@@ -1,17 +1,16 @@
 <strong>Carch</strong>
 
-<strong>**Carch** is a C-based project designed to automate and simplify system setup tasks for Arch Linux. It focuses on configuring window managers, installing packages, and setting up key system components. The project features a text-based user interface (TUI) built with `ncurses`, inspired by interfaces like `ratpoison` and `ratuti`. </strong>
+<strong>**'Carch'** is a C-based project designed to automate and simplify system setup tasks for Arch Linux.</strong>
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.  
 
-### Features
-
-- Automates system setup tasks for Arch Linux
-- Configures window managers and essential system components
-- Installs packages with ease
-- User-friendly text-based interface using `ncurses`
-- Inspired by `ratpoison` and `ratuti`
+### Usages
+```shell
+git clone https://github.com/harilvfs
+cd harilvfs/
+make
+```
 
 ### Contributing
 
