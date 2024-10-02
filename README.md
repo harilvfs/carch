@@ -1,4 +1,6 @@
+<p align=center>
 <strong>Carch</strong>
+</p>
 
 <strong>**'Carch'** is a C-based project designed to automate and simplify system setup tasks for Arch Linux.</strong>
 
