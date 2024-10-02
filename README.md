@@ -2,7 +2,7 @@
 <strong>Carch</strong>
 </p>
 
-<strong>**'Carch'** is a C-based project for a simple arch linux setup.</strong>
+<strong>**'Carch'** is a C-based project for a simple Arch Linux system setup.</strong>
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.  
