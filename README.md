@@ -7,7 +7,7 @@
 > [!Note]
 > This project is still in development, and you may encounter some bugs.  
 
-<img src='https://github.com/aayushx402/images/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Installation**
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Installation**
 ```shell
 git clone https://github.com/harilvfs
 cd harilvfs/
