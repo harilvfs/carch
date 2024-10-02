@@ -7,7 +7,7 @@
 > [!Note]
 > This project is still in development, and you may encounter some bugs.  
 
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Installation**
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Usages**
 ```shell
 git clone https://github.com/harilvfs
 cd harilvfs/
@@ -16,7 +16,7 @@ make
 
 <strong>**Contributing 🤝**</strong>
 
-*Contributions are welcome! If you want to help improve NewC, please fork the repository and submit a pull request.*
+*Contributions are welcome! If you want to help improve Carch, please fork the repository and submit a pull request.*
 
 <strong>**Steps to Contribute:**</strong>
 
