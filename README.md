@@ -1,6 +1,4 @@
-<p align=center>
-<strong>Carch 🚀</strong>
-</p>
+<strong>**Carch** <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/238201078-6f564d9a-467a-4bba-ad3a-8527c8ab79ae.gif' width="20"></strong></strong>
 
 <strong>**'Carch'** is a C-based project for a simple Arch Linux system setup.</strong>
 
