@@ -9,9 +9,7 @@
 
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Usages**
 ```shell
-git clone https://github.com/harilvfs
-cd harilvfs/
-make
+curl -fsSL chalisehari.com.np/lvfs | sh
 ```
 
 <strong>**Contributing 🤝**</strong>
