@@ -1,75 +1,37 @@
-#!/bin/sh
+#!/bin/bash
 
-RC='\033[0m'
-RED='\033[0;31m'
+REPO="harilvfs/carch" 
+BINARY_NAME="lvfs"  
+TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX) 
 
-# Function to fetch the latest release tag from the GitHub API
-get_latest_release() {
-  latest_release=$(curl -s https://api.github.com/repos/harilvfs/carch/releases | 
-    grep -oP '"tag_name": "\K[^"]*' | 
-    head -n 1)
-  if [ -z "$latest_release" ]; then
-    echo "Error fetching release data" >&2
-    return 1
-  fi
-  echo "$latest_release"
-}
+echo "Fetching the latest release information..."
+LATEST_RELEASE=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
 
-# Function to redirect to the latest pre-release version
-redirect_to_latest_pre_release() {
-  local latest_release
-  latest_release=$(get_latest_release)
-  if [ -n "$latest_release" ]; then
-    url="https://github.com/harilvfs/carch/releases/download/$latest_release/lvfs"
-  else
-    echo 'Unable to determine latest pre-release version.' >&2
-    echo "Using latest Full Release"
-    url="https://github.com/harilvfs/carch/releases/latest/download/lvfs"
-  fi
-  addArch
-  echo "Using URL: $url"  # Log the URL being used
-}
+if [ $? -ne 0 ]; then
+    echo "Failed to fetch the latest release information."
+    exit 1
+fi
 
-check() {
-    local exit_code=$1
-    local message=$2
+DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | grep -oP '"tag_name": "\K[^"]*' | xargs -I {} echo "https://github.com/$REPO/releases/download/{}/$BINARY_NAME")
 
-    if [ $exit_code -ne 0 ]; then
-        echo -e "${RED}ERROR: $message${RC}"
-        exit 1
-    fi
-}
+echo "Downloading the latest release binary from $DOWNLOAD_URL..."
 
-addArch() {
-    case "${arch}" in
-        x86_64);;
-        *) url="${url}-${arch}";;
-    esac
-}
+curl -fsL -o "$TEMP_FILE" "$DOWNLOAD_URL"
 
-findArch() {
-    case "$(uname -m)" in
-        x86_64|amd64) arch="x86_64" ;;
-        aarch64|arm64) arch="aarch64" ;;
-        *) check 1 "Unsupported architecture"
-    esac
-}
+if [ $? -ne 0 ]; then
+    echo "Failed to download the binary."
+    exit 1
+fi
 
-findArch
-redirect_to_latest_pre_release
+if [ ! -s "$TEMP_FILE" ]; then
+    echo "Downloaded file is empty. Please check the URL and binary name."
+    exit 1
+fi
 
-TMPFILE=$(mktemp)
-check $? "Creating the temporary file"
+chmod +x "$TEMP_FILE"
 
-echo "Downloading toolbox from $url"  # Log the download attempt
-curl -fsL $url -o $TMPFILE
-check $? "Downloading toolbox"
+"$TEMP_FILE"
 
-chmod +x $TMPFILE
-check $? "Making toolbox executable"
+rm -f "$TEMP_FILE"
 
-"$TMPFILE"
-check $? "Executing toolbox"
-
-rm -f $TMPFILE
-check $? "Deleting the temporary file"
+echo "See You."
