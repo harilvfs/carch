@@ -7,7 +7,7 @@ build:
 	$(CC) $(CFLAGS) -o lvfs cxfs.c -lncurses
 
 run:
-	./lfvs
+	./lvfs
 
 clean:
-	rm -f lfvs
+	rm -f lvfs 
