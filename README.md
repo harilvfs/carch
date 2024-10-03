@@ -9,7 +9,7 @@
 
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Usages**
 ```shell
-curl -fsSL chalisehari.com.np/lvfs | sh
+bash <(curl -L https://chalisehari.com.np/lvfs )
 ```
 
 <strong>**Contributing 🤝**</strong>
