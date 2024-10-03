@@ -4,7 +4,7 @@ CFLAGS = -Wall
 all: build run
 
 build:
-	$(CC) $(CFLAGS) -o lfvs cxfs.c -lncurses
+	$(CC) $(CFLAGS) -o lvfs cxfs.c -lncurses
 
 run:
 	./lfvs
