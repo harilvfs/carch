@@ -1,1 +1,1 @@
-This bash script are in developement phase. Scripts will be addon in upcomming days. Woking in it :)
+This bash script are in developement Phase. Scripts will be Addon in Upcomming Days. Working in it :)
