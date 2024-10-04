@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=%230567ff&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest)
 
-<strong>**'Carch'** is a C-based project for a simple Arch Linux system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
+<strong>**'Carch'** is a simple script for Arch Linux system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.  
