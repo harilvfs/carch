@@ -19,8 +19,10 @@ setup_dwm() {
 
     echo -e "${GREEN}To complete the installation, please add 'exec dwm' to your ~/.xinitrc file.${ENDCOLOR}"
 
-    echo -e "${GREEN}Cloning DWM repository...${ENDCOLOR}"
+    echo -e "${GREEN}Cloning DWM repository into your home directory...${ENDCOLOR}"
+    cd ~ || { echo -e "${RED}Failed to change directory to home. Aborting installation.${ENDCOLOR}"; exit 1; }
     git clone https://github.com/harilvfs/dwm
+
     cd dwm || { echo -e "${RED}Failed to change directory to dwm. Aborting installation.${ENDCOLOR}"; exit 1; }
 
     echo -e "${GREEN}Running setup script...${ENDCOLOR}"
