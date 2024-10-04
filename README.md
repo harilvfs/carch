@@ -57,7 +57,7 @@ carch
 │      ├── LTSKernel-Setup.sh
 │      ├── Neovim-Setup.sh
 │      ├── NordBackgrounds.sh
-│      ├── Packages-Setup.sh*
+│      ├── Packages-Setup.sh
 │      ├── Picom-Setup.sh
 │      ├── README.txt
 │      ├── Rofi-Setup.sh
@@ -65,6 +65,6 @@ carch
 │      └── Window-Manager-Setup.sh
 ├── LICENSE
 ├── README.md
-├── cxfs.sh*
-└── run.sh*
+├── cxfs.sh
+└── run.sh
 ```
