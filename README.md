@@ -5,7 +5,9 @@
 <strong>**'Carch'** is a simple script for Arch Linux system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
 > [!Note]
-> This project is still in development, and you may encounter some bugs.  
+> This project is still in development, and you may encounter some bugs.
+> Please feel free to submit an issue if you run into any problems:  
+> [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Usages**
 ```shell
