@@ -11,7 +11,8 @@
 ```shell
 git clone https://github.com/harilvfs/carch
 cd carch/
-make
+chmod +x cxfs.sh
+./cxfs.sh
 ```
 
 <strong>**Contributing 🤝**</strong>
