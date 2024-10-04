@@ -48,21 +48,21 @@ chmod +x cxfs.sh
 ```shell
 carch
 ├── scripts/
-│   ├── Alacritty-Setup.sh
-│   ├── Aur-Setup.sh
-│   ├── Fastfetch-Setup.sh
-│   ├── Font-Setup.sh
-│   ├── Grub-Setup.sh
-│   ├── Kitty-Setup.sh
-│   ├── LTSKernel-Setup.sh
-│   ├── Neovim-Setup.sh
-│   ├── NordBackgrounds.sh
-│   ├── Packages-Setup.sh*
-│   ├── Picom-Setup.sh
-│   ├── README.txt
-│   ├── Rofi-Setup.sh
-│   ├── Sddm-Setup.sh
-│   └── Window-Manager-Setup.sh
+│      ├── Alacritty-Setup.sh
+│      ├── Aur-Setup.sh
+│      ├── Fastfetch-Setup.sh
+│      ├── Font-Setup.sh
+│      ├── Grub-Setup.sh
+│      ├── Kitty-Setup.sh
+│      ├── LTSKernel-Setup.sh
+│      ├── Neovim-Setup.sh
+│      ├── NordBackgrounds.sh
+│      ├── Packages-Setup.sh*
+│      ├── Picom-Setup.sh
+│      ├── README.txt
+│      ├── Rofi-Setup.sh
+│      ├── Sddm-Setup.sh
+│      └── Window-Manager-Setup.sh
 ├── LICENSE
 ├── README.md
 ├── cxfs.sh*
