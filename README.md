@@ -44,6 +44,7 @@ chmod +x cxfs.sh
 <strong> **Thank you for checking out Carch! 🌟** </strong>
 
 <p align="center"> <strong>Repository Struct</strong>  </p>
+
 ```shell
 carch
 ├── scripts/
