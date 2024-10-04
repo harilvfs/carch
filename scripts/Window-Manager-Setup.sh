@@ -8,13 +8,12 @@ setup_dwm() {
     echo -e "${RED}Warning: This DWM setup script has not been tested yet.${ENDCOLOR}"
     echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
 
-    # Confirmation prompt
     read -p "Do you want to continue with the DWM setup? Make sure you know what a tiling window manager is. [Y/n] " yn
-    yn=${yn:-Y}  # Default to 'Y' if no input
+    yn=${yn:-Y}
 
     if [[ $yn =~ ^[Nn]$ ]]; then
         echo -e "${RED}Aborting DWM setup. Returning to menu...${ENDCOLOR}"
-        return  # or exit, depending on your menu structure
+        return 
     fi
 
     echo -e "${GREEN}To complete the installation, please add 'exec dwm' to your ~/.xinitrc file.${ENDCOLOR}"
