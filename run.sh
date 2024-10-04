@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO="harilvfs/carch" 
-BINARY_NAME="lvfs"  
+BINARY_NAME="cxfs.sh"  
 TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX) 
 
 echo "Fetching the latest release information..."
