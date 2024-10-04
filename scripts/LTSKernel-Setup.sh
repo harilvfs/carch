@@ -43,13 +43,19 @@ remove_kernel=${remove_kernel:-N}
 if [[ $remove_kernel =~ ^[Yy]$ ]]; then
     install_lts_kernel
     echo -e "${GREEN}Removing the current kernel...${ENDCOLOR}"
+    
     CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')  
+    if [[ "$CURRENT_KERNEL_NAME" != "linux" ]]; then
+        echo -e "${RED}Current kernel name does not match expected 'linux'. Cannot remove kernel.${ENDCOLOR}"
+        exit 1
+    fi
+
     sudo pacman -Rns --noconfirm "$CURRENT_KERNEL_NAME"
     echo -e "${GREEN}Removed the current kernel.${ENDCOLOR}"
     
     configure_grub
 
-} else {
+else
     read -p "Do you want to install LTS kernel only without removing the current kernel? [Y/n] " install_only
     install_only=${install_only:-Y}
 
