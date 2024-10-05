@@ -17,7 +17,7 @@ chmod +x cxfs.sh
 ./cxfs.sh
 ```
 
-<strong>**Contributing 🤝**</strong>
+### Contributing 🤝
 
 *Contributions are welcome! If you want to help improve Carch, please fork the repository and submit a pull request.*
 
@@ -30,11 +30,11 @@ chmod +x cxfs.sh
 - 🚀 Push to the branch
 - 📥 Submit a pull request
 
-<strong>**License 📄**</strong>
+### License 📄
 
 *This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.**
 
-<strong>**Contact 📬**</strong>
+### Contact 📬
 
 *For questions or suggestions, feel free to reach out via:**
 
