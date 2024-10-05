@@ -369,6 +369,7 @@ display_help() {
     echo "This tool helps to automate Arch Linux setup."
     echo "Select 'Arch Setup' to install packages and configure the system."
     echo "For more information, refer to the documentation."
+    echo "Visit the documentation at: https://harilvfs.github.io/carch/"
     echo
     echo -e "${GREEN}Press any key to return to the main menu.${NC}"
     read -n 1
