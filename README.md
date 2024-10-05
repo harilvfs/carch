@@ -41,7 +41,9 @@ chmod +x cxfs.sh
 - 📧 Email: ingoprivate@gmail.com
 - GitHub: [harilvfs](https://github.com/harilvfs)
 
----
+### Credits
+
+**TUI implementation help from [blurayne's gist](https://gist.github.com/blurayne/f63c5a8521c0eeab8e9afd8baa45c65e).**
 
 <p align="center"> <strong> Thank you for checking out Carch! 🌟</strong> </p>
 
@@ -71,7 +73,5 @@ carch
 └── run.sh
 ```
 
-### Credits
 
-**TUI implementation help from [blurayne's gist](https://gist.github.com/blurayne/f63c5a8521c0eeab8e9afd8baa45c65e).**
 
