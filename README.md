@@ -36,7 +36,7 @@ chmod +x cxfs.sh
 
 ### Contact 📬
 
-*For questions or suggestions, feel free to reach out via:**
+*For questions or suggestions, feel free to reach out via:*
 
 - 📧 Email: ingoprivate@gmail.com
 - GitHub: [harilvfs](https://github.com/harilvfs)
