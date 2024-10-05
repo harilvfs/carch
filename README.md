@@ -70,3 +70,8 @@ carch
 ├── cxfs.sh
 └── run.sh
 ```
+
+### Credits
+
+**TUI implementation help from [blurayne's gist](https://gist.github.com/blurayne/f63c5a8521c0eeab8e9afd8baa45c65e).**
+
