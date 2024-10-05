@@ -17,7 +17,7 @@ chmod +x cxfs.sh
 ./cxfs.sh
 ```
 
-<strong>**Contributing 🤝**</strong>
+### Contributing 🤝
 
 *Contributions are welcome! If you want to help improve Carch, please fork the repository and submit a pull request.*
 
@@ -30,18 +30,20 @@ chmod +x cxfs.sh
 - 🚀 Push to the branch
 - 📥 Submit a pull request
 
-<strong>**License 📄**</strong>
+### License 📄
 
-*This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.**
+*This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.*
 
-<strong>**Contact 📬**</strong>
+### Contact 📬
 
-*For questions or suggestions, feel free to reach out via:**
+*For questions or suggestions, feel free to reach out via:*
 
 - 📧 Email: ingoprivate@gmail.com
 - GitHub: [harilvfs](https://github.com/harilvfs)
 
----
+### Credits
+
+**TUI implementation help from [blurayne's gist](https://gist.github.com/blurayne/f63c5a8521c0eeab8e9afd8baa45c65e).**
 
 <p align="center"> <strong> Thank you for checking out Carch! 🌟</strong> </p>
 
@@ -70,3 +72,6 @@ carch
 ├── cxfs.sh
 └── run.sh
 ```
+
+
+
