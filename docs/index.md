@@ -1,6 +1,6 @@
 # Carch
 
-Carch is a set of scripts designed to help you quickly set up a new Arch or Arch-based Linux system. Whether you're new to Linux or an experienced user, this project offers hands-on support to streamline your installation and configuration process.
+Carch is a simple bash script that makes setting up an Arch or Arch-based system easier. It's perfect for new Linux users looking to dive into the Linux community!
 
 ---
 
