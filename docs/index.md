@@ -15,6 +15,9 @@ chmod +x cxfs.sh
 ./cxfs.sh
 ```
 
+> [!IMPORTANT]
+> The setup script is primarily made for Arch and Arch-based systems.Support for more distributions will be added in upcomming update.
+
 ## Contributing 🤝
 
 Contributions are welcome! If you'd like to help improve Carch, please follow these steps:
