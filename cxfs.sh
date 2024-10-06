@@ -317,9 +317,9 @@ display_main_menu() {
             exit
         fi
         case ${UI_WIDGET_RC} in
-            0) display_submenu ;;   
-            1) display_help ;;     
-            2) exit ;;            
+            0) display_submenu ;;
+            1) display_help ;;
+            2) exit ;;
         esac
     done
 }
@@ -376,11 +376,11 @@ display_help() {
     read -n 1
 }
 
-tput civis  
+tput civis
 
 cleanup() {
-    tput cnorm  
+    tput cnorm
 }
 trap cleanup EXIT
 
-display_main_menu  
+display_main_menu
