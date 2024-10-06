@@ -106,7 +106,7 @@ install_filemanagers() {
         echo "1) Nemo"
         echo "2) Thunar"
         echo "3) Dolphin"
-        echo "4) LFTP (Terminal File Manager)"
+        echo "4) LF (Terminal File Manager)"
         echo "5) Exit"
         read -p "Choose a file manager: " fm_choice
 
@@ -114,7 +114,7 @@ install_filemanagers() {
             1) sudo pacman -S nemo ;;
             2) sudo pacman -S thunar ;;
             3) sudo pacman -S dolphin ;;
-            4) sudo pacman -S lftp ;;
+            4) sudo pacman -S lf ;;
             5) clear; break ;;  
             *) echo "Invalid option" ;;
         esac
