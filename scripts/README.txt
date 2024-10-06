@@ -1,1 +1,1 @@
-This bash script are in developement Phase. Working in it :)
+This bash script are in developement Phase. Bugs may be expected. Working in it :)
