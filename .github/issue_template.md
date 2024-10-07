@@ -5,13 +5,6 @@
 <!-- Provide a detailed description of the issue. Include information about what the script should do versus what it is actually doing. -->
 [Describe the problem in detail. Explain the expected behavior and the actual behavior.]
 
-### Steps to Reproduce
-
-<!-- Provide a step-by-step guide to reproduce the issue. -->
-1. [First step]
-2. [Second step]
-3. [Third step]
-
 ### Environment
 
 <!-- Provide details about the system where the issue occurred. -->
@@ -24,22 +17,6 @@
 
 <!-- Describe how the script is behaving. Does it fail silently, produce errors, or behave unexpectedly? -->
 [Explain in detail how the script behaves, any visible symptoms or malfunctions.]
-
-### Logs & Output
-
-<!-- Provide relevant logs, error messages, or output from the script. -->
-- **Script Output**:
-<pre><code>
-# Paste the output or error logs here
-</code></pre>
-
-### Configuration or Setup (if applicable)
-
-<!-- Provide any relevant configuration or setup details if the issue is related to specific configurations. -->
-- **Configuration** (e.g., script parameters, environmental variables):
-<pre><code>
-# Paste the relevant configuration here
-</code></pre>
 
 ### Screenshots/Screen Recordings (if applicable)
 
