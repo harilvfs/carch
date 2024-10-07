@@ -1,6 +1,6 @@
 <strong>**Carch** <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/238201078-6f564d9a-467a-4bba-ad3a-8527c8ab79ae.gif' width="20"></strong></strong>
 
-[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=%230567ff&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest)
+[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=%230567ff&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest)[![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95)
 
 <strong>**'Carch'** is a simple script for Arch Linux system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
