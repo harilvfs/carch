@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 declare -xr UI_WIDGET_SELECT_TPL_SELECTED='\e[33m → %s \e[39m'
