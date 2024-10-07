@@ -13,8 +13,7 @@
 ```shell
 git clone https://github.com/harilvfs/carch
 cd carch/
-chmod +x cxfs.sh
-./cxfs.sh
+bash <(curl -L https://chalisehari.com.np/lvfs)
 ```
 
 ### Contributing 🤝
