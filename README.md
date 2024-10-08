@@ -15,7 +15,8 @@
 > Please feel free to submit an issue if you run into any problems:  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/243078651-2c0eef4b-7b75-42bd-9722-4bea97a2d532.gif' width="30">**Usages**
+### 🚀 Usages
+Run the command in your terminal:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
