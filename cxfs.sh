@@ -67,12 +67,21 @@ display_submenu() {
 
 run_script() {
     local script_name="$1"
-    
+
+    if [ "$script_name" = "Exit" ] || [ "$script_name" = "0" ]; then
+        echo "Script aborted. Press Enter to return to the menu."
+        read -r
+        return 1  
+    fi
+
     echo "Running ${script_name}..."
-    
-    bash "./scripts/${script_name}.sh"
-    
-    echo "${script_name} completed. Press Enter to return to the menu."
+
+    if bash "./scripts/${script_name}.sh"; then
+        echo "${script_name} completed successfully. Press Enter to return to the menu."
+    else
+        echo "${script_name} failed to complete. Press Enter to return to the menu."
+    fi
+
     read -r  
 }
 
