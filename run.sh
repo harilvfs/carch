@@ -1,5 +1,7 @@
 #!/bin/bash
 
+COLOR_CYAN="\e[36m"
+
 if ! command -v whiptail &> /dev/null; then
     echo "whiptail is not installed. Installing..."
     sudo pacman -S --noconfirm whiptail  
@@ -45,4 +47,5 @@ chmod +x "$TEMP_FILE"
 
 rm -f "$TEMP_FILE"
 
-echo "See You."
+echo "${COLOR_CYAN}See You...${COLOR_RESET}"
+
