@@ -1,7 +1,7 @@
 #!/bin/bash
 
-
-
+tput init
+tput clear
 echo "========================================"
 echo "     Hyperland Setup Script Notice      "
 echo "========================================"
