@@ -1,5 +1,7 @@
 #!/bin/bash
 
+tput init
+tput clear
 checkAlacritty() {
     if command -v alacritty &> /dev/null; then
         printf "Alacritty is already installed.\n"
