@@ -39,9 +39,9 @@ bash <(curl -L https://chalisehari.com.np/carch)
 - 📧 Email: ingoprivate@gmail.com
 - GitHub: [harilvfs](https://github.com/harilvfs)
 
-<strong><img src='https://user-images.githubusercontent.com/74038190/216120981-b9507c36-0e04-4469-8e27-c99271b45ba5.png' width="20"> **Contributors** </strong>
+### Constributors 👥
 
-<strong>Thanks to everyone who helped make **'Linux Project'** better. Your contributions are greatly appreciated! </strong>
+<strong>Thanks to everyone who helped make **'carch'** better. Your contributions are greatly appreciated! </strong>
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
