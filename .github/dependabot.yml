@@ -1,6 +1,8 @@
 version: 2
 updates:
-  - package-ecosystem: ""
-    directory: "/" 
+  - package-ecosystem: "npm" 
+    directory: "/"             
     schedule:
-      interval: "weekly"
+      interval: "weekly"  
+    commit-message:
+      prefix: "fix"           
