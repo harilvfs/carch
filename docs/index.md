@@ -92,7 +92,7 @@ We thank everyone who has contributed to making **Carch** better. Your feedback 
 
 ### Repository Structure
 
-<precode>
+```bash
 carch/
 ├── docs/
 │   └── index.md
@@ -124,8 +124,7 @@ carch/
 ├── cxfs.sh
 ├── run.sh
 └── setup.sh
-</precode>
-
+```
 ---
 
 Thank you for exploring Carch!
