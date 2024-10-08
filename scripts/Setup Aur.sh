@@ -51,7 +51,7 @@ while true; do
     case $aur_choice in
         1) install_paru ;;
         2) install_yay ;;
-        3) clear; exit ;;  
+        3) exit ;;  
         *) echo -e "${RED}Invalid option. Please choose again.${NC}" ;;
     esac
 done
