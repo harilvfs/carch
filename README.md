@@ -17,33 +17,33 @@
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
 ## 🚀 Usages
-Run the command in your terminal:
+Run the command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
 ## 🤝 Contributing 
 
-**Contributions are welcome! If you want to help improve Carch, please check the [CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md) for the contribution guide.**
+Contributions are welcome! If you want to help improve Carch, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
 
 ## 📜 Code of Conduct 
 
-**We aim for a welcoming environment for all contributors. Please read our [Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md) for a positive experience.**
+We aim for a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** for a better experience.
 
 ## 📄License 
 
-This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache-2.0 License. See the **[LICENSE](LICENSE)** file for details.
 
 ## 📬 Contact 
 
 **For questions or suggestions, feel free to reach out via:**
 
-- 📧 Email: ingoprivate@gmail.com
-- GitHub: [harilvfs](https://github.com/harilvfs)
+- 📧 Email: **ingoprivate@gmail.com**
+- GitHub: **[harilvfs](https://github.com/harilvfs)**
 
 ## 👥 Constributors 
 
-<strong>Thanks to everyone who helped make **'carch'** better. Your contributions are greatly appreciated! </strong>
+<strong>Thanks to everyone who helped make **'Carch'** better. Your contributions are greatly appreciated! </strong>
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
@@ -81,6 +81,6 @@ carch/
 ├── run.sh
 └── setup.sh
 ```
-<p align="center"> <strong> Thank you for checking out Carch! 🌟</strong> </p>
+<p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
 
