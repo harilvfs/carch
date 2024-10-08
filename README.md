@@ -30,6 +30,13 @@ Contributions are welcome! If you want to help improve Carch, please check the *
 
 We aim for a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** for a better experience.
 
+## Roadmap 📅
+
+We are excited to share our roadmap for the Carch project! This outlines our upcoming features, improvements, and timelines. For more details, please check out the full roadmap:
+
+[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)
+*We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!*
+
 ## 📄License 
 
 This project is licensed under the Apache-2.0 License. See the **[LICENSE](LICENSE)** file for details.
