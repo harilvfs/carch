@@ -58,7 +58,7 @@ This project is licensed under the Apache-2.0 License. See the **[LICENSE](LICEN
 
 <p align="center"> <strong> Repository Structure </strong>  </p>
 
-
+```bash
 carch/
 ├── docs/
 │   └── index.md
@@ -86,6 +86,7 @@ carch/
 ├── LICENSE
 ├── README.md
 ├── SECURITY.md
+├── roadmap.md
 ├── cxfs.sh
 ├── run.sh
 └── setup.sh
