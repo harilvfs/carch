@@ -26,7 +26,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 ## Code of Conduct 📜
 
-**We aim for a welcoming environment. Please read our [Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md).**
+**We aim for a welcoming environment for all contributors. Please read our [Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md).**
 
 ## License 📄
 
