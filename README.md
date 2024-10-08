@@ -16,21 +16,21 @@
 > Please feel free to submit an issue if you run into any problems:  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## 🚀 Usages
+## Usages 🚀
 Run the command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-## 🤝 Contributing 
+## Contributing 🤝 
 
 Contributions are welcome! If you want to help improve Carch, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
 
-## 📜 Code of Conduct 
+## Code of Conduct 📜 
 
 We aim for a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** for a better experience.
 
-## 📅 Roadmap 
+## Roadmap 📅 
 
 Check out our roadmap for the Carch project! It highlights upcoming features, improvements, and timelines.
 For more details, please check out the full roadmap:
@@ -39,18 +39,18 @@ For more details, please check out the full roadmap:
 
 *We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!*
 
-## 📄License 
+## License 📄 
 
 This project is licensed under the Apache-2.0 License. See the **[LICENSE](LICENSE)** file for details.
 
-## 📬 Contact 
+## Contact 📬 
 
 **For questions or suggestions, feel free to reach out via:**
 
 - 📧 Email: **ingoprivate@gmail.com**
 - GitHub: **[harilvfs](https://github.com/harilvfs)**
 
-## 👥 Constributors 
+## Constributors 👥 
 
 <strong>Thanks to everyone who helped make **'Carch'** better. Your contributions are greatly appreciated! </strong>
 
