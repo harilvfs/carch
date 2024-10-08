@@ -1,13 +1,12 @@
-## Pull Request Title: [Brief Description of the Changes]
-
 ### Description
 
 <!-- Provide a concise description of the changes made in this pull request. -->
 This pull request adds/updates/fixes [describe the main goal or feature].
 
-- [ ] Added/updated scripts or configurations.
-- [ ] Fixed issue #[issue number] (if applicable).
-- [ ] Improved/optimized existing functionality.
+- [] Added/updated scripts or configurations.
+- [] Fixed issue #[issue number] (if applicable).
+- [] Improved/optimized existing functionality.
+- [] Bugs Fixes.
 
 ### Motivation and Context
 
@@ -17,19 +16,19 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 ### How Has This Been Tested?
 
 <!-- Describe the steps you followed to test the changes. If applicable, mention the specific environment where the testing took place. -->
-- [ ] Tested on [your distribution/environment].
+- [] Tested on [your distribution/environment].
 
 ### Checklist
 
 Please ensure your pull request meets the following requirements:
 
-- [ ] My code follows the style guidelines of this project.
-- [ ] I have performed a self-review of my code.
-- [ ] I have commented on my code, particularly in hard-to-understand areas.
-- [ ] I have made corresponding changes to the documentation (if applicable).
-- [ ] My changes do not introduce new warnings.
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] New and existing unit tests pass locally with my changes.
+- [] My code follows the style guidelines of this project.
+- [] I have performed a self-review of my code.
+- [] I have commented on my code, particularly in hard-to-understand areas.
+- [] I have made corresponding changes to the documentation (if applicable).
+- [] My changes do not introduce new warnings.
+- [] I have added tests that prove my fix is effective or that my feature works.
+- [] New and existing unit tests pass locally with my changes.
 
 ### Screenshots (if applicable)
 
