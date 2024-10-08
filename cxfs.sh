@@ -1,49 +1,24 @@
 #!/bin/bash
 
-tput init
-tput clear
 export RED='\033[0;31m'  
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
-NC='\033[0m' 
-
-tput civis
+NC='\033[0m'
 
 display_main_menu() {
-    local selected=0
     while true; do
-        clear
-        echo -e "${CYAN}============================="
-        echo -e "    Linux System Arch Setup    "
-        echo -e "=============================${NC}"
-        
-        options=("Arch Setup" "Help & Info" "Exit")
-        
-        for i in "${!options[@]}"; do
-            if [[ $i -eq $selected ]]; then
-                echo -e "${GREEN}> ${options[i]}${NC}"
-            else
-                echo "  ${options[i]}"
-            fi
-        done
+        choice=$(whiptail --title "Linux System Arch Setup" \
+                          --menu "Choose an option" 15 60 4 \
+                          "1" "Arch Setup" \
+                          "2" "Help & Info" \
+                          "3" "Exit" 3>&1 1>&2 2>&3)
 
-        read -sn 1 input
-        case $input in
-            $'\x1B') read -sn 2 input
-                case $input in
-                    '[A') ((selected--));; 
-                    '[B') ((selected++));; 
-                esac ;;
-            "") 
-                case $selected in
-                    0) display_submenu ;;
-                    1) display_help ;;
-                    2) exit ;;
-                esac ;;
+        case $choice in
+            1) display_submenu ;;
+            2) display_help ;;
+            3) clear  
+               exit 0 ;;  
         esac
-        
-        ((selected<0)) && selected=0
-        ((selected>${#options[@]}-1)) && selected=${#options[@]}-1
     done
 }
 
@@ -58,79 +33,52 @@ load_scripts() {
 
 display_submenu() {
     load_scripts
-    local selected=0
+
     while true; do
-        clear
-        echo -e "${CYAN}=============================="
-        echo -e "      Arch Setup Options       "
-        echo -e "==============================${NC}"
-
+        script_list=()
         for i in "${!scripts[@]}"; do
-            if [[ $i -eq $selected ]]; then
-                echo -e "${GREEN}> ${scripts[i]}${NC}"
-            else
-                echo "  ${scripts[i]}"
-            fi
+            script_list+=("$((i + 1))" "${scripts[i]}")
         done
+        script_list+=("$(( ${#scripts[@]} + 1 ))" "Exit")
 
-        if [[ $selected -eq ${#scripts[@]} ]]; then
-            echo -e "${GREEN}> Exit${NC}"
-        else
-            echo "  Exit"
+        num_scripts=${#scripts[@]}
+        menu_height=$((num_scripts + 7))
+
+        ((menu_height > 20)) && menu_height=20
+
+        CHOICE=$(dialog --title "Arch Setup Options" --menu "Select a script to run" \
+                "$menu_height" 60 ${#script_list[@]} "${script_list[@]}" 3>&1 1>&2 2>&3)
+
+        EXIT_STATUS=$?
+
+        if [ $EXIT_STATUS -eq 1 ]; then
+            break
         fi
 
-        read -sn 1 input
-        case $input in
-            $'\x1B') 
-                read -sn 2 input
-                case $input in
-                    '[A') ((selected--));; 
-                    '[B') ((selected++));;
-                esac ;;
-            "")
-                if [[ $selected -eq ${#scripts[@]} ]]; then
-                    break  
-                else
-                    run_script "${scripts[selected]}"  
-                fi ;;
-        esac
+        selected=$((CHOICE - 1))
 
-        ((selected < 0)) && selected=0
-        ((selected > ${#scripts[@]})) && selected=${#scripts[@]}
+        if [[ $selected -lt ${#scripts[@]} ]]; then
+            run_script "${scripts[selected]}"
+        else
+            break
+        fi
     done
 }
-
 
 run_script() {
     local script_name="$1"
-    clear
-    echo -e "${CYAN}Running ${script_name}...${NC}"
-    bash "./scripts/${script_name}.sh" || echo "Error: Could not run ${script_name}.sh"
-    echo "Press Enter to return..."
-    read -r
+    
+    echo "Running ${script_name}..."
+    
+    bash "./scripts/${script_name}.sh"
+    
+    echo "${script_name} completed. Press Enter to return to the menu."
+    read -r  
 }
 
 display_help() {
-    load_scripts  
-    clear
-    echo -e "${CYAN}Help & Information${NC}"
-    echo "This tool helps to automate Arch Linux setup."
-    echo "Select 'Arch Setup' to install packages and configure the system."
-    echo "For more information, refer to the documentation."
-    echo "Visit the documentation at: https://harilvfs.github.io/carch/"
-    echo
-    for script in "${scripts[@]}"; do
-        echo "- ${script}"
-    done
-    
-    echo ""
-    echo "Press Enter to return to the main menu..."
-    read -r
+    whiptail --msgbox "This tool helps to automate Arch Linux setup.\n\nSelect 'Arch Setup' to install packages and configure the system.\nFor more information, visit: https://harilvfs.github.io/carch/" 15 60
 }
-
-cleanup() {
-    tput cnorm  
-}
-trap cleanup EXIT  
 
 display_main_menu
+
