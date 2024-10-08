@@ -71,6 +71,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 │   ├── Setup Picom.sh
 │   ├── Setup Rofi.sh
 │   ├── Setup SDDM.sh
+│   ├── Setup Themes-Icons.sh 
 │   └── Wallpapers.sh
 ├── LICENSE
 ├── README.md
