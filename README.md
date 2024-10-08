@@ -4,9 +4,9 @@
 
 <strong>**'Carch'** is a simple script for Arch Linux system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
-<p align="center">
-  <img src="https://github.com/harilvfs/carch/raw/main/preview/carchp.png" alt="Preview 1" style="display: inline-block; margin-right: 10px;">
-  <img src="https://github.com/harilvfs/carch/raw/main/preview/carchp1.png" alt="Preview 2" style="display: inline-block;">
+<p>
+<img src="https://github.com/harilvfs/carch/raw/main/preview/carchp.png" alt="screenshot" style="display:inline-block; width:49%;">
+<img src="https://github.com/harilvfs/carch/raw/main/preview/carchp1.png" alt="screenshot" style="display:inline-block; width:49%;">
 </p>
 
 > [!Note]
