@@ -1,5 +1,16 @@
 #!/bin/bash
 
+if ! command -v whiptail &> /dev/null; then
+    echo "whiptail is not installed. Installing..."
+    sudo pacman -S --noconfirm whiptail  
+    if [ $? -ne 0 ]; then
+        echo "Failed to install whiptail."
+        exit 1
+    fi
+else
+    echo "whiptail is already installed."
+fi
+
 REPO="harilvfs/carch" 
 BINARY_NAME="cxfs.sh"  
 TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX) 
