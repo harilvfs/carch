@@ -20,7 +20,7 @@
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-### Contributing 🤝
+## Contributing 🤝
 
 **Contributions are welcome! If you want to help improve Carch, please check the [CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md) for the contribution guide.**
 
@@ -28,11 +28,11 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 **We are committed to providing a welcoming and inclusive environment for all contributors. Please read and follow our [Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md).**
 
-### License 📄
+## License 📄
 
 **This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file for details.**
 
-### Contact 📬
+## Contact 📬
 
 **For questions or suggestions, feel free to reach out via:**
 
