@@ -37,7 +37,7 @@ For more details, please check out the full roadmap:
 
 **[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
 
-<strong>*We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!* </strong>
+<strong>**We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!** </strong>
 
 ## License 📄 
 
