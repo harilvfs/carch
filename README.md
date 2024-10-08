@@ -38,8 +38,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 <p align="center"> <strong>Repository Structure</strong>  </p>
 
 ```shell
- tree
-carch
+↪ carch
 ├── docs/
 │   └── index.md
 ├── preview/
