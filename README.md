@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=%230567ff&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases//latest/download/cxfs.sh)
 
 
-<strong>**'Carch'** is a simple script for Arch & Arch-based system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
+<strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
 <p>
 <img src="https://github.com/harilvfs/carch/raw/main/preview/carchp.png" alt="screenshot" style="display:inline-block; width:49%;">
@@ -24,7 +24,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 ## Contributing 🤝 
 
-Contributions are welcome! If you want to help improve Carch, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
+Contributions are welcome! If you want to help improve **Carch**, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
 
 ## Code of Conduct 📜 
 
@@ -35,9 +35,9 @@ We aim for a welcoming environment for all contributors. Please read our **[Code
 Check out our roadmap for the **Carch** project! It highlights upcoming **features**, **improvements**, and **timelines**.
 For more details, please check out the full roadmap:
 
-[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)
+**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
 
-*We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!*
+<strong>*We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!* </strong>
 
 ## License 📄 
 
@@ -56,9 +56,9 @@ This project is licensed under the Apache-2.0 License. See the **[LICENSE](LICEN
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-<p align="center"> <strong>Repository Structure</strong>  </p>
+<p align="center"> <strong> Repository Structure </strong>  </p>
 
-```shell
+
 carch/
 ├── docs/
 │   └── index.md
