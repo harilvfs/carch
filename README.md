@@ -22,16 +22,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 ### Contributing 🤝
 
-*Contributions are welcome! If you want to help improve Carch, please fork the repository and submit a pull request.*
-
-<strong>**Steps to Contribute:**</strong>
-
-- 🍴 Fork the repository
-- 🌿 Create a new feature branch
-- ✏️ Make your changes
-- 💬 Commit your changes with a descriptive message
-- 🚀 Push to the branch
-- 📥 Submit a pull request
+**Contributions are welcome! If you want to help improve Carch, please check the [CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md) for the contribution guide.**
 
 ### License 📄
 
@@ -68,7 +59,8 @@ carch
 ├── LICENSE
 ├── README.md
 ├── cxfs.sh
-└── run.sh
+├── run.sh
+└── setup.sh 
 ```
 <p align="center"> <strong> Thank you for checking out Carch! 🌟</strong> </p>
 
