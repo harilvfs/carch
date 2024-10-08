@@ -8,7 +8,7 @@ The following versions of the **Carch** project are currently supported with sec
 | ------- | ------------------ |
 | 1.0.x   | :white_check_mark: |
 | 0.9.x   | :x:                |
-| 0.8.x   | :white_check_mark: |
+| 0.8.x   | :x:                |
 | < 0.8   | :x:                |
 
 ## Reporting a Vulnerability
