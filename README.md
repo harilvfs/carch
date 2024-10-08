@@ -38,29 +38,36 @@ bash <(curl -L https://chalisehari.com.np/carch)
 <p align="center"> <strong>Repository Structure</strong>  </p>
 
 ```shell
+ tree
 carch
+├── docs/
+│   └── index.md
+├── preview/
+│   ├── carchp.png
+│   └── carchp1.png
 ├── scripts/
-│      ├── Alacritty Setup.sh
-│      ├── Aur Setup.sh
-│      ├── Fastfetch Setup.sh
-│      ├── Font Setup.sh
-│      ├── Grub Setup.sh
-│      ├── Kitty Setup.sh
-│      ├── LTSKernel Setup.sh
-│      ├── Neovim Setup.sh
-│      ├── Wallpapers.sh
-│      ├── Packages Setup.sh
-│      ├── Picom Setup.sh
-│      ├── README.txt
-│      ├── Rofi Setup.sh
-│      ├── Sddm Setup.sh
-│      ├── Hyprland Setup.sh
-│      └── Dwm Setup.sh
+│   ├── Dwm Setup.sh
+│   ├── Hyprland Setup.sh
+│   ├── Install Fonts.sh
+│   ├── Install LTS Kernal.sh
+│   ├── Install Packages.sh
+│   ├── README.txt
+│   ├── Setup Alacritty.sh
+│   ├── Setup Aur.sh
+│   ├── Setup Fastfetch.sh
+│   ├── Setup GRUB.sh
+│   ├── Setup Kitty.sh
+│   ├── Setup Neovim.sh
+│   ├── Setup Picom.sh
+│   ├── Setup Rofi.sh
+│   ├── Setup SDDM.sh
+│   └── Wallpapers.sh
 ├── LICENSE
 ├── README.md
+├── SECURITY.md
 ├── cxfs.sh
 ├── run.sh
-└── setup.sh 
+└── setup.sh
 ```
 <p align="center"> <strong> Thank you for checking out Carch! 🌟</strong> </p>
 
