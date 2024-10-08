@@ -47,5 +47,4 @@ chmod +x "$TEMP_FILE"
 
 rm -f "$TEMP_FILE"
 
-echo "${COLOR_CYAN}See You...${COLOR_RESET}"
-
+echo -e "${COLOR_CYAN}See You...${COLOR_RESET}"
