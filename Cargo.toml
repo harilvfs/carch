@@ -4,5 +4,5 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-crossterm = "0.26"  # For terminal control
+crossterm = "0.28"  # For terminal control
 dialoguer = "0.9"    # For menu/dialog interfaces
