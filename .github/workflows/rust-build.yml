@@ -45,4 +45,5 @@ jobs:
           git config --local user.name "GitHub Action"
           git add build/carch
           git commit -m "Update build directory with new binary" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/harilvfs/carch.git HEAD:main
+          # Push changes to the main branch using the PAT
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/harilvfs/carch.git HEAD:main || echo "Push failed. Check permissions."
