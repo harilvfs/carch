@@ -46,7 +46,7 @@
 ## Carch Project Checklist ✅
 
 - **Expand support for popular distributions:**
-  - [ ] Arch (including Manjaro) 🖥️
+  - [x] Arch (including Manjaro) 🖥️
   - [ ] Debian 🐧
   - [ ] Fedora 🍕
   - [ ] openSUSE 🐢
