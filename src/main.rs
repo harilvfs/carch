@@ -1,7 +1,7 @@
 use dialoguer::Select;
 use std::{fs, process::Command};
 
-const SCRIPT_DIR: &str = "../scripts";  // Path to the scripts directory
+const SCRIPT_DIR: &str = "../scripts"; // Path to the scripts directory
 const HELP_MESSAGE: &str = "This tool helps to automate Arch Linux setup.\n\n\
                             Select 'Arch Setup' to install packages and configure the system.\n\
                             For more information, visit: https://harilvfs.github.io/carch/";
@@ -40,7 +40,8 @@ fn load_scripts() -> Vec<String> {
             let path = entry.path();
             if let Some(file_name) = path.file_name() {
                 if let Some(name) = file_name.to_str() {
-                    if name.ends_with(".sh") {  // Check for .sh scripts
+                    if name.ends_with(".sh") {
+                        // Check for .sh scripts
                         // Trim the ".sh" extension and push to the scripts vector
                         let script_name = name.trim_end_matches(".sh");
                         scripts.push(script_name.to_string());
@@ -54,7 +55,7 @@ fn load_scripts() -> Vec<String> {
 
     // Debugging output to verify scripts loaded
     println!("Scripts found: {:?}", scripts);
-    
+
     scripts
 }
 
@@ -70,11 +71,12 @@ fn display_submenu() {
         }
 
         // Create display names for the menu, adding numbering
-        let script_names: Vec<String> = scripts.iter()
+        let script_names: Vec<String> = scripts
+            .iter()
             .enumerate()
             .map(|(i, name)| format!("{}: {}", i + 1, name))
             .collect();
-        
+
         let mut options = script_names.clone();
         options.push("Exit".to_string()); // Convert &str to String here
 
@@ -121,4 +123,3 @@ fn display_help() {
     println!("Press Enter to return to the menu...");
     let _ = std::io::stdin().read_line(&mut String::new());
 }
-
