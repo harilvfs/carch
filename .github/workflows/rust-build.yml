@@ -17,9 +17,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Rust
-        uses: actions/setup-rust@v1
+        uses: rust-lang/rustup@v1  # Use this action to install Rust
         with:
-          toolchain: stable
+          profile: minimal
+          default-toolchain: stable
 
       - name: Build release binary
         run: |
@@ -28,10 +29,10 @@ jobs:
           rm -rf target/release  # Clean up the target/release directory
 
       - name: List build artifacts
-        run: ls ./build 
-        
+        run: ls ./build  # Only the binary should be listed now
+
       - name: Upload Release Binary
-        uses: actions/upload-artifact@v3 
+        uses: actions/upload-artifact@v3  # Use the latest version of this action
         with:
           name: rust-release-binary
-          path: ./build/carch
+          path: ./build/carch  # Ensure this is your binary name
