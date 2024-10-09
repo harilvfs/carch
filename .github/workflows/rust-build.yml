@@ -17,10 +17,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Rust
-        uses: rust-lang/rustup@v1  # Use this action to install Rust
+        uses: actions/setup-rust@v1  # Use the latest stable version of this action
         with:
-          profile: minimal
-          default-toolchain: stable
+          toolchain: stable  # Specify the Rust toolchain to install
 
       - name: Build release binary
         run: |
