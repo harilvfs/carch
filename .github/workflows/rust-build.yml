@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Rust
-        uses: actions/setup-rust@v1  # Use the latest stable version of this action
+        uses: actions-rs/toolchain@v1  # Use the correct action to set up Rust
         with:
           toolchain: stable  # Specify the Rust toolchain to install
 
