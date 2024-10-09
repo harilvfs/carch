@@ -1,7 +1,5 @@
 #!/bin/bash
 
-tput init
-tput clear
 install_paru() {
     if ! command -v paru &> /dev/null; then
         echo "Paru not found. Installing..."
@@ -24,7 +22,6 @@ install_paru() {
 
 install_communication() {
     while true; do
-        clear
         echo "Communication Menu:"
         echo "1) Discord"
         echo "2) Signal"
@@ -36,7 +33,7 @@ install_communication() {
             1) paru -S discord ;;
             2) paru -S signal-desktop ;;
             3) paru -S telegram-desktop ;;
-            4) clear; break ;;  
+            4) break ;;  
             *) echo "Invalid option" ;;
         esac
     done
@@ -44,7 +41,6 @@ install_communication() {
 
 install_streaming() {
     while true; do
-        clear
         echo "Live Streaming/Recording Menu:"
         echo "1) OBS Studio"
         echo "2) Exit"
@@ -52,7 +48,7 @@ install_streaming() {
 
         case $stream_choice in
             1) sudo pacman -S obs-studio ;;
-            2) clear; break ;;  
+            2) break ;;  
             *) echo "Invalid option" ;;
         esac
     done
@@ -60,7 +56,6 @@ install_streaming() {
 
 install_editing() {
     while true; do
-        clear
         echo "Editing Menu:"
         echo "1) GIMP"
         echo "2) Exit"
@@ -68,7 +63,7 @@ install_editing() {
 
         case $edit_choice in
             1) sudo pacman -S gimp ;;
-            2) clear; break ;;  
+            2) break ;;  
             *) echo "Invalid option" ;;
         esac
     done
@@ -77,7 +72,6 @@ install_editing() {
 install_browsers() {
     install_paru
     while true; do
-        clear
         echo "Browsers Menu:"
         echo "1) Brave"
         echo "2) Firefox"
@@ -95,7 +89,7 @@ install_browsers() {
             4) sudo pacman -S chromium ;;
             5) sudo pacman -S qutebrowser ;;
             6) paru -S zen-browser-bin ;;
-            7) clear; break ;;  
+            7) break ;;  
             *) echo "Invalid option" ;;
         esac
     done
@@ -103,7 +97,6 @@ install_browsers() {
 
 install_filemanagers() {
     while true; do
-        clear
         echo "File Manager Menu:"
         echo "1) Nemo"
         echo "2) Thunar"
@@ -117,14 +110,13 @@ install_filemanagers() {
             2) sudo pacman -S thunar ;;
             3) sudo pacman -S dolphin ;;
             4) sudo pacman -S lf ;;
-            5) clear; break ;;  
+            5) break ;;  
             *) echo "Invalid option" ;;
         esac
     done
 }
 
 while true; do
-    clear
     echo "Main Menu:"
     echo "1) Communication"
     echo "2) Live Streaming/Recording"
@@ -140,7 +132,8 @@ while true; do
         3) install_editing ;;
         4) install_browsers ;;
         5) install_filemanagers ;;
-        6) clear; exit ;;  
+        6) exit ;;  
         *) echo "Invalid option" ;;
     esac
 done
+
