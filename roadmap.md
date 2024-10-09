@@ -62,7 +62,7 @@
   - [ ] Gather user feedback
 
 - **Implement additional programming languages:**
-  - [ ] Develop Rust components
+  - [x] Develop Rust components
   - [ ] Assess areas for parallel development
 
 - **Add WM setup scripts:**
@@ -77,7 +77,7 @@
 
 - **Transition TUI to Rust:**
   - [ ] Research best practices for TUI development in Rust
-  - [ ] Implement and test new TUI
+  - [x] Implement and test new TUI
 
 ---
 
