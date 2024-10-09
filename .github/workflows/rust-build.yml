@@ -26,8 +26,8 @@ jobs:
         run: |
           cargo build --release || { echo "Build failed"; exit 1; }
           if [ -f target/release/carch ]; then
-              mkdir -p build
-              mv target/release/carch ./build/carch
+              mkdir -p build  # Create build directory if it doesn't exist
+              mv target/release/carch ./build/carch  # Move the binary to build directory
           else
               echo "Binary not found. Build may have failed."
               exit 1
@@ -37,8 +37,10 @@ jobs:
       - name: List build artifacts
         run: ls ./build
 
-      - name: Upload Release Binary
-        uses: actions/upload-artifact@v3
-        with:
-          name: rust-release-binary
-          path: ./build/carch
+      - name: Commit and push the build directory
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add build/carch
+          git commit -m "Update build directory with new binary" || echo "No changes to commit"
+          git push origin main  # Push changes to the main branch
