@@ -56,41 +56,6 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-<p align="center"> <strong> Repository Structure </strong>  </p>
-
-```bash
-carch/
-├── docs/
-│   └── index.md
-├── preview/
-│   ├── carchp.png
-│   └── carchp1.png
-├── scripts/
-│   ├── Dwm Setup.sh
-│   ├── Hyprland Setup.sh
-│   ├── Install Fonts.sh
-│   ├── Install LTS Kernal.sh
-│   ├── Install Packages.sh
-│   ├── README.txt
-│   ├── Setup Alacritty.sh
-│   ├── Setup Aur.sh
-│   ├── Setup Fastfetch.sh
-│   ├── Setup GRUB.sh
-│   ├── Setup Kitty.sh
-│   ├── Setup Neovim.sh
-│   ├── Setup Picom.sh
-│   ├── Setup Rofi.sh
-│   ├── Setup SDDM.sh
-│   ├── Setup Themes-Icons.sh 
-│   └── Wallpapers.sh
-├── LICENSE
-├── README.md
-├── SECURITY.md
-├── roadmap.md
-├── cxfs.sh
-├── run.sh
-└── setup.sh
-```
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
 
