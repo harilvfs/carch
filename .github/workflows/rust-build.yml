@@ -1,0 +1,37 @@
+name: Build Rust Release
+
+on:
+  pull_request:
+    paths:
+      - '**/*.rs'
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: rust-lang/rustup-init@v1
+        with:
+          profile: minimal
+          default-toolchain: stable
+
+      - name: Build release binary
+        run: |
+          cargo build --release
+          mv target/release/carch ./build/carch
+          rm -rf target/release
+      - name: List build artifacts
+        run: ls ./build  # Only the binary should be listed now
+
+      - name: Upload Release Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: rust-release-binary
+          path: ./build/carch  # Replace with your binary name
