@@ -1,7 +1,6 @@
 use dialoguer::Select;
-use std::{fs, process::Command};
+use std::{env, fs, process::Command};
 
-const SCRIPT_DIR: &str = "../scripts"; // Path to the scripts directory
 const HELP_MESSAGE: &str = "This tool helps to automate Arch Linux setup.\n\n\
                             Select 'Arch Setup' to install packages and configure the system.\n\
                             For more information, visit: https://harilvfs.github.io/carch/";
@@ -34,23 +33,32 @@ fn display_main_menu() {
 
 fn load_scripts() -> Vec<String> {
     let mut scripts = Vec::new();
-    // Read the scripts directory and collect script names
-    if let Ok(entries) = fs::read_dir(SCRIPT_DIR) {
-        for entry in entries.filter_map(Result::ok) {
-            let path = entry.path();
-            if let Some(file_name) = path.file_name() {
-                if let Some(name) = file_name.to_str() {
-                    if name.ends_with(".sh") {
-                        // Check for .sh scripts
-                        // Trim the ".sh" extension and push to the scripts vector
-                        let script_name = name.trim_end_matches(".sh");
-                        scripts.push(script_name.to_string());
+
+    // Get the current working directory
+    let current_dir = env::current_dir().expect("Failed to get current directory");
+    let script_dirs = vec![
+        current_dir.join("scripts"),       // Relative path from the root
+        current_dir.join("../scripts"),    // Relative path from the src directory
+    ];
+
+    // Iterate over each script directory and load scripts
+    for script_dir in script_dirs {
+        if let Ok(entries) = fs::read_dir(&script_dir) { // Borrow script_dir
+            for entry in entries.filter_map(Result::ok) {
+                let path = entry.path();
+                if let Some(file_name) = path.file_name() {
+                    if let Some(name) = file_name.to_str() {
+                        if name.ends_with(".sh") {
+                            // Trim the ".sh" extension and push to the scripts vector
+                            let script_name = name.trim_end_matches(".sh");
+                            scripts.push(script_name.to_string());
+                        }
                     }
                 }
             }
+        } else {
+            eprintln!("Failed to read the directory: {:?}", script_dir.clone()); // Clone here
         }
-    } else {
-        eprintln!("Failed to read the directory: {}", SCRIPT_DIR);
     }
 
     // Debugging output to verify scripts loaded
@@ -64,7 +72,7 @@ fn display_submenu() {
         let scripts = load_scripts(); // Load scripts each time the submenu is displayed
 
         if scripts.is_empty() {
-            println!("No scripts found in the '{}' directory.", SCRIPT_DIR);
+            println!("No scripts found.");
             println!("Press Enter to return to the menu...");
             let _ = std::io::stdin().read_line(&mut String::new());
             break;
@@ -100,16 +108,34 @@ fn display_submenu() {
 fn run_script(script_name: &str) {
     println!("Running {}...", script_name);
 
-    // Execute the script using bash
-    let status = Command::new("bash")
-        .arg(format!("{}/{}.sh", SCRIPT_DIR, script_name))
-        .status()
-        .expect("Failed to run script");
+    // Determine the script path based on the current working directory
+    let current_dir = env::current_dir().expect("Failed to get current directory");
+    let script_paths = vec![
+        current_dir.join("scripts").join(format!("{}.sh", script_name)),
+        current_dir.join("../scripts").join(format!("{}.sh", script_name)),
+    ];
 
-    if status.success() {
-        println!("{} completed successfully.", script_name);
-    } else {
-        println!("{} failed to complete.", script_name);
+    let mut script_found = false;
+
+    for script_path in script_paths {
+        if script_path.exists() {
+            let status = Command::new("bash")
+                .arg(script_path)
+                .status()
+                .expect("Failed to run script");
+
+            if status.success() {
+                println!("{} completed successfully.", script_name);
+            } else {
+                println!("{} failed to complete.", script_name);
+            }
+            script_found = true;
+            break; // Exit after finding and executing the first valid script
+        }
+    }
+
+    if !script_found {
+        println!("Script '{}' not found in either directory.", script_name);
     }
 
     // Wait for user input to continue
@@ -123,3 +149,4 @@ fn display_help() {
     println!("Press Enter to return to the menu...");
     let _ = std::io::stdin().read_line(&mut String::new());
 }
+
