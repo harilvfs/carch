@@ -1,8 +1,0 @@
-[package]
-name = "tui"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-ratatui = { version = "0.28", features = ["termion"] }
-termion = "1.5"
