@@ -1,5 +1,8 @@
 #!/bin/bash
 
+tput init
+tput clear
+
 install_paru() {
     if ! command -v paru &> /dev/null; then
         echo "Paru not found. Installing..."
