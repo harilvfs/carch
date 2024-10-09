@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 crossterm = "0.28"  # For terminal control
-dialoguer = "0.9"    # For menu/dialog interfaces
+dialoguer = "0.11"    # For menu/dialog interfaces
