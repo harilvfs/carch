@@ -3,10 +3,11 @@ name: Build Rust Release
 on:
   pull_request:
     paths:
-      - '**/*.rs' 
+      - '**/*.rs'
+      - 'Cargo.toml'
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   build:
@@ -23,9 +24,15 @@ jobs:
 
       - name: Build release binary
         run: |
-          cargo build --release
-          mv target/release/carch ./build/carch
-          rm -rf target/release
+          cargo build --release || { echo "Build failed"; exit 1; }
+          if [ -f target/release/carch ]; then
+              mkdir -p build
+              mv target/release/carch ./build/carch
+          else
+              echo "Binary not found. Build may have failed."
+              exit 1
+          fi
+          rm -rf target/release  # Optional: remove the target/release directory
 
       - name: List build artifacts
         run: ls ./build
