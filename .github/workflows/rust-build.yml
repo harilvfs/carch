@@ -3,10 +3,10 @@ name: Build Rust Release
 on:
   pull_request:
     paths:
-      - '**/*.rs'
+      - '**/*.rs'  # Trigger only on changes to Rust files
   push:
     branches:
-      - main
+      - main  # Optional: Trigger on push to main branch
 
 jobs:
   build:
@@ -17,21 +17,21 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Rust
-        uses: rust-lang/rustup-init@v1
+        uses: actions/setup-rust@v1
         with:
-          profile: minimal
-          default-toolchain: stable
+          toolchain: stable
 
       - name: Build release binary
         run: |
           cargo build --release
-          mv target/release/carch ./build/carch
-          rm -rf target/release
-      - name: List build artifacts
-        run: ls ./build  # Only the binary should be listed now
+          mv target/release/carch ./build/carch  # Ensure "carch" is your binary name
+          rm -rf target/release  # Clean up the target/release directory
 
+      - name: List build artifacts
+        run: ls ./build 
+        
       - name: Upload Release Binary
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3 
         with:
           name: rust-release-binary
-          path: ./build/carch  # Replace with your binary name
+          path: ./build/carch
