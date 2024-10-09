@@ -32,8 +32,7 @@ We aim for a welcoming environment for all contributors. Please read our **[Code
 
 ## Roadmap 📅 
 
-Check out our roadmap for the **Carch** project! It highlights upcoming **features**, **improvements**, and **timelines**.
-For more details, please check out the full roadmap:
+Check out our roadmap for the **Carch** project!:
 
 **[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
 
