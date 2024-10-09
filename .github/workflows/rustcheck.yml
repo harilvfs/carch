@@ -1,0 +1,28 @@
+name: Rust Pull Request Check
+
+on:
+  pull_request:
+    branches:
+      - main  # Adjust the target branch as needed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable  # Specify the Rust toolchain to install
+
+      - name: Build the project
+        run: cargo build --verbose  # Build the project and display detailed output
+
+      - name: Run tests
+        run: cargo test --verbose  # Run tests and display detailed output
+
+      - name: Run Clippy
+        run: cargo clippy -- -D warnings  # Fail the build if there are warnings
