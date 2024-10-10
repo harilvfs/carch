@@ -5,9 +5,14 @@ on:
     paths:
       - '**/*.rs'
       - 'Cargo.toml'
+      - 'src/main.rs'
   push:
     branches:
       - main
+    paths:
+      - '**/*.rs'
+      - 'Cargo.toml'
+      - 'src/main.rs'
 
 permissions:
   contents: write
