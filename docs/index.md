@@ -129,5 +129,3 @@ carch/
 
 Thank you for exploring Carch!
 
-
-sssTest Hello
