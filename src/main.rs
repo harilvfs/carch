@@ -234,4 +234,3 @@ fn display_help() -> Result<(), Box<dyn std::error::Error>> {
     let _ = std::io::stdin().read_line(&mut String::new());
     Ok(())
 }
-
