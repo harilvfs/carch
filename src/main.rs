@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut terminal = Terminal::new(backend)?;
 
     let mut menu_state = ListState::default();
-    menu_state.select(Some(0)); // Set initial selection
+    menu_state.select(Some(0)); 
     let mut output_message = String::new();
 
     loop {
@@ -40,7 +40,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let menu_items = vec![
                 ListItem::new(Span::raw("Arch Setup")),
-                ListItem::new(Span::raw("Hyprland Setup")),  // Added Hyprland Setup
+                ListItem::new(Span::raw("Hyprland Setup")),  
                 ListItem::new(Span::raw("Help & Info")),
                 ListItem::new(Span::raw("Exit")),
             ];
@@ -52,7 +52,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             f.render_stateful_widget(menu, chunks[0], &mut menu_state);
 
-            // Display output message in the bottom area of the TUI
             let output_paragraph = Paragraph::new(Span::raw(output_message.clone()))
                 .block(Block::default().borders(Borders::ALL).title("Output"));
 
@@ -63,34 +62,33 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             match key.code {
                 KeyCode::Down => {
                     let i = menu_state.selected().unwrap_or(0);
-                    let next_index = if i >= 3 { 0 } else { i + 1 };  // Adjusted index range for new item
+                    let next_index = if i >= 3 { 0 } else { i + 1 };  
                     menu_state.select(Some(next_index));
                 }
                 KeyCode::Up => {
                     let i = menu_state.selected().unwrap_or(0);
-                    let next_index = if i == 0 { 3 } else { i - 1 };  // Adjusted index range for new item
+                    let next_index = if i == 0 { 3 } else { i - 1 };  
                     menu_state.select(Some(next_index));
                 }
                 KeyCode::Enter => match menu_state.selected() {
                     Some(0) => {
                         output_message = String::from("Running Arch Setup...\nPress Enter to return to menu.");
                     }
-                    Some(1) => {  // Handle Hyprland Setup selection
+                    Some(1) => {  
                         output_message = String::from("Running Hyprland Setup...\nPress Enter to return to menu.");
                     }
                     Some(2) => {
                         output_message = String::from(HELP_MESSAGE);
                     }
-                    Some(3) => break, // Exit
+                    Some(3) => break, 
                     _ => unreachable!(),
                 },
-                KeyCode::Char('q') => break, // Exit on 'q'
+                KeyCode::Char('q') => break, 
                 _ => {}
             }
         }
     }
 
-    // Cleanup and exit
     crossterm::terminal::disable_raw_mode()?;
     execute!(terminal.backend_mut(), crossterm::terminal::LeaveAlternateScreen)?;
 
