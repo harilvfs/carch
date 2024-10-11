@@ -1,4 +1,5 @@
 use std::io::{stdout};
+use std::process::{Command, Stdio};
 use ratatui::{
     backend::CrosstermBackend,
     layout::{Constraint, Direction, Layout},
@@ -11,7 +12,8 @@ use ratatui::{
 use crossterm::{
     event::{self, Event, KeyCode},
     execute,
-};
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen},
+   };
 
 const HELP_MESSAGE: &str = "This tool helps to automate Arch Linux setup.\n\
                             Select 'Arch Setup' to install packages and configure the system.\n\
@@ -19,7 +21,7 @@ const HELP_MESSAGE: &str = "This tool helps to automate Arch Linux setup.\n\
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut stdout = stdout();
-    execute!(stdout, crossterm::terminal::EnterAlternateScreen)?;
+    execute!(stdout, EnterAlternateScreen)?;
     crossterm::terminal::enable_raw_mode()?;
 
     let backend = CrosstermBackend::new(stdout);
@@ -34,7 +36,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let chunks = Layout::default()
                 .direction(Direction::Vertical)
                 .constraints(
-                    [Constraint::Percentage(80), Constraint::Percentage(20)].as_ref(),
+                    [Constraint::Percentage(60), Constraint::Percentage(40)].as_ref(),
                 )
                 .split(f.area());
 
@@ -52,7 +54,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             f.render_stateful_widget(menu, chunks[0], &mut menu_state);
 
-            let output_paragraph = Paragraph::new(Span::raw(output_message.clone()))
+            let output_paragraph = Paragraph::new(Span::raw(&output_message))
                 .block(Block::default().borders(Borders::ALL).title("Output"));
 
             f.render_widget(output_paragraph, chunks[1]);
@@ -75,7 +77,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                         output_message = String::from("Running Arch Setup...\nPress Enter to return to menu.");
                     }
                     Some(1) => {  
-                        output_message = String::from("Running Hyprland Setup...\nPress Enter to return to menu.");
+                        // Running Hyprland setup
+                        output_message = String::from("Running Hyprland Setup...\n");
+
+                        // Execute the cloning command and capture the output
+                        let output = Command::new("git")
+                            .args(&["clone", "https://github.com/your/repo/hyprland.git", "$HOME/.config/hyprland"])
+                            .stdout(Stdio::piped())
+                            .stderr(Stdio::piped())
+                            .output()
+                            .expect("Failed to execute command");
+
+                        // Convert the output to a string
+                        let stdout = String::from_utf8_lossy(&output.stdout);
+                        let stderr = String::from_utf8_lossy(&output.stderr);
+
+                        // Update output_message with the command output
+                        output_message.push_str("Cloning into '$HOME/.config/hyprland'...\n");
+                        output_message.push_str(&stdout);
+                        output_message.push_str(&stderr);
+                        output_message.push_str("Hyprland setup completed successfully!\n");
                     }
                     Some(2) => {
                         output_message = String::from(HELP_MESSAGE);
@@ -90,7 +111,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     crossterm::terminal::disable_raw_mode()?;
-    execute!(terminal.backend_mut(), crossterm::terminal::LeaveAlternateScreen)?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
 
     Ok(())
 }
