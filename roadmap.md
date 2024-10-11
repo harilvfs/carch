@@ -62,7 +62,7 @@
   - [ ] Gather user feedback
 
 - **Implement additional programming languages:**
-  - [x] Develop Rust components
+  - [ ] Develop Rust components
   - [ ] Assess areas for parallel development
 
 - **Add WM setup scripts:**
@@ -77,13 +77,11 @@
 
 - **Transition TUI to Rust:**
   - [ ] Research best practices for TUI development in Rust
-  - [x] Implement and test new TUI
+  - [ ] Implement and test new TUI
 
 ---
 
 ## Timeline (Tentative) 📅
 
 - **Weeks 2-3**: Refactor existing scripts for stability and begin expanding distribution support.
-- **Weeks 4-5**: Focus on TUI improvements and initial Rust implementation.
-- **Weeks 6-7**: Develop additional WM setup scripts and core system setup scripts.
-- **Weeks 8-9**: Finalize enhancements to TUI and continue integrating Rust components.
+- **Weeks 3-4**: Develop additional WM setup scripts and core system setup scripts.
