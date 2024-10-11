@@ -40,6 +40,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
             let menu_items = vec![
                 ListItem::new(Span::raw("Arch Setup")),
+                ListItem::new(Span::raw("Hyprland Setup")),  // Added Hyprland Setup
                 ListItem::new(Span::raw("Help & Info")),
                 ListItem::new(Span::raw("Exit")),
             ];
@@ -62,22 +63,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             match key.code {
                 KeyCode::Down => {
                     let i = menu_state.selected().unwrap_or(0);
-                    let next_index = if i >= 2 { 0 } else { i + 1 };
+                    let next_index = if i >= 3 { 0 } else { i + 1 };  // Adjusted index range for new item
                     menu_state.select(Some(next_index));
                 }
                 KeyCode::Up => {
                     let i = menu_state.selected().unwrap_or(0);
-                    let next_index = if i == 0 { 2 } else { i - 1 };
+                    let next_index = if i == 0 { 3 } else { i - 1 };  // Adjusted index range for new item
                     menu_state.select(Some(next_index));
                 }
                 KeyCode::Enter => match menu_state.selected() {
                     Some(0) => {
                         output_message = String::from("Running Arch Setup...\nPress Enter to return to menu.");
                     }
-                    Some(1) => {
+                    Some(1) => {  // Handle Hyprland Setup selection
+                        output_message = String::from("Running Hyprland Setup...\nPress Enter to return to menu.");
+                    }
+                    Some(2) => {
                         output_message = String::from(HELP_MESSAGE);
                     }
-                    Some(2) => break, // Exit
+                    Some(3) => break, // Exit
                     _ => unreachable!(),
                 },
                 KeyCode::Char('q') => break, // Exit on 'q'
