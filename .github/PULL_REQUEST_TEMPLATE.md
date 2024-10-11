@@ -3,12 +3,12 @@
 <!-- Provide a concise description of the changes made in this pull request. -->
 This pull request adds/updates/fixes [describe the main goal or feature].
 
-- [] Added/updated scripts or configurations.
-- [] Fixed issue #[issue number] (if applicable).
-- [] Improved/optimized existing functionality.
-- [] Bugs Fixes.
-- [] Feature Added.
-- [] Menu Improvement.
+- [ ] Added/updated scripts or configurations.
+- [ ] Fixed issue #[issue number] (if applicable).
+- [ ] Improved/optimized existing functionality.
+- [ ] Bugs Fixes.
+- [ ] Feature Added.
+- [ ] Menu Improvement.
 
 ### Context
 
@@ -24,12 +24,12 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 
 Please ensure your pull request meets the following requirements:
 
-- [] My code follows the style guidelines of this project.
-- [] I have performed a self-review of my code.
-- [] I have commented on my code, particularly in hard-to-understand areas.
-- [] My changes do not introduce new warnings.
-- [] I have added tests that prove my fix is effective or that my feature works.
-- [] New and existing unit tests pass locally with my changes.
+- [ ] My code follows the style guidelines of this project.
+- [ ] I have performed a self-review of my code.
+- [ ] I have commented on my code, particularly in hard-to-understand areas.
+- [ ] My changes do not introduce new warnings.
+- [ ] I have added tests that prove my fix is effective or that my feature works.
+- [ ] New and existing unit tests pass locally with my changes.
 
 ### Screenshots (if applicable)
 
