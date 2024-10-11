@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let chunks = Layout::default()
                 .direction(Direction::Vertical)
                 .constraints(
-                    [Constraint::Percentage(80), Constraint::Percentage(20)].as_ref(),
+                    [Constraint::Percentage(60), Constraint::Percentage(40)].as_ref(),
                 )
                 .split(f.area());
 
