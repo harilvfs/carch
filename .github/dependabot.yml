@@ -1,6 +1,0 @@
-version: 2
-updates:
-  - package-ecosystem: "cargo"  # Use "cargo" for Rust projects
-    directory: "/"               # Location of Cargo.toml (adjust if needed)
-    schedule:
-      interval: "weekly"         # Set the update frequency to weekly
