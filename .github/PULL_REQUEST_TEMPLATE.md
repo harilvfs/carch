@@ -18,7 +18,7 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 ### How Has This Been Tested?
 
 <!-- Describe the steps you followed to test the changes. If applicable, mention the specific environment where the testing took place. -->
-- [] Tested on [your distribution/environment].
+- [ ] Tested on [your distribution/environment].
 
 ### Checklist
 
