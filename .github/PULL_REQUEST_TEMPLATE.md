@@ -7,8 +7,10 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [] Fixed issue #[issue number] (if applicable).
 - [] Improved/optimized existing functionality.
 - [] Bugs Fixes.
+- [] Feature Added.
+- [] Menu Improvement.
 
-### Motivation and Context
+### Context
 
 <!-- Why is this change necessary? What problem does it solve or what new feature does it add? -->
 [Provide the reason for the change or new feature. Mention if it addresses a bug, adds a new feature, or improves existing functionality.]
@@ -25,7 +27,6 @@ Please ensure your pull request meets the following requirements:
 - [] My code follows the style guidelines of this project.
 - [] I have performed a self-review of my code.
 - [] I have commented on my code, particularly in hard-to-understand areas.
-- [] I have made corresponding changes to the documentation (if applicable).
 - [] My changes do not introduce new warnings.
 - [] I have added tests that prove my fix is effective or that my feature works.
 - [] New and existing unit tests pass locally with my changes.
