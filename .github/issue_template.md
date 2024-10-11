@@ -1,5 +1,3 @@
-## Issue Title: [Brief summary of the issue]
-
 ### Description
 
 <!-- Provide a detailed description of the issue. Include information about what the script should do versus what it is actually doing. -->
