@@ -30,3 +30,9 @@ paru -S carch
 ```
 
 <p>Just replace <code>paru</code> with the name of your preferred AUR helper.</p>
+
+### Using Carch 
+**To run Carch after installation, simply execute the following command in your terminal:**
+```bash
+carch
+```
