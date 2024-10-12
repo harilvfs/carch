@@ -15,6 +15,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
+[![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
@@ -33,6 +34,34 @@ Run the command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
+
+## ⬇️ **Get Started with Installation**
+
+You can easily install Carch as it's available as a package:
+
+[![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
+
+<details>
+  <summary><strong>Carch Installation Guide</strong></summary>
+
+<p>To install Carch on <a href="https://archlinux.org"><em>Arch Linux</em></a>, follow these steps:</p>
+
+```basg
+git clone https://aur.archlinux.org/carch.git
+cd carch
+makepkg -si
+```
+
+<p>For a simpler installation, use an <a href="https://wiki.archlinux.org/title/AUR_helpers"><em>AUR Helper</em></a> like <a href="https://github.com/Jguer/yay"><strong>yay</strong></a> or <a href="https://github.com/Morganamilo/paru"><strong>paru</strong></a>:</p>
+
+```bash
+paru -S carch
+```
+
+<p>Just replace <code>paru</code> with the name of your preferred AUR helper.</p>
+
+</details>
+
 
 ## Contributing 🤝 
 
