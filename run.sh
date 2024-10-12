@@ -4,7 +4,7 @@ COLOR_CYAN="\e[36m"
 
 if ! command -v whiptail &> /dev/null; then
     echo "whiptail is not installed. Installing..."
-    sudo pacman -S --noconfirm whiptail  
+    sudo pacman -S --noconfirm libnewt  
     if [ $? -ne 0 ]; then
         echo "Failed to install whiptail."
         exit 1
