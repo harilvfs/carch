@@ -8,7 +8,7 @@
 
 Carch allows you to customize your Arch system, adding configurations for a ready-to-use Linux environment.
 
-[Usages](#Usages) •
+[Usages](#Usages🚀) •
 [Documentation](#Documentation) •
 [Contributing ↗](#Constributing) •
 [Roadmap](#Roadmap)
@@ -25,7 +25,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 > Please feel free to submit an issue if you run into any problems:  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## 🚀 Usages
+## Usages 🚀
 Run the command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
