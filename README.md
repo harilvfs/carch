@@ -4,6 +4,7 @@
 [![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh)
 
 [![Discord invite][discord-badge]][discord-link]
+[![Downloads][downloads-badge]][downloads-link]
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
@@ -60,3 +61,5 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 [discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA
 [discord-link]: https://discord.gg/TAaVXT95
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white
+[downloads-link]: https://github.com/harilvfs/carch/releases
