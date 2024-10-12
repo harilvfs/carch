@@ -39,7 +39,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 You can easily install Carch as it's available as a package:
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg?header_color=blue&background=lightblue&text=black)](https://repology.org/project/carch/versions)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg&color=blue)](https://repology.org/project/carch/versions)
 
 <details>
   <summary><strong>Carch Installation Guide</strong></summary>
