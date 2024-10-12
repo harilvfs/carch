@@ -121,6 +121,8 @@ We thank everyone who has contributed to making **Carch** better. Your feedback 
 
 ```bash
 carch/
+├── build/
+│    └── carch
 ├── docs/
 │   └── index.md
 ├── preview/
@@ -144,9 +146,13 @@ carch/
 │   ├── Setup SDDM.sh
 │   ├── Setup Themes-Icons.sh 
 │   └── Wallpapers.sh
+├── INSTALLATION.md
 ├── LICENSE
+├── PKGBUILD
 ├── README.md
 ├── SECURITY.md
+├── binarybuild.sh
+├── carch.desktop
 ├── roadmap.md
 ├── cxfs.sh
 ├── run.sh
