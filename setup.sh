@@ -28,7 +28,7 @@ mkdir -p "$temp_dir/scripts"
 
 echo -e "${COLOR_YELLOW}Downloading 'scripts' folder from the Carch repository...${COLOR_RESET}"
 
-curl -L "https://github.com/harilvfs/carch/releases/download/v3.0.1/harilvfs.carch.main.scripts.zip" --output "$temp_dir/scripts/harilvfs_carch_main_scripts.zip"
+curl -L "https://github.com/harilvfs/carch/releases/latest/download/harilvfs.carch.main.scripts.zip" --output "$temp_dir/scripts/harilvfs_carch_main_scripts.zip"
 
 cd "$temp_dir/scripts" || exit
 
@@ -42,5 +42,4 @@ cd "$temp_dir" || exit
 
 echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
 bash <(curl -L https://chalisehari.com.np/lvfs)
-
 
