@@ -34,6 +34,18 @@ Run the command in your **Terminal**:
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
+## Aur
+**Paru**
+
+```bash
+paru -S carch
+```
+**Yay**
+
+```bash
+yay -S carch
+```
+
 ## Contributing 🤝 
 
 Contributions are welcome! If you want to help improve **Carch**, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
