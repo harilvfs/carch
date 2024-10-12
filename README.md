@@ -41,7 +41,7 @@ You can easily install Carch as it's available as a package:
 [![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg?header_color=blue&background=lightblue&text=black)](https://repology.org/project/carch/versions)
 
 <details>
-  <summary><strong>Arch Linux Installation Guide</strong></summary>
+  <summary><strong>Carch Installation Guide</strong></summary>
 
 <p>To install Carch on <a href="https://archlinux.org"><em>Arch Linux</em></a>, follow these steps:</p>
 
