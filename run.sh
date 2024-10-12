@@ -2,15 +2,15 @@
 
 COLOR_CYAN="\e[36m"
 
-if ! command -v whiptail &> /dev/null; then
-    echo "whiptail is not installed. Installing..."
+if ! command -v libnewt &> /dev/null; then
+    echo "libnewt is not installed. Installing..."
     sudo pacman -S --noconfirm libnewt  
     if [ $? -ne 0 ]; then
-        echo "Failed to install whiptail."
+        echo "Failed to install libnewt."
         exit 1
     fi
 else
-    echo "whiptail is already installed."
+    echo "libnewt is already installed."
 fi
 
 REPO="harilvfs/carch" 
