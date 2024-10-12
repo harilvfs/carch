@@ -43,42 +43,23 @@ Carch is also available as a package in various repositories:
 <details>
   <summary>Arch Linux</summary>
 
-Linutil can be installed on [Arch Linux](https://archlinux.org) with three different [AUR](https://aur.archlinux.org) packages:
-
-- `linutil` - Stable release compiled from source
-- `linutil-bin` - Stable release pre-compiled
-- `linutil-git` - Compiled from the last commit (not recommended)
+Linutil can be installed on [Arch Linux](https://archlinux.org) :
 
 by running:
 
 ```bash
-git clone https://aur.archlinux.org/<package>.git
-cd <package>
+git clone https://aur.archlinux.org/carch.git
+cd carch
 makepkg -si
 ```
-
-Replace `<package>` with your preferred package.
 
 If you use [yay](https://github.com/Jguer/yay), [paru](https://github.com/Morganamilo/paru) or any other [AUR Helper](https://wiki.archlinux.org/title/AUR_helpers), it's even simpler:
 
 ```bash
-paru -S linutil
+paru -S carch
 ```
 
-Replace `paru` with your preferred helper and `linutil` with your preferred package.
-
-</details>
-
-<details>
-  <summary>Cargo</summary>
-
-Linutil can be installed via [Cargo](https://doc.rust-lang.org/cargo) with:
-
-```bash
-cargo install linutil
-```
-
-Note that crates installed using `cargo install` require manual updating with `cargo install --force` (update functionality is [included in LinUtil](https://christitustech.github.io/linutil/userguide/#applications-setup))
+Replace `paru` with your preferred helper and `carch` with your preferred package.
 
 </details>
 
