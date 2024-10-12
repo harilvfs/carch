@@ -42,7 +42,7 @@ Check out our roadmap for the **Carch** project!:
 
 ## Documentation 📚
 
-For the better understanding of **Carch** [Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)
+For the better understanding of **Carch** **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
 
 ## License 📄 
 
