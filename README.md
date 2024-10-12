@@ -6,13 +6,6 @@
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
 
-Carch allows you to customize your Arch system, adding configurations for a ready-to-use Linux environment.
-
-[Usages](#Usages) •
-[Documentation](#Documentation) •
-[Contributing ↗](#Constributing) •
-[Roadmap](#Roadmap)
-
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
 <p>
@@ -25,31 +18,27 @@ Carch allows you to customize your Arch system, adding configurations for a read
 > Please feel free to submit an issue if you run into any problems:  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## Usages 
+## Usages 🚀
 Run the command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-## Contributing 
+## Contributing 🤝 
 
 Contributions are welcome! If you want to help improve **Carch**, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
 
-## Code of Conduct 
+## Code of Conduct 📜 
 
 We aim for a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** for a better experience.
 
-## Roadmap 
+## Roadmap 📅 
 
 Check out our roadmap for the **Carch** project!:
 
 **[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
 
 <strong>**We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!** </strong>
-
-## Documentation 📚
-
-For a better understanding of **Carch** Check out [Carch Offical Documentation](https://harilvfs.github.io/carch/) 
 
 ## License 📄 
 
