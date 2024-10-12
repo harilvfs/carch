@@ -30,7 +30,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
 ## Usages 🚀
-Run the command in your **Terminal**:
+Run the following command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
