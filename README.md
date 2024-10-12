@@ -34,34 +34,33 @@ Run the command in your **Terminal**:
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-## ⬇️ Installation
+## ⬇️ **Get Started with Installation**
 
-Carch is also available as a package in various repositories:
+You can easily install Carch as it's available as a package:
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg?header_color=blue&background=lightblue&text=black)](https://repology.org/project/carch/versions)
 
 <details>
-  <summary>Arch Linux</summary>
+  <summary><strong>Arch Linux Installation Guide</strong></summary>
 
-Linutil can be installed on [Arch Linux](https://archlinux.org) :
+<p>To install Carch on <a href="https://archlinux.org"><em>Arch Linux</em></a>, follow these steps:</p>
 
-by running:
-
-```bash
+```basg
 git clone https://aur.archlinux.org/carch.git
 cd carch
 makepkg -si
 ```
 
-If you use [yay](https://github.com/Jguer/yay), [paru](https://github.com/Morganamilo/paru) or any other [AUR Helper](https://wiki.archlinux.org/title/AUR_helpers), it's even simpler:
+<p>For a simpler installation, use an <a href="https://wiki.archlinux.org/title/AUR_helpers"><em>AUR Helper</em></a> like <a href="https://github.com/Jguer/yay"><strong>yay</strong></a> or <a href="https://github.com/Morganamilo/paru"><strong>paru</strong></a>:</p>
 
 ```bash
 paru -S carch
 ```
 
-Replace `paru` with your preferred helper and `carch` with your preferred package.
+<p>Just replace <code>paru</code> with the name of your preferred AUR helper.</p>
 
 </details>
+
 
 ## Contributing 🤝 
 
