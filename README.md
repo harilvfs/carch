@@ -2,7 +2,7 @@
 <strong> Carch 'A Linux Script' </strong> 
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/238201078-6f564d9a-467a-4bba-ad3a-8527c8ab79ae.gif' width="20">
 </div>
-
+<br>
 <div align="center">
 Carch allows you to customize your Arch system, adding configurations for a ready-to-use Linux environment.
 
