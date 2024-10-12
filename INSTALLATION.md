@@ -1,6 +1,6 @@
 ## Installation
 
-To Install, run the following command in your terminal:
+To Setup, run the following command in your terminal:
 
 ```bash
 bash <(curl -L https://chalisehari.com.np/carch)
