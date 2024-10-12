@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Carch
 Comment=An automated script for quick & easy Arch Linux system setup.
-Exec=/usr/bin/carch-setup
+Exec=/usr/bin/carch
 Icon=utilities-terminal
 Type=Application
 Terminal=true
