@@ -38,7 +38,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 Carch is also available as a package in various repositories:
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg)](https://repology.org/project/carch/versions)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg?header_color=blue&background=lightgray&text=black)](https://repology.org/project/carch/versions)
 
 <details>
   <summary>Arch Linux</summary>
