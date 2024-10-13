@@ -25,6 +25,7 @@ install_paru() {
 
 install_communication() {
     while true; do
+        tput clear  
         echo "Communication Menu:"
         echo "1) Discord"
         echo "2) Signal"
@@ -44,6 +45,7 @@ install_communication() {
 
 install_streaming() {
     while true; do
+        tput clear  
         echo "Live Streaming/Recording Menu:"
         echo "1) OBS Studio"
         echo "2) Exit"
@@ -59,6 +61,7 @@ install_streaming() {
 
 install_editing() {
     while true; do
+        tput clear  
         echo "Editing Menu:"
         echo "1) GIMP"
         echo "2) Exit"
@@ -75,6 +78,7 @@ install_editing() {
 install_browsers() {
     install_paru
     while true; do
+        tput clear  
         echo "Browsers Menu:"
         echo "1) Brave"
         echo "2) Firefox"
@@ -100,6 +104,7 @@ install_browsers() {
 
 install_filemanagers() {
     while true; do
+        tput clear  
         echo "File Manager Menu:"
         echo "1) Nemo"
         echo "2) Thunar"
@@ -120,6 +125,7 @@ install_filemanagers() {
 }
 
 while true; do
+    tput clear  
     echo "Main Menu:"
     echo "1) Communication"
     echo "2) Live Streaming/Recording"
