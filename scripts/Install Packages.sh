@@ -3,6 +3,10 @@
 tput init
 tput clear
 
+CYAN=$(tput setaf 6)
+YELLOW=$(tput setaf 3)
+GREEN=$(tput setaf 2)
+
 install_paru() {
     if ! command -v paru &> /dev/null; then
         echo "Paru not found. Installing..."
@@ -125,15 +129,17 @@ install_filemanagers() {
 }
 
 while true; do
-    tput clear  
-    echo "Main Menu:"
-    echo "1) Communication"
-    echo "2) Live Streaming/Recording"
-    echo "3) Editing"
-    echo "4) Browsers"
-    echo "5) File Managers"
-    echo "6) Exit"
-    read -p "Choose a category: " main_choice
+    tput clear 
+    echo "${CYAN}Packages Setup${RESET}"
+    echo "${YELLOW}----------------------${RESET}"
+    echo "Install Packages:"
+    echo "${GREEN}1) Communication${RESET}"
+    echo "${GREEN}2) Live Streaming/Recording${RESET}"
+    echo "${GREEN}3) Editing${RESET}"
+    echo "${GREEN}4) Browsers${RESET}"
+    echo "${GREEN}5) File Managers${RESET}"
+    echo "${GREEN}6) Exit${RESET}"
+    read -p "Choose a option: " main_choice
 
     case $main_choice in
         1) install_communication ;;
