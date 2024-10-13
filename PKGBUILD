@@ -19,7 +19,7 @@ build() {
 
 package() {
     
-    install -Dm755 "$srcdir/carch" "$pkgdir/usr/bin/carch-setup"
+    install -Dm755 "$srcdir/carch" "$pkgdir/usr/bin/carch"
 
   
     install -Dm644 "$srcdir/carch.desktop" "$pkgdir/usr/share/applications/carch.desktop"
