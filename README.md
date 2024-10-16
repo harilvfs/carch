@@ -18,6 +18,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 [![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
 ![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch)
+![GitHub all releases](https://img.shields.io/github/downloads/harilvfs/carch/total)
 
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
