@@ -10,23 +10,19 @@ temp_dir=$(mktemp -d)
 trap 'rm -rf "$temp_dir"' EXIT
 
 echo -e "${COLOR_YELLOW}Setting Carch Script...${COLOR_RESET}"
-mkdir -p "$temp_dir/scripts" &> /dev/null &
+mkdir -p "$temp_dir/scripts"
 
-curl -L "https://github.com/harilvfs/carch/releases/latest/download/harilvfs.carch.main.scripts.zip" --output "$temp_dir/scripts/harilvfs_carch_main_scripts.zip" &> /dev/null &
+echo -e "${COLOR_YELLOW}Downloading 'scripts' folder from the Carch repository...${COLOR_RESET}"
 
-wait
+curl -L "https://github.com/harilvfs/carch/releases/latest/download/harilvfs.carch.main.scripts.zip" --output "$temp_dir/scripts/harilvfs_carch_main_scripts.zip"
 
 cd "$temp_dir/scripts" || exit
 
-echo -e "${COLOR_CYAN}Processing Carch Script...${COLOR_RESET}"
-unzip -q "harilvfs_carch_main_scripts.zip" &> /dev/null &
-
-wait
+echo -e "${COLOR_CYAN}Unzipping the downloaded file...${COLOR_RESET}"
+unzip -q "harilvfs_carch_main_scripts.zip"
 
 echo -e "${COLOR_CYAN}Setting execute permissions on the scripts...${COLOR_RESET}"
-chmod +x *.sh &> /dev/null &
-
-wait
+chmod +x *.sh
 
 cd "$temp_dir" || exit
 
