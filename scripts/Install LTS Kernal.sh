@@ -26,11 +26,20 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
+# Function to check if user wants to exit
+check_exit() {
+    if [[ "$1" =~ ^[Ee]$ ]]; then
+        echo "Exiting..."
+        exit 0
+    fi
+}
 
+echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
 echo -e "${RED}If you don't know about kernel changes, it's recommended to exit the script.${ENDCOLOR}"
-read -p "Do you want to continue with the kernel installation? [Y/n] " continue_install
+
+read -p "Do you want to continue with the kernel installation? [Y/n/e] " continue_install
 continue_install=${continue_install:-Y}
+check_exit "$continue_install"
 
 if [[ ! $continue_install =~ ^[Yy]$ ]]; then
     echo "Exiting..."
@@ -39,8 +48,9 @@ fi
 
 check_current_kernel
 
-read -p "Do you want to remove the current kernel and install LTS? [Y/n] " remove_kernel
+read -p "Do you want to remove the current kernel and install LTS? [Y/n/e] " remove_kernel
 remove_kernel=${remove_kernel:-N}
+check_exit "$remove_kernel"
 
 if [[ $remove_kernel =~ ^[Yy]$ ]]; then
     install_lts_kernel
@@ -58,8 +68,9 @@ if [[ $remove_kernel =~ ^[Yy]$ ]]; then
     configure_grub
 
 else
-    read -p "Do you want to install LTS kernel only without removing the current kernel? [Y/n] " install_only
+    read -p "Do you want to install LTS kernel only without removing the current kernel? [Y/n/e] " install_only
     install_only=${install_only:-Y}
+    check_exit "$install_only"
 
     if [[ $install_only =~ ^[Yy]$ ]]; then
         install_lts_kernel
@@ -72,3 +83,4 @@ else
 fi
 
 echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"
+
