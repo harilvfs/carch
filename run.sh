@@ -15,7 +15,7 @@ else
 fi
 
 # Directory containing the scripts
-SCRIPT_DIR="harilvfs_carch_main_scripts"
+SCRIPT_DIR="scripts"
 
 # Check if the script directory exists
 if [ ! -d "$SCRIPT_DIR" ]; then
