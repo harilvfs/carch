@@ -2,7 +2,7 @@
   "name": "@harilvfs/carch",
   "version": "3.0.2",
   "description": "A package to simplify Arch Linux setup.",
-  "main": "setup.sh",
+  "main": "./setup.sh",
   "scripts": {
     "install": "bash setup.sh"
   },
