@@ -9,7 +9,7 @@ temp_dir=$(mktemp -d)
 
 trap 'rm -rf "$temp_dir"' EXIT
 
-echo -e "${COLOR_YELLOW}Setting Carch Script...${COLOR_RESET}"
+echo -e "${COLOR_YELLOW}Creating 'scripts' folder in temp directory...${COLOR_RESET}"
 mkdir -p "$temp_dir/scripts"
 
 echo -e "${COLOR_YELLOW}Downloading 'scripts' folder from the Carch repository...${COLOR_RESET}"
