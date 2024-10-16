@@ -23,7 +23,7 @@ display_main_menu() {
 }
 
 load_scripts() {
-    local script_dir="./harilvfs_carch_main_scripts"
+    local script_dir="./scripts"
     scripts=()
     while IFS= read -r -d '' file; do
         script_name=$(basename "${file}" .sh)
@@ -36,12 +36,12 @@ display_submenu() {
 
     while true; do
         script_list=()
-        for i in "${!harilvfs_carch_main_scripts[@]}"; do
+        for i in "${!scripts[@]}"; do
             script_list+=("$((i + 1))" "${scripts[i]}")
         done
-        script_list+=("$(( ${#harilvfs_carch_main_scripts[@]} + 1 ))" "Exit")
+        script_list+=("$(( ${#scripts[@]} + 1 ))" "Exit")
 
-        num_scripts=${#harilvfs_carch_main_scripts[@]}
+        num_scripts=${#scripts[@]}
         menu_height=$((num_scripts + 7))
 
         ((menu_height > 20)) && menu_height=20
@@ -57,8 +57,8 @@ display_submenu() {
 
         selected=$((CHOICE - 1))
 
-        if [[ $selected -lt ${#harilvfs_carch_main_scripts[@]} ]]; then
-            run_script "${harilvfs_carch_main_scripts[selected]}"
+        if [[ $selected -lt ${#scripts[@]} ]]; then
+            run_script "${scripts[selected]}"
         else
             break
         fi
@@ -76,7 +76,7 @@ run_script() {
 
     echo "Running ${script_name}..."
 
-    if bash "./harilvfs_carch_main_scripts/${script_name}.sh"; then
+    if bash "./scripts/${script_name}.sh"; then
         echo "${script_name} completed successfully. Press Enter to return to the menu."
     else
         echo "${script_name} failed to complete. Press Enter to return to the menu."
@@ -90,5 +90,4 @@ display_help() {
 }
 
 display_main_menu
-
 
