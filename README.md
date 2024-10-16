@@ -45,7 +45,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 You can easily install Carch as it's available as a package:
 
-[![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=red)](https://aur.archlinux.org/packages/carch)
+[![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
 
 <details>
   <summary><strong>Carch Installation Guide</strong></summary>
