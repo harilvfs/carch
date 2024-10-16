@@ -22,15 +22,6 @@ display_main_menu() {
     done
 }
 
-load_scripts() {
-    local script_dir="./scripts"
-    scripts=()
-    while IFS= read -r -d '' file; do
-        script_name=$(basename "${file}" .sh)
-        scripts+=("$script_name")
-    done < <(find "$script_dir" -maxdepth 1 -name '*.sh' -print0)
-}
-
 display_submenu() {
     load_scripts
 
