@@ -1,6 +1,7 @@
 #!/bin/bash
 
 COLOR_CYAN="\e[36m"
+COLOR_RESET="\e[0m"
 
 if ! command -v whiptail &> /dev/null; then
     echo "libnewt is not installed. Installing..."
@@ -12,6 +13,23 @@ if ! command -v whiptail &> /dev/null; then
 else
     echo "libnewt is already installed. Skipping installation."
 fi
+
+# Directory containing the scripts
+SCRIPT_DIR="harilvfs_carch_main_scripts"
+
+# Check if the script directory exists
+if [ ! -d "$SCRIPT_DIR" ]; then
+    echo "Script directory '$SCRIPT_DIR' does not exist. Please ensure the folder is present."
+    exit 1
+fi
+
+# Source all scripts from the folder
+for script in "$SCRIPT_DIR"/*.sh; do
+    if [ -f "$script" ]; then
+        echo "Loading script: $script"
+        source "$script"
+    fi
+done
 
 REPO="harilvfs/carch" 
 BINARY_NAME="cxfs"  
@@ -43,8 +61,10 @@ fi
 
 chmod +x "$TEMP_FILE"
 
+# Run the binary
 "$TEMP_FILE"
 
 rm -f "$TEMP_FILE"
 
 echo -e "${COLOR_CYAN}See You...${COLOR_RESET}"
+
