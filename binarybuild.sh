@@ -1,6 +1,6 @@
 #!/bin/bash
 
-shc -f cxfs.sh -o carch
+shc -f setup.sh -o carch
 
 if [[ $? -eq 0 ]]; then
     mv carch ~/Documents/GitHub/carch/build/
