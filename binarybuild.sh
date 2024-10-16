@@ -1,9 +1,9 @@
 #!/bin/bash
 
-shc -f setup.sh -o carch
+shc -f cxfs.sh -o cxfs
 
 if [[ $? -eq 0 ]]; then
-    mv carch ~/Documents/GitHub/carch/build/
+    mv cxfs ~/Documents/GitHub/carch/build/
     echo "Build successful! Binary moved to ~/Documents/github/carch/build/"
 else
     echo "Build failed!"
