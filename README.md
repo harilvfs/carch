@@ -11,11 +11,12 @@ Carch allows you to customize your Arch system, adding configurations for a read
 [Contributing ↗](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)
 </div>
 
-[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
+[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) 
 
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
 [![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
+![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
