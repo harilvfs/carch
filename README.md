@@ -1,5 +1,3 @@
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95)
-
 <div align="center">
 <strong> Carch 'A Linux Script' </strong> 
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/238201078-6f564d9a-467a-4bba-ad3a-8527c8ab79ae.gif' width="20">
