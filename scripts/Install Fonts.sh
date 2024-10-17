@@ -46,12 +46,12 @@ install_font() {
 
 while true; do
     echo "Choose a Nerd Font to install:"
-    echo "1) FiraCode Nerd Font"
-    echo "2) Meslo Nerd Font"
-    echo "3) JetBrains Nerd Font"
-    echo "4) Hack Nerd Font"
-    echo "5) Cascadia Nerd Font"
-    echo "6) Terminus Nerd Font"
+    echo "1) FiraCode"
+    echo "2) Meslo"
+    echo "3) JetBrains Mono"
+    echo "4) Hack"
+    echo "5) Cascadia"
+    echo "6) Terminus"
     echo "7) Exit"
     
     read -p "Enter your choice: " choice
