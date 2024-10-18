@@ -1,6 +1,6 @@
 <div align="center">
 <strong> Carch 'A Linux Script' </strong> 
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="20">
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="60">
 </div>
 <br>
 <div align="center">
