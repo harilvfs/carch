@@ -31,6 +31,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 ![Github Language](https://img.shields.io/github/languages/top/harilvfs/carch)
 ![Youtube](https://img.shields.io/youtube/channel/subscribers/UCxWo4QN4m72x8F5Pzrjg9Ew)
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/harilvfs/carch/main)
+![GitHub Tag](https://img.shields.io/github/v/tag/harilvfs/carch)
 
 
 
