@@ -24,7 +24,9 @@ Carch allows you to customize your Arch system, adding configurations for a read
 [![latest packaged version(s)](https://repology.org/badge/latest-versions/carch.svg)](https://repology.org/project/carch/versions)
 [![Packaging status](https://repology.org/badge/tiny-repos/carch.svg)](https://repology.org/project/carch/versions)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A)
-![Subreddit subscribers](https://img.shields.io/reddit/reddit-subscribers/aayush-le?style=social)
+![Github Followers](https://img.shields.io/github/followers/harilvfs)
+
+
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
