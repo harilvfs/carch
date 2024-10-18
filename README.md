@@ -20,7 +20,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
 ![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch)
 ![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total)
-[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+![GitHub License](https://img.shields.io/github/license/harilvfs/carch)
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg)
 [![latest packaged version(s)](https://repology.org/badge/latest-versions/carch.svg)](https://repology.org/project/carch/versions)
 [![Packaging status](https://repology.org/badge/tiny-repos/carch.svg)](https://repology.org/project/carch/versions)
