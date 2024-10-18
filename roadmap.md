@@ -68,7 +68,7 @@
 - **Add WM setup scripts:**
   - [x] i3 setup script
   - [x] Sway setup script
-  - [x] Other window manager scripts
+  - [ ] Other window manager scripts
 
 - **Create core system setup scripts:**
   - [ ] User configuration
