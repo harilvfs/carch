@@ -17,6 +17,10 @@ Carch allows you to customize your Arch system, adding configurations for a read
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
 [![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
+![AUR License](https://img.shields.io/aur/license/carch)
+![AUR Maintainer](https://img.shields.io/aur/maintainer/carch)
+![AUR Popularity](https://img.shields.io/aur/popularity/carch)
+![AUR Votes](https://img.shields.io/aur/votes/carch)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
 ![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch)
 ![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total)
@@ -39,21 +43,14 @@ Carch allows you to customize your Arch system, adding configurations for a read
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/harilvfs/carch)
 ![GitHub Release Date](https://img.shields.io/github/release-date/harilvfs/carch)
-![NPM Collaborators](https://img.shields.io/npm/collaborators/carch)
-![AUR License](https://img.shields.io/aur/license/carch)
-![NPM License](https://img.shields.io/npm/l/carch)
 ![GitHub Sponsors](https://img.shields.io/github/sponsors/harilvfs)
-![AUR Maintainer](https://img.shields.io/aur/maintainer/carch)
+![NPM Collaborators](https://img.shields.io/npm/collaborators/carch)
+![NPM License](https://img.shields.io/npm/l/carch)
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages)
 ![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch)
 ![GitHub package.json dynamic](https://img.shields.io/github/package-json/3.0.3/harilvfs/carch)
-![AUR Popularity](https://img.shields.io/aur/popularity/carch)
-![AUR Votes](https://img.shields.io/aur/votes/carch)
 ![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch)
-
-
-
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
