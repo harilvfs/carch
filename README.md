@@ -39,6 +39,7 @@ Carch allows you to customize your Arch system, adding configurations for a read
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/harilvfs/carch)
 ![GitHub Release Date](https://img.shields.io/github/release-date/harilvfs/carch)
+![NPM Collaborators](https://img.shields.io/npm/collaborators/carch)
 
 
 
