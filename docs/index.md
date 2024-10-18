@@ -149,7 +149,9 @@ carch/
 │   ├── Setup Neovim.sh
 │   ├── Setup Picom.sh
 │   ├── Setup Rofi.sh
+│   ├── i3wm Setup.sh 
 │   ├── Setup SDDM.sh
+│   ├── SwayWM setup.sh
 │   ├── Setup Themes-Icons.sh 
 │   └── Wallpapers.sh
 ├── INSTALLATION.md
