@@ -41,11 +41,8 @@
 ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/harilvfs/carch)
 ![GitHub Release Date](https://img.shields.io/github/release-date/harilvfs/carch)
-![NPM Collaborators](https://img.shields.io/npm/collaborators/carch)
-![NPM License](https://img.shields.io/npm/l/carch)
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages)
 ![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch)
-![GitHub package.json dynamic](https://img.shields.io/github/package-json/3.0.3/harilvfs/carch)
 ![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch)
 
