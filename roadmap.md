@@ -83,5 +83,5 @@
 
 ## Timeline (Tentative) 📅
 
-- **Weeks 2-3**: Refactor existing scripts for stability and begin expanding distribution support.
-- **Weeks 3-4**: Develop additional WM setup scripts and core system setup scripts. ✔
+- **Weeks 2-3**: Develop additional WM setup scripts and core system setup scripts. ✔
+- **Weeks 3-4**: Refactor existing scripts for stability and begin expanding distribution support.
