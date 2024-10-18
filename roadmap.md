@@ -66,14 +66,14 @@
   - [ ] Assess areas for parallel development
 
 - **Add WM setup scripts:**
-  - [ ] i3 setup script
-  - [ ] Sway setup script
-  - [ ] Other window manager scripts
+  - [x] i3 setup script
+  - [x] Sway setup script
+  - [x] Other window manager scripts
 
 - **Create core system setup scripts:**
   - [ ] User configuration
-  - [ ] Package management
-  - [ ] Documentation for beginners
+  - [x] Package management
+  - [x] Documentation for beginners
 
 - **Transition TUI to Rust:**
   - [ ] Research best practices for TUI development in Rust
@@ -84,4 +84,4 @@
 ## Timeline (Tentative) 📅
 
 - **Weeks 2-3**: Refactor existing scripts for stability and begin expanding distribution support.
-- **Weeks 3-4**: Develop additional WM setup scripts and core system setup scripts.
+- **Weeks 3-4**: Develop additional WM setup scripts and core system setup scripts. ✔
