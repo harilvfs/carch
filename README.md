@@ -51,11 +51,14 @@
 > Please feel free to submit an issue if you run into any problems:  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## Usages 🚀
+## Installation 🚀
 Run the following command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
+
+## Usages
+
 <details>
 
 <summary><strong>Run Script Simply Entering **Carch** in your terminal after running the main script</strong></summary>
