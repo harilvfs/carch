@@ -65,7 +65,7 @@ Use Carch After Exec Main Script.
 <summary><strong>Usage Guide</strong></summary>
 <br>
 
-Simply Run Carch Entering **Carch** in your terminal.
+Simply run Carch by entering carch in your terminal.
 
 ```bash
 carch
