@@ -28,7 +28,12 @@ chmod +x *.sh &> /dev/null &
 
 wait
 
-# Add the .desktop file 
+echo -e "${COLOR_YELLOW}Downloading and installing the latest Carch binary...${COLOR_RESET}"
+sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" --output /usr/bin/carch &> /dev/null
+sudo chmod +x /usr/bin/carch
+
+echo -e "${COLOR_GREEN}Carch binary installed successfully!${COLOR_RESET}"
+
 echo -e "${COLOR_YELLOW}Creating Carch Desktop Entry...${COLOR_RESET}"
 sudo tee /usr/share/applications/carch.desktop > /dev/null <<EOL
 [Desktop Entry]
