@@ -61,7 +61,9 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 <details>
 
-<summary><strong>Run Script Simply Entering **Carch** in your terminal after running the main script</strong></summary>
+<summary><strong>Usage Guide</strong></summary>
+Run Script Simply Entering **Carch** in your terminal after running the main script
+
 
 ```bash
 carch
