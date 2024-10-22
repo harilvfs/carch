@@ -56,6 +56,15 @@ Run the following command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
+<details>
+
+<summary><strong>Run Script Simply Entering **Carch** in your terminal after running the main script</strong></summary>
+
+```bash
+carch
+```
+
+</details>
 
 ## Contributing 🤝 
 
