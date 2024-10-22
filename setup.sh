@@ -28,6 +28,21 @@ chmod +x *.sh &> /dev/null &
 
 wait
 
+# Add the .desktop file 
+echo -e "${COLOR_YELLOW}Creating Carch Desktop Entry...${COLOR_RESET}"
+sudo tee /usr/share/applications/carch.desktop > /dev/null <<EOL
+[Desktop Entry]
+Name=Carch
+Comment=An automated script for quick & easy Arch Linux system setup.
+Exec=/usr/bin/carch
+Icon=utilities-terminal
+Type=Application
+Terminal=true
+Categories=Utility;
+EOL
+
+echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
+
 cd "$temp_dir" || exit
 
 echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
