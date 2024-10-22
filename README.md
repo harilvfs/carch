@@ -18,18 +18,11 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch)
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
-[![Carch AUR Version](https://img.shields.io/aur/version/carch?label=%5BAUR%5D%20Carch&color=blue)](https://aur.archlinux.org/packages/carch)
-![AUR License](https://img.shields.io/aur/license/carch)
-![AUR Maintainer](https://img.shields.io/aur/maintainer/carch)
-![AUR Popularity](https://img.shields.io/aur/popularity/carch)
-![AUR Votes](https://img.shields.io/aur/votes/carch)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
 ![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch)
 ![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total)
 ![GitHub License](https://img.shields.io/github/license/harilvfs/carch)
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg)
-[![latest packaged version(s)](https://repology.org/badge/latest-versions/carch.svg)](https://repology.org/project/carch/versions)
-[![Packaging status](https://repology.org/badge/tiny-repos/carch.svg)](https://repology.org/project/carch/versions)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A)
 ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch)
@@ -63,40 +56,6 @@ Run the following command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
-
-## ⬇️ **Get Started with Installation**
-
-You can easily install Carch as it's available as a package:
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg?minversion=999999999)](https://repology.org/project/carch/versions)
-
-<details>
-  <summary><strong>Carch Installation Guide</strong></summary>
-
-<p>To install Carch on <a href="https://archlinux.org"><em>Arch Linux</em></a>, follow these steps:</p>
-
-```basg
-git clone https://aur.archlinux.org/carch.git
-cd carch
-makepkg -si
-```
-
-<p>For a simpler installation, use an <a href="https://wiki.archlinux.org/title/AUR_helpers"><em>AUR Helper</em></a> like <a href="https://github.com/Jguer/yay"><strong>yay</strong></a> or <a href="https://github.com/Morganamilo/paru"><strong>paru</strong></a>:</p>
-
-```bash
-paru -S carch
-```
-
-<p>Just replace <code>paru</code> with the name of your preferred AUR helper.</p>
-
-### Using Carch 
-**To run Carch after installation, simply execute the following command in your terminal:**
-```bash
-carch
-```
-
-</details>
-
 
 ## Contributing 🤝 
 
