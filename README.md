@@ -58,12 +58,13 @@ bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
 ## Usages
+To Use Carch After Exec Main Script
 
 <details>
 
 <summary><strong>Usage Guide</strong></summary>
-Run Script Simply Entering **Carch** in your terminal after running the main script
 
+Run Script Simply Entering **Carch** in your terminal after running the main script
 
 ```bash
 carch
