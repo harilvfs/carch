@@ -18,7 +18,7 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&logo=github)
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
-![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=build)
+![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=money)
 ![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch?style=for-the-badge)
 ![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge)
