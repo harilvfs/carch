@@ -4,9 +4,10 @@
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
 </div>
 <br>
+
 <div align="center">
   
-**Carch allows you to customize your Arch system, adding configurations,installing packages for a ready-to-use Linux environment.**
+**Carch allows you to customize your Arch system, adding configurations and installing packages for a ready-to-use Linux environment.**
 
 [Installation](https://github.com/harilvfs/carch/blob/main/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
@@ -17,7 +18,7 @@
 
 <img src='/preview/bash.png' width="80">
 
-**'Carch'** is a simple script made with **Bash** for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20">
+**Carch** is a simple **Bash** script designed for an efficient setup of **Arch** and **Arch-based systems**. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20">
 
 </div>
 
@@ -44,8 +45,6 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
-
-
 
 <p>
 <img src="https://github.com/harilvfs/carch/raw/main/preview/carchp.png" alt="screenshot" style="display:inline-block; width:49%;">
