@@ -23,7 +23,7 @@
 ![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total?style=for-the-badge)
 ![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge)
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A?style=for-the-badge)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A&style=for-the-badge)
 ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge)
 ![Github Language](https://img.shields.io/github/languages/top/harilvfs/carch?style=for-the-badge)
