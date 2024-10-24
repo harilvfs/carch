@@ -31,7 +31,7 @@
 ![GitHub Tag](https://img.shields.io/github/v/tag/harilvfs/carch?style=for-the-badge)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge)
-![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/harilvfs/carch?style=for-the-badge)
 ![GitHub Release Date](https://img.shields.io/github/release-date/harilvfs/carch?style=for-the-badge)
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge)
