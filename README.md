@@ -3,7 +3,6 @@
 <br>
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
 </div>
-<br>
 
 <div align="center">
   
