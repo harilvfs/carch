@@ -24,7 +24,6 @@
 ![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge)
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A&style=for-the-badge)
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge)
 ![Github Language](https://img.shields.io/github/languages/top/harilvfs/carch?style=for-the-badge)
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/harilvfs/carch/main?style=for-the-badge)
 ![GitHub Tag](https://img.shields.io/github/v/tag/harilvfs/carch?style=for-the-badge)
@@ -39,6 +38,7 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge)
 
 ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch)
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
 
