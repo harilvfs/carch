@@ -53,7 +53,7 @@
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.<br>
-> Please feel free to submit an issue if you run into any problems:<br>  
+> Please feel free to submit an issue if you run into any problems:
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
 > [!Tip]
