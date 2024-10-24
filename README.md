@@ -13,7 +13,7 @@
 [Contributing ↗](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)
 </div>
 
-[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link]
+[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit)
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&logo=github)
 [![Downloads][downloads-badge]][downloads-link]
@@ -35,8 +35,6 @@
 ![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge&logo=github)
 ![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
-
-![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
 <strong>**'Carch'** is a simple script for **Arch & Arch-based** system setup. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20"></strong>
