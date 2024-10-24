@@ -112,7 +112,7 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
-[discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA
+[discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge
 [discord-link]: https://discord.gg/TAaVXT95
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white&style=for-the-badge
 [downloads-link]: https://github.com/harilvfs/carch/releases
