@@ -48,14 +48,23 @@ carch
 > This script is primarily designed for Arch and Arch-based systems. Support for additional distributions will be added in future updates.
 
 ## Usage
+<strong>**Using Carch After Executing the Main Script:** </strong>
 
-Upon running the installation script, Carch provides a menu-driven interface for various setup options:
+<details>
 
-- **Arch Setup:** Automated configuration of the Arch Linux environment.
-- **AUR Setup:** Options to install your preferred AUR helper (e.g., Paru, Yay).
-- **Theme & Icon Setup:** Customize your desktop with themes and icons.
+<summary><strong>Usage Guide</strong></summary>
+<br>
 
-Follow the on-screen instructions to navigate through the menu.
+Simply run Carch by entering carch in your terminal.
+
+```bash
+carch
+```
+
+</details>
+
+> [!Tip]
+> You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
 ## Roadmap
 
