@@ -58,7 +58,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
 ## Usages
-Use Carch After Exec Main Script.
+Using Carch After Executing the Main Script.
 
 <details>
 
