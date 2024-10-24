@@ -1,17 +1,35 @@
 {
   "name": "@harilvfs/carch",
   "version": "3.0.3",
-  "description": "A package to simplify Arch Linux setup.",
+  "description": "A tool to automate and simplify Arch Linux setup and configuration.",
   "main": "./setup.sh",
   "scripts": {
+    "preinstall": "chmod +x setup.sh",
     "install": "bash setup.sh"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/harilvfs/carch.git"
   },
+  "bugs": {
+    "url": "https://github.com/harilvfs/carch/issues"
+  },
+  "homepage": "https://harilvfs.github.io/carch/",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
+  },
+  "keywords": [
+    "arch-linux",
+    "setup",
+    "automation",
+    "carch",
+    "bash",
+    "linux"
+  ],
+  "author": "Aayush",
+  "license": "Apache-2.0",
+  "engines": {
+    "bash": ">=4.0"
   }
 }
 
