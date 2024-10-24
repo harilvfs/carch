@@ -6,7 +6,7 @@
 <br>
 <div align="center">
   
-**Carch allows you to customize your Arch system, adding configurations for a ready-to-use Linux environment.**
+**Carch allows you to customize your Arch system, adding configurations,installing packages for a ready-to-use Linux environment.**
 
 [Installation](https://github.com/harilvfs/carch/blob/main/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
