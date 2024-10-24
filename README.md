@@ -46,17 +46,15 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
-
-> [!Note]
-> This project is still in development, and you may encounter some bugs.<br>
-> Please feel free to submit an issue if you run into any problems:
-> [Submit an Issue](https://github.com/harilvfs/carch/issues).
-
 <p>
 <img src="https://github.com/harilvfs/carch/raw/main/preview/carchp.png" alt="screenshot" style="display:inline-block; width:49%;">
 <img src="https://github.com/harilvfs/carch/raw/main/preview/carchp1.png" alt="screenshot" style="display:inline-block; width:49%;">
 </p>
 
+> [!Note]
+> This project is still in development, and you may encounter some bugs.<br>
+> Please feel free to submit an issue if you run into any problems:
+> [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
