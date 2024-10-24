@@ -56,6 +56,10 @@
 > Please feel free to submit an issue if you run into any problems:  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
+> [!Tip]
+> You dont need to run the script always you can run the installtion script once
+> then when you want you can just type carch in your terminal it will  automatically excute the carch script
+ 
 ## Installation 🚀
 Run the following command in your **Terminal**:
 ```shell
