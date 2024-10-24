@@ -56,7 +56,6 @@ carch
 <br>
 
 Simply run Carch by entering carch in your terminal.
-
 ```bash
 carch
 ```
