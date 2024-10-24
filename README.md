@@ -18,11 +18,11 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge)
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
-![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
-![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch)
-![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total)
-![GitHub License](https://img.shields.io/github/license/harilvfs/carch)
-![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg)
+![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge)
+![GitHub contributors](https://img.shields.io/github/contributors/harilvfs/carch?style=for-the-badge)
+![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/latest/total?style=for-the-badge)
+![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge)
+![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A)
 ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch)
