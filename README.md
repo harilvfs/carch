@@ -15,7 +15,7 @@
 
 [![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Download_Script-Latest-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) 
 
-![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch)
+![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch&style=for-the-badge)
 [![Discord invite][discord-badge]][discord-link]
 [![Downloads][downloads-badge]][downloads-link]
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml)
