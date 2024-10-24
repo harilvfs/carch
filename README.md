@@ -52,8 +52,8 @@
 </p>
 
 > [!Note]
-> This project is still in development, and you may encounter some bugs.
-> Please feel free to submit an issue if you run into any problems:  
+> This project is still in development, and you may encounter some bugs.<br>
+> Please feel free to submit an issue if you run into any problems:<br>  
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
 > [!Tip]
