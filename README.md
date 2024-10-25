@@ -54,15 +54,15 @@
 > This project is still in development, and you may encounter some bugs.<br>
 > Please feel free to submit an issue if you run into any problems:
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
-
-> [!Tip]
-> You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
  
 ## Installation 🚀
 Run the following command in your **Terminal**:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
+
+> [!Tip]
+> You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
 ## Usages
 <strong>**Using Carch After Executing the Main Script:** </strong>
