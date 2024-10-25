@@ -17,7 +17,7 @@
 
 <img src='/preview/bash.png' width="80">
 
-**'Carch'** is a simple **Bash** script designed for an efficient setup of **Arch** and **Arch-based systems**. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20">
+**'Carch'** is a simple **Bash** script designed for an efficient setup of **Arch** & **Arch-based systems**. <img src='https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png' width="20">
 
 </div>
 
