@@ -1,10 +1,7 @@
 <div align="center">
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif' width="40">
 <br>
-<strong> Carch 'A Linux Script' </strong> 
-<br>  
-<a href="chalisehari.com.np"><img alt="Visit the website" height="30" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a>
-<a href="https://discord.gg/TAaVXT95"><img alt="Discord Server" height="30" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
+<strong> Carch 'A Linux Script' </strong>
 <br>
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
 </div>
@@ -20,6 +17,8 @@
 [![Bash Shell](https://badges.frapsoft.com/bash/v1/bash.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
+<a href="chalisehari.com.np"><img alt="Visit the website" height="30" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a>
+<a href="https://discord.gg/TAaVXT95"><img alt="Discord Server" height="30" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
 
 [Installation](https://github.com/harilvfs/carch/blob/main/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
