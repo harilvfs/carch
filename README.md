@@ -14,6 +14,9 @@
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.png)](https://github.com/firstcontributions/open-source-badges)
 [![Bash Shell](https://badges.frapsoft.com/bash/v1/bash.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
+[![Code of Conduct][coc-badge]][coc]
+[![PRs Welcome][prs-badge]][prs] 
+
 [Installation](https://github.com/harilvfs/carch/blob/main/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
 [Contributing ↗](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)
@@ -134,3 +137,5 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 [discord-link]: https://discord.gg/TAaVXT95
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white&style=for-the-badge
 [downloads-link]: https://github.com/harilvfs/carch/releases
+[coc]:https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md "Contributor Covenant Code of Conduct"
+[prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
