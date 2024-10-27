@@ -1,5 +1,4 @@
 <div align="center">
-<br>
 <strong> Carch 'A Linux Script' </strong>
 <br>
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
