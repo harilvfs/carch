@@ -58,6 +58,7 @@
          <img height="24px" src="https://user-images.githubusercontent.com/13122796/178032714-c51c7492-0666-44ac-99c2-f003a695ab50.png" />
      </picture>
    </a>
+   <br>
 
 [Installation](https://github.com/harilvfs/carch/blob/main/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
