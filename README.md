@@ -6,8 +6,8 @@
 
 <div align="center">
   
-*'Carch allows you to customize your Arch system, adding configurations and installing packages for a ready-to-use Linux environment'**
-
+<strong> *' Carch allows you to customize your Arch system, adding configurations and installing packages for a ready-to-use Linux environment '* </strong>
+ 
 [![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
 
 
