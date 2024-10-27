@@ -1,4 +1,8 @@
 <div align="center">
+<img src='/preview/linux.png' width="20">
+</div>
+
+<div align="center">
 <strong> Carch 'A Linux Script' </strong>
 <br>
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
