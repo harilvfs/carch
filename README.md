@@ -8,6 +8,9 @@
   
 **Carch allows you to customize your Arch system, adding configurations and installing packages for a ready-to-use Linux environment.**
 
+[![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.png)](https://github.com/firstcontributions/open-source-badges)
+[![Bash Shell](https://badges.frapsoft.com/bash/v1/bash.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
+
 [Installation](https://github.com/harilvfs/carch/blob/main/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
 [Contributing ↗](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)
