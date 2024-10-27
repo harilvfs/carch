@@ -8,6 +8,7 @@
 
 <div align="center">
 ~ Carch allows you to customize your Arch <img src='/preview/archi.png' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.
+<br>
   
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.png)](https://github.com/firstcontributions/open-source-badges)
 [![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
