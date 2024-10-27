@@ -18,7 +18,7 @@
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
 <a href="chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a>
-<a href="https://discord.gg/TAaVXT95"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
+<a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
 
 <a href="https://opencollective.com/carch"><img src="https://opencollective.com/carch/donate/button.png?color=blue" alt="Support to our Open Collective" height="40"></a>
 
@@ -36,7 +36,7 @@
 [![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
 </div>
 
-[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/TAaVXT95)](https://discord.gg/TAaVXT95) [![Download Script](https://img.shields.io/badge/Script-Download-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch)
+[![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) [![](https://dcbadge.limes.pink/api/server/https://discord.com/invite/8NJWstnUHd)](https://discord.com/invite/8NJWstnUHd) [![Download Script](https://img.shields.io/badge/Script-Download-brightgreen?style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest/download/cxfs.sh) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch)
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&logo=github&color=red)
 [![Downloads][downloads-badge]][downloads-link]
