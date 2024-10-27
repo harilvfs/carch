@@ -22,6 +22,10 @@
          <img height="24px" src="https://user-images.githubusercontent.com/93124920/270108715-d80743fa-b330-4809-b1e6-79fbdc60d09c.png" />
       </picture>
    </a>&nbsp;&nbsp;&nbsp;
+   <a href="https://discord.com/invite/8NJWstnUHd">
+   <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif' width="40">
+   </a>
+       
 </div>
 
 <div align="center">
