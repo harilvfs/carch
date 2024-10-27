@@ -1,3 +1,5 @@
+[![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
+
 <div align="center">
 <strong> Carch 'A Linux Script' </strong> 
 <br>
