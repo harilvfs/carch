@@ -1,7 +1,9 @@
 <div align="center">
 <strong> Carch 'A Linux Script' </strong>
 <br>
-   <a href="https://github.com/harilvfs">
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
+<br>
+    <a href="https://github.com/harilvfs">
        <picture>
            <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://i.ibb.co/dMMmCrW/Git-Hub-Mark.png" />
            <img height="24px" src="https://i.ibb.co/9wV3HGF/Git-Hub-Mark-Light.png" />
@@ -37,8 +39,6 @@
          <img height="24px" src="https://user-images.githubusercontent.com/13122796/178032714-c51c7492-0666-44ac-99c2-f003a695ab50.png" />
      </picture>
    </a>
-  <br>
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/fire.gif' width="80">
 </div>
 
 <div align="center">
