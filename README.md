@@ -1,3 +1,5 @@
+[![Open Source Love](https://harilvfs.github.io/open-source-badges/badges/open-source-v1/open-source.svg)](https://github.com/harilvfs/open-source-badges)
+
 <div align="center">
 <strong> Carch 'A Linux Script' </strong> 
 <br>
