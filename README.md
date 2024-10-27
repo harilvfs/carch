@@ -29,8 +29,6 @@
 
 <div align="center">
 
-<img src='/preview/bash.png' width="80">
-
 **'Carch'** is a simple **Bash** script designed for an efficient setup of **Arch** & **Arch-based Systems**. <img src='/preview/archi.png' width="15">
 </div>
 
