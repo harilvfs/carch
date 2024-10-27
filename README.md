@@ -1,8 +1,4 @@
 <div align="center">
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif' width="40">
-</div>
-
-<div align="center">
 <br>
 <strong> Carch 'A Linux Script' </strong>
 <br>
@@ -12,6 +8,10 @@
 <div align="center">
   
 <img src='https://github.com/harilvfs/assets/blob/main/github-gifs/250967242-a2605358-6b87-44ab-87fb-20dcdc5f9ef2.gif' width="20">Carch allows you to customize your Arch system, adding configurations and installing packages for a ready-to-use Linux environment<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/250967242-a2605358-6b87-44ab-87fb-20dcdc5f9ef2.gif' width="20">
+
+<div align="center">
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif' width="40">
+</div>
  
 [![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
 
