@@ -10,7 +10,7 @@
 
 <div align="center">
   
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/250967242-a2605358-6b87-44ab-87fb-20dcdc5f9ef2.gif' width="20">Carch allows you to customize your Arch <img src='/preview/archi.png' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/250967242-a2605358-6b87-44ab-87fb-20dcdc5f9ef2.gif' width="20">
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/250967242-a2605358-6b87-44ab-87fb-20dcdc5f9ef2.gif' width="20">Carch allows you to customize your Arch <img src='/preview/archi.png' width="15"> System, adding configurations and installing packages for a ready-to-use Linux environment<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/250967242-a2605358-6b87-44ab-87fb-20dcdc5f9ef2.gif' width="20">
 
 [![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
 
