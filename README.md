@@ -119,6 +119,8 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
+![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg "Repobeats analytics image")
+
 [discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge
 [discord-link]: https://discord.gg/TAaVXT95
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white&style=for-the-badge
