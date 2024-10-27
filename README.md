@@ -14,12 +14,12 @@
 
 [![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
 
-<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif' width="40">
-
 [![Open Source Love](https://firstcontributions.github.io/open-source-badges/badges/open-source-v1/open-source.png)](https://github.com/firstcontributions/open-source-badges)
 [![Bash Shell](https://badges.frapsoft.com/bash/v1/bash.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
+
+<img src='https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif' width="40">
 
 <a href="chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a>
 <a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
