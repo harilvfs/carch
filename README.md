@@ -5,7 +5,7 @@
 <div align="center">
 <strong> Carch 'A Linux Script' </strong>
 </div>
-
+<br>
 <div align="center">
 <img src='/preview/arch.png' width="20">
 </div>
