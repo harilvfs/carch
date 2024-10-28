@@ -7,7 +7,7 @@
 </div>
 <br>
 <div align="center">
-<img src='/preview/arch.png' width="20">
+<img src='/preview/arch.png' width="30">
 </div>
 
 <div align="center">
