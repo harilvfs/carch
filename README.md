@@ -158,6 +158,12 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
          <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/13122796/178032714-c51c7492-0666-44ac-99c2-f003a695ab50.png" />
          <img height="24px" src="https://user-images.githubusercontent.com/13122796/178032714-c51c7492-0666-44ac-99c2-f003a695ab50.png" />
      </picture>
+   </a>&nbsp;&nbsp;&nbsp;
+   <a href="https://bsky.app/profile/chalisehari.com.np">
+      <picture>
+         <source height="25px" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/bluesky/Bluesky_app_icon.svg" />
+         <img height="25px" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/bluesky/Bluesky_app_icon.svg" />
+     </picture>
    </a>
 
 </div>
