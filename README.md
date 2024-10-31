@@ -95,8 +95,6 @@ Check out our roadmap for the **Carch** project!:
 
 **[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
 
-<strong>**We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!** </strong>
-
 ## Documentation 📚
 
 For the better understanding of **Carch** **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
@@ -118,7 +116,9 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-<p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
+<p align="center"> <strong> Thank you for checking out Carch! </strong>
+<strong>**We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates!** </strong>
+</p>
 
 <div align="center">
   
