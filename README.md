@@ -116,10 +116,7 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-<p align="center"> <strong> Thank you for checking out Carch! </strong>
-  <br>
-<strong>We appreciate your feedback and contributions as we continue to develop Carch. Stay tuned for updates! </strong>
-</p>
+<p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
 <div align="center">
   
