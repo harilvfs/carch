@@ -11,7 +11,7 @@ If you discover a potential security vulnerability in **Carch**, please report i
 ### 1. Report Method
 
 You can report vulnerabilities using one of the following methods:
-- **Email**: Send a detailed report to our security email at [ingoprivate@gmail.com](mailto:ingoprivate@gmail.com).
+- **Email**: Send a detailed report to our security email at [ingoprivate@gmail.com](mailto:harilvfs@chalisehari.com.np).
 - **Report Form**: Fill out the [Report Form](https://github.com/harilvfs/carch/security/advisories/new).
 - **GitHub Issues**: Create a private issue in this repository and label it with "security." Ensure that the issue remains private to protect sensitive information.
 
