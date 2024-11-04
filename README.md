@@ -30,9 +30,6 @@
 
 <div align="center">
 <img src='/preview/bash.png' width="80">
-<br>
-  
-**'Carch'** is a simple **Bash Script** designed for an efficient setup of **Arch** & **Arch-based Systems**.
 </div>
 
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs)
