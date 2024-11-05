@@ -1,22 +1,49 @@
 #!/bin/bash
 
-tput init
-tput clear
+clear
+
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
+BLUE="\e[34m"
+ENDCOLOR="\e[0m"
 NC='\033[0m'
 
-echo -e "${CYAN}====================================${NC}"
-echo -e "${CYAN}    Nord & Anime Wallpapers Setup    ${NC}"
-echo -e "${CYAN}====================================${NC}"
-echo -e "${CYAN}Credits:${NC}"
-echo -e "${CYAN}Nord Wallpapers from Chris Titus - ${NC}https://github.com/ChrisTitusTech/nord-background${NC}"
-echo -e "${CYAN}Anime Wallpapers from 2SSK - ${NC}https://github.com/2SSK/Wallpaper-Bank${NC}"
-echo -e "${CYAN}======================================================================================${NC}"
-echo
+echo -e "${BLUE}"
+cat <<"EOF"
+-----------------------------------------------------------------------------------
+ 
+██╗    ██╗ █████╗ ██╗     ██╗     ██████╗  █████╗ ██████╗ ███████╗██████╗ ███████╗
+██║    ██║██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔════╝
+██║ █╗ ██║███████║██║     ██║     ██████╔╝███████║██████╔╝█████╗  ██████╔╝███████╗
+██║███╗██║██╔══██║██║     ██║     ██╔═══╝ ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗╚════██║
+╚███╔███╔╝██║  ██║███████╗███████╗██║     ██║  ██║██║     ███████╗██║  ██║███████║
+ ╚══╝╚══╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
+                                                                                  
+-----------------------------------------------------------------------------------
+                      Nord & Anime Wallpapers Setup
+                                Credits
+        Nord Wallpapers https://github.com/ChrisTitusTech/nord-background
+            Anime Wallpapers https://github.com/2SSK/Wallpaper-Bank
+------------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
 
 PICTURES_DIR="$HOME/Pictures"
 WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
+
+echo -e "${CYAN}Wallpapers will be set up in the Pictures directory (${PICTURES_DIR}).${NC}"
+
+while true; do
+    read -p "Do you want to continue? (y/n): " confirmation
+    if [[ "$confirmation" =~ ^(yes|y)$ ]]; then
+        break
+    elif [[ "$confirmation" =~ ^(no|n)$ ]]; then
+        echo -e "${YELLOW}Operation canceled. Exiting...${NC}"
+        exit 0
+    else
+        echo -e "${CYAN}Invalid input. Please type 'y' or 'n'.${NC}"
+    fi
+done
 
 if [ ! -d "$PICTURES_DIR" ]; then
     echo -e "${CYAN}Creating the Pictures directory...${NC}"
@@ -31,7 +58,7 @@ setup_wallpapers() {
         echo -e "${CYAN}Cleaning up unnecessary files from the repository...${NC}"
         cd "$WALLPAPERS_DIR"
         rm -rf .git README.md docs/
-        echo -e "${GREEN}Nord wallpapers have been successfully set up in your wallpapers directory.${NC}"
+        echo -e "${GREEN}Wallpapers have been successfully set up in your wallpapers directory.${NC}"
     else
         echo -e "${CYAN}Failed to clone the repository.${NC}"
     fi
