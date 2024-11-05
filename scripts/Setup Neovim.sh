@@ -4,20 +4,39 @@ tput init
 tput clear
 GREEN="\e[32m"
 RED="\e[31m"
+BLUE="\e[34m"
 ENDCOLOR="\e[0m"
+
+echo -e "${BLUE}"
+cat <<"EOF"
+-------------------------------------------------------------------------------------------------
+
+
+███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗    ███████╗███████╗████████╗██╗   ██╗██████╗ 
+████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
+██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║    ███████╗█████╗     ██║   ██║   ██║██████╔╝
+██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
+██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║    ███████║███████╗   ██║   ╚██████╔╝██║     
+╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝    ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+                                                                                                                                                                      
+-------------------------------------------------------------------------------------------------
+       
+                        This script will help you set up Neovim.
+            If you press 'Y', it will check for an existing Neovim configuration.
+If an existing configuration is found, it will back it up before applying the new configuration.
+    If you press 'N', it will create a new Neovim directory and apply the new configuration.
+                        Press 'E' to exit the script at any time.
+
+-------------------------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
 
 setup_neovim() {
     NVIM_CONFIG_DIR="$HOME/.config/nvim"
     BACKUP_DIR="$HOME/.config/nvimbackup"
 
-    echo -e "${GREEN}This script will help you set up Neovim.${ENDCOLOR}"
-    echo -e "${GREEN}If you press 'Y', it will check for an existing Neovim configuration.${ENDCOLOR}"
-    echo -e "${GREEN}If an existing configuration is found, it will back it up before applying the new configuration.${ENDCOLOR}"
-    echo -e "${GREEN}If you press 'N', it will create a new Neovim directory and apply the new configuration.${ENDCOLOR}"
-    echo -e "${GREEN}Press 'E' to exit the script at any time.${ENDCOLOR}"
-
     while true; do
-        read -p "Do you have an existing Neovim configuration? [Y/n/E] " yn
+        read -p "Do you have an existing Neovim configuration? [Y/N/E] " yn
         yn=${yn:-Y} 
 
         case $yn in
