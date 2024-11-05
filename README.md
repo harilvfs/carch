@@ -92,7 +92,8 @@ Check out our roadmap for the **Carch** project!:
 
 For the better understanding of **Carch** **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
 
-## 📄 License  
+## License  
+<img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50"> 
 
 This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](LICENSE)** file for details.
 
