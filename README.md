@@ -106,14 +106,14 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 ## Contact
 <img src="https://github.com/harilvfs/assets/blob/main/carch/communicate.png" width="50" /> 
 
-**For questions or suggestions, feel free to reach out via:**
+For questions or suggestions, feel free to reach out via:
 
 - 📧 Email: **harilvfs@chalisehari.com.np**
 
 ## Contributors  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
 
-<strong>Thanks to everyone who helped make **'Carch'** better. Your contributions are greatly appreciated! </strong>
+Thanks to everyone who helped make `Carch` better. Your contributions are greatly appreciated!
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
