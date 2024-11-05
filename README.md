@@ -65,7 +65,9 @@
 > Please feel free to submit an issue if you run into any problems:
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
  
-## 🚀 Installation 
+## Installation
+<img src="https://github.com/harilvfs/assets/blob/main/carch/installation.png" width="50" /> 
+
 Run the following command in your `Terminal`:
 ```shell
 bash <(curl -L https://chalisehari.com.np/carch)
@@ -74,21 +76,25 @@ bash <(curl -L https://chalisehari.com.np/carch)
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type `carch` in your terminal whenever you want to automatically execute the Carch script.
 
-## 🛠️ Contributing  
+## Contributing  
+<img src="https://github.com/harilvfs/assets/blob/main/carch/contribute.png" width="50" /> 
 
 Contributions are welcome! If you want to help improve **Carch**, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
 
-## 📜 Code of Conduct  
+## Code of Conduct  
+<img src="https://github.com/harilvfs/assets/blob/main/carch/code-of-conduct.png" width="50" /> 
 
 We aim for a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** for a better experience.
 
-## 📅 Roadmap  
+## Roadmap  
+<img src="https://github.com/harilvfs/assets/blob/main/carch/roadmap.png" width="50" /> 
 
 Check out our roadmap for the **Carch** project!:
 
 **[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
 
-## 📚 Documentation 
+## Documentation 
+<img src="https://github.com/harilvfs/assets/blob/main/carch/doc.png" width="50" /> 
 
 For the better understanding of **Carch** **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
 
