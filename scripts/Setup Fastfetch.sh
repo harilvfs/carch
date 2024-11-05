@@ -2,10 +2,46 @@
 
 tput init
 tput clear
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 CYAN='\033[0;36m'
 NC='\033[0m' 
+BLUE="\e[34m"
+ENDCOLOR="\e[0m"
+
+echo -e "${BLUE}"
+cat <<"EOF"
+---------------------------------------------------------------
+
+███████╗███████╗    ███████╗███████╗████████╗██╗   ██╗██████╗ 
+██╔════╝██╔════╝    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
+█████╗  █████╗      ███████╗█████╗     ██║   ██║   ██║██████╔╝
+██╔══╝  ██╔══╝      ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
+██║     ██║         ███████║███████╗   ██║   ╚██████╔╝██║     
+╚═╝     ╚═╝         ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+                                                              
+---------------------------------------------------------------      
+                    Fastfetch Setup Script        
+---------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
+
+confirm_continue() {
+    while true; do
+        read -p "Do you want to continue with the Fastfetch setup? (y/n): " confirm
+        case $confirm in
+            [yY]) return 0 ;; 
+            [nN]) 
+                echo -e "${RED}Setup aborted by the user.${NC}"
+                exit 1
+                ;;
+            *) echo -e "${RED}Invalid choice. Please enter y or n.${NC}" ;;
+        esac
+    done
+}
+
+confirm_continue
 
 FASTFETCH_DIR="$HOME/.config/fastfetch"
 BACKUP_DIR="$HOME/.config/fastfetch_backup"
@@ -37,3 +73,4 @@ echo -e "${CYAN}Cleaning up unnecessary files...${NC}"
 rm -rf "$FASTFETCH_DIR/.git" "$FASTFETCH_DIR/LICENSE" "$FASTFETCH_DIR/README.md"
 
 echo -e "${GREEN}Fastfetch setup completed successfully!${NC}"
+
