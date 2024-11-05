@@ -1,8 +1,8 @@
 #!/bin/bash
 
-
 tput init
 tput clear
+
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
@@ -27,15 +27,21 @@ cat <<"EOF"
 EOF
 
 setup_dwm() {
-        echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
+    echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
 
-    read -p "Do you want to continue with the DWM setup? Make sure you know what a tiling window manager is. [Y/n] " yn
-    yn=${yn:-Y}
+    while true; do
+        read -p "Do you want to continue with the DWM setup? Make sure you know what a tiling window manager is. [Y/n] " yn
+        yn=${yn:-Y}
 
-    if [[ $yn =~ ^[Nn]$ ]]; then
-        echo -e "${RED}Aborting DWM setup. Returning to menu...${ENDCOLOR}"
-        return 
-    fi
+        if [[ $yn =~ ^[Yy]$ ]]; then
+            break
+        elif [[ $yn =~ ^[Nn]$ ]]; then
+            echo -e "${RED}Aborting DWM setup. Returning to menu...${ENDCOLOR}"
+            return
+        else
+            echo -e "${RED}Invalid input. Please enter Y/y for yes or N/n for no.${ENDCOLOR}"
+        fi
+    done
 
     echo -e "${GREEN}To complete the installation, please add 'exec dwm' to your ~/.xinitrc file.${ENDCOLOR}"
 
@@ -64,3 +70,4 @@ setup_dwm() {
 }
 
 setup_dwm
+
