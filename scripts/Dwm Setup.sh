@@ -5,11 +5,29 @@ tput init
 tput clear
 GREEN="\e[32m"
 RED="\e[31m"
+BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
+echo -e "${BLUE}"
+cat <<"EOF"
+-----------------------------------------------------------------------------
+
+ 
+██████╗ ██╗    ██╗███╗   ███╗    ███████╗███████╗████████╗██╗   ██╗██████╗ 
+██╔══██╗██║    ██║████╗ ████║    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
+██║  ██║██║ █╗ ██║██╔████╔██║    ███████╗█████╗     ██║   ██║   ██║██████╔╝
+██║  ██║██║███╗██║██║╚██╔╝██║    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
+██████╔╝╚███╔███╔╝██║ ╚═╝ ██║    ███████║███████╗   ██║   ╚██████╔╝██║     
+╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝    ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+                                                                           
+                                                                  
+-----------------------------------------------------------------------------
+                Github: https://github.com/harilvfs/dwm          
+-----------------------------------------------------------------------------
+EOF
+
 setup_dwm() {
-    echo -e "${RED}Warning: This DWM setup script has not been tested yet.${ENDCOLOR}"
-    echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
+        echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
 
     read -p "Do you want to continue with the DWM setup? Make sure you know what a tiling window manager is. [Y/n] " yn
     yn=${yn:-Y}
