@@ -7,6 +7,22 @@ RED="\e[31m"
 BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
+echo -e "${BLUE}"
+cat <<"EOF"
+--------------------------------------------------------------------------------------
+
+
+██████╗ ██╗ ██████╗ ██████╗ ███╗   ███╗    ███████╗███████╗████████╗██╗   ██╗██████╗ 
+██╔══██╗██║██╔════╝██╔═══██╗████╗ ████║    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
+██████╔╝██║██║     ██║   ██║██╔████╔██║    ███████╗█████╗     ██║   ██║   ██║██████╔╝
+██╔═══╝ ██║██║     ██║   ██║██║╚██╔╝██║    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
+██║     ██║╚██████╗╚██████╔╝██║ ╚═╝ ██║    ███████║███████╗   ██║   ╚██████╔╝██║     
+╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝    ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+                                                                                                                                                                  
+--------------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
+
 print_source_message() {
     echo -e "${BLUE}This Picom build is from FT-Labs.${ENDCOLOR}"
     echo -e "${BLUE}Check out here: ${GREEN}https://github.com/FT-Labs/picom${ENDCOLOR}"
@@ -45,7 +61,7 @@ download_config() {
 print_source_message
 
 echo -e "${BLUE}Select an option for Picom setup:${ENDCOLOR}"
-echo "1. Picom with animation (dwm)"
+echo "1. Picom with animation (Dwm)"
 echo "2. Picom normal"
 echo "3. Exit"
 
