@@ -2,9 +2,28 @@
 
 tput init
 tput clear
+
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
-NC='\033[0m' 
+BLUE="\e[34m"
+RED='\033[0;31m'
+ENDCOLOR="\e[0m"
+NC='\033[0m'
+
+echo -e "${BLUE}"
+cat <<"EOF"
+-------------------------------------------------------------------------------------------------------
+ 
+██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗         ███████╗ ██████╗ ███╗   ██╗████████╗███████╗
+██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║         ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔════╝
+██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║         █████╗  ██║   ██║██╔██╗ ██║   ██║   ███████╗
+██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║         ██╔══╝  ██║   ██║██║╚██╗██║   ██║   ╚════██║
+██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗    ██║     ╚██████╔╝██║ ╚████║   ██║   ███████║
+╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+                                                                                                      
+-------------------------------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
 
 install_font() {
     local font_name="$1"
@@ -45,14 +64,14 @@ install_font() {
 }
 
 while true; do
-    echo "Choose a Nerd Font to install:"
-    echo "1) FiraCode"
-    echo "2) Meslo"
-    echo "3) JetBrains Mono"
-    echo "4) Hack"
-    echo "5) Cascadia"
-    echo "6) Terminus"
-    echo "7) Exit"
+    echo -e "${BLUE}Choose a Nerd Font to install:${ENDCOLOR}"
+    echo -e "${CYAN}1) FiraCode${NC}"
+    echo -e "${CYAN}2) Meslo${NC}"
+    echo -e "${CYAN}3) JetBrains Mono${NC}"
+    echo -e "${CYAN}4) Hack${NC}"
+    echo -e "${CYAN}5) Cascadia${NC}"
+    echo -e "${CYAN}6) Terminus${NC}"
+    echo -e "${CYAN}7) Exit${NC}"
     
     read -p "Enter your choice: " choice
 
@@ -63,7 +82,8 @@ while true; do
         4) install_font "Hack" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip" ;;
         5) install_font "Cascadia" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip" ;;
         6) install_font "Terminus" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Terminus.zip" ;;
-        7) exit ;;
-        *) echo "Invalid option. Please try again." ;;
+        7) echo -e "${GREEN}Exiting. Thank you!${NC}"; exit ;;
+        *) echo -e "${RED}Invalid option. Please try again.${NC}" ;;
     esac
 done
+
