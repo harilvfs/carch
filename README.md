@@ -96,7 +96,7 @@ For the better understanding of **Carch** **[Check out Carch Offical Documentati
 
 This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](LICENSE)** file for details.
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/communicate.png"> 📬 <h3>Contact</h3  
+<img src="https://github.com/harilvfs/assets/blob/main/carch/communicate.png" width="50"> <h3>Contact</h3> 
 
 **For questions or suggestions, feel free to reach out via:**
 
