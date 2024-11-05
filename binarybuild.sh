@@ -17,7 +17,6 @@ echo "Building the binary..."
 shc -f setup.sh -o "$BINARY_NAME"
 
 if [[ $? -eq 0 ]]; then
-    # Move the binary to the build directory
     mv "$BINARY_NAME" "$BUILD_DIR/"
     echo "Build successful! Binary moved to $BUILD_DIR/"
 else
