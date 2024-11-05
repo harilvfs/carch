@@ -2,10 +2,26 @@
 
 tput init
 tput clear
+
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
 ENDCOLOR="\e[0m"
+
+echo -e "${BLUE}"
+cat <<"EOF"
+-----------------------------------------------------------------------------
+ 
+██╗  ████████╗███████╗    ██╗  ██╗███████╗██████╗ ███╗   ██╗ █████╗ ██╗     
+██║  ╚══██╔══╝██╔════╝    ██║ ██╔╝██╔════╝██╔══██╗████╗  ██║██╔══██╗██║     
+██║     ██║   ███████╗    █████╔╝ █████╗  ██████╔╝██╔██╗ ██║███████║██║     
+██║     ██║   ╚════██║    ██╔═██╗ ██╔══╝  ██╔══██╗██║╚██╗██║██╔══██║██║     
+███████╗██║   ███████║    ██║  ██╗███████╗██║  ██║██║ ╚████║██║  ██║███████╗
+╚══════╝╚═╝   ╚══════╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+                                                                 
+------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
 
 check_current_kernel() {
     CURRENT_KERNEL=$(uname -r)
@@ -26,7 +42,6 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-# Function to check if user wants to exit
 check_exit() {
     if [[ "$1" =~ ^[Ee]$ ]]; then
         echo "Exiting..."
@@ -35,9 +50,9 @@ check_exit() {
 }
 
 echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
-echo -e "${RED}If you don't know about kernel changes, it's recommended to exit the script.${ENDCOLOR}"
+echo -e "${RED}If you don't know about kernel changes, it's recommended to [E] exit the script.${ENDCOLOR}"
 
-read -p "Do you want to continue with the kernel installation? [Y/n/e] " continue_install
+read -p "Do you want to continue with the kernel installation? [Y/N/E] " continue_install
 continue_install=${continue_install:-Y}
 check_exit "$continue_install"
 
