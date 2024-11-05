@@ -100,8 +100,7 @@ This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](L
 
 **For questions or suggestions, feel free to reach out via:**
 
-- 📧 Email: **ingoprivate@gmail.com**
-- GitHub: **[harilvfs](https://github.com/harilvfs)**
+- 📧 Email: **harilvfs@chalisehari.com.np**
 
 ## Constributors 👥 
 
