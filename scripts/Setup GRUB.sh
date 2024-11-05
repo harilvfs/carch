@@ -7,9 +7,25 @@ BLUE="\e[34m"
 RED="\e[31m"
 ENDCOLOR="\e[0m"
 
+echo -e "${BLUE}"
+cat <<"EOF"
+---------------------------------------------------------------------------------
+
+
+ ██████╗ ██████╗ ██╗   ██╗██████╗     ███████╗███████╗████████╗██╗   ██╗██████╗ 
+██╔════╝ ██╔══██╗██║   ██║██╔══██╗    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
+██║  ███╗██████╔╝██║   ██║██████╔╝    ███████╗█████╗     ██║   ██║   ██║██████╔╝
+██║   ██║██╔══██╗██║   ██║██╔══██╗    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
+╚██████╔╝██║  ██║╚██████╔╝██████╔╝    ███████║███████╗   ██║   ╚██████╔╝██║     
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═════╝     ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+                                                                                 
+---------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
+
 print_message() {
     echo -e "${BLUE}This bootloader setup script is from Chris Titus Tech.${ENDCOLOR}"
-    echo -e "${BLUE}Check out his GitHub for more: ${GREEN}github.com/christitustech${ENDCOLOR}"
+    echo -e "${BLUE}Check out his GitHub for more: ${GREEN}https://github.com/christitustech${ENDCOLOR}"
 }
 
 request_sudo() {
@@ -42,17 +58,23 @@ install_grub_theme() {
 }
 
 print_message
+echo -e "${RED}WARNING: Please ensure you have backed up your old GRUB configuration before proceeding.${ENDCOLOR}"
+
+while true; do
+    read -p "Do you want to continue with the GRUB setup? (y/n): " yn
+    case $yn in
+        [Yy]* ) break;;  
+        [Nn]* )
+            echo -e "${RED}GRUB setup aborted by the user.${ENDCOLOR}"
+            exit 0
+            ;;
+        * ) echo -e "${RED}Invalid input. Please enter 'y' or 'n'.${ENDCOLOR}";;
+    esac
+done
+
 request_sudo
-
-read -p "Do you want to continue with GRUB setup? [Y/n] " yn
-yn=${yn:-Y}
-
-if [[ $yn =~ ^[Nn]$ ]]; then
-    echo -e "${RED}GRUB setup aborted.${ENDCOLOR}"
-    exit 0
-fi
-
 backup_grub
 install_grub_theme
 
 echo -e "${GREEN}GRUB setup completed. Please reboot your system to see the changes.${ENDCOLOR}"
+
