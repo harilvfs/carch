@@ -1,36 +1,54 @@
 #!/bin/bash
 
-tput init
-tput clear
-echo "========================================"
-echo "     Hyperland Setup Script Notice      "
-echo "========================================"
-echo "For better results, consider using"
-echo "Prasanth Rangan's Hyprland configuration:"
-echo "https://github.com/prasanthrangan/hyprdots"
-echo "Note: I have tweaked some configs to suit my use cases."
-echo
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+RESET='\033[0m'  
+ENDCOLOR="\e[0m"
 
-read -p "Do you want to continue with this script? (yes/no): " choice
+echo -e "${BLUE}"
+cat <<"EOF"
+-----------------------------------------------------------------------------------------------------------------
+
+
+██╗  ██╗██╗   ██╗██████╗ ██████╗ ██╗      █████╗ ███╗   ██╗██████╗     ███████╗███████╗████████╗██╗   ██╗██████╗ 
+██║  ██║╚██╗ ██╔╝██╔══██╗██╔══██╗██║     ██╔══██╗████╗  ██║██╔══██╗    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
+███████║ ╚████╔╝ ██████╔╝██████╔╝██║     ███████║██╔██╗ ██║██║  ██║    ███████╗█████╗     ██║   ██║   ██║██████╔╝
+██╔══██║  ╚██╔╝  ██╔═══╝ ██╔══██╗██║     ██╔══██║██║╚██╗██║██║  ██║    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
+██║  ██║   ██║   ██║     ██║  ██║███████╗██║  ██║██║ ╚████║██████╔╝    ███████║███████╗   ██║   ╚██████╔╝██║     
+╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝     ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
+                                                                                                                 
+
+-----------------------------------------------------------------------------------------------------------------
+                                 For better results, consider using
+                              Prasanth Rangan's Hyprland configuration
+                             https://github.com/prasanthrangan/hyprdots
+                        Note: I have tweaked some configs to suit my use cases
+-----------------------------------------------------------------------------------------------------------------
+EOF
+echo -e "${ENDCOLOR}"
+
+read -p "Do you want to continue with this script? (y/n): " choice
 
 if [[ "$choice" != "yes" ]]; then
-    echo "Exiting the script."
+    echo -e "${RED}Exiting the script.${RESET}"
     exit 1
 fi
 
-echo "Proceeding with Hyperland setup..."
+echo -e "${GREEN}Proceeding with Hyperland setup...${RESET}"
 
 install_if_missing() {
     if ! command -v "$1" &> /dev/null; then
-        echo "Installing $1..."
+        echo -e "${YELLOW}Installing $1...${RESET}"
         sudo pacman -S --noconfirm "$1"
     else
-        echo "$1 is already installed."
+        echo -e "${GREEN}$1 is already installed.${RESET}"
     fi
 }
 
 if ! command -v paru &> /dev/null; then
-    echo "Installing paru for AUR package management..."
+    echo -e "${YELLOW}Installing paru for AUR package management...${RESET}"
     sudo pacman -S --needed base-devel git --noconfirm
     git clone https://aur.archlinux.org/paru.git
     cd paru || exit
@@ -38,7 +56,7 @@ if ! command -v paru &> /dev/null; then
     cd ..
     rm -rf paru
 else
-    echo "Paru is already installed."
+    echo -e "${GREEN}Paru is already installed.${RESET}"
 fi
 
 dependencies=(
@@ -81,21 +99,21 @@ for dep in "${dependencies[@]}"; do
 done
 
 if ! paru -Q hyprland &> /dev/null; then
-    echo "Installing Hyprland and wlroots from AUR..."
+    echo -e "${YELLOW}Installing Hyprland and wlroots from AUR...${RESET}"
     paru -S --noconfirm hyprland wlroots
 else
-    echo "Hyprland and wlroots are already installed."
+    echo -e "${GREEN}Hyprland and wlroots are already installed.${RESET}"
 fi
 
-echo "Cloning Hyprland configuration..."
+echo -e "${YELLOW}Cloning Hyprland configuration...${RESET}"
 git clone https://github.com/harilvfs/hyprland ~/.config/hyprland
 
-echo "Moving files to ~/.config..."
+echo -e "${YELLOW}Moving files to ~/.config...${RESET}"
 cd ~/.config/hyprland || exit
 mv * ~/.config/
 
-echo "================================="
-echo "    Hyperland installation is    "
-echo "        successfully done!       "
-echo "================================="
+echo -e "${GREEN}=================================${RESET}"
+echo -e "${GREEN}    Hyperland installation is    ${RESET}"
+echo -e "${GREEN}        successfully done!       ${RESET}"
+echo -e "${GREEN}=================================${RESET}"
 
