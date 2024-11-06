@@ -127,7 +127,7 @@
   </footer>
 
  <script>
-    document.querySelectorAll(".tabs a").forEach(tab => {
+      document.querySelectorAll(".tabs a").forEach(tab => {
       tab.addEventListener("click", function (event) {
         event.preventDefault();
         document.querySelectorAll(".content").forEach(content => content.classList.remove("active"));
@@ -137,7 +137,7 @@
     });
     document.querySelector(".tabs a").click();
 
-    const themeToggle = document.getElementById("theme-toggle");
+      const themeToggle = document.getElementById("theme-toggle");
     themeToggle.addEventListener("click", () => {
       document.body.classList.toggle("dark-mode");
       themeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
