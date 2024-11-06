@@ -1,83 +1,96 @@
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f9;
-        color: #333;
-    }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9fafc;
+  color: #333;
+}
 
-    header {
-        background-color: #333;
-        color: #fff;
-        padding: 20px;
-        text-align: center;
-    }
+header {
+  background-color: #1f2937;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 4px solid #3b82f6;
+}
 
-    .container {
-        display: flex;
-        height: 100vh;
-    }
+.container {
+  display: flex;
+  height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-    .vertical-tabs {
-        width: 200px;
-        background-color: #444;
-        padding-top: 20px;
-    }
+.vertical-tabs {
+  width: 250px;
+  background-color: #1f2937;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-    .vertical-tabs ul.tabs {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+.vertical-tabs ul.tabs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
-    .vertical-tabs ul.tabs li {
-        margin-bottom: 10px;
-    }
+.vertical-tabs ul.tabs li {
+  margin-bottom: 10px;
+}
 
-    .vertical-tabs ul.tabs a {
-        text-decoration: none;
-        color: white;
-        padding: 10px 15px;
-        display: block;
-        background-color: #555;
-        border-radius: 5px;
-        text-align: left;
-        margin: 0 10px;
-        font-size: 14px;
-    }
+.vertical-tabs ul.tabs a {
+  text-decoration: none;
+  color: #d1d5db;
+  padding: 15px;
+  display: block;
+  background-color: #374151;
+  border-radius: 5px;
+  margin: 0 10px;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
 
-    .vertical-tabs ul.tabs a:hover,
-    .vertical-tabs ul.tabs a:focus {
-        background-color: #666;
-    }
+.vertical-tabs ul.tabs a:hover,
+.vertical-tabs ul.tabs a:focus,
+.vertical-tabs ul.tabs a:active {
+  background-color: #3b82f6;
+  color: #f9fafc;
+}
 
-    .content-area {
-        padding: 20px;
-        flex: 1;
-        overflow-y: auto;
-        background-color: #f4f4f9;
-    }
+.content-area {
+  padding: 30px;
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f9fafc;
+  border-left: 2px solid #e5e7eb;
+}
 
-    .content {
-        display: none;
-    }
+.content {
+  display: none;
+}
 
-    .content.active {
-        display: block;
-    }
+.content.active {
+  display: block;
+}
 
-    .preview-img {
-        max-width: 100%;
-        height: auto;
-        margin-top: 10px;
-    }
+.preview-img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-    footer {
-        text-align: center;
-        padding: 10px;
-        background-color: #333;
-        color: #fff;
-        position: relative;
-        bottom: 0;
-        width: 100%;
-    }
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #1f2937;
+  color: #fff;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  font-size: 14px;
+}
+
