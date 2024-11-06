@@ -94,3 +94,37 @@ footer {
   font-size: 14px;
 }
 
+#features ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#features ul li {
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-top: 20px;
+  color: #1f2937;
+}
+
+ul.script-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+ul.script-list li {
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+ul.script-list li::before {
+  content: "📜";
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+  font-size: 1.1em;
+}
+
