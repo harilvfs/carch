@@ -14,107 +14,111 @@
     <p>A comprehensive guide to using, contributing to, and exploring the features of Carch.</p>
   </header>
 
-  <!-- Navigation Tabs -->
-  <nav>
-    <ul class="tabs">
-      <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#installation">Installation</a></li>
-      <li><a href="#usage">Usage</a></li>
-      <li><a href="#advanced-usage">Advanced Usage</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
-      <li><a href="#contributing">Contributing</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#license">License</a></li>
-    </ul>
-  </nav>
+  <!-- Main Container -->
+  <div class="container">
+    
+    <!-- Navigation Tabs -->
+    <nav>
+      <ul class="tabs">
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#advanced-usage">Advanced Usage</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#contributing">Contributing</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#license">License</a></li>
+      </ul>
+    </nav>
 
-  <!-- Tab Content -->
-  <section id="introduction" class="content">
-    <h2>Introduction</h2>
-    <p>Carch is a modular Bash script designed to streamline the initial setup of Arch and Arch-based Linux systems. With a TUI, package automation, and environment configurations, Carch helps users configure their systems efficiently and with ease.</p>
-  </section>
+    <!-- Tab Content Area -->
+    <div class="content-area">
+      
+      <section id="introduction" class="content">
+        <h2>Introduction</h2>
+        <p>Carch is a modular Bash script designed to streamline the initial setup of Arch and Arch-based Linux systems. With a TUI, package automation, and environment configurations, Carch helps users configure their systems efficiently and with ease.</p>
+        <img src="carchp.png" alt="Carch Preview" class="preview-img">
+      </section>
 
-  <section id="features" class="content">
-    <h2>Features</h2>
-    <ul>
-      <li><strong>Quick Setup:</strong> Simplifies the installation of essential packages.</li>
-      <li><strong>Enhanced TUI Navigation:</strong> Color-themed TUI makes navigation and setup easier.</li>
-      <li><strong>Preconfigured Scripts:</strong> Supports configurations for popular setups like Dwm and Hyprland.</li>
-      <li><strong>Continuous Updates:</strong> Regular updates and new features based on community feedback.</li>
-    </ul>
-  </section>
+      <section id="features" class="content" style="display: none;">
+        <h2>Features</h2>
+        <ul>
+          <li><strong>Quick Setup:</strong> Simplifies the installation of essential packages.</li>
+          <li><strong>Enhanced TUI Navigation:</strong> Color-themed TUI makes navigation and setup easier.</li>
+          <li><strong>Preconfigured Scripts:</strong> Supports configurations for popular setups like Dwm and Hyprland.</li>
+          <li><strong>Continuous Updates:</strong> Regular updates and new features based on community feedback.</li>
+        </ul>
+      </section>
 
-  <section id="installation" class="content">
-    <h2>Installation</h2>
-    <p>To install Carch, run the following command in your terminal:</p>
-    <pre><code>bash &lt;(curl -L https://chalisehari.com.np/carch)</code></pre>
-    <p>After installation, launch Carch by running:</p>
-    <pre><code>carch</code></pre>
-    <p><em>Note:</em> Carch is designed for Arch and Arch-based Linux systems.</p>
-  </section>
+      <section id="installation" class="content" style="display: none;">
+        <h2>Installation</h2>
+        <p>To install Carch, run the following command in your terminal:</p>
+        <pre><code>bash &lt;(curl -L https://chalisehari.com.np/carch)</code></pre>
+        <p>After installation, launch Carch by running:</p>
+        <pre><code>carch</code></pre>
+        <p><em>Note:</em> Carch is designed for Arch and Arch-based Linux systems.</p>
+      </section>
 
-  <section id="usage" class="content">
-    <h2>Usage</h2>
-    <p>Once installed, launch Carch with <code>carch</code> in your terminal.</p>
-    <p>The TUI offers a menu with options for setup scripts and configurations. Select any option to execute the associated script within the TUI.</p>
-    <blockquote>
-      <strong>Tip:</strong> You only need to install Carch once; simply type <code>carch</code> to access it anytime.
-    </blockquote>
-  </section>
+      <section id="usage" class="content" style="display: none;">
+        <h2>Usage</h2>
+        <p>Once installed, launch Carch with <code>carch</code> in your terminal.</p>
+        <blockquote>
+          <strong>Tip:</strong> You only need to install Carch once; simply type <code>carch</code> to access it anytime.
+        </blockquote>
+      </section>
 
-  <section id="advanced-usage" class="content">
-    <h2>Advanced Usage</h2>
-    <h3>Hyprland Setup with Output Display</h3>
-    <p>The Hyprland setup provides step-by-step guidance in the TUI output section, including a prompt:</p>
-    <pre><code>Do you want to continue? (y/n)</code></pre>
-    <p>Progress is shown line-by-line for clear monitoring.</p>
+      <section id="advanced-usage" class="content" style="display: none;">
+        <h2>Advanced Usage</h2>
+        <h3>Hyprland Setup with Output Display</h3>
+        <p>The Hyprland setup provides step-by-step guidance in the TUI output section, including a prompt:</p>
+        <pre><code>Do you want to continue? (y/n)</code></pre>
+      </section>
 
-    <h3>Paru and Yay Installation in TUI Output</h3>
-    <p>When installing AUR helpers like Paru or Yay, progress displays in the TUI output, keeping the main interface visible for user convenience.</p>
-  </section>
+      <section id="roadmap" class="content" style="display: none;">
+        <h2>Roadmap</h2>
+        <p>Stay informed about upcoming features and improvements on our <a href="https://github.com/harilvfs/carch/blob/main/roadmap.md" target="_blank">roadmap</a>.</p>
+      </section>
 
-  <section id="roadmap" class="content">
-    <h2>Roadmap</h2>
-    <p>Stay informed about upcoming features and improvements on our <a href="https://github.com/harilvfs/carch/blob/main/roadmap.md" target="_blank">roadmap</a>.</p>
-  </section>
+      <section id="contributing" class="content" style="display: none;">
+        <h2>Contributing</h2>
+        <p>We welcome contributions! Please read the <a href="https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md" target="_blank">CONTRIBUTING.md</a> for more details.</p>
+      </section>
 
-  <section id="contributing" class="content">
-    <h2>Contributing</h2>
-    <p>We welcome contributions! Please read the <a href="https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md" target="_blank">CONTRIBUTING.md</a> for more details.</p>
-  </section>
+      <section id="contact" class="content" style="display: none;">
+        <h2>Contact</h2>
+        <ul>
+          <li>Email: <a href="mailto:harilvfs@chalisehari.com.np">harilvfs@chalisehari.com.np</a></li>
+          <li>GitHub: <a href="https://github.com/harilvfs" target="_blank">harilvfs</a></li>
+        </ul>
+      </section>
 
-  <section id="contact" class="content">
-    <h2>Contact</h2>
-    <ul>
-      <li>Email: <a href="mailto:harilvfs@chalisehari.com.np">harilvfs@chalisehari.com.np</a></li>
-      <li>GitHub: <a href="https://github.com/harilvfs" target="_blank">harilvfs</a></li>
-    </ul>
-  </section>
+      <section id="license" class="content" style="display: none;">
+        <h2>License</h2>
+        <p>Carch is licensed under the Apache-2.0 License. For more information, view the <a href="LICENSE" target="_blank">LICENSE</a> file.</p>
+      </section>
 
-  <section id="license" class="content">
-    <h2>License</h2>
-    <p>Carch is licensed under the Apache-2.0 License. For more information, view the <a href="LICENSE" target="_blank">LICENSE</a> file.</p>
-  </section>
+    </div>
+  </div>
 
   <!-- Footer Section -->
   <footer>
     <p>&copy; 2024 Carch Project. All rights reserved.</p>
   </footer>
 
-        <!-- JavaScript for tab navigation -->
-    <script>
-      document.querySelectorAll(".tabs a").forEach(tab => {
-        tab.addEventListener("click", function (event) {
-          event.preventDefault();
-          document.querySelectorAll(".content").forEach(content => content.style.display = "none");
-          document.querySelector(this.getAttribute("href")).style.display = "block";
-        });
+  <!-- JavaScript for tab navigation -->
+  <script>
+    document.querySelectorAll(".tabs a").forEach(tab => {
+      tab.addEventListener("click", function (event) {
+        event.preventDefault();
+        document.querySelectorAll(".content").forEach(content => content.style.display = "none");
+        document.querySelector(this.getAttribute("href")).style.display = "block";
       });
+    });
 
-      // Show the first tab by default
-      document.querySelector(".tabs a").click();
-    </script>
+    // Show the first tab by default
+    document.querySelector(".tabs a").click();
+  </script>
 
 </body>
 </html>
