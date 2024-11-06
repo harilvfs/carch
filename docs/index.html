@@ -18,7 +18,7 @@
   <div class="container">
     
     <!-- Navigation Tabs -->
-    <nav>
+      <nav class="vertical-tabs">    
       <ul class="tabs">
         <li><a href="#introduction">Introduction</a></li>
         <li><a href="#features">Features</a></li>
@@ -107,16 +107,22 @@
   </footer>
 
   <!-- JavaScript for tab navigation -->
-  <script>
+ <script>
+    // JavaScript for Tab Navigation
     document.querySelectorAll(".tabs a").forEach(tab => {
       tab.addEventListener("click", function (event) {
         event.preventDefault();
-        document.querySelectorAll(".content").forEach(content => content.style.display = "none");
-        document.querySelector(this.getAttribute("href")).style.display = "block";
+
+        // Hide all content sections
+        document.querySelectorAll(".content").forEach(content => content.classList.remove("active"));
+
+        // Show the selected content section
+        const target = document.querySelector(this.getAttribute("href"));
+        target.classList.add("active");
       });
     });
 
-    // Show the first tab by default
+    // Show the first tab content by default
     document.querySelector(".tabs a").click();
   </script>
 
