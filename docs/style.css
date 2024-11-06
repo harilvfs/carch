@@ -19,7 +19,7 @@ body {
 
 body.dark-mode {
   --bg-color: #181a1b;
-  --text-color: #d1d5db;
+  --text-color: #d1d5db; 
   --header-bg-color: #111827;
   --header-text-color: #d1d5db;
   --tab-bg-color: #374151;
@@ -34,7 +34,6 @@ header {
   padding: 10px;
   text-align: center;
   border-bottom: 4px solid var(--tab-hover-color);
-  position: relative;
 }
 
 #theme-toggle {
@@ -50,53 +49,48 @@ header {
 
 .container {
   display: flex;
-  flex-direction: column;
   height: 100vh;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .vertical-tabs {
-  display: none;
+  width: 250px;
+  background-color: var(--header-bg-color);
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-@media (min-width: 768px) {
-  .container {
-    flex-direction: row;
-  }
-  
-  .vertical-tabs {
-    display: flex;
-    width: 250px;
-    background-color: var(--header-bg-color);
-    padding-top: 20px;
-    flex-direction: column;
-  }
+.vertical-tabs ul.tabs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .vertical-tabs ul.tabs {
-    list-style-type: none;
-    padding: 0;
-  }
+.vertical-tabs ul.tabs li {
+  margin-bottom: 10px;
+}
 
-  .vertical-tabs ul.tabs a {
-    text-decoration: none;
-    color: var(--header-text-color);
-    padding: 15px;
-    display: block;
-    background-color: var(--tab-bg-color);
-    margin: 5px 15px;
-    font-size: 1em;
-    border-radius: 5px;
-    transition: background 0.3s;
-  }
+.vertical-tabs ul.tabs a {
+  text-decoration: none;
+  color: var(--text-color);
+  padding: 15px;
+  display: block;
+  background-color: var(--tab-bg-color);
+  border-radius: 5px;
+  margin: 0 10px;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
 
-  .vertical-tabs ul.tabs a:hover {
-    background-color: var(--tab-hover-color);
-  }
+.vertical-tabs ul.tabs a:hover {
+  background-color: var(--tab-hover-color);
 }
 
 .content-area {
-  padding: 20px;
+  padding: 30px;
   flex: 1;
   overflow-y: auto;
   background-color: var(--content-bg-color);
@@ -124,28 +118,44 @@ footer {
   padding: 15px;
   background-color: var(--header-bg-color);
   color: var(--header-text-color);
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  font-size: 14px;
+}
+
+#features ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#features ul li {
+  margin-bottom: 10px;
 }
 
 h3 {
   margin-top: 20px;
+  color: var(--text-color); 
 }
 
-ul {
-  padding: 0;
+ul.script-list {
   list-style-type: none;
+  padding: 0;
   margin-top: 15px;
 }
 
-ul li {
+ul.script-list li {
   margin-bottom: 8px;
   padding-left: 20px;
   position: relative;
+  color: var(--text-color); 
 }
 
-ul li::before {
+ul.script-list li::before {
   content: "📜";
   position: absolute;
   left: 0;
   color: #3b82f6;
+  font-size: 1.1em;
 }
 
