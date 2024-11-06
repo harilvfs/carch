@@ -1,4 +1,4 @@
 *.sh linguist-language=Shell
-*.html linguist-language=HTML
-*.css linguist-language=CSS
+docs/*.html linguist-language=HTML
+docs/*.css linguist-language=CSS
 
