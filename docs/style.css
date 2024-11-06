@@ -1,7 +1,7 @@
 /* Root variables for color themes */
 :root {
   --bg-color: #f9fafc;
-  --text-color: #333;
+  --text-color: #333; /* Dark text color for light mode */
   --header-bg-color: #1f2937;
   --header-text-color: #fff;
   --tab-bg-color: #374151;
@@ -21,7 +21,7 @@ body {
 /* Dark mode overrides */
 body.dark-mode {
   --bg-color: #181a1b;
-  --text-color: #d1d5db;
+  --text-color: #d1d5db; /* Light text color for dark mode */
   --header-bg-color: #111827;
   --header-text-color: #d1d5db;
   --tab-bg-color: #374151;
@@ -50,6 +50,7 @@ header {
   right: 15px;
 }
 
+/* Vertical Tabs and Content Styling */
 .container {
   display: flex;
   height: 100vh;
@@ -127,6 +128,7 @@ footer {
   font-size: 14px;
 }
 
+/* Additional styles */
 #features ul {
   list-style-type: none;
   padding: 0;
@@ -138,7 +140,7 @@ footer {
 
 h3 {
   margin-top: 20px;
-  color: #1f2937;
+  color: var(--text-color);
 }
 
 ul.script-list {
