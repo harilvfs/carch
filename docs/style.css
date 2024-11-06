@@ -1,17 +1,53 @@
+/* Root variables for color themes */
+:root {
+  --bg-color: #f9fafc;
+  --text-color: #333;
+  --header-bg-color: #1f2937;
+  --header-text-color: #fff;
+  --tab-bg-color: #374151;
+  --tab-hover-color: #3b82f6;
+  --content-bg-color: #f9fafc;
+  --content-border-color: #e5e7eb;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9fafc;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Dark mode overrides */
+body.dark-mode {
+  --bg-color: #181a1b;
+  --text-color: #d1d5db;
+  --header-bg-color: #111827;
+  --header-text-color: #d1d5db;
+  --tab-bg-color: #374151;
+  --tab-hover-color: #3b82f6;
+  --content-bg-color: #24292e;
+  --content-border-color: #374151;
 }
 
 header {
-  background-color: #1f2937;
-  color: #fff;
+  background-color: var(--header-bg-color);
+  color: var(--header-text-color);
   padding: 10px;
   text-align: center;
-  border-bottom: 4px solid #3b82f6;
+  border-bottom: 4px solid var(--tab-hover-color);
+}
+
+/* Theme Toggle Button */
+#theme-toggle {
+  background: transparent;
+  border: none;
+  color: var(--header-text-color);
+  font-size: 1.2em;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
 
 .container {
@@ -23,7 +59,7 @@ header {
 
 .vertical-tabs {
   width: 250px;
-  background-color: #1f2937;
+  background-color: var(--header-bg-color);
   padding-top: 20px;
   display: flex;
   flex-direction: column;
@@ -42,29 +78,26 @@ header {
 
 .vertical-tabs ul.tabs a {
   text-decoration: none;
-  color: #d1d5db;
+  color: var(--text-color);
   padding: 15px;
   display: block;
-  background-color: #374151;
+  background-color: var(--tab-bg-color);
   border-radius: 5px;
   margin: 0 10px;
   font-size: 16px;
   transition: background 0.3s ease;
 }
 
-.vertical-tabs ul.tabs a:hover,
-.vertical-tabs ul.tabs a:focus,
-.vertical-tabs ul.tabs a:active {
-  background-color: #3b82f6;
-  color: #f9fafc;
+.vertical-tabs ul.tabs a:hover {
+  background-color: var(--tab-hover-color);
 }
 
 .content-area {
   padding: 30px;
   flex: 1;
   overflow-y: auto;
-  background-color: #f9fafc;
-  border-left: 2px solid #e5e7eb;
+  background-color: var(--content-bg-color);
+  border-left: 2px solid var(--content-border-color);
 }
 
 .content {
@@ -86,8 +119,8 @@ header {
 footer {
   text-align: center;
   padding: 15px;
-  background-color: #1f2937;
-  color: #fff;
+  background-color: var(--header-bg-color);
+  color: var(--header-text-color);
   position: relative;
   bottom: 0;
   width: 100%;
