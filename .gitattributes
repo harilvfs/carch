@@ -1,0 +1,4 @@
+*.sh linguist-language=Shell
+*.html linguist-language=HTML
+*.css linguist-language=CSS
+
