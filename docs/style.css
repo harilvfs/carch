@@ -1,73 +1,92 @@
 /* style.css */
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
-}
+    /* Base Styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+    }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
+    /* Header */
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
 
-.container {
-    display: flex;
-}
+    /* Main Container */
+    .container {
+        display: flex;
+        height: 100vh;
+    }
 
-nav {
-    width: 200px;
-    background-color: #444;
-    padding: 20px;
-}
+    /* Vertical Tabs Navigation */
+    .vertical-tabs {
+        width: 200px;
+        background-color: #444;
+        padding-top: 20px;
+    }
 
-nav ul.tabs {
-    list-style-type: none;
-    padding: 0;
-}
+    .vertical-tabs ul.tabs {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
-nav ul.tabs li {
-    margin-bottom: 10px;
-}
+    .vertical-tabs ul.tabs li {
+        margin-bottom: 10px;
+    }
 
-nav ul.tabs a {
-    text-decoration: none;
-    color: white;
-    padding: 10px 15px;
-    display: block;
-    background-color: #555;
-    border-radius: 5px;
-    text-align: center;
-}
+    .vertical-tabs ul.tabs a {
+        text-decoration: none;
+        color: white;
+        padding: 10px 15px;
+        display: block;
+        background-color: #555;
+        border-radius: 5px;
+        text-align: left;
+        margin: 0 10px;
+        font-size: 14px;
+    }
 
-nav ul.tabs a:hover,
-nav ul.tabs a:focus {
-    background-color: #666;
-}
+    .vertical-tabs ul.tabs a:hover,
+    .vertical-tabs ul.tabs a:focus {
+        background-color: #666;
+    }
 
-.content-area {
-    padding: 20px;
-    width: 100%;
-}
+    /* Content Area */
+    .content-area {
+        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+        background-color: #f4f4f9;
+    }
 
-.content {
-    display: none;
-}
+    .content {
+        display: none;
+    }
 
-.preview-img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-}
+    .content.active {
+        display: block;
+    }
 
-footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-}
+    /* Preview Image */
+    .preview-img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+    }
 
+    /* Footer */
+    footer {
+        text-align: center;
+        padding: 10px;
+        background-color: #333;
+        color: #fff;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+    }
