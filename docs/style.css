@@ -51,9 +51,7 @@ header {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
 }
 
 .vertical-tabs {
@@ -65,12 +63,9 @@ header {
     flex-direction: row;
   }
   
-  .vertical-tabs {
-    display: flex;
+ .vertical-tabs {
+    display: block;
     width: 250px;
-    background-color: var(--header-bg-color);
-    padding-top: 20px;
-    flex-direction: column;
   }
 
   .vertical-tabs ul.tabs {
@@ -95,16 +90,16 @@ header {
   }
 }
 
-.content-area {
-  padding: 20px;
-  flex: 1;
-  overflow-y: auto;
-  background-color: var(--content-bg-color);
-  border-left: 2px solid var(--content-border-color);
-}
+ .content-area {
+    padding: 30px;
+    flex: 1;
+    overflow-y: auto;
+    background-color: var(--content-bg-color);
+  }
 
 .content {
-  display: none;
+  display: block;
+  padding: 20px;
 }
 
 .content.active {
