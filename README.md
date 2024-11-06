@@ -17,7 +17,7 @@
 <div align="center">
 <br>
 
-[![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/electron/electron/actions/workflows/docs-build.yml)
+[![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml)
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
