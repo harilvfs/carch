@@ -1,7 +1,7 @@
 /* Root variables for color themes */
 :root {
   --bg-color: #f9fafc;
-  --text-color: #333; /* Dark text color for light mode */
+  --text-color: #333;
   --header-bg-color: #1f2937;
   --header-text-color: #fff;
   --tab-bg-color: #374151;
@@ -21,7 +21,7 @@ body {
 /* Dark mode overrides */
 body.dark-mode {
   --bg-color: #181a1b;
-  --text-color: #d1d5db; /* Light text color for dark mode */
+  --text-color: #d1d5db; /* Light gray for better contrast */
   --header-bg-color: #111827;
   --header-text-color: #d1d5db;
   --tab-bg-color: #374151;
@@ -128,7 +128,6 @@ footer {
   font-size: 14px;
 }
 
-/* Additional styles */
 #features ul {
   list-style-type: none;
   padding: 0;
@@ -140,7 +139,7 @@ footer {
 
 h3 {
   margin-top: 20px;
-  color: var(--text-color);
+  color: var(--text-color); /* Dynamic color for themes */
 }
 
 ul.script-list {
@@ -153,6 +152,7 @@ ul.script-list li {
   margin-bottom: 8px;
   padding-left: 20px;
   position: relative;
+  color: var(--text-color); /* Dynamic color for themes */
 }
 
 ul.script-list li::before {
