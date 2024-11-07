@@ -25,7 +25,7 @@
 
 [Installation](/.github/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
-[Contributing ↗](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)
+[Contributing ↗](/.github/CONTRIBUTING.md)
 </div>
 
 <br>
