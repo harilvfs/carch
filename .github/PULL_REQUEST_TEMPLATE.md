@@ -4,11 +4,11 @@
 This pull request adds/updates/fixes [describe the main goal or feature].
 
 - [ ] Added/updated scripts or configurations.
-- [ ] Fixed issue #[issue number] (if applicable).
+- [ ] Fixed issue #[issue number].
 - [ ] Improved/optimized existing functionality.
 - [ ] Bugs Fixes.
 - [ ] Feature Added.
-- [ ] Menu Improvement.
+- [ ] UI Enhancement.
 
 ### Context
 
@@ -31,7 +31,7 @@ Please ensure your pull request meets the following requirements:
 - [ ] I have added tests that prove my fix is effective or that my feature works.
 - [ ] New and existing unit tests pass locally with my changes.
 
-### Screenshots (if applicable)
+### Screenshots 
 
 <!-- Add any screenshots to help explain your changes or to demonstrate the new feature. -->
 
