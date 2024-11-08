@@ -1,21 +1,32 @@
 #!/bin/bash
 
 COLOR_CYAN="\e[36m"
+COLOR_RESET="\e[0m"
 
-if ! command -v whiptail &> /dev/null; then
-    echo "libnewt is not installed. Installing..."
-    sudo pacman -S --noconfirm libnewt
-    if [ $? -ne 0 ]; then
-        echo "Failed to install libnewt."
-        exit 1
+install_if_missing() {
+    local package_name="$1"
+    local install_cmd="$2"
+    local check_cmd="$3"
+
+    if ! command -v "$check_cmd" &> /dev/null; then
+        echo "$package_name is not installed. Installing..."
+        sudo $install_cmd
+        if [ $? -ne 0 ]; then
+            echo "Failed to install $package_name."
+            exit 1
+        fi
+    else
+        echo "$package_name is already installed. Skipping installation."
     fi
-else
-    echo "libnewt is already installed. Skipping installation."
-fi
+}
 
-REPO="harilvfs/carch" 
-BINARY_NAME="cxfs.sh"  
-TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX) 
+install_if_missing "libnewt" "pacman -S --noconfirm libnewt" "whiptail"
+install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
+install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
+
+REPO="harilvfs/carch"
+BINARY_NAME="cxfs.sh"
+TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX)
 
 echo "Fetching the latest release information..."
 LATEST_RELEASE=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
@@ -28,7 +39,6 @@ fi
 DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | grep -oP '"tag_name": "\K[^"]*' | xargs -I {} echo "https://github.com/$REPO/releases/download/{}/$BINARY_NAME")
 
 echo "Downloading the latest release binary from $DOWNLOAD_URL..."
-
 curl -fsL -o "$TEMP_FILE" "$DOWNLOAD_URL"
 
 if [ $? -ne 0 ]; then
@@ -48,3 +58,4 @@ chmod +x "$TEMP_FILE"
 rm -f "$TEMP_FILE"
 
 echo -e "${COLOR_CYAN}See You...${COLOR_RESET}"
+
