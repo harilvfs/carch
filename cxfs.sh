@@ -10,8 +10,8 @@ last_submenu_index=0
 
 display_main_menu() {
     while true; do
-        choice=$(whiptail --title "Linux System Arch Setup" \
-                          --menu "Choose an option" 15 60 4 \
+        choice=$(whiptail --title "Arch Linux System Setup Script" \
+                          --menu "Choose an option\n------------------\nUse Arrow Up & Down to Navigate\n----------------------------------" 15 65 4 \
                           --default-item "$((last_main_menu_index + 1))" \
                           "1" "Arch Setup" \
                           "2" "Help & Info" \
@@ -36,21 +36,36 @@ load_scripts() {
 
 display_submenu() {
     load_scripts
-
+    local search_query=""
+    
     while true; do
+        if [ -n "$search_query" ]; then
+            search_scripts "$search_query"
+        else
+            filtered_scripts=("${scripts[@]}")
+        fi
+
         script_list=()
-        for i in "${!scripts[@]}"; do
-            script_list+=("$((i + 1))" "${scripts[i]}")
+        script_list+=("/" "Search (press '/' to enter search mode)")
+        for i in "${!filtered_scripts[@]}"; do
+            script_list+=("$((i + 1))" "${filtered_scripts[i]}")
         done
-        script_list+=("$(( ${#scripts[@]} + 1 ))" "Exit")
 
-        num_scripts=${#scripts[@]}
-        menu_height=$((num_scripts + 7))
+        if [ -n "$search_query" ]; then
+            script_list+=("$(( ${#filtered_scripts[@]} + 2 ))" "Back to Menu")
+        else
+            script_list+=("$(( ${#filtered_scripts[@]} + 2 ))" "Exit")
+        fi
 
-        ((menu_height > 20)) && menu_height=20
+        num_scripts=${#filtered_scripts[@]}
+        
+        menu_height=$((num_scripts + 8))
+        ((menu_height < 15)) && menu_height=15
+        ((menu_height > 25)) && menu_height=25
 
         CHOICE=$(dialog --default-item "$((last_submenu_index + 1))" \
-                        --title "Arch Setup Options" --menu "Select a script to run" \
+                        --title "Arch Setup Options" \
+                        --menu "Select a script to run\n------------------------\nUse Arrow Up & Down to Navigate" \
                         "$menu_height" 60 ${#script_list[@]} "${script_list[@]}" 3>&1 1>&2 2>&3)
 
         EXIT_STATUS=$?
@@ -59,13 +74,33 @@ display_submenu() {
             break
         fi
 
+        if [[ "$CHOICE" == "/" ]]; then
+            search_query=$(dialog --title "Search" --inputbox "Enter search term:" 10 60 "$search_query" 3>&1 1>&2 2>&3)
+            if [ -z "$search_query" ]; then
+                filtered_scripts=("${scripts[@]}")
+            fi
+            continue
+        fi
+
         selected=$((CHOICE - 1))
 
-        if [[ $selected -lt ${#scripts[@]} ]]; then
-            last_submenu_index=$selected  
-            run_script "${scripts[selected]}"
-        else
+        if [[ "$search_query" && $selected -ge ${#filtered_scripts[@]} ]]; then
+            search_query=""
+        elif [[ ! "$search_query" && $selected -ge ${#filtered_scripts[@]} ]]; then
             break
+        elif [[ $selected -lt ${#filtered_scripts[@]} ]]; then
+            last_submenu_index=$selected  
+            run_script "${filtered_scripts[selected]}"
+        fi
+    done
+}
+
+search_scripts() {
+    local search_query="$1"
+    filtered_scripts=()
+    for script in "${scripts[@]}"; do
+        if [[ "${script,,}" == *"${search_query,,}"* ]]; then
+            filtered_scripts+=("$script")
         fi
     done
 }
@@ -91,7 +126,7 @@ run_script() {
 }
 
 display_help() {
-    whiptail --msgbox "This tool helps to automate Arch Linux setup.\n\nSelect 'Arch Setup' to install packages and configure the system.\nFor more information, visit: https://harilvfs.github.io/carch/" 15 60
+    whiptail --msgbox "This tool helps to automate Arch Linux setup.\n\nSelect 'Arch Setup' to install packages and configure the system.\nFor more information, visit: https://harilvfs.github.io/carch/" 15 65
 }
 
 display_main_menu
