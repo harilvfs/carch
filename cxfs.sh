@@ -21,7 +21,10 @@ display_scripts_menu() {
     clear
     echo -e "${GREEN}"
     figlet -f slant "Arch Linux System Setup"
+    echo "This tool helps to automate Arch Linux system setup."
+    echo "For more information, visit: https://harilvfs.github.io/carch/"
     echo -e "${NC}"
+
     echo "Select a script to run:"
     
     reordered_scripts=("${scripts[last_selected_index]}" "${scripts[@]:0:last_selected_index}" "${scripts[@]:last_selected_index+1}")
