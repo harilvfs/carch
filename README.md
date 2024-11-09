@@ -1,5 +1,5 @@
 <div align="center">
-<img src='/preview/penguin.png' width="80">
+<img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/penguin.webp' width="80">
 </div>
 
 <div align="center">
