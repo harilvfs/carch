@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://github.com/harilvfs/carch/blob/main/preview/penguin.png" width="80">
+<img src="https://github.com/harilvfs/carch/blob/main/preview/penguin.png" />
 </div>
 
 # Carch Documentation
@@ -21,12 +21,12 @@
 - [Acknowledgments](#acknowledgments)
 
 ## Introduction
-<img src="https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png" width="50" />
+<img src="https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png"/>
 
 Carch aims to automate and streamline the initial setup of Arch Linux, making it easier for users to configure their systems efficiently. The script encompasses various setup tasks, including package installations, theme configurations, and window manager setups.
 
 ## Features
-<img src="https://github.com/harilvfs/carch/blob/main/docs/assets/feature.png" width="50" />
+<img src="https://github.com/harilvfs/carch/blob/main/docs/assets/feature.png"/>
 
 - **Easy Setup:** Quick and straightforward installation of essential packages.
 - **TUI Navigation:** A text-based user interface that enhances user experience.
