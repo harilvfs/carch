@@ -130,16 +130,19 @@ install_music() {
         echo -e "${YELLOW}--------------------------------------------------------${RESET}"
         echo -e "${CYAN}Youtube Music - https://github.com/th-ch/youtube-music${RESET}"
         echo -e "${CYAN}Spotube - https://github.com/KRTirtho/spotube${RESET}"
+        echo -e "${CYAN}Spotify - https://github.com/spotify${RESET}"
         echo -e "${YELLOW}--------------------------------------------------------${RESET}"
         echo "1) Youtube-Music"
         echo "2) Spotube"
-        echo "3) Exit"
+        echo "3) Spotify"
+        echo "4) Exit"
         read -p "Choose a Music Package: " music_choice
 
         case $music_choice in
             1) paru -S youtube-music-bin ;;
             2) paru -S spotube ;;
-            3) break ;;  
+            3) paru -S spotify ;;
+            4) break ;;  
             *) echo -e "${RED}Invalid option${RESET}" ;;
         esac
     done
