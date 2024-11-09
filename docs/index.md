@@ -1,4 +1,5 @@
 <div align="center">
+
 <img src="https://github.com/harilvfs/carch/blob/main/preview/penguin.png" />
 </div>
 
@@ -21,11 +22,13 @@
 - [Acknowledgments](#acknowledgments)
 
 ## Introduction
+
 <img src="https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png"/>
 
 Carch aims to automate and streamline the initial setup of Arch Linux, making it easier for users to configure their systems efficiently. The script encompasses various setup tasks, including package installations, theme configurations, and window manager setups.
 
 ## Features
+
 <img src="https://github.com/harilvfs/carch/blob/main/docs/assets/feature.png"/>
 
 - **Easy Setup:** Quick and straightforward installation of essential packages.
@@ -36,6 +39,7 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 ![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/preview/carch.gif)
 
 ## Installation
+
 <img src="https://github.com/harilvfs/assets/blob/main/carch/installation.png" width="50" /> 
 
 To install Carch, execute the following command in your terminal:
@@ -55,63 +59,64 @@ carch
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
 ## Scripts
+
 <img src="https://github.com/harilvfs/assets/blob/main/carch/terminal.png" width="50" /> 
 
 <strong>*Carch comes with the following scripts to configure various aspects of your Arch-based system:*</strong>
 
 ### Dwm Setup
-Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
+- Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
 
 ### Hyprland Setup
-Installs the Hyprland compositor along with my pre-configured dotfiles for a streamlined setup.
+- Installs the Hyprland compositor along with my pre-configured dotfiles for a streamlined setup.
 
 ### i3wm Setup
-Installs and configures i3, providing a lightweight and efficient window management experience.
+- Installs and configures i3, providing a lightweight and efficient window management experience.
 
 ### Install Fonts
-Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.
+- Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.
 
 ### Install LTS Kernel
-Installs the Long-Term Support (LTS) kernel for enhanced stability and extended support.
+- Installs the Long-Term Support (LTS) kernel for enhanced stability and extended support.
 
 ### Install Packages
-Installs a curated selection of essential packages to establish a fully functional environment.
+- Installs a curated selection of essential packages to establish a fully functional environment.
 
 ### Setup Alacritty
-Configures the Alacritty terminal emulator using my preferred settings for optimal performance.
+- Configures the Alacritty terminal emulator using my preferred settings for optimal performance.
 
 ### Setup AUR
-Installs AUR (Arch User Repository) helpers, like Paru or Yay, to simplify package management.
+- Installs AUR (Arch User Repository) helpers, like Paru or Yay, to simplify package management.
 
 ### Setup Fastfetch
-Configures Fastfetch to display detailed system information quickly and attractively in the terminal.
+- Configures Fastfetch to display detailed system information quickly and attractively in the terminal.
 
 ### Setup GRUB
-Customizes the GRUB bootloader with improved aesthetics and settings for a more polished boot experience.
+- Customizes the GRUB bootloader with improved aesthetics and settings for a more polished boot experience.
 
 ### Setup Kitty
-Sets up the Kitty terminal emulator with advanced features and custom configurations.
+- Sets up the Kitty terminal emulator with advanced features and custom configurations.
 
 ### Setup Neovim
-Installs and configures Neovim for an enhanced, efficient code editing environment.
+- Installs and configures Neovim for an enhanced, efficient code editing environment.
 
 ### Setup Picom
-Installs and configures the Picom compositor to enable window transparency, shadows, and other visual effects.
+- Installs and configures the Picom compositor to enable window transparency, shadows, and other visual effects.
 
 ### Setup Rofi
-Configures Rofi as a powerful application launcher and window switcher, improving workflow efficiency.
+- Configures Rofi as a powerful application launcher and window switcher, improving workflow efficiency.
 
 ### Setup SDDM
-Configures the SDDM (Simple Desktop Display Manager) for a streamlined and visually appealing login experience.
+- Configures the SDDM (Simple Desktop Display Manager) for a streamlined and visually appealing login experience.
 
 ### Setup Themes & Icons
-Installs and applies a set of themes and icons to enhance the look and feel of your desktop.
+- Installs and applies a set of themes and icons to enhance the look and feel of your desktop.
 
 ### SwayWM Setup
-Installs and configures the Sway window manager, optimized for Wayland environments.
+- Installs and configures the Sway window manager, optimized for Wayland environments.
 
 ### Wallpapers
-Installs a selection of wallpapers for a personalized desktop aesthetic.
+- Installs a selection of wallpapers for a personalized desktop aesthetic.
 
 <br>
 
