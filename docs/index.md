@@ -38,7 +38,7 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 - A text-based user interface that enhances user experience.
 
 #### Multiple Scripts 
-Automate the setup of various environments, including Dwm and Hyprland.
+- Automate the setup of various environments, including Dwm and Hyprland.
 
 #### Active Development 
 - Continuous updates and new features based on community feedback.
