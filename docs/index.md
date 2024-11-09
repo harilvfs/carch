@@ -1,7 +1,7 @@
-<div align="center">
 
-![Carch](https://github.com/harilvfs/carch/blob/main/preview/penguin.png)
-</div>
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs)
+
+<a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a>
 
 # Carch Documentation
 
@@ -23,16 +23,13 @@
 
 ## Introduction
 
-![Carch Screenshots](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/introduction.webp)
-
-
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/introduction.webp" width="50" />
 
 Carch aims to automate and streamline the initial setup of Arch Linux, making it easier for users to configure their systems efficiently. The script encompasses various setup tasks, including package installations, theme configurations, and window manager setups.
 
 ## Features
 
-<img src="https://github.com/harilvfs/carch/blob/main/docs/assets/feature.png"/>
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/feature.webp" width="50" />
 
 - **Easy Setup:** Quick and straightforward installation of essential packages.
 - **TUI Navigation:** A text-based user interface that enhances user experience.
@@ -43,7 +40,7 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 
 ## Installation
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/installation.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/installation.webp" width="50" /> 
 
 To install Carch, execute the following command in your terminal:
 
@@ -52,6 +49,8 @@ bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
 ## Usage
+
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/usages.webp" width="50" />
 
 <strong>Simply run Carch by entering carch in your terminal.</strong>
 ```bash
@@ -63,92 +62,91 @@ carch
 
 ## Scripts
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/terminal.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/terminal.webp" width="50" /> 
 
 <strong>*Carch comes with the following scripts to configure various aspects of your Arch-based system:*</strong>
 
-### Dwm Setup
+#### Dwm Setup
 - Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
 
-### Hyprland Setup
+##### Hyprland Setup
 - Installs the Hyprland compositor along with my pre-configured dotfiles for a streamlined setup.
 
-### i3wm Setup
+##### i3wm Setup
 - Installs and configures i3, providing a lightweight and efficient window management experience.
 
-### Install Fonts
+##### Install Fonts
 - Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.
 
-### Install LTS Kernel
+##### Install LTS Kernel
 - Installs the Long-Term Support (LTS) kernel for enhanced stability and extended support.
 
-### Install Packages
+##### Install Packages
 - Installs a curated selection of essential packages to establish a fully functional environment.
 
-### Setup Alacritty
+##### Setup Alacritty
 - Configures the Alacritty terminal emulator using my preferred settings for optimal performance.
 
-### Setup AUR
+##### Setup AUR
 - Installs AUR (Arch User Repository) helpers, like Paru or Yay, to simplify package management.
 
-### Setup Fastfetch
+##### Setup Fastfetch
 - Configures Fastfetch to display detailed system information quickly and attractively in the terminal.
 
-### Setup GRUB
+##### Setup GRUB
 - Customizes the GRUB bootloader with improved aesthetics and settings for a more polished boot experience.
 
-### Setup Kitty
+##### Setup Kitty
 - Sets up the Kitty terminal emulator with advanced features and custom configurations.
 
-### Setup Neovim
+##### Setup Neovim
 - Installs and configures Neovim for an enhanced, efficient code editing environment.
 
-### Setup Picom
+##### Setup Picom
 - Installs and configures the Picom compositor to enable window transparency, shadows, and other visual effects.
 
-### Setup Rofi
+##### Setup Rofi
 - Configures Rofi as a powerful application launcher and window switcher, improving workflow efficiency.
 
-### Setup SDDM
+##### Setup SDDM
 - Configures the SDDM (Simple Desktop Display Manager) for a streamlined and visually appealing login experience.
 
-### Setup Themes & Icons
+##### Setup Themes & Icons
 - Installs and applies a set of themes and icons to enhance the look and feel of your desktop.
 
-### SwayWM Setup
+##### SwayWM Setup
 - Installs and configures the Sway window manager, optimized for Wayland environments.
 
-### Wallpapers
+##### Wallpapers
 - Installs a selection of wallpapers for a personalized desktop aesthetic.
 
-<br>
 
 ## Roadmap
-<img src="https://github.com/harilvfs/assets/blob/main/carch/roadmap.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/roadmap.webp" width="50" /> 
 
 For information on upcoming features and improvements, check the full roadmap here: 
 
-**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
+**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/.github/roadmap.md)**
 
 ## Contributing
-<img src="https://github.com/harilvfs/assets/blob/main/carch/contribute.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/contribute.webp" width="50" /> 
 
 Contributions are welcome! To contribute to Carch
 
 Please refer to the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for more details.
 
 ## Code of Conduct
-<img src="https://github.com/harilvfs/assets/blob/main/carch/code-of-conduct.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/code-of-conduct.webp" width="50" /> 
 
 We strive to create a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** to ensure a positive experience for everyone involved.
 
 ## License
-<img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/licensing.webp" width="50" /> 
 
 Carch is licensed under the **Apache-2.0 License**. For more details, see the **[LICENSE](LICENSE)** file.
 
 ## Contact
-<img src="https://github.com/harilvfs/assets/blob/main/carch/communicate.png" width="50" /> 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/communicate.webp" width="50" /> 
 
 If you have any questions or suggestions, feel free to reach out via:
 
@@ -156,7 +154,7 @@ If you have any questions or suggestions, feel free to reach out via:
 - GitHub: [harilvfs](https://github.com/harilvfs)
 
 ## Acknowledgments
-<img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/contributors.webp" width="50" />
 
 We thank everyone who has contributed to making **Carch** better. Your feedback and contributions are invaluable!
 
@@ -168,44 +166,21 @@ We thank everyone who has contributed to making **Carch** better. Your feedback 
 
 ```bash
 carch/
-├── LICENSE
 ├── PKGBUILD
-├── README.md
 ├── binarybuild.sh
 ├── build
 │   └── carch
 ├── carch.desktop
 ├── clean.sh
-├── clean.sh.x.c
 ├── cxfs.sh
-├── cxfs.sh.x.c
 ├── docs
 │   ├── assets
-│   │   ├── carchp.png
-│   │   ├── carchp1.png
-│   │   ├── communicate.png
-│   │   ├── contribute.png
-│   │   ├── doc.png
-│   │   ├── documentation.png
-│   │   ├── feature.png
-│   │   ├── installation.png
-│   │   ├── licensing.png
-│   │   └── roadmap.png
 │   └── index.md
 ├── package.json
-├── preview
-│   ├── arch.png
-│   ├── archi.png
-│   ├── bash.png
-│   ├── carch.gif
-│   ├── carchp.png
-│   ├── carchp1.png
-│   ├── linux.png
-│   ├── package.png
-│   └── penguin.png
 ├── run
 │   └── cleanrun.sh
 ├── run.sh
+├── preview
 ├── scripts
 │   ├── Dwm Setup.sh
 │   ├── Hyprland Setup.sh
@@ -226,11 +201,12 @@ carch/
 │   ├── SwayWM Setup.sh
 │   ├── Wallpapers.sh
 │   └── i3wm Setup.sh
-├── setup.sh
-└── setup.sh.x.c
+└── setup.sh
 
 ```
 ---
 
 Thank you for exploring Carch!
 
+[discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge
+[discord-link]: https://discord.gg/TAaVXT95
