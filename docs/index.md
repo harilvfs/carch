@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/harilvfs/carch/blob/main/preview/penguin.png" />
+![Carch](https://github.com/harilvfs/carch/blob/main/preview/penguin.png)
 </div>
 
 # Carch Documentation
