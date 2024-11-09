@@ -23,7 +23,7 @@
 
 ## Introduction
 
-![Carch Screenshots](https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png)
+![Carch Screenshots](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/introduction.webp)
 
 
 <img src="https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png"/>
