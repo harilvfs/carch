@@ -31,4 +31,4 @@ wait
 cd "$temp_dir" || exit
 
 echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
-bash <(curl -L https://chalisehari.com.np/lvfs)
+bash <(curl -L https://chalisehari.com.np/cleanrun)
