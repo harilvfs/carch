@@ -31,10 +31,17 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/feature.webp" width="50" />
 
-- **Easy Setup:** Quick and straightforward installation of essential packages.
-- **TUI Navigation:** A text-based user interface that enhances user experience.
-- **Multiple Scripts:** Automate the setup of various environments, including Dwm and Hyprland.
-- **Active Development:** Continuous updates and new features based on community feedback.
+#### Easy Setup
+- Quick and straightforward installation of essential packages.
+
+#### TUI Navigation
+- A text-based user interface that enhances user experience.
+
+#### Multiple Scripts 
+Automate the setup of various environments, including Dwm and Hyprland.
+
+#### Active Development 
+- Continuous updates and new features based on community feedback.
 
 ![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/preview/carch.gif)
 
@@ -42,7 +49,7 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/installation.webp" width="50" /> 
 
-To install Carch, execute the following command in your terminal:
+**To install Carch, execute the following command in your terminal:**
 
 ```bash
 bash <(curl -L https://chalisehari.com.np/carch)
