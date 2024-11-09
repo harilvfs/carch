@@ -23,6 +23,9 @@
 
 ## Introduction
 
+![Carch Screenshots](https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png)
+
+
 <img src="https://github.com/harilvfs/carch/blob/main/docs/assets/introduction.png"/>
 
 Carch aims to automate and streamline the initial setup of Arch Linux, making it easier for users to configure their systems efficiently. The script encompasses various setup tasks, including package installations, theme configurations, and window manager setups.
