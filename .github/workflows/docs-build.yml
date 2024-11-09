@@ -4,9 +4,8 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'docs/index.html'
-      - 'docs/index.css'
-
+      - 'docs/index.md'
+      
   workflow_dispatch:
 
 permissions:
