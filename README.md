@@ -94,7 +94,7 @@ Check out our roadmap for the **Carch** project!:
 ## Documentation 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/doc.png" width="50" /> 
 
-For the better understanding of **Carch** **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
+For the better understanding **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
 
 ## License  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
