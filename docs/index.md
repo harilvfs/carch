@@ -7,9 +7,9 @@
 
 <button onclick="toggleTheme()">Toggle Dark/Light Mode</button>
 
-<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/style.css">
 
-<script src="/assets/js/scripts.js"></script>
+<script src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/script.js"></script>
 
 # Carch Documentation
 
