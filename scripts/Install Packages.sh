@@ -124,6 +124,27 @@ install_filemanagers() {
     done
 }
 
+install_music() {
+    while true; do
+        echo -e "${CYAN}Music Packages Menu:${RESET}"
+        echo -e "${YELLOW}--------------------------------------------------------${RESET}"
+        echo -e "${CYAN}Youtube Music - https://github.com/th-ch/youtube-music${RESET}"
+        echo -e "${CYAN}Spotube - https://github.com/KRTirtho/spotube${RESET}"
+        echo -e "${YELLOW}--------------------------------------------------------${RESET}"
+        echo "1) Youtube-Music"
+        echo "2) Spotube"
+        echo "3) Exit"
+        read -p "Choose a Music Package: " music_choice
+
+        case $music_choice in
+            1) paru -S youtube-music-bin ;;
+            2) paru -S spotube ;;
+            3) break ;;  
+            *) echo -e "${RED}Invalid option${RESET}" ;;
+        esac
+    done
+}
+
 while true; do
     clear 
     echo -e "${BLUE}"
@@ -140,13 +161,15 @@ while true; do
 -------------------------------------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
-    echo "Install Packages:"
+    echo -e "${CYAN}Install Packages:${RESET}"
+    echo -e "${YELLOW}---------------------------${RESET}"
     echo -e "${GREEN}1) Communication${RESET}"
     echo -e "${GREEN}2) Live Streaming/Recording${RESET}"
     echo -e "${GREEN}3) Editing${RESET}"
     echo -e "${GREEN}4) Browsers${RESET}"
     echo -e "${GREEN}5) File Managers${RESET}"
-    echo -e "${GREEN}6) Exit${RESET}"
+    echo -e "${GREEN}6) Music${RESET}"
+    echo -e "${GREEN}7) Exit${RESET}"
     read -p "Choose an option: " main_choice
 
     case $main_choice in
@@ -155,7 +178,8 @@ echo -e "${ENDCOLOR}"
         3) install_editing ;;
         4) install_browsers ;;
         5) install_filemanagers ;;
-        6) exit ;;  
+        6) install_music ;;
+        7) exit ;;  
         *) echo -e "${RED}Invalid option${RESET}" ;;
     esac
 done
