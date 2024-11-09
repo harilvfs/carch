@@ -55,7 +55,7 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
-<img src="./preview/carch.GIF" />
+<img src="./preview/carch.gif" />
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.<br>
