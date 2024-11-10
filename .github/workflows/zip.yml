@@ -3,7 +3,7 @@ name: Upload Scripts Zip to Latest Release
 on:
   push:
     paths:
-      - "scripts/*.sh"  # Trigger only if there's a change in any .sh file in the `scripts` directory.
+      - "zip/carchscrips.zip"
 
 permissions:
   contents: write  # Grant permissions to modify release contents
