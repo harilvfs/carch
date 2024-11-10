@@ -4,6 +4,7 @@
 This pull request adds/updates/fixes [describe the main goal or feature].
 
 - [ ] Added/updated scripts or configurations.
+- [ ] Remove Bad Script/Code.
 - [ ] Fixed issue #[issue number].
 - [ ] Improved/optimized existing functionality.
 - [ ] Bugs Fixes.
