@@ -3,7 +3,7 @@ name: Upload Scripts Zip to Latest Release
 on:
   push:
     paths:
-      - "zip/carchscrips.zip"
+      - "zip/carchscripts.zip"
 
 permissions:
   contents: write  
