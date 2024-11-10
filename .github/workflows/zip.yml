@@ -16,22 +16,25 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Extract Version
-      id: extract_version
+    - name: Get Latest Release Upload URL
+      id: get_latest_release_upload_url
       run: |
-        # Use date as the version or set any versioning format you prefer
-        version=$(date +"%Y.%m.%d")
-        echo "version=$version" >> $GITHUB_ENV
-      shell: bash
+        # Fetch the latest release information using the GitHub API
+        latest_release=$(curl -s \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/latest)
+        
+        # Extract the upload URL from the latest release (removes "{?name,label}" from the URL)
+        upload_url=$(echo "$latest_release" | jq -r '.upload_url' | sed 's/{?name,label}//')
 
-    - name: Create and Upload Release
-      id: create_release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ env.version }}
-        name: Release ${{ env.version }}
-        files: zip/carchscripts.zip  # Path to your zip file
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Set the upload_url as an output variable
+        echo "upload_url=$upload_url" >> $GITHUB_ENV
+
+    - name: Upload Zip File to Latest Release
+      run: |
+        # Upload the zip file to the latest release using the extracted upload URL
+        curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Content-Type: application/zip" \
+          --data-binary @zip/carchscripts.zip \
+          "$upload_url?name=carchscripts.zip"
