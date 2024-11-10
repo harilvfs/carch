@@ -1,4 +1,4 @@
-name: Update Scripts Zip in Latest Release
+name: Upload Scripts Zip to Latest Release
 
 on:
   push:
@@ -22,34 +22,13 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
           });
-          // Output both the release ID and the correct upload URL
-          core.setOutput("release_id", latestRelease.data.id);
-          core.setOutput("upload_url", latestRelease.data.upload_url.split("{")[0]);  // Remove "{?name,label}"
+          // Output the upload_url (without {name,label} part)
+          core.setOutput("upload_url", latestRelease.data.upload_url.split("{")[0]);
 
-    - name: Delete Existing Zip Asset (if any)
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const releaseId = ${{ steps.get_latest_release_upload_url.outputs.release_id }};
-          const assets = await github.rest.repos.listReleaseAssets({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            release_id: releaseId,
-          });
-          for (const asset of assets.data) {
-            if (asset.name === "carchscripts.zip") {
-              await github.rest.repos.deleteReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                asset_id: asset.id,
-              });
-            }
-          }
-
-    - name: Upload New Zip Asset to Latest Release
+    - name: Upload Zip File to Latest Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.get_latest_release_upload_url.outputs.upload_url }}  # Corrected URL without release ID
+        upload_url: ${{ steps.get_latest_release_upload_url.outputs.upload_url }}  # Correct URL without {name,label}
         asset_path: "zip/carchscripts.zip"  # Path to the zip file
         asset_name: "carchscripts.zip"
         asset_content_type: application/zip
