@@ -3,7 +3,7 @@ name: Update Scripts Zip in Latest Release
 on:
   push:
     paths:
-      - "scripts/*.sh"  # Trigger only if there's a change in the `scripts` directory.
+      - "scripts/*.sh"  # Trigger only if there's a change in any .sh file in the `scripts` directory.
 
 jobs:
   upload_zip_to_release:
@@ -49,7 +49,7 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.get_latest_release.outputs.result }}/assets{?name,label}
-        asset_path: zip/scripts.zip  # Path to the already existing zip file in the 'zip' directory
-        asset_name: scripts.zip
+        asset_path: "zip/carchscripts.zip"  # Properly quoted path
+        asset_name: "carchscripts.zip"  # Ensure asset name matches the file being uploaded
         asset_content_type: application/zip
 
