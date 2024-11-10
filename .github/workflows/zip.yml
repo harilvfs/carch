@@ -19,12 +19,10 @@ jobs:
     - name: Get Latest Release Info
       id: get_latest_release_info
       run: |
-        # Fetch the latest release information
         latest_release=$(curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/releases/latest)
         
-        # Extract the upload URL and release ID
         upload_url=$(echo "$latest_release" | jq -r '.upload_url' | sed 's/{?name,label}//')
         release_id=$(echo "$latest_release" | jq -r '.id')
         
@@ -33,15 +31,12 @@ jobs:
 
     - name: Remove Existing carchscripts.zip Asset (if present)
       run: |
-        # Fetch all assets for the latest release
         assets=$(curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/releases/$release_id/assets)
         
-        # Find the asset ID of `carchscripts.zip` if it exists
         asset_id=$(echo "$assets" | jq -r '.[] | select(.name == "carchscripts.zip") | .id')
         
-        # Delete the asset if it exists
         if [ -n "$asset_id" ]; then
           echo "Removing existing carchscripts.zip asset with ID $asset_id"
           curl -X DELETE \
@@ -53,7 +48,6 @@ jobs:
 
     - name: Upload Zip File to Latest Release
       run: |
-        # Upload the zip file to the latest release
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Content-Type: application/zip" \
