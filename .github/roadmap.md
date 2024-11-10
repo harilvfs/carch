@@ -61,6 +61,7 @@
   - [x] Add themes/customizations
   - [ ] Gather user feedback
 
+
 - **Implement additional programming languages:**
   - [ ] Develop Rust components
   - [ ] Assess areas for parallel development
@@ -68,7 +69,7 @@
 - **Add WM setup scripts:**
   - [x] i3 setup script
   - [x] Sway setup script
-  - [ ] Other window manager scripts
+  - [x] Other window manager scripts
 
 - **Create core system setup scripts:**
   - [ ] User configuration
@@ -83,5 +84,5 @@
 
 ## Timeline (Tentative) 📅
 
-- **Weeks 2-3**: Develop additional WM setup scripts and core system setup scripts. ✔
-- **Weeks 3-4**: Refactor existing scripts for stability and begin expanding distribution support.
+- **Q 2024**: Develop additional WM setup scripts and core system setup scripts. ✔
+- **Q 2025**: Refactor existing scripts for stability and begin expanding distribution support. 
