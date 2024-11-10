@@ -34,14 +34,16 @@ install_communication() {
         echo "1) Discord"
         echo "2) Signal"
         echo "3) Telegram"
-        echo "4) Exit"
+        echo "4) Keybase"
+        echo "5) Exit"
         read -p "Choose an option: " comm_choice
 
         case $comm_choice in
             1) paru -S discord ;;
             2) paru -S signal-desktop ;;
             3) paru -S telegram-desktop ;;
-            4) break ;;  
+            4) paru -s keybase-bin ;;
+            5) break ;;  
             *) echo -e "${RED}Invalid option${RESET}" ;;
         esac
     done
@@ -65,13 +67,15 @@ install_streaming() {
 install_editing() {
     while true; do
         echo -e "${CYAN}Editing Menu:${RESET}"
-        echo "1) GIMP"
-        echo "2) Exit"
+        echo "1) GIMP (Image)"
+        echo "2) Kdenlive (Videos)"
+        echo "3) Exit"
         read -p "Choose an option: " edit_choice
 
         case $edit_choice in
             1) sudo pacman -S gimp ;;
-            2) break ;;  
+            2) sudo pacman -S kdenlive ;;
+            3) break ;;  
             *) echo -e "${RED}Invalid option${RESET}" ;;
         esac
     done
@@ -87,7 +91,8 @@ install_browsers() {
         echo "4) Chromium"
         echo "5) Qutebrowser"
         echo "6) Zen Browser"
-        echo "7) Exit"
+        echo "7) Thorium Broswer"
+        echo "8) Exit"
         read -p "Choose a browser to install: " browser_choice
 
         case $browser_choice in
@@ -97,7 +102,8 @@ install_browsers() {
             4) sudo pacman -S chromium ;;
             5) sudo pacman -S qutebrowser ;;
             6) paru -S zen-browser-bin ;;
-            7) break ;;  
+            7) paru -S thorium-browser-bin ;;
+            8) break ;;  
             *) echo -e "${RED}Invalid option${RESET}" ;;
         esac
     done
@@ -110,7 +116,9 @@ install_filemanagers() {
         echo "2) Thunar"
         echo "3) Dolphin"
         echo "4) LF (Terminal File Manager)"
-        echo "5) Exit"
+        echo "5) Ranger"
+        echo "6) Nautilus"
+        echo "7) Exit"
         read -p "Choose a file manager: " fm_choice
 
         case $fm_choice in
@@ -118,7 +126,9 @@ install_filemanagers() {
             2) sudo pacman -S thunar ;;
             3) sudo pacman -S dolphin ;;
             4) sudo pacman -S lf ;;
-            5) break ;;  
+            5) sudo pacman -S ranger ;;
+            6) sudo pacman -S nautilus ;;
+            7) break ;;  
             *) echo -e "${RED}Invalid option${RESET}" ;;
         esac
     done
@@ -166,7 +176,7 @@ EOF
 echo -e "${ENDCOLOR}"
     echo -e "${CYAN}Install Packages:${RESET}"
     echo -e "${YELLOW}---------------------------${RESET}"
-    echo -e "${GREEN}1) Communication${RESET}"
+    echo -e "${GREEN}1) Communication & Chatting${RESET}"
     echo -e "${GREEN}2) Live Streaming/Recording${RESET}"
     echo -e "${GREEN}3) Editing${RESET}"
     echo -e "${GREEN}4) Browsers${RESET}"
