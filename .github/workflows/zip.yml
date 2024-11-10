@@ -6,7 +6,7 @@ on:
       - "zip/carchscrips.zip"
 
 permissions:
-  contents: write  # Grant permissions to modify release contents
+  contents: write  
 
 jobs:
   upload_zip_to_release:
