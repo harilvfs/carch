@@ -16,19 +16,44 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Get Latest Release Upload URL
-      id: get_latest_release_upload_url
+    - name: Get Latest Release Info
+      id: get_latest_release_info
       run: |
+        # Fetch the latest release information
         latest_release=$(curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/releases/latest)
         
+        # Extract the upload URL and release ID
         upload_url=$(echo "$latest_release" | jq -r '.upload_url' | sed 's/{?name,label}//')
-
+        release_id=$(echo "$latest_release" | jq -r '.id')
+        
         echo "upload_url=$upload_url" >> $GITHUB_ENV
+        echo "release_id=$release_id" >> $GITHUB_ENV
+
+    - name: Remove Existing carchscripts.zip Asset (if present)
+      run: |
+        # Fetch all assets for the latest release
+        assets=$(curl -s \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/$release_id/assets)
+        
+        # Find the asset ID of `carchscripts.zip` if it exists
+        asset_id=$(echo "$assets" | jq -r '.[] | select(.name == "carchscripts.zip") | .id')
+        
+        # Delete the asset if it exists
+        if [ -n "$asset_id" ]; then
+          echo "Removing existing carchscripts.zip asset with ID $asset_id"
+          curl -X DELETE \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/assets/$asset_id
+        else
+          echo "No existing carchscripts.zip asset found."
+        fi
 
     - name: Upload Zip File to Latest Release
       run: |
+        # Upload the zip file to the latest release
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Content-Type: application/zip" \
