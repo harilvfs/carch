@@ -92,7 +92,8 @@ install_browsers() {
         echo "5) Qute Browser"
         echo "6) Zen Browser"
         echo "7) Thorium Browser"
-        echo "8) Exit"
+        echo "8) Tor Browser"
+        echo "9) Exit"
         read -p "Choose a browser to install: " browser_choice
 
         case $browser_choice in
