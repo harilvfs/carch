@@ -12,14 +12,14 @@ trap 'rm -rf "$temp_dir"' EXIT
 echo -e "${COLOR_YELLOW}Setting Carch Script...${COLOR_RESET}"
 mkdir -p "$temp_dir/scripts" &> /dev/null &
 
-curl -L "https://github.com/harilvfs/carch/releases/latest/download/harilvfs.carch.main.scripts.zip" --output "$temp_dir/scripts/harilvfs_carch_main_scripts.zip" &> /dev/null &
+curl -L "https://github.com/harilvfs/carch/releases/latest/download/carchscripts.zip" --output "$temp_dir/scripts/carchscripts.zip" &> /dev/null &
 
 wait
 
 cd "$temp_dir/scripts" || exit
 
 echo -e "${COLOR_CYAN}Processing Carch Script...${COLOR_RESET}"
-unzip -q "harilvfs_carch_main_scripts.zip" &> /dev/null &
+unzip -q "carchscripts.zip" &> /dev/null &
 
 wait
 
