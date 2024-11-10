@@ -30,7 +30,7 @@ jobs:
       with:
         tag_name: ${{ env.version }}
         name: Release ${{ env.version }}
-        files: zip/carchscripts.zip
+        files: zip/carchscripts.zip  # Path to your zip file
         draft: false
         prerelease: false
       env:
