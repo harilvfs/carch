@@ -22,13 +22,13 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
           });
-          // Extract only the upload URL from the release
+          // The upload URL must include the placeholder `{?name,label}`
           core.setOutput("upload_url", latestRelease.data.upload_url);
 
     - name: Upload Zip File to Latest Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.get_latest_release_upload_url.outputs.upload_url }}  # Correct URL format with {name,label}
+        upload_url: ${{ steps.get_latest_release_upload_url.outputs.upload_url }}
         asset_path: "zip/carchscripts.zip"  # Path to the zip file
         asset_name: "carchscripts.zip"
         asset_content_type: application/zip
