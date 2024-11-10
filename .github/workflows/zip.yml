@@ -22,18 +22,15 @@ jobs:
             owner: context.repo.owner,
             repo: context.repo.repo,
           });
-          return latestRelease.data.upload_url.split("{")[0];  // Extract only the upload URL
+          // Extract only the upload URL without "{?name,label}"
+          return { releaseId: latestRelease.data.id, uploadUrl: latestRelease.data.upload_url.split("{")[0] };
 
     - name: Delete Existing Zip Asset (if any)
       id: delete_asset
       uses: actions/github-script@v6
       with:
         script: |
-          const latestRelease = await github.rest.repos.getLatestRelease({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-          });
-          const releaseId = latestRelease.data.id;
+          const { releaseId } = JSON.parse('${{ steps.get_latest_release_upload_url.outputs.result }}');
           const assets = await github.rest.repos.listReleaseAssets({
             owner: context.repo.owner,
             repo: context.repo.repo,
@@ -52,7 +49,7 @@ jobs:
     - name: Upload New Zip Asset to Latest Release
       uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.get_latest_release_upload_url.outputs.result }}  # Corrected URL without release ID
-        asset_path: "zip/carchscripts.zip"  # Properly quoted path
+        upload_url: "${{ steps.get_latest_release_upload_url.outputs.result.uploadUrl }}"  # Correct URL
+        asset_path: "zip/carchscripts.zip"  # Path to the zip file
         asset_name: "carchscripts.zip"
         asset_content_type: application/zip
