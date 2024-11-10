@@ -3,7 +3,10 @@ name: Upload Scripts Zip to Latest Release
 on:
   push:
     paths:
-      - "scripts/*.sh"
+      - "scripts/*.sh"  # Trigger only if there's a change in any .sh file in the `scripts` directory.
+
+permissions:
+  contents: write  # Grant permissions to modify release contents
 
 jobs:
   upload_zip_to_release:
@@ -13,38 +16,22 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Install GitHub CLI
+    - name: Extract Version
+      id: extract_version
       run: |
-        sudo apt-get update
-        sudo apt-get install -y gh
+        # Use date as the version or set any versioning format you prefer
+        version=$(date +"%Y.%m.%d")
+        echo "version=$version" >> $GITHUB_ENV
+      shell: bash
 
-    - name: Authenticate GitHub CLI
+    - name: Create and Upload Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.version }}
+        name: Release ${{ env.version }}
+        files: zip/carchscripts.zip
+        draft: false
+        prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        echo "${GITHUB_TOKEN}" | gh auth login --with-token
-
-    - name: Confirm Zip File Exists
-      run: |
-        if [ ! -f zip/carchscripts.zip ]; then
-          echo "Error: zip/carchscripts.zip does not exist."
-          exit 1
-        fi
-        echo "File found: zip/carchscripts.zip"
-    
-    - name: Debug File Path and Size
-      run: |
-        ls -lh zip/carchscripts.zip
-        file zip/carchscripts.zip
-
-    - name: Get Latest Release Tag
-      id: get_release
-      run: |
-        latest_tag=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
-        echo "tag=$latest_tag" >> $GITHUB_ENV
-
-    - name: Upload Zip File to Latest Release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release upload "$tag" zip/carchscripts.zip --clobber
