@@ -89,10 +89,11 @@ install_browsers() {
         echo "2) Firefox"
         echo "3) Google Chrome"
         echo "4) Chromium"
-        echo "5) Qutebrowser"
+        echo "5) Qute Browser"
         echo "6) Zen Browser"
-        echo "7) Thorium Broswer"
-        echo "8) Exit"
+        echo "7) Thorium Browser"
+        echo "8) Tor Browser"
+        echo "9) Exit"
         read -p "Choose a browser to install: " browser_choice
 
         case $browser_choice in
@@ -103,7 +104,8 @@ install_browsers() {
             5) sudo pacman -S qutebrowser ;;
             6) paru -S zen-browser-bin ;;
             7) paru -S thorium-browser-bin ;;
-            8) break ;;  
+            8) paru -S tor-browser-bin ;;
+            9) break ;;  
             *) echo -e "${RED}Invalid option${RESET}" ;;
         esac
     done
