@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'docs/index.md'
+      - ''
       
   workflow_dispatch:
 
