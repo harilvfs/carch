@@ -46,3 +46,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Show deployment URL
+        run: echo "Deployment successful! Visit your site at ${{ steps.deployment.outputs.page_url }}"
