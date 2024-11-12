@@ -119,7 +119,7 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 <img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
 
 - **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
-- **[ML4W Aka *Mylinuxforwork*](https://github.com/mylinuxforwork)** 
+- **[ML4W Aka Mylinuxforwork](https://github.com/mylinuxforwork)** 
 
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
