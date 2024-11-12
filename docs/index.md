@@ -189,26 +189,27 @@ carch/
 ├── run.sh
 ├── preview
 ├── scripts
-│   ├── Dwm Setup.sh
-│   ├── Hyprland Setup.sh
-│   ├── Install Fonts.sh
-│   ├── Install LTS Kernal.sh
-│   ├── Install Packages.sh
-│   ├── README.txt
-│   ├── Setup Alacritty.sh
-│   ├── Setup Aur.sh
-│   ├── Setup Fastfetch.sh
-│   ├── Setup GRUB.sh
-│   ├── Setup Kitty.sh
-│   ├── Setup Neovim.sh
-│   ├── Setup Picom.sh
-│   ├── Setup Rofi.sh
-│   ├── Setup SDDM.sh
-│   ├── Setup Themes-Icons.sh
-│   ├── SwayWM Setup.sh
+│   ├── Alacritty.sh
+│   ├── Aur.sh
+│   ├── Dwm.sh
+│   ├── Fastfetch.sh
+│   ├── Fonts.sh
+│   ├── Grub.sh
+│   ├── Hyprland.sh
+│   ├── Kitty.sh
+│   ├── LTS-Kernal.sh
+│   ├── Neovim.sh
+│   ├── Packages.sh
+│   ├── Picom.sh
+│   ├── Rofi.sh
+│   ├── Sddm.sh
+│   ├── SwayWM.sh
+│   ├── Themes-Icons.sh
 │   ├── Wallpapers.sh
-│   └── i3wm Setup.sh
-└── setup.sh
+│   └── i3wm.sh
+├── setup.sh
+└── zip
+    └── carchscripts.zip
 
 ```
 ---
