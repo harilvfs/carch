@@ -20,6 +20,7 @@
 - [License](#license)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
+- [Inspiration](#inspiration)
 
 ## Introduction
 
