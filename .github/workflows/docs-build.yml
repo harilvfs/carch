@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'docs/**'
+      - 'docs/**'  # Watch the entire docs directory for changes
       
   workflow_dispatch:
 
@@ -15,8 +15,8 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true 
-  
+  cancel-in-progress: true  # Cancel any in-progress jobs if a new one starts
+
 jobs:
   deploy:
     environment:
@@ -30,20 +30,18 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0' 
+          ruby-version: '3.0'  # Specify Ruby version suitable for Jekyll
           
-      - name: Install Jekyll and dependencies
-        run: |
-          gem install bundler
-          bundle install
-          
+      - name: Install Jekyll
+        run: gem install jekyll
+
       - name: Build with Jekyll
-        run: bundle exec jekyll build -s docs -d _site 
+        run: jekyll build -s docs -d _site  # Source as 'docs' and output to '_site'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site' 
+          path: '_site'  # Upload the built site from '_site'
           
       - name: Deploy to GitHub Pages
         id: deployment
