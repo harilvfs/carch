@@ -31,17 +31,33 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/feature.webp" width="50" />
 
-#### Easy Setup
+<details>
+  <summary>Easy Setup</summary>
+
 - Quick and straightforward installation of essential packages.
 
-#### TUI Navigation
+</details>
+
+<details>
+  <summary>TUI Navigation</summary>
+
 - A text-based user interface that enhances user experience.
 
-#### Multiple Scripts 
+</details>
+
+<details>
+  <summary>Multiple Scripts</summary>
+
 - Automate the setup of various environments, including Dwm and Hyprland.
 
-#### Active Development 
+</details>
+
+<details>
+  <summary>Active Development</summary>
+
 - Continuous updates and new features based on community feedback.
+
+</details>
 
 ![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/preview/carch.gif)
 
