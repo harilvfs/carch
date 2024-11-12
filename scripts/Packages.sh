@@ -137,11 +137,11 @@ install_texteditor() {
 install_multimedia() {
     install_paru
     while true; do
-        multimedia_choice=$(gum choose "VLC" "Netflix" "Exit")
+        multimedia_choice=$(gum choose "VLC" "Netflix[Unoffical]" "Exit")
 
         case $multimedia_choice in
             "VLC") paru -S vlc ;;
-            "Netflix") paru -S netflix ;;
+            "Netflix[Unoffical]") paru -S netflix ;;
             "Exit") break ;;
         esac
     done
