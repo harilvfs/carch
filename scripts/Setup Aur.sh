@@ -17,7 +17,6 @@ install_paru() {
     temp_dir=$(mktemp -d)
     cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${NC}"; exit 1; }
 
-    # Clone and install paru
     git clone https://aur.archlinux.org/paru.git
     cd paru || { echo -e "${RED}Failed to enter paru directory${NC}"; exit 1; }
     makepkg -si
@@ -58,18 +57,15 @@ cat <<"EOF"
                                                                                                                     
 -------------------------------------------------------------------------
 EOF
-echo -e "${ENDCOLOR}"
+    echo -e "${ENDCOLOR}"
 
     echo -e "${CYAN}AUR Setup Menu:${NC}"
-    echo "1) Install Paru"
-    echo "2) Install Yay"
-    echo "3) Exit"
-    read -p "Choose an option: " aur_choice
+    choice=$(gum choose "Install Paru" "Install Yay" "Exit")
 
-    case $aur_choice in
-        1) install_paru ;;
-        2) install_yay ;;
-        3) exit ;;  
-        *) echo -e "${RED}Invalid option. Please choose again.${NC}" ;;
+    case $choice in
+        "Install Paru") install_paru ;;
+        "Install Yay") install_yay ;;
+        "Exit") exit ;;  
     esac
 done
+

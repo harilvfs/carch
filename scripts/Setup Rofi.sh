@@ -25,10 +25,10 @@ EOF
 echo -e "${ENDCOLOR}"
 
 echo -e "${RED}WARNING: Make sure to back up your current Rofi configuration (if it exists).${ENDCOLOR}"
-read -p "Do you want to continue with the Rofi setup? (y/n): " yn
-if [[ ! "$yn" =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Setup aborted by the user.${ENDCOLOR}"
-    exit 0
+
+if ! gum confirm "Continue with Rofi setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
+    exit 1
 fi
 
 setup_rofi() {

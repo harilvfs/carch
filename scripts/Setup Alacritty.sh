@@ -28,18 +28,13 @@ EOF
 echo -e "${ENDCOLOR}"
 
 confirm_continue() {
-    while true; do
-        printf "${YELLOW}Warning: If you already have an Alacritty configuration, make sure to back it up before proceeding.${RESET}\n"
-        read -p "Do you want to continue with the setup? (y/n): " confirm
-        case $confirm in
-            [yY]) return 0 ;;  
-            [nN]) 
-                printf "${RED}Setup aborted by the user.${RESET}\n"
-                exit 1 
-                ;;
-            *) printf "${RED}Invalid choice. Please enter y or n.${RESET}\n" ;;
-        esac
-    done
+    printf "${YELLOW}Warning: If you already have an Alacritty configuration, make sure to back it up before proceeding.${RESET}\n"
+    if gum confirm "Do you want to continue with the setup?"; then
+        return 0
+    else
+        printf "${RED}Setup aborted by the user.${RESET}\n"
+        exit 1
+    fi
 }
 
 checkAlacritty() {
@@ -73,7 +68,6 @@ setupAlacrittyConfig() {
 }
 
 confirm_continue
-
 checkAlacritty
 setupAlacrittyConfig
 

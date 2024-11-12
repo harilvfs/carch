@@ -42,36 +42,29 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-check_exit() {
-    if [[ "$1" =~ ^[Ee]$ ]]; then
-        echo "Exiting..."
-        exit 0
-    fi
+prompt_continue() {
+    choice=$(gum choose "Yes" "No" "Exit")
+    case "$choice" in
+        "Yes") return 0 ;;
+        "No") return 1 ;;
+        "Exit") echo "Exiting..."; exit 0 ;;
+    esac
 }
 
 echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
-echo -e "${RED}If you don't know about kernel changes, it's recommended to [E] exit the script.${ENDCOLOR}"
+echo -e "${RED}If you don't know about kernel changes, it's recommended to Exit.${ENDCOLOR}"
 
-read -p "Do you want to continue with the kernel installation? [Y/N/E] " continue_install
-continue_install=${continue_install:-Y}
-check_exit "$continue_install"
+echo -e "\n${BLUE}Choose an option:${ENDCOLOR}"
+echo -e "${GREEN}Yes:${NC} Removes the current kernel and installs the LTS kernel."
+echo -e "${GREEN}No:${NC} Installs the LTS kernel without removing the current kernel."
+echo -e "${GREEN}Exit:${NC} Cancels the installation.\n"
 
-if [[ ! $continue_install =~ ^[Yy]$ ]]; then
-    echo "Exiting..."
-    exit 0
-fi
-
-check_current_kernel
-
-read -p "Do you want to remove the current kernel and install LTS? [Y/n/e] " remove_kernel
-remove_kernel=${remove_kernel:-N}
-check_exit "$remove_kernel"
-
-if [[ $remove_kernel =~ ^[Yy]$ ]]; then
+echo "Do you want to continue with the kernel installation?"
+if prompt_continue; then
     install_lts_kernel
     echo -e "${GREEN}Removing the current kernel...${ENDCOLOR}"
-    
-    CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')  
+
+    CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')
     if [[ "$CURRENT_KERNEL_NAME" != "linux" ]]; then
         echo -e "${RED}Current kernel name does not match expected 'linux'. Cannot remove kernel.${ENDCOLOR}"
         exit 1
@@ -79,22 +72,12 @@ if [[ $remove_kernel =~ ^[Yy]$ ]]; then
 
     sudo pacman -Rns --noconfirm "$CURRENT_KERNEL_NAME"
     echo -e "${GREEN}Removed the current kernel.${ENDCOLOR}"
-    
+
     configure_grub
-
 else
-    read -p "Do you want to install LTS kernel only without removing the current kernel? [Y/n/e] " install_only
-    install_only=${install_only:-Y}
-    check_exit "$install_only"
-
-    if [[ $install_only =~ ^[Yy]$ ]]; then
-        install_lts_kernel
-        
-        configure_grub
-    else
-        echo "Exiting..."
-        exit 0
-    fi
+    echo "Installing the LTS kernel alongside the current kernel..."
+    install_lts_kernel
+    configure_grub
 fi
 
 echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"

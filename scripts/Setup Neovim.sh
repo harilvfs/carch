@@ -36,11 +36,10 @@ setup_neovim() {
     BACKUP_DIR="$HOME/.config/nvimbackup"
 
     while true; do
-        read -p "Do you have an existing Neovim configuration? [Y/N/E] " yn
-        yn=${yn:-Y} 
-
-        case $yn in
-            [Yy]* )
+        choice=$(gum choose "Yes" "No" "Exit")
+        
+        case $choice in
+            "Yes")
                 if [ -d "$NVIM_CONFIG_DIR" ]; then
                     echo -e "${RED}Existing Neovim config found at $NVIM_CONFIG_DIR. Backing up...${ENDCOLOR}"
                     mkdir -p "$BACKUP_DIR"
@@ -49,17 +48,17 @@ setup_neovim() {
                 fi
                 break
                 ;;
-            [Nn]* )
+            "No")
                 echo -e "${GREEN}Creating Neovim configuration directory...${ENDCOLOR}"
                 mkdir -p "$NVIM_CONFIG_DIR"
                 break
                 ;;
-            [Ee]* )
+            "Exit")
                 echo -e "${RED}Exiting the script.${ENDCOLOR}"
                 exit 0
                 ;;
-            * )
-                echo -e "${RED}Please answer 'Y', 'N', or 'E'.${ENDCOLOR}"
+            *)
+                echo -e "${RED}Invalid option, please choose 'Yes', 'No', or 'Exit'.${ENDCOLOR}"
                 ;;
         esac
     done
@@ -81,3 +80,4 @@ setup_neovim() {
 }
 
 setup_neovim
+

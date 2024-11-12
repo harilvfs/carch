@@ -25,10 +25,10 @@ EOF
 echo -e "${ENDCOLOR}"
 
 echo -e "${RED}WARNING: This script will modify your Kitty configuration. A backup of your existing configuration will be created.${ENDCOLOR}"
-read -p "Do you want to continue with the Kitty setup? (y/n): " yn
-if [[ ! "$yn" =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Setup aborted by the user.${ENDCOLOR}"
-    exit 0
+
+if ! gum confirm "Continue with Kitty setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
+    exit 1
 fi
 
 setup_kitty() {

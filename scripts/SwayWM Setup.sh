@@ -28,9 +28,7 @@ ${NC}${YELLOW}If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles${NC}
 "
 
-# Prompt the user to continue
-read -p "$(echo -e ${YELLOW}Do you want to continue? If you have doubts, please check the script. [y/n]${NC}) " -r
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+if ! gum confirm "Continue with Sway setup?"; then
     echo -e "${RED}Setup aborted by the user.${NC}"
     exit 1
 fi
