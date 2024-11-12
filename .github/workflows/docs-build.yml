@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'docs/**'  # Watch the entire docs directory for changes
+      - 'docs/**'
       
   workflow_dispatch:
 
@@ -15,37 +15,31 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true  # Cancel any in-progress jobs if a new one starts
+  cancel-in-progress: true
 
 jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'  # Specify Ruby version suitable for Jekyll
+
+      - name: Copy Markdown File to _site
+        run: |
+          mkdir -p _site
+          cp docs/index.md _site/index.md
           
-      - name: Install Jekyll
-        run: gem install jekyll
-
-      - name: Build with Jekyll
-        run: jekyll build -s docs -d _site  # Source as 'docs' and output to '_site'
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'  # Upload the built site from '_site'
-          
+          path: '_site'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
       - name: Show deployment URL
-        run: echo "Deployment successful! Visit your site at ${{ steps.deployment.outputs.page_url }}"
+        run: echo "Deployment successful! Visit your site at https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
