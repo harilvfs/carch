@@ -167,6 +167,12 @@ We thank everyone who has contributed to making **Carch** better. Your feedback 
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
+## Inspiration
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/inspiration.webp" width="50" />
+
+- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
+- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)** 
+
 ---
 
 ### Repository Structure
