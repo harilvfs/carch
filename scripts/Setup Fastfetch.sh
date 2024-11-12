@@ -27,21 +27,12 @@ cat <<"EOF"
 EOF
 echo -e "${ENDCOLOR}"
 
-confirm_continue() {
-    while true; do
-        read -p "Do you want to continue with the Fastfetch setup? (y/n): " confirm
-        case $confirm in
-            [yY]) return 0 ;; 
-            [nN]) 
-                echo -e "${RED}Setup aborted by the user.${NC}"
-                exit 1
-                ;;
-            *) echo -e "${RED}Invalid choice. Please enter y or n.${NC}" ;;
-        esac
-    done
-}
+echo -e "${BLUE}Do you want to continue with the Fastfetch setup?${ENDCOLOR}"
 
-confirm_continue
+if ! gum confirm "Continue with Fastfetch setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
+    exit 1
+fi
 
 FASTFETCH_DIR="$HOME/.config/fastfetch"
 BACKUP_DIR="$HOME/.config/fastfetch_backup"

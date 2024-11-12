@@ -33,17 +33,10 @@ WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
 
 echo -e "${CYAN}Wallpapers will be set up in the Pictures directory (${PICTURES_DIR}).${NC}"
 
-while true; do
-    read -p "Do you want to continue? (y/n): " confirmation
-    if [[ "$confirmation" =~ ^(yes|y)$ ]]; then
-        break
-    elif [[ "$confirmation" =~ ^(no|n)$ ]]; then
-        echo -e "${YELLOW}Operation canceled. Exiting...${NC}"
-        exit 0
-    else
-        echo -e "${CYAN}Invalid input. Please type 'y' or 'n'.${NC}"
-    fi
-done
+if ! gum confirm "Do you want to continue?"; then
+    echo -e "${YELLOW}Operation canceled. Exiting...${NC}"
+    exit 0
+fi
 
 if [ ! -d "$PICTURES_DIR" ]; then
     echo -e "${CYAN}Creating the Pictures directory...${NC}"
