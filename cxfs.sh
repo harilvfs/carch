@@ -48,13 +48,7 @@ display_scripts_menu() {
 
 run_script() {
     local script_name="$1"
-    echo "Running ${script_name}..."
-    if bash "./scripts/${script_name}.sh"; then
-        echo "${script_name} completed successfully. Press Enter to return to the menu."
-    else
-        echo "${script_name} failed to complete. Press Enter to return to the menu."
-    fi
-    read -r
+    ./scripts/${script_name}.sh
     display_scripts_menu
 }
 
