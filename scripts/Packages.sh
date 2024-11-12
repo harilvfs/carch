@@ -134,6 +134,19 @@ install_texteditor() {
     done
 }
 
+install_multimedia() {
+    install_paru
+    while true; do
+        multimedia_choice=$(gum choose "VLC" "Netflix" "Exit")
+
+        case $multimedia_choice in
+            "VLC") paru -S vlc ;;
+            "Netflix") paru -S netflix ;;
+            "Exit") break ;;
+        esac
+    done
+}
+
 while true; do
     clear 
     echo -e "${BLUE}"
@@ -150,7 +163,7 @@ while true; do
 ----------------------------------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
-    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Exit")
+    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Exit")
 
     case $main_choice in
         "Communication & Chatting") install_communication ;;
@@ -160,6 +173,7 @@ echo -e "${ENDCOLOR}"
         "File Managers") install_filemanagers ;;
         "Music") install_music ;;
         "Coding & Text Editor") install_texteditor ;;
+        "Multimedia") install_multimedia ;;
         "Exit") exit ;;
     esac
 done
