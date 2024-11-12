@@ -60,26 +60,21 @@ download_config() {
 
 print_source_message
 
-echo -e "${BLUE}Select an option for Picom setup:${ENDCOLOR}"
-echo "1. Picom with animation (Dwm)"
-echo "2. Picom normal"
-echo "3. Exit"
-
-read -p "Enter your choice [1-3]: " choice
+choice=$(gum choose "Picom with animation (Dwm)" "Picom normal" "Exit")
 
 case "$choice" in
-    1)
+    "Picom with animation (Dwm)")
         install_dependencies_animation
         setup_picom
         download_config "https://raw.githubusercontent.com/harilvfs/i3wmdotfiles/refs/heads/main/picom/picom-animations/picom.conf"
         echo -e "${GREEN}Picom setup completed with animations!${ENDCOLOR}"
         ;;
-    2)
+    "Picom normal")
         install_dependencies_normal
         download_config "https://raw.githubusercontent.com/harilvfs/i3wmdotfiles/refs/heads/main/picom/picom.conf"
         echo -e "${GREEN}Picom setup completed without animations!${ENDCOLOR}"
         ;;
-    3)
+    "Exit")
         echo "Exiting..."
         exit 0
         ;;
@@ -88,3 +83,4 @@ case "$choice" in
         exit 1
         ;;
 esac
+

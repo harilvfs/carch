@@ -31,10 +31,8 @@ cat <<"EOF"
 EOF
 echo -e "${ENDCOLOR}"
 
-read -p "Do you want to continue with this script? (y/n): " choice
-
-if [[ "$choice" != "yes" ]]; then
-    echo -e "${RED}Exiting the script.${RESET}"
+if ! gum confirm "Continue with Hyprland setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
     exit 1
 fi
 
