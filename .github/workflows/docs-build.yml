@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'docs/index.md'
+      - 'docs/**'
       
   workflow_dispatch:
 
@@ -15,8 +15,8 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
-
+  cancel-in-progress: true 
+  
 jobs:
   deploy:
     environment:
@@ -27,13 +27,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0' 
+          
+      - name: Install Jekyll and dependencies
+        run: |
+          gem install bundler
+          bundle install
+          
+      - name: Build with Jekyll
+        run: bundle exec jekyll build -s docs -d _site 
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'  
+          path: '_site' 
           
       - name: Deploy to GitHub Pages
         id: deployment
