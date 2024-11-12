@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'docs/**'
+      - 'docs/index.md'
       
   workflow_dispatch:
 
@@ -15,31 +15,26 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
     environment:
       name: github-pages
-      url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Copy Markdown File to _site
-        run: |
-          mkdir -p _site
-          cp docs/index.md _site/index.md
-          
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
-
+          path: 'docs'  
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Show deployment URL
-        run: echo "Deployment successful! Visit your site at https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
