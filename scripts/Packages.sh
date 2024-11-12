@@ -104,12 +104,13 @@ install_filemanagers() {
 install_music() {
     install_paru
     while true; do
-        music_choice=$(gum choose "Youtube-Music" "Spotube" "Spotify" "Exit")
+        music_choice=$(gum choose "Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Exit")
 
         case $music_choice in
             "Youtube-Music") paru -S youtube-music-bin ;;
             "Spotube") paru -S spotube ;;
             "Spotify") paru -S spotify ;;
+            "Rhythmbox") paru -S rhythmbox ;;
             "Exit") break ;;
         esac
     done
