@@ -20,9 +20,9 @@ display_scripts_menu() {
     load_scripts
     clear
     echo -e "${GREEN}"
-    figlet -f slant "Arch Linux System Setup"
-    echo "This tool helps to automate Arch Linux system setup."
-    echo "For more information, visit: https://harilvfs.github.io/carch/"
+    figlet -f slant "Carch"
+    echo "A script that helps to automate Arch Linux system setup."
+    echo -e "For more information, visit: \033[4;34mhttps://harilvfs.github.io/carch/\033[0m"
     echo -e "${NC}"
 
     echo "Select a script to run:"
