@@ -125,7 +125,7 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 
 <div align="center">
   
-![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
  <a href="https://github.com/harilvfs">
        <picture>
