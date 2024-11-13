@@ -1,9 +1,0 @@
-- uses: lowlighter/metrics@latest
-  with:
-    plugin_contributors: yes
-    plugin_contributors_categories: |
-      {
-        "🧩 Scripts":["scripts/**.sh", "**.sh"],
-        "📚 Documentation":["README.md", "docs/index.md"],
-        "💻 Code (other)":["*", ".github/workflows/**"]   
-      }
