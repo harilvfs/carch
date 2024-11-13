@@ -184,6 +184,12 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 
 </div>
 
+<div align="center">
+ <a href="#">
+<img src="https://github.com/harilvfs/assets/blob/main/carch/backx.png" />
+</a>
+</div>
+
 [discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge
 [discord-link]: https://discord.gg/TAaVXT95
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white&style=for-the-badge
