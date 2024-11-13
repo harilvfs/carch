@@ -1,4 +1,3 @@
-
 //Setup
 export default async function({login, q, imports, data, rest, graphql, queries, account}, {enabled = false, extras = false} = {}) {
   //Plugin execution
