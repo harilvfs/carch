@@ -56,7 +56,7 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
-<img src="./preview/carch.gif" />
+<img src="./preview/carchv3.0.gif" />
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.<br>
@@ -115,11 +115,17 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
+## Inspiration
+<img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
+
+- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
+- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)** 
+
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
 <div align="center">
   
-![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
  <a href="https://github.com/harilvfs">
        <picture>

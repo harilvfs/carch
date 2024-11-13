@@ -20,6 +20,7 @@
 - [License](#license)
 - [Contact](#contact)
 - [Acknowledgments](#acknowledgments)
+- [Inspiration](#inspiration)
 
 ## Introduction
 
@@ -43,7 +44,7 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 #### Active Development 
 - Continuous updates and new features based on community feedback.
 
-![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/preview/carch.gif)
+![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/preview/carchv3.0.gif)
 
 ## Installation
 
@@ -167,6 +168,12 @@ We thank everyone who has contributed to making **Carch** better. Your feedback 
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
+## Inspiration
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/inspiration.webp" width="50" />
+
+- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
+- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)** 
+
 ---
 
 ### Repository Structure
@@ -189,26 +196,27 @@ carch/
 ├── run.sh
 ├── preview
 ├── scripts
-│   ├── Dwm Setup.sh
-│   ├── Hyprland Setup.sh
-│   ├── Install Fonts.sh
-│   ├── Install LTS Kernal.sh
-│   ├── Install Packages.sh
-│   ├── README.txt
-│   ├── Setup Alacritty.sh
-│   ├── Setup Aur.sh
-│   ├── Setup Fastfetch.sh
-│   ├── Setup GRUB.sh
-│   ├── Setup Kitty.sh
-│   ├── Setup Neovim.sh
-│   ├── Setup Picom.sh
-│   ├── Setup Rofi.sh
-│   ├── Setup SDDM.sh
-│   ├── Setup Themes-Icons.sh
-│   ├── SwayWM Setup.sh
+│   ├── Alacritty.sh
+│   ├── Aur.sh
+│   ├── Dwm.sh
+│   ├── Fastfetch.sh
+│   ├── Fonts.sh
+│   ├── Grub.sh
+│   ├── Hyprland.sh
+│   ├── Kitty.sh
+│   ├── LTS-Kernal.sh
+│   ├── Neovim.sh
+│   ├── Packages.sh
+│   ├── Picom.sh
+│   ├── Rofi.sh
+│   ├── Sddm.sh
+│   ├── SwayWM.sh
+│   ├── Themes-Icons.sh
 │   ├── Wallpapers.sh
-│   └── i3wm Setup.sh
-└── setup.sh
+│   └── i3wm.sh
+├── setup.sh
+└── zip
+    └── carchscripts.zip
 
 ```
 ---

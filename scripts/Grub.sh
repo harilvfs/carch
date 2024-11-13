@@ -60,17 +60,10 @@ install_grub_theme() {
 print_message
 echo -e "${RED}WARNING: Please ensure you have backed up your old GRUB configuration before proceeding.${ENDCOLOR}"
 
-while true; do
-    read -p "Do you want to continue with the GRUB setup? (y/n): " yn
-    case $yn in
-        [Yy]* ) break;;  
-        [Nn]* )
-            echo -e "${RED}GRUB setup aborted by the user.${ENDCOLOR}"
-            exit 0
-            ;;
-        * ) echo -e "${RED}Invalid input. Please enter 'y' or 'n'.${ENDCOLOR}";;
-    esac
-done
+if ! gum confirm "Continue with Grub setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
+    exit 1
+fi
 
 request_sudo
 backup_grub

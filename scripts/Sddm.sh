@@ -65,12 +65,9 @@ EOF'
 
 print_banner
 
-read -p "Do you want to continue with SDDM and Catppuccin theme installation? [Y/n] " yn
-yn=${yn:-Y}
-
-if [[ $yn =~ ^[Nn]$ ]]; then
-    echo "Installation aborted."
-    exit 0
+if ! gum confirm "Continue with SDDM setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
+    exit 1
 fi
 
 echo "Proceeding with installation..."
