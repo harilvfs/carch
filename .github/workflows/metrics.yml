@@ -10,7 +10,8 @@ jobs:
       - uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.METRICS_TOKEN }}
-        
+          plugin_contributors: yes
+          plugin_contributors_sections: categories
           plugin_contributors_categories: |
             {
                 "🧩 Plugins / 🖼️ templates":["source/plugins/**", "source/templates/**"],
