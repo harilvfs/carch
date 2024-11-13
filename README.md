@@ -186,15 +186,11 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 <br>
 <div align="center">
  <a href="">
-<img src="https://github.com/harilvfs/assets/blob/main/carch/arrow.png" width="30"/>
-</a>
-</div>
-
-<div align="center">
- <a href="">
-<img src="https://github.com/harilvfs/assets/blob/main/carch/btt.png" width="120" />
+  <img src="https://github.com/harilvfs/assets/blob/main/carch/arrow.png" width="30"/>
+  <br>
+  <img src="https://github.com/harilvfs/assets/blob/main/carch/btt.png" width="120" />
  </a>
- </div>
+</div>
 
 [discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge
 [discord-link]: https://discord.gg/TAaVXT95
