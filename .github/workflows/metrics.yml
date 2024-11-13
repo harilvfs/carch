@@ -1,0 +1,10 @@
+name: Contributors with contributions count
+uses: lowlighter/metrics@latest
+with:
+  filename: metrics.plugin.contributors.contributions.svg
+  token: ${{ secrets.METRICS_TOKEN }}
+  base: ""
+  template: repository
+  repo: metrics
+  plugin_contributors: yes
+  plugin_contributors_contributions: yes
