@@ -187,6 +187,8 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 <div align="center">
  <a href="">
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrow.png" width="30"/>
+  <br>
+  <img src="https://github.com/harilvfs/assets/blob/main/carch/btt.png" width="120" />
 </a>
 </div>
 
