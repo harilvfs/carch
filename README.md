@@ -1,3 +1,7 @@
+<a href="https://github.com/harilvfs/carch/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=harilvfs/carch" />
+</a>
+
 <div align="center">
 <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/penguin.webp' width="80">
 </div>
