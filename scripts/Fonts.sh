@@ -13,7 +13,7 @@ NC='\033[0m'
 echo -e "${BLUE}"
 cat <<"EOF"
 -------------------------------------------------------------------------------------------------------
- 
+
 ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗         ███████╗ ██████╗ ███╗   ██╗████████╗███████╗
 ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║         ██╔════╝██╔═══██╗████╗  ██║╚══██╔══╝██╔════╝
 ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║         █████╗  ██║   ██║██╔██╗ ██║   ██║   ███████╗
@@ -64,25 +64,16 @@ install_font() {
 }
 
 while true; do
-    echo -e "${BLUE}Choose a Nerd Font to install:${ENDCOLOR}"
-    echo -e "${CYAN}1) FiraCode${NC}"
-    echo -e "${CYAN}2) Meslo${NC}"
-    echo -e "${CYAN}3) JetBrains Mono${NC}"
-    echo -e "${CYAN}4) Hack${NC}"
-    echo -e "${CYAN}5) Cascadia${NC}"
-    echo -e "${CYAN}6) Terminus${NC}"
-    echo -e "${CYAN}7) Exit${NC}"
-    
-    read -p "Enter your choice: " choice
+    choice=$(gum choose "FiraCode" "Meslo" "JetBrains Mono" "Hack" "Cascadia" "Terminus" "Exit")
 
     case $choice in
-        1) install_font "FiraCode" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip" ;;
-        2) install_font "Meslo" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip" ;;
-        3) install_font "JetBrains" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip" ;;
-        4) install_font "Hack" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip" ;;
-        5) install_font "Cascadia" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip" ;;
-        6) install_font "Terminus" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Terminus.zip" ;;
-        7) echo -e "${GREEN}Exiting. Thank you!${NC}"; exit ;;
+        "FiraCode") install_font "FiraCode" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip" ;;
+        "Meslo") install_font "Meslo" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip" ;;
+        "JetBrains Mono") install_font "JetBrains" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip" ;;
+        "Hack") install_font "Hack" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip" ;;
+        "Cascadia") install_font "Cascadia" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip" ;;
+        "Terminus") install_font "Terminus" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Terminus.zip" ;;
+        "Exit") echo -e "${GREEN}Exiting. Thank you!${NC}"; exit ;;
         *) echo -e "${RED}Invalid option. Please try again.${NC}" ;;
     esac
 done

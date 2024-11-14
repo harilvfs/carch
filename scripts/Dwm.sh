@@ -29,19 +29,13 @@ EOF
 setup_dwm() {
     echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
 
-    while true; do
-        read -p "Do you want to continue with the DWM setup? Make sure you know what a tiling window manager is. [Y/n] " yn
-        yn=${yn:-Y}
+    echo -e "${BLUE}Do you want to continue with the DWM setup?${ENDCOLOR}"
+    echo -e "${RED}Make sure you know what a tiling window manager is.${ENDCOLOR}"
 
-        if [[ $yn =~ ^[Yy]$ ]]; then
-            break
-        elif [[ $yn =~ ^[Nn]$ ]]; then
-            echo -e "${RED}Aborting DWM setup. Returning to menu...${ENDCOLOR}"
-            return
-        else
-            echo -e "${RED}Invalid input. Please enter Y/y for yes or N/n for no.${ENDCOLOR}"
-        fi
-    done
+    if ! gum confirm "Continue with DWM setup?"; then
+        echo -e "${RED}Aborting DWM setup. Returning to menu...${ENDCOLOR}"
+        return
+    fi
 
     echo -e "${GREEN}To complete the installation, please add 'exec dwm' to your ~/.xinitrc file.${ENDCOLOR}"
 

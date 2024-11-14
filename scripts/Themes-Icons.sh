@@ -29,10 +29,8 @@ echo -e "${ENDCOLOR}"
 echo -e "${CYAN}Theme and Icon Setup${RESET}"
 echo -e "${YELLOW}----------------------${RESET}"
 
-echo -e "${GREEN}1. Setup Themes${RESET}"
-echo -e "${GREEN}2. Setup Icons${RESET}"
-echo -e "${GREEN}3. Exit${RESET}"
-read -p "Choose an option: " option
+# Use gum to allow the user to select an option
+option=$(gum choose "Setup Themes" "Setup Icons" "Exit")
 
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
@@ -90,30 +88,29 @@ setup_icons() {
 
 confirm_and_proceed() {
     echo -e "${YELLOW}This will add themes to themes & icons directories, but you will need to manually select them using the appropriate app for your window manager (lxappearance for X11, nwg-look for Wayland).${RESET}"
-    read -p "Do you want to continue? (yes/no): " confirmation
 
-    if [[ "$confirmation" != "yes" && "$confirmation" != "y" ]]; then
+    if ! gum confirm "Do you want to continue?"; then
         echo -e "${YELLOW}Operation canceled. Press Enter to return to the submenu.${RESET}"
         read -r
         exec "$0"  
     fi
 }
 
-case $option in
-    1)
+case "$option" in
+    "Setup Themes")
         confirm_and_proceed  
         install_dependencies
         setup_themes
         echo -e "${BLUE}Use lxappearance for X11 or nwg-look for Wayland to select the theme.${RESET}"
         ;;
-    2)
+    "Setup Icons")
         confirm_and_proceed  
         install_dependencies
         setup_icons
         echo -e "${BLUE}Use lxappearance for X11 or nwg-look for Wayland to select the icons.${RESET}"
         ;;
-    3)
-        echo -e "${YELLOW}Exiting to submenu...${RESET}"
+    "Exit")
+        echo -e "${YELLOW}Exiting...${RESET}"
         exit 0
         ;;
     *)

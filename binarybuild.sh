@@ -23,9 +23,9 @@ while true; do
     case $choice in
         1)
             echo "Building clean.sh..."
-            shc -f clean.sh -o clean
+            shc -f clean.sh -o "$BINARY_NAME" 
             if [[ $? -eq 0 ]]; then
-                mv clean "$BUILD_DIR/"
+                mv "$BINARY_NAME" "$BUILD_DIR/"
                 echo "Build successful! Binary moved to $BUILD_DIR/"
             else
                 echo "Build failed!"

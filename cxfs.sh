@@ -20,9 +20,9 @@ display_scripts_menu() {
     load_scripts
     clear
     echo -e "${GREEN}"
-    figlet -f slant "Arch Linux System Setup"
-    echo "This tool helps to automate Arch Linux system setup."
-    echo "For more information, visit: https://harilvfs.github.io/carch/"
+    figlet -f slant "Carch"
+    echo "A script that helps to automate Arch Linux system setup."
+    echo -e "For more information, visit: \033[4;34mhttps://harilvfs.github.io/carch/\033[0m"
     echo -e "${NC}"
 
     echo "Select a script to run:"
@@ -48,13 +48,7 @@ display_scripts_menu() {
 
 run_script() {
     local script_name="$1"
-    echo "Running ${script_name}..."
-    if bash "./scripts/${script_name}.sh"; then
-        echo "${script_name} completed successfully. Press Enter to return to the menu."
-    else
-        echo "${script_name} failed to complete. Press Enter to return to the menu."
-    fi
-    read -r
+    ./scripts/${script_name}.sh
     display_scripts_menu
 }
 

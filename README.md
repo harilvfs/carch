@@ -30,7 +30,8 @@
 
 <br>
 
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Reddit](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs)
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) ![Reddit User Karma](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit&color=blue)
+
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&logo=github&color=red)
 [![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=orange&label=Latest%20Release&style=for-the-badge)](https://github.com/harilvfs/carch/releases/latest) 
@@ -55,7 +56,7 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
-<img src="./preview/carch.gif" />
+<img src="./preview/carchv3.0.gif" />
 
 > [!Note]
 > This project is still in development, and you may encounter some bugs.<br>
@@ -93,7 +94,7 @@ Check out our roadmap for the **Carch** project!:
 ## Documentation 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/doc.png" width="50" /> 
 
-For the better understanding of **Carch** **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
+For the better understanding **[Check out Carch Offical Documentation](https://harilvfs.github.io/carch/)**
 
 ## License  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
@@ -114,11 +115,17 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
+## Inspiration
+<img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
+
+- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
+- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)** 
+
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
 <div align="center">
   
-![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
  <a href="https://github.com/harilvfs">
        <picture>
@@ -175,6 +182,14 @@ Thanks to everyone who helped make `Carch` better. Your contributions are greatl
      </picture>
    </a>
 
+</div>
+<br>
+<div align="center">
+ <a href="">
+  <img src="https://github.com/harilvfs/assets/blob/main/carch/arrow.png" width="30"/>
+  <br>
+  <img src="https://github.com/harilvfs/assets/blob/main/carch/btt.png" width="120" />
+ </a>
 </div>
 
 [discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge

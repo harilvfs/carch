@@ -24,9 +24,8 @@ cat <<"EOF"
 EOF
 echo -e "${ENDCOLOR}"
 
-read -p "Do you want to continue with the installation? (y/n): " confirm
-if [[ ! $confirm =~ ^[Yy]$ ]]; then
-    echo "Installation aborted."
+if ! gum confirm "Continue with i3wm setup?"; then
+    echo -e "${RED}Setup aborted by the user.${NC}"
     exit 1
 fi
 
