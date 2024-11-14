@@ -27,6 +27,7 @@ cat <<"EOF"
 EOF
 
 setup_dwm() {
+    echo -e "${GREEN}Please note, this dwm script has not been tested.${ENDCOLOR}"
     echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
 
     echo -e "${BLUE}Do you want to continue with the DWM setup?${ENDCOLOR}"
@@ -64,4 +65,7 @@ setup_dwm() {
 }
 
 setup_dwm
+
+
+
 
