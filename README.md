@@ -1,7 +1,3 @@
-<a href="https://github.com/harilvfs/carch/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=harilvfs/carch" />
-</a>
-
 <div align="center">
 <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/penguin.webp' width="80">
 </div>
@@ -113,9 +109,6 @@ For questions or suggestions, feel free to reach out via:
 - 📧 Email: **harilvfs@chalisehari.com.np**
 
 ## Contributors  
-<img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
-
-Thanks to everyone who helped make `Carch` better. Your contributions are greatly appreciated!
 
 <a href="https://github.com/harilvfs/carch/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=harilvfs/carch" />
