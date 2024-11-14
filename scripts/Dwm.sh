@@ -66,4 +66,3 @@ setup_dwm() {
 
 setup_dwm
 
-ddd
