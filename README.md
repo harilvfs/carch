@@ -109,10 +109,11 @@ For questions or suggestions, feel free to reach out via:
 - 📧 Email: **harilvfs@chalisehari.com.np**
 
 ## Contributors  
+<img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
 
-<a href="https://github.com/harilvfs/carch/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=harilvfs/carch" />
-</a>
+Thanks to everyone who helped make `Carch` better. Your contributions are greatly appreciated!
+
+[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
 ## Inspiration
 <img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
