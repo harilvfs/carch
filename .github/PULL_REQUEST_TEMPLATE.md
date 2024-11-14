@@ -10,6 +10,7 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] Bugs Fixes.
 - [ ] Feature Added.
 - [ ] UI Enhancement.
+- [ ] Scripts ZIP
 
 ### Context
 
