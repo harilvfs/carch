@@ -1,6 +1,8 @@
 #!/bin/bash
 
 GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
 NC='\033[0m'
 
 last_selected_index=0  
@@ -21,8 +23,10 @@ display_scripts_menu() {
     clear
     echo -e "${GREEN}"
     figlet -f slant "Carch"
-    echo "A script that helps to automate Arch Linux system setup."
-    echo -e "For more information, visit: \033[4;34mhttps://harilvfs.github.io/carch/\033[0m"
+    echo "Version 3.0.6"
+    echo -e "${YELLOW}--------------${RESET}"
+    echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
+    echo -e "${GREEN}For more information, visit: \033[4;34mhttps://harilvfs.github.io/carch/\033[0m"
     echo -e "${NC}"
 
     echo "Select a script to run:"
@@ -53,4 +57,3 @@ run_script() {
 }
 
 display_scripts_menu
-
