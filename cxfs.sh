@@ -23,7 +23,7 @@ display_scripts_menu() {
     clear
     echo -e "${GREEN}"
     figlet -f slant "Carch"
-    echo "Version 3.0.6"
+    echo "Version 3.0.7"
     echo -e "${YELLOW}--------------${RESET}"
     echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
     echo -e "${GREEN}For more information, visit: \033[4;34mhttps://harilvfs.github.io/carch/\033[0m"
