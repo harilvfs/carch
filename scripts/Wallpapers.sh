@@ -20,10 +20,11 @@ cat <<"EOF"
  ╚══╝╚══╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
                                                                                   
 -----------------------------------------------------------------------------------
-                      Nord & Anime Wallpapers Setup
+                       Nord & Anime Wallpapers Setup
                                 Credits
-        Nord Wallpapers https://github.com/ChrisTitusTech/nord-background
-            Anime Wallpapers https://github.com/2SSK/Wallpaper-Bank
+        ChrisTitusTech https://github.com/ChrisTitusTech/nord-background
+                2SSK https://github.com/2SSK/Wallpaper-Bank
+          Maotseantonio https://github.com/maotseantonio/wallpapers
 ------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
