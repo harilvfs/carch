@@ -65,3 +65,5 @@ setup_dwm() {
 }
 
 setup_dwm
+
+dd
