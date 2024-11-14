@@ -113,7 +113,9 @@ For questions or suggestions, feel free to reach out via:
 
 Thanks to everyone who helped make `Carch` better. Your contributions are greatly appreciated!
 
-[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
+<a href="https://github.com/harilvfs/carch/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=harilvfs/carch" />
+</a>
 
 ## Inspiration
 <img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
