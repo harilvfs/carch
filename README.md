@@ -108,18 +108,18 @@ For questions or suggestions, feel free to reach out via:
 
 - 📧 Email: **harilvfs@chalisehari.com.np**
 
+## Inspiration
+<img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
+
+- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
+- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)** 
+
 ## Contributors  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
 
 Thanks to everyone who helped make `Carch` better. Your contributions are greatly appreciated!
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
-
-## Inspiration
-<img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
-
-- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
-- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)** 
 
 <p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
 
