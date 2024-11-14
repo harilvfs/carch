@@ -1,6 +1,6 @@
 {
   "name": "@harilvfs/carch",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "A tool to automate and simplify Arch Linux setup and configuration.",
   "main": "./setup.sh",
   "scripts": {
