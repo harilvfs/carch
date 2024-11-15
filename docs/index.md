@@ -134,7 +134,7 @@ carch
 
 For information on upcoming features and improvements, check the full roadmap here: 
 
-**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/.github/roadmap.md)**
+**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/.github/ROADMAP.md)**
 
 ## Contributing
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/contribute.webp" width="50" /> 
