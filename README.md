@@ -89,7 +89,7 @@ We aim for a welcoming environment for all contributors. Please read our **[Code
 
 Check out our roadmap for the **Carch** project!:
 
-**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/roadmap.md)**
+**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/.github/ROADMAP.md)**
 
 ## Documentation 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/doc.png" width="50" /> 
