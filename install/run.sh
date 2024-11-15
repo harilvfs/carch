@@ -25,7 +25,7 @@ install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
 install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
 
 REPO="harilvfs/carch"
-BINARY_NAME="cxfs.sh"
+BINARY_NAME="core.sh"
 TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX)
 
 echo "Fetching the latest release information..."
