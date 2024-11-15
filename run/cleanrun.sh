@@ -4,7 +4,7 @@ COLOR_CYAN="\e[36m"
 COLOR_RESET="\e[0m"
 
 REPO="harilvfs/carch"
-BINARY_NAME="cxfs.sh"
+BINARY_NAME="core.sh"
 TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX)
 
 echo "Fetching the latest release information..."
