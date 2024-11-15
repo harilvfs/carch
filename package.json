@@ -1,11 +1,11 @@
 {
   "name": "@harilvfs/carch",
   "version": "3.0.7",
-  "description": "A tool to automate and simplify Arch Linux setup and configuration.",
-  "main": "setup/setup.sh",
+  "description": "A Script to automate and simplify Arch Linux system setup and configuration.",
+  "main": "install/setup.sh",
   "scripts": {
-    "preinstall": "chmod +x setup/setup.sh",
-    "install": "bash setup/setup.sh"
+    "preinstall": "chmod +x install/setup.sh",
+    "install": "bash install/setup.sh"
   },
   "repository": {
     "type": "git",
