@@ -3,3 +3,5 @@ setup.sh.x.c
 clean.sh.x.c
 /setup/setup.sh.x.c
 /run/clean.sh.x.c
+package.json
+package-lock.json
