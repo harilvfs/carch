@@ -25,7 +25,7 @@
 
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&logo=github&color=red)
-![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge&logo=github)
+![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge&color=green)
 [![Downloads][downloads-badge]][downloads-link]
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=github)
@@ -154,7 +154,7 @@ ___
 
 </div>
 
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&style=for-the-badge&label=Carch%20Downloads&color=green
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&style=for-the-badge&label=Carch%20Downloads&color=brightgreen
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
