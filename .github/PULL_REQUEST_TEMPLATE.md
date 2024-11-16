@@ -3,6 +3,7 @@
 <!-- Provide a concise description of the changes made in this pull request. -->
 This pull request adds/updates/fixes [describe the main goal or feature].
 
+### Changes
 - [ ] Added/updated scripts or configurations.
 - [ ] Remove Bad Script/Code.
 - [ ] Fixed issue #[issue number].
