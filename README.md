@@ -71,23 +71,6 @@ bash <(curl -L https://chalisehari.com.np/carch)
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type `carch` in your terminal whenever you want to automatically execute the Carch script.
 
-## Contributing  
-<img src="https://github.com/harilvfs/assets/blob/main/carch/contribute.png" width="50" /> 
-
-Contributions are welcome! If you want to help improve **Carch**, please check the **[CONTRIBUTING.md](https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md)** for the contribution guide.
-
-## Code of Conduct  
-<img src="https://github.com/harilvfs/assets/blob/main/carch/code-of-conduct.png" width="50" /> 
-
-We aim for a welcoming environment for all contributors. Please read our **[Code of Conduct](https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md)** for a better experience.
-
-## Roadmap  
-<img src="https://github.com/harilvfs/assets/blob/main/carch/roadmap.png" width="50" /> 
-
-Check out our roadmap for the **Carch** project!:
-
-**[View the Roadmap](https://github.com/harilvfs/carch/blob/main/.github/ROADMAP.md)**
-
 ## License  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
 
