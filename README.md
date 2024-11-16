@@ -158,14 +158,6 @@ For questions or suggestions, feel free to reach out via:
    </a>
 
 </div>
-<br>
-<div align="center">
- <a href="">
-  <img src="https://github.com/harilvfs/assets/blob/main/carch/arrow.png" width="30"/>
-  <br>
-  <img src="https://github.com/harilvfs/assets/blob/main/carch/btt.png" width="120" />
- </a>
-</div>
 
 [discord-badge]: https://img.shields.io/discord/757266205408100413.svg?logo=discord&colorB=7289DA&style=for-the-badge
 [discord-link]: https://discord.gg/TAaVXT95
