@@ -1,5 +1,5 @@
-<h3 align="center">
-<strong> Carch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/penguin.webp' width="40"> </strong>
+<h2 align="center">
+<strong> Carch </strong>
 </h3>
 <br>
 <div align="center">
