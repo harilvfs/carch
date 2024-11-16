@@ -154,7 +154,7 @@ ___
 
 </div>
 
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&logoColor=white&style=for-the-badge&label=Carch%20Downloads
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/carch/total?logo=github&logoColor=white&style=for-the-badge&label=Carch%20Downloads
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
