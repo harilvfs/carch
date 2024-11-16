@@ -24,21 +24,21 @@
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) [![Reddit User Karma](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit&color=blue)](https://reddit.com/u/aayush-le)
 
 
-![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&logo=github&color=red)
+![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=red)
 ![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge&color=green)
 [![Downloads][downloads-badge]][downloads-link]
-![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)
-![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=github)
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge&logo=github)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A&style=for-the-badge&logo=github)
-![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest?style=for-the-badge&logo=github)
-![GitHub last commit](https://img.shields.io/github/last-commit/harilvfs/carch?style=for-the-badge&logo=github)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
-![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge&logo=github)
-![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github)
-![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
+![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge)
+![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge)
+![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A&style=for-the-badge)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/latest?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/harilvfs/carch?style=for-the-badge)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge)
+![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge)
+![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge)
 
 ## Preview
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="50" />
@@ -154,7 +154,7 @@ ___
 
 </div>
 
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?logo=github&style=for-the-badge&label=Carch%20Downloads&color=brightgreen
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=Carch%20Downloads&color=brightgreen
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
