@@ -46,7 +46,7 @@
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
 <details>
-  <summary> **Check Out Preview** </summary>
+  <strong><summary>Check Out Preview</summary></strong>
 <img src="./preview/carchv3.0.gif" />
 
 </details>
