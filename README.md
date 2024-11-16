@@ -7,7 +7,7 @@
 </div>
 
 <div align="center">
-<img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/arch.webp' width="30">
+<img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/arch.webp' width="10">
 </div>
 
 <div align="center">
