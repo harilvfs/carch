@@ -3,7 +3,7 @@
 </div>
 
 <div align="center">
-<strong> Carch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/penguin.webp' width="20"> </strong>
+<strong> Carch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/preview/penguin.webp' width="40"> </strong>
 </div>
 
 <div align="center">
