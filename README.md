@@ -25,7 +25,6 @@
 
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=red)
-![GitHub License](https://img.shields.io/github/license/harilvfs/carch?style=for-the-badge&color=green)
 [![Downloads][downloads-badge]][downloads-link]
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge)
