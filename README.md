@@ -96,8 +96,6 @@ For questions or suggestions, feel free to reach out via:
 
 - 📧 Email: **harilvfs@chalisehari.com.np**
 
-<p align="center"> <strong> Thank you for checking out Carch! </strong> </p>
-
 <div align="center">
   
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
