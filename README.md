@@ -1,7 +1,7 @@
 <h3 align="center">
 <strong>Carch</strong>
  <br>
-<img src="https://github.com/harilvfs/assets/blob/main/carch/terx.png" width="30" />
+<img src="https://github.com/harilvfs/assets/blob/main/carch/terx.png" width="40" />
 </h3>
 
 <div align="center">
