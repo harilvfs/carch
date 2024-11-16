@@ -147,6 +147,49 @@ install_multimedia() {
     done
 }
 
+install_github() {
+    install_paru
+    while true; do
+        github_choice=$(gum choose "Git" "Github" "Exit")
+
+        case $github_choice in        
+            "Git") paru -S git ;;
+            "Github") paru -S github-desktop-bin ;;
+            "Exit") break ;;
+        esac
+    done
+}
+
+install_thunarpreview() {
+    install_paru
+    while true; do
+        echo -e "${BLUE}This package enables thumbnail previews in the Thunar file manager.${RESET}"
+        echo -e "${YELLOW}-------------------------------------------------------------------${RESET}"
+        thunarpreview_choice=$(gum choose "Tumbler" "Exit")
+
+        case $thunarpreview_choice in
+            "Tumbler") paru -S tumbler ;;
+            "Exit") break ;;
+        esac
+    done
+}
+
+install_andriod() {
+    install_paru
+    while true; do
+        echo -e "${BLUE}Android debloat and subsystem packages.${RESET}"
+        echo -e "${YELLOW}---------------------------------------${RESET}"
+        andriod_choice=$(gum choose "Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
+
+        case $andriod_choice in
+            "Gvfs-MTP [Displays Android phones via USB]") paru -S gvfs-mtp ;;
+            "ADB") paru -S adb ;;
+            "Exit") break ;;
+        esac
+    done
+}
+
+    
 while true; do
     clear 
     echo -e "${BLUE}"
@@ -163,7 +206,7 @@ while true; do
 ----------------------------------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
-    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Exit")
+    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar [Thumbnail Preview]" "Andriod" "Exit")
 
     case $main_choice in
         "Communication & Chatting") install_communication ;;
@@ -174,7 +217,9 @@ echo -e "${ENDCOLOR}"
         "Music") install_music ;;
         "Coding & Text Editor") install_texteditor ;;
         "Multimedia") install_multimedia ;;
+        "Github") install_github ;;
+        "Thunar [Thumbnail Preview]") install_thunarpreview ;;
+        "Andriod") install_andriod ;;
         "Exit") exit ;;
     esac
 done
-
