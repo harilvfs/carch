@@ -20,7 +20,7 @@
 
 <a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a> <a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
 
-<a href="https://harilvfs.github.io/carch/"> <img alt="Check Out Documentation" height="40" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
+<a href="https://harilvfs.github.io/carch/"> <img alt="Check Out Documentation" height="30" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 [Installation](/.github/INSTALLATION.md) •
 [Documentation](https://harilvfs.github.io/carch/) •
