@@ -1,5 +1,6 @@
 <h3 align="center">
-<strong>Carch<img src="https://github.com/harilvfs/assets/blob/main/carch/terx.png" width="30" /> </strong>
+<strong>Carch</strong>
+<img src="https://github.com/harilvfs/assets/blob/main/carch/terx.png" width="30" />
 </h3>
 <br>
 <div align="center">
