@@ -3,7 +3,7 @@
 </div>
 
 <div align="center">
-<strong> Carch 'A Linux Script' </strong>
+<strong> Carch </strong>
 </div>
 
 <div align="center">
