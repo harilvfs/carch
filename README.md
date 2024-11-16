@@ -43,7 +43,6 @@
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/harilvfs/carch?color=blueviolet&label=Commit%20Activity%3A&style=for-the-badge&logo=github)
 ![Github Language](https://img.shields.io/github/languages/top/harilvfs/carch?style=for-the-badge&logo=github)
-![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/harilvfs/carch/main?style=for-the-badge&logo=github)
 ![GitHub Tag](https://img.shields.io/github/v/tag/harilvfs/carch?style=for-the-badge&logo=github)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
