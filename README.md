@@ -1,5 +1,5 @@
 <h2 align="center">
-<strong> Carch </strong>
+<strong> Carch <img src="https://github.com/harilvfs/assets/blob/main/carch/terx.png" width="30" /> </strong>
 </h3>
 <br>
 <div align="center">
