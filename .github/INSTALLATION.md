@@ -29,7 +29,7 @@ carch
 ## Aur
 **Carch is also available in the AUR package repository.**
 
-**Package** `carch-bin`
+Package `carch-bin`
 
 You can install it using an AUR package manager.
  - `paru`
