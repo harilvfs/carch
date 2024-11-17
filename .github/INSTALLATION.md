@@ -39,3 +39,14 @@ Select `<packager>` then
 <packager> -S carch-bin
 ```
 
+**You can also install it using a package build.**
+
+```bash
+git clone https://aur.archlinux.org/carch-bin.git
+cd carch-bin
+makepkg -si
+```
+
+> [!NOTE]
+> To access the latest commit or updates of Carch, you can use the command line instead of the AUR.
+> The AUR package may take some time to update, so using the command line will ensure you get the latest version.
