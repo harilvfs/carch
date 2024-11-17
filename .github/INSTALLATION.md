@@ -1,5 +1,8 @@
 ## Installation
 
+
+<details>
+  <summary>CommandLine</summary>
 To Setup, run the following command in your terminal:
 
 ```bash
@@ -25,3 +28,5 @@ carch
 
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
+
+</details>
