@@ -3,7 +3,8 @@
 
 <details>
   <summary>CommandLine</summary>
-To Setup, run the following command in your terminal:
+  <br>
+<strong>To Setup, run the following command in your terminal:</strong>
 
 ```bash
 bash <(curl -L https://chalisehari.com.np/carch)
