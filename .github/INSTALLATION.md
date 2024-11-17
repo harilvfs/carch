@@ -27,7 +27,7 @@ carch
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
 ## Aur
-**Carch is also available in the AUR package repository.**
+**Carch is also available in the [AUR package repository](https://aur.archlinux.org/packages/carch-bin).**
 
 Package `carch-bin`
 
