@@ -1,4 +1,3 @@
-
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Discord invite][discord-badge]][discord-link] ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs)
 
 <a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a>
@@ -13,6 +12,7 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Aur](#aur)
 - [Script Overview](#scripts)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
@@ -68,13 +68,43 @@ carch
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
+## Aur
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/Arch-Linux-01.svg" width="100" />
+
+**Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
+
+[Package](https://aur.archlinux.org/packages/carch-bin) **`carch-bin`**
+
+You can install it using an AUR package manager.
+ - [`paru`](https://aur.archlinux.org/packages/paru-bin)
+ - [`yay`](https://aur.archlinux.org/packages/yay-bin)
+
+Select `<packager>` then
+
+```bash
+<packager> -S carch-bin
+```
+
+You can also install it using a package build.
+
+```bash
+git clone https://aur.archlinux.org/carch-bin.git
+cd carch-bin
+makepkg -si
+```
+
+> [!NOTE]
+> To access the latest commit or updates of `Carch`, you can use the command line instead of the AUR.<br>
+> The AUR package may take some time to update, so using the command line will ensure you get the latest version.
+
+
 ## Scripts
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/terminal.webp" width="50" /> 
 
-<strong>*Carch comes with the following scripts to configure various aspects of your Arch-based system:*</strong>
+#### Carch comes with the following scripts to configure various aspects of your Arch-based system:
 
-#### Dwm Setup
+##### Dwm Setup
 - Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
 
 ##### Hyprland Setup
