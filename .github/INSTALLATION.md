@@ -41,7 +41,7 @@ Select `<packager>` then
 <packager> -S carch-bin
 ```
 
-Install it using a package build.
+You can also install it using a package build.
 
 ```bash
 git clone https://aur.archlinux.org/carch-bin.git
