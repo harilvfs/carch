@@ -29,7 +29,7 @@ carch
 ## Aur
 **Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
 
-[Package](https://aur.archlinux.org/packages/carch-bin) **`carch-bin`**
+[Package](https://aur.archlinux.org/packages/carch-git) **`carch-git`**
 
 You can install it using an AUR package manager.
  - [`paru`](https://aur.archlinux.org/packages/paru-bin)
@@ -38,14 +38,14 @@ You can install it using an AUR package manager.
 Select `<packager>` then
 
 ```bash
-<packager> -S carch-bin
+<packager> -S carch-git
 ```
 
 You can also install it using a package build.
 
 ```bash
-git clone https://aur.archlinux.org/carch-bin.git
-cd carch-bin
+git clone https://aur.archlinux.org/carch-git.git
+cd carch-git
 makepkg -si
 ```
 
