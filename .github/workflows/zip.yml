@@ -51,5 +51,5 @@ jobs:
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Content-Type: application/zip" \
-          --data-binary @zip/carchscripts.zip \
+          --data-binary @source/zip/carchscripts.zip \
           "$upload_url?name=carchscripts.zip"
