@@ -12,6 +12,7 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] Feature Added.
 - [ ] UI Enhancement.
 - [ ] Scripts ZIP
+- [ ] Documentation
 
 ### Context
 
