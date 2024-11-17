@@ -40,9 +40,7 @@ Select `<packager>` then
 ```bash
 <packager> -S carch-bin
 ```
-
-*Also*
-
+<br>
 Install it using a package build.
 
 ```bash
