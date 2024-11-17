@@ -102,7 +102,7 @@ makepkg -si
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/terminal.webp" width="50" /> 
 
-### Carch comes with the following scripts to configure various aspects of your Arch-based system:
+#### Carch comes with the following scripts to configure various aspects of your Arch-based system:
 
 #### Dwm Setup
 - Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
