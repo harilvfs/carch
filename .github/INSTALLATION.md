@@ -29,6 +29,8 @@ carch
 ## Aur
 **Carch is also available in the AUR package repository.**
 
+`carch-bin`
+
 You can install it using an AUR package manager.
  - paru
  - yay
