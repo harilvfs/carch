@@ -1,28 +1,30 @@
-# Maintainer Hari Chalise <ingoprivate@gmail.com>
-pkgname="carch"
-pkgver="v3.0.2"
-pkgrel=1
+# Maintainer: Hari Chalise <harilvfs@chalisehari.com.np>
+pkgname=carch-bin
+_pkgname=carch
+pkgver=v3.0.7
+pkgrel=4
 pkgdesc="An automated script for quick & easy Arch Linux system setup"
 arch=('x86_64')
-url="https://harilvfs.github.io/carch/"
+url="https://github.com/harilvfs/$_pkgname"
 license=('Apache-2.0')
-depends=('bash')
+depends=('bash' 'gum' 'figlet' 'pacman')
 source=(
-    "https://github.com/harilvfs/carch/releases/download/v3.0.2/carch"
-    "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/carch.desktop"
+    "https://github.com/harilvfs/$_pkgname/releases/download/$pkgver/$_pkgname"
+    "https://raw.githubusercontent.com/harilvfs/$_pkgname/refs/heads/main/$_pkgname.desktop"
 )
-sha256sums=('da4ca1df39e9d27b006ddb06ee0ce78cf4c957cff05b2e59080144b612614fd7' '2171e7dc0300fced083f4b74548253fe0ff8b40b34ad0446d2c3557245735acc')  
+sha256sums=('47cef8973be3ff95c96b4a187c99fa29b43d7ac11b04786fcb479e99861d72be' 'SKIP')  
 
-build() {
-    
-    :
+conflicts=($_pkgname)
+provides=($_pkgname)
+
+prepare() {
+    echo "Version=$pkgver" >> "$_pkgname.desktop"
 }
 
 package() {
-    
-    install -Dm755 "$srcdir/carch" "$pkgdir/usr/bin/carch"
-  
-    install -Dm644 "$srcdir/carch.desktop" "$pkgdir/usr/share/applications/carch.desktop"
-}
+   cd "$srcdir"
 
+    install -Dm755 "$srcdir/$_pkgname" "$pkgdir/usr/bin/$_pkgname"
+    install -Dm644 "$srcdir/$_pkgname.desktop" "$pkgdir/usr/share/applications/$_pkgname.desktop"
+}
 
