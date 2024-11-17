@@ -50,5 +50,5 @@ makepkg -si
 ```
 
 > [!NOTE]
-> To access the latest commit or updates of `Carch`, you can use the command line instead of the **AUR**.<br>
-> The **AUR** package may take some time to update, so using the command line will ensure you get the latest version.
+> To access the latest commit or updates of `Carch`, you can use the command line instead of the AUR.<br>
+> The AUR package may take some time to update, so using the command line will ensure you get the latest version.
