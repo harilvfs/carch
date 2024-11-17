@@ -39,7 +39,7 @@
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="50" />
 <details>
   <summary>Check out the Carch script preview </summary>
-<img src="./preview/carchv3.0.gif" />
+<img src="./source/carchv3.0.gif" />
 
 </details>
 
