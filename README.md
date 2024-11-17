@@ -14,13 +14,9 @@
 
 <a href="https://harilvfs.github.io/carch/"> <img alt="Check Out Documentation" height="35" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
-<h6 align="center">
-
 [Installation](/.github/INSTALLATION.md) •
 [Contributing](/.github/CONTRIBUTING.md) •
-[Roadmap ↗](./github/ROADMAP.md)
-</h6>
-
+[Roadmap ↗](./github/ROADMAP.md) 
 </div>
 
 <br>
