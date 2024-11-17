@@ -32,8 +32,8 @@ carch
 `carch-bin`
 
 You can install it using an AUR package manager.
- - paru
- - yay
+ - `paru`
+ - `yay`
 
 Select `<packager>` then
 
