@@ -5,8 +5,8 @@
   <summary>CommandLine</summary>
   <br>
 <strong>To Setup, run the following command in your terminal:</strong>
+<br>
 
-  
 ```bash
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
