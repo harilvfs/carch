@@ -33,7 +33,7 @@ You can install it using an AUR package manager.
  - paru
  - yay
 
-Select <packager> then
+Select `<packager>` then
 
 ```bash
 <packager> -S carch-bin
