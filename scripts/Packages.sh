@@ -206,7 +206,7 @@ while true; do
 ----------------------------------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
-    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar [Thumbnail Preview]" "Andriod" "Exit")
+    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar " "Andriod" "Exit")
 
     case $main_choice in
         "Communication & Chatting") install_communication ;;
@@ -218,7 +218,7 @@ echo -e "${ENDCOLOR}"
         "Coding & Text Editor") install_texteditor ;;
         "Multimedia") install_multimedia ;;
         "Github") install_github ;;
-        "Thunar [Thumbnail Preview]") install_thunarpreview ;;
+        "Thunar ") install_thunarpreview ;;
         "Andriod") install_andriod ;;
         "Exit") exit ;;
     esac
