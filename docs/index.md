@@ -70,6 +70,7 @@ carch
 
 ## Aur
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/Arch-Linux-01.svg" width="100" />
+
 **Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
 
 [Package](https://aur.archlinux.org/packages/carch-bin) **`carch-bin`**
