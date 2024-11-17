@@ -104,13 +104,13 @@ makepkg -si
 
 #### Carch comes with the following scripts to configure various aspects of your Arch-based system:
 
-#### Dwm Setup
+##### Dwm Setup
 - Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
 
-#### Hyprland Setup
+##### Hyprland Setup
 - Installs the Hyprland compositor along with my pre-configured dotfiles for a streamlined setup.
 
-#### i3wm Setup
+##### i3wm Setup
 - Installs and configures i3, providing a lightweight and efficient window management experience.
 
 #### Install Fonts
