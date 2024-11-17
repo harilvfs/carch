@@ -44,7 +44,7 @@ Carch aims to automate and streamline the initial setup of Arch Linux, making it
 #### Active Development 
 - Continuous updates and new features based on community feedback.
 
-![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/preview/carchv3.0.gif)
+![Carch Screenshots](https://github.com/harilvfs/carch/raw/main/source/carchv3.0.gif)
 
 ## Installation
 
