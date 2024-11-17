@@ -54,17 +54,6 @@
 - **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
 - **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)**
 
-## Installation
-<img src="https://github.com/harilvfs/assets/blob/main/carch/installation.png" width="50" /> 
-
-Run the following command in your `Terminal`:
-```shell
-bash <(curl -L https://chalisehari.com.np/carch)
-```
-
-> [!Tip]
-> You don't need to run the installation script every time. You can run it once, and then simply type `carch` in your terminal whenever you want to automatically execute the Carch script.
-
 ## License  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
 
