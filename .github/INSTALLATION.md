@@ -29,11 +29,11 @@ carch
 ## Aur
 **Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
 
-Package `carch-bin`
+[Package](https://aur.archlinux.org/packages/carch-bin) `carch-bin`
 
 You can install it using an AUR package manager.
- - `paru`
- - `yay`
+ - [`paru`](https://aur.archlinux.org/packages/paru-bin)
+ - [`yay`](https://aur.archlinux.org/packages/yay-bin)
 
 Select `<packager>` then
 
@@ -50,5 +50,5 @@ makepkg -si
 ```
 
 > [!NOTE]
-> To access the latest commit or updates of Carch, you can use the command line instead of the AUR.
-> The AUR package may take some time to update, so using the command line will ensure you get the latest version.
+> To access the latest commit or updates of `Carch`, you can use the command line instead of the **AUR**.
+> The **AUR** package may take some time to update, so using the command line will ensure you get the latest version.
