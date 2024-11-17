@@ -41,6 +41,8 @@ Select `<packager>` then
 <packager> -S carch-bin
 ```
 
+*Also*
+
 Install it using a package build.
 
 ```bash
