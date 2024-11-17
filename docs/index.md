@@ -12,6 +12,7 @@
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
+- [Aur](#aur)
 - [Usage](#usage)
 - [Script Overview](#scripts)
 - [Roadmap](#roadmap)
@@ -67,6 +68,35 @@ carch
 
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
+
+## Aur
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/Arch-Linux-01.svg" width="50" />
+
+**Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
+
+[Package](https://aur.archlinux.org/packages/carch-bin) **`carch-bin`**
+
+You can install it using an AUR package manager.
+ - [`paru`](https://aur.archlinux.org/packages/paru-bin)
+ - [`yay`](https://aur.archlinux.org/packages/yay-bin)
+
+Select `<packager>` then
+
+```bash
+<packager> -S carch-bin
+```
+
+You can also install it using a package build.
+
+```bash
+git clone https://aur.archlinux.org/carch-bin.git
+cd carch-bin
+makepkg -si
+```
+
+> [!NOTE]
+> To access the latest commit or updates of `Carch`, you can use the command line instead of the AUR.<br>
+> The AUR package may take some time to update, so using the command line will ensure you get the latest version.
 
 ## Scripts
 
