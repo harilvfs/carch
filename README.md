@@ -43,7 +43,7 @@
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 
 ## Preview
-<img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="30" />
+<img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="40" />
 <details>
   <summary>Terminal Preview </summary>
 <img src="./source/carchv3.0.gif" />
