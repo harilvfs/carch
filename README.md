@@ -33,14 +33,14 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet&logo=github)
 [![Downloads][downloads-badge]][downloads-link]
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)
-![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge)
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge)
-![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge)
-![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge)
-![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge)
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge)
+![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=github)
+![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge&logo=github)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
+![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge&logo=github)
+![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github)
+![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github)
 
 ## Preview
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="50" />
