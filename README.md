@@ -42,7 +42,7 @@
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="50" />
+<img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="20" />
 <details>
   <summary>Check out the Carch script preview </summary>
 <img src="./source/carchv3.0.gif" />
