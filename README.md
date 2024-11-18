@@ -40,7 +40,7 @@
 ![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 ![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 ![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=FFFF00)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BCarch%5D%20GithubStars)
 
 ## Preview
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="50" />
