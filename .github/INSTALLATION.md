@@ -1,4 +1,4 @@
-Discord Test
+Left Test
 
 ## Installation
 
