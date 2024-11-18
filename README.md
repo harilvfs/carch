@@ -75,10 +75,6 @@ For questions or suggestions, feel free to reach out via:
 - 📧 Email: **harilvfs@chalisehari.com.np**
 
 ___
-
-<div align="center">
- 
-**Repobeats**
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
