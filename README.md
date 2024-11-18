@@ -55,11 +55,6 @@
 > Please feel free to submit an issue if you run into any problems:
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## License  
-<img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
-
-This project is licensed under the **Apache-2.0 License**. See the **[LICENSE](LICENSE)** file for details.
-
 ## Contributors  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
 
