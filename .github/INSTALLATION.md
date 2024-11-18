@@ -1,4 +1,4 @@
-Hello
+Discord Test
 
 ## Installation
 
