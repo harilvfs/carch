@@ -29,6 +29,8 @@ carch
 ## Aur
 [![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg)](https://repology.org/project/carch/versions)
 
+[![Carch AUR Version](https://repology.org/badge/version-for-repo/carch.svg?minversion=999999999)
+
 **Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
 
 [Package](https://aur.archlinux.org/packages/carch-git) **`carch-git`**
