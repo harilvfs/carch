@@ -55,13 +55,6 @@
 > Please feel free to submit an issue if you run into any problems:
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## Contributors  
-<img src="https://github.com/harilvfs/assets/blob/main/carch/contributors.png" width="50" />
-
-Thanks to everyone who helped make `Carch` better. Your contributions are greatly appreciated!
-
-[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
-
 ## Contact
 <img src="https://github.com/harilvfs/assets/blob/main/carch/communicate.png" width="50" /> 
 
