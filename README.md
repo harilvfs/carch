@@ -33,13 +33,6 @@
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet&logo=github&logoColor=000000)
 [![Downloads][downloads-badge]][downloads-link]
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000)
-![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
 
 ## Preview
