@@ -26,21 +26,13 @@
 
 <br>
 
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) [![Reddit User Karma](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit&color=blue)](https://reddit.com/u/aayush-le)
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) [![Reddit User Karma](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit&color=blue)](https://reddit.com/u/aayush-le)
 
 ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
-![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet&logo=github&logoColor=000000)
+![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BCarch%5D%20Release)
 [![Downloads][downloads-badge]][downloads-link]
-![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000)
-![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed-raw/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub Discussions](https://img.shields.io/github/discussions/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub repo size](https://img.shields.io/github/repo-size/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BCarch%5D%20Stars&color=yellow)
 
 ## Preview
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="40" />
