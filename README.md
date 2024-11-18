@@ -22,7 +22,7 @@
 [Installation](/.github/INSTALLATION.md) •
 [Contributing](/.github/CONTRIBUTING.md) •
 [Roadmap ↗](./github/ROADMAP.md) 
-</div>
+
 
 <br>
 
@@ -31,6 +31,7 @@
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Release)
 [![Downloads][downloads-badge]][downloads-link]
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
+</div>
 
 ## Preview
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="40" />
