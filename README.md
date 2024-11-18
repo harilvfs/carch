@@ -23,7 +23,8 @@
 
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) ![Twitch Status](https://img.shields.io/twitch/status/aayushchalese?style=for-the-badge&color=blue&logo=twitch) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) [![Reddit User Karma](https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&logo=reddit&color=blue)](https://reddit.com/u/aayush-le)
 
-![Arch Linux](https://img.shields.io/badge/-Arch_Linux-black.svg?style=for-the-badge&logo=archlinux) ![AUR Version](https://img.shields.io/aur/version/carch-git/-Arch_Linux-black.svg?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
+![Arch Linux](https://img.shields.io/badge/-Arch_Linux-black.svg?style=for-the-badge&logo=archlinux)
+![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet)
 [![Downloads][downloads-badge]][downloads-link]
