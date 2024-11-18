@@ -55,12 +55,6 @@
 > Please feel free to submit an issue if you run into any problems:
 > [Submit an Issue](https://github.com/harilvfs/carch/issues).
 
-## Inspiration
-<img src="https://github.com/harilvfs/assets/blob/main/carch/inspiration.png" width="50" />
-
-- **[ChrisTitusTech `linutil`](https://github.com/ChrisTitusTech)**
-- **[ML4W `Dotfiles Script`](https://github.com/mylinuxforwork)**
-
 ## License  
 <img src="https://github.com/harilvfs/assets/blob/main/carch/licensing.png" width="50" /> 
 
