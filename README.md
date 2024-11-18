@@ -30,9 +30,9 @@
 
 ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
-![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet)
+![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet&logo=github)
 [![Downloads][downloads-badge]][downloads-link]
-![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge)
+![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge)
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge)
