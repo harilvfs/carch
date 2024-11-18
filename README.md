@@ -32,7 +32,7 @@
 
 ![GitHub Created At](https://img.shields.io/github/created-at/harilvfs/carch?style=for-the-badge&color=blueviolet&logo=github)
 [![Downloads][downloads-badge]][downloads-link]
-[![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)]
+[![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github)
 ![Build status](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/docs-build.yml?style=for-the-badge&logo=github)
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=for-the-badge&logo=github)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed-raw/harilvfs/carch?style=for-the-badge&logo=github)
