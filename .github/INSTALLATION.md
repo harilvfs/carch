@@ -31,7 +31,7 @@ carch
 
 **Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
 
-[Package](https://aur.archlinux.org/packages/carch-git) **`carch-git`**
+**[Package](https://aur.archlinux.org/packages/carch-git)** **`carch-git`**
 
 You can install it using an AUR package manager.
  - [`paru`](https://aur.archlinux.org/packages/paru-bin)
