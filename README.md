@@ -8,6 +8,7 @@
 <br>
 <div align="center">
  
+![Arch Linux](https://img.shields.io/badge/-Arch_Linux-black.svg?style=for-the-badge&logo=archlinux)
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
 <a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a> <a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
