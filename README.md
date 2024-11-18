@@ -9,7 +9,7 @@
 <div align="center">
  
 <a href="https://archlinux.org/">
-<img src="(https://img.shields.io/badge/-Arch_Linux-black.svg?style=for-the-badge&logo=archlinux) />
+<img src="https://img.shields.io/badge/-Arch_Linux-black.svg?style=for-the-badge&logo=archlinux" />
  </a>
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
