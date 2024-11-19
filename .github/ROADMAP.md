@@ -59,6 +59,7 @@
 - **Improve TUI:**
   - [x] Enhance navigation
   - [x] Add themes/customizations
+  - [x] GUI/GTK
   - [ ] Gather user feedback
 
 
