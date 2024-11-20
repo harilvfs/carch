@@ -8,16 +8,18 @@
 <br>
 <div align="center">
 
+[![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
+
 <a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a> <a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
 
 <a href="https://harilvfs.github.io/carch/"> <img alt="Check Out Documentation" height="35" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 [Installation](/.github/INSTALLATION.md) •
 [Contributing](/.github/CONTRIBUTING.md) •
-[Roadmap ↗](./github/ROADMAP.md) 
-</div>
+[Roadmap ↗](/.github/ROADMAP.md) 
 
----
+• • •
+</div>
 
 <div align="center">
 
@@ -27,7 +29,6 @@
 [![Downloads][downloads-badge]][downloads-link]
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
 
-[![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 </div>
 
 ## Preview
