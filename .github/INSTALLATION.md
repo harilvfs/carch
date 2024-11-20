@@ -27,11 +27,33 @@ carch
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
 ## GTK Version of Carch
-The GTK version of Carch is available.
+**The GTK version of Carch is available.**
 
 > [!CAUTION]
 > The GTK version of Carch is currently under development. <br>
 > It’s not fully ready for use and needs some script updates to work properly. You may try it now as you would with the usual Carch script.
+
+How to Install and Use
+
+First you will need python dependencies
+
+```bash
+sudo pacman -S python
+```
+
+Using Aur
+
+```bash
+<paru> or <yay> -S python
+```
+
+clone the carch repository
+
+```bash
+git clone https://github.com/harilvfs/carch
+cd carch
+python3 carch-gtk.py
+```
 
 
 ## Aur
