@@ -27,9 +27,11 @@ carch
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
 ## GTK Version of Carch
-The GTK version of Carch is available but still in development.
+The GTK version of Carch is available.
+
 > [!CAUTION]
-> It’s not fully ready for use and needs some script updates to work properly.
+> The GTK version of Carch is currently under development. <br>
+> It’s not fully ready for use and needs some script updates to work properly. You may try it now as you would with the usual Carch script.
 
 
 ## Aur
