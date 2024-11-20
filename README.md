@@ -16,7 +16,7 @@
 
 [Installation](/.github/INSTALLATION.md) •
 [Contributing](/.github/CONTRIBUTING.md) •
-[Roadmap ↗](./github/ROADMAP.md) 
+[Roadmap ↗](/.github/ROADMAP.md) 
 
 • • •
 </div>
