@@ -34,7 +34,8 @@ carch
 > It’s not fully ready for use and needs some script updates to work properly. You may try it now as you would with the usual Carch script.
 
 **How to Install and Use 📦**
-<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="30" />
+
+<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
 
 ### Prerequisites
 
