@@ -33,7 +33,7 @@ carch
 > The GTK version of Carch is currently under development. <br>
 > It’s not fully ready for use and needs some script updates to work properly. You may try it now as you would with the usual Carch script.
 
-**How to Install and Use 📦**
+**How to Install and Use 📦** <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 
