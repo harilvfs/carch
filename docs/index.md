@@ -78,7 +78,7 @@ carch
 
 **How to Install and Use 📦**
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
+<img src="https://raw.githubusercontent.com/smritics/linuxcli/refs/heads/main/docs/assets/arrowdown.webp" width="20" />
 
 ### Prerequisites
 
