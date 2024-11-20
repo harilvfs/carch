@@ -53,13 +53,18 @@ paru -S python
 yay -S python
 ```
 
-#### Clone the Carch repository and run the GTK script:
+### Install and Run Carch
+
+Clone the Carch repository and run the GTK script:
 
 ```bash
 git clone https://github.com/harilvfs/carch
 cd carch
 python3 carch-gtk.py
 ```
+
+> [!NOTE]
+> If any errors pop up while running the script, they are likely related to missing dependencies. Make sure to install all required Python dependencies.
 
 
 ## Aur
