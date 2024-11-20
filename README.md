@@ -16,7 +16,7 @@
 [Contributing](/.github/CONTRIBUTING.md) •
 [Roadmap ↗](./github/ROADMAP.md) 
 </div>
-
+<br>
 <div align="center">
 
 ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
