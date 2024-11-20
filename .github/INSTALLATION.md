@@ -35,19 +35,25 @@ carch
 
 How to Install and Use
 
-First you will need python dependencies
+#### Prerequisites
+
+Before you start, you'll need to install Python dependencies.
+
+On Arch Linux:
 
 ```bash
 sudo pacman -S python
 ```
 
-Using Aur
+Using AUR (with `paru` or `yay`):
 
 ```bash
-<paru> or <yay> -S python
+paru -S python
+# or
+yay -S python
 ```
 
-clone the carch repository
+Clone the Carch repository and run the GTK script:
 
 ```bash
 git clone https://github.com/harilvfs/carch
