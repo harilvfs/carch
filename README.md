@@ -20,6 +20,7 @@
 <div align="center">
 <img src="https://github.com/harilvfs/assets/blob/main/github-gifs/212744287-14f66c13-5458-40dc-9244-8ff533fc8f4a.gif" width="500" />
 <br>
+<br>
 
 ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
