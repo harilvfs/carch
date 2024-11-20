@@ -35,7 +35,7 @@ carch
 
 **How to Install and Use 📦**
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
+<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 
 ### Prerequisites
 
