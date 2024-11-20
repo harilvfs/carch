@@ -33,11 +33,11 @@ carch
 > The GTK version of Carch is currently under development. <br>
 > It’s not fully ready for use and needs some script updates to work properly. You may try it now as you would with the usual Carch script.
 
-How to Install and Use
+<strong>*How to Install and Use* </strong>
 
-#### Prerequisites
+### Prerequisites
 
-Before you start, you'll need to install Python dependencies.
+Before you start, you'll need to install `Python` dependencies.
 
 On Arch Linux:
 
@@ -53,7 +53,7 @@ paru -S python
 yay -S python
 ```
 
-Clone the Carch repository and run the GTK script:
+#### Clone the Carch repository and run the GTK script:
 
 ```bash
 git clone https://github.com/harilvfs/carch
