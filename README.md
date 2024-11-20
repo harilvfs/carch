@@ -23,7 +23,7 @@
 
 ![AUR Version](https://img.shields.io/aur/version/carch-git?color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue) ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?logo=github&logoColor=000000&label=%5BGithub%5D%20Release)
 [![Downloads][downloads-badge]][downloads-link]
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?logo=telegram)](https://t.me/harilvfs)
 
 ## Preview
 <img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="40" />
