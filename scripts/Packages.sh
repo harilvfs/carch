@@ -87,7 +87,7 @@ install_browsers() {
 
 install_filemanagers() {
     while true; do
-        fm_choice=$(gum choose "Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Exit")
+        fm_choice=$(gum choose "Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
 
         case $fm_choice in
             "Nemo") sudo pacman -S nemo ;;
@@ -96,6 +96,7 @@ install_filemanagers() {
             "LF (Terminal File Manager)") sudo pacman -S lf ;;
             "Ranger") sudo pacman -S ranger ;;
             "Nautilus") sudo pacman -S nautilus ;;
+            "Yazi") sudo pacman -S yazi ;;
             "Exit") break ;;
         esac
     done
