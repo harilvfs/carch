@@ -1,7 +1,7 @@
 # Carch Project Roadmap 🚀
 
-**Current Phase: Beginning of Script Development**  
-*As of now, the project is in its initial phase, focusing on the development of scripts to simplify Arch Linux setup.* 🛠️
+**Current Phase: Advancing Script Development**  
+The project is now progressing through its development phase, focusing on creating scripts to simplify the Arch Linux setup process. 🛠️
 
 ---
 
@@ -24,6 +24,7 @@
    - Enhance user experience with better navigation and visuals.
    - Add more themes and customization options.
    - Integrate user feedback for continuous improvement.
+   - Explore GTK integration for a graphical interface.
 
 4. **Implement Additional Programming Languages 💻**
    - Add Rust implementations for performance-critical components.
@@ -86,4 +87,5 @@
 ## Timeline (Tentative) 📅
 
 - **Q 2024**: Develop additional WM setup scripts and core system setup scripts. ✔
-- **Q 2025**: Refactor existing scripts for stability and begin expanding distribution support. 
+- **Q 2025**: Refactor existing scripts for stability and begin expanding distribution support.
+- **Q Mid 2025**: Rust Implementation
