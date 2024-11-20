@@ -18,7 +18,7 @@
 </div>
 <br>
 
-![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue) ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Release)
+![AUR Version](https://img.shields.io/aur/version/carch-git?color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue) ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Release)
 [![Downloads][downloads-badge]][downloads-link]
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
 
