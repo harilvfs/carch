@@ -8,7 +8,7 @@
 <br>
 <div align="center">
 
-[![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?logo=github)](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml)
+![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=plasticlogo=github)
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
