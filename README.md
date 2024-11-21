@@ -8,6 +8,8 @@
 <br>
 <div align="center">
 
+![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=flat-square&logo=github&label=Github%20Page%20Build&color=5865F2&labelColor=36454F)
+
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
 <a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a> <a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
@@ -25,9 +27,9 @@
 
 [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
-![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Release)
+![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&labelColor=36454F&color=8A2BE2)
 [![Downloads][downloads-badge]][downloads-link]
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
+![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow&labelColor=36454F)
 
 </div>
 
@@ -114,7 +116,7 @@ ___
 
 </div>
 
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000&labelColor=36454F
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
