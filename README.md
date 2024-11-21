@@ -25,7 +25,7 @@
 
 <div align="center">
 
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&labelColor=36454F)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram&labelColor=36454F)](https://t.me/harilvfs) ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue&labelColor=36454F)
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram)](https://t.me/harilvfs) ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
 ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&labelColor=36454F)
 [![Downloads][downloads-badge]][downloads-link]
