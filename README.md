@@ -8,7 +8,7 @@
 <br>
 <div align="center">
 
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=flat&logo=github&label=Github%20Page%20Build&color=brightgreen&labelColor=000000)
+![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages?style=flat-square&logo=github&label=Github%20Page%20Build&color=brightgreen&labelColor=36454F)
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
