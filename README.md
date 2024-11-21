@@ -8,7 +8,9 @@
 <br>
 <div align="center">
 
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages/badge.svg?style=for-the-badge&logo=github)
+[![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml/badge.svg)](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml)
+
+[![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/github-pages/badge.svg?style=for-the-badge&logo=github)](https://github.com/harilvfs/carch/actions/workflows/docs-build.yml)
 
 [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
