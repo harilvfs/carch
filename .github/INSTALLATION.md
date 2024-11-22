@@ -1,9 +1,9 @@
 ### Installation Methods
-[Command Line](#cli)
+[CLI](#cli)
 
 [GTK](#gtk)
 
-[Aur](#aur)
+[AUR](#aur)
 
 ## CLI
 
