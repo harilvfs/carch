@@ -32,7 +32,19 @@ echo -e "${COLOR_YELLOW}Downloading and installing the latest Carch binary...${C
 sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" --output /usr/bin/carch &> /dev/null
 sudo chmod +x /usr/bin/carch
 
-echo -e "${COLOR_GREEN}Carch binary installed successfully!${COLOR_RESET}"
+echo -e "${COLOR_YELLOW}Downloading and installing Carch GTK Scripts...${COLOR_RESET}"
+sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk" --output /usr/bin/carch-gtk &> /dev/null
+sudo chmod +x /usr/bin/carch-gtk
+
+sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" --output /usr/bin/carch-gtk.py &> /dev/null
+sudo chmod +x /usr/bin/carch-gtk.py
+
+echo -e "${COLOR_YELLOW}Downloading and extracting additional scripts.zip...${COLOR_RESET}"
+sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip" --output "$temp_dir/scripts.zip" &> /dev/null
+sudo mkdir -p /usr/bin/scripts
+sudo unzip -q "$temp_dir/scripts.zip" -d /usr/bin/scripts
+
+echo -e "${COLOR_GREEN}Carch binary and scripts installed successfully!${COLOR_RESET}"
 
 echo -e "${COLOR_YELLOW}Creating Carch Desktop Entry...${COLOR_RESET}"
 sudo tee /usr/share/applications/carch.desktop > /dev/null <<EOL
