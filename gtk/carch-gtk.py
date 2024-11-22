@@ -22,7 +22,7 @@ class CarchApp(Gtk.Window):
         self.add(vbox)
 
         header_bar = Gtk.HeaderBar(title="Carch")
-        header_bar.set_subtitle("Arch Linux Automation - Version 3.0.7")
+        header_bar.set_subtitle("Arch Linux Automation - Version 3.0.8")
         header_bar.set_show_close_button(True)
         self.set_titlebar(header_bar)
 
@@ -156,7 +156,7 @@ class CarchApp(Gtk.Window):
     def show_about_dialog(self, button):
         about_dialog = Gtk.AboutDialog()
         about_dialog.set_program_name("Carch")
-        about_dialog.set_version("3.0.7")
+        about_dialog.set_version("3.0.8")
         about_dialog.set_comments("A script that helps to automate Arch Linux system setup.")
         about_dialog.set_website("https://harilvfs.github.io/carch/")
         about_dialog.run()
