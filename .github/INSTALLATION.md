@@ -1,3 +1,8 @@
+### Installation Methods
+[Command Line](#installation)
+[GTK](#gtk)
+[Aur](#aur)
+
 ## Installation
 
 To Setup, run the following command in your terminal:
