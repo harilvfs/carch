@@ -58,9 +58,11 @@ Once done, you can launch the Carch GTK interface by typing:
 carch-gtk
 ```
 
+
 > **Note:** You can also run the Carch GTK interface after installing it from the AUR.
 
-#### From Source
+
+### From Source
 
 Before you start, you'll need to install `Python` dependencies.
 
