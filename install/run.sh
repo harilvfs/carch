@@ -24,6 +24,7 @@ install_if_missing "libnewt" "pacman -S --noconfirm libnewt" "whiptail"
 install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
 install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
 install_if_missing "Python" "pacman -S --noconfirm python" "python3"
+install_if_missing "gtk" "pacman -S --noconfirm gtk3" "gtk3"
 
 REPO="harilvfs/carch"
 BINARY_NAME="core.sh"
