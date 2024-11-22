@@ -57,7 +57,7 @@ Once done, you can launch the Carch GTK interface by typing:
 ```
 carch-gtk
 ```
-<br>
+
 
 > **Note:** You can also run the Carch GTK interface after installing it from the AUR.
 
