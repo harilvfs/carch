@@ -39,6 +39,20 @@ carch
 
 ### Prerequisites
 
+Simply run the main script:
+
+```bash
+bash <(curl -L https://chalisehari.com.np/carch)
+```
+
+Once done, you can launch the Carch GTK interface by typing:
+
+```
+carch-gtk
+```
+
+#### From Source
+
 Before you start, you'll need to install `Python` dependencies.
 
 On Arch Linux:
@@ -67,7 +81,6 @@ python3 carch-gtk.py
 
 > [!NOTE]
 > If any errors pop up while running the script, they are likely related to missing dependencies. Make sure to install all required Python dependencies.
-
 
 ## Aur
 [![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg)](https://repology.org/project/carch/versions)
