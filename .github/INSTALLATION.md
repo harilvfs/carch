@@ -61,6 +61,7 @@ carch-gtk
 
 > **Note:** You can also run the Carch GTK interface after installing it from the AUR.
 
+<br>
 
 ### From Source
 
