@@ -78,9 +78,28 @@ carch
 
 **How to Install and Use 📦**
 
-<img src="https://raw.githubusercontent.com/smritics/linuxcli/refs/heads/main/docs/assets/arrowdown.webp" width="20" />
+<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 
 ### Prerequisites
+
+Simply run the main script:
+
+```bash
+bash <(curl -L https://chalisehari.com.np/carch)
+```
+
+Once done, you can launch the Carch GTK interface by typing:
+
+```
+carch-gtk
+```
+
+
+> **Note:** You can also run the Carch GTK interface after installing it from the AUR.
+
+
+
+### From Source
 
 Before you start, you'll need to install `Python` dependencies.
 
