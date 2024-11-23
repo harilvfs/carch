@@ -27,11 +27,21 @@ Simply run Carch by entering carch in your terminal.
 ```bash
 carch
 ```
-
 </details>
 
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
+
+### Cli Commands
+Carch now support cli commands too 
+type `carchcli` with this commands
+
+       - `--help` [ Show help message ]
+       - `--update` [ Update Carch using the latest script. ]
+       - `--version` [ display the version of carch ]
+       - `--run-script <name>` [ Run the specified script ]
+       - `--list-scripts` [ List all available scripts ]
+       
 
 ## GTK
 **The GTK version of Carch is available.**
