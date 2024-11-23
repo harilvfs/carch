@@ -36,11 +36,11 @@ carch
 Carch now support cli commands too 
 type `carchcli` with this commands
 
-       - `--help` [ Show help message ]
-       - `--update` [ Update Carch using the latest script. ]
-       - `--version` [ display the version of carch ]
-       - `--run-script <name>` [ Run the specified script ]
-       - `--list-scripts` [ List all available scripts ]
+   - `--help` [ Show help message ]
+   - `--update` [ Update Carch using the latest script. ]
+   - `--version` [ display the version of carch ]
+   - `--run-script <name>` [ Run the specified script ]
+   - `--list-scripts` [ List all available scripts ]
        
 
 ## GTK
