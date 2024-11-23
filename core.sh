@@ -5,10 +5,10 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 NC='\033[0m'
 
-last_selected_index=0  
+last_selected_index=0
 
 load_scripts() {
-    local script_dir="./scripts"
+    local script_dir="/usr/bin/scripts"
     scripts=()
     while IFS= read -r -d '' file; do
         script_name=$(basename "${file}" .sh)
@@ -52,8 +52,16 @@ display_scripts_menu() {
 
 run_script() {
     local script_name="$1"
-    ./scripts/${script_name}.sh
+    local script_path="/usr/bin/scripts/${script_name}.sh"
+
+    if [[ -f "$script_path" ]]; then
+        echo -e "${YELLOW}Running script: ${script_name}${RESET}"
+        bash "$script_path"
+    else
+        echo -e "${YELLOW}Error: Script '${script_name}' not found in /usr/bin/scripts!${RESET}"
+    fi
     display_scripts_menu
 }
 
 display_scripts_menu
+
