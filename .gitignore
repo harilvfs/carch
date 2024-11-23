@@ -3,3 +3,4 @@ setup.sh.x.c
 clean.sh.x.c
 /install/setup.sh.x.c
 /run/clean.sh.x.c
+core.sh.x.c
