@@ -83,12 +83,12 @@ class CarchApp(Gtk.Window):
             script_label.set_justify(Gtk.Justification.LEFT)
             box.pack_start(script_label, True, True, 0)
 
-            view_button = Gtk.Button(label="View Script")
+            view_button = Gtk.Button(label="View")
             view_button.set_tooltip_text(f"View the content of '{script}'")
             view_button.connect("clicked", self.view_script, script)
             box.pack_start(view_button, False, False, 0)
 
-            run_button = Gtk.Button(label="Run Script")
+            run_button = Gtk.Button(label="Run")
             run_button.set_tooltip_text(f"Run the script '{script}'")
             run_button.connect("clicked", self.run_script, script)
             box.pack_start(run_button, False, False, 0)
