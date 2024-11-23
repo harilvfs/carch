@@ -53,13 +53,18 @@ class CarchApp(Gtk.Window):
 
         cancel_button = Gtk.Button(label="Exit")
         cancel_button.set_tooltip_text("Exit the application")
-        cancel_button.connect("clicked", Gtk.main_quit)
+        cancel_button.connect("clicked", self.on_exit)
+
         button_box.pack_start(cancel_button, True, True, 0)
 
         self.spinner = Gtk.Spinner()
         button_box.pack_start(self.spinner, False, False, 0)
 
         self.show_all()
+
+    def on_exit(self, button):
+        os.system('clear')
+        Gtk.main_quit() 
 
     def load_scripts(self):
         if not os.path.exists(self.script_dir):
