@@ -22,7 +22,7 @@ class CarchApp(Gtk.Window):
         self.add(vbox)
 
         header_bar = Gtk.HeaderBar(title="Carch")
-        header_bar.set_subtitle("Arch Linux Automation - Version 3.0.8")
+        header_bar.set_subtitle(f"{len(self.scripts)} Scripts Available")
         header_bar.set_show_close_button(True)
         self.set_titlebar(header_bar)
 
@@ -45,6 +45,9 @@ class CarchApp(Gtk.Window):
 
         self.populate_scripts()
 
+        self.status_label = Gtk.Label()
+        vbox.pack_start(self.status_label, False, False, 0)
+
         button_box = Gtk.Box(spacing=10)
         vbox.pack_start(button_box, False, False, 0)
 
@@ -52,6 +55,9 @@ class CarchApp(Gtk.Window):
         cancel_button.set_tooltip_text("Exit the application")
         cancel_button.connect("clicked", Gtk.main_quit)
         button_box.pack_start(cancel_button, True, True, 0)
+
+        self.spinner = Gtk.Spinner()
+        button_box.pack_start(self.spinner, False, False, 0)
 
         self.show_all()
 
@@ -142,23 +148,30 @@ class CarchApp(Gtk.Window):
             self.show_message(f"Script '{script_name}' not found!")
             return
 
+        self.status_label.set_text(f"Running '{script_name}'...")
+        self.spinner.start()
+
         thread = threading.Thread(target=self.execute_script, args=(script_path,))
         thread.start()
 
     def execute_script(self, script_path):
         try:
             subprocess.run(["bash", script_path], check=True)
+            GLib.idle_add(self.status_label.set_text, "Script executed successfully.")
         except subprocess.CalledProcessError:
-            pass  
-        except Exception:
-            pass  
+            GLib.idle_add(self.status_label.set_text, "Script execution failed.")
+        except Exception as e:
+            GLib.idle_add(self.status_label.set_text, f"Error: {e}")
+        finally:
+            GLib.idle_add(self.spinner.stop)
 
     def show_about_dialog(self, button):
         about_dialog = Gtk.AboutDialog()
         about_dialog.set_program_name("Carch")
         about_dialog.set_version("3.0.8")
-        about_dialog.set_comments("A script that helps to automate Arch Linux system setup.")
+        about_dialog.set_comments("A script that helps automate Arch Linux system setup.")
         about_dialog.set_website("https://harilvfs.github.io/carch/")
+        about_dialog.set_logo_icon_name("system-run")
         about_dialog.run()
         about_dialog.destroy()
 
