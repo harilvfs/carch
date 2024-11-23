@@ -12,6 +12,7 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [CLI Commands](#cli-commands)
 - [GTK](#gtk)
 - [Aur](#aur)
 - [Script Overview](#scripts)
@@ -68,6 +69,16 @@ carch
 
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
+
+## CLI Commands  
+
+Carch now supports CLI commands! Use `carchcli` with the following options:  
+
+   - `--help` - Displays the help message.  
+   - `--update` - Updates Carch to the latest script version.  
+   - `--version` - Shows the current version of Carch.  
+   - `--run-script <name>` - Executes the specified script.  
+   - `--list-scripts` - Lists all available scripts.  
 
 ## GTK
 **The GTK version of Carch is available.**
