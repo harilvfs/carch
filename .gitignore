@@ -4,3 +4,4 @@ clean.sh.x.c
 /install/setup.sh.x.c
 /run/clean.sh.x.c
 core.sh.x.c
+/cli/carchcli.sh.x.c
