@@ -24,39 +24,19 @@ install_if_missing "libnewt" "pacman -S --noconfirm libnewt" "whiptail"
 install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
 install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
 install_if_missing "Python" "pacman -S --noconfirm python" "python3"
-install_if_missing "gtk3" "pacman -S --noconfirm gtk3" "gtk3"
 
-REPO="harilvfs/carch"
-BINARY_NAME="core.sh"
-TEMP_FILE=$(mktemp /tmp/$BINARY_NAME.XXXXXX)
-
-echo "Fetching the latest release information..."
-LATEST_RELEASE=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
-
-if [ $? -ne 0 ]; then
-    echo "Failed to fetch the latest release information."
-    exit 1
+if ! pacman -Q gtk3 &>/dev/null; then
+    echo "gtk3 is not installed. Installing..."
+    sudo pacman -S --noconfirm gtk3
+    if [ $? -ne 0 ]; then
+        echo "Failed to install gtk3."
+        exit 1
+    fi
+else
+    echo "gtk3 is already installed. Skipping installation."
 fi
 
-DOWNLOAD_URL=$(echo "$LATEST_RELEASE" | grep -oP '"tag_name": "\K[^"]*' | xargs -I {} echo "https://github.com/$REPO/releases/download/{}/$BINARY_NAME")
+echo -e "${COLOR_CYAN}Carch has been successfully installed!${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Use 'carch' or 'carch-gtk' to run the Carch script.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}For available commands, type 'carchcli --help'.${COLOR_RESET}"
 
-echo "Downloading the latest release binary from $DOWNLOAD_URL..."
-curl -fsL -o "$TEMP_FILE" "$DOWNLOAD_URL"
-
-if [ $? -ne 0 ]; then
-    echo "Failed to download the binary."
-    exit 1
-fi
-
-if [ ! -s "$TEMP_FILE" ]; then
-    echo "Downloaded file is empty. Please check the URL and binary name."
-    exit 1
-fi
-
-chmod +x "$TEMP_FILE"
-
-"$TEMP_FILE"
-
-rm -f "$TEMP_FILE"
-
-echo -e "${COLOR_CYAN}See You...${COLOR_RESET}"
