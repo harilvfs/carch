@@ -3,7 +3,7 @@ name: Upload Scripts Zip to Latest Release
 on:
   push:
     paths:
-      - "source/zip/carchscripts.zip"
+      - "source/zip/scripts.zip"
 
 permissions:
   contents: write  
@@ -29,21 +29,21 @@ jobs:
         echo "upload_url=$upload_url" >> $GITHUB_ENV
         echo "release_id=$release_id" >> $GITHUB_ENV
 
-    - name: Remove Existing carchscripts.zip Asset (if present)
+    - name: Remove Existing scripts.zip Asset (if present)
       run: |
         assets=$(curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/releases/$release_id/assets)
         
-        asset_id=$(echo "$assets" | jq -r '.[] | select(.name == "carchscripts.zip") | .id')
+        asset_id=$(echo "$assets" | jq -r '.[] | select(.name == "scripts.zip") | .id')
         
         if [ -n "$asset_id" ]; then
-          echo "Removing existing carchscripts.zip asset with ID $asset_id"
+          echo "Removing existing scripts.zip asset with ID $asset_id"
           curl -X DELETE \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/releases/assets/$asset_id
         else
-          echo "No existing carchscripts.zip asset found."
+          echo "No existing scripts.zip asset found."
         fi
 
     - name: Upload Zip File to Latest Release
@@ -51,5 +51,5 @@ jobs:
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Content-Type: application/zip" \
-          --data-binary @source/zip/carchscripts.zip \
-          "$upload_url?name=carchscripts.zip"
+          --data-binary @source/zip/scripts.zip \
+          "$upload_url?name=scripts.zip"
