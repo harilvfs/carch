@@ -125,8 +125,13 @@ ___
          <img height="25px" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/bluesky/Bluesky_app_icon.svg" />
      </picture>
    </a>
-
 </div>
+
+<p align="center">
+<a href="https://discord.com/invite/8NJWstnUHd">
+<img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="350">
+</a>
+</p>
 
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
 [downloads-link]: https://github.com/harilvfs/carch/releases
