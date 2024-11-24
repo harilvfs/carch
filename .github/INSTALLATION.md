@@ -18,7 +18,7 @@ This command will start the setup process.
 
 <details>
 
-<summary><strong>Usage Guide</strong></summary>
+<summary>Usage Guide</summary>
 <br>
 
 Simply run Carch by entering carch in your terminal.
