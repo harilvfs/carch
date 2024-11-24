@@ -59,11 +59,11 @@ ___
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
-<p align="center">
+<img src="https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif" width="50" />
+
 <a href="https://discord.com/invite/8NJWstnUHd">
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
 </a>
-</p>
 
 <a href="https://github.com/harilvfs">
        <picture>
