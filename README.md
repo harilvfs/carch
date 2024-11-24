@@ -128,11 +128,6 @@ ___
 </a>
 </p>
 
-<div align="center">
-  
-<img src="https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif" width="40" />
-</div>
-
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md "Contributor Covenant Code of Conduct"
