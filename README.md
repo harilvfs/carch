@@ -59,14 +59,6 @@ ___
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
-<img src="https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif" width="50" />
-
-<p align="center">
-<a href="https://discord.com/invite/8NJWstnUHd">
-<img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
-</a>
-</p>
-
 <a href="https://github.com/harilvfs">
        <picture>
            <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://i.ibb.co/dMMmCrW/Git-Hub-Mark.png" />
@@ -128,6 +120,17 @@ ___
      </picture>
    </a>
    
+</div>
+
+<p align="center">
+<a href="https://discord.com/invite/8NJWstnUHd">
+<img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
+</a>
+</p>
+
+
+<div align="center"
+<img src="https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif" width="40" />
 </div>
 
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
