@@ -1,6 +1,6 @@
 ### Installation Methods
    - [CLI](#cli)
-      - [CMD](#cli-commands)
+     - [CMD](#cli-commands)
    
    - [GTK](#gtk)
 
