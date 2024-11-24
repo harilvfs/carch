@@ -1,27 +1,26 @@
 ### Installation Methods
    - [CLI](#cli)
-
+   - [CMD](#cli-commands)
+   
    - [GTK](#gtk)
-
+   
    - [AUR](#aur)
 
 ## CLI
 
-To Setup, run the following command in your terminal:
+To Install Carch, run the following command in your terminal:
 
 ```bash
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 This command will start the setup process.
 
-<strong>**Using Carch After Executing the Main Script:** </strong>
-
 <details>
 
-<summary><strong>Usage Guide</strong></summary>
+<summary>Usage Guide</summary>
 <br>
 
-Simply run Carch by entering carch in your terminal.
+Simply run Carch by entering `carch` in your terminal.
 
 ```bash
 carch
@@ -31,9 +30,22 @@ carch
 > [!Tip]
 > You don't need to run the installation script every time. You can run it once, and then simply type carch in your terminal whenever you want to automatically execute the Carch script.
 
-### CLI Commands  
+## CLI Commands  
 
 Carch now supports CLI commands! Use `carchcli` with the following options:  
+
+```bash
+Usage: carchcli [OPTIONS]
+
+A tool for automating Arch Linux setups.
+
+Options:
+ --help               Show this help message and exit.
+ --version            Show the program version.
+ --run-script <name>  Run the specified script from /usr/bin/scripts.
+ --list-scripts       List all available scripts in /usr/bin/scripts.
+ --update             Update Carch using the latest script.
+```
 
    - `--help` - Displays the help message.  
    - `--update` - Updates Carch to the latest script version.  
