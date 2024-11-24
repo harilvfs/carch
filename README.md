@@ -59,6 +59,13 @@ ___
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
+<br>
+<p align="center">
+<a href="https://discord.com/invite/8NJWstnUHd">
+<img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
+</a>
+</p>
+
 <a href="https://github.com/harilvfs">
        <picture>
            <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://i.ibb.co/dMMmCrW/Git-Hub-Mark.png" />
