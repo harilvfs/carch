@@ -73,12 +73,6 @@ ___
            <img height="24px" src="https://i.ibb.co/9wV3HGF/Git-Hub-Mark-Light.png" />
        </picture>
    </a>&nbsp;&nbsp;&nbsp;
-   <a href="https://discord.com/invite/8NJWstnUHd">
-       <picture>
-           <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/13122796/178032563-d4e084b7-244e-4358-af50-26bde6dd4996.png" />
-           <img height="24px" src="https://user-images.githubusercontent.com/13122796/178032563-d4e084b7-244e-4358-af50-26bde6dd4996.png" />
-       </picture>
-   </a>&nbsp;&nbsp;&nbsp;
    <a href="https://reddit.com/u/aayush-le">
        <picture>
            <source height="25px" media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/13122796/178032351-9d9d5619-8ef7-470a-9eec-2744ece54553.png" />
