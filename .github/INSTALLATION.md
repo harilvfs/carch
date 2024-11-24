@@ -1,6 +1,5 @@
 ### Installation Methods
-   - [CLI](#cli)
-     - [Carch CMDS](#cli-commands)
+   - [CLI](#cli)  - [Carch CMDS](#cli-commands)
    
    - [GTK](#gtk)
 
