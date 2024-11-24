@@ -14,8 +14,6 @@ bash <(curl -L https://chalisehari.com.np/carch)
 ```
 This command will start the setup process.
 
-#### Using Carch After Executing the Main Script
-
 <details>
 
 <summary>Usage Guide</summary>
