@@ -39,7 +39,7 @@ Usage: carchcli [OPTIONS]
 A tool for automating Arch Linux setups.
 
 Options:
-  --help              Show this help message and exit.
+ ` --help`              Show this help message and exit.
   --version           Show the program version.
   --run-script <name> Run the specified script from /usr/bin/scripts.
   --list-scripts      List all available scripts in /usr/bin/scripts.
