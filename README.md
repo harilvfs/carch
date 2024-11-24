@@ -59,7 +59,6 @@ ___
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
-<br>
 <p align="center">
 <a href="https://discord.com/invite/8NJWstnUHd">
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
@@ -134,12 +133,6 @@ ___
    </a>
    
 </div>
-<br>
-<p align="center">
-<a href="https://discord.com/invite/8NJWstnUHd">
-<img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
-</a>
-</p>
 
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
 [downloads-link]: https://github.com/harilvfs/carch/releases
