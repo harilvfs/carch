@@ -52,8 +52,6 @@ Options:
    - `--version` - Shows the current version of Carch.  
    - `--run-script <name>` - Executes the specified script.  
    - `--list-scripts` - Lists all available scripts.  
-       
-EX : `carchcli --help`
 
 ## GTK
 **The GTK version of Carch is available.**
