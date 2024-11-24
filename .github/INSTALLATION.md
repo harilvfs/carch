@@ -20,7 +20,7 @@ This command will start the setup process.
 <summary>Usage Guide</summary>
 <br>
 
-Simply run Carch by entering carch in your terminal.
+Simply run Carch by entering `carch` in your terminal.
 
 ```bash
 carch
