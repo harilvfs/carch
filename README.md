@@ -128,8 +128,7 @@ ___
 </a>
 </p>
 
-
-<div align="center"
+<div align="center">
   
 <img src="https://github.com/harilvfs/assets/blob/main/github-gifs/235294015-47144047-25ab-417c-af1b-6746820a20ff.gif" width="40" />
 </div>
