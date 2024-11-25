@@ -17,6 +17,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: site # Set default working directory to "site"
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -28,22 +33,18 @@ jobs:
         with:
           node-version: 20
           cache: npm
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+          cache-dependency-path: site/package-lock.json # Specify the correct path for package-lock.json
 
       - name: Install Dependencies
-        working-directory: site # Update if package.json is in "site/"
         run: npm ci
 
       - name: Build VitePress Site
-        working-directory: site # Update if package.json is in "site/"
         run: npm run docs:build
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site/docs/.vitepress/dist # Update based on your output directory
+          path: docs/.vitepress/dist # Relative to the "working-directory"
 
   deploy:
     environment:
