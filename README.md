@@ -17,9 +17,9 @@
 <a href="https://harilvfs.github.io/carch/"> <img alt="Check Out Documentation" height="35" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 <p align="center">
-	<a href="/.github/installation.md" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
-	<a href="/.github/contributing.md" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a>
-	<a href="/.github/roadmap.md" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
+	<a href="/.github/INSTALLATION.md" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
+	<a href="/.github/CONTRIBUTING.md" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a>
+	<a href="/.github/ROADMAP.md" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
 </p>
 
 
