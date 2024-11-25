@@ -33,11 +33,11 @@ jobs:
       - name: Install dependencies
         run: |
           cd site
-          bun install 
+          npm install 
       - name: Build with VitePress
         run: |
           cd site
-          bun run docs:build
+          npm run docs:build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
