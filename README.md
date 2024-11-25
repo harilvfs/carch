@@ -20,10 +20,6 @@
 	<a href="/.github/installation.md" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
 	<a href="/.github/contributing.md" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a>
 	<a href="/.github/roadmap.md" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
-	<a href="https://www.reddit.com/r/archcraft" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/REDDIT-f74300?style=flat-square"></a>
-	<a href="https://discord.gg/3PzeJ5S7Pu" target="_blank"><img alt="discord" src="https://img.shields.io/badge/DISCORD-5865f2?style=flat-square"></a>
-	<a href="https://t.me/archcraftos" target="_blank"><img alt="telegram" src="https://img.shields.io/badge/TELEGRAM-2399d6?style=flat-square"></a>
-	<a href="https://matrix.to/#/#archcraft:matrix.org" target="_blank"><img alt="matrix" src="https://img.shields.io/badge/MATRIX-0ebd8b?style=flat-square"></a>
 </p>
 
 
