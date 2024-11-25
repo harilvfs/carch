@@ -3,7 +3,6 @@ name: Deploy VitePress site to Pages
 on:
   push:
     branches: [main]
-
   workflow_dispatch:
 
 permissions:
@@ -19,38 +18,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: oven-sh/setup-bun@v1
-      - name: Setup Node
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Install dependencies
+
+      - name: Install Dependencies
         run: |
           cd site
-          bun install 
-      - name: Build with VitePress
+          npm install
+
+      - name: Build VitePress Site
         run: |
           cd site
-          bun run docs:build
-      - name: Upload artifact
+          npm run docs:build
+
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: site/docs/.vitepress/dist
 
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
-    name: Deploy
+    environment:
+      name: github-pages
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
