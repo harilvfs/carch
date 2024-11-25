@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+
+    <title>Carch</title>
+
+    <link rel="shortcut icon" href="images/penguin.png" type="image/x-icon">
+
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/stroke.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <link rel="stylesheet" type="text/css" href="js/syntax-highlighter/styles/shCore.css" media="all">
+    <link rel="stylesheet" type="text/css" href="js/syntax-highlighter/styles/shThemeRDark.css" media="all">
+
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+
+    <style>
+        .section {
+            margin: 5px 0;
+            padding: 5px 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+
+    <script>
+        var mybutton = document.getElementById("myBtn");
+        window.onscroll = function() {scrollFunction()};
+        function scrollFunction() {
+            if (document.body.scrollTop > 1000 || document.documentElement.scrollTop > 1000) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        function topFunction() {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            document.documentElement.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector('#mode').addEventListener('click',()=>{
+                document.querySelector('html').classList.toggle('dark');
+            })
+        });
+
+
+    </script>
+
+    <div id="wrapper">
+
+        <div id="mode" >
+            <div class="dark">
+                <svg aria-hidden="true" viewBox="0 0 512 512">
+                    <title>lightmode</title>
+                    <path fill="currentColor" d="M256 160c-52.9 0-96 43.1-96 96s43.1 96 96 96 96-43.1 96-96-43.1-96-96-96zm246.4 80.5l-94.7-47.3 33.5-100.4c4.5-13.6-8.4-26.5-21.9-21.9l-100.4 33.5-47.4-94.8c-6.4-12.8-24.6-12.8-31 0l-47.3 94.7L92.7 70.8c-13.6-4.5-26.5 8.4-21.9 21.9l33.5 100.4-94.7 47.4c-12.8 6.4-12.8 24.6 0 31l94.7 47.3-33.5 100.5c-4.5 13.6 8.4 26.5 21.9 21.9l100.4-33.5 47.3 94.7c6.4 12.8 24.6 12.8 31 0l47.3-94.7 100.4 33.5c13.6 4.5 26.5-8.4 21.9-21.9l-33.5-100.4 94.7-47.3c13-6.5 13-24.7.2-31.1zm-155.9 106c-49.9 49.9-131.1 49.9-181 0-49.9-49.9-49.9-131.1 0-181 49.9-49.9 131.1-49.9 181 0 49.9 49.9 49.9 131.1 0 181z"></path>
+                </svg>
+            </div>
+            <div class="light">
+                <svg aria-hidden="true" viewBox="0 0 512 512">
+                    <title>darkmode</title>
+                    <path fill="currentColor" d="M283.211 512c78.962 0 151.079-35.925 198.857-94.792 7.068-8.708-.639-21.43-11.562-19.35-124.203 23.654-238.262-71.576-238.262-196.954 0-72.222 38.662-138.635 101.498-174.394 9.686-5.512 7.25-20.197-3.756-22.23A258.156 258.156 0 0 0 283.211 0c-141.309 0-256 114.511-256 256 0 141.309 114.511 256 256 256z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="container">
+
+            <section id="top" class="section docs-heading" style="margin: 5px 0; padding: 5px 0;">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="big-title text-center">
+                            <h1 style="font-size: 2.5em;">Carch</h1>
+                            <p class="lead" style="font-size: 1.2em;">Documentation 3.0.8</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+            </section>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <nav class="docs-sidebar" data-spy="affix" data-offset-top="300" data-offset-bottom="200" role="navigation">
+                        <ul class="nav">
+                            <li><a href="#line1">Features</a></li>
+                            <li><a href="#line2">Installation</a></li>
+                            <ul class="nav">
+                                <li><a href="#line2_1">Install</a></li>
+                                <li><a href="#line2_2">Usage</a></li>
+                                <li><a href="#line2_3">CLI Commands</a></li>
+                                <li><a href="#line2_4">GTK</a></li>
+                                <li><a href="#line2_5">AUR</a></li>
+                            </ul>
+                        </li>
+                            <li><a href="#line3">Script Overview</a></li>
+                            <ul class="nav">
+                                <li><a href="#line3_1">Dwm Setup</a></li>
+                                <li><a href="#line3_2">Hyprland Setup</a></li>
+                                <li><a href="#line3_3">i3WM Setup</a></li>
+                                <li><a href="#line3_4">Install Fonts</a></li>
+                                <li><a href="#line3_5">Install LTS Kernal</a></li>
+                                <li><a href="#line3_6">Install Packages</a></li>
+                                <li><a href="#line3_7">Setup Alacritty</a></li>
+                                <li><a href="#line3_8">Setup AUR</a></li>
+                                <li><a href="#line3_9">Setup Fastfetch</a></li>
+                                <li><a href="#line3_10">Setup GRUB</a></li>
+                                <li><a href="#line3_11">Setup Kitty</a></li>
+                                <li><a href="#line3_12">Setup Neovim</a></li>
+                                <li><a href="#line3_13">Setup Picom</a></li>
+                                <li><a href="#line3_14">Setup Rofi</a></li>
+                                <li><a href="#line3_15">Setup SDDM</a></li>
+                                <li><a href="#line3_16">Setup Themes & Icons</a></li>
+                                <li><a href="#line3_17">SwayWM Setup</a></li>
+                                <li><a href="#line3_18">Wallpapers</a></li>
+                            </ul>
+                        </li>
+                            <li><a href="#line4">Roadmap</a></li>
+                            <li><a href="#line5">Contributing</a></li>
+                            <li><a href="#line6">Code of Conduct</a>
+                            <li><a href="#line7">Inspiration</a></li>
+                            <li><a href="#line8">Contact</a></li>
+                            <li><a href="#line9">Acknowledgments</a></li>
+                            <li><a href="#line10">Copyright and license</a></li>
+                        </ul>
+                    </nav >
+                </div>
+                <div class="col-md-9">
+                    <section class="welcome">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                               <h1>Introduction<hr></h1>
+                                <div class="row">
+
+                                    <div class="col-md-12 full">
+                                        <div class="intro1">
+                                            <ul>
+                                                <li><strong>Name: </strong>Carch</li>
+                                                <li><strong>Version: </strong>v3.0.8</li>
+                                                <li><strong>Author: </strong> <a href="https://github.com/harilvfs" target="_blank">Hari Chalise</a></li>
+                                                <li><strong>License: </strong> <a href="https://www.apache.org/licenses/" target="_blank">Apache-2.0 License</a></li>
+                                            </ul>
+                                        </div>
+                                    
+                                        <hr>
+                                        <div>
+                                            <p><strong>Welcome to Carch!</strong></p>
+                                            <p>
+                                                Carch is a powerful yet user-friendly Bash script designed to automate and streamline the initial setup of Arch Linux and Arch-based systems. 
+                                                It simplifies tasks like package installations, theme configurations, and window manager setups, making your system configuration both efficient and customizable.
+                                            </p>
+                                            <p>
+                                                This documentation serves as a comprehensive guide to help you use, contribute to, and fully understand the features of Carch.
+                                                Whether you're a seasoned Linux user or a newcomer, Carch ensures an effortless setup experience tailored to your needs.
+                                            </p>
+                                    
+                                            <div class="intro2 clearfix">
+                                                <p><i class="fa fa-exclamation-triangle"></i> Be careful when running the configuration of any script. Improper execution or changes may lead to system instability or unexpected behavior.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line1" class="section">
+
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Features<hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/feature.webp" width="50" alt="Carch Features" />
+                                <br>
+                                <h5>Easy Setup</h5>
+                                <ul>
+                                    <li>Quick and straightforward installation of essential packages.</li>
+                                </ul>
+                    
+                                <h5>TUI Navigation</h5>
+                                <ul>
+                                    <li>A text-based user interface that enhances user experience.</li>
+                                </ul>
+                    
+                                <h5>Multiple Scripts</h5>
+                                <ul>
+                                    <li>Automate the setup of various environments, including Dwm and Hyprland.</li>
+                                </ul>
+                    
+                                <h5>Active Development</h5>
+                                <ul>
+                                    <li>Continuous updates and new features based on community feedback.</li>
+                                </ul>
+                    
+                                <div class="image-container">
+                                    <img src="https://github.com/harilvfs/carch/raw/main/source/carchv3.0.gif" alt="Carch Screenshots" class="img-responsive">
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </section>
+                    <section id="line2" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Installation <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <section id="line2_1" class="section"></section>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/installation.webp" width="50" alt="Carch Installation" />
+                                <h5><strong>To install Carch, execute the following command in your terminal:</strong></h5>
+                                <pre><code>bash <(curl -L https://chalisehari.com.np/carch)</code></pre>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="line2_2" class="section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Usage <hr></h4>
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/usages.webp" width="50" alt="Carch Usage" />
+                                <p><strong>Simply run Carch by entering <code>carch</code> in your terminal.</strong></p>
+                                <pre><code>carch</code></pre>
+                    
+                                <blockquote>
+                                    <p><strong>Tip:</strong> You don't need to run the installation script every time. You can run it once, and then simply type <code>carch</code> in your terminal whenever you want to automatically execute the Carch script.</p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="line2_3" class="section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>CLI Commands <hr></h4>
+                                <p>Carch also supports CLI commands! Use <code>carchcli</code> with the following options:</p>
+                                <pre>
+                    <code>
+                    Usage: carchcli [OPTIONS]
+                    
+                    A tool for automating Arch Linux setups.
+                    
+                    Options:
+                     --help               Show this help message and exit.
+                     --version            Show the program version.
+                     --run-script &lt;name&gt;  Run the specified script from /usr/bin/scripts.
+                     --list-scripts       List all available scripts in /usr/bin/scripts.
+                     --update             Update Carch using the latest script.
+                    </code>
+                                </pre>
+                                <ul>
+                                    <li><code>--help</code> - Displays the help message.</li>
+                                    <li><code>--update</code> - Updates Carch to the latest script version.</li>
+                                    <li><code>--version</code> - Shows the current version of Carch.</li>
+                                    <li><code>--run-script &lt;name&gt;</code> - Executes the specified script.</li>
+                                    <li><code>--list-scripts</code> - Lists all available scripts.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line2_4" class="section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>GTK <hr></h4>
+                                <p><strong>The GTK version of Carch is available.</strong></p>
+                    
+                                <blockquote>
+                                    <p><strong>CAUTION:</strong> The GTK version of Carch is currently under development. It’s not fully ready for use and needs some script updates to work properly. You may try it now as you would with the usual Carch script.</p>
+                                </blockquote>
+                    
+                                <h5>How to Install and Use 📦</h5>
+                                <img src="https://raw.githubusercontent.com/smritics/linuxcli/refs/heads/main/docs/assets/arrowdown.webp" width="20" alt="Download Arrow" />
+                    
+                                <h3>Prerequisites</h3>
+                                <p>Simply run the main script:</p>
+                                <pre><code>bash <(curl -L https://chalisehari.com.np/carch)</code></pre>
+                    
+                                <p>Once done, you can launch the Carch GTK interface by typing:</p>
+                                <pre><code>carch-gtk</code></pre>
+                    
+                                <p><strong>Note:</strong> You can also run the Carch GTK interface after installing it from the AUR.</p>
+                    
+                                <h3>From Source</h3>
+                                <p>Before you start, you'll need to install <code>Python</code> dependencies.</p>
+                                <p>On Arch Linux:</p>
+                                <pre><code>sudo pacman -S python</code></pre>
+                    
+                                <p>Using AUR (with <code>paru</code> or <code>yay</code>):</p>
+                                <p><code>paru</code>:</p>
+                                <pre><code>paru -S python</code></pre>
+                                <p><code>yay</code>:</p>
+                                <pre><code>yay -S python</code></pre>
+                    
+                                <h5>Clone and Run Carch Gtk</h5>
+                                <pre><code>git clone https://github.com/harilvfs/carch && cd carch/gtk && python3 carch-gtk.py</code></pre>
+                    
+                                <blockquote>
+                                    <p><strong>NOTE:</strong> If any errors pop up while running the script, they are likely related to missing dependencies. Make sure to install all required Python dependencies.</p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="line2_5" class="section">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>AUR <hr></h4>
+                                <a href="https://aur.archlinux.org/packages/carch-git">
+                                    <img src="https://repology.org/badge/vertical-allrepos/carch.svg" alt="AUR Packaging status" />
+                                </a>
+                                <img src="https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue" alt="AUR Version" />
+                    
+                                <p><strong>Carch is also available in the <a href="https://aur.archlinux.org/">AUR</a> package repository.</strong></p>
+                                <p><strong>Package:</strong> <code>carch-git</code></p>
+                    
+                                <h5>Install using an AUR package manager:</h5>
+                                <p>Using <code>paru</code>:</p>
+                                <pre><code>paru -S carch-git</code></pre>
+                                <p>Or <code>yay</code>:</p>
+                                <pre><code>yay -S carch-git</code></pre>
+                    
+                                <h5>Install using a package build:</h5>
+                                <pre><code>git clone https://aur.archlinux.org/carch-git.git && cd carch-git && makepkg -si</code></pre>
+                    
+                                <blockquote>
+                                    <p><strong>NOTE:</strong> To access the latest commit or updates of <code>Carch</code>, you can use the command line instead of the AUR.<br>
+                                    The AUR package may take some time to update, so using the command line will ensure you get the latest version.</p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line3" class="section">
+
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Script Overview <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/terminal.webp" width="50" alt="Terminal" />
+                    
+                                <h6>Carch comes with the following scripts to configure various aspects of your Arch-based system:</h6>
+                                <ul class="nav">
+                                    <li><a href="#line3_1">Dwm Setup</a></li>
+                                    <li><a href="#line3_2">Hyprland Setup</a></li>
+                                    <li><a href="#line3_3">i3WM Setup</a></li>
+                                    <li><a href="#line3_4">Install Fonts</a></li>
+                                    <li><a href="#line3_5">Install LTS Kernel</a></li>
+                                    <li><a href="#line3_6">Install Packages</a></li>
+                                    <li><a href="#line3_7">Setup Alacritty</a></li>
+                                    <li><a href="#line3_8">Setup AUR</a></li>
+                                    <li><a href="#line3_9">Setup Fastfetch</a></li>
+                                    <li><a href="#line3_10">Setup GRUB</a></li>
+                                    <li><a href="#line3_11">Setup Kitty</a></li>
+                                    <li><a href="#line3_12">Setup Neovim</a></li>
+                                    <li><a href="#line3_13">Setup Picom</a></li>
+                                    <li><a href="#line3_14">Setup Rofi</a></li>
+                                    <li><a href="#line3_15">Setup SDDM</a></li>
+                                    <li><a href="#line3_16">Setup Themes & Icons</a></li>
+                                    <li><a href="#line3_17">SwayWM Setup</a></li>
+                                    <li><a href="#line3_18">Wallpapers</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 id="line3_1">Dwm Setup</h5>
+                                <p>Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.</p>
+                    
+                                <h5 id="line3_2">Hyprland Setup</h5>
+                                <p>Installs the Hyprland compositor along with my pre-configured dotfiles for a streamlined setup.</p>
+                    
+                                <h5 id="line3_3">i3WM Setup</h5>
+                                <p>Installs and configures i3, providing a lightweight and efficient window management experience.</p>
+                    
+                                <h5 id="line3_4">Install Fonts</h5>
+                                <p>Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.</p>
+                    
+                                <h5 id="line3_5">Install LTS Kernel</h5>
+                                <p>Installs the Long-Term Support (LTS) kernel for enhanced stability and extended support.</p>
+                    
+                                <h5 id="line3_6">Install Packages</h5>
+                                <p>Installs a curated selection of essential packages to establish a fully functional environment.</p>
+                    
+                                <h5 id="line3_7">Setup Alacritty</h5>
+                                <p>Configures the Alacritty terminal emulator using my preferred settings for optimal performance.</p>
+                    
+                                <h5 id="line3_8">Setup AUR</h5>
+                                <p>Installs AUR (Arch User Repository) helpers, like Paru or Yay, to simplify package management.</p>
+                    
+                                <h5 id="line3_9">Setup Fastfetch</h5>
+                                <p>Configures Fastfetch to display detailed system information quickly and attractively in the terminal.</p>
+                    
+                                <h5 id="line3_10">Setup GRUB</h5>
+                                <p>Customizes the GRUB bootloader with improved aesthetics and settings for a more polished boot experience.</p>
+                    
+                                <h5 id="line3_11">Setup Kitty</h5>
+                                <p>Sets up the Kitty terminal emulator with advanced features and custom configurations.</p>
+                    
+                                <h5 id="line3_12">Setup Neovim</h5>
+                                <p>Installs and configures Neovim for an enhanced, efficient code editing environment.</p>
+                    
+                                <h5 id="line3_13">Setup Picom</h5>
+                                <p>Installs and configures the Picom compositor to enable window transparency, shadows, and other visual effects.</p>
+                    
+                                <h5 id="line3_14">Setup Rofi</h5>
+                                <p>Configures Rofi as a powerful application launcher and window switcher, improving workflow efficiency.</p>
+                    
+                                <h5 id="line3_15">Setup SDDM</h5>
+                                <p>Configures the SDDM (Simple Desktop Display Manager) for a streamlined and visually appealing login experience.</p>
+                    
+                                <h5 id="line3_16">Setup Themes & Icons</h5>
+                                <p>Installs and applies a set of themes and icons to enhance the look and feel of your desktop.</p>
+                    
+                                <h5 id="line3_17">SwayWM Setup</h5>
+                                <p>Installs and configures the Sway window manager, optimized for Wayland environments.</p>
+                    
+                                <h5 id="line3_18">Wallpapers</h5>
+                                <p>Installs a selection of wallpapers for a personalized desktop aesthetic.</p>
+                            </div>
+                        </div>
+                    
+                    </section>
+
+                    <section id="line4" class="section">
+
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Roadmap <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/roadmap.webp" width="50" alt="Roadmap Icon" />
+                                <p><strong>For information on upcoming features and improvements, check the full roadmap here:</strong></p>
+                                <p><strong><a href="https://github.com/harilvfs/carch/blob/main/.github/ROADMAP.md" target="_blank">View the Roadmap</a></strong></p>
+                            </div>
+                        </div>
+                    
+                    </section>
+
+                    <section id="line5" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Contributing <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/contribute.webp" width="50" alt="Contributing">
+                                <p><strong>Contributions are welcome! To contribute to Carch, please refer to the </strong>
+                                <strong><a href="https://github.com/harilvfs/carch/blob/main/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for more details.</strong></p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="line6" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Code of Conduct <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/code-of-conduct.webp" width="50" alt="Code of Conduct">
+                                <p><strong>We strive to create a welcoming environment for all contributors. Please read our </strong>
+                                <strong><a href="https://github.com/harilvfs/carch/blob/main/.github/CODE_OF_CONDUCT.md">Code of Conduct</a> to ensure a positive experience for everyone involved.</strong></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line7" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Inspiration <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/inspiration.webp" width="50" alt="Inspiration">
+                                <p><strong>This project draws inspiration from the following incredible resources:</strong></p>
+                                <ul>
+                                    <li><strong><a href="https://github.com/ChrisTitusTech" target="_blank">ChrisTitusTech - `linutil`</a></strong></li>
+                                    <li><strong><a href="https://github.com/mylinuxforwork" target="_blank">ML4W - `Dotfiles Script`</a></strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line8" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Contact <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/communicate.webp" width="50" alt="Contact">
+                                <p><strong>If you have any questions or suggestions, feel free to reach out via:</strong></p>
+                                <ul>
+                                    <li>📧 <strong>Email:</strong> <a href="mailto:harilvfs@chalisehari.com.np">harilvfs@chalisehari.com.np</a></li>
+                                    <li>🐙 <strong>GitHub:</strong> <a href="https://github.com/harilvfs" target="_blank">harilvfs</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line9" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>Acknowledgments <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/contributors.webp" width="50" alt="Acknowledgments">
+                                <p><strong>We thank everyone who has contributed to making <strong>Carch</strong> better. Your feedback and contributions are invaluable!</strong></p>
+                                <a href="https://github.com/harilvfs/carch/graphs/contributors" target="_blank">
+                                    <img src="https://contrib.rocks/image?repo=harilvfs/carch" alt="Contributors">
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="line10" class="section">
+                        <div class="row">
+                            <div class="col-md-12 left-align">
+                                <h1>License <hr></h1>
+                            </div>
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/licensing.webp" width="50" alt="License">
+                                <p><strong>Carch is licensed under the <strong>Apache-2.0 License</strong>. For more details, see the <a href="LICENSE" target="_blank">LICENSE</a> file.</strong></p>
+                                <p><strong>&copy; Hari Chalise</strong></p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/retina.js"></script>
+    <script src="js/jquery.fitvids.js"></script>
+    <script src="js/wow.js"></script>
+    <script src="js/jquery.prettyPhoto.js"></script>
+
+    <!-- CUSTOM PLUGINS -->
+    <script src="js/custom.js"></script>
+    <script src="js/main.js"></script>
+
+    <script src="js/syntax-highlighter/scripts/shCore.js"></script>
+    <script src="js/syntax-highlighter/scripts/shBrushXml.js"></script>
+    <script src="js/syntax-highlighter/scripts/shBrushCss.js"></script>
+    <script src="js/syntax-highlighter/scripts/shBrushJScript.js"></script>
+
+</body>
+
+</html>
