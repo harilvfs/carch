@@ -5,6 +5,12 @@ export default {
   themeConfig: {
     logo: "/penguin.webp",
     siteTitle: "Carch",
+    repo: "harilvfs/carch",
+    docsDir: "site/docs",
+    editLink: {
+      pattern: "https://github.com/harilvfs/carch/tree/main/docs/:path",
+      text: "Edit this page on GitHub",
+    },
     nav: [
       { text: "Home", link: "/" },
       { text: "Contact", link: "/contact" },
