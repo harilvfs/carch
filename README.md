@@ -16,7 +16,7 @@
 
 • • •
 
-![AUR Version](https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue) ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&color=8A2BE2) [![Downloads][downloads-badge]][downloads-link] ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
+![AUR Version][aur-badge] ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&color=8A2BE2) [![Downloads][downloads-badge]][downloads-link] ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
 
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
@@ -34,6 +34,7 @@
 [discord-link]: https://discord.gg/HBySRyymyZ
 [telegram-badge]: https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram
 [telegram-link]: https://t.me/harilvfs
+[aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue 
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://carch.vercel.app/github/codeofconduct.html "Contributor Covenant Code of Conduct"
