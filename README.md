@@ -15,11 +15,7 @@
 
 • • •
 
-[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram)](https://t.me/harilvfs) ![AUR Version](https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
-
-![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&color=8A2BE2)
-[![Downloads][downloads-badge]][downloads-link]
-![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram)](https://t.me/harilvfs) ![AUR Version](https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue) ![Latest release](https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&color=8A2BE2) [![Downloads][downloads-badge]][downloads-link] ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
 
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
