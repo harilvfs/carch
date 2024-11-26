@@ -6,8 +6,8 @@
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F) [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
 
-
-For installation <a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="25" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
+*For Installation*
+<a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="25" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 <p align="center">
 	<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
