@@ -22,8 +22,6 @@
 	<a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
 </p>
 
-[![Wiki](https://img.shields.io/badge/Wiki-Carch-blue?style=flat-square)](https://chalisehari.com.np/carchdocs)
-
 • • •
 </div>
 
