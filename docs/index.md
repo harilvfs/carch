@@ -16,16 +16,16 @@ hero:
       text: View on GitHub
       link: https://github.com/harilvfs/carch
 features:
-  - icon: 🚀
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/10229/10229090.png" alt="setup"/>
     title: Easy Setup
     details: Quick and straightforward installation of essential packages.
-  - icon: 📟
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/7425/7425907.png" alt="tui"/>
     title: TUI Navigation
     details: A text-based user interface that enhances user experience.
-  - icon: 📜
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/3131/3131638.png" alt="scripts"/>
     title: Multiple Scripts
     details: Automate the setup of various environments, including Dwm and Hyprland.
-  - icon: 🔧
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/4205/4205106.png" alt="development"/>
     title: Active Development
     details: Continuous updates and new features based on community feedback.
 ---

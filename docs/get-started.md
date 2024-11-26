@@ -1,4 +1,4 @@
-# Welcome to Carch Documentation  🚀
+# Welcome to Carch Documentation 🩷 
 
 Carch is here to make your Arch Linux journey smooth, efficient, and fun. Whether you're setting up your system for the first time or exploring advanced customizations, we've got you covered!  
 
