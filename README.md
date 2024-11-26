@@ -18,9 +18,6 @@
 
 ![AUR Version][aur-badge] ![Latest release][release-badge] [![Downloads][downloads-badge]][downloads-link] ![Github Stars][stars-badge]
 
- 
-![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
-
 <img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="30"/>
 
 <p align="left">
@@ -28,6 +25,8 @@
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
 </a>
 </p>
+
+![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F
 [discord-badge]: https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square
