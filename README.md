@@ -21,7 +21,7 @@
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
-### Discord
+<img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" />
 
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
