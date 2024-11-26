@@ -1,17 +1,14 @@
 # Installation
 <br>
 
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/installation.webp" width="50" /> 
-
 **To install Carch, execute the following command in your terminal:**
 
 ```bash
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-## Usage
+# Usage
 
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/docs/assets/usages.webp" width="50" />
 
 <strong>Simply run Carch by entering carch in your terminal.</strong>
 ```bash
