@@ -14,12 +14,12 @@
 
 <a href="https://chalisehari.com.np"><img alt="Visit the website" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/website_vector.svg"></a> <a href="https://discord.com/invite/8NJWstnUHd"><img alt="Discord Server" height="40" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg"></a>
 
-<a href="https://harilvfs.github.io/carch/"> <img alt="Check Out Documentation" height="35" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
+<a href="https://chalisehari.com.np"> <img alt="Check Out Documentation" height="35" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 <p align="center">
-	<a href="/.github/INSTALLATION.md" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
-	<a href="/.github/CONTRIBUTING.md" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a>
-	<a href="/.github/ROADMAP.md" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
+	<a href="https://carch.vercel.app/installation" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
+	<a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a>
+	<a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
 </p>
 
 [![Wiki](https://img.shields.io/badge/Wiki-Carch-blue?style=flat-square)](https://chalisehari.com.np/carchdocs)
