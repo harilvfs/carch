@@ -35,28 +35,6 @@
 
 </div>
 
-## Preview
-<img src="https://github.com/harilvfs/assets/blob/main/carch/preview.png" width="40" />
-<details>
-  <summary>Terminal Preview </summary>
-<img src="./source/carchv3.0.gif" />
-
-</details>
-
-> [!Note]
-> This project is still in development, and you may encounter some bugs.<br>
-> Please feel free to submit an issue if you run into any problems:
-> [Submit an Issue](https://github.com/harilvfs/carch/issues).
-
-## Contact
-<img src="https://github.com/harilvfs/assets/blob/main/carch/communicate.png" width="50" /> 
-
-For questions or suggestions, feel free to reach out via:
-
-- 📧 Email: **harilvfs@chalisehari.com.np**
-
-___
-
 <div align="center">
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
