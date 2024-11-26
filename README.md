@@ -3,7 +3,7 @@
 
 *Carch allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.*
 
-![GitHub deployments][vercel-deploy]  ![][discord-badge][discord-link] [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram)](https://t.me/harilvfs)
+![GitHub deployments][vercel-deploy]  [![](discord-badge)](discord-link) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram)](https://t.me/harilvfs)
 
 *For Installation*
 
