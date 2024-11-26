@@ -3,7 +3,7 @@
 
 *Carch allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.*
 
-![GitHub deployments][vercel-deploy]  [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square)](https://discord.gg/HBySRyymyZ) [![Telegram Channel][telegram-badge]][telegram-link]
+![GitHub deployments][vercel-deploy]  [![][discord-link]][discord-link] [![Telegram Channel][telegram-badge]][telegram-link]
 
 *For Installation*
 
@@ -31,6 +31,8 @@
 </p>
 
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F
+[discord-badge]: https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square
+[discord-link]: https://discord.gg/HBySRyymyZ
 [telegram-badge]: https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram
 [telegram-link]: https://t.me/harilvfs
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
