@@ -2,6 +2,7 @@
 export default {
   title: 'Carch',
   description: 'An automated script for quick & easy Arch Linux system setup 🧩',
+  lastUpdated: true,
   themeConfig: {
     logo: "/penguin.webp",
     siteTitle: "Carch",
@@ -40,21 +41,21 @@ export default {
         text: "Installation",
         collapsible: false,
         items: [
-          { text: "CLI", link: "/installation/cli" },
-          { text: "CMD", link: "/installation/cmd" },
+          { text: "Terminal", link: "/installation/cli" },
+          { text: "Commands", link: "/installation/cmd" },
           { text: "GTK", link: "/installation/gtk" },
-          { text: "AUR", link: "/installation/aur" },
+          { text: "Arch [AUR]", link: "/installation/aur" },
         ],
       },
       {
-        text: "Script",
+        text: "Utilities",
         collapsible: true,
         items: [
           { text: "Overview Scripts", link: "/scripts/scripts" },
         ],
       },
       {
-        text: "Github",
+        text: "Collaboration",
         collapsible: true,
         items: [
           { text: "Roadmap", link: "/github/roadmap" },
@@ -70,19 +71,15 @@ export default {
           { text: "Contributions", link: "/acknowledgment/contributors" },
         ],
       },
-     {
-        text: "Repository",
-        collapsible: true,
-        items: [
-          { text: "Repo Structure", link: "/repository/structure" },
-        ],
-      },
     ],
     socialLinks: [
       { icon: "github", link: "https://github.com/harilvfs/carch" },
       { icon: "twitter", link: "https://twitter.com/harilvfs" },
       { icon: "discord", link: "https://discord.com/invite/8NJWstnUHd" },
     ],
+    search: {
+      provider: "local",
+      },
     footer: {
       message: "Released under the Apache 2.0 License.",
       copyright: "Copyright © 2024 Hari Chalise",
