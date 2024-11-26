@@ -31,8 +31,8 @@
 </p>
 
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F
-[discord-badge]: https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square
-[discord-link]: https://discord.gg/HBySRyymyZ
+(discord-badge): https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square
+(discord-link): https://discord.gg/HBySRyymyZ
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://carch.vercel.app/github/codeofconduct.html "Contributor Covenant Code of Conduct"
