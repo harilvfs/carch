@@ -22,7 +22,7 @@
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
-<div align="center">
+### Social
  
 <a href="https://github.com/harilvfs">
        <picture>
@@ -84,8 +84,7 @@
          <img height="25px" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/bluesky/Bluesky_app_icon.svg" />
      </picture>
    </a>
-   
-</div>
+
 <br>
 <p align="center">
 <a href="https://discord.com/invite/8NJWstnUHd">
