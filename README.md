@@ -3,17 +3,14 @@
 
 *Carch allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.*
 
-![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F) [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
-
+![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F) [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] <a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a> <a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a> <a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
 
 *For Installation*
 
 <a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="25" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 <p align="center">
-	<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
-	<a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a>
-	<a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a>
+	
 </p>
 
 • • •
