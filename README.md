@@ -1,3 +1,5 @@
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b)](https://discord.gg/HBySRyymyZ)
+
 <h3 align="center">
 <strong>Carch</strong>
 </h3>
