@@ -7,7 +7,7 @@
 
 
 
-<a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="25" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
+For installation <a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="25" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 <p align="center">
 	<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a>
