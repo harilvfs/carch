@@ -86,7 +86,6 @@
    </a>
 
 <br>
-<br>
 
 ### Discord
 
