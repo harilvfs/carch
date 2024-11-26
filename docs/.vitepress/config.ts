@@ -4,7 +4,6 @@ export default {
   description: 'An automated script for quick & easy Arch Linux system setup 🧩',
   lastUpdated: true,
   themeConfig: {
-    logo: "/penguin.webp",
     siteTitle: "Carch",
     repo: "harilvfs/carch",
     docsDir: "site/docs",
@@ -35,6 +34,7 @@ export default {
         collapsible: true,
         items: [
           { text: "Introduction", link: "/getting-started/introduction" },
+          { text: "Preview", link: "/getting-started/preview.md" },
         ],
       },
       {
