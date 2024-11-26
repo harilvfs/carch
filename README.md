@@ -1,4 +1,4 @@
-<h1>Carch <img src="https://cdn-icons-png.flaticon.com/128/2049/2049831.png" /></h1>
+<h1>Carch <img src="https://cdn-icons-png.flaticon.com/128/2049/2049831.png" width="50"/></h1>
 
 <div align="center">
 ~ Carch allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.
