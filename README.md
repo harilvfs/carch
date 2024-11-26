@@ -6,7 +6,7 @@
 ![GitHub deployments](https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F) [![](https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square)](https://discord.gg/HBySRyymyZ) [![Telegram Channel](https://img.shields.io/badge/Telegram-Carch-blue?style=flat-square&logo=telegram)](https://t.me/harilvfs)
 
 *For Installation*
-
+<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 <a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a> <a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a> <a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a> [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
 *See Carch Docs for details.*
