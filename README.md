@@ -87,10 +87,11 @@
 
 <br>
 
-
+<p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
 </a>
+</p>
 
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
 [downloads-link]: https://github.com/harilvfs/carch/releases
