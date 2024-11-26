@@ -1,6 +1,6 @@
 <h1>Carch <img src="https://cdn-icons-png.flaticon.com/128/15186/15186090.png" height="30px" /></h1>
 
-*Carch allows you to customize your* Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, *adding configurations and installing packages for a ready-to-use Linux environment.*
+**Carch allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.**
 
 ![GitHub deployments][vercel-deploy]  [![][discord-badge]][discord-link] [![Telegram Channel][telegram-badge]][telegram-link] [![Telegram Group][telegram-groupbadge]][telegram-grouplink]
 
@@ -10,7 +10,7 @@
 
 <a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a> <a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a> <a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a> [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
 
-*I don't want to mess up the* `README` *with installation guides and other stuff, so for more, please check the* [Carch Docs](https://chalisehari.com.np/carchdocs).
+I don't want to mess up the `README` with installation guides and other stuff, so for more, please check the [Carch Docs](https://chalisehari.com.np/carchdocs).
 
 <a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="30" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
