@@ -7,6 +7,7 @@
 
 
 *For Installation*
+
 <a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="25" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 <p align="center">
