@@ -19,11 +19,11 @@
 [![Downloads][downloads-badge]][downloads-link]
 ![Github Stars](https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow)
 
-
-<div align="center">
  
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
+<div align="center">
+ 
 <a href="https://github.com/harilvfs">
        <picture>
            <source height="24px" media="(prefers-color-scheme: dark)" srcset="https://i.ibb.co/dMMmCrW/Git-Hub-Mark.png" />
