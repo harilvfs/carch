@@ -13,8 +13,6 @@
 > [!NOTE]
 > I don't want to mess up the `README` with installation guides and other stuff, so for more, please check the [Carch Docs](https://chalisehari.com.np/carchdocs).
 
-I don't want to mess up the `README` with installation guides and other stuff, so for more, please check the [Carch Docs](https://chalisehari.com.np/carchdocs).
-
 <a href="https://chalisehari.com.np/carchdocs"> <img alt="Check Out Documentation" height="30" src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/ghpages_vector.svg"></a>
 
 • • •
