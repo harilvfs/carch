@@ -10,7 +10,7 @@
 
 <img src="https://cdn-icons-png.flaticon.com/128/1634/1634155.png" width="20" />
 
-### Prerequisites
+## Prerequisites
 
 Simply run the main script:
 
@@ -29,7 +29,7 @@ carch-gtk
 
 
 
-### From Source
+## From Source
 
 Before you start, you'll need to install `Python` dependencies.
 
@@ -47,7 +47,7 @@ paru -S python
 yay -S python
 ```
 
-### Install and Run Carch
+## Install and Run Carch
 
 Clone the Carch repository and run the GTK script:
 
