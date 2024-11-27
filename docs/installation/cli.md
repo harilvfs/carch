@@ -1,5 +1,4 @@
 # Installation
-<br>
 
 **To install Carch, execute the following command in your terminal:**
 
@@ -7,7 +6,7 @@
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-# Usage
+## Usage
 
 
 <strong>Simply run Carch by entering carch in your terminal.</strong>

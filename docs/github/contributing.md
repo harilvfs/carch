@@ -38,6 +38,4 @@
 - Test your changes locally to ensure everything works as expected.
 - If your changes introduce new features, consider updating the documentation as well.
 
-Thank you for contributing to **Carch**! Your efforts help us improve and grow our community! 🚀
-
-
+Thank You !!

@@ -1,12 +1,12 @@
 // .vitepress/config.js
 export default {
   title: 'Carch',
-  description: 'An automated script for quick & easy Arch Linux system setup 🧩',
+  description: 'Documentation website of carch',
   lastUpdated: true,
   themeConfig: {
     siteTitle: "Carch",
     repo: "harilvfs/carch",
-    docsDir: "site/docs",
+    docsDir: "/docs",
     editLink: {
       pattern: "https://github.com/harilvfs/carch/tree/main/docs/:path",
       text: "Edit this page on GitHub",
@@ -32,6 +32,7 @@ export default {
       {
         text: "Getting Started",
         collapsible: true,
+        collapsed: false,
         items: [
           { text: "Introduction", link: "/getting-started/introduction" },
           { text: "Preview", link: "/getting-started/preview.md" },
@@ -39,7 +40,8 @@ export default {
       },
       {
         text: "Installation",
-        collapsible: false,
+        collapsible: true,
+        collapsed: false,
         items: [
           { text: "Terminal", link: "/installation/cli" },
           { text: "Commands", link: "/installation/cmd" },
@@ -50,6 +52,7 @@ export default {
       {
         text: "Utilities",
         collapsible: true,
+        collapsed: false,
         items: [
           { text: "Overview Scripts", link: "/scripts/scripts" },
         ],
@@ -57,6 +60,7 @@ export default {
       {
         text: "Collaboration",
         collapsible: true,
+        collapsed: false,
         items: [
           { text: "Roadmap", link: "/github/roadmap" },
           { text: "Contributing", link: "/github/contributing" },
@@ -66,6 +70,7 @@ export default {
      {
         text: "Acknowledgment",
         collapsible: true,
+        collapsed: false,
         items: [
           { text: "Inspiration", link: "/acknowledgment/inspiration" },
           { text: "Contributions", link: "/acknowledgment/contributors" },
@@ -80,10 +85,16 @@ export default {
     search: {
       provider: "local",
       },
+     markdown: {
+      theme: "material-palenight",
+      lineNumbers: true,
+    },
+    returnToTopLabel: 'Go to Top',
+    sidebarMenuLabel: 'Menu',
+    },
     footer: {
       message: "Released under the Apache 2.0 License.",
       copyright: "Copyright © 2024 Hari Chalise",
     },
-  }
 };
 
