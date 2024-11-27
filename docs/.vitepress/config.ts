@@ -79,7 +79,7 @@ export default {
     ],
     socialLinks: [
       { icon: "github", link: "https://github.com/harilvfs/carch" },
-      { icon: "twitter", link: "https://twitter.com/harilvfs" },
+      { icon: "telegram", link: "https://t.me/harilvfs" },
       { icon: "discord", link: "https://discord.com/invite/8NJWstnUHd" },
     ],
     search: {
