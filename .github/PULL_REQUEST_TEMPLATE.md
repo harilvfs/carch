@@ -4,15 +4,15 @@
 This pull request adds/updates/fixes [describe the main goal or feature].
 
 ### Changes
-- [ ] Added/updated scripts or configurations.
-- [ ] Remove Bad Script/Code.
+- [ ] Updates <!-- Added/updated scripts or configurations or others -->
+- [ ] Remove <!-- Bad Script/Code or others-->
 - [ ] Fixed issue #[issue number].
-- [ ] Improved/optimized existing functionality.
-- [ ] Bugs Fixes.
-- [ ] Feature Added.
-- [ ] UI Enhancement.
-- [ ] Scripts ZIP
-- [ ] Documentation
+- [ ] Improved <!-- optimized existing functionality -->
+- [ ] Fixes.
+- [ ] Feature <!-- Added -->
+- [ ] UI/UX <!-- Enhancement -->
+- [ ] ZIP <!-- Scripts Changes/Updated -->
+- [ ] Documentation <!-- Carch Docs Changes -->
 
 ### Context
 
@@ -22,7 +22,7 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 ### How Has This Been Tested?
 
 <!-- Describe the steps you followed to test the changes. If applicable, mention the specific environment where the testing took place. -->
-- [ ] Tested on [your distribution/environment].
+- [ ] Tested on [your distribution/environment/else].
 
 ### Checklist
 
