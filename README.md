@@ -32,16 +32,10 @@
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F
-[discord-badge]: https://dcbadge.limes.pink/api/server/https://discord.gg/HBySRyymyZ?logoColor=ff6b6b&style=flat-square
-[discord-link]: https://discord.gg/HBySRyymyZ
-[telegram-badge]: https://img.shields.io/badge/Telegram-Channel-blue?style=flat-square&logo=telegram
-[telegram-link]: https://t.me/harilvfs
-[telegram-groupbadge]: https://img.shields.io/badge/Telegram-Group-blue?style=flat-square&logo=telegram
-[telegram-grouplink]: https://t.me/carchx
 [aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue 
-[release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Release&color=8A2BE2
-[stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&logo=github&logoColor=000000&label=%5BGithub%5D%20Stars&color=yellow
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=%5BCarch%5D%20Downloads&color=brightgreen&logo=github&logoColor=000000
+[release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&label=Release&color=8A2BE2
+[stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&label=Stars&color=green
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&Downloads&color=brightgreen
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://carch.vercel.app/github/codeofconduct.html "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
