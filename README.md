@@ -31,7 +31,7 @@
 
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=vercel%20docs%20build&color=5865F2&labelColor=36454F
 [aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&label=%5BAur%5D%20carch-git&logocolor=blue 
-[release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&label=release&color=8A2BE2
+[release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&label=release&color=blue
 [stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&label=stars&color=green
 [downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=downloads&color=brightgreen
 [downloads-link]: https://github.com/harilvfs/carch/releases
