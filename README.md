@@ -8,7 +8,7 @@
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 
-<a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square" width="30" ></a>
+<a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square" width="40" ></a>
 
 
 • • •
