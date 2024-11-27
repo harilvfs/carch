@@ -31,11 +31,11 @@
 
 ![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
 
-[vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=Vercel%20Docs%20Build&color=5865F2&labelColor=36454F
-[aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20CARCH-GIT&logocolor=blue 
-[release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&label=RELEASE&color=8A2BE2
-[stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&label=STARS&color=green
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=DOWNLOADS&color=brightgreen
+[vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=vercel%20docs%20build&color=5865F2&labelColor=36454F
+[aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue 
+[release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&label=release&color=8A2BE2
+[stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&label=stars&color=green
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=downloads&color=brightgreen
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://carch.vercel.app/github/codeofconduct.html "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
