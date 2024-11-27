@@ -1,6 +1,6 @@
 <h1>Carch <img src="https://cdn-icons-png.flaticon.com/128/15186/15186090.png" height="30px" /></h1>
 
-**Carch allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.**
+**Carch** *allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.*
 
 ![GitHub deployments][vercel-deploy] <a href="https://t.me/harilvfs" target="_blank"><img alt="telegram" src="https://img.shields.io/badge/TELEGRAM%20CHANNEL-2399d6?style=flat-square"></a> <a href="https://t.me/carchx" target="_blank"><img alt="telegram" src="https://img.shields.io/badge/TELEGRAM%20GROUP-2399d6?style=flat-square"></a> <a href="https://www.reddit.com/u/aayush-le" target="_blank"><img alt="reddit" src="https://img.shields.io/badge/REDDIT-f74300?style=flat-square"></a> <a href="https://discord.gg/HBySRyymyZ" target="_blank"><img alt="discord" src="https://img.shields.io/badge/DISCORD-5865f2?style=flat-square"></a>
 
