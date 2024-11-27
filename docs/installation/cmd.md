@@ -3,7 +3,13 @@
 
 Carch now supports CLI commands! Use `carchcli` with the following options:  
 
-```bash
+:::code-group
+
+```sh [CLI]
+carchcli --help
+```
+
+```sh [Preview]
 Usage: carchcli [OPTIONS]
 
 A tool for automating Arch Linux setups.

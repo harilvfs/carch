@@ -14,9 +14,14 @@ Select `<packager>` then
 
 :::code-group
 
-```sh [<i class="devicon-archlinux-plain"></i> Arch]
-<packager> -S carch-git
 
+```sh [<i class="devicon-archlinux-plain"></i> paru]
+paru -S carch-git
+
+```
+
+```sh [<i class="devicon-archlinuc-plain"></i> yay]
+yay -S carch-git
 ```
 
 ```sh [ Package Build ]

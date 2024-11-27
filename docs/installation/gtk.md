@@ -20,13 +20,10 @@ bash <(curl -L https://chalisehari.com.np/carch)
 
 Once done, you can launch the Carch GTK interface by typing:
 
-```
+
+```bash
 carch-gtk
 ```
-
-
-> **Note:** You can also run the Carch GTK interface after installing it from the AUR.
-
 
 
 ## From Source
