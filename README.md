@@ -6,8 +6,6 @@
 
 *For installation and more, check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
-
 <a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square" width="40" ></a>
 
 
