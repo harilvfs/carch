@@ -82,19 +82,15 @@ export default {
       { icon: "telegram", link: "https://t.me/harilvfs" },
       { icon: "discord", link: "https://discord.com/invite/8NJWstnUHd" },
     ],
-    search: {
-      provider: "local",
-      },
-     markdown: {
-      theme: "material-palenight",
-      lineNumbers: true,
-    },
-    returnToTopLabel: 'Go to Top',
-    sidebarMenuLabel: 'Menu',
-    },
     footer: {
       message: "Released under the Apache 2.0 License.",
       copyright: "Copyright © 2024 Hari Chalise",
+    },
+    search: {
+      provider: "local",
+      },
+    returnToTopLabel: 'Go to Top',
+    sidebarMenuLabel: 'Menu',
     },
 };
 
