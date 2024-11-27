@@ -2,15 +2,14 @@
 
 **To install Carch, execute the following command in your terminal:**
 
-```bash
+:::code-group
+
+
+```sh [Install]
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
-## Usage
-
-
-<strong>Simply run Carch by entering carch in your terminal.</strong>
-```bash
+```sh [Run]
 carch
 ```
 
