@@ -1,6 +1,6 @@
 # Aur
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg)](https://repology.org/project/carch/versions)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg)](https://repology.org/project/carch-git/versions)
 
 ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
