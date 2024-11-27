@@ -35,7 +35,7 @@
 [aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&logo=arch-linux&label=%5BAUR%5D%20CARCH-GIT&logocolor=blue 
 [release-badge]: https://img.shields.io/github/release/harilvfs/carch.svg?style=flat-square&label=RELEASE&color=8A2BE2
 [stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&label=STARS&color=green
-[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&DOWNLOADS&color=brightgreen
+[downloads-badge]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat-square&label=DOWNLOADS&color=brightgreen
 [downloads-link]: https://github.com/harilvfs/carch/releases
 [coc]:https://carch.vercel.app/github/codeofconduct.html "Contributor Covenant Code of Conduct"
 [prs]:http://makeapullrequest.com "Make a Pull Request (external link) ➶"
