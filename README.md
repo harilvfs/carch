@@ -6,7 +6,7 @@
 
 *For installation and more check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
 
-<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
+<img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="30" />
 
 <a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square"></a>
 
@@ -15,7 +15,7 @@
 
 
 
-<img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="50"/>
+<img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="30"/>
 
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
