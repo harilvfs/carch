@@ -28,6 +28,7 @@
 </p>
 
 Like my work? Giving a star to Carch means a lot. Thanks! <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
+
 <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
 
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=vercel%20docs%20build&color=5865F2&labelColor=36454F
