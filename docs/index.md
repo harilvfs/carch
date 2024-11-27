@@ -64,11 +64,6 @@ features:
   .VPFooter {
     background-color: transparent !important;
     border: none;
-    box-shadow: none;
-  }
-
-  .VPFooter::before {
-    content: none; /* Removes any decorative lines or pseudo-elements */
   }
 
   .VPNavBar:not(.top) {
