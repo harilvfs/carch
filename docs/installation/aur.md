@@ -1,7 +1,5 @@
 # Aur
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/carch.svg)](https://repology.org/project/carch-git/versions)
-
 ![AUR Version](https://img.shields.io/aur/version/carch-git?style=for-the-badge&color=blue&logo=arch-linux&label=%5BAUR%5D%20carch-git&logocolor=blue)
 
 **Carch is also available in the [AUR](https://aur.archlinux.org/) package repository.**
@@ -14,17 +12,19 @@ You can install it using an AUR package manager.
 
 Select `<packager>` then
 
-```bash
+:::code-group
+
+```sh [<i class="devicon-archlinux-plain"></i> Arch]
 <packager> -S carch-git
+
 ```
 
-You can also install it using a package build.
-
-```bash
+```sh [ Package Build ]
 git clone https://aur.archlinux.org/carch-git.git
 cd carch-git
 makepkg -si
 ```
+
 
 > [!NOTE]
 > To access the latest commit or updates of `Carch`, you can use the command line instead of the AUR.<br>
