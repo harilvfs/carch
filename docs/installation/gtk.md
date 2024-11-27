@@ -8,7 +8,7 @@
 
 **How to Install and Use 📦**
 
-<img src="https://raw.githubusercontent.com/smritics/linuxcli/refs/heads/main/docs/assets/arrowdown.webp" width="20" />
+<img src="https://cdn-icons-png.flaticon.com/128/1634/1634155.png" width="20" />
 
 ### Prerequisites
 
