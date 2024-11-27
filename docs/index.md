@@ -80,7 +80,7 @@ features:
 
 @media (min-width: 640px) {
   :root {
-    --vp-home-hero-image-filter: blur(76px);
+    --vp-home-hero-image-filter: blur(56px);
   }
 }
 
