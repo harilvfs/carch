@@ -4,7 +4,7 @@
 
 ![GitHub deployments][vercel-deploy]
 
-*For Installation and more check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
+*For installation and more check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
 
@@ -15,7 +15,7 @@
 
 
 
-<img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="30"/>
+<img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="50"/>
 
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
