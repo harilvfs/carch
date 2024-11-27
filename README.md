@@ -13,6 +13,7 @@
 <br>
 *For more, please check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
 
+<a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square"></a>
 
 • • •
 
