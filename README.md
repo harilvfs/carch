@@ -4,7 +4,7 @@
 
 ![GitHub deployments][vercel-deploy]
 
-*For installation and more check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
+*For installation and more, check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="20" />
 
