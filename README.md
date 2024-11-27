@@ -1,7 +1,3 @@
-<div align="center">
-<img src="https://github.com/harilvfs/assets/blob/main/carch/carchlogo.png" />
-</div>
-
 <h1>Carch <img src="https://cdn-icons-png.flaticon.com/128/15186/15186090.png" height="30px" /></h1>
 
 **Carch** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.
