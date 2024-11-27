@@ -8,7 +8,7 @@
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
 
-<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a> <a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a> <a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a> [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] 
+<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/Installation-62aeef?style=flat-square"></a> <a href="https://carch.vercel.app/github/contributing.html" target="_blank"><img alt="contributing" src="https://img.shields.io/badge/Contributing-98c379?style=flat-square"></a> <a href="https://carch.vercel.app/github/roadmap.html" target="_blank"><img alt="roadmap" src="https://img.shields.io/badge/Roadmap-c778dd?style=flat-square"></a> [![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs] ![AUR Version][aur-badge] ![Latest release][release-badge] [![Downloads][downloads-badge]][downloads-link] ![Github Stars][stars-badge]
 <br>
 <br>
 **Note:** I don't want to mess up the `README` with installation guides and other stuff, so for more, please check the [Carch Docs](https://chalisehari.com.np/carchdocs).
@@ -17,7 +17,7 @@
 
 • • •
 
-![AUR Version][aur-badge] ![Latest release][release-badge] [![Downloads][downloads-badge]][downloads-link] ![Github Stars][stars-badge]
+
 
 <img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="30"/>
 
