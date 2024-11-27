@@ -8,7 +8,7 @@
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
 
-<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/INSTALLATION-62aeef?style=flat-square"></a> <a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square"></a> 
+<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/INSTALLATION-62aeef?style=flat-square"></a> 
 <br>
 <br>
 *For more, please check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
