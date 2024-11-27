@@ -8,7 +8,7 @@
 
 <img src="https://github.com/harilvfs/assets/blob/main/carch/arrowdown.png" width="10" />
 
-<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/INSTALLATION-62aeef?style=flat-square"></a> <a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square"></a> ![AUR Version][aur-badge]  [![Downloads][downloads-badge]][downloads-link] ![Github Stars][stars-badge]
+<a href="https://carch.vercel.app/installation/cli.html" target="_blank"><img alt="installation" src="https://img.shields.io/badge/INSTALLATION-62aeef?style=flat-square"></a> <a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square"></a> 
 <br>
 <br>
 **Note:** I don't want to mess up the `README` with installation guides and other stuff, so for more, please check the [Carch Wiki](https://chalisehari.com.np/carchdocs).
