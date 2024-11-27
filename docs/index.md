@@ -12,7 +12,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /get-started
+      link: /getting-started/introduction.md
     - theme: alt
       text: View on GitHub
       link: https://github.com/harilvfs/carch
