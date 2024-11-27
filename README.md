@@ -27,8 +27,6 @@
 </a>
 </p>
 
-![Alt](https://repobeats.axiom.co/api/embed/4d5c2488d768e7beee43c843c179917fe2a2bca1.svg)
-
 [vercel-deploy]: https://img.shields.io/github/deployments/harilvfs/carch/Production?style=flat-square&logo=vercel&label=vercel%20docs%20build&color=5865F2&labelColor=36454F
 [aur-badge]: https://img.shields.io/aur/version/carch-git?style=flat-square&color=blue&label=%5BAur%5D%20carch-git&logocolor=blue
 [stars-badge]: https://img.shields.io/github/stars/harilvfs/carch?style=flat-square&label=stars&color=green
