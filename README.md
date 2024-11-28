@@ -2,7 +2,7 @@
 
 **Carch** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.
 
-![GitHub deployments][vercel-deploy]
+[![GitHub Actions Build Status](https://github.com/harilvfs/carch/actions/workflows/docs.yml/badge.svg)](https://github.com/harilvfs/carch/actions/workflows/docs.yml)
 
 *For installation and more, check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
 
