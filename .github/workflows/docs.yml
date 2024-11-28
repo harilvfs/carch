@@ -1,4 +1,3 @@
-
 name: Deploy VitePress site
 
 on:
@@ -32,7 +31,7 @@ jobs:
         working-directory: docs
 
       - name: Build with VitePress
-        run: npm run build
+        run: npm run build:docs
         working-directory: docs
 
       - name: Upload artifact
