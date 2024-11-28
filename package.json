@@ -1,4 +1,6 @@
 {
+  "name": "carch-docs",
+  "type": "module",
   "dependencies": {
     "devicon": "^2.16.0"
   },
