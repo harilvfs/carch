@@ -5,7 +5,7 @@ pageClass: home-page
 hero:
   name: Carch 
   image:
-    src: /archx.png
+    src: /penguin.webp
     alt: Archlinux logo
     style: "width: 150px; height: auto;"
   tagline: An automated script for quick & easy Arch Linux system setup 🧩

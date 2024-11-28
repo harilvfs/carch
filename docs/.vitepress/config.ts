@@ -2,10 +2,11 @@
 export default {
   title: 'Carch',
   description: 'Documentation website of carch',
+  base: "/carch/",
   lastUpdated: true,
   themeConfig: {
     siteTitle: "Carch",
-    repo: "harilvfs/carch",
+    logo: "archx.png",
     docsDir: "/docs",
     editLink: {
       pattern: "https://github.com/harilvfs/carch/tree/main/docs/:path",
