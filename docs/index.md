@@ -3,27 +3,32 @@ layout: home
 pageClass: home-page
 
 hero:
-  name: "AGS"
-  text: "Scaffolding CLI for Astal+TypeScript"
-  tagline: Initialize, bundle, or run Astal projects written in TypeScript/JavaScript with a single command
-  image: https://aylur.github.io/astal/icon.svg
+  name: Carch 
+  image:
+    src: /archx.png
+    alt: Archlinux logo
+    style: "width: 150px; height: auto;"
+  tagline: An automated script for quick & easy Arch Linux system setup 🧩
   actions:
     - theme: brand
-      text: Quick Start
-      link: /guide/quick-start
+      text: Get Started
+      link: /getting-started/introduction.md
     - theme: alt
-      text: Astal Documentation
-      link: https://aylur.github.io/astal/
-
+      text: View on GitHub
+      link: https://github.com/harilvfs/carch
 features:
-  - title: Initialize projects
-    details: With <code>ags init</code> you can initialize a project, which generates a basic template.
-  - title: Generate TypeScript types.
-    details: With <code>ags types</code> you can generate types from GObject based libraries.
-  - title: Bundle projects
-    details: With <code>ags bundle</code> you can bundle your project into a single executable script.
-  - title: Run projects
-    details: With <code>ags run</code> you can run a projects without bundling them first.
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/10229/10229090.png" alt="setup"/>
+    title: Easy Setup
+    details: Quick and straightforward installation of essential packages.
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/7425/7425907.png" alt="tui"/>
+    title: TUI Navigation
+    details: A text-based user interface that enhances user experience.
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/3131/3131638.png" alt="scripts"/>
+    title: Multiple Scripts
+    details: Automate the setup of various environments, including Dwm and Hyprland.
+  - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/4205/4205106.png" alt="development"/>
+    title: Active Development
+    details: Continuous updates and new features based on community feedback.
 ---
 
 <style>
@@ -85,4 +90,3 @@ features:
   }
 }
 </style>
-
