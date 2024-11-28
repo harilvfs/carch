@@ -13,8 +13,6 @@
 
 
 
-<img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" width="30"/>
-
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
