@@ -4,9 +4,9 @@
 
 [![GitHub Actions Build Status][check]][link]
 
-*For installation and more, check the* [Carch Wiki](https://chalisehari.com.np/carchdocs).
+*For installation and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/).
 
-<a href="https://chalisehari.com.np/carchdocs" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square" width="40" ></a>
+<a href="https://harilvfs.github.io/carch/" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=flat-square" width="40" ></a>
 
 
 • • •
