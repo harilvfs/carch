@@ -67,14 +67,8 @@ features:
     border: none;
   }
 
-  .VPNavBar:not(.top) {
-    background-color: transparent !important;
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-
     div.divider {
       display: none;
-    }
   }
 }
 
