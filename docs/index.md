@@ -8,7 +8,7 @@ hero:
   image:
     src: /penguin.webp
     alt: Archlinux logo
-    style: "width: 200px; height: auto;"
+    style: "width: 150px; height: auto;"
   tagline: A simple Bash script for quick, efficient, and preconfigured Arch Linux system setup 🧩
   actions:
     - theme: brand
