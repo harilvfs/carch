@@ -8,7 +8,7 @@ hero:
   image:
     src: /penguin.webp
     alt: Archlinux logo
-    style: "width: 150px; height: auto;"
+    style: "width: 200px; height: auto;"
   tagline: A simple Bash script for quick, efficient, and preconfigured Arch Linux system setup 🧩
   actions:
     - theme: brand
@@ -42,38 +42,6 @@ features:
 
   --vp-home-hero-image-background-image: linear-gradient(-45deg, var(--vp-c-purple-3), var(--vp-c-brand-3));
   --vp-home-hero-image-filter: blur(44px);
-}
-
-:root {
-  --overlay-gradient: color-mix(in srgb, var(--vp-c-brand-1), transparent 55%);
-}
-
-.dark {
-  --overlay-gradient: color-mix(in srgb, var(--vp-c-brand-1), transparent 85%);
-}
-
-.home-page {
-  background:
-    linear-gradient(215deg, var(--overlay-gradient), transparent 40%),
-    radial-gradient(var(--overlay-gradient), transparent 40%) no-repeat -60vw -40vh / 105vw 200vh,
-    radial-gradient(var(--overlay-gradient), transparent 65%) no-repeat 50% calc(100% + 20rem) / 60rem 30rem;
-
-  .VPFeature code {
-    background-color: var(--vp-code-line-highlight-color);
-    color: var(--vp-code-color);
-    padding: 2px;
-    border-radius: 4px;
-    padding: 3px 6px;
-  }
-
-  .VPFooter {
-    background-color: transparent !important;
-    border: none;
-  }
-
-    div.divider {
-      display: none;
-  }
 }
 
 @media (min-width: 640px) {
