@@ -4,15 +4,19 @@ pageClass: home-page
 
 hero:
   name: Carch 
+  text: "Automate Your Arch Linux Setup"
   image:
     src: /penguin.webp
     alt: Archlinux logo
     style: "width: 150px; height: auto;"
-  tagline: An automated script for quick & easy Arch Linux system setup 🧩
+  tagline: A simple Bash script for quick, efficient, and preconfigured Arch Linux system setup 🧩
   actions:
     - theme: brand
-      text: Get Started
+      text: What is Carch? 
       link: /getting-started/introduction.md
+    - theme: alt
+      text: Get Started
+      link: /installation/cli.md
     - theme: alt
       text: View on GitHub
       link: https://github.com/harilvfs/carch

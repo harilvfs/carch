@@ -4,9 +4,15 @@ export default {
   description: 'Documentation website of carch',
   base: "/carch/",
   lastUpdated: true,
+
+  head: [
+        ["link", { rel: "icon", href: "/carch/penguin.webp" }],
+    ],
+
   themeConfig: {
     siteTitle: "Carch",
     logo: "archx.png",
+    outline: "deep",
     docsDir: "/docs",
     editLink: {
       pattern: "https://github.com/harilvfs/carch/tree/main/docs/:path",
