@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## v3.0.9 2024-12-02
+## [v3.0.9](https://github.com/harilvfs/carch/compare/v3.0.8...v3.0.9) (2024-12-02)
 
 *Note: This release primarily focuses on building and enhancing the Carch documentation.*
 
@@ -45,7 +45,7 @@ All notable changes to this project will be documented in this file.
 * Remove carchscripts.zip in favor of scripts.zip by @harilvfs in https://github.com/harilvfs/carch/pull/120
 * Remove Transparency from Top Section by @harilvfs in https://github.com/harilvfs/carch/pull/142
 
-## v3.0.8 2024-11-23
+## [v3.0.8](https://github.com/harilvfs/carch/compare/v3.0.7...v3.0.8) (2024-11-23)
 
 ### Changed
 
@@ -89,7 +89,7 @@ All notable changes to this project will be documented in this file.
 * Remove Installation Guide from README by @aayushrg7 in https://github.com/harilvfs/carch/pull/80
 * Remove 'Inspiration' tag by @aayushrg7 in https://github.com/harilvfs/carch/pull/92
 
-## v3.0.7 2024-11-15
+## [v3.0.7](https://github.com/harilvfs/carch/compare/v3.0.6...v3.0.7) (2024-11-15)
 
 ### Changed
 
@@ -117,14 +117,14 @@ All notable changes to this project will be documented in this file.
 * Remove comments from zip workflow by @harilvfs in https://github.com/harilvfs/carch/pull/37
 * Remove Echo On Running Script by @harilvfs in https://github.com/harilvfs/carch/pull/44
 
-## v3.0.6 2024-11-09
+## [v3.0.6](https://github.com/harilvfs/carch/compare/v3.0.5...v3.0.6) (2024-11-09)
 
 ### Changed
 
 - Replace Whiptail and Dialog with Gum and Figlet for Simplified Menu by @harilvfs in https://github.com/harilvfs/carch/pull/19
 - Update Docs Workflow by @harilvfs in https://github.com/harilvfs/carch/pull/18
 
-## v3.0.5 2024-11-06
+## [v3.0.5](https://github.com/harilvfs/carch/compare/v3.0.4...v3.0.5] (2024-11-06)
 
 ### Changed
 
@@ -141,7 +141,7 @@ All notable changes to this project will be documented in this file.
 
 - **Bugs Fixes**: Fixed some minor & known bugs.
 
-## v3.0.4 2024-10-22
+## [v3.0.4](https://github.com/harilvfs/carch/compare/v3.0.3...v3.0.4) (2024-10-22)
 
 ### Changed
 
@@ -156,7 +156,7 @@ All notable changes to this project will be documented in this file.
   - The `carch.desktop` file is now created automatically during setup.
   - This desktop entry allows easy access to Carch from your system’s application menu.
 
-## v3.0.3 2024-10-16
+## [v3.0.3] (https://github.com/harilvfs/carch/compare/v3.0.2...v3.0.3) (2024-10-16)
 
 ### Changed
 
@@ -179,13 +179,13 @@ All notable changes to this project will be documented in this file.
 - Resolved known issues for a more stable experience.
 - Fixed Aur `PKGBUILD`.
 
-## v3.0.2 2024-10-12
+## [v3.0.2](https://github.com/harilvfs/carch/compare/v3.0.1...v3.0.2) (2024-10-12)
 
 ### Changed
 
 - Refactor setup script for speed & reliability by @harilvfs in https://github.com/harilvfs/carch/pull/9
 
-## v3.0.1 2024-10-11
+## [v3.0.1](https://github.com/harilvfs/carch/compare/v1.0...v3.0.1) (2024-10-11)
 
 *Tag Changes Here*
 
@@ -196,7 +196,7 @@ All notable changes to this project will be documented in this file.
 
 *Note: In this version, we are incorporating Rust, so expect Dependabot PR updates.* 
 
-## v2.0 2024-10-09
+## [v2.0](https://github.com/harilvfs/carch/compare/2024-10-08...2024-10-09) (2024-10-09)
 
 ### Changed
 
@@ -213,7 +213,7 @@ All notable changes to this project will be documented in this file.
 - Hyprland setup script.
 
 
-## v1.0 2024-10-08
+## [v1.0](https://github.com/harilvfs/carch/commits/2024-10-08) (2024-10-08)
 
 ### Removed
 
