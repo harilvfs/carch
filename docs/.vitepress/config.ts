@@ -22,8 +22,13 @@ export default {
       { text: "Home", link: "/" },
       { text: "Contact", link: "/contact" },
       { 
+        text: "3.0.9",
+        items: [
+          {
           text: 'Changelog',
           link: 'https://github.com/harilvfs/carch/blob/main/CHANGELOG.md'
+          },
+        ],
       },
     ],
     sidebar: [
