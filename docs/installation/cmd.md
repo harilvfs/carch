@@ -1,9 +1,12 @@
 # CLI Commands  
 
-
 Carch now supports CLI commands! Use `carchcli` with the following options:  
 
 :::code-group
+
+```sh [Install]
+bash <(curl -L https://chalisehari.com.np/carch)
+```
 
 ```sh [CLI]
 carchcli --help
