@@ -156,7 +156,7 @@ All notable changes to this project will be documented in this file.
   - The `carch.desktop` file is now created automatically during setup.
   - This desktop entry allows easy access to Carch from your system’s application menu.
 
-## [v3.0.3] (https://github.com/harilvfs/carch/compare/v3.0.2...v3.0.3) (2024-10-16)
+## [v3.0.3](https://github.com/harilvfs/carch/compare/v3.0.2...v3.0.3) (2024-10-16)
 
 ### Changed
 
