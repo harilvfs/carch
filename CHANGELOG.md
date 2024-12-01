@@ -124,7 +124,7 @@ All notable changes to this project will be documented in this file.
 - Replace Whiptail and Dialog with Gum and Figlet for Simplified Menu by @harilvfs in https://github.com/harilvfs/carch/pull/19
 - Update Docs Workflow by @harilvfs in https://github.com/harilvfs/carch/pull/18
 
-## [v3.0.5](https://github.com/harilvfs/carch/compare/v3.0.4...v3.0.5] (2024-11-06)
+## [v3.0.5](https://github.com/harilvfs/carch/compare/v3.0.4...v3.0.5) (2024-11-06)
 
 ### Changed
 
