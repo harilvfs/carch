@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.9 2024-12-02
+
+*Note: This release primarily focuses on building and enhancing the Carch documentation.*
+
+### Changed
+
+* Update Markdown Documentation for Docs by @smritics in https://github.com/harilvfs/carch/pull/113
+* Enhance Carch-GTK Interface and Functionality by @smritics in https://github.com/harilvfs/carch/pull/115
+* Refactor Installation Script by @harilvfs in https://github.com/harilvfs/carch/pull/116
+* Refactor: Core Structure Overhaul by @harilvfs in https://github.com/harilvfs/carch/pull/117
+* Docs: Update Markdown Documentation by @smritics in https://github.com/harilvfs/carch/pull/119
+* Refine Carch Documentation by @harilvfs in https://github.com/harilvfs/carch/pull/123
+* Simplify Installation Guide by @smritics in https://github.com/harilvfs/carch/pull/125
+* Document CLI Changes by @smritics in https://github.com/harilvfs/carch/pull/126
+* Comprehensive Documentation Refactor by @harilvfs in https://github.com/harilvfs/carch/pull/129
+* Refactor Documentation for Improved Visual Appeal by @harilvfs in https://github.com/harilvfs/carch/pull/136
+* Enhance Documentation with Beautiful Updates by @harilvfs in https://github.com/harilvfs/carch/pull/138
+* Apache 2.0 License by @aayushrg7 in https://github.com/harilvfs/carch/pull/139
+* Enhance Pull Request Template by @aayushrg7 in https://github.com/harilvfs/carch/pull/140
+* Refactor Documentation & Some Fixes by @harilvfs in https://github.com/harilvfs/carch/pull/141
+* Enhancement on docs by @harilvfs in https://github.com/harilvfs/carch/pull/143
+* CSS Changes [ Remove White Space ] by @harilvfs in https://github.com/harilvfs/carch/pull/144
+* Create Changelog for Carch by @smritics in https://github.com/harilvfs/carch/pull/146
+
+### Added
+
+* Add GTK and Related Dependencies by @aayushrg7 in https://github.com/harilvfs/carch/pull/112
+* Add CLI Commands Guide to Documentation by @harilvfs in https://github.com/harilvfs/carch/pull/118
+* Add screen clearing on exit to GTK application by @harilvfs in https://github.com/harilvfs/carch/pull/122
+* Add CLI Guide to Documentation by @harilvfs in https://github.com/harilvfs/carch/pull/127
+
+### Fixed
+
+* Fix Documentation Headings by @harilvfs in https://github.com/harilvfs/carch/pull/114
+* Fix scripts.zip upload workflow by @smritics in https://github.com/harilvfs/carch/pull/121
+* Fix broken image link by @harilvfs in https://github.com/harilvfs/carch/pull/134
+* Fix image width to '150' by @harilvfs in https://github.com/harilvfs/carch/pull/145
+
+### Removed
+
+* Remove carchscripts.zip in favor of scripts.zip by @harilvfs in https://github.com/harilvfs/carch/pull/120
+* Remove Transparency from Top Section by @harilvfs in https://github.com/harilvfs/carch/pull/142
+
 ## v3.0.8 2024-11-23
 
 ### Changed
