@@ -1,7 +1,5 @@
 # CLI Commands  
 
-
-
 Carch now supports CLI commands! Use `carchcli` with the following options:  
 
 :::code-group
