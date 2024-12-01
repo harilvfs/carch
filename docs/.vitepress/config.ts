@@ -22,17 +22,8 @@ export default {
       { text: "Home", link: "/" },
       { text: "Contact", link: "/contact" },
       { 
-        text: "Changelog",
-        items: [
-          { text: "v3.0.1", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.1" },
-          { text: "v3.0.2", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.2" },
-          { text: "v3.0.3", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.3" },
-          { text: "v3.0.4", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.4" },
-          { text: "v3.0.5", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.5" },
-          { text: "v3.0.6", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.6" },
-          { text: "v3.0.7", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.7" },
-          { text: "v3.0.8", link: "https://github.com/harilvfs/carch/releases/tag/v3.0.8" },
-        ],
+          text: 'Changelog',
+          link: 'https://github.com/harilvfs/carch/blob/main/CHANGELOG.md'
       },
     ],
     sidebar: [
