@@ -66,6 +66,47 @@ install_editing() {
     done
 }
 
+install_terminals() {
+    install_paru
+    while true; do
+        echo -e "${BLUE}If you're unsure what to choose, Kitty or Alacritty are great options.${RESET}"
+        echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
+
+        terminal_choice=$(gum choose "Alacritty" "Kitty" "GNOME Terminal" "Konsole" \
+    "Xfce Terminal" "LXTerminal" "MATE Terminal" "xterm" \
+    "urxvt (rxvt-unicode)" "Tilix" "Terminator" "Guake" "Yakuake" \
+    "Tilda" "Cool Retro Term" "Sakura" "st (Simple Terminal)" "Eterm" \
+    "WezTerm" "Deepin Terminal" "Zellij" "Termite" "fbterm" "Exit")
+
+        case $terminal_choice in
+            "Alacritty") sudo pacman -S alacritty ;;
+            "Kitty") sudo pacman -S kitty ;;
+            "GNOME Terminal") sudo pacman -S gnome-terminal ;;
+            "Konsole") sudo pacman -S konsole ;;
+            "Xfce Terminal") sudo pacman -S xfce4-terminal ;;
+            "LXTerminal") sudo pacman -S lxterminal ;;
+            "MATE Terminal") sudo pacman -S mate-terminal ;;
+            "xterm") sudo pacman -S xterm ;;
+            "urxvt (rxvt-unicode)") sudo pacman -S rxvt-unicode ;;
+            "Tilix") sudo pacman -S tilix ;;
+            "Terminator") sudo pacman -S terminator ;;
+            "Guake") sudo pacman -S guake ;;
+            "Yakuake") sudo pacman -S yakuake ;;
+            "Tilda") sudo pacman -S tilda ;;
+            "Cool Retro Term") sudo pacman -S cool-retro-term ;;
+            "Sakura") sudo pacman -S sakura ;;
+            "st (Simple Terminal)") paru -S st ;;
+            "Eterm") paru -S eterm ;;
+            "WezTerm") sudo pacman -S wezterm ;;
+            "Deepin Terminal") sudo pacman -S deepin-terminal ;;
+            "Zellij") sudo pacman -S zellij ;;
+            "Termite") paru -S termite ;;
+            "fbterm") paru -S fbterm ;;
+            "Exit") break ;;
+        esac
+    done
+}
+
 install_browsers() {
     install_paru
     while true; do
@@ -207,12 +248,13 @@ while true; do
 ----------------------------------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
-    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar [Thumbnail Preview]" "Andriod" "Exit")
+    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Terminal" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar [Thumbnail Preview]" "Andriod" "Exit")
 
     case $main_choice in
         "Communication & Chatting") install_communication ;;
         "Live Streaming/Recording") install_streaming ;;
         "Editing") install_editing ;;
+        "Terminal") install_terminals ;;
         "Browsers") install_browsers ;;
         "File Managers") install_filemanagers ;;
         "Music") install_music ;;
