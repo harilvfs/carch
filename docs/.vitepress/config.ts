@@ -20,7 +20,7 @@ export default {
     },
     nav: [
       { text: "Home", link: "/" },
-      { text: "Contact", link: "/contact" },
+      { text: "Guide", link: "/getting-started/introduction" },
       { 
         text: "3.0.9",
         items: [
@@ -81,9 +81,9 @@ export default {
       },
     ],
     socialLinks: [
-      { icon: "github", link: "https://github.com/harilvfs/carch" },
       { icon: "telegram", link: "https://t.me/harilvfs" },
       { icon: "discord", link: "https://discord.com/invite/8NJWstnUHd" },
+      { icon: "gmail", link: "mailto:harilvfs@chalisehari.com.np" },
     ],
     footer: {
       message: "Released under the Apache 2.0 License.",
