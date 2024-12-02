@@ -13,13 +13,15 @@ source=(
     "https://github.com/harilvfs/$_pkgname/releases/download/$pkgver/carch-gtk"
     "https://github.com/harilvfs/$_pkgname/releases/download/$pkgver/carch-gtk.py"
     "https://github.com/harilvfs/$_pkgname/releases/download/$pkgver/$_pkgname"
+    "https://github.com/harilvfs/$_pkgname/releases/download/$pkgver/carchcli"
     "https://raw.githubusercontent.com/harilvfs/$_pkgname/refs/heads/main/$_pkgname.desktop"
 )
 sha256sums=(
     'SKIP' 
-    '3efbb7d4863e06b609e48a2f26d1c823bfee7bf5388ef3262fa04d668917cd64' 
+    'b9ad03d513a315f785b72747956fa1d3ebf6fc78dd71a764f281f61a9abe0fe2' 
     'SKIP' 
-    '47cef8973be3ff95c96b4a187c99fa29b43d7ac11b04786fcb479e99861d72be' 
+    '18c924b27e6ae3ea39c164b8a8d64cff74df6341bcdafc4684e7ab1f3db817cb' 
+    '865621815bce71fca88d3c5251149673d20936656b71fe69510fed594384acc8'
     'SKIP' 
 )
 
@@ -42,6 +44,6 @@ package() {
     install -Dm755 "$srcdir/carch-gtk" "$pkgdir/usr/bin/carch-gtk"
     install -Dm755 "$srcdir/carch-gtk.py" "$pkgdir/usr/bin/carch-gtk.py"
 
+    install -Dm755 "$srcdir/carchcli" "$pkgdir/usr/bin/carchcli"
     install -Dm644 "$srcdir/$_pkgname.desktop" "$pkgdir/usr/share/applications/$_pkgname.desktop"
 }
-
