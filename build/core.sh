@@ -5,8 +5,6 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 NC='\033[0m'
 
-last_selected_index=0
-
 load_scripts() {
     local script_dir="/usr/bin/scripts"
     scripts=()
@@ -30,17 +28,7 @@ display_scripts_menu() {
     echo -e "${NC}"
 
     echo "Select a script to run:"
-    
-    reordered_scripts=("${scripts[last_selected_index]}" "${scripts[@]:0:last_selected_index}" "${scripts[@]:last_selected_index+1}")
-
-    selected_script=$(gum choose "${reordered_scripts[@]}")
-
-    for i in "${!scripts[@]}"; do
-        if [[ "${scripts[i]}" == "$selected_script" ]]; then
-            last_selected_index=$i
-            break
-        fi
-    done
+    selected_script=$(gum choose "${scripts[@]}")
 
     if [[ "$selected_script" == "Cancel" ]]; then
         clear
