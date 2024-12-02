@@ -18,7 +18,7 @@ hero:
       text: Get Started
       link: /installation/cli.md
     - theme: alt
-      text: View on GitHub
+      text: GitHub
       link: https://github.com/harilvfs/carch
 features:
   - icon: <img width="35" height="35" src="https://cdn-icons-png.flaticon.com/128/10229/10229090.png" alt="setup"/>
