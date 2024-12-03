@@ -1,11 +1,13 @@
-cxfs.sh.x.c
-setup.sh.x.c
-clean.sh.x.c
 /install/setup.sh.x.c
 /run/clean.sh.x.c
-core.sh.x.c
+/build/core.sh.x.c
 /cli/carchcli.sh.x.c
 /gtk/gtk.sh.x.c
+/build/carch
+/gtk/carch-gtk
+/cli/carchcli
+/source/zip
+PKGBUILD
 
 # Logs
 logs
@@ -118,3 +120,4 @@ docs/.vitepress/cache
 
 # devicon
 docs/.vitepress/devicon
+
