@@ -6,8 +6,6 @@
 /build/carch
 /gtk/carch-gtk
 /cli/carchcli
-/source/zip
-PKGBUILD
 
 # Logs
 logs
