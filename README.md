@@ -9,6 +9,8 @@
 
 <div align="center">
 
+<a href="https://harilvfs.github.io/carch/installation/cli.html"><kbd> <br>Installation<br> </kbd></a>
+
 For Installation and more, check out the [Carch Wiki](https://harilvfs.github.io/carch/).
 
 
