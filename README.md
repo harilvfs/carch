@@ -1,6 +1,6 @@
 <div align="center">
     
-# **`🧩 Carch`**
+## **`🧩 Carch`**
 
 ![Carch](./source/carch.webp)
 
