@@ -28,5 +28,5 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 
 </div>
 
-[check]: https://github.com/harilvfs/carch/actions/workflows/docs.yml/badge.svg
+[check]: https://github.com/harilvfs/carch/actions/workflows/docs.yml?label=Wiki-Build
 [link]: https://github.com/harilvfs/carch/actions/workflows/docs.yml
