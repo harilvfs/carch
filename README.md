@@ -19,7 +19,7 @@
 • • •
 
 
-*For any query please contact me on* [Discord](https://discord.com/invite/8NJWstnUHd).
+*For any `query` please contact me `on`* [Discord](https://discord.com/invite/8NJWstnUHd).
 
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
