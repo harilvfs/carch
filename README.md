@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/github/issues/harilvfs/carch?style=for-the-badge&color=dbb6ed&logoColor=85e185&labelColor=1c1c29" /> <img src="https://img.shields.io/github/issues-pr/harilvfs/carch?style=for-the-badge&color=ef9f9c&logoColor=85e185&labelColor=1c1c29" /> <img src="https://img.shields.io/github/last-commit/harilvfs/carch?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=1c1c29"/> <img src="https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=1c1c29"/> <img src="https://img.shields.io/github/forks/harilvfs/carch?style=for-the-badge&color=9dc3ea&logoColor=D9E0EE&labelColor=1c1c29" /> <img src="https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&color=e0ea9d&logoColor=D9E0EE&labelColor=171b22" />
 <br>
 
---
+---
 
 <h4> 
   
