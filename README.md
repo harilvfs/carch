@@ -38,12 +38,15 @@
 <a href="https://discord.com/invite/8NJWstnUHd">
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
 </a>
+</p>
+
+<div align="center">
 
 Like my work? Giving a star to Carch means a lot. Thanks!
 
 <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
 
-</p>
+</div>
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/docs.yml/badge.svg
 [link]: https://github.com/harilvfs/carch/actions/workflows/docs.yml
