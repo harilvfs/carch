@@ -1,5 +1,20 @@
 ![Carch](./source/carch.webp)
 
+<br><br><br><br>
+<div class=badges align="center">
+    <img src="https://img.shields.io/github/issues/harilvfs/carch?style=for-the-badge&color=dbb6ed&logoColor=85e185&labelColor=1c1c29" />
+    <img src="https://img.shields.io/github/issues-pr/harilvfs/carch?style=for-the-badge&color=ef9f9c&logoColor=85e185&labelColor=1c1c29" />
+    <img src="https://img.shields.io/github/last-commit/harilvfs/carch?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=1c1c29"/>
+    <img src="https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=1c1c29"/>
+    <br><br>
+    <a href="https://discord.com/invite/8NJWstnUHd"><img src="https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
+    <br><br>
+    <img class="badge" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black&color=eed49f"  style="border-radius: 5px;"/>
+    <br><br>
+    <a href="https://harilvfs.github.io/carch/installation/cli.html"><kbd> <br>INSTALLATION<br> </kbd></a>  
+</div>
+<br><br><br>
+
 <h1>Carch <img src="./source/penguin.webp" width="20" height="20"> </h1>
 
 **Carch** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.
