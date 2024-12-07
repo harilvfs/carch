@@ -7,7 +7,7 @@ hero:
   text: "Automate Your Arch Linux Setup"
   image:
     src: /penguin.webp
-    alt: Archlinux logo
+    alt: Linux logo
     style: "width: 150px; height: auto;"
   tagline: A simple Bash script for quick, efficient, and preconfigured Arch Linux system setup 🧩
   actions:
@@ -42,6 +42,41 @@ features:
 
   --vp-home-hero-image-background-image: linear-gradient(-45deg, var(--vp-c-purple-3), var(--vp-c-brand-3));
   --vp-home-hero-image-filter: blur(44px);
+}
+
+:root {
+  --overlay-gradient: color-mix(in srgb, var(--vp-c-brand-1), transparent 55%);
+}
+
+.dark {
+  --overlay-gradient: color-mix(in srgb, var(--vp-c-brand-1), transparent 85%);
+}
+
+.home-page {
+  background:
+    linear-gradient(215deg, var(--overlay-gradient), transparent 40%),
+    radial-gradient(var(--overlay-gradient), transparent 40%) no-repeat -60vw -40vh / 105vw 200vh,
+    radial-gradient(var(--overlay-gradient), transparent 65%) no-repeat 50% calc(100% + 20rem) / 60rem 30rem;
+
+  .VPFeature a {
+    font-weight: bold;
+    color: var(--vp-c-brand-2);
+  }
+
+  .VPFooter {
+    background-color: transparent !important;
+    border: none;
+  }
+
+  .VPNavBar:not(.top) {
+    background-color: transparent !important;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+
+    div.divider {
+      display: none;
+    }
+  }
 }
 
 @media (min-width: 640px) {

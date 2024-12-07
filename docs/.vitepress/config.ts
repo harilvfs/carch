@@ -6,12 +6,12 @@ export default {
   lastUpdated: true,
 
   head: [
-        ["link", { rel: "icon", href: "/carch/penguin.webp" }],
+        ["link", { rel: "icon", href: "/carch/package.png" }],
     ],
 
   themeConfig: {
     siteTitle: "Carch",
-    logo: "archx.png",
+    logo: "package.png",
     outline: "deep",
     docsDir: "/docs",
     editLink: {
