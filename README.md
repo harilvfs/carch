@@ -9,7 +9,7 @@
 
 <div align="center">
 
-*For **Installation** and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/).
+For **Installation** and more, check the [Carch Wiki](https://harilvfs.github.io/carch/).
 
 
 • • •
