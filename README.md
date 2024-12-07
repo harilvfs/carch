@@ -13,13 +13,13 @@
 
 • • •
 
-*For `Installation` and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/).
+<strong>*For `Installation` and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/). </strong>
 
 
 • • •
 
 
-*For any `query` please contact me `on`* [Discord](https://discord.com/invite/8NJWstnUHd).
+<strong> *For any `query` please contact me `on`* [Discord](https://discord.com/invite/8NJWstnUHd). </strong>
 
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
