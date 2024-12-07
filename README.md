@@ -10,7 +10,7 @@
     <br><br>
     <a href="https://discord.com/invite/8NJWstnUHd"><img src="https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
     <br><br>
-    <img class="badge" src="https://img.shields.io/badge/Arch%20Linux-FCC624?style=for-the-badge&logo=arch-linux&logoColor=black&color=eed49f"  style="border-radius: 5px;"/>
+    <img class="badge" src="https://img.shields.io/badge/Arch%20Linux-FCC624?style=for-the-badge&logo=arch-linux&logoColor=blue&color=eed49f"  style="border-radius: 5px;"/>
 </div>
 <br>
 
