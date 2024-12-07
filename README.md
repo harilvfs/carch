@@ -22,13 +22,6 @@ Any queries or concerns? Feel free to write about them on
 <a href="https://www.reddit.com/user/aayush-le/" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_reddit.png?raw=true" width="45px"/></a>
 <br><br>
 
-
-<p align="center">
-<a href="https://discord.com/invite/8NJWstnUHd">
-<img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
-</a>
-</p>
-
 Like my work? Giving a star to Carch means a lot. Thanks!
 
 <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
