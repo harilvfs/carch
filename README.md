@@ -1,6 +1,5 @@
 ![Carch](./source/carch.webp)
 
-<br><br><br><br>
 <div class=badges align="center">
     <img src="https://img.shields.io/github/issues/harilvfs/carch?style=for-the-badge&color=dbb6ed&logoColor=85e185&labelColor=1c1c29" />
     <img src="https://img.shields.io/github/issues-pr/harilvfs/carch?style=for-the-badge&color=ef9f9c&logoColor=85e185&labelColor=1c1c29" />
