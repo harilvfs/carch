@@ -6,7 +6,7 @@
 <br><br>
 [![GitHub Actions Build Status][check]][link]
 </div>
-
+<br>
 <div align="center">
 
 *For installation and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/).
