@@ -1,3 +1,7 @@
+<div align="center">
+    
+# **`🧩 Carch`**
+
 ![Carch](./source/carch.webp)
 
 <div class=badges align="center">
