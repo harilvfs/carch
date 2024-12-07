@@ -13,8 +13,6 @@
 <br>
 
 <div align="center">
-    
-**`Carch`** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment.
 
 [![GitHub Actions Build Status][check]][link]
 
