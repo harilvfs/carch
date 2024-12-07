@@ -11,7 +11,7 @@
     <a href="https://discord.com/invite/8NJWstnUHd"><img src="https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
     <br><br>
     <a href="https://archlinux.org/">
-    <img src="https://img.shields.io/badge/-Arch_Linux-black.svg?style=for-the-badge&logo=archlinux&logoColor=black&color=eed49" />
+    <img src="https://img.shields.io/badge/-Arch_Linux-FCC624?style=for-the-badge&logo=archlinux&logoColor=black&color=eed49" />
     </a>
 </div>
 <br>
