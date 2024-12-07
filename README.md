@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&color=e0ea9d&logoColor=D9E0EE&labelColor=171b22" />
     <br><br>
     <a href="https://discord.com/invite/8NJWstnUHd"><img src="https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
-    <a href="https://t.me/harilvfs" target="blank"><img src="https://img.shields.io/badge/Telegram-Carch?style=for-the-badge&logo=telegram&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
+    <a href="https://t.me/harilvfs" target="blank"><img src="https://img.shields.io/badge/Telegram-Carch-blue?style=for-the-badge&logo=telegram&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
 <a href="https://www.reddit.com/user/aayush-le/" target="blank"><img src="https://img.shields.io/reddit/user-karma/combined/aayush-le?style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
     <br><br>
     <img class="badge" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black&color=eed49f"  style="border-radius: 5px;"/>
