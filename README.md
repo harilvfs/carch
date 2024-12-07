@@ -11,23 +11,19 @@
   
 **`Carch`** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment. </h4>
 
-• • •
-
-<strong>*For `Installation` and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/). </strong>
+*For `Installation` and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/).
 
 
 • • •
 
 
-<strong> *For any `query` please contact me `on`* [Discord](https://discord.com/invite/8NJWstnUHd). </strong>
+*For any `query` please contact me `on`* [Discord](https://discord.com/invite/8NJWstnUHd).
 
 <p align="left">
 <a href="https://discord.com/invite/8NJWstnUHd">
 <img src="https://invidget.switchblade.xyz/8NJWstnUHd" width="300">
 </a>
 </p>
-
-• • •
 
 Like my work? Giving a star to Carch means a lot. Thanks!
 
