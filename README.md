@@ -1,4 +1,3 @@
-![Carch](./source/carch.webp)
 <div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/carch.webp" width="900" />
 </div>
