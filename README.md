@@ -16,7 +16,7 @@
 
 *For installation and more, check the* [Carch Wiki](https://harilvfs.github.io/carch/).
 
-<a href="https://harilvfs.github.io/carch/" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=for-the-badge&logo=wikipedia" /></a>
+<a href="https://harilvfs.github.io/carch/" target="_blank"><img alt="wiki" src="https://img.shields.io/badge/WIKI-98c379?style=for-the-badge&logo=wiki" /></a>
 
 • • •
 
