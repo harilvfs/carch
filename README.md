@@ -6,6 +6,9 @@
     <img src="https://img.shields.io/github/last-commit/harilvfs/carch?style=for-the-badge&logo=github&color=7dc4e4&logoColor=D9E0EE&labelColor=1c1c29"/>
     <img src="https://img.shields.io/github/stars/harilvfs/carch?style=for-the-badge&logo=apachespark&color=eed49f&logoColor=D9E0EE&labelColor=1c1c29"/>
     <br><br>
+    <img src="https://img.shields.io/github/forks/harilvfs/carch?style=for-the-badge&color=9dc3ea&logoColor=D9E0EE&labelColor=1c1c29" />
+    <img src="https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&color=e0ea9d&logoColor=D9E0EE&labelColor=171b22" />
+    <br><br>
     <a href="https://discord.com/invite/8NJWstnUHd"><img src="https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29" /></a>
     <br><br>
     <img class="badge" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black&color=eed49f"  style="border-radius: 5px;"/>
