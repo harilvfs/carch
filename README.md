@@ -12,7 +12,7 @@
     <br><br>
     <a href="https://harilvfs.github.io/carch/installation/cli.html"><kbd> <br>INSTALLATION<br> </kbd></a>  
 </div>
-<br><br><br>
+<br>
 
 <h1>Carch <img src="./source/penguin.webp" width="20" height="20"> </h1>
 
