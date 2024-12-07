@@ -5,7 +5,7 @@
 <img class="badge" src="https://img.shields.io/badge/Arch%20Linux-FCC624?style=for-the-badge&logo=arch-linux&logoColor=blue&color=7dc4e4"  style="border-radius: 5px;"/>
 <br><br>
 
-<h3 >**`Carch`** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment. </h3>
+<h4> **Carch** allows you to customize your Arch <img src='https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/archx.webp' width="10"> System, adding configurations and installing packages for a ready-to-use Linux environment. </h4>
 
 [![GitHub Actions Build Status][check]][link]
 
