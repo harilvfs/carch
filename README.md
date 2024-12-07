@@ -18,9 +18,9 @@ Any queries or concerns? Feel free to write about them on
 
 [![Discord](https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=f5a7a0&logoColor=FFFFFF&labelColor=1c1c29)](https://discord.com/invite/8NJWstnUHd)
 <br><br>
-<a href="https://t.me/harilvfs" target="blank"><img src="https://github.com/Nighty3098/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
-<a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/Nighty3098/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
-<a href="https://www.reddit.com/user/aayush-le/" target="blank"><img src="https://github.com/Nighty3098/DevIcons/blob/main/badges/badges_reddit.png?raw=true" width="45px"/></a>
+<a href="https://t.me/harilvfs" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
+<a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
+<a href="https://www.reddit.com/user/aayush-le/" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_reddit.png?raw=true" width="45px"/></a>
 <br><br>
 
 
