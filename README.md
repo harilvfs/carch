@@ -1,6 +1,9 @@
 ![Carch](./source/carch.webp)
 
+<div align="center">
+  
 [![GitHub Actions Build Status][check]][link]
+</div>
 
 <div align="center">
 
