@@ -86,7 +86,7 @@ export default {
       { icon: "gmail", link: "mailto:harilvfs@chalisehari.com.np" },
     ],
     footer: {
-      message: "Released under the Apache 2.0 License.",
+      message: "Released under the GPL-3.0 License.",
       copyright: "Copyright © 2024 Hari Chalise",
     },
     search: {
