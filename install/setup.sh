@@ -5,8 +5,6 @@ COLOR_GREEN="\e[32m"
 COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 
-temp_dir=$(mktemp -d)
-
 echo -e "${COLOR_YELLOW}Downloading and installing the latest Carch binary...${COLOR_RESET}"
 sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" --output /usr/bin/carch &> /dev/null
 sudo chmod +x /usr/bin/carch
@@ -22,12 +20,18 @@ sudo chmod +x /usr/bin/carch-gtk
 sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" --output /usr/bin/carch-gtk.py &> /dev/null
 sudo chmod +x /usr/bin/carch-gtk.py
 
-echo -e "${COLOR_YELLOW}Downloading and extracting additional scripts.zip...${COLOR_RESET}"
-sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip" --output "$temp_dir/scripts.zip" &> /dev/null
+echo -e "${COLOR_YELLOW}Downloading additional scripts.zip...${COLOR_RESET}"
 sudo mkdir -p /usr/bin/scripts
-sudo unzip -q "$temp_dir/scripts.zip" -d /usr/bin/scripts
+sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip" --output /usr/bin/scripts/scripts.zip &> /dev/null
 
-rm -rf "$temp_dir"
+echo -e "${COLOR_YELLOW}Extracting scripts.zip...${COLOR_RESET}"
+sudo unzip -q /usr/bin/scripts/scripts.zip -d /usr/bin/scripts
+
+echo -e "${COLOR_YELLOW}Making all .sh scripts executable...${COLOR_RESET}"
+sudo chmod +x /usr/bin/scripts/*.sh
+
+echo -e "${COLOR_YELLOW}Cleaning up the downloaded zip file...${COLOR_RESET}"
+sudo rm /usr/bin/scripts/scripts.zip
 
 echo -e "${COLOR_GREEN}Carch binary, Carch CLI, and scripts installed successfully!${COLOR_RESET}"
 
