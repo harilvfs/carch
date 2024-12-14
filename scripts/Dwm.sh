@@ -9,28 +9,18 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
+figlet -f slant "DWM"
 cat <<"EOF"
------------------------------------------------------------------------------
-
- 
-██████╗ ██╗    ██╗███╗   ███╗    ███████╗███████╗████████╗██╗   ██╗██████╗ 
-██╔══██╗██║    ██║████╗ ████║    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
-██║  ██║██║ █╗ ██║██╔████╔██║    ███████╗█████╗     ██║   ██║   ██║██████╔╝
-██║  ██║██║███╗██║██║╚██╔╝██║    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
-██████╔╝╚███╔███╔╝██║ ╚═╝ ██║    ███████║███████╗   ██║   ╚██████╔╝██║     
-╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝    ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
-                                                                           
-                                                                  
------------------------------------------------------------------------------
-                Github: https://github.com/harilvfs/dwm          
------------------------------------------------------------------------------
+----------------------------------------
+Github: https://github.com/harilvfs/dwm          
+----------------------------------------
 EOF
 
 setup_dwm() {
     echo -e "${GREEN}Please note, this dwm script has not been tested.${ENDCOLOR}"
     echo -e "${GREEN}If you encounter any issues, please create an issue on my GitHub: https://github.com/harilvfs/carch/issues${ENDCOLOR}"
 
-    echo -e "${BLUE}Do you want to continue with the DWM setup?${ENDCOLOR}"
+    echo -e "${blue}do you want to continue with the dwm setup?${endcolor}"
     echo -e "${RED}Make sure you know what a tiling window manager is.${ENDCOLOR}"
 
     if ! gum confirm "Continue with DWM setup?"; then
