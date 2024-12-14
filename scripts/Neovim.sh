@@ -5,27 +5,24 @@ tput clear
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
+YELLOW="\e[33m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
+figlet -f slant "Neovim"
 cat <<"EOF"
--------------------------------------------------------------------------------------------------
-
-
-███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗    ███████╗███████╗████████╗██╗   ██╗██████╗ 
-████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║    ██╔════╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗
-██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║    ███████╗█████╗     ██║   ██║   ██║██████╔╝
-██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║    ╚════██║██╔══╝     ██║   ██║   ██║██╔═══╝ 
-██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║    ███████║███████╗   ██║   ╚██████╔╝██║     
-╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝    ╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝     
-                                                                                                                                                                      
+      
 -------------------------------------------------------------------------------------------------
        
-                        This script will help you set up Neovim.
-            If you press 'Y', it will check for an existing Neovim configuration.
+This script will help you set up Neovim.
+
+If you press 'Y', it will check for an existing Neovim configuration.
+
 If an existing configuration is found, it will back it up before applying the new configuration.
-    If you press 'N', it will create a new Neovim directory and apply the new configuration.
-                        Press 'E' to exit the script at any time.
+
+If you press 'N', it will create a new Neovim directory and apply the new configuration.
+
+Press 'E' to exit the script at any time.
 
 -------------------------------------------------------------------------------------------------
 EOF
@@ -36,6 +33,7 @@ setup_neovim() {
     BACKUP_DIR="$HOME/.config/nvimbackup"
 
     while true; do
+        echo -e "${YELLOW}Do you want to continue?${ENDCOLOR}"
         choice=$(gum choose "Yes" "No" "Exit")
         
         case $choice in

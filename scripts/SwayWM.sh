@@ -12,17 +12,10 @@ NC="\033[0m" # No color
 
 clear
 
+echo -e "${BLUE}"
+figlet -f slant "SwayWM"
+
 echo -e "${BLUE}
-  ███████╗██╗    ██╗ █████╗ ██╗   ██╗
-  ██╔════╝██║    ██║██╔══██╗╚██╗ ██╔╝
-  ███████╗██║ █╗ ██║███████║ ╚████╔╝ 
-  ╚════██║██║███╗██║██╔══██║  ╚██╔╝  
-  ███████║╚███╔███╔╝██║  ██║   ██║   
-  ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
-                                   
------------------------------------------
-         Sway Dotfiles Setup
------------------------------------------
 
 ${NC}${YELLOW}If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles${NC}

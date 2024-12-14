@@ -9,23 +9,16 @@ ENDCOLOR="\e[0m"
 NC='\033[0m'
 
 echo -e "${BLUE}"
+figlet -f slant "Wallpapers"
 cat <<"EOF"
------------------------------------------------------------------------------------
- 
-██╗    ██╗ █████╗ ██╗     ██╗     ██████╗  █████╗ ██████╗ ███████╗██████╗ ███████╗
-██║    ██║██╔══██╗██║     ██║     ██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗██╔════╝
-██║ █╗ ██║███████║██║     ██║     ██████╔╝███████║██████╔╝█████╗  ██████╔╝███████╗
-██║███╗██║██╔══██║██║     ██║     ██╔═══╝ ██╔══██║██╔═══╝ ██╔══╝  ██╔══██╗╚════██║
-╚███╔███╔╝██║  ██║███████╗███████╗██║     ██║  ██║██║     ███████╗██║  ██║███████║
- ╚══╝╚══╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝
-                                                                                  
------------------------------------------------------------------------------------
-                       Nord & Anime Wallpapers Setup
-                                Credits
-        ChrisTitusTech https://github.com/ChrisTitusTech/nord-background
-                2SSK https://github.com/2SSK/Wallpaper-Bank
-          Maotseantonio https://github.com/maotseantonio/wallpapers
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------
+                Nord & Anime Wallpapers Setup
+
+                          Credits
+ChrisTitusTech https://github.com/ChrisTitusTech/nord-background
+        2SSK https://github.com/2SSK/Wallpaper-Bank
+    Maotseantonio https://github.com/maotseantonio/wallpapers
+-----------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
 
