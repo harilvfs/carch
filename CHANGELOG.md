@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.0.0](https://github.com/harilvfs/carch/compare/v3.0.9...v4.0.0) (2024-12-18)
+
+### Changed
+
+* Update CHANGELOG.md for v3.0.9 by @smritics in https://github.com/harilvfs/carch/pull/148
+* Update PKGBUILD v3.0.9 by @smritics in https://github.com/harilvfs/carch/pull/149
+* Update Carch to v3.0.9 by @harilvfs in https://github.com/harilvfs/carch/pull/153
+* Update GTK to v3.0.9 by @harilvfs in https://github.com/harilvfs/carch/pull/154
+* Refinements to Documentation by @harilvfs in https://github.com/harilvfs/carch/pull/157
+* Update binary build to latest version by @harilvfs in https://github.com/harilvfs/carch/pull/160
+* Transfer Docs to Carch-Org Repository by @harilvfs in https://github.com/harilvfs/carch/pull/173
+* Change `core.sh` To Carch [ No Binary ] 🪶 by @harilvfs in https://github.com/harilvfs/carch/pull/176
+* Move Cli From [ Binary ] `Bash` Script by @harilvfs in https://github.com/harilvfs/carch/pull/177
+* From Binary To `Gtk` Bash Script 📜 by @harilvfs in https://github.com/harilvfs/carch/pull/178
+* Transfer `Contrib` `Install` `Roadmap` To [Docs] ✈️ by @harilvfs in https://github.com/harilvfs/carch/pull/181
+
+### Added
+
+* Add Changelog to Top Navigation [Docs] by @harilvfs in https://github.com/harilvfs/carch/pull/150
+* Add Carch Version Info [Docs] by @harilvfs in https://github.com/harilvfs/carch/pull/151
+* Add CarchCLI Installation Guide [Docs] by @harilvfs in https://github.com/harilvfs/carch/pull/155
+* Add terminal installation to packages script by @harilvfs in https://github.com/harilvfs/carch/pull/158
+* Design Carch Banner by @harilvfs in https://github.com/harilvfs/carch/pull/166
+* Bring Back Imp Stuffs by @harilvfs in https://github.com/harilvfs/carch/pull/168
+* Astal Vitepress CSS [Index] by @harilvfs in https://github.com/harilvfs/carch/pull/170
+* Add Gum Spin [Packages Script] by @harilvfs in https://github.com/harilvfs/carch/pull/182
+* Add Gum Spin To `Hyprland` Script by @harilvfs in https://github.com/harilvfs/carch/pull/183
+
+### Fixed
+
+* Revert "Update .gitignore to Exclude Binary Files" by @harilvfs in https://github.com/harilvfs/carch/pull/164
+* Fix and Update AUR Package Build [ docs ] by @harilvfs in https://github.com/harilvfs/carch/pull/172
+* Fix Script Detection and Bugs by @harilvfs in https://github.com/harilvfs/carch/pull/179
+
+### Removed
+
+* Remove /bin Scripts [Unnecessary] by @harilvfs in https://github.com/harilvfs/carch/pull/156
+* Remove Unused 'aboutinfo' Markdown from [docs] by @harilvfs in https://github.com/harilvfs/carch/pull/165
+* Remove Npm [Docs] Stuffs by @harilvfs in https://github.com/harilvfs/carch/pull/174
+
 ## [v3.0.9](https://github.com/harilvfs/carch/compare/v3.0.8...v3.0.9) (2024-12-02)
 
 *Note: This release primarily focuses on building and enhancing the Carch documentation.*
