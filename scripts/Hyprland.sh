@@ -31,8 +31,7 @@ echo -e "${GREEN}Proceeding with Hyperland setup...${RESET}"
 
 install_if_missing() {
     if ! command -v "$1" &> /dev/null; then
-        echo -e "${YELLOW}Installing $1...${RESET}"
-        sudo pacman -S --noconfirm "$1"
+        gum spin --spinner dot --title "Installing $1..." -- sudo pacman -S --noconfirm "$1"
     else
         echo -e "${GREEN}$1 is already installed.${RESET}"
     fi
