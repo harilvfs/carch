@@ -173,7 +173,7 @@ class CarchApp(Gtk.Window):
     def show_about_dialog(self, button):
         about_dialog = Gtk.AboutDialog()
         about_dialog.set_program_name("Carch")
-        about_dialog.set_version("3.0.9")
+        about_dialog.set_version("4.0.0")
         about_dialog.set_comments("A script that helps automate Arch Linux system setup.")
         about_dialog.set_website("https://harilvfs.github.io/carch/")
         about_dialog.set_logo_icon_name("system-run")
