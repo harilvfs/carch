@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [v4.0.0](https://github.com/harilvfs/carch/compare/v3.0.9...v4.0.0) (2024-12-18)
 
+*Note: In this version, I have moved carch docs stuff to the carch-org [repository](https://github.com/carch-org/docs). Updates and maintenance will now happen there.*
+
 ### Changed
 
 * Update CHANGELOG.md for v3.0.9 by @smritics in https://github.com/harilvfs/carch/pull/148
