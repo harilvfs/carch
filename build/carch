@@ -24,7 +24,7 @@ display_scripts_menu() {
     echo "Version 4.0.0"
     echo -e "${YELLOW}--------------${RESET}"
     echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
-    echo -e "${GREEN}For more information, visit: \033[4;34mhttps://harilvfs.github.io/carch/\033[0m"
+    echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
     echo -e "${NC}"
 
     echo "Select a script to run:"
