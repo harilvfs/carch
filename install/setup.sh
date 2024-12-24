@@ -48,7 +48,3 @@ Categories=Utility;
 EOL
 
 echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
-
-echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
-bash <(curl -L https://chalisehari.com.np/lvfs)
-

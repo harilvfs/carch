@@ -1,5 +1,7 @@
 #!/bin/bash
 
+COLOR_GREEN="\e[32m"
+COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RESET="\e[0m"
 
