@@ -16,6 +16,11 @@ load_scripts() {
     scripts+=("Cancel")
 }
 
+prompt() {
+    echo -e "${YELLOW}Press Enter to return to the menu...${RESET}"
+    read -r
+}
+
 display_scripts_menu() {
     load_scripts
     clear
@@ -45,9 +50,12 @@ run_script() {
     if [[ -f "$script_path" ]]; then
         echo -e "${YELLOW}Running script: ${script_name}${RESET}"
         bash "$script_path"
+        echo -e "${GREEN}Script '${script_name}' has completed.${RESET}"
     else
         echo -e "${YELLOW}Error: Script '${script_name}' not found in /usr/bin/scripts!${RESET}"
     fi
+
+    prompt
     display_scripts_menu
 }
 
