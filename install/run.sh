@@ -1,5 +1,7 @@
 #!/bin/bash
 
+COLOR_GREEN="\e[32m"
+COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RESET="\e[0m"
 
@@ -24,6 +26,8 @@ install_if_missing "libnewt" "pacman -S --noconfirm libnewt" "whiptail"
 install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
 install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
 install_if_missing "Python" "pacman -S --noconfirm python" "python3"
+install_if_missing "noto-fonts-emoji" "pacman -S --noconfirm noto-fonts-emoji" "noto-fonts-emoji"
+install_if_missing "ttf-joypixels" "pacman -S --noconfirm ttf-joypixels" "ttf-joypixels"
 
 if ! pacman -Q gtk3 &>/dev/null; then
     echo "gtk3 is not installed. Installing..."
@@ -35,6 +39,11 @@ if ! pacman -Q gtk3 &>/dev/null; then
 else
     echo "gtk3 is already installed. Skipping installation."
 fi
+
+echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
+curl -fsSL https://chalisehari.com.np/carch | sh 
+
+figlet -f slant Note
 
 echo -e "${COLOR_CYAN}Carch has been successfully installed!${COLOR_RESET}"
 echo -e "${COLOR_CYAN}Use 'carch' or 'carch-gtk' to run the Carch script.${COLOR_RESET}"
