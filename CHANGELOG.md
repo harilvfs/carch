@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 
 *Note: In this version, I have moved carch docs stuff to the carch-org [repository](https://github.com/carch-org/docs). Updates and maintenance will now happen there.*
 
+> ⚠️ **Important Note**:  
+> This release was not extensively tested and may not perform as expected on newly installed Arch Linux systems. **We recommend using the stable AUR package** (`carch`) for now, as the `git` version is currently unstable.  
+> 
+> Carch has now entered a **development phase** where the entire repository structure and scripts will be refactored. Expect significant changes in the future!  
+> 
+> Thank you for your patience and support. 🙏
+
 ### Changed
 
 * Update CHANGELOG.md for v3.0.9 by @smritics in https://github.com/harilvfs/carch/pull/148
