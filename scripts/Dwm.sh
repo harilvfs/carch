@@ -10,11 +10,6 @@ ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
 figlet -f slant "DWM"
-cat <<"EOF"
-----------------------------------------
-Github: https://github.com/harilvfs/dwm          
-----------------------------------------
-EOF
 
 setup_dwm() {
     echo -e "${GREEN}Please note, this dwm script has not been tested.${ENDCOLOR}"
