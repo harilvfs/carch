@@ -33,7 +33,7 @@ install_sddm() {
 }
 
 install_theme() {
-    local theme_dir="/usr/share/sddm/themes/catppuccin-mocha"
+    local theme_dir="/usr/share/sddm/themes/"
     local theme_url="https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip"
 
     if [ ! -d "$theme_dir" ]; then
