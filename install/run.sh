@@ -22,7 +22,6 @@ install_if_missing() {
     fi
 }
 
-install_if_missing "libnewt" "pacman -S --noconfirm libnewt" "whiptail"
 install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
 install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
 install_if_missing "Python" "pacman -S --noconfirm python" "python3"
@@ -61,7 +60,7 @@ else
 fi
 
 echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
-curl -fsSL https://chalisehari.com.np/carch | sh 
+bash <(curl -L https://chalisehari.com.np/carch) 
 
 figlet -f slant Note
 
