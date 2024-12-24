@@ -369,8 +369,6 @@ install_github() {
 install_thunarpreview() {
     install_paru
     while true; do
-        gum format "**This package enables thumbnail previews in the Thunar file manager.**"
-        gum format "----------------------------------------------------------------------"
         thunarpreview_choice=$(gum choose "Tumbler" "Exit")
 
         case $thunarpreview_choice in
@@ -389,8 +387,6 @@ install_thunarpreview() {
 install_andriod() {
     install_paru
     while true; do
-        gum format "**Android debloat and subsystem packages.**"
-        gum format "---------------------------------------------"
         andriod_choice=$(gum choose "Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
 
         case $andriod_choice in
