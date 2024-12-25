@@ -8,11 +8,10 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] Remove <!-- Bad Script/Code or others-->
 - [ ] Fixed issue #[issue number].
 - [ ] Improved <!-- optimized existing functionality -->
-- [ ] Fixes.
+- [ ] Fixes. <!-- Fixes Scripts/Other -->
 - [ ] Feature <!-- Added -->
 - [ ] UI/UX <!-- Enhancement -->
 - [ ] ZIP <!-- Scripts Changes/Updated -->
-- [ ] Documentation <!-- Carch Docs Changes -->
 
 ### Context
 
