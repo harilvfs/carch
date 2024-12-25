@@ -65,6 +65,6 @@ bash <(curl -L https://chalisehari.com.np/carch)
 figlet -f slant Note
 
 echo -e "${COLOR_CYAN}Carch has been successfully installed!${COLOR_RESET}"
-echo -e "${COLOR_CYAN}Use 'carch' or 'carch-gtk' to run the Carch script.${COLOR_RESET}"
-echo -e "${COLOR_CYAN}For available commands, type 'carchcli --help'.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Use 'carch' or 'carch --gtk' to run the Carch script.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}For available commands, type 'carch --help'.${COLOR_RESET}"
 
