@@ -12,18 +12,14 @@ echo -e "${BLUE}"
 figlet -f slant "Neovim"
 cat <<"EOF"
       
--------------------------------------------------------------------------------------------------
-       
 This script will help you set up Neovim.
 
-If you press 'Y', it will check for an existing Neovim configuration.
-
+"Yes", it will check for an existing Neovim configuration.
 If an existing configuration is found, it will back it up before applying the new configuration.
 
-If you press 'N', it will create a new Neovim directory and apply the new configuration.
+"No", it will create a new Neovim directory and apply the new configuration.
 
-Press 'E' to exit the script at any time.
-
+"Exit" to exit the script at any time.
 -------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
@@ -33,21 +29,21 @@ setup_neovim() {
     BACKUP_DIR="$HOME/.config/nvimbackup"
 
     while true; do
-        echo -e "${YELLOW}Do you want to continue?${ENDCOLOR}"
+        echo -e "${YELLOW}:: Do you want to continue?${ENDCOLOR}"
         choice=$(gum choose "Yes" "No" "Exit")
         
         case $choice in
             "Yes")
                 if [ -d "$NVIM_CONFIG_DIR" ]; then
-                    echo -e "${RED}Existing Neovim config found at $NVIM_CONFIG_DIR. Backing up...${ENDCOLOR}"
+                    echo -e "${RED}:: Existing Neovim config found at $NVIM_CONFIG_DIR. Backing up...${ENDCOLOR}"
                     mkdir -p "$BACKUP_DIR"
                     mv "$NVIM_CONFIG_DIR" "$BACKUP_DIR/nvim_$(date +%Y%m%d_%H%M%S)"
-                    echo -e "${GREEN}Backup created at $BACKUP_DIR.${ENDCOLOR}"
+                    echo -e "${GREEN}:: Backup created at $BACKUP_DIR.${ENDCOLOR}"
                 fi
                 break
                 ;;
             "No")
-                echo -e "${GREEN}Creating Neovim configuration directory...${ENDCOLOR}"
+                echo -e "${GREEN}:: Creating Neovim configuration directory...${ENDCOLOR}"
                 mkdir -p "$NVIM_CONFIG_DIR"
                 break
                 ;;
@@ -61,19 +57,19 @@ setup_neovim() {
         esac
     done
 
-    echo -e "${GREEN}Cloning Neovim configuration from GitHub...${ENDCOLOR}"
+    echo -e "${GREEN}:: Cloning Neovim configuration from GitHub...${ENDCOLOR}"
     if ! git clone https://github.com/harilvfs/nvim "$NVIM_CONFIG_DIR"; then
         echo -e "${RED}Failed to clone the Neovim configuration repository. Please check your internet connection or the repository URL.${ENDCOLOR}"
         exit 1
     fi
 
-    echo -e "${GREEN}Cleaning up unnecessary files...${ENDCOLOR}"
+    echo -e "${GREEN}:: Cleaning up unnecessary files...${ENDCOLOR}"
     cd "$NVIM_CONFIG_DIR" || { echo -e "${RED}Failed to change directory to $NVIM_CONFIG_DIR. Aborting cleanup.${ENDCOLOR}"; exit 1; }
     rm -rf .git README.md LICENSE
 
     echo -e "${GREEN}Neovim setup completed successfully!${ENDCOLOR}"
 
-    echo -e "${GREEN}Installing necessary dependencies...${ENDCOLOR}"
+    echo -e "${GREEN}:: Installing necessary dependencies...${ENDCOLOR}"
     sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go shellcheck xclip wl-clipboard
 }
 

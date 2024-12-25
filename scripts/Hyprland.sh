@@ -27,7 +27,7 @@ if ! gum confirm "Continue with Hyprland setup?"; then
     exit 1
 fi
 
-echo -e "${GREEN}Proceeding with Hyperland setup...${RESET}"
+echo -e "${GREEN}:: Proceeding with Hyperland setup...${RESET}"
 
 install_if_missing() {
     if ! command -v "$1" &> /dev/null; then
@@ -38,7 +38,7 @@ install_if_missing() {
 }
 
 if ! command -v paru &> /dev/null; then
-    echo -e "${YELLOW}Installing paru for AUR package management...${RESET}"
+    echo -e "${YELLOW}:: Installing paru for AUR package management...${RESET}"
     sudo pacman -S --needed base-devel git --noconfirm
     git clone https://aur.archlinux.org/paru.git
     cd paru || exit
@@ -89,16 +89,16 @@ for dep in "${dependencies[@]}"; do
 done
 
 if ! paru -Q hyprland &> /dev/null; then
-    echo -e "${YELLOW}Installing Hyprland and wlroots from AUR...${RESET}"
+    echo -e "${YELLOW}:: Installing Hyprland and wlroots from AUR...${RESET}"
     paru -S --noconfirm hyprland wlroots
 else
-    echo -e "${GREEN}Hyprland and wlroots are already installed.${RESET}"
+    echo -e "${GREEN}:: Hyprland and wlroots are already installed.${RESET}"
 fi
 
-echo -e "${YELLOW}Cloning Hyprland configuration...${RESET}"
+echo -e "${YELLOW}:: Cloning Hyprland configuration...${RESET}"
 git clone https://github.com/harilvfs/hyprland ~/.config/hyprland
 
-echo -e "${YELLOW}Moving files to ~/.config...${RESET}"
+echo -e "${YELLOW}:: Moving files to ~/.config...${RESET}"
 cd ~/.config/hyprland || exit
 mv * ~/.config/
 
