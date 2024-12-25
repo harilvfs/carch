@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 COLOR_GREEN="\e[32m"
 COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
@@ -59,6 +57,28 @@ if ! pacman -Q ttf-joypixels &>/dev/null; then
     fi
 else
     echo -e "${COLOR_GREEN}ttf-joypixels is already installed. Skipping installation.${COLOR_RESET}"
+fi
+
+if ! pacman -Q man-pages &>/dev/null; then
+    echo -e "${COLOR_YELLOW}man-pages is not installed. :: Installing...${COLOR_RESET}"
+    sudo pacman -S --noconfirm man-pages
+    if [ $? -ne 0 ]; then
+        echo -e "${COLOR_RED}Failed to install man-pages.${COLOR_RESET}"
+        exit 1
+    fi
+else
+    echo -e "${COLOR_GREEN}man-pages is already installed. Skipping installation.${COLOR_RESET}"
+fi
+
+if ! pacman -Q man-db &>/dev/null; then
+    echo -e "${COLOR_YELLOW}man-db is not installed. :: Installing...${COLOR_RESET}"
+    sudo pacman -S --noconfirm man-db
+    if [ $? -ne 0 ]; then
+        echo -e "${COLOR_RED}Failed to install man-db.${COLOR_RESET}"
+        exit 1
+    fi
+else
+    echo -e "${COLOR_GREEN}man-db is already installed. Skipping installation.${COLOR_RESET}"
 fi
 
 echo -e "${COLOR_YELLOW}:: Running the external bash command...${COLOR_RESET}"
