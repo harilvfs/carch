@@ -17,7 +17,7 @@ show_help() {
 }
 
 show_version() {
-    echo "Carch version 3.0.8"
+    echo "Carch version 4.0.0"
 }
 
 run_script() {
