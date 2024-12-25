@@ -14,7 +14,7 @@ class CarchApp(Gtk.Window):
         self.set_border_width(10)
         self.set_default_size(700, 500)
 
-        self.script_dir = "./scripts"
+        self.script_dir = "/usr/bin/scripts"
         self.scripts = self.load_scripts()
         self.filtered_scripts = self.scripts.copy()
 
