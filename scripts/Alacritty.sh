@@ -28,7 +28,7 @@ checkAlacritty() {
     if command -v alacritty &> /dev/null; then
         printf "${GREEN}Alacritty is already installed.${RESET}\n"
     else
-        printf "${YELLOW}Alacritty is not installed. Installing now...${RESET}\n"
+        printf "${YELLOW}Alacritty is not installed. :: Installing now...${RESET}\n"
         if [ -x "$(command -v pacman)" ]; then
             sudo pacman -S alacritty --noconfirm
         elif [ -x "$(command -v apt)" ]; then
@@ -42,21 +42,20 @@ checkAlacritty() {
 }
 
 setupAlacrittyConfig() {
-    printf "${CYAN}Copying Alacritty config files...${RESET}\n"
+    printf "${CYAN}:: Copying Alacritty config files...${RESET}\n"
     if [ -d "${HOME}/.config/alacritty" ] && [ ! -d "${HOME}/.config/alacritty-bak" ]; then
         cp -r "${HOME}/.config/alacritty" "${HOME}/.config/alacritty-bak"
-        printf "${YELLOW}Existing Alacritty configuration backed up to alacritty-bak.${RESET}\n"
+        printf "${YELLOW}:: Existing Alacritty configuration backed up to alacritty-bak.${RESET}\n"
     fi
     mkdir -p "${HOME}/.config/alacritty/"
     curl -sSLo "${HOME}/.config/alacritty/alacritty.toml" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty/alacritty.toml"
     curl -sSLo "${HOME}/.config/alacritty/keybinds.toml" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty/keybinds.toml"
     curl -sSLo "${HOME}/.config/alacritty/nordic.toml" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty/nordic.toml"
-    printf "${GREEN}Alacritty configuration files copied.${RESET}\n"
+    printf "${GREEN}:: Alacritty configuration files copied.${RESET}\n"
 }
+
+printf "${GREEN}::Alacritty setup complete.${RESET}\n"
 
 confirm_continue
 checkAlacritty
 setupAlacrittyConfig
-
-printf "${GREEN}Alacritty setup complete.${RESET}\n"
-

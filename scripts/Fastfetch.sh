@@ -28,7 +28,7 @@ BACKUP_DIR="$HOME/.config/fastfetch_backup"
 if command -v fastfetch &> /dev/null; then
     echo -e "${GREEN}Fastfetch is already installed.${NC}"
 else
-    echo -e "${CYAN}Fastfetch is not installed. Installing...${NC}"
+    echo -e "${CYAN}Fastfetch is not installed. :: Installing...${NC}"
     sudo pacman -S fastfetch --noconfirm
 fi
 
@@ -40,15 +40,15 @@ if [ -d "$FASTFETCH_DIR" ]; then
         mkdir "$BACKUP_DIR"
     fi
 
-    echo -e "${CYAN}Backing up existing Fastfetch configuration...${NC}"
+    echo -e "${CYAN}:: Backing up existing Fastfetch configuration...${NC}"
     mv "$FASTFETCH_DIR"/* "$BACKUP_DIR/"
     echo -e "${GREEN}Backup completed.${NC}"
 fi
 
-echo -e "${CYAN}Cloning Fastfetch repository...${NC}"
+echo -e "${CYAN}:: Cloning Fastfetch repository...${NC}"
 git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"
 
-echo -e "${CYAN}Cleaning up unnecessary files...${NC}"
+echo -e "${CYAN}:: Cleaning up unnecessary files...${NC}"
 rm -rf "$FASTFETCH_DIR/.git" "$FASTFETCH_DIR/LICENSE" "$FASTFETCH_DIR/README.md"
 
 echo -e "${GREEN}Fastfetch setup completed successfully!${NC}"
