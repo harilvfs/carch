@@ -5,13 +5,14 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 NC='\033[0m'
 
+SCRIPT_DIR="/usr/bin/scripts"
+
 load_scripts() {
-    local script_dir="/usr/bin/scripts"
     scripts=()
     while IFS= read -r -d '' file; do
         script_name=$(basename "${file}" .sh)
         scripts+=("$script_name")
-    done < <(find "$script_dir" -maxdepth 1 -name '*.sh' -print0)
+    done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
     
     scripts+=("Cancel")
 }
@@ -45,19 +46,103 @@ display_scripts_menu() {
 
 run_script() {
     local script_name="$1"
-    local script_path="/usr/bin/scripts/${script_name}.sh"
+    local script_path="$SCRIPT_DIR/${script_name}.sh"
 
     if [[ -f "$script_path" ]]; then
         echo -e "${YELLOW}Running script: ${script_name}${RESET}"
         bash "$script_path"
         echo -e "${GREEN}Script '${script_name}' has completed.${RESET}"
     else
-        echo -e "${YELLOW}Error: Script '${script_name}' not found in /usr/bin/scripts!${RESET}"
+        echo -e "${YELLOW}Error: Script '${script_name}' not found in $SCRIPT_DIR!${RESET}"
+    fi
+
+    if [[ "$2" == "direct" ]]; then
+        exit 0
     fi
 
     prompt
     display_scripts_menu
 }
 
-display_scripts_menu
+launch_gtk() {
+    local gtk_script="/usr/bin/carch-gtk.py"
+    if [[ -f "$gtk_script" ]]; then
+        echo -e "${YELLOW}Launching GTK interface...${RESET}"
+        python3 "$gtk_script"
+    else
+        echo -e "${YELLOW}Error: GTK script not found at $gtk_script!${RESET}"
+        exit 1
+    fi
+}
+
+show_help() {
+    echo "Usage: carch [OPTIONS]"
+    echo
+    echo "A tool for automating Arch Linux setups."
+    echo
+    echo "Options:"
+    echo "  --help              Show this help message and exit."
+    echo "  --version           Show the program version."
+    echo "  --run-script <name> Run the specified script from $SCRIPT_DIR."
+    echo "  --list-scripts      List all available scripts in $SCRIPT_DIR."
+    echo "  --update            Update Carch using the latest script."
+    echo "  --gtk               Launch the GTK interface."
+    echo
+}
+
+show_version() {
+    echo "Carch version 4.0.0"
+}
+
+list_scripts() {
+    echo "Available scripts in $SCRIPT_DIR:"
+    for script in "$SCRIPT_DIR"/*.sh; do
+        echo "  - $(basename "$script" .sh)"
+    done
+}
+
+update_carch() {
+    echo "Updating Carch..."
+    bash <(curl -L https://chalisehari.com.np/carch)
+    if [[ $? -eq 0 ]]; then
+        echo "Carch updated successfully."
+    else
+        echo "Carch update failed. Please check your internet connection or the update URL."
+        exit 1
+    fi
+}
+
+if [[ $# -gt 0 ]]; then
+    case "$1" in
+        --help)
+            show_help
+            ;;
+        --version)
+            show_version
+            ;;
+        --run-script)
+            if [[ -n $2 ]]; then
+                run_script "$2" "direct"
+            else
+                echo "Error: --run-script requires a script name."
+                exit 1
+            fi
+            ;;
+        --list-scripts)
+            list_scripts
+            ;;
+        --update)
+            update_carch
+            ;;
+        --gtk)
+            launch_gtk
+            ;;
+        *)
+            echo -e "${YELLOW}Error: Unknown option '$1'. Use --help for usage.${RESET}"
+            exit 1
+            ;;
+    esac
+else
+    display_scripts_menu
+fi
 
