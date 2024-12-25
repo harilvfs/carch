@@ -88,4 +88,8 @@ Categories=Utility;
 EOL
 
 echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
-echo -e "${COLOR_GREEN}Installation complete!${COLOR_RESET}"
+
+figlet -f slant Note
+echo -e "${COLOR_CYAN}:: Carch has been successfully installed!${COLOR_RESET}"
+echo -e "${COLOR_CYAN}:: Use 'carch' or 'carch --gtk' to run the Carch script.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}:: For available commands, type 'carch --help'.${COLOR_RESET}"

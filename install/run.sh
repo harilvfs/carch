@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 COLOR_GREEN="\e[32m"
 COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
@@ -11,14 +13,14 @@ install_if_missing() {
     local check_cmd="$3"
 
     if ! command -v "$check_cmd" &> /dev/null; then
-        echo "$package_name is not installed. Installing..."
+        echo -e "${COLOR_YELLOW}$package_name is not installed. :: Installing...${COLOR_RESET}"
         sudo $install_cmd
         if [ $? -ne 0 ]; then
-            echo "Failed to install $package_name."
+            echo -e "${COLOR_RED}Failed to install $package_name.${COLOR_RESET}"
             exit 1
         fi
     else
-        echo "$package_name is already installed. Skipping installation."
+        echo -e "${COLOR_GREEN}$package_name is already installed. Skipping installation.${COLOR_RESET}"
     fi
 }
 
@@ -27,44 +29,40 @@ install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
 install_if_missing "Python" "pacman -S --noconfirm python" "python3"
 
 if ! pacman -Q gtk3 &>/dev/null; then
-    echo "gtk3 is not installed. Installing..."
+    echo -e "${COLOR_YELLOW}gtk3 is not installed. :: Installing...${COLOR_RESET}"
     sudo pacman -S --noconfirm gtk3
     if [ $? -ne 0 ]; then
-        echo "Failed to install gtk3."
+        echo -e "${COLOR_RED}Failed to install gtk3.${COLOR_RESET}"
         exit 1
     fi
 else
-    echo "gtk3 is already installed. Skipping installation."
+    echo -e "${COLOR_GREEN}gtk3 is already installed. Skipping installation.${COLOR_RESET}"
 fi
 
 if ! pacman -Q noto-fonts-emoji &>/dev/null; then
-    echo "note-fonts-emoji is not installed. Installing..."
+    echo -e "${COLOR_YELLOW}noto-fonts-emoji is not installed. :: Installing...${COLOR_RESET}"
     sudo pacman -S --noconfirm noto-fonts-emoji
     if [ $? -ne 0 ]; then
-        echo "Failed to install noto-fonts-emoji."
+        echo -e "${COLOR_RED}Failed to install noto-fonts-emoji.${COLOR_RESET}"
         exit 1
     fi
 else
-    echo "noto-fonts-emoji is already installed. Skipping installation."
+    echo -e "${COLOR_GREEN}noto-fonts-emoji is already installed. Skipping installation.${COLOR_RESET}"
 fi
 
 if ! pacman -Q ttf-joypixels &>/dev/null; then
-    echo "ttf-joypixels is not installed. Installing..."
-    sudo pacman -S --noconfirm ttf-joypixels 
+    echo -e "${COLOR_YELLOW}ttf-joypixels is not installed. :: Installing...${COLOR_RESET}"
+    sudo pacman -S --noconfirm ttf-joypixels
     if [ $? -ne 0 ]; then
-        echo "Failed to install ttf-joypixels."
+        echo -e "${COLOR_RED}Failed to install ttf-joypixels.${COLOR_RESET}"
         exit 1
     fi
 else
-    echo "ttf-joypixels is already installed. Skipping installation."
+    echo -e "${COLOR_GREEN}ttf-joypixels is already installed. Skipping installation.${COLOR_RESET}"
 fi
 
-echo -e "${COLOR_YELLOW}Running the external bash command...${COLOR_RESET}"
-bash <(curl -L https://chalisehari.com.np/carch) 
-
-figlet -f slant Note
-
-echo -e "${COLOR_CYAN}Carch has been successfully installed!${COLOR_RESET}"
-echo -e "${COLOR_CYAN}Use 'carch' or 'carch --gtk' to run the Carch script.${COLOR_RESET}"
-echo -e "${COLOR_CYAN}For available commands, type 'carch --help'.${COLOR_RESET}"
-
+echo -e "${COLOR_YELLOW}:: Running the external bash command...${COLOR_RESET}"
+if ! bash <(curl -L https://chalisehari.com.np/carch); then
+    echo -e "${COLOR_RED}Failed to execute the external bash command.${COLOR_RESET}"
+    exit 1
+fi
