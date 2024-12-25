@@ -1,20 +1,34 @@
 #!/bin/bash
 
+clear
+
 COLOR_RESET="\e[0m"
 COLOR_GREEN="\e[32m"
 COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
+COLOR_RED="\e[31m"
+COLOR_BLUE="\e[34m"
+ENDCOLOR="\e[0m"
 
 TARGET_DIR="/usr/bin"
 SCRIPTS_DIR="$TARGET_DIR/scripts"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
+
+echo -e "${COLOR_BLUE}"
+figlet -f slant "Carch"
+echo -e "${ENDCOLOR}"
 
 if ! command -v gum &> /dev/null; then
     echo -e "${COLOR_RED}Error: gum is not installed. Please install gum first using:${COLOR_GREEN} pacman -S gum.${COLOR_RESET}"
     exit 1
 fi
 
-CHOICE=$(gum choose "Rolling Release" "Stable Release")
+CHOICE=$(gum choose "Rolling Release" "Stable Release" "Cancel")
+
+if [[ $CHOICE == "Cancel" ]]; then
+    echo -e "${COLOR_RED}Installation canceled by the user.${COLOR_RESET}"
+    exit 0
+fi
 
 echo -e "${COLOR_YELLOW}Removing existing installation...${COLOR_RESET}"
 sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$DESKTOP_FILE"
@@ -75,4 +89,3 @@ EOL
 
 echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
 echo -e "${COLOR_GREEN}Installation complete!${COLOR_RESET}"
-
