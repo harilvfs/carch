@@ -9,14 +9,6 @@ echo -e "${COLOR_YELLOW}Downloading and installing the latest Carch binary...${C
 sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" --output /usr/bin/carch &> /dev/null
 sudo chmod +x /usr/bin/carch
 
-echo -e "${COLOR_YELLOW}Downloading and installing the latest Carch CLI (carchcli)...${COLOR_RESET}"
-sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carchcli" --output /usr/bin/carchcli &> /dev/null
-sudo chmod +x /usr/bin/carchcli
-
-echo -e "${COLOR_YELLOW}Downloading and installing Carch GTK Scripts...${COLOR_RESET}"
-sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk" --output /usr/bin/carch-gtk &> /dev/null
-sudo chmod +x /usr/bin/carch-gtk
-
 sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" --output /usr/bin/carch-gtk.py &> /dev/null
 sudo chmod +x /usr/bin/carch-gtk.py
 
@@ -33,7 +25,7 @@ sudo chmod +x /usr/bin/scripts/*.sh
 echo -e "${COLOR_YELLOW}Cleaning up the downloaded zip file...${COLOR_RESET}"
 sudo rm /usr/bin/scripts/scripts.zip
 
-echo -e "${COLOR_GREEN}Carch binary, Carch CLI, and scripts installed successfully!${COLOR_RESET}"
+echo -e "${COLOR_GREEN}Carch Installed Successfully!${COLOR_RESET}"
 
 echo -e "${COLOR_YELLOW}Creating Carch Desktop Entry...${COLOR_RESET}"
 sudo tee /usr/share/applications/carch.desktop > /dev/null <<EOL
