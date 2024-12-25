@@ -11,7 +11,7 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 install_paru() {
-    echo -e "${CYAN}Installing Paru...${NC}"
+    echo -e "${CYAN}:: Installing Paru...${NC}"
     sudo pacman -S --needed base-devel
 
     temp_dir=$(mktemp -d)
@@ -27,7 +27,7 @@ install_paru() {
 }
 
 install_yay() {
-    echo -e "${CYAN}Installing Yay...${NC}"
+    echo -e "${CYAN}:: Installing Yay...${NC}"
     sudo pacman -S --needed git base-devel
 
     temp_dir=$(mktemp -d)

@@ -10,7 +10,7 @@ RESET='\033[0m'
 
 install_paru() {
     if ! command -v paru &> /dev/null; then
-        echo -e "${RED}Paru not found. Installing...${RESET}"
+        echo -e "${RED}Paru not found. :: Installing...${RESET}"
         sudo pacman -S --needed base-devel
 
         temp_dir=$(mktemp -d)
@@ -24,7 +24,7 @@ install_paru() {
         rm -rf "$temp_dir"
         echo -e "${GREEN}Paru installed successfully.${RESET}"
     else
-        echo -e "${GREEN}Paru is already installed.${RESET}"
+        echo -e "${GREEN}:: Paru is already installed.${RESET}"
     fi
 }
 
@@ -105,36 +105,106 @@ install_terminals() {
         echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
 
         terminal_choice=$(gum choose "Alacritty" "Kitty" "GNOME Terminal" "Konsole" \
-    "Xfce Terminal" "LXTerminal" "MATE Terminal" "xterm" \
-    "urxvt (rxvt-unicode)" "Tilix" "Terminator" "Guake" "Yakuake" \
-    "Tilda" "Cool Retro Term" "Sakura" "st (Simple Terminal)" "Eterm" \
-    "WezTerm" "Deepin Terminal" "Zellij" "Termite" "fbterm" "Exit")
+        "Xfce Terminal" "LXTerminal" "MATE Terminal" "xterm" \
+        "urxvt (rxvt-unicode)" "Tilix" "Terminator" "Guake" "Yakuake" \
+        "Tilda" "Cool Retro Term" "Sakura" "st (Simple Terminal)" "Eterm" \
+        "WezTerm" "Deepin Terminal" "Zellij" "Termite" "fbterm" "Exit")
 
         case $terminal_choice in
-            "Alacritty") sudo pacman -S alacritty ;;
-            "Kitty") sudo pacman -S kitty ;;
-            "GNOME Terminal") sudo pacman -S gnome-terminal ;;
-            "Konsole") sudo pacman -S konsole ;;
-            "Xfce Terminal") sudo pacman -S xfce4-terminal ;;
-            "LXTerminal") sudo pacman -S lxterminal ;;
-            "MATE Terminal") sudo pacman -S mate-terminal ;;
-            "xterm") sudo pacman -S xterm ;;
-            "urxvt (rxvt-unicode)") sudo pacman -S rxvt-unicode ;;
-            "Tilix") sudo pacman -S tilix ;;
-            "Terminator") sudo pacman -S terminator ;;
-            "Guake") sudo pacman -S guake ;;
-            "Yakuake") sudo pacman -S yakuake ;;
-            "Tilda") sudo pacman -S tilda ;;
-            "Cool Retro Term") sudo pacman -S cool-retro-term ;;
-            "Sakura") sudo pacman -S sakura ;;
-            "st (Simple Terminal)") paru -S st ;;
-            "Eterm") paru -S eterm ;;
-            "WezTerm") sudo pacman -S wezterm ;;
-            "Deepin Terminal") sudo pacman -S deepin-terminal ;;
-            "Zellij") sudo pacman -S zellij ;;
-            "Termite") paru -S termite ;;
-            "fbterm") paru -S fbterm ;;
+            "Alacritty")
+                echo -e "${BLUE}:: Installing Alacritty...${RESET}"
+                sudo pacman -S alacritty --noconfirm &>/dev/null
+                echo -e "${GREEN}Alacritty installed successfully!${RESET}" ;;
+            "Kitty")
+                echo -e "${BLUE}:: Installing Kitty...${RESET}"
+                sudo pacman -S kitty --noconfirm &>/dev/null
+                echo -e "${GREEN}Kitty installed successfully!${RESET}" ;;
+            "GNOME Terminal")
+                echo -e "${BLUE}:: Installing GNOME Terminal...${RESET}"
+                sudo pacman -S gnome-terminal --noconfirm &>/dev/null
+                echo -e "${GREEN}GNOME Terminal installed successfully!${RESET}" ;;
+            "Konsole")
+                echo -e "${BLUE}:: Installing Konsole...${RESET}"
+                sudo pacman -S konsole --noconfirm &>/dev/null
+                echo -e "${GREEN}Konsole installed successfully!${RESET}" ;;
+            "Xfce Terminal")
+                echo -e "${BLUE}:: Installing Xfce Terminal...${RESET}"
+                sudo pacman -S xfce4-terminal --noconfirm &>/dev/null
+                echo -e "${GREEN}Xfce Terminal installed successfully!${RESET}" ;;
+            "LXTerminal")
+                echo -e "${BLUE}:: Installing LXTerminal...${RESET}"
+                sudo pacman -S lxterminal --noconfirm &>/dev/null
+                echo -e "${GREEN}LXTerminal installed successfully!${RESET}" ;;
+            "MATE Terminal")
+                echo -e "${BLUE}:: Installing MATE Terminal...${RESET}"
+                sudo pacman -S mate-terminal --noconfirm &>/dev/null
+                echo -e "${GREEN}MATE Terminal installed successfully!${RESET}" ;;
+            "xterm")
+                echo -e "${BLUE}:: Installing xterm...${RESET}"
+                sudo pacman -S xterm --noconfirm &>/dev/null
+                echo -e "${GREEN}xterm installed successfully!${RESET}" ;;
+            "urxvt (rxvt-unicode)")
+                echo -e "${BLUE}:: Installing urxvt (rxvt-unicode)...${RESET}"
+                sudo pacman -S rxvt-unicode --noconfirm &>/dev/null
+                echo -e "${GREEN}urxvt (rxvt-unicode) installed successfully!${RESET}" ;;
+            "Tilix")
+                echo -e "${BLUE}:: Installing Tilix...${RESET}"
+                sudo pacman -S tilix --noconfirm &>/dev/null
+                echo -e "${GREEN}Tilix installed successfully!${RESET}" ;;
+            "Terminator")
+                echo -e "${BLUE}:: Installing Terminator...${RESET}"
+                sudo pacman -S terminator --noconfirm &>/dev/null
+                echo -e "${GREEN}Terminator installed successfully!${RESET}" ;;
+            "Guake")
+                echo -e "${BLUE}:: Installing Guake...${RESET}"
+                sudo pacman -S guake --noconfirm &>/dev/null
+                echo -e "${GREEN}Guake installed successfully!${RESET}" ;;
+            "Yakuake")
+                echo -e "${BLUE}:: Installing Yakuake...${RESET}"
+                sudo pacman -S yakuake --noconfirm &>/dev/null
+                echo -e "${GREEN}Yakuake installed successfully!${RESET}" ;;
+            "Tilda")
+                echo -e "${BLUE}:: Installing Tilda...${RESET}"
+                sudo pacman -S tilda --noconfirm &>/dev/null
+                echo -e "${GREEN}Tilda installed successfully!${RESET}" ;;
+            "Cool Retro Term")
+                echo -e "${BLUE}:: Installing Cool Retro Term...${RESET}"
+                sudo pacman -S cool-retro-term --noconfirm &>/dev/null
+                echo -e "${GREEN}Cool Retro Term installed successfully!${RESET}" ;;
+            "Sakura")
+                echo -e "${BLUE}:: Installing Sakura...${RESET}"
+                sudo pacman -S sakura --noconfirm &>/dev/null
+                echo -e "${GREEN}Sakura installed successfully!${RESET}" ;;
+            "st (Simple Terminal)")
+                echo -e "${BLUE}:: Installing st (Simple Terminal)...${RESET}"
+                paru -S st --noconfirm &>/dev/null
+                echo -e "${GREEN}st (Simple Terminal) installed successfully!${RESET}" ;;
+            "Eterm")
+                echo -e "${BLUE}:: Installing Eterm...${RESET}"
+                paru -S eterm --noconfirm &>/dev/null
+                echo -e "${GREEN}Eterm installed successfully!${RESET}" ;;
+            "WezTerm")
+                echo -e "${BLUE}:: Installing WezTerm...${RESET}"
+                sudo pacman -S wezterm --noconfirm &>/dev/null
+                echo -e "${GREEN}WezTerm installed successfully!${RESET}" ;;
+            "Deepin Terminal")
+                echo -e "${BLUE}:: Installing Deepin Terminal...${RESET}"
+                sudo pacman -S deepin-terminal --noconfirm &>/dev/null
+                echo -e "${GREEN}Deepin Terminal installed successfully!${RESET}" ;;
+            "Zellij")
+                echo -e "${BLUE}:: Installing Zellij...${RESET}"
+                sudo pacman -S zellij --noconfirm &>/dev/null
+                echo -e "${GREEN}Zellij installed successfully!${RESET}" ;;
+            "Termite")
+                echo -e "${BLUE}:: Installing Termite...${RESET}"
+                paru -S termite --noconfirm &>/dev/null
+                echo -e "${GREEN}Termite installed successfully!${RESET}" ;;
+            "fbterm")
+                echo -e "${BLUE}:: Installing fbterm...${RESET}"
+                paru -S fbterm --noconfirm &>/dev/null
+                echo -e "${GREEN}fbterm installed successfully!${RESET}" ;;
             "Exit") break ;;
+            *) echo -e "${RED}Invalid choice. Please try again.${RESET}" ;;
         esac
     done
 }
@@ -346,7 +416,7 @@ install_multimedia() {
 install_github() {
     install_paru
     while true; do
-        github_choice=$(gum choose "Git" "Github" "Exit")
+        github_choice=$(gum choose "Git" "Github" "Github-CLI" "Exit")
 
         case $github_choice in
             "Git")
@@ -358,6 +428,11 @@ install_github() {
                 gum spin --spinner dot --title "Installing GitHub Desktop..." -- paru -S --noconfirm github-desktop-bin && \
                 version=$(paru -Qi github-desktop-bin | grep Version | awk '{print $3}') && \
                 gum format "🎉 **GitHub Desktop installed successfully! Version: $version**"
+                ;;
+            "Github-CLI")
+                gum spin --spinner dot --title "Installing GitHub Cli..." -- sudo pacman -S --noconfirm github-cli && \
+                version=$(pacman -Qi github-cli | grep Version | awk '{print $3}') && \
+                gum format "🎉 **GitHub Cli installed successfully! Version: $version**"
                 ;;
             "Exit")
                 break

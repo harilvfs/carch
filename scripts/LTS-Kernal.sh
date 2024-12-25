@@ -14,7 +14,7 @@ echo -e "${ENDCOLOR}"
 
 check_current_kernel() {
     CURRENT_KERNEL=$(uname -r)
-    echo -e "${BLUE}Current kernel version: ${GREEN}$CURRENT_KERNEL${ENDCOLOR}"
+    echo -e "${BLUE}:: Current kernel version: ${GREEN}$CURRENT_KERNEL${ENDCOLOR}"
     if [[ "$CURRENT_KERNEL" == *"lts"* ]]; then
         echo -e "${GREEN}You are already using the LTS kernel. Skipping the installation.${ENDCOLOR}"
         exit 0
@@ -22,12 +22,12 @@ check_current_kernel() {
 }
 
 install_lts_kernel() {
-    echo -e "${GREEN}Installing LTS kernel and headers...${ENDCOLOR}"
+    echo -e "${GREEN}:: Installing LTS kernel and headers...${ENDCOLOR}"
     sudo pacman -S --needed linux-lts linux-lts-docs linux-lts-headers
 }
 
 configure_grub() {
-    echo -e "${GREEN}Updating GRUB configuration...${ENDCOLOR}"
+    echo -e "${GREEN}:: Updating GRUB configuration...${ENDCOLOR}"
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
@@ -51,20 +51,20 @@ echo -e "${GREEN}Exit:${NC} Cancels the installation.\n"
 echo "Do you want to continue with the kernel installation?"
 if prompt_continue; then
     install_lts_kernel
-    echo -e "${GREEN}Removing the current kernel...${ENDCOLOR}"
+    echo -e "${GREEN}:: Removing the current kernel...${ENDCOLOR}"
 
     CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')
     if [[ "$CURRENT_KERNEL_NAME" != "linux" ]]; then
-        echo -e "${RED}Current kernel name does not match expected 'linux'. Cannot remove kernel.${ENDCOLOR}"
+        echo -e "${RED}:: Current kernel name does not match expected 'linux'. Cannot remove kernel.${ENDCOLOR}"
         exit 1
     fi
 
     sudo pacman -Rns --noconfirm "$CURRENT_KERNEL_NAME"
-    echo -e "${GREEN}Removed the current kernel.${ENDCOLOR}"
+    echo -e "${GREEN}:: Removed the current kernel.${ENDCOLOR}"
 
     configure_grub
 else
-    echo "Installing the LTS kernel alongside the current kernel..."
+    echo ":: Installing the LTS kernel alongside the current kernel..."
     install_lts_kernel
     configure_grub
 fi
