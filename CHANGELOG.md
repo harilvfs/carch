@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.0](https://github.com/harilvfs/carch/compare/v4.0.0...v4.1.0) (2024-12-26)
+
+> [!NOTE] 
+> This release is a **very frequent and much-needed update**, addressing several critical fixes and improvements:  
+>
+> Improved installation support for **both stable and rolling-release systems**.  
+> 
+> **AUR fixes** are currently in progress. For now, you can use `carch-git` as it is fixed, while the `carch` package is still being worked on.  
+> 
+> 🔄 **Why the Delay?**  
+> I was a bit late in releasing these fixes as I had to reinstall my system, and the setup took some extra time. I appreciate your patience and understanding. 🙏  
+>
+> ✅ **Next Steps:**  
+>The AUR fixes will be completed soon. Meanwhile, make sure to check the **PKGBUILD** for a better understanding of how the installation works. 
+
+### Changed
+
+* Refactor Setup Script by @harilvfs in https://github.com/harilvfs/carch/pull/196
+* Refactor Installation Script by @harilvfs in https://github.com/harilvfs/carch/pull/197
+* Refactor Whole Scripts [Carch] by @harilvfs in https://github.com/harilvfs/carch/pull/198
+* Update Script for Man Pages Handling by @harilvfs in https://github.com/harilvfs/carch/pull/201
+
+### Added
+
+* Add Returing To Menu [Back] by @harilvfs in https://github.com/harilvfs/carch/pull/191
+* Include `GTK` & `CLI` [Main Script] by @harilvfs in https://github.com/harilvfs/carch/pull/192
+* man-page for [Carch] 📄 by @harilvfs in https://github.com/harilvfs/carch/pull/200
+
+### Fixed
+
+* Fix `SDDM` Theme Dir  [Scripts] by @harilvfs in https://github.com/harilvfs/carch/pull/187
+* Fix Carch `Installation` ⛓️ by @harilvfs in https://github.com/harilvfs/carch/pull/189
+* Fix Gum Bug 🐛 [Package Script] by @harilvfs in https://github.com/harilvfs/carch/pull/190
+* Fix Script [DIR] by @harilvfs in https://github.com/harilvfs/carch/pull/194
+* Fix PULL REQUEST TEMPLATE by @harilvfs in https://github.com/harilvfs/carch/pull/199
+
+### Removed
+
+* Remove Gtk Script [Include In Main Script] by @harilvfs in https://github.com/harilvfs/carch/pull/193
+* Remove CLI/GTK As Include [Main Script] by @harilvfs in https://github.com/harilvfs/carch/pull/195
+
 ## [v4.0.0](https://github.com/harilvfs/carch/compare/v3.0.9...v4.0.0) (2024-12-18)
 
 *Note: In this version, I have moved carch docs stuff to the carch-org [repository](https://github.com/carch-org/docs). Updates and maintenance will now happen there.*
