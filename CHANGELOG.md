@@ -4,18 +4,23 @@ All notable changes to this project will be documented in this file.
 
 ## [v4.1.0](https://github.com/harilvfs/carch/compare/v4.0.0...v4.1.0) (2024-12-26)
 
-> [!NOTE] 
-> This release is a **very frequent and much-needed update**, addressing several critical fixes and improvements:  
->
-> Improved installation support for **both stable and rolling-release systems**.  
-> 
-> **AUR fixes** are currently in progress. For now, you can use `carch-git` as it is fixed, while the `carch` package is still being worked on.  
-> 
+### AUR Packages Update
+
+You can now use the `carch` package for a stable release and `carch-git` for the rolling release version.  
+
+For installation instructions, refer to the [official guide](https://carch-org.github.io/docs/installation/aur.html).  
+
+> [!NOTE]  
+> This release includes **critical updates and improvements**:  
+>  
+> - Enhanced installation support for **both stable and rolling-release systems**.  
+> - **AUR fixes**: Both `carch` and `carch-git` packages are now fixed and available for installation.  
+>  
 > 🔄 **Why the Delay?**  
-> I was a bit late in releasing these fixes as I had to reinstall my system, and the setup took some extra time. I appreciate your patience and understanding. 🙏  
->
+> The release was slightly delayed as I had to reinstall my system, which required additional setup time. Thank you for your patience!  
+>  
 > ✅ **Next Steps:**  
->The AUR fixes will be completed soon. Meanwhile, make sure to check the **PKGBUILD** for a better understanding of how the installation works. 
+> Everything is up to date. Feel free to check the **PKGBUILD** for better insights into the installation process.
 
 ### Changed
 
