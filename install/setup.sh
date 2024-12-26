@@ -17,6 +17,7 @@ MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 
 echo -e "${COLOR_BLUE}"
 figlet -f slant "Carch"
+echo "Version 4.1.0"
 echo -e "${ENDCOLOR}"
 
 if ! command -v gum &> /dev/null; then
