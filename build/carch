@@ -104,11 +104,11 @@ list_scripts() {
 update_carch() {
     echo "Updating Carch..."
     bash <(curl -L https://chalisehari.com.np/carch)
-    if [[ $? -eq 0 ]]; then
-        echo "Carch updated successfully."
-    else
-        echo "Carch update failed. Please check your internet connection or the update URL."
-        exit 1
+    
+    if [[ $CHOICE == "Cancel" ]]; then
+    echo -e "${COLOR_RED}Installation canceled by the user.${COLOR_RESET}"
+    exit 0
+    
     fi
 }
 
