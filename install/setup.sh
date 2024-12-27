@@ -21,7 +21,7 @@ echo "Version 4.1.0"
 echo -e "${ENDCOLOR}"
 
 if ! command -v gum &> /dev/null; then
-    echo -e "${COLOR_RED}Error: gum is not installed. Please install gum first using:${COLOR_GREEN} pacman -S gum.${COLOR_RESET}"
+    echo -e "${COLOR_RED}Error: gum is not installed. :: Please install gum first using:${COLOR_GREEN} pacman -S gum.${COLOR_RESET}"
     exit 1
 fi
 
@@ -98,7 +98,7 @@ Terminal=true
 Categories=Utility;
 EOL
 
-echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
+echo -e "${COLOR_GREEN}:: Carch Desktop Entry created successfully!${COLOR_RESET}"
 
 figlet -f slant Note
 echo -e "${COLOR_CYAN}:: Carch has been successfully installed!${COLOR_RESET}"
