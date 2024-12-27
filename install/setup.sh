@@ -35,7 +35,6 @@ if [[ $CHOICE == "Cancel" ]]; then
     exit 0
 fi
 
-# Cleanup
 echo -e "${COLOR_YELLOW}Removing existing installation...${COLOR_RESET}"
 sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$DESKTOP_FILE" "$MAN_PAGES_DIR"
 sudo rm -rf "$SCRIPTS_DIR"
@@ -66,18 +65,33 @@ install_man_page() {
     sudo mandb &>/dev/null
 }
 
+install_icons() {
+    local icon_sizes=("16" "24" "32" "48" "64" "128" "256")
+    local base_url="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/logo"
+    local icon_dir="/usr/share/icons/hicolor"
+
+    echo -e "${COLOR_YELLOW}:: Downloading and installing icons...${COLOR_RESET}"
+    for size in "${icon_sizes[@]}"; do
+        local icon_path="$icon_dir/${size}x${size}/apps"
+        sudo mkdir -p "$icon_path"
+        sudo curl -L "$base_url/product_logo_${size}.png" --output "$icon_path/carch.png" &>/dev/null
+    done
+}
+
 if [[ $CHOICE == "Rolling Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Rolling Release...${COLOR_RESET}"
     download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/build/carch" "$TARGET_DIR/carch" true
     download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/gtk/carch-gtk.py" "$TARGET_DIR/carch-gtk.py" true
     download_scripts "https://github.com/harilvfs/carch/raw/refs/heads/main/source/zip/scripts.zip"
     install_man_page "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1"
+    install_icons
 elif [[ $CHOICE == "Stable Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Stable Release...${COLOR_RESET}"
     download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch" "$TARGET_DIR/carch" true
     download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" "$TARGET_DIR/carch-gtk.py" true
     download_scripts "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
     install_man_page "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1"
+    install_icons
 fi
 
 echo -e "${COLOR_YELLOW}:: Creating Carch Desktop Entry...${COLOR_RESET}"
@@ -86,7 +100,7 @@ sudo tee "$DESKTOP_FILE" > /dev/null <<EOL
 Name=Carch
 Comment=An automated script for quick & easy Arch Linux system setup.
 Exec=$TARGET_DIR/carch
-Icon=utilities-terminal
+Icon=carch
 Type=Application
 Terminal=true
 Categories=Utility;
