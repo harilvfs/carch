@@ -98,7 +98,7 @@ Terminal=true
 Categories=Utility;
 EOL
 
-echo -e "${COLOR_GREEN}:: Carch Desktop Entry created successfully!${COLOR_RESET}"
+echo -e "${COLOR_YELLOW}:: Carch Desktop Entry created successfully!${COLOR_RESET}"
 
 figlet -f slant Note
 echo -e "${COLOR_CYAN}:: Carch has been successfully installed!${COLOR_RESET}"
