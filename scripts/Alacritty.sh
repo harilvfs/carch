@@ -54,8 +54,8 @@ setupAlacrittyConfig() {
     printf "${GREEN}:: Alacritty configuration files copied.${RESET}\n"
 }
 
-printf "${GREEN}::Alacritty setup complete.${RESET}\n"
-
 confirm_continue
 checkAlacritty
 setupAlacrittyConfig
+
+printf "${GREEN}::Alacritty setup complete.${RESET}\n"

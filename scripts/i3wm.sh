@@ -8,6 +8,7 @@ ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
 figlet -f slant "i3WM"
+echo -e "${GREEN}"
 cat <<"EOF"
 
 This will only install necessary dependencies                

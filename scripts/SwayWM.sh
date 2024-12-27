@@ -8,7 +8,7 @@ GREEN="\033[1;32m"
 RED="\033[1;31m"
 YELLOW="\033[1;33m"
 BLUE="\033[1;34m"
-NC="\033[0m" # No color
+NC="\033[0m" 
 
 clear
 
@@ -17,7 +17,7 @@ figlet -f slant "SwayWM"
 
 echo -e "${BLUE}
 
-${NC}${YELLOW}:: If the setup fails, please manually use the dotfiles from:
+${NC}${YELLOW}If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles${NC}
 "
 
