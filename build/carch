@@ -16,7 +16,6 @@ setup_logging() {
     chmod 644 "$LOG_FILE"
 }
 
-# Log a message to the log file
 log_message() {
     local log_type="$1"
     local message="$2"
