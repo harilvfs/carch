@@ -6,6 +6,21 @@ RESET='\033[0m'
 NC='\033[0m'
 
 SCRIPT_DIR="/usr/bin/scripts"
+LOG_FILE="$HOME/.config/carch/carch.log"
+
+setup_logging() {
+    mkdir -p "$(dirname "$LOG_FILE")"
+    if [[ ! -f "$LOG_FILE" ]]; then
+        touch "$LOG_FILE"
+    fi
+    chmod 644 "$LOG_FILE"
+}
+
+log_message() {
+    local log_type="$1"
+    local message="$2"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [$log_type] $message" >>"$LOG_FILE"
+}
 
 load_scripts() {
     scripts=()
@@ -13,7 +28,7 @@ load_scripts() {
         script_name=$(basename "${file}" .sh)
         scripts+=("$script_name")
     done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
-    
+
     scripts+=("Cancel")
 }
 
@@ -38,7 +53,8 @@ display_scripts_menu() {
 
     if [[ "$selected_script" == "Cancel" ]]; then
         clear
-        exit 0
+        log_message "INFO" "User exited the main menu."
+        exit_with_log_message
     else
         run_script "$selected_script"
     fi
@@ -49,15 +65,25 @@ run_script() {
     local script_path="$SCRIPT_DIR/${script_name}.sh"
 
     if [[ -f "$script_path" ]]; then
+        log_message "INFO" "Starting script: ${script_name}"
         echo -e "${YELLOW}Running script: ${script_name}${RESET}"
-        bash "$script_path"
-        echo -e "${GREEN}Script '${script_name}' has completed.${RESET}"
+        if bash "$script_path"; then
+            echo -e "${GREEN}Script '${script_name}' completed successfully.${RESET}"
+            log_message "SUCCESS" "Script '${script_name}' completed successfully."
+        else
+            echo -e "${YELLOW}Script '${script_name}' encountered an error.${RESET}"
+            log_message "ERROR" "Script '${script_name}' encountered an error."
+        fi
     else
         echo -e "${YELLOW}Error: Script '${script_name}' not found in $SCRIPT_DIR!${RESET}"
+        log_message "ERROR" "Script '${script_name}' not found in $SCRIPT_DIR."
     fi
 
+    echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+    log_message "INFO" "Logs saved after running script: ${script_name}"
+
     if [[ "$2" == "direct" ]]; then
-        exit 0
+        exit_with_log_message
     fi
 
     prompt
@@ -67,10 +93,16 @@ run_script() {
 launch_gtk() {
     local gtk_script="/usr/bin/carch-gtk.py"
     if [[ -f "$gtk_script" ]]; then
+        log_message "INFO" "Launching GTK interface."
         echo -e "${YELLOW}Launching GTK interface...${RESET}"
-        python3 "$gtk_script"
+        if python3 "$gtk_script"; then
+            log_message "SUCCESS" "GTK interface launched successfully."
+        else
+            log_message "ERROR" "Failed to launch GTK interface."
+        fi
     else
         echo -e "${YELLOW}Error: GTK script not found at $gtk_script!${RESET}"
+        log_message "ERROR" "GTK script not found at $gtk_script."
         exit 1
     fi
 }
@@ -112,6 +144,14 @@ update_carch() {
     fi
 }
 
+exit_with_log_message() {
+    echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+    log_message "INFO" "Exiting Carch. Logs saved to: ${LOG_FILE}"
+    exit 0
+}
+
+setup_logging
+
 if [[ $# -gt 0 ]]; then
     case "$1" in
         --help)
@@ -145,4 +185,3 @@ if [[ $# -gt 0 ]]; then
 else
     display_scripts_menu
 fi
-
