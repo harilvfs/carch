@@ -1,7 +1,9 @@
 name: Upload Scripts Zip to Latest Release
 
 on:
-  workflow_dispatch:
+  push:
+    paths:
+      - "source/zip/scripts.zip"
 
 permissions:
   contents: write  
