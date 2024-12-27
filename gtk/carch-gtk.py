@@ -3,14 +3,29 @@ import gi
 import os
 import subprocess
 import threading
+import logging
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GLib, Pango
 
+log_dir = os.path.expanduser("~/.config/carch")
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, "carch-gtk.log")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(log_file, mode="a"),
+        logging.StreamHandler()
+    ]
+)
 
 class CarchApp(Gtk.Window):
     def __init__(self):
         super().__init__(title="Carch - Arch Linux Automation")
+        logging.info("Application started.")
+
         self.set_border_width(10)
         self.set_default_size(700, 500)
 
@@ -63,18 +78,23 @@ class CarchApp(Gtk.Window):
         self.show_all()
 
     def on_exit(self, button):
+        log_path = os.path.expanduser("~/.config/carch/carch-gtk.log")
         os.system('clear')
-        Gtk.main_quit() 
+        logging.info(f"Application exited. Logs saved at {log_path}.")
+        Gtk.main_quit()
 
     def load_scripts(self):
         if not os.path.exists(self.script_dir):
+            logging.warning(f"Script directory '{self.script_dir}' does not exist.")
             return []
 
-        return [
+        scripts = [
             os.path.splitext(f)[0]
             for f in os.listdir(self.script_dir)
             if f.endswith(".sh")
         ]
+        logging.info(f"Loaded {len(scripts)} scripts from '{self.script_dir}'.")
+        return scripts
 
     def populate_scripts(self):
         for script in self.filtered_scripts:
@@ -107,11 +127,13 @@ class CarchApp(Gtk.Window):
             self.listbox_container.remove(child)
         self.populate_scripts()
         self.listbox_container.show_all()
+        logging.info(f"Search updated with query: '{query}'.")
 
     def view_script(self, button, script_name):
         script_path = os.path.join(self.script_dir, f"{script_name}.sh")
         if not os.path.exists(script_path):
             self.show_message(f"Script '{script_name}' not found!")
+            logging.error(f"Script '{script_path}' not found.")
             return
 
         with open(script_path, "r") as script_file:
@@ -130,10 +152,6 @@ class CarchApp(Gtk.Window):
         text_view.get_buffer().set_text(content)
         text_view.set_editable(False)
 
-        provider = Gtk.CssProvider()
-        provider.load_from_data(b"GtkTextView { font-family: monospace; font-size: 10pt; }")
-        text_view.get_style_context().add_provider(provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
-
         scrollable = Gtk.ScrolledWindow()
         scrollable.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         scrollable.set_vexpand(True)
@@ -146,15 +164,18 @@ class CarchApp(Gtk.Window):
         dialog.connect("response", lambda d, r: d.destroy())
 
         dialog.show_all()
+        logging.info(f"Viewed script: '{script_name}'.")
 
     def run_script(self, button, script_name):
         script_path = os.path.join(self.script_dir, f"{script_name}.sh")
         if not os.path.exists(script_path):
             self.show_message(f"Script '{script_name}' not found!")
+            logging.error(f"Script '{script_path}' not found.")
             return
 
         self.status_label.set_text(f"Running '{script_name}'...")
         self.spinner.start()
+        logging.info(f"Running script: '{script_name}'.")
 
         thread = threading.Thread(target=self.execute_script, args=(script_path,))
         thread.start()
@@ -163,10 +184,13 @@ class CarchApp(Gtk.Window):
         try:
             subprocess.run(["bash", script_path], check=True)
             GLib.idle_add(self.status_label.set_text, "Script executed successfully.")
+            logging.info(f"Script '{script_path}' executed successfully.")
         except subprocess.CalledProcessError:
             GLib.idle_add(self.status_label.set_text, "Script execution failed.")
+            logging.error(f"Execution of script '{script_path}' failed.")
         except Exception as e:
             GLib.idle_add(self.status_label.set_text, f"Error: {e}")
+            logging.exception(f"Unexpected error during script execution: {e}")
         finally:
             GLib.idle_add(self.spinner.stop)
 
@@ -179,6 +203,7 @@ class CarchApp(Gtk.Window):
         about_dialog.set_logo_icon_name("system-run")
         about_dialog.run()
         about_dialog.destroy()
+        logging.info("Displayed About dialog.")
 
     def show_message(self, message):
         dialog = Gtk.MessageDialog(
@@ -191,6 +216,7 @@ class CarchApp(Gtk.Window):
         )
         dialog.run()
         dialog.destroy()
+        logging.info(f"Displayed message dialog: {message}")
 
 
 if __name__ == "__main__":
