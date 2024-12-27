@@ -8,9 +8,11 @@ export BLUE="\e[34m"
 export ENDCOLOR="\e[0m"
 
 print_banner() {
-    echo -e "${BLUE}"
-    figlet -f slant "SDDM"
-    cat <<"EOF"
+echo -e "${BLUE}"
+figlet -f slant "SDDM"
+
+echo -e "${GREEN}" 
+cat <<"EOF"
 Catppuccin SDDM Theme    
 https://github.com/catppuccin/sddm
 ------------------------------------

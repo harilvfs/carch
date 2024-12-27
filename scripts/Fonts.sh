@@ -72,14 +72,14 @@ main_menu() {
         echo -e "${BLUE}"
         figlet -f slant "Fonts"
         echo -e "${ENDCOLOR}"
-        choice=$(gum choose "FiraCode" "Meslo" "JetBrains Mono" "Hack" "Cascadia" "Terminus" "Exit")
+        choice=$(gum choose "FiraCode" "Meslo" "JetBrains Mono" "Hack" "CascadiaMono" "Terminus" "Exit")
 
         case $choice in
             "FiraCode") install_menu "FiraCode" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip" ;;
             "Meslo") install_menu "Meslo" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip" ;;
             "JetBrains Mono") install_menu "JetBrains" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip" ;;
             "Hack") install_menu "Hack" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip" ;;
-            "Cascadia") install_menu "Cascadia" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip" ;;
+            "CascadiaMono") install_menu "Cascadia" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip" ;;
             "Terminus") install_menu "Terminus" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Terminus.zip" ;;
             "Exit") echo -e "${GREEN}Exiting. Thank you!${NC}"; exit ;;
             *) echo -e "${RED}Invalid option. Please try again.${NC}" ;;

@@ -11,14 +11,14 @@ ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
 figlet -f slant "Hyprland"
+echo -e "${ENDCOLOR}"
+echo -e "${GREEN}"
 cat <<"EOF"
-
--------------------------------------------------------
-For better results, consider using
-Prasanth Rangan's Hyprland configuration
-https://github.com/prasanthrangan/hyprdots
-Note: I have tweaked some configs to suit my use cases
---------------------------------------------------------
+:: Hyprland is a minimalistic and beautiful
+:: For better results, consider using
+:: Prasanth Rangan's Hyprland configuration
+:: https://github.com/prasanthrangan/hyprdots
+----------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
 

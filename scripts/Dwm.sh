@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 RC='\033[0m'
 RED='\033[31m'
 YELLOW='\033[33m'
@@ -12,6 +14,9 @@ print_message() {
     local message="$2"
     printf "%b%s%b\n" "$color" "$message" "$RC"
 }
+
+echo -e "${BLUE}"
+figlet -f slant "DWM"
 
 confirm_setup() {
     print_message "$CYAN" "Welcome to the DWM setup script."
