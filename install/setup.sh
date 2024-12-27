@@ -8,7 +8,6 @@ COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
 COLOR_BLUE="\e[34m"
-ENDCOLOR="\e[0m"
 
 TARGET_DIR="/usr/bin"
 SCRIPTS_DIR="$TARGET_DIR/scripts"
@@ -18,72 +17,67 @@ MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 echo -e "${COLOR_BLUE}"
 figlet -f slant "Carch"
 echo "Version 4.1.0"
-echo -e "${ENDCOLOR}"
+echo -e "${COLOR_RESET}"
 
-if ! command -v gum &> /dev/null; then
-    echo -e "${COLOR_RED}Error: gum is not installed. :: Please install gum first using:${COLOR_GREEN} pacman -S gum.${COLOR_RESET}"
-    exit 1
-fi
+check_dependency() {
+    local dependency="$1"
+    if ! command -v "$dependency" &>/dev/null; then
+        echo -e "${COLOR_RED}Error: $dependency is not installed. Install it using:${COLOR_GREEN} pacman -S $dependency.${COLOR_RESET}"
+        exit 1
+    fi
+}
+
+check_dependency "gum"
 
 CHOICE=$(gum choose "Rolling Release" "Stable Release" "Cancel")
-
 if [[ $CHOICE == "Cancel" ]]; then
     echo -e "${COLOR_RED}Installation canceled by the user.${COLOR_RESET}"
     exit 0
 fi
 
+# Cleanup
 echo -e "${COLOR_YELLOW}Removing existing installation...${COLOR_RESET}"
-sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$DESKTOP_FILE"
+sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$DESKTOP_FILE" "$MAN_PAGES_DIR"
 sudo rm -rf "$SCRIPTS_DIR"
-sudo rm -f "$MAN_PAGES_DIR"
+
+download_and_install() {
+    local url="$1"
+    local output="$2"
+    local is_executable="$3"
+    echo -e "${COLOR_YELLOW}:: Downloading $(basename "$output")...${COLOR_RESET}"
+    sudo curl -L "$url" --output "$output" &>/dev/null
+    if [[ $is_executable == "true" ]]; then
+        sudo chmod +x "$output"
+    fi
+}
+
+download_scripts() {
+    sudo mkdir -p "$SCRIPTS_DIR"
+    download_and_install "$1" "$SCRIPTS_DIR/scripts.zip" false
+    echo -e "${COLOR_YELLOW}:: Extracting scripts.zip...${COLOR_RESET}"
+    sudo unzip -q "$SCRIPTS_DIR/scripts.zip" -d "$SCRIPTS_DIR"
+    sudo chmod +x "$SCRIPTS_DIR"/*.sh
+    sudo rm "$SCRIPTS_DIR/scripts.zip"
+}
+
+install_man_page() {
+    download_and_install "$1" "$MAN_PAGES_DIR" false
+    echo -e "${COLOR_YELLOW}:: Updating man database...${COLOR_RESET}"
+    sudo mandb &>/dev/null
+}
 
 if [[ $CHOICE == "Rolling Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Rolling Release...${COLOR_RESET}"
-
-    sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/build/carch" --output "$TARGET_DIR/carch" &> /dev/null
-    sudo chmod +x "$TARGET_DIR/carch"
-
-    sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/gtk/carch-gtk.py" --output "$TARGET_DIR/carch-gtk.py" &> /dev/null
-    sudo chmod +x "$TARGET_DIR/carch-gtk.py"
-
-    sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/carch.desktop" --output "$DESKTOP_FILE" &> /dev/null
-
-    echo -e "${COLOR_YELLOW}:: Downloading additional scripts.zip...${COLOR_RESET}"
-    sudo mkdir -p "$SCRIPTS_DIR"
-    sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip" --output "$SCRIPTS_DIR/scripts.zip" &> /dev/null
-
-    echo -e "${COLOR_YELLOW}:: Extracting scripts.zip...${COLOR_RESET}"
-    sudo unzip -q "$SCRIPTS_DIR/scripts.zip" -d "$SCRIPTS_DIR"
-    sudo chmod +x "$SCRIPTS_DIR"/*.sh
-    sudo rm "$SCRIPTS_DIR/scripts.zip"
-
-    echo -e "${COLOR_YELLOW}:: Downloading and installing man page...${COLOR_RESET}"
-    sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1" --output "/usr/share/man/man1/carch.1" &> /dev/null
-    sudo mandb &> /dev/null
-
+    download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/build/carch" "$TARGET_DIR/carch" true
+    download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/gtk/carch-gtk.py" "$TARGET_DIR/carch-gtk.py" true
+    download_scripts "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
+    install_man_page "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1"
 elif [[ $CHOICE == "Stable Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Stable Release...${COLOR_RESET}"
-
-    sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" --output "$TARGET_DIR/carch" &> /dev/null
-    sudo chmod +x "$TARGET_DIR/carch"
-
-    sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" --output "$TARGET_DIR/carch-gtk.py" &> /dev/null
-    sudo chmod +x "$TARGET_DIR/carch-gtk.py"
-
-    echo -e "${COLOR_YELLOW}:: Downloading additional scripts.zip...${COLOR_RESET}"
-    sudo mkdir -p "$SCRIPTS_DIR"
-    sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip" --output "$SCRIPTS_DIR/scripts.zip" &> /dev/null
-
-    echo -e "${COLOR_YELLOW}:: Extracting scripts.zip...${COLOR_RESET}"
-    sudo unzip -q "$SCRIPTS_DIR/scripts.zip" -d "$SCRIPTS_DIR"
-    sudo chmod +x "$SCRIPTS_DIR"/*.sh
-    sudo rm "$SCRIPTS_DIR/scripts.zip"
-
-    echo -e "${COLOR_YELLOW}:: Downloading and installing man page...${COLOR_RESET}"
-    sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1" --output "/usr/share/man/man1/carch.1" &> /dev/null
-    sudo mandb &> /dev/null
-
-    echo -e "${COLOR_GREEN}Scripts installed successfully!${COLOR_RESET}"
+    download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch" "$TARGET_DIR/carch" true
+    download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" "$TARGET_DIR/carch-gtk.py" true
+    download_scripts "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
+    install_man_page "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1"
 fi
 
 echo -e "${COLOR_YELLOW}:: Creating Carch Desktop Entry...${COLOR_RESET}"
@@ -98,9 +92,11 @@ Terminal=true
 Categories=Utility;
 EOL
 
-echo -e "${COLOR_YELLOW}:: Carch Desktop Entry created successfully!${COLOR_RESET}"
+echo -e "${COLOR_GREEN}:: Carch Desktop Entry created successfully!${COLOR_RESET}"
 
-figlet -f slant Note
-echo -e "${COLOR_CYAN}:: Carch has been successfully installed!${COLOR_RESET}"
-echo -e "${COLOR_CYAN}:: Use 'carch' or 'carch --gtk' to run the Carch script.${COLOR_RESET}"
-echo -e "${COLOR_CYAN}:: For available commands, type 'carch --help'.${COLOR_RESET}"
+echo -e "${COLOR_GREEN}"
+figlet -f slant "Note"
+echo -e "${COLOR_CYAN}Carch has been successfully installed!${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Use 'carch' or 'carch --gtk' to run the script.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}For help, type 'carch --help'.${COLOR_RESET}"
+
