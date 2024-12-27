@@ -10,6 +10,10 @@ ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
 figlet -f slant "Picom"
+echo -e "${GREEN}"
+cat << "EOF"
+Picom is a standalone compositor for Xorg.
+EOF
 echo -e "${ENDCOLOR}"
 
 install_paru() {

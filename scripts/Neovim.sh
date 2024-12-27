@@ -14,12 +14,12 @@ cat <<"EOF"
       
 This script will help you set up Neovim.
 
-"Yes", it will check for an existing Neovim configuration.
+:: 'Yes', it will check for an existing Neovim configuration.
 If an existing configuration is found, it will back it up before applying the new configuration.
 
-"No", it will create a new Neovim directory and apply the new configuration.
+:: 'No', it will create a new Neovim directory and apply the new configuration.
 
-"Exit" to exit the script at any time.
+:: 'Exit' to exit the script at any time.
 -------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
@@ -29,7 +29,7 @@ setup_neovim() {
     BACKUP_DIR="$HOME/.config/nvimbackup"
 
     while true; do
-        echo -e "${YELLOW}:: Do you want to continue?${ENDCOLOR}"
+        echo -e "${YELLOW}Do you want to continue?${ENDCOLOR}"
         choice=$(gum choose "Yes" "No" "Exit")
         
         case $choice in
