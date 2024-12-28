@@ -22,6 +22,7 @@ Any queries or concerns? Feel free to write about them on
 <a href="https://t.me/carchx" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
 <a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
 <a href="https://www.reddit.com/r/carch/" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_reddit.png?raw=true" width="45px"/></a>
+<a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail Hari" width="45px" /></a>
 <br><br>
 
 Like my work? Giving a star to Carch means a lot. Thanks!
