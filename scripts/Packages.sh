@@ -67,8 +67,9 @@ install_communication() {
 }
 
 install_streaming() {
+    install_paru
     while true; do
-        stream_choice=$(gum choose "OBS Studio" "Exit")
+        stream_choice=$(gum choose "OBS Studio" "SimpleScreenRecorder [Git]" "Exit")
 
         case $stream_choice in
             "OBS Studio")
@@ -76,7 +77,15 @@ install_streaming() {
                 version=$(pacman -Qi obs-studio | grep Version | awk '{print $3}') && \
                 gum format "🎉 **OBS Studio installed successfully! Version: $version**"
                 ;;
-            "Exit") break ;;
+            "SimpleScreenRecorder [Git]")
+                gum confirm "The Git version builds from source and may take some time. Proceed?" && \
+                gum spin --spinner dot --title "Installing SimpleScreenRecorder [Git]..." -- paru -S --noconfirm simplescreenrecorder-git && \
+                version=$(pacman -Qi simplescreenrecorder-git | grep Version | awk '{print $3}') && \
+                gum format "🎉 **SimpleScreenRecorder [Git] installed successfully! Version: $version**"
+                ;;
+            "Exit")
+                break
+                ;;
         esac
     done
 }
@@ -231,6 +240,7 @@ install_browsers() {
                 gum format "🎉 **Firefox installed successfully! Version: $version**"
                 ;;
             "Libre Wolf")
+                gum confirm "The LibreWolf binary package installation may take some time due to its size. Proceed?" && \
                 gum spin --spinner dot --title "Installing Libre Wolf..." -- paru -S --noconfirm librewolf-bin && \
                 version=$(pacman -Qi librewolf-bin | grep Version | awk '{print $3}') && \
                 gum format "🎉 **Libre Wolf installed successfully! Version: $version**"
