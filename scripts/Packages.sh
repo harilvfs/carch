@@ -31,13 +31,18 @@ install_paru() {
 install_communication() {
     install_paru
     while true; do
-        comm_choice=$(gum choose "Discord" "Signal" "Telegram" "Keybase" "Exit")
+        comm_choice=$(gum choose "Discord" "Better Discord" "Signal" "Telegram" "Keybase" "Exit")
 
         case $comm_choice in
             "Discord")
                 gum spin --spinner dot --title "Installing Discord..." -- paru -S --noconfirm discord && \
                 version=$(pacman -Qi discord | grep Version | awk '{print $3}') && \
                 gum format "🎉 **Discord installed successfully! Version: $version**"
+                ;;
+            "Better Discord")
+                gum spin --spinner dot --title "Installing Better Discord..." -- paru -S --noconfirm betterdiscord-installer-bin&& \
+                version=$(pacman -Qi betterdiscord-installer-bin | grep Version | awk '{print $3}') && \
+                gum format "🎉 **Better Discord installed successfully! Version: $version**"
                 ;;
             "Signal")
                 gum spin --spinner dot --title "Installing Signal..." -- paru -S --noconfirm signal-desktop && \
@@ -62,8 +67,9 @@ install_communication() {
 }
 
 install_streaming() {
+    install_paru
     while true; do
-        stream_choice=$(gum choose "OBS Studio" "Exit")
+        stream_choice=$(gum choose "OBS Studio" "SimpleScreenRecorder [Git]" "Exit")
 
         case $stream_choice in
             "OBS Studio")
@@ -71,7 +77,15 @@ install_streaming() {
                 version=$(pacman -Qi obs-studio | grep Version | awk '{print $3}') && \
                 gum format "🎉 **OBS Studio installed successfully! Version: $version**"
                 ;;
-            "Exit") break ;;
+            "SimpleScreenRecorder [Git]")
+                gum confirm "The Git version builds from source and may take some time. Proceed?" && \
+                gum spin --spinner dot --title "Installing SimpleScreenRecorder [Git]..." -- paru -S --noconfirm simplescreenrecorder-git && \
+                version=$(pacman -Qi simplescreenrecorder-git | grep Version | awk '{print $3}') && \
+                gum format "🎉 **SimpleScreenRecorder [Git] installed successfully! Version: $version**"
+                ;;
+            "Exit")
+                break
+                ;;
         esac
     done
 }
@@ -212,7 +226,7 @@ install_terminals() {
 install_browsers() {
     install_paru
     while true; do
-        browser_choice=$(gum choose "Brave" "Firefox" "Google Chrome" "Chromium" "Qute Browser" "Zen Browser" "Thorium Browser" "Tor Browser" "Exit")
+        browser_choice=$(gum choose "Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Tor Browser" "Exit")
 
         case $browser_choice in
             "Brave")
@@ -225,6 +239,12 @@ install_browsers() {
                 version=$(pacman -Qi firefox | grep Version | awk '{print $3}') && \
                 gum format "🎉 **Firefox installed successfully! Version: $version**"
                 ;;
+            "Libre Wolf")
+                gum confirm "The LibreWolf binary package installation may take some time due to its size. Proceed?" && \
+                gum spin --spinner dot --title "Installing Libre Wolf..." -- paru -S --noconfirm librewolf-bin && \
+                version=$(pacman -Qi librewolf-bin | grep Version | awk '{print $3}') && \
+                gum format "🎉 **Libre Wolf installed successfully! Version: $version**"
+                ;;
             "Google Chrome")
                 gum spin --spinner dot --title "Installing Google Chrome..." -- paru -S --noconfirm google-chrome && \
                 version=$(pacman -Qi google-chrome | grep Version | awk '{print $3}') && \
@@ -234,6 +254,11 @@ install_browsers() {
                 gum spin --spinner dot --title "Installing Chromium..." -- sudo pacman -S --noconfirm chromium && \
                 version=$(pacman -Qi chromium | grep Version | awk '{print $3}') && \
                 gum format "🎉 **Chromium installed successfully! Version: $version**"
+                ;;
+            "Vivaldi")
+                gum spin --spinner dot --title "Installing Vivaldi..." -- sudo pacman -S --noconfirm vivaldi && \
+                version=$(pacman -Qi vivaldi | grep Version | awk '{print $3}') && \
+                gum format "🎉 **Vivaldi installed successfully! Version: $version**"
                 ;;
             "Qute Browser")
                 gum spin --spinner dot --title "Installing Qute Browser..." -- sudo pacman -S --noconfirm qutebrowser && \
