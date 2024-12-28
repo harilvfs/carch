@@ -7,6 +7,10 @@ NC='\033[0m'
 
 SCRIPT_DIR="/usr/bin/scripts"
 LOG_FILE="$HOME/.config/carch/carch.log"
+TARGET_DIR="/usr/bin"
+DESKTOP_FILE="/usr/share/applications/carch.desktop"
+MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
+ICON_DIR="/usr/share/icons/hicolor"
 
 setup_logging() {
     mkdir -p "$(dirname "$LOG_FILE")"
@@ -20,6 +24,23 @@ log_message() {
     local log_type="$1"
     local message="$2"
     echo "$(date '+%Y-%m-%d %H:%M:%S') [$log_type] $message" >>"$LOG_FILE"
+}
+
+uninstall_carch() {
+    echo -e "${YELLOW}Removing Carch from the system...${RESET}"
+
+    sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py"
+
+    sudo rm -rf "$SCRIPT_DIR"
+
+    sudo rm -f "$DESKTOP_FILE"
+
+    sudo rm -f "$MAN_PAGES_DIR"
+
+    sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
+
+    echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
+    log_message "INFO" "Carch uninstalled successfully."
 }
 
 load_scripts() {
@@ -119,6 +140,7 @@ show_help() {
     echo "  --list-scripts      List all available scripts in $SCRIPT_DIR."
     echo "  --update            Update Carch using the latest script."
     echo "  --gtk               Launch the GTK interface."
+    echo "  --uninstall         Uninstall Carch and remove all associated files."
     echo
 }
 
@@ -176,6 +198,9 @@ if [[ $# -gt 0 ]]; then
             ;;
         --gtk)
             launch_gtk
+            ;;
+        --uninstall)
+            uninstall_carch
             ;;
         *)
             echo -e "${YELLOW}Error: Unknown option '$1'. Use --help for usage.${RESET}"
