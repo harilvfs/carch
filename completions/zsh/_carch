@@ -1,0 +1,38 @@
+#compdef carch
+
+_carch() {
+    local -a commands
+
+    commands=(
+        '--help:Show the help message'
+        '--version:Show the program version'
+        '--gen-config:Generate a default configuration file'
+        '--config:Provide a path to the configuration file'
+        '-c:Use the default configuration file'
+        '--run-script:Run a specific script from the script directory'
+        '-r:Run a specific script from the script directory'
+        '--list-scripts:List all available scripts'
+        '-l:List all available scripts'
+        '--update:Update Carch using the latest script'
+        '--gtk:Launch the GTK interface'
+        '-g:Launch the GTK interface'
+        '--uninstall:Uninstall Carch and remove all associated files'
+    )
+
+    _arguments \
+        '--help[Show the help message]' \
+        '--version[Show the program version]' \
+        '--gen-config[Generate a default configuration file]' \
+        '--config[Provide a path to the configuration file]' \
+        '-c[Use the default configuration file]' \
+        '--run-script[Run a specific script]' \
+        '-r[Run a specific script]' \
+        '--list-scripts[List all available scripts]' \
+        '-l[List all available scripts]' \
+        '--update[Update Carch using the latest script]' \
+        '--gtk[Launch the GTK interface]' \
+        '-g[Launch the GTK interface]' \
+        '--uninstall[Uninstall Carch and remove all associated files]'
+}
+
+_carch
