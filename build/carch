@@ -11,6 +11,8 @@ TARGET_DIR="/usr/bin"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
 MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 ICON_DIR="/usr/share/icons/hicolor"
+CONFIG_DIR="$HOME/.config/carch"
+CONFIG_FILE="$CONFIG_DIR/carch.conf"
 
 setup_logging() {
     mkdir -p "$(dirname "$LOG_FILE")"
@@ -43,13 +45,46 @@ uninstall_carch() {
     log_message "INFO" "Carch uninstalled successfully."
 }
 
-load_scripts() {
+generate_config() {
+    mkdir -p "$CONFIG_DIR"
+    if [[ ! -f "$CONFIG_FILE" ]]; then
+        cat > "$CONFIG_FILE" <<EOL
+# Carch Configuration File
+# List the script names (without .sh extension) you want to include in the menu.
+# Example:
+# Alacritty
+# Kitty
+
+EOL
+        echo -e "${GREEN}Default configuration file created at $CONFIG_FILE.${RESET}"
+        log_message "INFO" "Generated default configuration file."
+    else
+        echo -e "${YELLOW}Configuration file already exists at $CONFIG_FILE.${RESET}"
+        log_message "INFO" "Configuration file already exists."
+    fi
+}
+
+load_selected_scripts() {
+    scripts=()
+    if [[ -f "$CONFIG_FILE" ]]; then
+        while IFS= read -r script_name; do
+            [[ "$script_name" =~ ^#.*$ || -z "$script_name" ]] && continue
+            scripts+=("$script_name")
+        done < "$CONFIG_FILE"
+    else
+        echo -e "${YELLOW}Configuration file not found. Loading all scripts.${RESET}"
+        log_message "WARNING" "Configuration file not found. Loading all scripts."
+        load_all_scripts
+    fi
+    scripts+=("Cancel")
+}
+
+load_all_scripts() {
     scripts=()
     while IFS= read -r -d '' file; do
         script_name=$(basename "${file}" .sh)
         scripts+=("$script_name")
     done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
-
     scripts+=("Cancel")
 }
 
@@ -59,26 +94,33 @@ prompt() {
 }
 
 display_scripts_menu() {
-    load_scripts
-    clear
-    echo -e "${GREEN}"
-    figlet -f slant "Carch"
-    echo "Version 4.1.0"
-    echo -e "${YELLOW}--------------${RESET}"
-    echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
-    echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
-    echo -e "${NC}"
-
-    echo "Select a script to run:"
-    selected_script=$(gum choose "${scripts[@]}")
-
-    if [[ "$selected_script" == "Cancel" ]]; then
-        clear
-        log_message "INFO" "User exited the main menu."
-        exit_with_log_message
+    if [[ "$1" == "config" ]]; then
+        load_selected_scripts
     else
-        run_script "$selected_script"
+        load_all_scripts
     fi
+
+    while true; do
+        clear
+        echo -e "${GREEN}"
+        figlet -f slant "Carch"
+        echo "Version 4.1.0"
+        echo -e "${YELLOW}--------------${RESET}"
+        echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
+        echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
+        echo -e "${NC}"
+
+        echo "Select a script to run:"
+        selected_script=$(gum choose "${scripts[@]}")
+
+        if [[ "$selected_script" == "Cancel" ]]; then
+            clear
+            log_message "INFO" "User exited the main menu."
+            exit_with_log_message
+        else
+            run_script "$selected_script"
+        fi
+    done
 }
 
 run_script() {
@@ -103,12 +145,30 @@ run_script() {
     echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
     log_message "INFO" "Logs saved after running script: ${script_name}"
 
-    if [[ "$2" == "direct" ]]; then
-        exit_with_log_message
+    prompt
+}
+
+run_script_direct() {
+    local script_name="$1"
+    local script_path="$SCRIPT_DIR/${script_name}.sh"
+
+    if [[ -f "$script_path" ]]; then
+        log_message "INFO" "Starting script: ${script_name}"
+        echo -e "${YELLOW}Running script: ${script_name}${RESET}"
+        if bash "$script_path"; then
+            echo -e "${GREEN}Script '${script_name}' completed successfully.${RESET}"
+            log_message "SUCCESS" "Script '${script_name}' completed successfully."
+        else
+            echo -e "${YELLOW}Script '${script_name}' encountered an error.${RESET}"
+            log_message "ERROR" "Script '${script_name}' encountered an error."
+        fi
+    else
+        echo -e "${YELLOW}Error: Script '${script_name}' not found in $SCRIPT_DIR!${RESET}"
+        log_message "ERROR" "Script '${script_name}' not found in $SCRIPT_DIR."
     fi
 
-    prompt
-    display_scripts_menu
+    echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+    log_message "INFO" "Logs saved after running script: ${script_name}"
 }
 
 launch_gtk() {
@@ -134,18 +194,17 @@ show_help() {
     echo "A tool for automating Arch Linux setups."
     echo
     echo "Options:"
-    echo "  --help              Show this help message and exit."
-    echo "  --version           Show the program version."
-    echo "  --run-script <name> Run the specified script from $SCRIPT_DIR."
-    echo "  --list-scripts      List all available scripts in $SCRIPT_DIR."
-    echo "  --update            Update Carch using the latest script."
-    echo "  --gtk               Launch the GTK interface."
-    echo "  --uninstall         Uninstall Carch and remove all associated files."
+    echo "  --help, -h              Show this help message and exit."
+    echo "  --version, -v           Show the program version."
+    echo "  --gen-config            Generate a default configuration file in ~/.config/carch/carch.conf."
+    echo "  --config <conf dir>     Use a specific configuration file to load selected scripts."
+    echo "  -c                      Use the default configuration file to load selected scripts."
+    echo "  --run-script <name>, -r Run the specified script from $SCRIPT_DIR."
+    echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
+    echo "  --update                Update Carch using the latest script."
+    echo "  --gtk, -g               Launch the GTK interface."
+    echo "  --uninstall             Uninstall Carch and remove all associated files."
     echo
-}
-
-show_version() {
-    echo "Carch version 4.1.0"
 }
 
 list_scripts() {
@@ -153,17 +212,6 @@ list_scripts() {
     for script in "$SCRIPT_DIR"/*.sh; do
         echo "  - $(basename "$script" .sh)"
     done
-}
-
-update_carch() {
-    echo "Updating Carch..."
-    bash <(curl -L https://chalisehari.com.np/carch)
-    
-    if [[ $CHOICE == "Cancel" ]]; then
-    echo -e "${COLOR_RED}Installation canceled by the user.${COLOR_RESET}"
-    exit 0
-    
-    fi
 }
 
 exit_with_log_message() {
@@ -176,27 +224,42 @@ setup_logging
 
 if [[ $# -gt 0 ]]; then
     case "$1" in
-        --help)
+        --help|-h)
             show_help
             ;;
-        --version)
-            show_version
+        --version|-v)
+            echo "Carch version 4.1.0"
             ;;
-        --run-script)
+        --gen-config)
+            generate_config
+            ;;
+        --config)
             if [[ -n $2 ]]; then
-                run_script "$2" "direct"
+                CONFIG_FILE="$2"
+                display_scripts_menu "config"
+            else
+                echo "Error: --config requires a file path."
+                exit 1
+            fi
+            ;;
+        -c)
+            display_scripts_menu "config"
+            ;;
+        --run-script|-r)
+            if [[ -n $2 ]]; then
+                run_script_direct "$2"
             else
                 echo "Error: --run-script requires a script name."
                 exit 1
             fi
             ;;
-        --list-scripts)
+        --list-scripts|-l)
             list_scripts
             ;;
         --update)
-            update_carch
+            bash <(curl -L https://chalisehari.com.np/carch)
             ;;
-        --gtk)
+        --gtk|-g)
             launch_gtk
             ;;
         --uninstall)
