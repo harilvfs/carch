@@ -11,11 +11,11 @@ TARGET_DIR="/usr/bin"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
 MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 ICON_DIR="/usr/share/icons/hicolor"
+
 CONFIG_DIR="$HOME/.config/carch"
 CONFIG_FILE="$CONFIG_DIR/carch.conf"
-BASH_COMPLETION_DIR="/usr/share/bash-completion/completions/carch"
-ZSH_COMPLETION_DIR="/usr/share/zsh/functions/Completion/Unix/_carch"
-FISH_COMPLETION_DIR="$HOME/.config/fish/completions/carch.fish"
+
+BASH_COMPLETION_DIR=$(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo "/usr/share/bash-completion/completions")
 
 setup_logging() {
     mkdir -p "$(dirname "$LOG_FILE")"
@@ -44,23 +44,42 @@ uninstall_carch() {
 
     sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
 
-    BASH_COMPLETION_DIR=$(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo "/usr/share/bash-completion/completions")
-    if [[ -d "$BASH_COMPLETION_DIR" ]]; then
+    for dir in $(zsh -c 'echo $fpath'); do
+        if [[ -f "$dir/_carch" ]]; then
+        sudo rm -f "$dir/_carch"
+        [[ -z $(ls -A "$dir" 2>/dev/null) ]] && sudo rmdir "$dir"
+        fi
+    done
+
+
+if [[ -d "$BASH_COMPLETION_DIR" ]]; then
+    echo "Checking Bash completion directory: $BASH_COMPLETION_DIR"
+    if [[ -f "$BASH_COMPLETION_DIR/carch" ]]; then
         sudo rm -f "$BASH_COMPLETION_DIR/carch"
-        [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR"
+        echo "Removed Bash completion: $BASH_COMPLETION_DIR/carch"
     fi
+    [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR" && echo "Removed empty Bash completion directory: $BASH_COMPLETION_DIR"
+fi
 
-    ZSH_COMPLETION_DIR=$(zsh -c 'echo $fpath' | grep "Completion/Unix" | head -n 1)
-    if [[ -d "$ZSH_COMPLETION_DIR" ]]; then
-        sudo rm -f "$ZSH_COMPLETION_DIR/_carch"
-        [[ -z $(ls -A "$ZSH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$ZSH_COMPLETION_DIR"
+GLOBAL_FISH_COMPLETION_DIR="/usr/share/fish/vendor_completions.d"
+if [[ -d "$GLOBAL_FISH_COMPLETION_DIR" ]]; then
+    echo "Checking global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
+    if [[ -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
+        sudo rm -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish"
+        echo "Removed global Fish completion: $GLOBAL_FISH_COMPLETION_DIR/carch.fish"
     fi
+    [[ -z $(ls -A "$GLOBAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$GLOBAL_FISH_COMPLETION_DIR" && echo "Removed empty global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
+fi
 
-    FISH_COMPLETION_DIR=$(fish -c 'echo $fish_complete_path' | head -n 1)
-    if [[ -d "$FISH_COMPLETION_DIR" ]]; then
-        rm -f "$FISH_COMPLETION_DIR/carch.fish"
-        [[ -z $(ls -A "$FISH_COMPLETION_DIR" 2>/dev/null) ]] && rmdir "$FISH_COMPLETION_DIR"
+LOCAL_FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
+if [[ -d "$LOCAL_FISH_COMPLETION_DIR" ]]; then
+    echo "Checking local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
+    if [[ -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
+        rm -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish"
+        echo "Removed local Fish completion: $LOCAL_FISH_COMPLETION_DIR/carch.fish"
     fi
+    [[ -z $(ls -A "$LOCAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && rmdir "$LOCAL_FISH_COMPLETION_DIR" && echo "Removed empty local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
+fi
 
     echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
     log_message "INFO" "Carch uninstalled successfully."

@@ -46,6 +46,7 @@ sudo rm -rf "$SCRIPTS_DIR"
 sudo rm -f "$BASH_COMPLETION_DIR/carch"
 sudo rm -f "$ZSH_COMPLETION_DIR/_carch"
 rm -f "$FISH_COMPLETION_DIR/carch.fish"
+
 echo -e "${COLOR_YELLOW}Removing icons...${COLOR_RESET}"
 for size in 16 24 32 48 64 128 256; do
     sudo rm -f "$ICON_DIR/${size}x${size}/apps/carch.png"
