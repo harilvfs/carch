@@ -1,5 +1,5 @@
 .\" Manpage for Carch
-.TH "carch" "1" "December 2024" "Carch 4.1.0" "Carch Manual"
+.TH "carch" "1" "December 2024" "Carch 4.1.1" "Carch Manual"
 
 .SH NAME
 carch \- Automate and streamline Arch Linux system setup
@@ -21,19 +21,31 @@ Get started quickly with the live version by running the following command in yo
 
 .SH OPTIONS
 .TP
-\fB\-\-help\fR
+\fB\-\-help\fR, \fB\-h\fR
 Display this help message and exit.
 
 .TP
-\fB\-\-version\fR
-Show the current version of the program (\fB4.1.0\fR).
+\fB\-\-version\fR, \fB\-v\fR
+Show the current version of the program (\fB4.1.1\fR).
+
+.TP
+\fB\-\-gen\-config\fR
+Generate a default configuration file in ~/.config/carch/carch.conf.
+
+.TP
+\fB\-\-config\fR \fI<conf dir>\fR
+Use a specific configuration file to load selected scripts.
+
+.TP
+\fB\-c\fR
+Use the default configuration file to load selected scripts.
 
 .TP
 \fB\-\-run\-script\fR \fI<name>\fR
 Execute the specified script from the script directory (\fB$SCRIPT_DIR\fR).
 
 .TP
-\fB\-\-list\-scripts\fR
+\fB\-\-list\-scripts\fR, \fB\-l\fR
 List all available scripts in the script directory (\fB$SCRIPT_DIR\fR).
 
 .TP
@@ -41,8 +53,12 @@ List all available scripts in the script directory (\fB$SCRIPT_DIR\fR).
 Update Carch by downloading and applying the latest script version.
 
 .TP
-\fB\-\-gtk\fR
+\fB\-\-gtk\fR, \fB\-g\fR
 Launch the GTK-based graphical user interface.
+
+.TP
+\fB\-\-uninstall\fR
+Uninstall Carch and remove all associated files.
 
 .SH SUPPORT
 For assistance or to report issues, visit the official repository:
