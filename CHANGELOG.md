@@ -2,6 +2,71 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.1](https://github.com/harilvfs/carch/compare/v4.1.0...v4.1.1) (2024-12-30)
+
+**This release will be the last release of 2024. We will be back in 2025 with more updates and features.**  
+
+> [!NOTE]  
+> The upcoming releases will be delayed or less frequent compared to before. I will be focusing on:  
+>
+> - Developing a TUI for Carch  
+> - Learning Bash scripting  
+> - Exploring Rust or other languages  
+
+> [!IMPORTANT]
+> Thisrelease is not the last but marks a shift to less frequent updates as I dedicate time to improve skills and make Carch better and more stable. Stay tuned for something new!
+
+## ✨ Main Highlights of This Release  
+
+### 🚀 Key Features  
+- **Enhanced Installation Support**  
+  - Improved compatibility for both stable and rolling-release systems.  
+
+- **📜 Logging**  
+  - Added a log file to track the installation process for better troubleshooting.  
+
+- **⚡ Auto-Completion for CLI**  
+  - Added shell auto-completion support for:  
+    - **Bash**  
+    - **Zsh**  
+    - **Fish**  
+  *(Currently available only for the CLI version of Carch)*  
+
+### 🛠️ Additional Updates  
+- **🖼️ Desktop Entry**  
+  - Added a Carch icon for better desktop integration.  
+
+- **📋 New Commands**  
+  - Introduced more useful commands to the CLI version of Carch.  
+
+- **⚙️ Configuration File**  
+  - Added a configuration file to enhance customization for the CLI version.  
+
+### 🐛 Bug Fixes  
+- Resolved numerous bugs for a smoother experience.  
+
+### Changed
+
+* Making Script Clean 🧹 by @harilvfs in https://github.com/harilvfs/carch/pull/208
+* Making Setup Installation `clean` 🧹 by @harilvfs in https://github.com/harilvfs/carch/pull/209
+
+### Added
+
+* Add [Logging] Carch by @harilvfs in https://github.com/harilvfs/carch/pull/206
+* Add logging `Carch` [GTK] by @harilvfs in https://github.com/harilvfs/carch/pull/207
+* Add Carch Icons [Desktop Entry] by @harilvfs in https://github.com/harilvfs/carch/pull/211
+* Added Icon For Desktop Entry by @harilvfs in https://github.com/harilvfs/carch/pull/212
+* Add Uninstall Command [Carch] by @harilvfs in https://github.com/harilvfs/carch/pull/213
+* Add Some Packages [Package Script] by @harilvfs in https://github.com/harilvfs/carch/pull/214
+* Added Useful Command [Carch --[options]] by @harilvfs in https://github.com/harilvfs/carch/pull/215
+* Config File Example by @harilvfs in https://github.com/harilvfs/carch/pull/216
+* Added Commands Completions [ZSH BASH FISH] by @harilvfs in https://github.com/harilvfs/carch/pull/219
+
+### Fixed
+
+* Fix Completions Removel by @harilvfs in https://github.com/harilvfs/carch/pull/222
+* Script Fixes [BUG] by @harilvfs in https://github.com/harilvfs/carch/pull/210
+
 ## [v4.1.0](https://github.com/harilvfs/carch/compare/v4.0.0...v4.1.0) (2024-12-26)
 
 ### AUR Packages Update
