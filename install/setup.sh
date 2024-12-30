@@ -17,7 +17,7 @@ MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 
 BASH_COMPLETION_DIR="/usr/share/bash-completion/completions"
 ZSH_COMPLETION_DIR="/usr/share/zsh/functions/Completion/Unix"
-FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
+FISH_COMPLETION_DIR="/usr/share/fish/completions"
 
 echo -e "${COLOR_BLUE}"
 figlet -f slant "Carch"
@@ -45,7 +45,7 @@ sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$DESKTOP_FILE" "$MAN_
 sudo rm -rf "$SCRIPTS_DIR"
 sudo rm -f "$BASH_COMPLETION_DIR/carch"
 sudo rm -f "$ZSH_COMPLETION_DIR/_carch"
-rm -f "$FISH_COMPLETION_DIR/carch.fish"
+sudo rm -f "$FISH_COMPLETION_DIR/carch.fish"
 
 echo -e "${COLOR_YELLOW}Removing icons...${COLOR_RESET}"
 for size in 16 24 32 48 64 128 256; do
