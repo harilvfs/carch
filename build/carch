@@ -61,7 +61,7 @@ if [[ -d "$BASH_COMPLETION_DIR" ]]; then
     [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR" && echo "Removed empty Bash completion directory: $BASH_COMPLETION_DIR"
 fi
 
-GLOBAL_FISH_COMPLETION_DIR="/usr/share/fish/vendor_completions.d"
+GLOBAL_FISH_COMPLETION_DIR="/usr/share/fish/completions"
 if [[ -d "$GLOBAL_FISH_COMPLETION_DIR" ]]; then
     echo "Checking global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
     if [[ -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
