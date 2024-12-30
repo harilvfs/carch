@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 > - Exploring Rust or other languages  
 
 > [!IMPORTANT]
-> Thisrelease is not the last but marks a shift to less frequent updates as I dedicate time to improve skills and make Carch better and more stable. Stay tuned for something new!
+> This release is not the last but marks a shift to less frequent updates as I dedicate time to improve skills and make Carch better and more stable. Stay tuned for something new!
 
 ## ✨ Main Highlights of This Release  
 
