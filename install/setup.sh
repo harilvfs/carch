@@ -92,7 +92,7 @@ install_completions() {
             echo -e "${COLOR_GREEN}Zsh completion installed in:${COLOR_CYAN} $ZSH_COMPLETION_DIR${COLOR_RESET}"
             ;;
         fish)
-            curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/fish/carch.fish" \
+            sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/fish/carch.fish" \
                 -o "$FISH_COMPLETION_DIR/carch.fish" &>/dev/null
             echo -e "${COLOR_GREEN}Fish completion installed in:${COLOR_CYAN} $FISH_COMPLETION_DIR${COLOR_RESET}"
             ;;
