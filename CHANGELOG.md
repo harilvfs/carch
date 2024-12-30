@@ -16,9 +16,9 @@ All notable changes to this project will be documented in this file.
 > [!IMPORTANT]
 > This release is not the last but marks a shift to less frequent updates as I dedicate time to improve skills and make Carch better and more stable. Stay tuned for something new!
 
-## ✨ Main Highlights of This Release  
+### ✨ Main Highlights of This Release  
 
-### 🚀 Key Features  
+#### 🚀 Key Features  
 - **Enhanced Installation Support**  
   - Improved compatibility for both stable and rolling-release systems.  
 
@@ -32,7 +32,7 @@ All notable changes to this project will be documented in this file.
     - **Fish**  
   *(Currently available only for the CLI version of Carch)*  
 
-### 🛠️ Additional Updates  
+#### 🛠️ Additional Updates  
 - **🖼️ Desktop Entry**  
   - Added a Carch icon for better desktop integration.  
 
@@ -42,7 +42,7 @@ All notable changes to this project will be documented in this file.
 - **⚙️ Configuration File**  
   - Added a configuration file to enhance customization for the CLI version.  
 
-### 🐛 Bug Fixes  
+#### 🐛 Bug Fixes  
 - Resolved numerous bugs for a smoother experience.  
 
 ### Changed
