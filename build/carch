@@ -13,6 +13,9 @@ MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 ICON_DIR="/usr/share/icons/hicolor"
 CONFIG_DIR="$HOME/.config/carch"
 CONFIG_FILE="$CONFIG_DIR/carch.conf"
+BASH_COMPLETION_DIR="/usr/share/bash-completion/completions/carch"
+ZSH_COMPLETION_DIR="/usr/share/zsh/functions/Completion/Unix/_carch"
+FISH_COMPLETION_DIR="$HOME/.config/fish/completions/carch.fish"
 
 setup_logging() {
     mkdir -p "$(dirname "$LOG_FILE")"
@@ -40,6 +43,24 @@ uninstall_carch() {
     sudo rm -f "$MAN_PAGES_DIR"
 
     sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
+
+    BASH_COMPLETION_DIR=$(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo "/usr/share/bash-completion/completions")
+    if [[ -d "$BASH_COMPLETION_DIR" ]]; then
+        sudo rm -f "$BASH_COMPLETION_DIR/carch"
+        [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR"
+    fi
+
+    ZSH_COMPLETION_DIR=$(zsh -c 'echo $fpath' | grep "Completion/Unix" | head -n 1)
+    if [[ -d "$ZSH_COMPLETION_DIR" ]]; then
+        sudo rm -f "$ZSH_COMPLETION_DIR/_carch"
+        [[ -z $(ls -A "$ZSH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$ZSH_COMPLETION_DIR"
+    fi
+
+    FISH_COMPLETION_DIR=$(fish -c 'echo $fish_complete_path' | head -n 1)
+    if [[ -d "$FISH_COMPLETION_DIR" ]]; then
+        rm -f "$FISH_COMPLETION_DIR/carch.fish"
+        [[ -z $(ls -A "$FISH_COMPLETION_DIR" 2>/dev/null) ]] && rmdir "$FISH_COMPLETION_DIR"
+    fi
 
     echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
     log_message "INFO" "Carch uninstalled successfully."
