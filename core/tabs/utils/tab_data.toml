@@ -1,0 +1,189 @@
+name = "Utilities"
+
+[[data]]
+name = "Monitor Control"
+multi_select = false
+
+[[data.preconditions]]
+matches = true
+data = { environment = "XDG_SESSION_TYPE" }
+values = ["x11", "X11", "xorg", "Xorg", "tty"]
+
+[[data.preconditions]]
+matches = true
+data = { environment = "DISPLAY" }
+values = [":0", ":1", ":2", ":3", ":4", ":5", ":6", ":7", ":8", ":9"]
+
+[[data.entries]]
+name = "Auto Detect Displays"
+description = "This script is designed to detect and apply recommended configuration for monitors connected with your system"
+script = "monitor-control/auto_detect_displays.sh"
+
+[[data.entries]]
+name = "Change Orientation"
+description = "This script is designed to change the orientation of monitors in your system"
+script = "monitor-control/change_orientation.sh"
+
+[[data.entries]]
+name = "Disable Monitor"
+description = "This script is designed to disable a monitor in your system"
+script = "monitor-control/disable_monitor.sh"
+
+[[data.entries]]
+name = "Duplicate Displays"
+description = "This script is designed to duplicate display among multi-monitor setup in your system"
+script = "monitor-control/duplicate_displays.sh"
+
+[[data.entries]]
+name = "Enable Monitor"
+description = "This script is designed to enable a monitor in your system"
+script = "monitor-control/enable_monitor.sh"
+
+[[data.entries]]
+name = "Extend Displays"
+description = "This script is designed to extend display among multi-monitor setup in your system"
+script = "monitor-control/extend_displays.sh"
+
+[[data.entries]]
+name = "Manage Arrangement"
+description = "This script is designed to arrange monitors in multi-monitor setup in your system"
+script = "monitor-control/manage_arrangement.sh"
+
+[[data.entries]]
+name = "Reset Scaling"
+description = "This script is designed to reset scaling of a monitor in your system"
+script = "monitor-control/reset_scaling.sh"
+matches = true
+
+[[data.entries]]
+name = "Scale Monitors"
+description = "This script is designed to change the scaling of monitors in your system"
+script = "monitor-control/scale_monitor.sh"
+
+[[data.entries]]
+name = "Set Brightness"
+script = "monitor-control/set_brightness.sh"
+description = "This script is designed to change the Brightness of monitors connected to your system"
+matches = true
+
+[[data.entries]]
+name = "Set Primary Monitor"
+description = "This script is designed to set a Primary monitor in your system"
+script = "monitor-control/set_primary_monitor.sh"
+
+[[data.entries]]
+name = "Set Resolution"
+description = "This script is designed to change the resolution of monitors connected to your system"
+script = "monitor-control/set_resolutions.sh"
+
+[[data]]
+name = "Printers"
+
+[[data.entries]]
+name = "CUPS"
+script = "printers/install-cups.sh"
+description = "This script will install the CUPS system, required for most printer drivers on Linux."
+task_list = "I"
+
+[[data.entries]]
+name = "Epson printer drivers"
+script = "printers/install-epson-printer-drivers.sh"
+description = "This script will install the Epson printer drivers."
+task_list = "I"
+
+[[data]]
+name = "User Account Manager"
+multi_select = false
+
+[[data.entries]]
+name = "Add User"
+script = "user-account-manager/add_user.sh"
+
+[[data.entries]]
+name = "Add User To Groups"
+script = "user-account-manager/add_to_group.sh"
+
+[[data.entries]]
+name = "Change Password"
+script = "user-account-manager/change_password.sh"
+
+[[data.entries]]
+name = "Delete User"
+script = "user-account-manager/delete_user.sh"
+
+[[data.entries]]
+name = "Remove User From Groups"
+script = "user-account-manager/remove_from_group.sh"
+
+[[data]]
+name = "Auto Mount Drive"
+description = "This utility is designed to help with automating the process of mounting a drive on to your system."
+script = "auto-mount.sh"
+task_list = "PFM"
+multi_select = false
+
+[[data]]
+name = "Auto Login"
+script = "auto-login.sh"
+task_list = "DE setup"
+
+[[data]]
+name = "Bluetooth Manager"
+description = "This utility is designed to manage bluetooth in your system"
+script = "bluetooth-control.sh"
+task_list = "I SS"
+multi_select = false
+
+[[data]]
+name = "Bootable USB Creator"
+script = "create-bootable-usb.sh"
+task_list = "D"
+
+[[data]]
+name = "Crypto tool"
+script = "encrypt_decrypt_tool.sh"
+task_list = "I FM"
+
+[[data]]
+name = "Numlock on Startup"
+description = "This utility is designed to enable Num Lock at boot, rather than within desktop environments like KDE or GNOME"
+script = "numlock.sh"
+task_list = "PFM SS"
+
+[[data]]
+name = "Ollama"
+description = "This utility is designed to manage ollama in your system"
+script = "ollama.sh"
+task_list = "I SS"
+
+[[data]]
+name = "Service Manager"
+description = "This utility is designed to manage services in your system"
+script = "service-control.sh"
+task_list = "I PFM SS"
+
+[[data]]
+name = "SSH Commands"
+script = "ssh.sh"
+task_list = "I FM SS"
+
+[[data]]
+name = "SSH Samba"
+script = "samba-ssh-setup.sh"
+task_list = "I SS PFM"
+
+[[data]]
+name = "Timeshift Backup"
+script = "timeshift.sh"
+task_list = "I"
+
+[[data.preconditions]]
+matches = false
+data = "command_exists"
+values = [ "dnf" ]
+
+[[data]]
+name = "WiFi Manager"
+description = "This utility is designed to manage wifi in your system"
+script = "wifi-control.sh"
+task_list = "I SS"
