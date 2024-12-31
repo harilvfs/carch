@@ -23,7 +23,7 @@ const MIN_WIDTH: u16 = 100;
 const MIN_HEIGHT: u16 = 25;
 const FLOAT_SIZE: u16 = 80;
 const CONFIRM_PROMPT_FLOAT_SIZE: u16 = 40;
-const TITLE: &str = concat!(" Linux Toolbox - ", env!("CARGO_PKG_VERSION"), " ");
+const TITLE: &str = concat!(" Carch - ", env!("CARGO_PKG_VERSION"), " ");
 const ACTIONS_GUIDE: &str = "List of important tasks performed by commands' names:
 
 D  - disk modifications (ex. partitioning) (privileged)
@@ -289,7 +289,7 @@ impl AppState {
 
         let label = Paragraph::new(Line::from(vec![
             Span::styled("Carch ", Style::default().bold()),
-            Span::styled("by Hari Chalise", Style::default().italic()),
+            Span::styled("v4.1.1", Style::default().italic()),
         ]))
         .block(label_block)
         .centered();
