@@ -8,6 +8,11 @@
 
 </div>
 
+<div align="center">
+
+<a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI-CREDIT-FF2600?style=for-the-badge&logoColor=FB4700&labelColor=1c1c29&logo=rust"/></a>
+</div>
+
 <br>
 <div align="center">
 
@@ -31,5 +36,4 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 
 </div>
 
-<a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI-CREDIT-FF2600?style=for-the-badge&logoColor=FB4700&labelColor=1c1c29&logo=rust"/></a>
 
