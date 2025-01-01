@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'

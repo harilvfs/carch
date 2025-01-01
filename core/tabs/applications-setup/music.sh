@@ -1,5 +1,12 @@
 #!/bin/bash
 
+clear
+
+BLUE="\e[34m"
+GREEN="\e[32m"
+RED="\e[31m"
+RESET="\e[0m"
+
 install_paru() {
     if ! command -v paru &> /dev/null; then
         echo -e "${RED}Paru not found. :: Installing...${RESET}"
@@ -50,7 +57,13 @@ install_music_app() {
 }
 
 install_music() {
-    echo -e "Select a music app to install:"
+    install_paru
+    while true; do
+    echo -e "${BLUE}"
+    figlet -f slant "Music Apps"
+    echo -e "${RESET}"
+
+    echo -e "${BLUE}Select a music app to install:${RESET}"
     echo -e "1) Youtube-Music"
     echo -e "2) Spotube"
     echo -e "3) Spotify"
@@ -59,13 +72,35 @@ install_music() {
 
     read -p "Enter your choice (1-5): " choice
     case $choice in
-        1) install_music_app "Youtube-Music" ;;
-        2) install_music_app "Spotube" ;;
-        3) install_music_app "Spotify" ;;
-        4) install_music_app "Rhythmbox" ;;
-        5) echo "Exiting..."; exit 0 ;;
-        *) gum format "❌ **Invalid choice. Please try again.**" ;;
-    esac
+        1)
+            gum spin --spinner dot --title "Installing Youtube-Music..." -- paru -S youtube-music-bin --noconfirm && \
+            version=$(paru -Qi youtube-music-bin | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Youtube-Music installed successfully! Version: $version**"
+            ;;
+        2) 
+            gum spin --spinner dot --title "Installing Spotube..." -- paru -S spotube --noconfirm && \
+            version=$(paru -Qi spotube | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Spotube installed successfully! Version: $version**"
+            ;;
+        3) 
+            gum spin --spinner dot --title "Installing Spotify..." -- paru -S spotify --noconfirm && \
+            version=$(paru -Qi spotify | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Spotify installed successfully! Version: $version**"
+            ;;
+        4) 
+            gum spin --spinner dot --title "Installing Rhythmbox..." -- paru -S rhythmbox --noconfirm && \
+            version=$(paru -Qi rhythmbox | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Rhythmbox installed successfully! Version: $version**"
+            ;; 
+        5) 
+            break
+            ;; 
+        esac
+    done
 }
 
 install_music

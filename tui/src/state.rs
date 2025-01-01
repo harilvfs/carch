@@ -283,13 +283,12 @@ impl AppState {
             bottom_right: " ",
             vertical_left: " ",
             vertical_right: " ",
-            horizontal_top: "*",
-            horizontal_bottom: "*",
+            horizontal_top: "-",
+            horizontal_bottom: "-",
         });
 
         let label = Paragraph::new(Line::from(vec![
             Span::styled("Carch ", Style::default().bold()),
-            Span::styled("v4.1.1", Style::default().italic()),
         ]))
         .block(label_block)
         .centered();

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+clear
+
+BLUE="\e[34m"
+GREEN="\e[32m"
+RED="\e[31m"
+RESET="\e[0m"
+
 install_paru() {
     if ! command -v paru &> /dev/null; then
         echo -e "${RED}Paru not found. :: Installing...${RESET}"
@@ -20,52 +27,13 @@ install_paru() {
     fi
 }
 
-install_texteditor_app() {
-    install_paru
-    case $1 in
-        "Cursor (AI Code Editor)")
-            gum spin --spinner dot --title "Installing Cursor (AI Code Editor)..." -- paru -S cursor-bin --noconfirm &>/dev/null
-            version=$(paru -Qi cursor-bin | grep Version | awk '{print $3}')
-            gum format "🎉 **Cursor installed successfully! Version: $version**"
-            ;;
-        "Visual Studio Code (VSCODE)")
-            gum spin --spinner dot --title "Installing Visual Studio Code..." -- paru -S visual-studio-code-bin --noconfirm &>/dev/null
-            version=$(paru -Qi visual-studio-code-bin | grep Version | awk '{print $3}')
-            gum format "🎉 **Visual Studio Code installed successfully! Version: $version**"
-            ;;
-        "Vscodium")
-            gum spin --spinner dot --title "Installing Vscodium..." -- paru -S vscodium-bin --noconfirm &>/dev/null
-            version=$(paru -Qi vscodium-bin | grep Version | awk '{print $3}')
-            gum format "🎉 **Vscodium installed successfully! Version: $version**"
-            ;;
-        "ZED Editor")
-            gum spin --spinner dot --title "Installing ZED Editor..." -- paru -S zed-preview-bin --noconfirm &>/dev/null
-            version=$(paru -Qi zed-preview-bin | grep Version | awk '{print $3}')
-            gum format "🎉 **ZED Editor installed successfully! Version: $version**"
-            ;;
-        "Neovim")
-            gum spin --spinner dot --title "Installing Neovim..." -- paru -S neovim --noconfirm &>/dev/null
-            version=$(paru -Qi neovim | grep Version | awk '{print $3}')
-            gum format "🎉 **Neovim installed successfully! Version: $version**"
-            ;;
-        "Vim")
-            gum spin --spinner dot --title "Installing Vim..." -- paru -S vim --noconfirm &>/dev/null
-            version=$(paru -Qi vim | grep Version | awk '{print $3}')
-            gum format "🎉 **Vim installed successfully! Version: $version**"
-            ;;
-        "Code-OSS")
-            gum spin --spinner dot --title "Installing Code-OSS..." -- paru -S coder-oss --noconfirm &>/dev/null
-            version=$(paru -Qi coder-oss | grep Version | awk '{print $3}')
-            gum format "🎉 **Code-OSS installed successfully! Version: $version**"
-            ;;
-        *)
-            gum format "❌ **Invalid choice. Please try again.**"
-            ;;
-    esac
-}
-
 install_texteditor() {
-    echo -e "Select a text editor to install:"
+    while true; do 
+    echo -e "${BLUE}"
+    figlet -f slant "Text Editor"
+    echo -e "${RESET}"
+
+    echo -e "${BLUE}Select a text editor to install:${RESET}"
     echo -e "1) Cursor (AI Code Editor)"
     echo -e "2) Visual Studio Code (VSCODE)"
     echo -e "3) Vscodium"
@@ -77,16 +45,53 @@ install_texteditor() {
 
     read -p "Enter your choice (1-8): " choice
     case $choice in
-        1) install_texteditor_app "Cursor (AI Code Editor)" ;;
-        2) install_texteditor_app "Visual Studio Code (VSCODE)" ;;
-        3) install_texteditor_app "Vscodium" ;;
-        4) install_texteditor_app "ZED Editor" ;;
-        5) install_texteditor_app "Neovim" ;;
-        6) install_texteditor_app "Vim" ;;
-        7) install_texteditor_app "Code-OSS" ;;
-        8) echo "Exiting..."; exit 0 ;;
-        *) gum format "❌ **Invalid choice. Please try again.**" ;;
-    esac
+        1) 
+            gum spin --spinner dot --title "Installing Cursor (AI Code Editor)..." -- paru -S cursor-bin --noconfirm && \
+            version=$(paru -Qi cursor-bin | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Cursor installed successfully! Version: $version**"
+            ;;
+        2)
+            gum spin --spinner dot --title "Installing Visual Studio Code..." -- paru -S visual-studio-code-bin --noconfirm && \
+            version=$(paru -Qi visual-studio-code-bin | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Visual Studio Code installed successfully! Version: $version**"
+            ;;
+        3) 
+            gum spin --spinner dot --title "Installing Vscodium..." -- paru -S vscodium-bin --noconfirm && \
+            version=$(paru -Qi vscodium-bin | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Vscodium installed successfully! Version: $version**"
+            ;;
+        4) 
+            gum spin --spinner dot --title "Installing ZED Editor..." -- paru -S zed-preview-bin --noconfirm && \
+            version=$(paru -Qi zed-preview-bin | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **ZED Editor installed successfully! Version: $version**"
+            ;;
+        5) 
+            gum spin --spinner dot --title "Installing Neovim..." -- paru -S neovim --noconfirm && \
+            version=$(paru -Qi neovim | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Neovim installed successfully! Version: $version**"
+            ;;
+        6)
+            gum spin --spinner dot --title "Installing Vim..." -- paru -S vim --noconfirm && \
+            version=$(paru -Qi vim | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Vim installed successfully! Version: $version**"
+            ;;
+        7) 
+            gum spin --spinner dot --title "Installing Code-OSS..." -- paru -S coder-oss --noconfirm && \
+            version=$(paru -Qi coder-oss | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Code-OSS installed successfully! Version: $version**"
+            ;;
+        8)
+            break 
+            ;;
+        esac
+    done
 }
 
 install_texteditor

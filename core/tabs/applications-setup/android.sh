@@ -1,7 +1,11 @@
 #!/bin/bash
 
+clear
+
 BLUE="\e[34m"
-ENDCOLOR="\e[0m"
+GREEN="\e[32m"
+RED="\e[31m"
+RESET="\e[0m"
 
 install_paru() {
     if ! command -v paru &> /dev/null; then
@@ -23,43 +27,38 @@ install_paru() {
     fi
 }
 
-install_andriod_app() {
+install_android() {
     install_paru
     while true; do
     echo -e "${BLUE}"
     figlet -f slant "Android"
-    echo -e "${ENDCOLOR}"
-        case $1 in
-        "Gvfs-MTP [Displays Android phones via USB]")
-            gum spin --spinner dot --title "Installing Gvfs-MTP..." -- paru -S gvfs-mtp --noconfirm &>/dev/null
-            version=$(paru -Qi gvfs-mtp | grep Version | awk '{print $3}')
-            gum format "🎉 **Gvfs-MTP installed successfully! Version: $version**"
-            ;;
-        "ADB")
-            gum spin --spinner dot --title "Installing ADB..." -- paru -S adb --noconfirm &>/dev/null
-            version=$(paru -Qi adb | grep Version | awk '{print $3}')
-            gum format "🎉 **ADB installed successfully! Version: $version**"
-            ;;
-        *)
-            gum format "❌ **Invalid choice. Please try again.**"
-            ;;
-    esac
-}
+    echo -e "${RESET}"
 
-install_andriod() {
-    echo -e "Select an Android-related application to install:"
+    echo -e "${BLUE}Select an Android-related application to install:${RESET}"
     echo -e "1) Gvfs-MTP [Displays Android phones via USB]"
     echo -e "2) ADB"
     echo -e "3) Exit"
 
-    read -p "Enter your choice (1-3): " choice
-    case $choice in
-        1) install_andriod_app "Gvfs-MTP [Displays Android phones via USB]" ;;
-        2) install_andriod_app "ADB" ;;
-        3) echo "Exiting..."; exit 0 ;;
-        *) gum format "❌ **Invalid choice. Please try again.**" ;;
-    esac
+    read -p "Enter your choice (1-3): " android_choice
+    
+    case $android_choice in
+        1) 
+            gum spin --spinner dot --title "Installing Gvfs-MTP..." -- paru -S --noconfirm gvfs-mtp  && \
+            version=$(paru -Qi gvfs-mtp | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **Gvfs-MTP installed successfully! Version: $version**"
+            ;;
+        2) 
+            gum spin --spinner dot --title "Installing ADB..." -- paru -S --noconfirm adb && \
+            version=$(paru -Qi adb | grep Version | awk '{print $3}') && \
+            clear
+            gum format "🎉 **ADB installed successfully! Version: $version**"
+            ;;
+        3) 
+            break
+            ;;
+        esac
+    done
 }
 
-install_andriod
-
+install_android

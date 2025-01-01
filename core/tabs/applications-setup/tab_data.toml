@@ -5,18 +5,21 @@ name = "Communication Apps"
 description = "Communication Apps is a collection of tools and scripts that help users with their daily communication tasks."
 script = "communication.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Dev Tools"
 description = "Developer Tools is a collection of tools and scripts that help developers with their daily tasks."
 script = "dev.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Web Browsers"
 description = "Web Browsers is a collection of tools and scripts that help users with their daily web browsing tasks."
 script = "browsers.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Alacritty"
@@ -89,36 +92,42 @@ name = "Recording"
 description = "This is the collection of screen recording tools that help users with their daily recording tasks."
 script = "recording.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Editing"
 description = "This is the collection of video editing tools that help users with their daily editing tasks."
 script = "editing.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "File Managers"
 description = "This is the collection of file managers that help users with their daily file management tasks."
 script = "filemanager.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Multimedia"
 description = "This is the collection of multimedia tools that help users with their daily multimedia tasks."
 script = "multimedia.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Music"
 description = "This is the collection of music tools that help users with their daily music tasks."
 script = "music.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Terminal Emulators"
 description = "This is the collection of terminal emulators that help users with their daily terminal tasks."
 script = "terminal.sh"
 task_list = "I"
+multi_select = false
 
 [[data]]
 name = "Text Editors"

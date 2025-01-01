@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
