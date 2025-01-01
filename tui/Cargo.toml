@@ -1,5 +1,5 @@
 [package]
-name = "carch_tui"
+name = "carch-tui"
 description = "An automated script for quick & easy Arch Linux system setup 🧩."
 documentation = "https://carch-org.github.io/docs/"
 readme = "../README.md"

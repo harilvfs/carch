@@ -1,5 +1,8 @@
 #!/bin/bash
 
+BLUE="\e[34m"
+ENDCOLOR="\e[0m"
+
 install_paru() {
     if ! command -v paru &> /dev/null; then
         echo -e "${RED}Paru not found. :: Installing...${RESET}"
@@ -22,7 +25,11 @@ install_paru() {
 
 install_andriod_app() {
     install_paru
-    case $1 in
+    while true; do
+    echo -e "${BLUE}"
+    figlet -f slant "Android"
+    echo -e "${ENDCOLOR}"
+        case $1 in
         "Gvfs-MTP [Displays Android phones via USB]")
             gum spin --spinner dot --title "Installing Gvfs-MTP..." -- paru -S gvfs-mtp --noconfirm &>/dev/null
             version=$(paru -Qi gvfs-mtp | grep Version | awk '{print $3}')
@@ -39,7 +46,6 @@ install_andriod_app() {
     esac
 }
 
-# Main function to select and install Android-related applications
 install_andriod() {
     echo -e "Select an Android-related application to install:"
     echo -e "1) Gvfs-MTP [Displays Android phones via USB]"
