@@ -10,7 +10,7 @@
 
 <div align="center">
 
-<a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI-CREDIT-FF2600?style=for-the-badge&logoColor=FB4700&labelColor=1c1c29&logo=rust"/></a>
+<a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI%20CREDIT-ChrisTitusTech/linutil-FF2600?style=for-the-badge&logoColor=FB4700&labelColor=1c1c29&logo=rust"/></a>
 </div>
 
 <br>
