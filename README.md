@@ -31,5 +31,5 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 
 </div>
 
-<a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI%20Credit-8A2BE2?style=for-the-badge&color=dbb6ed&logoColor=85e185&labelColor=1c1c29"/></a>
+<a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI-CREDIT-90EE90?style=for-the-badge&logoColor=85e185&labelColor=1c1c29"/></a>
 
