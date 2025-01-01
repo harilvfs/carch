@@ -11,6 +11,14 @@
 <div align="center">
 
 <a href="https://github.com/ChrisTitusTech/linutil" target="blank"><img src="https://img.shields.io/badge/TUI%20CREDIT-ChrisTitusTech/linutil-FF2600?style=for-the-badge&logoColor=FB4700&labelColor=1c1c29&logo=rust"/></a>
+
+<a href="https://github.com/ChrisTitusTech/linutil" target="blank">
+  <img 
+    src="https://img.shields.io/badge/TUI%20CREDIT-ChrisTitusTech/linutil-FF2600?style=for-the-badge&logo=rust&logoColor=FFD700&labelColor=1c1c1c" 
+    alt="TUI Credit by ChrisTitusTech/linutil" 
+  />
+</a>
+
 </div>
 
 <br>
