@@ -1,0 +1,39 @@
+name = "System Setup"
+
+[[data]]
+name = "Aur Helper"
+description = "This script is designed to handle the installation and configuration of an AUR helper"
+script = "aur.sh"
+task_list = "I PFM"
+multi_select = false
+
+[[data]]
+name = "Wallpapers"
+description = "This script is designed to handle the installation and configuration of wallpapers"
+script = "wallpapers.sh"
+task_list = "I PFM"
+
+[[data]]
+name = "Grub Theme"
+description = "Installs ChrisTitusTech's Top 5 Bootloader Themes script to allow for easy customization of GRUB."
+script = "grub.sh"
+task_list = "PFM"
+
+[[data]]
+name = "Fonts"
+description = "This script is designed to handle the installation and configuration of fonts"
+script = "fonts.sh"
+task_list = "I PFM"
+multi_select = false
+
+[[data]]
+name = "Sddm Theme"
+description = "This script is designed to handle the installation and configuration of SDDM themes"
+script = "sddm.sh"
+task_list = "I PFM"
+
+[[data]]
+name = "Themes and Icons"
+description = "This script is designed to handle the installation and configuration of themes and icons"
+script = "themes-icons.sh"
+task_list = "I PFM"
