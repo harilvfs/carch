@@ -29,5 +29,5 @@ nix = { version = "0.29.0", features = [ "user" ] }
 vt100-ctt = "0.16.0"
 
 [[bin]]
-name = "carch"
+name = "carch-tui"
 path = "src/main.rs"
