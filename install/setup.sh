@@ -178,6 +178,6 @@ echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
 echo -e "${COLOR_GREEN}"
 figlet -f slant "Note"
 echo -e "${COLOR_CYAN}Carch Installed!${COLOR_RESET}"
-echo -e "${COLOR_CYAN}Use 'carch' or 'carch --gtk' to run the script.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Use 'carch' 'carch --gtk' or 'carch --tui' to run the script.${COLOR_RESET}"
 echo -e "${COLOR_CYAN}For help, type 'carch --help'.${COLOR_RESET}"
 
