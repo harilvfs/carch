@@ -94,11 +94,6 @@ install_terminal() {
             clear
             gum format "🎉 **Yakuake installed successfully!**"
             ;;
-        "Tilda")
-            gum spin --spinner dot --title "Installing Tilda..." -- sudo pacman -S tilda --noconfirm && \
-            clear
-            gum format "🎉 **Tilda installed successfully!**"
-            ;;
         "Cool Retro Term")
             gum spin --spinner dot --title "Installing Cool Retro Term..." -- sudo pacman -S cool-retro-term --noconfirm && \
             clear
@@ -170,19 +165,18 @@ install_terminals() {
     echo -e "11) Terminator"
     echo -e "12) Guake"
     echo -e "13) Yakuake"
-    echo -e "14) Tilda"
-    echo -e "15) Cool Retro Term"
-    echo -e "16) Sakura"
-    echo -e "17) st (Simple Terminal)"
-    echo -e "18) Eterm"
-    echo -e "19) WezTerm"
-    echo -e "20) Deepin Terminal"
-    echo -e "21) Zellij"
-    echo -e "22) Termite"
-    echo -e "23) fbterm"
-    echo -e "24) Exit"
+    echo -e "14) Cool Retro Term"
+    echo -e "15)akura"
+    echo -e "16) st (Simple Terminal)"
+    echo -e "17) Eterm"
+    echo -e "18) WezTerm"
+    echo -e "19) Deepin Terminal"
+    echo -e "20) Zellij"
+    echo -e "21) Termite"
+    echo -e "22) fbterm"
+    echo -e "23) Exit"
 
-    read -p "Enter your choice (1-24): " choice
+    read -p "Enter your choice (1-23): " choice
     case $choice in
         1) install_terminal "Alacritty" ;;
         2) install_terminal "Kitty" ;;
@@ -197,17 +191,16 @@ install_terminals() {
         11) install_terminal "Terminator" ;;
         12) install_terminal "Guake" ;;
         13) install_terminal "Yakuake" ;;
-        14) install_terminal "Tilda" ;;
-        15) install_terminal "Cool Retro Term" ;;
-        16) install_terminal "Sakura" ;;
-        17) install_terminal "st (Simple Terminal)" ;;
-        18) install_terminal "Eterm" ;;
-        19) install_terminal "WezTerm" ;;
-        20) install_terminal "Deepin Terminal" ;;
-        21) install_terminal "Zellij" ;;
-        22) install_terminal "Termite" ;;
-        23) install_terminal "fbterm" ;;
-        24) echo "Exiting..."; exit 0 ;;
+        14) install_terminal "Cool Retro Term" ;;
+        15) install_terminal "Sakura" ;;
+        16) install_terminal "st (Simple Terminal)" ;;
+        17) install_terminal "Eterm" ;;
+        18) install_terminal "WezTerm" ;;
+        19) install_terminal "Deepin Terminal" ;;
+        20) install_terminal "Zellij" ;;
+        21) install_terminal "Termite" ;;
+        22) install_terminal "fbterm" ;;
+        23) echo "Exiting..."; exit 0 ;;
         *) gum format "❌ **Invalid choice. Please try again.**" ;;
         esac
     done 

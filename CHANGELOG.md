@@ -96,7 +96,7 @@ For installation instructions, refer to the [official guide](https://carch-org.g
 
 ### Added
 
-* Add Returing To Menu [Back] by @harilvfs in https://github.com/harilvfs/carch/pull/191
+* Add Returning To Menu [Back] by @harilvfs in https://github.com/harilvfs/carch/pull/191
 * Include `GTK` & `CLI` [Main Script] by @harilvfs in https://github.com/harilvfs/carch/pull/192
 * man-page for [Carch] 📄 by @harilvfs in https://github.com/harilvfs/carch/pull/200
 
@@ -267,7 +267,7 @@ For installation instructions, refer to the [official guide](https://carch-org.g
 * Add Tor Browser Installation into Packages Installation Script by @harilvfs in https://github.com/harilvfs/carch/pull/33
 * Add Gum Interactive Menus and Confirmation to Setup Scripts by @harilvfs in https://github.com/harilvfs/carch/pull/39
 * Add Rhythmbox To Music [Package Installation] by @harilvfs in https://github.com/harilvfs/carch/pull/43
-* Add a tag for netflix unoffical package by @harilvfs in https://github.com/harilvfs/carch/pull/45
+* Add a tag for netflix unofficial package by @harilvfs in https://github.com/harilvfs/carch/pull/45
 * Add note for dwm setup & version in cxfs by @smritics in https://github.com/harilvfs/carch/pull/53
 
 ### Removed
