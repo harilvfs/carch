@@ -1,4 +1,4 @@
-name: Build Rust Release
+name: Build Rust Binary
 
 on:
   push:
