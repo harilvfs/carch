@@ -1,0 +1,7 @@
+# example carch.toml
+
+auto_execute = [
+    "Communication Apps",
+    "Android",
+    "Thunar"
+]
