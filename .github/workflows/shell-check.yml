@@ -5,6 +5,7 @@ on:
     paths:
       - '**/*.sh'
       - 'install/*.sh'
+      - 'build/carch'
   workflow_dispatch:
 
 permissions:
