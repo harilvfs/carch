@@ -287,9 +287,10 @@ impl AppState {
             horizontal_bottom: "-",
         });
 
-        let label = Paragraph::new(Line::from(vec![
-            Span::styled("Carch ", Style::default().bold()),
-        ]))
+        let label = Paragraph::new(Line::from(vec![Span::styled(
+            "Carch ",
+            Style::default().bold(),
+        )]))
         .block(label_block)
         .centered();
 
