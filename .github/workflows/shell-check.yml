@@ -3,7 +3,6 @@ name: Script Checks
 on:
   pull_request:
     paths:
-      - 'scripts/*.sh'
       - '**/*.sh'
       - 'install/*.sh'
       - 'build/carch'
