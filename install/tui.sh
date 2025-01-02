@@ -71,4 +71,3 @@ check $? "Executing carch-tui"
 
 rm -f "$TMPFILE"
 check $? "Deleting the temporary file"
-
