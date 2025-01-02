@@ -121,7 +121,7 @@ install_terminals() {
         terminal_choice=$(gum choose "Alacritty" "Kitty" "GNOME Terminal" "Konsole" \
         "Xfce Terminal" "LXTerminal" "MATE Terminal" "xterm" \
         "urxvt (rxvt-unicode)" "Tilix" "Terminator" "Guake" "Yakuake" \
-        "Tilda" "Cool Retro Term" "Sakura" "st (Simple Terminal)" "Eterm" \
+        "Cool Retro Term" "Sakura" "st (Simple Terminal)" "Eterm" \
         "WezTerm" "Deepin Terminal" "Zellij" "Termite" "fbterm" "Exit")
 
         case $terminal_choice in
@@ -177,10 +177,6 @@ install_terminals() {
                 echo -e "${BLUE}:: Installing Yakuake...${RESET}"
                 sudo pacman -S yakuake --noconfirm &>/dev/null
                 echo -e "${GREEN}Yakuake installed successfully!${RESET}" ;;
-            "Tilda")
-                echo -e "${BLUE}:: Installing Tilda...${RESET}"
-                sudo pacman -S tilda --noconfirm &>/dev/null
-                echo -e "${GREEN}Tilda installed successfully!${RESET}" ;;
             "Cool Retro Term")
                 echo -e "${BLUE}:: Installing Cool Retro Term...${RESET}"
                 sudo pacman -S cool-retro-term --noconfirm &>/dev/null
@@ -484,12 +480,12 @@ install_thunarpreview() {
     done
 }
 
-install_andriod() {
+install_android() {
     install_paru
     while true; do
-        andriod_choice=$(gum choose "Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
+        android_choice=$(gum choose "Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
 
-        case $andriod_choice in
+        case $android_choice in
             "Gvfs-MTP [Displays Android phones via USB]")
                 gum spin --spinner dot --title "Installing Gvfs-MTP..." -- paru -S --noconfirm gvfs-mtp && \
                 version=$(paru -Qi gvfs-mtp | grep Version | awk '{print $3}') && \
@@ -512,7 +508,7 @@ while true; do
     echo -e "${BLUE}"
     figlet -f slant "Packages"
     echo -e "${ENDCOLOR}"
-    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Terminal" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar [Thumbnail Preview]" "Andriod" "Exit")
+    main_choice=$(gum choose "Communication & Chatting" "Live Streaming/Recording" "Editing" "Terminal" "Browsers" "File Managers" "Music" "Coding & Text Editor" "Multimedia" "Github" "Thunar [Thumbnail Preview]" "Android" "Exit")
 
     case $main_choice in
         "Communication & Chatting") install_communication ;;
@@ -526,7 +522,7 @@ while true; do
         "Multimedia") install_multimedia ;;
         "Github") install_github ;;
         "Thunar [Thumbnail Preview]") install_thunarpreview ;;
-        "Andriod") install_andriod ;;
+        "Android") install_android ;;
         "Exit") exit ;;
     esac
 done
