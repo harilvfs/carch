@@ -1,0 +1,52 @@
+name: Build Rust Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.rs'
+      - '**/Cargo.toml'
+      - 'Cargo.lock'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build release binary
+        run: |
+          cargo build --release || { echo "Build failed"; exit 1; }
+          if [ -f target/release/carch-tui ]; then
+              mkdir -p build
+              mv target/release/carch-tui ./build/carch-tui
+          else
+              echo "Binary not found. Build may have failed."
+              exit 1
+          fi
+          rm -rf target/release 
+
+      - name: List build artifacts
+        run: ls ./build
+
+      - name: Commit and push the build directory
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add build/carch-tui
+          git commit -m "Update build directory with new binary" || echo "No changes to commit"
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/harilvfs/carch.git HEAD:main || echo "Push failed. Check permissions."
