@@ -1,7 +1,7 @@
 function __fish_carch_no_subcommand
     for i in (commandline -opc)
         switch $i
-            case --help --version --gen-config --config -c --run-script -r --list-scripts -l --update --gtk -g --uninstall
+            case --help --version --gen-config --config -c --run-script -r --list-scripts -l --update --gtk -g --tui -t --uninstall
                 return 1
         end
     end
@@ -20,5 +20,7 @@ complete -c carch -n '__fish_carch_no_subcommand' -s l -d "List all available sc
 complete -c carch -n '__fish_carch_no_subcommand' -l update -d "Update Carch using the latest script"
 complete -c carch -n '__fish_carch_no_subcommand' -l gtk -d "Launch the GTK interface"
 complete -c carch -n '__fish_carch_no_subcommand' -s g -d "Launch the GTK interface"
+complete -c carch -n '__fish_carch_no_subcommand' -l tui -d "Launch the TUI interface"
+complete -c carch -n '__fish_carch_no_subcommand' -s t -d "Launch the TUI interface"
 complete -c carch -n '__fish_carch_no_subcommand' -l uninstall -d "Uninstall Carch and remove all associated files"
 

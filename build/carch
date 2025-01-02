@@ -34,7 +34,7 @@ log_message() {
 uninstall_carch() {
     echo -e "${YELLOW}Removing Carch from the system...${RESET}"
 
-    sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py"
+    sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$TARGET_DIR/carch-tui"
 
     sudo rm -rf "$SCRIPT_DIR"
 
@@ -228,6 +228,32 @@ launch_gtk() {
     fi
 }
 
+carch_tui() {
+    local tui_script="/usr/bin/carch-tui"
+    
+    if [[ -f "$tui_script" ]]; then
+        if [[ ! -x "$tui_script" ]]; then
+            echo -e "${YELLOW}Setting executable permission for $tui_script...${RESET}"
+            chmod +x "$tui_script"
+            log_message "INFO" "Executable permission added to $tui_script."
+        fi
+        
+        log_message "INFO" "Launching TUI interface."
+        echo -e "${YELLOW}Launching TUI interface...${RESET}"
+        
+        if "$tui_script"; then
+            log_message "SUCCESS" "TUI interface launched successfully."
+        else
+            log_message "ERROR" "Failed to launch TUI interface."
+            exit 1
+        fi
+    else
+        echo -e "${RED}Error: TUI binary not found at $tui_script!${RESET}"
+        log_message "ERROR" "TUI binary not found at $tui_script."
+        exit 1
+    fi
+}
+
 show_help() {
     echo "Usage: carch [OPTIONS]"
     echo
@@ -243,6 +269,7 @@ show_help() {
     echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
     echo "  --update                Update Carch using the latest script."
     echo "  --gtk, -g               Launch the GTK interface."
+    echo "  --tui, -t               Launch the TUI interface."
     echo "  --uninstall             Uninstall Carch and remove all associated files."
     echo
 }
@@ -301,6 +328,9 @@ if [[ $# -gt 0 ]]; then
             ;;
         --gtk|-g)
             launch_gtk
+            ;;
+        --tui|-t)
+            carch_tui
             ;;
         --uninstall)
             uninstall_carch
