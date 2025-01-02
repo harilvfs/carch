@@ -48,6 +48,9 @@ setup_kitty() {
     echo -e "${CYAN}:: Downloading Kitty configuration files...${NC}"
     wget -q -P "$CONFIG_DIR" https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/kitty.conf
     wget -q -P "$CONFIG_DIR" https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/nord.conf
+    wget -q -p "$CONFIG_DIR" https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/frappe.conf
+    wget -q -p "$CONFIG_DIR" https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/macchiato.conf
+    wget -q -p "$CONFIG_DIR" https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/mocha.conf
 
     echo -e "${GREEN}Kitty setup completed! Check your backup directory for previous configs at $BACKUP_DIR.${NC}"
 }
