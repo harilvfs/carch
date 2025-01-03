@@ -73,7 +73,7 @@ for rc in "${shell_rc[@]}"; do
     if [[ -f "$rc" ]]; then
         if ! grep -Fxq "$startup_line" "$rc"; then
             echo -e "${GREEN}Adding tmux auto-start to $rc...${RESET}"
-            echo -e "$startup_line" >> "$rc"
+            echo -e "$startup_line" >>"$rc"
         else
             echo -e "${YELLOW}Tmux auto-start already present in $rc.${RESET}"
         fi
