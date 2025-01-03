@@ -146,3 +146,9 @@ name = "Android"
 description = "This is the collection of Android tools that help users with their daily Android tasks."
 script = "android.sh"
 task_list = "I"
+
+[[data]]
+name = "Tmux"
+description = "Tmux is a terminal multiplexer that lets you switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal."
+script = "tmux.sh"
+task_list = "I"
