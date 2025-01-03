@@ -86,4 +86,3 @@ for rc in "${shell_rc[@]}"; do
 done
 
 echo -e "${GREEN}Tmux setup and configuration completed successfully.${RESET}"
-
