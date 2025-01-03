@@ -8,6 +8,8 @@ on:
       - '**/*.rs'
       - '**/Cargo.toml'
       - 'Cargo.lock'
+      - 'core/**'
+      - 'tui/**'
   workflow_dispatch:
 
 permissions:
