@@ -66,7 +66,7 @@ wget -O "$config_dir/tmux.conf" "$config_url"
 plugin_script_dir="$HOME/.tmux/plugins/tpm/scripts/"
 echo -e "${GREEN}Installing tmux plugins...${RESET}"
 cd "$plugin_script_dir" || exit
-chmod +x *.sh
+chmod +x ./*.sh
 ./install_plugins.sh
 
 echo -e "${GREEN}Updating tmux plugins...${RESET}"
