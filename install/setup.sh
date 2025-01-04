@@ -41,7 +41,7 @@ if [[ $CHOICE == "Cancel" ]]; then
 fi
 
 echo -e "${COLOR_YELLOW}Removing existing installation...${COLOR_RESET}"
-sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$TARGET_DIR/carch-tui" "$DESKTOP_FILE" "$MAN_PAGES_DIR"
+sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-tui" "$DESKTOP_FILE" "$MAN_PAGES_DIR"
 sudo rm -rf "$SCRIPTS_DIR"
 sudo rm -f "$BASH_COMPLETION_DIR/carch"
 sudo rm -f "$ZSH_COMPLETION_DIR/_carch"
@@ -144,13 +144,11 @@ install_icons() {
 if [[ $CHOICE == "Rolling Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Rolling Release...${COLOR_RESET}"
     download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/build/carch" "$TARGET_DIR/carch" true
-    download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/gtk/carch-gtk.py" "$TARGET_DIR/carch-gtk.py" true
     download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/build/carch-tui" "$TARGET_DIR/carch-tui" true
     download_scripts "https://github.com/harilvfs/carch/raw/refs/heads/main/source/zip/scripts.zip"
 elif [[ $CHOICE == "Stable Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Stable Release...${COLOR_RESET}"
     download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch" "$TARGET_DIR/carch" true
-    download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch-gtk.py" "$TARGET_DIR/carch-gtk.py" true
     download_and_install "https://github.com/harilvfs/carch/releases/download/v4.1.1/carch-tui" "$TARGET_DIR/carch-tui" true
     download_scripts "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
 fi
@@ -178,6 +176,6 @@ echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
 echo -e "${COLOR_GREEN}"
 figlet -f slant "Note"
 echo -e "${COLOR_CYAN}Carch Installed!${COLOR_RESET}"
-echo -e "${COLOR_CYAN}Use 'carch' 'carch --gtk' or 'carch --tui' to run the script.${COLOR_RESET}"
+echo -e "${COLOR_CYAN}Use 'carch' or 'carch --tui' to run the script.${COLOR_RESET}"
 echo -e "${COLOR_CYAN}For help, type 'carch --help'.${COLOR_RESET}"
 

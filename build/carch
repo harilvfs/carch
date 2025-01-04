@@ -34,7 +34,7 @@ log_message() {
 uninstall_carch() {
     echo -e "${YELLOW}Removing Carch from the system...${RESET}"
 
-    sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-gtk.py" "$TARGET_DIR/carch-tui"
+    sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-tui"
 
     sudo rm -rf "$SCRIPT_DIR"
 
@@ -211,23 +211,6 @@ run_script_direct() {
     log_message "INFO" "Logs saved after running script: ${script_name}"
 }
 
-launch_gtk() {
-    local gtk_script="/usr/bin/carch-gtk.py"
-    if [[ -f "$gtk_script" ]]; then
-        log_message "INFO" "Launching GTK interface."
-        echo -e "${YELLOW}Launching GTK interface...${RESET}"
-        if python3 "$gtk_script"; then
-            log_message "SUCCESS" "GTK interface launched successfully."
-        else
-            log_message "ERROR" "Failed to launch GTK interface."
-        fi
-    else
-        echo -e "${YELLOW}Error: GTK script not found at $gtk_script!${RESET}"
-        log_message "ERROR" "GTK script not found at $gtk_script."
-        exit 1
-    fi
-}
-
 carch_tui() {
     local tui_script="/usr/bin/carch-tui"
     
@@ -268,7 +251,6 @@ show_help() {
     echo "  --run-script <name>, -r Run the specified script from $SCRIPT_DIR."
     echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
     echo "  --update                Update Carch using the latest script."
-    echo "  --gtk, -g               Launch the GTK interface."
     echo "  --tui, -t               Launch the TUI interface."
     echo "  --uninstall             Uninstall Carch and remove all associated files."
     echo
@@ -325,9 +307,6 @@ if [[ $# -gt 0 ]]; then
             ;;
         --update)
             bash <(curl -L https://chalisehari.com.np/carch)
-            ;;
-        --gtk|-g)
-            launch_gtk
             ;;
         --tui|-t)
             carch_tui
