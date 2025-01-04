@@ -24,7 +24,6 @@ install_if_missing() {
 
 install_if_missing "gum" "pacman -S --noconfirm gum" "gum"
 install_if_missing "figlet" "pacman -S --noconfirm figlet" "figlet"
-install_if_missing "Python" "pacman -S --noconfirm python" "python3"
 
 install_package() {
     local package_name="$1"
@@ -40,7 +39,6 @@ install_package() {
     fi
 }
 
-install_package "gtk3"
 install_package "noto-fonts-emoji"
 install_package "ttf-joypixels"
 install_package "man-pages"
