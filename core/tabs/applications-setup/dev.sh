@@ -42,7 +42,7 @@ install_github() {
         echo "2) GitHub Desktop"
         echo "3) GitHub-CLI"
         echo "4) Exit"
-        read -p "Enter your choice [1-4]" github_choice
+        read -p "Enter your choice [1-4]: " github_choice
 
         case $github_choice in
 
