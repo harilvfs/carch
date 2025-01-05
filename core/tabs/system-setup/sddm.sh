@@ -76,6 +76,11 @@ set_theme() {
     sudo bash -c 'cat > /etc/sddm.conf <<EOF
 [Theme]
 Current=catppuccin-mocha
+
+# [Autologin]
+# User=username
+# Session=dwm,hyprland or others..
+#
 EOF'
 }
 
