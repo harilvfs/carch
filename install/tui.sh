@@ -20,9 +20,9 @@ check() {
 
 findArch() {
     case "$(uname -m)" in
-        x86_64|amd64) arch="x86_64" ;;
-        aarch64|arm64) arch="aarch64" ;;
-        *) check 1 "Unsupported architecture"
+        x86_64 | amd64) arch="x86_64" ;;
+        aarch64 | arm64) arch="aarch64" ;;
+        *) check 1 "Unsupported architecture" ;;
     esac
 }
 
