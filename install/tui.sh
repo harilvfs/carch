@@ -28,8 +28,8 @@ findArch() {
 
 getUrl() {
     case "${arch}" in
-        x86_64) echo "https://github.com/harilvfs/carch/releases/latest/download/carch-tui";;
-        *) echo "https://github.com/harilvfs/carch/releases/latest/download/carch-tui-${arch}";;
+        x86_64) echo "https://github.com/harilvfs/carch/releases/latest/download/carch-tui" ;;
+        *) echo "https://github.com/harilvfs/carch/releases/latest/download/carch-tui-${arch}" ;;
     esac
 }
 
