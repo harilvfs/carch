@@ -4,10 +4,8 @@ clear
 
 COLOR_RESET="\e[0m"
 COLOR_GREEN="\e[32m"
-COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
-COLOR_BLUE="\e[34m"
 
 VERSION="4.1.1"
 TARGET_DIR="/usr/bin"
@@ -63,8 +61,9 @@ for size in 16 24 32 48 64 128 256; do
 done
 
 detect_shell() {
-    local shell=$(basename "$SHELL")
-    echo "$shell"
+    local detected_shell
+    detected_shell=$(basename "$SHELL")
+    echo "$detected_shell"
 }
 
 ensure_directories() {

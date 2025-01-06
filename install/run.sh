@@ -1,8 +1,6 @@
 #!/bin/bash
 
 COLOR_GREEN="\e[32m"
-COLOR_YELLOW="\e[33m"
-COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
 COLOR_RESET="\e[0m"
 
@@ -25,8 +23,7 @@ install_if_missing() {
 
     if ! command -v "$check_cmd" &> /dev/null; then
         log_info "$package_name is not installed. Installing..."
-        sudo $install_cmd &>/dev/null
-        if [ $? -ne 0 ]; then
+        if ! sudo "$install_cmd" &>/dev/null; then
             log_error "Failed to install $package_name."
             exit 1
         fi
@@ -43,8 +40,7 @@ install_package() {
     local package_name="$1"
     if ! pacman -Q "$package_name" &>/dev/null; then
         log_info "$package_name is not installed. Installing..."
-        sudo pacman -S --noconfirm "$package_name" &>/dev/null
-        if [ $? -ne 0 ]; then
+        if ! sudo pacman -S --noconfirm "$package_name" &>/dev/null; then
             log_error "Failed to install $package_name."
             exit 1
         fi
@@ -60,7 +56,8 @@ install_package "man-pages"
 install_package "man-db"
 
 log_info "Running the external bash command..."
-if ! bash <(curl -L https://chalisehari.com.np/carch); then
+if ! bash <(curl -L "https://chalisehari.com.np/carch"); then
     log_error "Failed to execute the external bash command."
     exit 1
 fi
+
