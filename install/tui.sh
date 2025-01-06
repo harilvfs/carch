@@ -1,73 +1,50 @@
 #!/bin/sh
 
-# Source: https://github.com/ChrisTitusTech/linutil
+# Source Repo:ChrisTitusTech/linutil
 
-RC='\033[0m'
-RED='\033[0;31m'
-
-get_latest_release() {
-    latest_release=$(curl -s https://api.github.com/repos/harilvfs/carch/releases |
-        grep -oP '"tag_name": "\K[^"]*' |
-        head -n 1)
-    if [ -z "$latest_release" ]; then
-        printf "%b\n" "Error fetching release data" >&2
-        return 1
-    fi
-    printf "%b\n" "$latest_release"
-}
-
-redirect_to_latest_pre_release() {
-    latest_release=$(get_latest_release)
-    if [ -n "$latest_release" ]; then
-        url="https://github.com/harilvfs/carch/releases/download/$latest_release/carch-tui"
-    else
-        printf "%b\n" 'Unable to determine latest pre-release version.' >&2
-        printf "%b\n" "Using latest Full Release"
-        url="https://github.com/harilvfs/carch/releases/latest/download/carch-tui"
-    fi
-    addArch
-    printf "%b\n" "Using URL: $url"
-}
+rc='\033[0m'
+red='\033[0;31m'
 
 check() {
     exit_code=$1
     message=$2
 
     if [ "$exit_code" -ne 0 ]; then
-        printf "%b\n" "${RED}ERROR: $message${RC}"
+        printf '%sERROR: %s%s\n' "$red" "$message" "$rc"
         exit 1
     fi
-}
 
-addArch() {
-    case "${arch}" in
-        x86_64) ;;
-        *) url="${url}-${arch}" ;;
-    esac
+    unset exit_code
+    unset message
 }
 
 findArch() {
     case "$(uname -m)" in
         x86_64 | amd64) arch="x86_64" ;;
+        aarch64 | arm64) arch="aarch64" ;;
         *) check 1 "Unsupported architecture" ;;
     esac
 }
 
-findArch
-redirect_to_latest_pre_release
+getUrl() {
+    case "${arch}" in
+        x86_64) echo "https://github.com/harilvfs/carch/releases/latest/download/carch-tui" ;;
+        *) echo "https://github.com/harilvfs/carch/releases/latest/download/carch-tui-${arch}" ;;
+    esac
+}
 
-TMPFILE=$(mktemp)
+findArch
+temp_file=$(mktemp)
 check $? "Creating the temporary file"
 
-printf "%b\n" "Downloading carch-tui from $url"
-curl -fsL "$url" -o "$TMPFILE"
-check $? "Downloading carch-tui"
+curl -fsL "$(getUrl)" -o "$temp_file"
+check $? "Downloading carch"
 
-chmod +x "$TMPFILE"
-check $? "Making carch-tui executable"
+chmod +x "$temp_file"
+check $? "Making carch executable"
 
-"$TMPFILE" "$@"
-check $? "Executing carch-tui"
+"$temp_file" "$@"
+check $? "Executing carch"
 
-rm -f "$TMPFILE"
+rm -f "$temp_file"
 check $? "Deleting the temporary file"
