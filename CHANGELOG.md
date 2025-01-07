@@ -6,9 +6,10 @@ All notable changes to this project will be documented in this file.
 
 **Happy New Year! This is the first release of 2025.**  
 
-However, please note that no further releases or updates will be pushed for Carch.
-
-Carch is not dead, but I have personal reasons for pausing active development and new features. If things get better, I will work on updates and improvements again.
+> [!NOTE]
+> However, please note that no further releases or updates will be pushed for Carch.
+> 
+> Carch is not dead, but I have personal reasons for pausing active development and new features. If things get better, I will work on updates and improvements again.
 
 > [!IMPORTANT]
 > Certain components of Carch have been removed, including the GTK version and AUR packages.
