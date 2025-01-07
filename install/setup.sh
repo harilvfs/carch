@@ -167,7 +167,7 @@ if [[ $CHOICE == "Rolling Release" ]]; then
 elif [[ $CHOICE == "Stable Release" ]]; then
     print_message INFO "Installing Stable Release..."
     download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch" "$TARGET_DIR/carch" true
-    download_and_install "https://github.com/harilvfs/carch/releases/download/v4.1.1/carch-tui" "$TARGET_DIR/carch-tui" true
+    download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch-tui" "$TARGET_DIR/carch-tui" true
     download_scripts "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
 fi
 
