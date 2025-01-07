@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 **Happy New Year! This is the first release of 2025.**  
 
 > [!NOTE]
-> However, please note that no further releases or updates will be pushed for Carch.
+> However, please note that no further releases or updates will be pushed for Carch For the near future.
 > 
 > Carch is not dead, but I have personal reasons for pausing active development and new features. If things get better, I will work on updates and improvements again.
 
