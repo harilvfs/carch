@@ -1,5 +1,5 @@
 .\" Manpage for Carch
-.TH "carch" "1" "January 2025" "Carch 4.1.1" "Carch Manual"
+.TH "carch" "1" "January 2025" "Carch 4.1.2" "Carch Manual"
 
 .SH NAME
 carch \- Automate and streamline Arch Linux system setup
@@ -10,14 +10,14 @@ carch \- Automate and streamline Arch Linux system setup
 .SH DESCRIPTION
 Carch is a versatile tool designed to automate and streamline the process of setting up Arch Linux systems. 
 .br
-It provides support for both CLI and GTK-based graphical interfaces, configuration management, and logging. 
+It provides support for both CLI and TUI interfaces, configuration management, and logging. 
 .br
 With Carch, you can efficiently customize your Arch Linux installation to meet your specific needs.
 
 .SH LIVE VERSION
 Get started quickly with the live version by running the following command in your terminal:
 .PP
-\fBcurl -fsSL https://chalisehari.com.np/lvfs | sh\fR
+\fBcurl -fsSL https://chalisehari.com.np/carchx | sh\fR
 
 .SH OPTIONS
 .TP
@@ -26,7 +26,7 @@ Display this help message and exit.
 
 .TP
 \fB\-\-version\fR, \fB\-v\fR
-Show the current version of the program (\fB4.1.1\fR).
+Show the current version of the program (\fB4.1.2\fR).
 
 .TP
 \fB\-\-gen\-config\fR
@@ -39,6 +39,10 @@ Use a specific configuration file to load selected scripts.
 .TP
 \fB\-c\fR
 Use the default configuration file to load selected scripts.
+
+.TP
+\fB\-\-tui\fR, \fB\-t\fR
+Launch the program in Text User Interface (TUI) mode.
 
 .TP
 \fB\-\-run\-script\fR \fI<name>\fR
