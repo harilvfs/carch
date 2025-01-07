@@ -1,6 +1,6 @@
 [package]
 name = "carch_core"
-description = "The backend of carch."
+description = "The backend of carch tui."
 repository = "https://github.com/harilvfs/carch/tree/main/core"
 edition = "2021"
 version.workspace = true
