@@ -23,7 +23,6 @@ All notable changes to this project will be documented in this file.
 - Carch now includes a TUI!  
   Use the command `carch --tui` or `carch -t` to launch it.  
   [Learn more here](https://carch-org.github.io/docs/installation/tui.html).
-](https://carch-org.github.io/docs/installation/tui.html)
 
 ### Changed
 
