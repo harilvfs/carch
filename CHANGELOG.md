@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
     - `carch --tui`
     or
     - `carch -t`
+
 *See [docs](https://carch-org.github.io/docs/installation/tui.html) for more.*
 
 ### Changed
