@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v4.1.2](https://github.com/harilvfs/carch/compare/v4.1.1...v4.1.2) (2025-01-07)
 
-**Happy New Year! This is the first release of 2025.**  
+**This is the first release of year 2025.**  
 
 > [!NOTE]
 > However, please note that no further releases or updates will be pushed for `Carch` For the near future.
