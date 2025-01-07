@@ -17,6 +17,13 @@ Carch is not dead, but I have personal reasons for pausing active development an
 >
 > The removal of GTK is discussed [**here**](https://github.com/harilvfs/carch/discussions/234)
 
+### ✨ Main Highlights of This Release  
+
+- Carch now includes a TUI!  
+  Use the command `carch --tui` or `carch -t` to launch it.  
+  [Learn more here](https://carch-org.github.io/docs/installation/tui.html).
+](https://carch-org.github.io/docs/installation/tui.html)
+
 ### Changed
 
 * Refactor Setup Script [ New Design ] by @harilvfs in https://github.com/harilvfs/carch/pull/239
