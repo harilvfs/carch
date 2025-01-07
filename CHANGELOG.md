@@ -7,15 +7,15 @@ All notable changes to this project will be documented in this file.
 **Happy New Year! This is the first release of 2025.**  
 
 > [!NOTE]
-> However, please note that no further releases or updates will be pushed for Carch For the near future.
+> However, please note that no further releases or updates will be pushed for `Carch` For the near future.
 > 
-> Carch is not dead, but I have personal reasons for pausing active development and new features. If things get better, I will work on updates and improvements again.
+> **Carch** is not dead, but I have personal reasons for pausing active development and new features. If things get better, I will work on updates and improvements again.
 >
-> Certain components of Carch have been removed, including the GTK version and AUR packages.
+> Certain components of `Carch` have been removed, including the `GTK` version and `AUR` packages.
 >
-> The AUR package removal is explained in detail [**here**](https://github.com/carch-org/pkgs#carch-aur-packages)
+> The **AUR** package removal is explained in detail [**here**](https://github.com/carch-org/pkgs#carch-aur-packages)
 >
-> The removal of GTK is discussed [**here**](https://github.com/harilvfs/carch/discussions/234)
+> The removal of `GTK` is discussed [**here**](https://github.com/harilvfs/carch/discussions/234)
 
 ### ✨ Main Highlights of This Release  
 
