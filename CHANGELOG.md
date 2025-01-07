@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 >
 > Certain components of `Carch` have been removed, including the `GTK` version and `AUR` packages.
 >
-> The **AUR** package removal is explained in detail [**here**](https://github.com/carch-org/pkgs#carch-aur-packages)
+> The `AUR` package removal is explained in detail [**here**](https://github.com/carch-org/pkgs#carch-aur-packages)
 >
 > The removal of `GTK` is discussed [**here**](https://github.com/harilvfs/carch/discussions/234)
 
