@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.2](https://github.com/harilvfs/carch/compare/v4.1.1...v4.1.2) (2025-01-07)
+
+**Happy New Year! This is the first release of 2025.**  
+
+However, please note that no further releases or updates will be pushed for Carch.
+
+Carch is not dead, but I have personal reasons for pausing active development and new features. If things get better, I will work on updates and improvements again.
+
+> [!IMPORTANT]
+> Certain components of Carch have been removed, including the GTK version and AUR packages.
+>
+> The AUR package removal is explained in detail [**here**](https://github.com/carch-org/pkgs#carch-aur-packages)
+>
+> The removal of GTK is discussed [**here**](https://github.com/harilvfs/carch/discussions/234)
+
+### Changed
+
+* Refactor Setup Script [ New Design ] by @harilvfs in https://github.com/harilvfs/carch/pull/239
+
+### Added
+
+* Christitus Tech Tui Implementation [carch] by @harilvfs in https://github.com/harilvfs/carch/pull/225
+* Tui Installation On Progress by @harilvfs in https://github.com/harilvfs/carch/pull/232
+* Added Tmux Setup Script by @harilvfs in https://github.com/harilvfs/carch/pull/233 [For both tui & cli]
+* Add autologin in sddm [Autologin INFO] by @harilvfs in https://github.com/harilvfs/carch/pull/236
+
+### Fixed
+
+* Minor Fish Dir Fixes by @harilvfs in https://github.com/harilvfs/carch/pull/224
+
+### Removed
+
+* Remove all GTK Stuffs by @harilvfs in https://github.com/harilvfs/carch/pull/235
+* Aur Packages [carch & carch-git]
+
 ## [v4.1.1](https://github.com/harilvfs/carch/compare/v4.1.0...v4.1.1) (2024-12-30)
 
 **This release will be the last release of 2024. We will be back in 2025 with more updates and features.**  
