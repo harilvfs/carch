@@ -7,7 +7,7 @@ COLOR_GREEN="\e[32m"
 COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
 
-VERSION="4.1.1"
+VERSION="4.1.2"
 TARGET_DIR="/usr/bin"
 SCRIPTS_DIR="$TARGET_DIR/scripts"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
