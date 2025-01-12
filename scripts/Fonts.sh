@@ -27,14 +27,15 @@ install_font() {
     local target_font_dir
 
     if [ "$scope" == "system" ]; then
-        target_font_dir="/usr/share/fonts"
+      target_font_dir="/usr/share/fonts"
         if [ "$(id -u)" -ne 0 ]; then
-            echo -e "${CYAN}:: Requesting sudo permissions for system-wide installation...${NC}"
-            sudo -v || { echo -e "${RED}Failed to obtain sudo permissions. Exiting.${NC}"; exit 1; }
+          echo -e "${CYAN}:: Requesting sudo permissions for system-wide installation...${NC}"
+          sudo ls &>/dev/null || { echo -e "${RED}Failed to obtain sudo permissions. Exiting.${NC}"; exit 1; }
         fi
     else
         target_font_dir="$HOME/.local/share/fonts"
     fi
+
 
     mkdir -p "$download_dir" "$target_font_dir"
 
