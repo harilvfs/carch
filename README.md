@@ -1,11 +1,4 @@
 <div align="center">
-  <h3>Notice</h3>
-  <p>This project has been officially closed by the owner. Thank you for your interest and support.</p>
-
-  <img src="https://img.shields.io/badge/Maintained%3F-No-1c1c29?style=for-the-badge&color=ef9f9c&logoColor=85e185&labelColor=1c1c29">
-</div>
-
-<div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.webp" width="800" />
 </div>
 <br>
