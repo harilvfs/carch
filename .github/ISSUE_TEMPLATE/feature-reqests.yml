@@ -5,7 +5,7 @@ labels: ["enhancement"]
 assignees:
   - harilvfs
 
-ody:
+body:
   - type: markdown
     attributes:
       value: |
