@@ -1,0 +1,52 @@
+name: "Feature Request"
+description: "Suggest an idea to improve this project"
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees: []
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "Provide a clear and concise description of the feature you'd like to see added."
+      placeholder: "Explain what the feature is and why it would be useful."
+    validations:
+      required: true
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: "Use Case"
+      description: "How would this feature benefit you or other users?"
+      placeholder: "Describe real-world scenarios where this feature would be helpful."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: "Proposed Solution"
+      description: "If you have a specific solution in mind, describe it here."
+      placeholder: "Explain how you think the feature should be implemented (optional)."
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives"
+      description: "Have you considered any alternative solutions or workarounds?"
+      placeholder: "Describe other possible approaches to solve this problem."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "Additional Information"
+      description: "Include any relevant details, references, or screenshots."
+      placeholder: "Provide any extra information, such as links to similar features in other projects."
+    validations:
+      required: false
+
