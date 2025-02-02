@@ -88,9 +88,18 @@ body:
         - Bash
         - Zsh
         - Fish
-        - Other
+        - Other (please specify below)
     validations:
       required: true
+
+  - type: input
+    id: other_shell
+    attributes:
+      label: "Other Shell"
+      description: "If you selected 'Other', specify your shell."
+      placeholder: "Enter shell name"
+    validations:
+      required: false
 
   - type: input
     id: script_version
