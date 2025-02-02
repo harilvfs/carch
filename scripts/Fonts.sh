@@ -30,10 +30,10 @@ install_font() {
 		target_font_dir="/usr/share/fonts"
 		if [ "$(id -u)" -ne 0 ]; then
 			echo -e "${CYAN}:: Requesting sudo permissions for system-wide installation...${NC}"
-			sudo ls &>/dev/null || {
+			if ! sudo -v; then
 				echo -e "${RED}Failed to obtain sudo permissions. Exiting.${NC}"
 				exit 1
-			}
+			fi
 		fi
 	else
 		target_font_dir="$HOME/.local/share/fonts"
@@ -68,11 +68,12 @@ install_font() {
 	fi
 
 	echo -e "${CYAN}:: Cleaning up...${NC}"
-	rm -rf "$font_extract_dir" "$font_download_path"
+	rm -rf "$download_dir" "$font_download_path" "$font_extract_dir"
 
 	echo -e "${GREEN}Font $font_name installed successfully!${NC}"
 
-	read -p "Press Enter to return to the font menu..."
+	echo "Press Enter to return to the font menu..."
+	read
 
 }
 
