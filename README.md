@@ -1,9 +1,4 @@
 <div align="center">
-  <h3>Notice</h3>
-  <p>This project has been officially closed by the owner. Thank you for your interest and support.</p>
-</div>
-
-<div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.webp" width="800" />
 </div>
 <br>
