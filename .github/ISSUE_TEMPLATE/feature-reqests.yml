@@ -10,10 +10,6 @@ ody:
     attributes:
       value: |
         Thank you for taking the time to submit a feature request! Please note that submitting a request does not guarantee implementation.
-      description: "Provide a clear and concise description of the feature you'd like to see added."
-      placeholder: "Explain what the feature is and why it would be useful."
-    validations:
-      required: true
 
   - type: textarea
     id: use_case
