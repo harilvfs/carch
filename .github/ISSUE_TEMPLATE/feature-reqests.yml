@@ -2,7 +2,8 @@ name: "Feature Request"
 description: "Suggest an idea to improve this project"
 title: "[Feature]: "
 labels: ["enhancement"]
-assignees: []
+assignees:
+  - harilvfs
 
 body:
   - type: textarea
