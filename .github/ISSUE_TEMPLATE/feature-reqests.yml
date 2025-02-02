@@ -5,11 +5,11 @@ labels: ["enhancement"]
 assignees:
   - harilvfs
 
-body:
-  - type: textarea
-    id: description
+ody:
+  - type: markdown
     attributes:
-      label: "Description"
+      value: |
+        Thank you for taking the time to submit a feature request! Please note that submitting a request does not guarantee implementation.
       description: "Provide a clear and concise description of the feature you'd like to see added."
       placeholder: "Explain what the feature is and why it would be useful."
     validations:
@@ -51,3 +51,13 @@ body:
     validations:
       required: false
 
+  - type: checkboxes
+    id: financing
+    attributes:
+      label: Support or Contribution
+      description: |
+
+        You are welcome to submit your feature request! While most enhancements are community-driven, you can also support or contribute to accelerate implementation.
+      options:
+        - label: "[I am willing to contribute or support this feature](https://github.com/harilvfs/carch)"
+          required: false
