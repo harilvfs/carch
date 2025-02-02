@@ -1,7 +1,9 @@
-blank_issues_enabled: false
+blank_issues_enabled: false 
 contact_links:
   - name: Join our Discord server
-    url: https://discord.gg/c4fJK7Za3g
-  - name: Carch Documentation 
+    url: https://discord.com/invite/8NJWstnUHd
+    about: Chat with the us.  
+  - name: Read the Carch Documentation
     url: https://carch-org.github.io/docs/
+    about: Find guides on installing, using, and configuring Carch scripts.
 

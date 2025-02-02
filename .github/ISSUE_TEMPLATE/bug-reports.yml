@@ -2,8 +2,8 @@ name: "Bug Report"
 description: "Report a bug to help us improve"
 title: "[Bug]: "
 labels: ["bug"]
-assignees: []
-
+assignees:
+  - harilvfs
 body:
   - type: textarea
     id: description
