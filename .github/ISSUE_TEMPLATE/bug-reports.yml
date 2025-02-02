@@ -1,0 +1,131 @@
+name: "Bug Report"
+description: "Report a bug to help us improve"
+title: "[Bug]: "
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "Provide a clear and concise description of the bug."
+      placeholder: "Describe the issue in detail..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Steps to Reproduce"
+      description: "List the steps to reproduce the issue."
+      placeholder: |
+        1. First Step
+        2. Second Step
+        3. Additional Steps
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: "Expected Behavior"
+      description: "What should happen instead?"
+      placeholder: "Describe the intended or correct behavior."
+    validations:
+      required: true
+
+  - type: textarea
+    id: script_behavior
+    attributes:
+      label: "Script Behavior"
+      description: "Describe how the script is behaving. Does it fail silently, produce errors, or behave unexpectedly?"
+      placeholder: "Provide details on symptoms, errors, or malfunctions."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: linux_distro
+    attributes:
+      label: "Linux Distro"
+      description: "Which Arch-based Linux distribution are you using?"
+      options:
+        - Arch Linux
+        - EndeavourOS
+        - Manjaro
+        - Garuda Linux
+        - ArcoLinux
+        - CachyOS
+        - RebornOS
+        - Other (please specify below)
+    validations:
+      required: true
+
+  - type: input
+    id: other_distro
+    attributes:
+      label: "Other Distro (if not listed)"
+      description: "If you selected 'Other', specify your Arch-based distro."
+      placeholder: "Enter distro name"
+    validations:
+      required: false
+
+  - type: input
+    id: linux_version
+    attributes:
+      label: "Linux Version"
+      description: "Output of `uname -a`"
+      placeholder: "Paste the output here"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: shell
+    attributes:
+      label: "Shell"
+      description: "Which shell are you using?"
+      options:
+        - Bash
+        - Zsh
+        - Fish
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: script_version
+    attributes:
+      label: "Script Version"
+      description: "Which version of the script are you using?"
+      placeholder: "e.g., latest commit, version number"
+    validations:
+      required: true
+
+  - type: input
+    id: terminal
+    attributes:
+      label: "Terminal Emulator"
+      description: "Which terminal emulator are you using?"
+      placeholder: "e.g., Alacritty, Kitty, etc."
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots (if applicable)"
+      description: "Attach screenshots if they help explain the problem."
+      placeholder: "Drag and drop screenshots here."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "Additional Information"
+      description: "Include any other relevant details, error messages, or recent changes."
+      placeholder: "Paste error messages or additional notes here."
+    validations:
+      required: false
+
+
