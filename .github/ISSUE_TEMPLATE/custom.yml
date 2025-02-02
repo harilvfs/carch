@@ -1,0 +1,73 @@
+name: "Custom Issue"
+description: "Use this template to submit a custom issue"
+title: "[Custom]: Short description of the issue"
+labels: ["custom"]
+assignees: []
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "Provide a clear and concise description of the issue or request."
+      placeholder: "Explain the issue or request in detail."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Steps to Reproduce (if applicable)"
+      description: "List the steps to reproduce the issue."
+      placeholder: |
+        1. First Step
+        2. Second Step
+        3. and so on...
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: "Expected Behavior"
+      description: "What should happen instead?"
+      placeholder: "Describe the intended or correct behavior."
+    validations:
+      required: false
+
+  - type: textarea
+    id: script_behavior
+    attributes:
+      label: "Script Behavior"
+      description: "Describe how the script is behaving. Does it fail silently, produce errors, or behave unexpectedly?"
+      placeholder: "Provide details on symptoms, errors, or malfunctions."
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: "Screenshots (if applicable)"
+      description: "Attach screenshots if they help explain the issue."
+      placeholder: "Drag and drop screenshots here."
+    validations:
+      required: false
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: "Proposed Solution (if applicable)"
+      description: "If you have a solution in mind, describe it here."
+      placeholder: "Explain your proposed solution (optional)."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_info
+    attributes:
+      label: "Additional Information"
+      description: "Include any relevant details, references, or extra context."
+      placeholder: "Provide any extra information, such as links to similar features in other projects."
+    validations:
+      required: false
+
