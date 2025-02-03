@@ -7,7 +7,7 @@ echo -e "${GREEN}Updating the system...${ENDCOLOR}"
 sudo pacman -Syuu --noconfirm
 
 echo -e "${GREEN}Installing Paru AUR helper...${ENDCOLOR}"
-if ! command -v paru &> /dev/null; then
+if ! command -v paru &>/dev/null; then
     git clone https://aur.archlinux.org/paru.git
     cd paru || exit
     makepkg -si --noconfirm
