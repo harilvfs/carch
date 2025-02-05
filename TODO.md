@@ -10,4 +10,4 @@
 
 - Rework some documentation, as the installation method has changed.
 
-- Main goal: ~~Make everything available for Fedora Linux as well.~~ This will take more time, but I will work on it.
+- Main goal: Make everything available for Fedora Linux as well.
