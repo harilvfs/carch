@@ -1,15 +1,6 @@
 name: Build Rust Binary
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**/*.rs'
-      - '**/Cargo.toml'
-      - 'Cargo.lock'
-      - 'core/**'
-      - 'tui/**'
   workflow_dispatch:
 
 permissions:
