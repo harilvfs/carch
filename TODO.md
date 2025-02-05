@@ -8,6 +8,6 @@
 
 - Delegate the installation of Carch to PKGBUILDs, offering both rolling and stable releases.
 
-- Rework some documentation, as the installation method has changed.
+- Rework some documentation, as the installation method will change.
 
 - Main goal: Make everything available for Fedora Linux as well.
