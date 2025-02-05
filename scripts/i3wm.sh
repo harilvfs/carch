@@ -114,7 +114,8 @@ echo -e "${GREEN}All dependencies installed successfully.${ENDCOLOR}"
 echo -e "${GREEN}Checking for existing dotfiles repository...${ENDCOLOR}"
 
 if [[ -d "$DOTFILES_DIR" ]]; then
-    read -p "Existing dotfiles repository found. Do you want to remove it? (y/N): " confirm
+    echo "Existing dotfiles repository found. Do you want to remove it? (y/N)"
+    read -r confirm
     if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
         echo -e "${GREEN}Removing existing dotfiles repository...${ENDCOLOR}"
         rm -rf "$DOTFILES_DIR"
@@ -130,7 +131,8 @@ git clone "$DOTFILES_REPO" "$DOTFILES_DIR" || {
     exit 1; 
 }
 
-read -p "Choose your color scheme (Catppuccin/Nord): " COLOR_SCHEME
+echo "Choose your color scheme (catppuccin/nord)"
+read -r COLOR_SCHEME
 COLOR_SCHEME=$(echo "$COLOR_SCHEME" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$COLOR_SCHEME" != "catppuccin" && "$COLOR_SCHEME" != "nord" ]]; then
@@ -176,7 +178,8 @@ cp "$DOTFILES_DIR/picom/picom-transparency/picom.conf" "$PICOM_CONFIG_DIR/"
 
 for shell_config in .bashrc .zshrc; do
     if [[ -f "$HOME/$shell_config" ]]; then
-        read -p "Found existing $shell_config. Replace with new config? (y/N): " choice
+        echo "Found existing $shell_config. Replace with new config? (y/N)"
+        read -r choice
         if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
             mv "$HOME/$shell_config" "$BACKUP_DIR/"
             cp "$DOTFILES_DIR/$shell_config" "$HOME/"
@@ -192,14 +195,16 @@ elif [[ "$OS" == "fedora" ]]; then
 fi
 
 if [[ -d "$HOME/.config/fish" ]]; then
-    read -p "Found existing Fish config. Replace with new config? (y/N): " choice
+    echo "Found existing Fish config. Replace with new config? (y/N)"
+    read -r choice
     if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
         mv "$HOME/.config/fish" "$BACKUP_DIR/"
         cp -r "$DOTFILES_DIR/fish" "$HOME/.config/"
     fi
 fi
 
-read -p "Choose your bar (Polybar/I3status) [Polybar recommended]: " BAR_CHOICE
+echo "Choose your bar (polybar/i3status) [Polybar recommended]"
+read -r BAR_CHOICE
 BAR_CHOICE=$(echo "$BAR_CHOICE" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$BAR_CHOICE" == "polybar" ]]; then
@@ -248,7 +253,8 @@ if [[ ! -d "$HOME/Pictures" ]]; then
 fi
 
 if [[ -d "$WALLPAPER_DIR" ]]; then
-    read -p "Wallpapers directory already exists. Do you want to remove and re-clone? (y/N): " choice
+    echo "Wallpapers directory already exists. Do you want to remove and re-clone? (y/N)"
+    read -r choice
     if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
         echo -e "${GREEN}Removing existing wallpapers directory...${ENDCOLOR}"
         rm -rf "$WALLPAPER_DIR"
@@ -294,7 +300,8 @@ check_remove_dir() {
     for dir in "$1" "$2"; do
         if [ -d "$dir" ]; then
             echo "$dir already exists."
-            read -p "Do you want to remove it? (y/n): " remove_dir
+            echo "Do you want to remove it? (y/n)"
+            read -r remove_dir
             if [[ "$remove_dir" =~ ^[Yy]$ ]]; then
                 rm -rf "$dir"
                 echo "$dir removed."
@@ -356,7 +363,8 @@ apply_sddm_theme() {
 
     if [ -d "$theme_dir" ]; then
         echo "$theme_dir already exists."
-        read -p "Do you want to remove the existing theme and continue? (y/n): " remove_dir
+        echo "Do you want to remove the existing theme and continue? (y/n)"
+        read -r remove_dir
         if [[ "$remove_dir" =~ ^[Yy]$ ]]; then
             sudo rm -rf "$theme_dir"
             echo "$theme_dir removed."
@@ -372,7 +380,7 @@ apply_sddm_theme() {
     
     unzip "$temp_dir/catppuccin-mocha.zip" -d "$temp_dir"
     
-    cd "$temp_dir/catppuccin-mocha"
+    cd "$temp_dir/catppuccin-mocha" || exit 
     
     echo "Copying the theme to /usr/share/sddm/themes..."
     sudo cp -r "$temp_dir/catppuccin-mocha" /usr/share/sddm/themes/
@@ -442,7 +450,7 @@ enable_start_sddm
 echo "Sddm theme applied, service started, and configuration updated successfully!"
 
 create_file() {
-    echo -e "${GREEN}Creating script...${END_COLOR}"
+    echo -e "${GREEN}Creating script...${ENDCOLOR}"
     sudo tee "/usr/local/bin/numlock" >/dev/null <<'EOF'
 #!/bin/bash
 
@@ -456,7 +464,7 @@ EOF
 }
 
 create_service() {
-    echo -e "${GREEN}Creating service...${END_COLOR}"
+    echo -e "${GREEN}Creating service...${ENDCOLOR}"
     sudo tee "/etc/systemd/system/numlock.service" >/dev/null <<'EOF'
 [Unit]
 Description=numlock
@@ -473,7 +481,7 @@ EOF
 
 numlockSetup() {
     if [ "$INIT_MANAGER" = "rc-service" ]; then
-        echo -e "${RED}Unsupported init system.${END_COLOR}"
+        echo -e "${RED}Unsupported init system.${ENDCOLOR}"
         exit 1
     fi
 
@@ -488,11 +496,11 @@ numlockSetup() {
     echo -n "Do you want to enable Numlock on boot? (y/N): "
     read -r confirm
     if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
-        echo -e "${GREEN}Enabling Numlock on boot...${END_COLOR}"
+        echo -e "${GREEN}Enabling Numlock on boot...${ENDCOLOR}"
         sudo systemctl enable numlock.service
-        echo -e "${GREEN}Numlock will be enabled on boot.${END_COLOR}"
+        echo -e "${GREEN}Numlock will be enabled on boot.${ENDCOLOR}"
     else
-        echo -e "${GREEN}Numlock will not be enabled on boot.${END_COLOR}"
+        echo -e "${GREEN}Numlock will not be enabled on boot.${ENDCOLOR}"
     fi
 }
 
