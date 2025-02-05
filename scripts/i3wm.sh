@@ -78,14 +78,15 @@ if [[ "$OS" == "arch" ]]; then
 		gnome-settings-daemon gnome-keyring neovim \
 		ttf-meslo-nerd noto-fonts-emoji ttf-joypixels ttf-jetbrains-mono \
 		starship network-manager-applet blueman pasystray wget unzip starship \
-		curl zoxide
+		curl zoxide shfmt
 elif [[ "$OS" == "fedora" ]]; then
 	sudo dnf install -y \
 		i3 polybar rofi maim \
 		imwheel xclip flameshot lxappearance thunar xorg-x11-server-Xorg \
 		xorg-x11-xinit xrandr gtk3 gnome-settings-daemon gnome-keyring \
 		neovim network-manager-applet blueman pasystray git jetbrains-mono-fonts-all \
-		google-noto-color-emoji-fonts google-noto-emoji-fonts wget unzip curl zoxide
+		google-noto-color-emoji-fonts google-noto-emoji-fonts wget unzip curl zoxide \
+    shfmt
 
 	install_starship
 fi
