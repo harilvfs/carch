@@ -6,12 +6,12 @@
 
 <div align="center">
 
-- ~~Fix the i3wm script and make it usable for Fedora Linux.~~ Done ✅ 
+~~Fix the i3wm script and make it usable for Fedora Linux.~~ Done ✅ 
 
-- Delegate the installation of Carch to PKGBUILDs, offering both rolling and stable releases.
+Delegate the installation of Carch to PKGBUILDs, offering both rolling and stable releases.
 
-- Rework some documentation, as the installation method will change.
+Rework some documentation, as the installation method will change.
 
-- Main goal: Make everything available for Fedora Linux as well.
+Main goal: Make everything available for Fedora Linux as well.
 
 </div>
