@@ -28,9 +28,20 @@ check_dependency() {
     fi
 }
 
-for pkg in git cargo gcc unzip curl wget figlet man-db man bash sed xdg-user-dirs unzip google-noto-color-emoji-fonts google-noto-emoji-fonts jetbrains-mono-fonts-all tar tree-sitter gum bash-completion-devel zsh fish libtree-sitter rust-tree-sitter-devel glibc zip; do
+for pkg in git gcc unzip curl wget figlet man-db man bash sed xdg-user-dirs unzip google-noto-color-emoji-fonts google-noto-emoji-fonts jetbrains-mono-fonts-all tar tree-sitter gum bash-completion-devel zsh fish libtree-sitter rust-tree-sitter-devel glibc zip; do
     check_dependency "$pkg"
 done
+
+install_rust() {
+    if ! command -v rustc &>/dev/null; then
+        echo -e "${COLOR_YELLOW}:: Installing Rust...${COLOR_RESET}"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    else
+        echo -e "${COLOR_GREEN}:: Rust is already installed.${COLOR_RESET}"
+    fi
+}
+
+install_rust
 
 clear
 
