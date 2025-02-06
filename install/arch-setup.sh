@@ -9,9 +9,18 @@ COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
 
+if [ -f /etc/os-release ]; then
+    DISTRO=$(grep ^NAME= /etc/os-release | cut -d= -f2 | tr -d '"')
+elif command -v lsb_release &>/dev/null; then
+    DISTRO=$(lsb_release -d | cut -f2)
+else
+    DISTRO="Unknown Linux Distribution"
+fi
+
 echo -e "${COLOR_CYAN}"
 figlet -f slant "Carch"
 echo "Version $VERSION"
+echo "Distribution: $DISTRO"
 echo -e "${COLOR_RESET}"
 
 echo -e "${COLOR_YELLOW}Select installation type:${COLOR_RESET}"
