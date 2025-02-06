@@ -47,7 +47,7 @@ while true; do
     figlet -f slant "Aur"
     echo -e "${ENDCOLOR}"
 
-    echo -e "${CYAN}:: AUR Setup Menu${NC}"
+    echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
     echo -e "Please select an option:"
     echo -e "1) Install Paru"
     echo -e "2) Install Yay"

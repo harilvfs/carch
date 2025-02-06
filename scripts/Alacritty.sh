@@ -15,47 +15,59 @@ figlet -f slant "Alacritty"
 echo -e "${ENDCOLOR}"
 
 confirm_continue() {
-    printf "${YELLOW}Warning: If you already have an Alacritty configuration, make sure to back it up before proceeding.${RESET}\n"
-    if gum confirm "Do you want to continue with the setup?"; then
-        return 0
-    else
-        printf "${RED}Setup aborted by the user.${RESET}\n"
+    echo -e "${YELLOW}Warning: If you already have an Alacritty configuration, make sure to back it up before proceeding.${RESET}"
+    if ! gum confirm "Do you want to continue with the setup?"; then
+        echo -e "${RED}Setup aborted by the user.${RESET}"
         exit 1
     fi
 }
 
-checkAlacritty() {
-    if command -v alacritty &> /dev/null; then
-        printf "${GREEN}Alacritty is already installed.${RESET}\n"
-    else
-        printf "${YELLOW}Alacritty is not installed. :: Installing now...${RESET}\n"
-        if [ -x "$(command -v pacman)" ]; then
-            sudo pacman -S alacritty --noconfirm
-        elif [ -x "$(command -v apt)" ]; then
-            sudo apt install alacritty -y
-        else
-            printf "${RED}Unsupported package manager! Please install Alacritty manually.${RESET}\n"
-            exit 1
-        fi
-        printf "${GREEN}Alacritty has been installed.${RESET}\n"
+installAlacritty() {
+    if command -v alacritty &>/dev/null; then
+        echo -e "${GREEN}Alacritty is already installed.${RESET}"
+        return
     fi
+
+    echo -e "${YELLOW}Alacritty is not installed. Installing now...${RESET}"
+    
+    if [ -x "$(command -v pacman)" ]; then
+        sudo pacman -S alacritty --noconfirm
+    elif [ -x "$(command -v dnf)" ]; then
+        sudo dnf install alacritty -y
+    else
+        echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${RESET}"
+        exit 1
+    fi
+
+    echo -e "${GREEN}Alacritty has been installed.${RESET}"
 }
 
 setupAlacrittyConfig() {
-    printf "${CYAN}:: Copying Alacritty config files...${RESET}\n"
-    if [ -d "${HOME}/.config/alacritty" ] && [ ! -d "${HOME}/.config/alacritty-bak" ]; then
-        cp -r "${HOME}/.config/alacritty" "${HOME}/.config/alacritty-bak"
-        printf "${YELLOW}:: Existing Alacritty configuration backed up to alacritty-bak.${RESET}\n"
+    local alacritty_config="${HOME}/.config/alacritty"
+
+    echo -e "${CYAN}:: Setting up Alacritty configuration...${RESET}"
+
+    if [ -d "$alacritty_config" ] && [ ! -d "${alacritty_config}-bak" ]; then
+        mv "$alacritty_config" "${alacritty_config}-bak"
+        echo -e "${YELLOW}:: Existing Alacritty configuration backed up to alacritty-bak.${RESET}"
     fi
-    mkdir -p "${HOME}/.config/alacritty/"
-    curl -sSLo "${HOME}/.config/alacritty/alacritty.toml" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty/alacritty.toml"
-    curl -sSLo "${HOME}/.config/alacritty/keybinds.toml" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty/keybinds.toml"
-    curl -sSLo "${HOME}/.config/alacritty/nordic.toml" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty/nordic.toml"
-    printf "${GREEN}:: Alacritty configuration files copied.${RESET}\n"
+
+    mkdir -p "$alacritty_config"
+
+    base_url="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty"
+    for file in alacritty.toml keybinds.toml nordic.toml; do
+        curl -sSLo "$alacritty_config/$file" "$base_url/$file"
+    done
+
+    echo -e "${CYAN}:: Running 'alacritty migrate' to update the config...${RESET}"
+    (cd "$alacritty_config" && alacritty migrate)
+
+    echo -e "${GREEN}:: Alacritty configuration files copied and migrated.${RESET}"
 }
 
 confirm_continue
-checkAlacritty
+installAlacritty
 setupAlacrittyConfig
 
-printf "${GREEN}::Alacritty setup complete.${RESET}\n"
+echo -e "${GREEN}:: Alacritty setup complete.${RESET}"
+

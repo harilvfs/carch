@@ -44,9 +44,17 @@ enable_sddm() {
 install_sddm() {
     if ! command -v sddm &> /dev/null; then
         echo -e "${GREEN}:: Installing SDDM...${ENDCOLOR}"
-        if ! sudo pacman -S sddm --noconfirm; then
-            echo -e "${RED}Failed to install SDDM. Exiting...${ENDCOLOR}"
-            exit 1
+        
+        if [[ -f /etc/fedora-release ]]; then
+            if ! sudo dnf install -y sddm; then
+                echo -e "${RED}Failed to install SDDM on Fedora. Exiting...${ENDCOLOR}"
+                exit 1
+            fi
+        else
+            if ! sudo pacman -S sddm --noconfirm; then
+                echo -e "${RED}Failed to install SDDM. Exiting...${ENDCOLOR}"
+                exit 1
+            fi
         fi
     else
         echo -e "${GREEN}SDDM is already installed.${ENDCOLOR}"
@@ -56,6 +64,17 @@ install_sddm() {
 install_theme() {
     local theme_dir="/usr/share/sddm/themes/"
     local theme_url="https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip"
+    
+    if [ -d "$theme_dir/catppuccin-mocha" ]; then
+        echo -e "${RED}:: Catppuccin theme already exists.${ENDCOLOR}"
+        if gum confirm "Do you want to remove the existing theme and install a new one?"; then
+            echo -e "${GREEN}:: Removing the existing theme...${ENDCOLOR}"
+            sudo rm -rf "$theme_dir/catppuccin-mocha"
+        else
+            echo -e "${RED}:: Keeping the existing theme. Exiting...${ENDCOLOR}"
+            exit 1
+        fi
+    fi
 
     echo -e "${GREEN}:: Downloading Catppuccin SDDM theme...${ENDCOLOR}"
     sudo mkdir -p "$theme_dir"
@@ -94,10 +113,10 @@ fi
 echo -e "${GREEN}:: Proceeding with installation...${ENDCOLOR}"
 
 install_sddm
-disable_other_dms
-enable_sddm
 install_theme
 set_theme
+disable_other_dms
+enable_sddm
 
 echo -e "${GREEN}:: Setup complete. Please reboot your system to see the changes.${ENDCOLOR}"
 

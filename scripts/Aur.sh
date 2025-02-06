@@ -1,7 +1,6 @@
 #!/bin/bash
 
-tput init
-tput clear
+clear
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -48,7 +47,7 @@ while true; do
     figlet -f slant "Aur"
     echo -e "${ENDCOLOR}"
 
-    echo -e "${CYAN}:: AUR Setup Menu${NC}"
+    echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
     choice=$(gum choose "Install Paru" "Install Yay" "Exit")
 
     case $choice in

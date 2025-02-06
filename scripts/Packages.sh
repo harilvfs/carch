@@ -8,56 +8,136 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 RESET='\033[0m'
 
-install_paru() {
-    if ! command -v paru &> /dev/null; then
-        echo -e "${RED}Paru not found. :: Installing...${RESET}"
-        sudo pacman -S --needed base-devel
-
-        temp_dir=$(mktemp -d)
-        cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${RESET}"; exit 1; }
-
-        git clone https://aur.archlinux.org/paru.git
-        cd paru || { echo -e "${RED}Failed to enter paru directory${RESET}"; exit 1; }
-        makepkg -si
-        
-        cd ..
-        rm -rf "$temp_dir"
-        echo -e "${GREEN}Paru installed successfully.${RESET}"
+detect_distro() {
+    if [[ -f "/etc/os-release" ]]; then
+        . /etc/os-release
+        case "$ID" in
+            arch | arcolinux | endeavor | manjaro)
+                echo -e "${GREEN}:: Arch-based system detected.${RESET}"
+                return 0
+                ;;
+            fedora)
+                echo -e "${YELLOW}:: Fedora detected. Skipping AUR helper installation.${RESET}"
+                return 1
+                ;;
+            *)
+                echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
+                return 2
+                ;;
+        esac
     else
-        echo -e "${GREEN}:: Paru is already installed.${RESET}"
+        echo -e "${RED}:: Unable to detect the distribution.${RESET}"
+        return 2
+    fi
+}
+
+install_yay() {
+    detect_distro
+    case $? in
+        1) return ;; 
+        2) echo -e "${YELLOW}:: Proceeding, but AUR installation may not work properly.${RESET}" ;;
+    esac
+
+    if command -v yay &>/dev/null; then
+        echo -e "${GREEN}:: Yay is already installed.${RESET}"
+        return
+    fi
+
+    if command -v paru &>/dev/null; then
+        echo -e "${GREEN}:: Paru is installed. Using paru instead of yay.${RESET}"
+        return
+    fi
+
+    echo -e "${RED}:: No AUR helper found. Installing yay...${RESET}"
+    
+    sudo pacman -S --needed git base-devel
+
+    temp_dir=$(mktemp -d)
+    cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${RESET}"; exit 1; }
+
+    git clone https://aur.archlinux.org/yay.git
+    cd yay || { echo -e "${RED}Failed to enter yay directory${RESET}"; exit 1; }
+    makepkg -si
+
+    cd ..
+    rm -rf "$temp_dir"
+    echo -e "${GREEN}:: Yay installed successfully.${RESET}"
+}
+
+install_flatpak() {
+    if ! command -v flatpak &>/dev/null; then
+        echo -e "${YELLOW}:: Flatpak not found. Installing...${RESET}"
+        sudo dnf install -y flatpak
+    fi
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+}
+
+install_fedora_package() {
+    package_name="$1"
+    flatpak_id="$2"
+
+    if sudo dnf list --available | grep -q "^$package_name"; then
+        gum spin --spinner dot --title "Installing $package_name via DNF..." -- sudo dnf install -y "$package_name"
+    else
+        echo -e "${YELLOW}:: $package_name not found in DNF. Falling back to Flatpak.${RESET}"
+        gum spin --spinner dot --title "Installing $package_name via Flatpak..." -- flatpak install -y flathub "$flatpak_id"
     fi
 }
 
 install_communication() {
-    install_paru
+    detect_distro
+    distro=$?
+    
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager="yay -S --noconfirm"
+    elif [[ $distro -eq 1 ]]; then
+        install_flatpak
+        pkg_manager="install_fedora_package"
+    else
+        echo -e "${RED}:: Unsupported system. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         comm_choice=$(gum choose "Discord" "Better Discord" "Signal" "Telegram" "Keybase" "Exit")
 
         case $comm_choice in
             "Discord")
-                gum spin --spinner dot --title "Installing Discord..." -- paru -S --noconfirm discord && \
-                version=$(pacman -Qi discord | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Discord installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Discord..." -- $pkg_manager discord
+                else
+                    $pkg_manager "discord" "com.discordapp.Discord"
+                fi
                 ;;
             "Better Discord")
-                gum spin --spinner dot --title "Installing Better Discord..." -- paru -S --noconfirm betterdiscord-installer-bin&& \
-                version=$(pacman -Qi betterdiscord-installer-bin | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Better Discord installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Better Discord..." -- $pkg_manager betterdiscord-installer-bin
+                else
+                    echo -e "${YELLOW}:: Better Discord is not available for Fedora.${RESET}"
+                fi
                 ;;
             "Signal")
-                gum spin --spinner dot --title "Installing Signal..." -- paru -S --noconfirm signal-desktop && \
-                version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Signal installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Signal..." -- $pkg_manager signal-desktop
+                else
+                    $pkg_manager "signal-desktop" "org.signal.Signal"
+                fi
                 ;;
             "Telegram")
-                gum spin --spinner dot --title "Installing Telegram..." -- paru -S --noconfirm telegram-desktop && \
-                version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Telegram installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Telegram..." -- $pkg_manager telegram-desktop
+                else
+                    $pkg_manager "telegram-desktop" "org.telegram.desktop"
+                fi
                 ;;
             "Keybase")
-                gum spin --spinner dot --title "Installing Keybase..." -- paru -S --noconfirm keybase-bin && \
-                version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Keybase installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Keybase..." -- $pkg_manager keybase-bin
+                else
+                    gum spin --spinner dot --title "Installing Keybase via RPM..." -- sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
+                    run_keybase
+                fi
                 ;;
             "Exit")
                 break
@@ -67,21 +147,37 @@ install_communication() {
 }
 
 install_streaming() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager="sudo pacman -S --noconfirm"
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+    else
+        echo -e "${RED}:: Unsupported system. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         stream_choice=$(gum choose "OBS Studio" "SimpleScreenRecorder [Git]" "Exit")
 
         case $stream_choice in
             "OBS Studio")
-                gum spin --spinner dot --title "Installing OBS Studio..." -- sudo pacman -S --noconfirm obs-studio && \
-                version=$(pacman -Qi obs-studio | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing OBS Studio..." -- $pkg_manager obs-studio
+                version=$([[ $distro -eq 0 ]] && pacman -Qi obs-studio | grep Version | awk '{print $3}' || rpm -q obs-studio)
                 gum format "🎉 **OBS Studio installed successfully! Version: $version**"
                 ;;
             "SimpleScreenRecorder [Git]")
-                gum confirm "The Git version builds from source and may take some time. Proceed?" && \
-                gum spin --spinner dot --title "Installing SimpleScreenRecorder [Git]..." -- paru -S --noconfirm simplescreenrecorder-git && \
-                version=$(pacman -Qi simplescreenrecorder-git | grep Version | awk '{print $3}') && \
-                gum format "🎉 **SimpleScreenRecorder [Git] installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum confirm "The Git version builds from source and may take some time. Proceed?" && \
+                    gum spin --spinner dot --title "Installing SimpleScreenRecorder [Git]..." -- yay -S --noconfirm simplescreenrecorder-git && \
+                    version=$(pacman -Qi simplescreenrecorder-git | grep Version | awk '{print $3}')
+                    gum format "🎉 **SimpleScreenRecorder [Git] installed successfully! Version: $version**"
+                else
+                    echo -e "${YELLOW}:: SimpleScreenRecorder [Git] is not available on Fedora.${RESET}"
+                fi
                 ;;
             "Exit")
                 break
@@ -91,19 +187,37 @@ install_streaming() {
 }
 
 install_editing() {
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        pkg_manager="sudo pacman -S --noconfirm"
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+    else
+        echo -e "${RED}:: Unsupported system. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         edit_choice=$(gum choose "GIMP (Image)" "Kdenlive (Videos)" "Exit")
 
         case $edit_choice in
             "GIMP (Image)")
-                gum spin --spinner dot --title "Installing GIMP..." -- sudo pacman -S --noconfirm gimp && \
-                version=$(pacman -Qi gimp | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing GIMP..." -- $pkg_manager gimp
+                version=$([[ $distro -eq 0 ]] && pacman -Qi gimp | grep Version | awk '{print $3}' || rpm -q gimp)
                 gum format "🎉 **GIMP installed successfully! Version: $version**"
                 ;;
             "Kdenlive (Videos)")
-                gum spin --spinner dot --title "Installing Kdenlive..." -- sudo pacman -S --noconfirm kdenlive && \
-                version=$(pacman -Qi kdenlive | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Kdenlive installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Kdenlive..." -- $pkg_manager kdenlive
+                    version=$(pacman -Qi kdenlive | grep Version | awk '{print $3}')
+                    gum format "🎉 **Kdenlive installed successfully! Version: $version**"
+                else
+                    gum spin --spinner dot --title "Installing Kdenlive on Fedora..." -- $pkg_manager kdenlive
+                    version=$(rpm -q kdenlive)
+                    gum format "🎉 **Kdenlive installed successfully! Version: $version**"
+                fi
                 ;;
             "Exit")
                 break
@@ -111,6 +225,7 @@ install_editing() {
         esac
     done
 }
+
 
 install_terminals() {
     install_paru
