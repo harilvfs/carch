@@ -44,3 +44,5 @@ echo -e "${CYAN}:: Cleaning up unnecessary files...${NC}"
 rm -rf "$FASTFETCH_DIR/.git" "$FASTFETCH_DIR/LICENSE" "$FASTFETCH_DIR/README.md"
 
 echo -e "${GREEN}Fastfetch setup completed successfully!${NC}"
+
+

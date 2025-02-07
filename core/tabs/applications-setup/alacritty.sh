@@ -49,3 +49,4 @@ checkAlacritty
 setupAlacrittyConfig
 
 printf "${GREEN}::Alacritty setup complete.${RESET}\n"
+
