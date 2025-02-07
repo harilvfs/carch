@@ -132,7 +132,7 @@ git clone "$DOTFILES_REPO" "$DOTFILES_DIR" || {
 }
 
 echo -e "${YELLOW}Choose your color scheme (catppuccin/nord)${ENDCOLOR}"
-echo -e "${YELLOW}Type Full Sentense like catppuccin or nord${ENDCOLOR}"
+echo -e "${YELLOW}Type Full Sentence like catppuccin or nord${ENDCOLOR}"
 read -rp "Enter your choice: " COLOR_SCHEME
 COLOR_SCHEME=$(echo "$COLOR_SCHEME" | tr '[:upper:]' '[:lower:]')
 
@@ -206,7 +206,7 @@ fi
 
 
 echo -e "${YELLOW}Choose your bar (polybar/i3status) [Polybar recommended]${ENDCOLOR}"
-echo -e "${YELLOW}Type Full Sentense Like polybar or i3status${ENDCOLOR}"
+echo -e "${YELLOW}Type Full Sentence Like polybar or i3status${ENDCOLOR}"
 read -rp "Choose your bar: " BAR_CHOICE
 BAR_CHOICE=$(echo "$BAR_CHOICE" | tr '[:upper:]' '[:lower:]')
 
