@@ -170,6 +170,121 @@ if gum confirm "Do you want additional wallpapers?"; then
     print_message $GREEN "Wallpapers are located in $WALLPAPER_DIR. Apply them using azote."
 fi
 
+is_sddm_installed() {
+    if command -v sddm &> /dev/null; then
+        return 0 
+    else
+        return 1
+    fi
+}
+
+install_sddm() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        case $ID in
+            arch*)
+                sudo pacman -S --noconfirm sddm
+                ;;
+            fedora*)
+                sudo dnf install -y sddm
+                ;;
+            *)
+                echo "Unsupported distribution."
+                exit 1
+                ;;
+        esac
+    fi
+}
+
+apply_sddm_theme() {
+    theme_dir="/usr/share/sddm/themes/catppuccin-mocha"
+
+if [ -d "$theme_dir" ]; then
+    print_message "$YELLOW" "$theme_dir already exists."
+    if gum confirm "Do you want to remove the existing theme and continue?"; then
+        sudo rm -rf "$theme_dir"
+        print_message "$GREEN" "$theme_dir removed."
+    else
+        print_message "$RED" "$theme_dir not removed, exiting."
+        exit 1
+    fi
+fi
+
+    temp_dir=$(mktemp -d)
+    echo "Downloading Catppuccin Mocha theme..."
+    wget https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip -O "$temp_dir/catppuccin-mocha.zip"
+    
+    unzip "$temp_dir/catppuccin-mocha.zip" -d "$temp_dir"
+    
+    cd "$temp_dir/catppuccin-mocha" || exit 
+    
+    echo "Copying the theme to /usr/share/sddm/themes..."
+    sudo cp -r "$temp_dir/catppuccin-mocha" /usr/share/sddm/themes/
+    
+    rm -rf "$temp_dir"
+}
+
+configure_sddm_theme() {
+    echo "Configuring sddm.conf to use the Catppuccin Mocha theme..."
+    
+    if [ ! -f /etc/sddm.conf ]; then
+        sudo touch /etc/sddm.conf
+    fi
+
+    if ! grep -q "\[Theme\]" /etc/sddm.conf; then
+        echo "[Theme]" | sudo tee -a /etc/sddm.conf > /dev/null
+    fi
+    
+    sudo sed -i '/\[Theme\]/a Current=catppuccin-mocha' /etc/sddm.conf
+}
+
+enable_start_sddm() {
+    echo "Checking for existing display managers..."
+
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+    fi
+
+    if command -v gdm &> /dev/null; then
+        echo "GDM detected. Removing GDM..."
+        sudo systemctl stop gdm
+        sudo systemctl disable gdm --now
+        if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
+            sudo pacman -Rns --noconfirm gdm
+        elif [[ "$ID" == "fedora" ]]; then
+            sudo dnf remove -y gdm
+        fi
+    fi
+
+    if command -v lightdm &> /dev/null; then
+        echo "LightDM detected. Removing LightDM..."
+        sudo systemctl stop lightdm
+        sudo systemctl disable lightdm --now
+        if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
+            sudo pacman -Rns --noconfirm lightdm
+        elif [[ "$ID" == "fedora" ]]; then
+            sudo dnf remove -y lightdm
+        fi
+    fi
+
+    echo "Enabling and starting the sddm service..."
+    sudo systemctl enable sddm --now
+}
+
+if ! is_sddm_installed; then
+    install_sddm
+else
+    echo "Sddm is already installed, skipping installation."
+fi
+
+apply_sddm_theme
+
+configure_sddm_theme
+
+enable_start_sddm
+
+echo "Sddm theme applied, service started, and configuration updated successfully!"
+
 print_message $BLUE "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
 print_message $GREEN "SwayWM setup complete!"
 
