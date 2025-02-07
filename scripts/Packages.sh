@@ -228,167 +228,207 @@ install_editing() {
 
 
 install_terminals() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        pkg_manager="sudo pacman -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        install_flatpak
+        pkg_manager="sudo dnf install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         echo -e "${BLUE}If you're unsure what to choose, Kitty or Alacritty are great options.${RESET}"
         echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
 
-        terminal_choice=$(gum choose "Alacritty" "Kitty" "GNOME Terminal" "Konsole" \
-        "Xfce Terminal" "LXTerminal" "MATE Terminal" "xterm" \
-        "urxvt (rxvt-unicode)" "Tilix" "Terminator" "Guake" "Yakuake" \
-        "Cool Retro Term" "Sakura" "st (Simple Terminal)" "Eterm" \
-        "WezTerm" "Deepin Terminal" "Zellij" "Termite" "fbterm" "Exit")
+        terminal_choice=$(gum choose "Alacritty" "Kitty" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Exit")
 
         case $terminal_choice in
             "Alacritty")
-                echo -e "${BLUE}:: Installing Alacritty...${RESET}"
-                sudo pacman -S alacritty --noconfirm &>/dev/null
-                echo -e "${GREEN}Alacritty installed successfully!${RESET}" ;;
+                gum spin --spinner dot --title "Installing Alacritty..." -- $pkg_manager alacritty
+                version=$(get_version alacritty)
+                gum format "🎉 **Alacritty installed successfully! Version: $version**"
+                ;;
             "Kitty")
-                echo -e "${BLUE}:: Installing Kitty...${RESET}"
-                sudo pacman -S kitty --noconfirm &>/dev/null
-                echo -e "${GREEN}Kitty installed successfully!${RESET}" ;;
+                gum spin --spinner dot --title "Installing Kitty..." -- $pkg_manager kitty
+                version=$(get_version kitty)
+                gum format "🎉 **Kitty installed successfully! Version: $version**"
+                ;;
             "GNOME Terminal")
-                echo -e "${BLUE}:: Installing GNOME Terminal...${RESET}"
-                sudo pacman -S gnome-terminal --noconfirm &>/dev/null
-                echo -e "${GREEN}GNOME Terminal installed successfully!${RESET}" ;;
+                gum spin --spinner dot --title "Installing GNOME Terminal..." -- $pkg_manager gnome-terminal
+                version=$(get_version gnome-terminal)
+                gum format "🎉 **GNOME Terminal installed successfully! Version: $version**"
+                ;;
             "Konsole")
-                echo -e "${BLUE}:: Installing Konsole...${RESET}"
-                sudo pacman -S konsole --noconfirm &>/dev/null
-                echo -e "${GREEN}Konsole installed successfully!${RESET}" ;;
-            "Xfce Terminal")
-                echo -e "${BLUE}:: Installing Xfce Terminal...${RESET}"
-                sudo pacman -S xfce4-terminal --noconfirm &>/dev/null
-                echo -e "${GREEN}Xfce Terminal installed successfully!${RESET}" ;;
-            "LXTerminal")
-                echo -e "${BLUE}:: Installing LXTerminal...${RESET}"
-                sudo pacman -S lxterminal --noconfirm &>/dev/null
-                echo -e "${GREEN}LXTerminal installed successfully!${RESET}" ;;
-            "MATE Terminal")
-                echo -e "${BLUE}:: Installing MATE Terminal...${RESET}"
-                sudo pacman -S mate-terminal --noconfirm &>/dev/null
-                echo -e "${GREEN}MATE Terminal installed successfully!${RESET}" ;;
-            "xterm")
-                echo -e "${BLUE}:: Installing xterm...${RESET}"
-                sudo pacman -S xterm --noconfirm &>/dev/null
-                echo -e "${GREEN}xterm installed successfully!${RESET}" ;;
-            "urxvt (rxvt-unicode)")
-                echo -e "${BLUE}:: Installing urxvt (rxvt-unicode)...${RESET}"
-                sudo pacman -S rxvt-unicode --noconfirm &>/dev/null
-                echo -e "${GREEN}urxvt (rxvt-unicode) installed successfully!${RESET}" ;;
-            "Tilix")
-                echo -e "${BLUE}:: Installing Tilix...${RESET}"
-                sudo pacman -S tilix --noconfirm &>/dev/null
-                echo -e "${GREEN}Tilix installed successfully!${RESET}" ;;
-            "Terminator")
-                echo -e "${BLUE}:: Installing Terminator...${RESET}"
-                sudo pacman -S terminator --noconfirm &>/dev/null
-                echo -e "${GREEN}Terminator installed successfully!${RESET}" ;;
-            "Guake")
-                echo -e "${BLUE}:: Installing Guake...${RESET}"
-                sudo pacman -S guake --noconfirm &>/dev/null
-                echo -e "${GREEN}Guake installed successfully!${RESET}" ;;
-            "Yakuake")
-                echo -e "${BLUE}:: Installing Yakuake...${RESET}"
-                sudo pacman -S yakuake --noconfirm &>/dev/null
-                echo -e "${GREEN}Yakuake installed successfully!${RESET}" ;;
-            "Cool Retro Term")
-                echo -e "${BLUE}:: Installing Cool Retro Term...${RESET}"
-                sudo pacman -S cool-retro-term --noconfirm &>/dev/null
-                echo -e "${GREEN}Cool Retro Term installed successfully!${RESET}" ;;
-            "Sakura")
-                echo -e "${BLUE}:: Installing Sakura...${RESET}"
-                sudo pacman -S sakura --noconfirm &>/dev/null
-                echo -e "${GREEN}Sakura installed successfully!${RESET}" ;;
-            "st (Simple Terminal)")
-                echo -e "${BLUE}:: Installing st (Simple Terminal)...${RESET}"
-                paru -S st --noconfirm &>/dev/null
-                echo -e "${GREEN}st (Simple Terminal) installed successfully!${RESET}" ;;
-            "Eterm")
-                echo -e "${BLUE}:: Installing Eterm...${RESET}"
-                paru -S eterm --noconfirm &>/dev/null
-                echo -e "${GREEN}Eterm installed successfully!${RESET}" ;;
+                gum spin --spinner dot --title "Installing Konsole..." -- $pkg_manager konsole
+                version=$(get_version konsole)
+                gum format "🎉 **Konsole installed successfully! Version: $version**"
+                ;;
             "WezTerm")
-                echo -e "${BLUE}:: Installing WezTerm...${RESET}"
-                sudo pacman -S wezterm --noconfirm &>/dev/null
-                echo -e "${GREEN}WezTerm installed successfully!${RESET}" ;;
-            "Deepin Terminal")
-                echo -e "${BLUE}:: Installing Deepin Terminal...${RESET}"
-                sudo pacman -S deepin-terminal --noconfirm &>/dev/null
-                echo -e "${GREEN}Deepin Terminal installed successfully!${RESET}" ;;
-            "Zellij")
-                echo -e "${BLUE}:: Installing Zellij...${RESET}"
-                sudo pacman -S zellij --noconfirm &>/dev/null
-                echo -e "${GREEN}Zellij installed successfully!${RESET}" ;;
-            "Termite")
-                echo -e "${BLUE}:: Installing Termite...${RESET}"
-                paru -S termite --noconfirm &>/dev/null
-                echo -e "${GREEN}Termite installed successfully!${RESET}" ;;
-            "fbterm")
-                echo -e "${BLUE}:: Installing fbterm...${RESET}"
-                paru -S fbterm --noconfirm &>/dev/null
-                echo -e "${GREEN}fbterm installed successfully!${RESET}" ;;
-            "Exit") break ;;
-            *) echo -e "${RED}Invalid choice. Please try again.${RESET}" ;;
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing WezTerm..." -- $pkg_manager wezterm
+                    version=$(get_version wezterm)
+                    gum format "🎉 **WezTerm installed successfully! Version: $version**"
+                elif [[ $distro -eq 1 ]]; then
+                    if sudo dnf list --installed wezterm &>/dev/null; then
+                        version=$(get_version wezterm)
+                        gum format "🎉 **WezTerm is already installed! Version: $version**"
+                    else
+                        gum spin --spinner dot --title "Installing WezTerm from DNF..." -- sudo dnf install -y wezterm
+                        if [[ $? -ne 0 ]]; then
+                            gum spin --spinner dot --title "WezTerm not found in DNF, falling back to Flatpak..." -- $flatpak_cmd org.wezfurlong.wezterm
+                            version="(Flatpak version installed)"
+                        else
+                            version=$(get_version wezterm)
+                        fi
+                        gum format "🎉 **WezTerm installed successfully! Version: $version**"
+                    fi
+                fi
+                ;;
+            "Ghostty")
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Ghostty..." -- $pkg_manager ghostty
+                elif [[ $distro -eq 1 ]]; then
+                    gum spin --spinner dot --title "Enabling Ghostty repository..." -- sudo dnf copr enable pgdev/ghostty -y
+                    gum spin --spinner dot --title "Installing Ghostty..." -- sudo dnf install -y ghostty
+                fi
+                version=$(get_version ghostty)
+                gum format "🎉 **Ghostty installed successfully! Version: $version**"
+                ;;
+            "Exit")
+                break
+                ;;
         esac
     done
 }
 
 install_browsers() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager_aur="yay -S --noconfirm"
+        pkg_manager_pacman="sudo pacman -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        install_flatpak
+        pkg_manager="sudo dnf install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         browser_choice=$(gum choose "Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Tor Browser" "Exit")
 
         case $browser_choice in
             "Brave")
-                gum spin --spinner dot --title "Installing Brave Browser..." -- paru -S --noconfirm brave-bin && \
-                version=$(pacman -Qi brave-bin | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Brave Browser..." -- $pkg_manager_aur brave-bin
+                    version=$(get_version brave-bin)
+                else
+                    gum spin --spinner dot --title "Installing Brave Browser via Flatpak..." -- $flatpak_cmd com.brave.Browser
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Brave Browser installed successfully! Version: $version**"
                 ;;
             "Firefox")
-                gum spin --spinner dot --title "Installing Firefox..." -- sudo pacman -S --noconfirm firefox && \
-                version=$(pacman -Qi firefox | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Firefox..." -- $pkg_manager_pacman firefox
+                    version=$(get_version firefox)
+                else
+                    gum spin --spinner dot --title "Installing Firefox via DNF..." -- $pkg_manager firefox
+                    version=$(get_version firefox)
+                fi
                 gum format "🎉 **Firefox installed successfully! Version: $version**"
                 ;;
             "Libre Wolf")
-                gum confirm "The LibreWolf binary package installation may take some time due to its size. Proceed?" && \
-                gum spin --spinner dot --title "Installing Libre Wolf..." -- paru -S --noconfirm librewolf-bin && \
-                version=$(pacman -Qi librewolf-bin | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Libre Wolf..." -- $pkg_manager_aur librewolf-bin
+                    version=$(get_version librewolf-bin)
+                else
+                    gum spin --spinner dot --title "Installing Libre Wolf via Flatpak..." -- $flatpak_cmd io.gitlab.librewolf-community
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Libre Wolf installed successfully! Version: $version**"
                 ;;
             "Google Chrome")
-                gum spin --spinner dot --title "Installing Google Chrome..." -- paru -S --noconfirm google-chrome && \
-                version=$(pacman -Qi google-chrome | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Google Chrome..." -- $pkg_manager_aur google-chrome
+                    version=$(get_version google-chrome)
+                else
+                    gum spin --spinner dot --title "Installing Google Chrome via Flatpak..." -- $flatpak_cmd com.google.Chrome
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Google Chrome installed successfully! Version: $version**"
                 ;;
             "Chromium")
-                gum spin --spinner dot --title "Installing Chromium..." -- sudo pacman -S --noconfirm chromium && \
-                version=$(pacman -Qi chromium | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Chromium..." -- $pkg_manager_pacman chromium
+                    version=$(get_version chromium)
+                else
+                    gum spin --spinner dot --title "Installing Chromium via Flatpak..." -- $flatpak_cmd org.chromium.Chromium
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Chromium installed successfully! Version: $version**"
                 ;;
             "Vivaldi")
-                gum spin --spinner dot --title "Installing Vivaldi..." -- sudo pacman -S --noconfirm vivaldi && \
-                version=$(pacman -Qi vivaldi | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Vivaldi..." -- $pkg_manager_pacman vivaldi
+                    version=$(get_version vivaldi)
+                else
+                    gum spin --spinner dot --title "Installing Vivaldi via Flatpak..." -- $flatpak_cmd com.vivaldi.Vivaldi
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Vivaldi installed successfully! Version: $version**"
                 ;;
             "Qute Browser")
-                gum spin --spinner dot --title "Installing Qute Browser..." -- sudo pacman -S --noconfirm qutebrowser && \
-                version=$(pacman -Qi qutebrowser | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Qute Browser..." -- $pkg_manager_pacman qutebrowser
+                    version=$(get_version qutebrowser)
+                else
+                    gum spin --spinner dot --title "Installing Qute Browser via Flatpak..." -- $flatpak_cmd org.qutebrowser.qutebrowser
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Qute Browser installed successfully! Version: $version**"
                 ;;
             "Zen Browser")
-                gum spin --spinner dot --title "Installing Zen Browser..." -- paru -S --noconfirm zen-browser-bin && \
-                version=$(pacman -Qi zen-browser-bin | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Zen Browser..." -- $pkg_manager_aur zen-browser-bin
+                    version=$(get_version zen-browser-bin)
+                else
+                    gum spin --spinner dot --title "Installing Zen Browser via Flatpak..." -- $flatpak_cmd app.zen_browser.zen
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Zen Browser installed successfully! Version: $version**"
                 ;;
             "Thorium Browser")
-                gum spin --spinner dot --title "Installing Thorium Browser..." -- paru -S --noconfirm thorium-browser-bin && \
-                version=$(pacman -Qi thorium-browser-bin | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Thorium Browser installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Thorium Browser..." -- $pkg_manager_aur thorium-browser-bin
+                    version=$(get_version thorium-browser-bin)
+                    gum format "🎉 **Thorium Browser installed successfully! Version: $version**"
+                else
+                    gum format "❌ **Thorium Browser is not available on Fedora repositories or Flatpak. Visit [Thorium Website](https://thorium.rocks/) for installation instructions.**"
+                fi
                 ;;
             "Tor Browser")
-                gum spin --spinner dot --title "Installing Tor Browser..." -- paru -S --noconfirm tor-browser-bin && \
-                version=$(pacman -Qi tor-browser-bin | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Tor Browser..." -- $pkg_manager_aur tor-browser-bin
+                    version=$(get_version tor-browser-bin)
+                else
+                    gum spin --spinner dot --title "Installing Tor Browser via Flatpak..." -- $flatpak_cmd org.torproject.torbrowser-launcher
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Tor Browser installed successfully! Version: $version**"
                 ;;
             "Exit")
@@ -399,43 +439,69 @@ install_browsers() {
 }
 
 install_filemanagers() {
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        pkg_manager="sudo pacman -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         fm_choice=$(gum choose "Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
 
         case $fm_choice in
             "Nemo")
-                gum spin --spinner dot --title "Installing Nemo..." -- sudo pacman -S --noconfirm nemo && \
-                version=$(pacman -Qi nemo | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing Nemo..." -- $pkg_manager nemo
+                version=$(get_version nemo)
                 gum format "🎉 **Nemo installed successfully! Version: $version**"
                 ;;
             "Thunar")
-                gum spin --spinner dot --title "Installing Thunar..." -- sudo pacman -S --noconfirm thunar && \
-                version=$(pacman -Qi thunar | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing Thunar..." -- $pkg_manager thunar
+                version=$(get_version thunar)
                 gum format "🎉 **Thunar installed successfully! Version: $version**"
                 ;;
             "Dolphin")
-                gum spin --spinner dot --title "Installing Dolphin..." -- sudo pacman -S --noconfirm dolphin && \
-                version=$(pacman -Qi dolphin | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing Dolphin..." -- $pkg_manager dolphin
+                version=$(get_version dolphin)
                 gum format "🎉 **Dolphin installed successfully! Version: $version**"
                 ;;
             "LF (Terminal File Manager)")
-                gum spin --spinner dot --title "Installing LF..." -- sudo pacman -S --noconfirm lf && \
-                version=$(pacman -Qi lf | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing LF..." -- $pkg_manager lf
+                    version=$(get_version lf)
+                else
+                    gum spin --spinner dot --title "Enabling LF COPR repository..." -- sudo dnf copr enable lsevcik/lf -y
+                    gum spin --spinner dot --title "Installing LF..." -- sudo dnf install -y lf
+                    version=$(get_version lf)
+                fi
                 gum format "🎉 **LF installed successfully! Version: $version**"
                 ;;
             "Ranger")
-                gum spin --spinner dot --title "Installing Ranger..." -- sudo pacman -S --noconfirm ranger && \
-                version=$(pacman -Qi ranger | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing Ranger..." -- $pkg_manager ranger
+                version=$(get_version ranger)
                 gum format "🎉 **Ranger installed successfully! Version: $version**"
                 ;;
             "Nautilus")
-                gum spin --spinner dot --title "Installing Nautilus..." -- sudo pacman -S --noconfirm nautilus && \
-                version=$(pacman -Qi nautilus | grep Version | awk '{print $3}') && \
+                gum spin --spinner dot --title "Installing Nautilus..." -- $pkg_manager nautilus
+                version=$(get_version nautilus)
                 gum format "🎉 **Nautilus installed successfully! Version: $version**"
                 ;;
             "Yazi")
-                gum spin --spinner dot --title "Installing Yazi..." -- sudo pacman -S --noconfirm yazi && \
-                version=$(pacman -Qi yazi | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Yazi..." -- $pkg_manager yazi
+                    version=$(get_version yazi)
+                else
+                    gum spin --spinner dot --title "Adding Yazi repository..." -- sudo dnf copr enable varlad/yazi -y
+                    gum spin --spinner dot --title "Installing Yazi..." -- sudo dnf install -y yazi
+                    version=$(get_version yazi)
+                fi
                 gum format "🎉 **Yazi installed successfully! Version: $version**"
                 ;;
             "Exit")
@@ -446,29 +512,62 @@ install_filemanagers() {
 }
 
 install_music() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager="yay -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        install_flatpak
+        pkg_manager="sudo dnf install -y"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         music_choice=$(gum choose "Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Exit")
 
         case $music_choice in
             "Youtube-Music")
-                gum spin --spinner dot --title "Installing Youtube-Music..." -- paru -S --noconfirm youtube-music-bin && \
-                version=$(paru -Qi youtube-music-bin | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Youtube-Music installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Youtube-Music..." -- $pkg_manager youtube-music-bin
+                    version=$(get_version youtube-music-bin)
+                    gum format "🎉 **Youtube-Music installed successfully! Version: $version**"
+                else
+                    gum format "⚠️ **Youtube-Music is not available for Fedora.**"
+                fi
                 ;;
             "Spotube")
-                gum spin --spinner dot --title "Installing Spotube..." -- paru -S --noconfirm spotube && \
-                version=$(paru -Qi spotube | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Spotube..." -- $pkg_manager spotube
+                    version=$(get_version spotube)
+                else
+                    gum spin --spinner dot --title "Installing Spotube via Flatpak..." -- flatpak install -y flathub com.github.KRTirtho.Spotube
+                    version="Flatpak Version"
+                fi
                 gum format "🎉 **Spotube installed successfully! Version: $version**"
                 ;;
             "Spotify")
-                gum spin --spinner dot --title "Installing Spotify..." -- paru -S --noconfirm spotify && \
-                version=$(paru -Qi spotify | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Spotify..." -- $pkg_manager spotify
+                    version=$(get_version spotify)
+                else
+                    gum spin --spinner dot --title "Installing Spotify via Flatpak..." -- flatpak install -y flathub com.spotify.Client
+                    version="Flatpak Version"
+                fi
                 gum format "🎉 **Spotify installed successfully! Version: $version**"
                 ;;
             "Rhythmbox")
-                gum spin --spinner dot --title "Installing Rhythmbox..." -- paru -S --noconfirm rhythmbox && \
-                version=$(paru -Qi rhythmbox | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Rhythmbox..." -- $pkg_manager rhythmbox
+                else
+                    gum spin --spinner dot --title "Installing Rhythmbox on Fedora..." -- $pkg_manager rhythmbox
+                fi
+                version=$(get_version rhythmbox)
                 gum format "🎉 **Rhythmbox installed successfully! Version: $version**"
                 ;;
             "Exit")
@@ -479,46 +578,106 @@ install_music() {
 }
 
 install_texteditor() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager_aur="yay -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        install_flatpak
+        pkg_manager="sudo dnf install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         texteditor_choice=$(gum choose "Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Exit")
 
         case $texteditor_choice in
             "Cursor (AI Code Editor)")
-                gum spin --spinner dot --title "Installing Cursor (AI Code Editor)..." -- paru -S --noconfirm cursor-bin && \
-                version=$(paru -Qi cursor-bin | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Cursor..." -- $pkg_manager_aur cursor-bin
+                    version=$(get_version cursor-bin)
+                else
+                    gum format "📝 **Cursor is not available in Fedora repositories.**"
+                    gum format "🔗 **Download AppImage from:** [Cursor Official Site](https://www.cursor.com/)"
+                    gum format "🚀 **To Run:** \`chmod +x Cursor.AppImage && ./Cursor.AppImage\`"
+                    version="(Manual installation required)"
+                fi
                 gum format "🎉 **Cursor installed successfully! Version: $version**"
                 ;;
+
             "Visual Studio Code (VSCODE)")
-                gum spin --spinner dot --title "Installing Visual Studio Code..." -- paru -S --noconfirm visual-studio-code-bin && \
-                version=$(paru -Qi visual-studio-code-bin | grep Version | awk '{print $3}') && \
-                gum format "🎉 **Visual Studio Code installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing VS Code..." -- $pkg_manager_aur visual-studio-code-bin
+                    version=$(get_version visual-studio-code-bin)
+                else
+                    gum spin --spinner dot --title "Installing VS Code via Flatpak..." -- $flatpak_cmd com.visualstudio.code
+                    version="(Flatpak version installed)"
+                fi
+                gum format "🎉 **VS Code installed successfully! Version: $version**"
                 ;;
+
             "Vscodium")
-                gum spin --spinner dot --title "Installing Vscodium..." -- paru -S --noconfirm vscodium-bin && \
-                version=$(paru -Qi vscodium-bin | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Vscodium..." -- $pkg_manager_aur vscodium-bin
+                    version=$(get_version vscodium-bin)
+                else
+                    gum spin --spinner dot --title "Installing Vscodium via Flatpak..." -- $flatpak_cmd com.vscodium.codium
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Vscodium installed successfully! Version: $version**"
                 ;;
+
             "ZED Editor")
-                gum spin --spinner dot --title "Installing ZED Editor..." -- paru -S --noconfirm zed-preview-bin && \
-                version=$(paru -Qi zed-preview-bin | grep Version | awk '{print $3}') && \
-                gum format "🎉 **ZED Editor installed successfully! Version: $version**"
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing ZED Editor..." -- $pkg_manager_aur zed-preview-bin
+                    version=$(get_version zed-preview-bin)
+                else
+                    gum spin --spinner dot --title "Installing ZED via Flatpak..." -- $flatpak_cmd dev.zed.Zed
+                    version="(Flatpak version installed)"
+                fi
+                gum format "🎉 **ZED installed successfully! Version: $version**"
                 ;;
+
             "Neovim")
-                gum spin --spinner dot --title "Installing Neovim..." -- paru -S --noconfirm neovim && \
-                version=$(paru -Qi neovim | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Neovim..." -- $pkg_manager_aur neovim
+                    version=$(get_version neovim)
+                else
+                    gum spin --spinner dot --title "Installing Neovim via DNF..." -- $pkg_manager neovim
+                    version=$(get_version neovim)
+                fi
                 gum format "🎉 **Neovim installed successfully! Version: $version**"
                 ;;
+
             "Vim")
-                gum spin --spinner dot --title "Installing Vim..." -- paru -S --noconfirm vim && \
-                version=$(paru -Qi vim | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Vim..." -- $pkg_manager_aur vim
+                    version=$(get_version vim)
+                else
+                    gum spin --spinner dot --title "Installing Vim via Flatpak..." -- $flatpak_cmd org.vim.Vim
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Vim installed successfully! Version: $version**"
                 ;;
+
             "Code-OSS")
-                gum spin --spinner dot --title "Installing Code-OSS..." -- paru -S --noconfirm coder-oss && \
-                version=$(paru -Qi coder-oss | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Code-OSS..." -- $pkg_manager_aur code-oss
+                    version=$(get_version code-oss)
+                else
+                    gum spin --spinner dot --title "Installing Code-OSS via Flatpak..." -- $flatpak_cmd com.visualstudio.code-oss
+                    version="(Flatpak version installed)"
+                fi
                 gum format "🎉 **Code-OSS installed successfully! Version: $version**"
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -527,21 +686,57 @@ install_texteditor() {
 }
 
 install_multimedia() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager_aur="yay -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         multimedia_choice=$(gum choose "VLC" "Netflix [Unofficial]" "Exit")
 
         case $multimedia_choice in
             "VLC")
-                gum spin --spinner dot --title "Installing VLC..." -- paru -S --noconfirm vlc && \
-                version=$(paru -Qi vlc | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing VLC..." -- $pkg_manager_aur vlc
+                    version=$(get_version vlc)
+                else
+                    gum spin --spinner dot --title "Installing VLC via DNF..." -- $pkg_manager vlc
+                    version=$(get_version vlc)
+                fi
                 gum format "🎉 **VLC installed successfully! Version: $version**"
                 ;;
+
             "Netflix [Unofficial]")
-                gum spin --spinner dot --title "Installing Netflix [Unofficial]..." -- paru -S --noconfirm netflix && \
-                version=$(paru -Qi netflix | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Netflix [Unofficial]..." -- $pkg_manager_aur netflix
+                    version=$(get_version netflix)
+                else
+                    gum format "🔴 **Netflix Unofficial requires manual installation on Fedora**"
+                    gum format "1️⃣  **Installing required dependencies:**"
+                    gum spin --spinner dot --title "Installing wget and OpenCL..." -- sudo dnf install -y wget opencl-utils
+
+                    gum format "2️⃣  **Installing Microsoft Core Fonts:**"
+                    gum spin --spinner dot --title "Installing Core Fonts..." -- sudo yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm
+
+                    gum format "3️⃣ **Installing Wine Silverlight & Netflix Desktop:**"
+                    gum spin --spinner dot --title "Installing Wine Silverlight..." -- sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
+                    gum spin --spinner dot --title "Installing Netflix Desktop..." -- sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
+                    
+                    version="(Manual installation required)"
+                fi
                 gum format "🎉 **Netflix [Unofficial] installed successfully! Version: $version**"
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -550,26 +745,71 @@ install_multimedia() {
 }
 
 install_github() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager_aur="yay -S --noconfirm"
+        pkg_manager_pacman="sudo pacman -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
-        github_choice=$(gum choose "Git" "Github" "Github-CLI" "Exit")
+        github_choice=$(gum choose "Git" "GitHub Desktop" "GitHub CLI" "Exit")
 
         case $github_choice in
             "Git")
-                gum spin --spinner dot --title "Installing Git..." -- paru -S --noconfirm git && \
-                version=$(paru -Qi git | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Git..." -- $pkg_manager_aur git
+                    version=$(get_version git)
+                else
+                    gum spin --spinner dot --title "Installing Git via DNF..." -- $pkg_manager git
+                    version=$(get_version git)
+                fi
                 gum format "🎉 **Git installed successfully! Version: $version**"
                 ;;
-            "Github")
-                gum spin --spinner dot --title "Installing GitHub Desktop..." -- paru -S --noconfirm github-desktop-bin && \
-                version=$(paru -Qi github-desktop-bin | grep Version | awk '{print $3}') && \
+
+            "GitHub Desktop")
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing GitHub Desktop..." -- $pkg_manager_aur github-desktop-bin
+                    version=$(get_version github-desktop-bin)
+                else
+                    gum format "🔄 **Setting up GitHub Desktop repository...**"
+                    sudo dnf upgrade --refresh
+                    sudo rpm --import https://rpm.packages.shiftkey.dev/gpg.key
+                    echo -e "[shiftkey-packages]\nname=GitHub Desktop\nbaseurl=https://rpm.packages.shiftkey.dev/rpm/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://rpm.packages.shiftkey.dev/gpg.key" | sudo tee /etc/yum.repos.d/shiftkey-packages.repo > /dev/null
+
+                    gum spin --spinner dot --title "Installing GitHub Desktop via DNF..." -- $pkg_manager github-desktop
+                    if [[ $? -ne 0 ]]; then
+                        gum format "⚠️ **RPM installation failed. Falling back to Flatpak...**"
+                        gum spin --spinner dot --title "Installing GitHub Desktop via Flatpak..." -- $flatpak_cmd io.github.shiftey.Desktop
+                        version="(Flatpak version installed)"
+                    else
+                        version=$(get_version github-desktop)
+                    fi
+                fi
                 gum format "🎉 **GitHub Desktop installed successfully! Version: $version**"
                 ;;
-            "Github-CLI")
-                gum spin --spinner dot --title "Installing GitHub Cli..." -- sudo pacman -S --noconfirm github-cli && \
-                version=$(pacman -Qi github-cli | grep Version | awk '{print $3}') && \
-                gum format "🎉 **GitHub Cli installed successfully! Version: $version**"
+
+            "GitHub CLI")
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing GitHub CLI..." -- $pkg_manager_pacman github-cli
+                    version=$(get_version github-cli)
+                else
+                    gum spin --spinner dot --title "Installing GitHub CLI via DNF..." -- $pkg_manager gh
+                    version=$(get_version gh)
+                fi
+                gum format "🎉 **GitHub CLI installed successfully! Version: $version**"
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -578,16 +818,35 @@ install_github() {
 }
 
 install_thunarpreview() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager_aur="yay -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         thunarpreview_choice=$(gum choose "Tumbler" "Exit")
 
         case $thunarpreview_choice in
             "Tumbler")
-                gum spin --spinner dot --title "Installing Tumbler..." -- paru -S --noconfirm tumbler && \
-                version=$(paru -Qi tumbler | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Tumbler..." -- $pkg_manager_aur tumbler
+                else
+                    gum spin --spinner dot --title "Installing Tumbler via DNF..." -- $pkg_manager tumbler
+                fi
+                version=$(get_version tumbler)
                 gum format "🎉 **Tumbler installed successfully! Version: $version**"
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -596,21 +855,45 @@ install_thunarpreview() {
 }
 
 install_android() {
-    install_paru
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        install_yay
+        pkg_manager_aur="yay -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
     while true; do
         android_choice=$(gum choose "Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
 
         case $android_choice in
             "Gvfs-MTP [Displays Android phones via USB]")
-                gum spin --spinner dot --title "Installing Gvfs-MTP..." -- paru -S --noconfirm gvfs-mtp && \
-                version=$(paru -Qi gvfs-mtp | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Gvfs-MTP..." -- $pkg_manager_aur gvfs-mtp
+                else
+                    gum spin --spinner dot --title "Installing Gvfs-MTP via DNF..." -- $pkg_manager gvfs-mtp
+                fi
+                version=$(get_version gvfs-mtp)
                 gum format "🎉 **Gvfs-MTP installed successfully! Version: $version**"
                 ;;
+
             "ADB")
-                gum spin --spinner dot --title "Installing ADB..." -- paru -S --noconfirm adb && \
-                version=$(paru -Qi adb | grep Version | awk '{print $3}') && \
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing ADB..." -- $pkg_manager_aur android-tools
+                else
+                    gum spin --spinner dot --title "Installing ADB via DNF..." -- $pkg_manager android-tools
+                fi
+                version=$(get_version android-tools)
                 gum format "🎉 **ADB installed successfully! Version: $version**"
                 ;;
+
             "Exit")
                 break
                 ;;
