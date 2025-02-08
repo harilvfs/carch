@@ -11,6 +11,19 @@ body:
       value: |
         Thank you for taking the time to submit a feature request! Please note that submitting a request does not guarantee implementation.
 
+
+  - type: dropdown
+    id: distro
+    attributes:
+      label: "Which Linux distro is this feature for?"
+      description: "Please select the distro(s) this feature is intended for."
+      options:
+        - Arch Linux
+        - Fedora Linux
+        - Both
+    validations:
+      required: true
+
   - type: textarea
     id: use_case
     attributes:
