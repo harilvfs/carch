@@ -51,12 +51,7 @@ body:
       description: "Which Arch-based Linux distribution are you using?"
       options:
         - Arch Linux
-        - EndeavourOS
-        - Manjaro
-        - Garuda Linux
-        - ArcoLinux
-        - CachyOS
-        - RebornOS
+        - Fedora Linux
         - Other (please specify below)
     validations:
       required: true
