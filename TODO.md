@@ -6,14 +6,14 @@
 
 <div align="center">
 
-~~Fix the i3wm script and make it usable for Fedora Linux.~~ Done ✅ 
+> ~~Fix the i3wm script and make it usable for Fedora Linux.~~ **Done ✅** 
 
-~~Delegate the installation of Carch to PKGBUILDs, offering both rolling and stable releases.~~ Done ✅
+> ~~Delegate the installation of Carch to PKGBUILDs, offering both rolling and stable releases.~~ **Done ✅**
 
-~~Rework some documentation, as the installation method will change.~~ Done ✅
+> ~~Rework some documentation, as the installation method will change.~~ **Done ✅**
 
-~~Main goal: Make everything available for Fedora Linux as well.~~ Done ✅
+> ~~Main goal: Make everything available for Fedora Linux as well.~~ **Done ✅**
 
-Modify the SwayWM script to support Fedora Linux.
+> Modify the `SwayWM` script to support `Fedora Linux`.
 
 </div>
