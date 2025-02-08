@@ -9,7 +9,7 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Lts Kernel"
+figlet -f slant "LTS Kernel"
 echo -e "${ENDCOLOR}"
 
 check_current_kernel() {
@@ -21,9 +21,16 @@ check_current_kernel() {
     fi
 }
 
-install_lts_kernel() {
-    echo -e "${GREEN}:: Installing LTS kernel and headers...${ENDCOLOR}"
+install_lts_kernel_arch() {
+    echo -e "${GREEN}:: Installing LTS kernel and headers on Arch...${ENDCOLOR}"
     sudo pacman -S --needed linux-lts linux-lts-docs linux-lts-headers
+}
+
+install_lts_kernel_fedora() {
+    echo -e "${RED}LTS kernel is not available as a package in Fedora.${ENDCOLOR}"
+    echo -e "${CYAN}Fedora's default kernel is already a stable and good option for your system.${ENDCOLOR}"
+    echo -e "${CYAN}It's recommended to stick with the Fedora kernel unless you have a specific need for LTS.${ENDCOLOR}"
+    exit 0
 }
 
 configure_grub() {
@@ -50,7 +57,15 @@ echo -e "${GREEN}Exit:${NC} Cancels the installation.\n"
 
 echo "Do you want to continue with the kernel installation?"
 if prompt_continue; then
-    install_lts_kernel
+    if [ -x "$(command -v pacman)" ]; then
+        install_lts_kernel_arch
+    elif [ -x "$(command -v dnf)" ]; then
+        install_lts_kernel_fedora
+    else
+        echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
+        exit 1
+    fi
+
     echo -e "${GREEN}:: Removing the current kernel...${ENDCOLOR}"
 
     CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')
@@ -65,7 +80,14 @@ if prompt_continue; then
     configure_grub
 else
     echo ":: Installing the LTS kernel alongside the current kernel..."
-    install_lts_kernel
+    if [ -x "$(command -v pacman)" ]; then
+        install_lts_kernel_arch
+    elif [ -x "$(command -v dnf)" ]; then
+        install_lts_kernel_fedora
+    else
+        echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
+        exit 1
+    fi
     configure_grub
 fi
 

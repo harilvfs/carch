@@ -7,16 +7,15 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 YELLOW='\033[0;33m'
 RESET='\033[0m'
-ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
 figlet -f slant "Themes & Icons"
-echo -e "${ENDCOLOR}"
+echo -e "${RESET}"
 
 echo -e "${CYAN}Theme and Icon Setup${RESET}"
 echo -e "${YELLOW}----------------------${RESET}"
 
-option=$(gum choose "Themes" "Icons" "Exit")
+option=$(gum choose "Themes" "Icons" "Both" "Exit")
 
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
@@ -25,75 +24,93 @@ check_and_create_dir() {
     fi
 }
 
-install_dependencies() {
-    echo -e "${BLUE}:: Installing dependencies...${RESET}"
-    if [ "$XDG_SESSION_TYPE" == "x11" ]; then
-        sudo pacman -S lxappearance qt5-base qt6-base kvantum --noconfirm
-    elif [ "$XDG_SESSION_TYPE" == "wayland" ]; then
-        sudo pacman -S nwg-look qt5-base qt6-base kvantum --noconfirm
-    else
-        echo -e "${YELLOW}Unknown session type.${RESET}"
-        exit 1
+check_existing_dir() {
+    if [ -d "$1" ]; then
+        echo -e "${YELLOW}:: $1 already exists. Do you want to overwrite?${RESET}"
+        if ! gum confirm "Continue?"; then
+            echo -e "${YELLOW}Operation canceled.${RESET}"
+            return 1
+        fi
     fi
+    return 0
+}
+
+clone_repo() {
+    local repo_url=$1
+    local target_dir=$2
+
+    if [ -d "$target_dir" ]; then
+        echo -e "${YELLOW}:: $target_dir already exists. Skipping clone.${RESET}"
+    else
+        git clone "$repo_url" "$target_dir" || {
+            echo -e "${RED}:: Failed to clone $repo_url. Exiting...${RESET}"
+            exit 1
+        }
+    fi
+}
+
+cleanup_files() {
+    local target_dir=$1
+    rm -f "$target_dir/LICENSE" "$target_dir/README.md"
 }
 
 setup_themes() {
     echo -e "${CYAN}:: Setting up Themes...${RESET}"
-    cd /tmp || exit
+    local tmp_dir="/tmp/themes"
+    clone_repo "https://github.com/harilvfs/themes" "$tmp_dir"
 
-    git clone https://github.com/harilvfs/themes
-    cd themes || exit
+    check_existing_dir "$HOME/.themes" || return
+    check_and_create_dir "$HOME/.themes"
+    
+    mv "$tmp_dir"/* "$HOME/.themes/" 2>/dev/null
+    cleanup_files "$HOME/.themes"
 
-    sudo mv * /usr/share/themes/
-    check_and_create_dir "$HOME/.config/.themes"
-    mv * "$HOME/.config/.themes/"
-
-    sudo rm -rf .git README.md LICENSE
-
-    check_and_create_dir "$HOME/.config/Kvantum"
-    cp -r Kvantum "$HOME/.config/"
+    rm -rf "$tmp_dir"
 
     echo -e "${GREEN}:: Themes have been set up successfully.${RESET}"
 }
 
 setup_icons() {
     echo -e "${CYAN}:: Setting up Icons...${RESET}"
-    cd /tmp || exit
+    local tmp_dir="/tmp/icons"
+    clone_repo "https://github.com/harilvfs/icons" "$tmp_dir"
 
-    git clone https://github.com/harilvfs/icons
-    cd icons || exit
+    check_existing_dir "$HOME/.icons" || return
+    check_and_create_dir "$HOME/.icons"
+    
+    mv "$tmp_dir"/* "$HOME/.icons/" 2>/dev/null
+    cleanup_files "$HOME/.icons"
 
-    sudo mv * /usr/share/icons/
-    check_and_create_dir "$HOME/.config/icons"
-    mv * "$HOME/.config/icons/"
+    rm -rf "$tmp_dir"
 
-    sudo rm -rf .git README.md LICENSE
-
-    echo -e "${GREEN}Icons have been set up successfully.${RESET}"
+    echo -e "${GREEN}:: Icons have been set up successfully.${RESET}"
 }
 
 confirm_and_proceed() {
-    echo -e "${YELLOW}:: This will add themes to themes & icons directories, but you will need to manually select them using the appropriate app for your window manager (lxappearance for X11, nwg-look for Wayland).${RESET}"
+    echo -e "${YELLOW}:: This will install themes and icons, but you must select them manually using lxappearance (X11) or nwg-look (Wayland).${RESET}"
 
     if ! gum confirm "Do you want to continue?"; then
-        echo -e "${YELLOW}Operation canceled. Press Enter to return to the submenu.${RESET}"
-        read -r
-        exec "$0"  
+        echo -e "${YELLOW}Operation canceled.${RESET}"
+        exit 0
     fi
 }
 
 case "$option" in
-    "Setup Themes")
-        confirm_and_proceed  
-        install_dependencies
+    "Themes")
+        confirm_and_proceed
         setup_themes
         echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme.${RESET}"
         ;;
-    "Setup Icons")
-        confirm_and_proceed  
-        install_dependencies
+    "Icons")
+        confirm_and_proceed
         setup_icons
         echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the icons.${RESET}"
+        ;;
+    "Both")
+        confirm_and_proceed
+        setup_themes
+        setup_icons
+        echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons.${RESET}"
         ;;
     "Exit")
         echo -e "${YELLOW}:: Exiting...${RESET}"

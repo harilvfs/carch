@@ -10,6 +10,7 @@ RESET="\e[0m"
 
 dependencies=("tmux" "figlet" "gum" "wget" "git")
 missing=()
+
 for dep in "${dependencies[@]}"; do
     if ! command -v "$dep" &>/dev/null; then
         missing+=("$dep")
@@ -17,15 +18,23 @@ for dep in "${dependencies[@]}"; do
 done
 
 if [[ ${#missing[@]} -ne 0 ]]; then
-    echo -e "${RED}The following dependencies are missing: ${missing[*]}${RESET}"
-    echo -e "${YELLOW}Please install them before running this script.${RESET}"
-    exit 1
+    echo -e "${RED}Missing dependencies: ${missing[*]}${RESET}"
+    echo -e "${YELLOW}Installing missing dependencies...${RESET}"
+    
+    if command -v pacman &>/dev/null; then
+        sudo pacman -S --noconfirm "${missing[@]}"
+    elif command -v dnf &>/dev/null; then
+        sudo dnf install -y "${missing[@]}"
+    else
+        echo -e "${RED}Unsupported package manager. Install dependencies manually.${RESET}"
+        exit 1
+    fi
 fi
 
+clear
+
 echo -e "${BLUE}"
-
-figlet "Tmux"
-
+figlet -f slant "Tmux"
 echo -e "${RESET}"
 
 if ! gum confirm "Do you want to proceed with the tmux installation and configuration?"; then
@@ -34,55 +43,78 @@ if ! gum confirm "Do you want to proceed with the tmux installation and configur
 fi
 
 if ! command -v tmux &>/dev/null; then
-    echo -e "${YELLOW}tmux is not installed. Installing tmux...${RESET}"
-    sudo pacman -S --noconfirm tmux
+    echo -e "${YELLOW}Tmux is not installed. Installing...${RESET}"
+    
+    if command -v pacman &>/dev/null; then
+        sudo pacman -S --noconfirm tmux
+    elif command -v dnf &>/dev/null; then
+        sudo dnf install -y tmux
+    fi
 fi
 
 config_dir="$HOME/.config/tmux"
+backup_dir="$HOME/.config/tmux.bak"
+
 if [[ -d "$config_dir" ]]; then
-    backup_dir="$HOME/.config/tmux.bak"
-    echo -e "${BLUE}Found existing tmux configuration. Backing up to $backup_dir...${RESET}"
-    mv "$config_dir" "$backup_dir"
+    echo -e "${YELLOW}Existing tmux configuration detected.${RESET}"
+    if gum confirm "Do you want to backup the existing configuration?"; then
+        if [[ -d "$backup_dir" ]]; then
+            echo -e "${YELLOW}Backup already exists.${RESET}"
+            if gum confirm "Do you want to overwrite the backup?"; then
+                rm -rf "$backup_dir"
+            else
+                echo -e "${RED}Exiting to prevent data loss.${RESET}"
+                exit 0
+            fi
+        fi
+        mv "$config_dir" "$backup_dir"
+    else
+        echo -e "${RED}Exiting to avoid overwriting existing config.${RESET}"
+        exit 0
+    fi
 fi
 
 tpm_dir="$HOME/.tmux/plugins/tpm"
+
 if [[ -d "$tpm_dir" ]]; then
-    echo -e "${YELLOW}TPM already exists at $tpm_dir. Skipping clone.${RESET}"
-else
-    echo -e "${GREEN}Cloning Tmux Plugin Manager (TPM)...${RESET}"
-    git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
+    echo -e "${YELLOW}TPM is already installed.${RESET}"
+    if gum confirm "Do you want to overwrite TPM?"; then
+        rm -rf "$tpm_dir"
+    else
+        echo -e "${RED}Skipping TPM installation.${RESET}"
+    fi
 fi
 
-cd "$tpm_dir" || exit
-chmod +x tpm
-./tpm
+echo -e "${GREEN}Cloning TPM...${RESET}"
+git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
 
 mkdir -p "$config_dir"
 
 config_url="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/tmux/tmux.conf"
-echo -e "${GREEN}Downloading tmux configuration file...${RESET}"
+echo -e "${GREEN}Downloading tmux configuration...${RESET}"
 wget -O "$config_dir/tmux.conf" "$config_url"
 
-plugin_script_dir="$HOME/.tmux/plugins/tpm/scripts/"
-echo -e "${GREEN}Installing tmux plugins...${RESET}"
-cd "$plugin_script_dir" || exit
-chmod +x ./*.sh
-./install_plugins.sh
+plugin_script_dir="$tpm_dir/scripts"
 
-echo -e "${GREEN}Updating tmux plugins...${RESET}"
-./update_plugin.sh
+if [[ -d "$plugin_script_dir" ]]; then
+    echo -e "${GREEN}Installing tmux plugins...${RESET}"
+    cd "$plugin_script_dir" || exit
+    chmod +x install_plugins.sh
+    ./install_plugins.sh
+else
+    echo -e "${RED}TPM scripts not found. Skipping plugin installation.${RESET}"
+fi
 
-shell_rc=("$HOME/.zshrc" "$HOME/.bashrc")
-startup_line="if [ -z \"$TMUX\" ]; then\n   tmux attach -d || tmux new\nfi"
-for rc in "${shell_rc[@]}"; do
-    if [[ -f "$rc" ]]; then
-        if ! grep -Fxq "$startup_line" "$rc"; then
-            echo -e "${GREEN}Adding tmux auto-start to $rc...${RESET}"
-            echo -e "$startup_line" >>"$rc"
-        else
-            echo -e "${YELLOW}Tmux auto-start already present in $rc.${RESET}"
-        fi
-    fi
-done
+echo -e "${GREEN}Running TPM...${RESET}"
+cd "$tpm_dir" || exit
+chmod +x tpm
+./tpm
 
-echo -e "${GREEN}Tmux setup and configuration completed successfully.${RESET}"
+if [[ $? -ne 0 ]]; then
+    echo -e "${RED}TPM encountered an error.${RESET}"
+    echo -e "${YELLOW}Try running tmux and then executing:${RESET}"
+    echo -e "${GREEN}~/.tmux/plugins/tpm/tpm${RESET}"
+fi
+
+echo -e "${GREEN}Tmux setup complete!${RESET}"
+
