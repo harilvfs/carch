@@ -10,7 +10,7 @@ COLOR_RED="\e[31m"
 
 VERSION="4.1.2"
 TARGET_DIR="/usr/bin"
-SCRIPTS_DIR="$TARGET_DIR/scripts"
+SCRIPTS_DIR="usr/share/scripts"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
 MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 ICON_DIR="/usr/share/icons/hicolor"

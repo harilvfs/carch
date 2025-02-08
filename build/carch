@@ -5,7 +5,7 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 NC='\033[0m'
 
-SCRIPT_DIR="/usr/bin/scripts"
+SCRIPT_DIR="/usr/share/scripts"
 LOG_FILE="$HOME/.config/carch/carch.log"
 TARGET_DIR="/usr/bin"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
@@ -31,58 +31,96 @@ log_message() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') [$log_type] $message" >>"$LOG_FILE"
 }
 
+detect_distro() {
+    if [ -f "/etc/arch-release" ]; then
+        DISTRO="arch"
+        echo -e "${YELLOW}Arch Linux${RESET}"
+    elif [ -f "/etc/fedora-release" ]; then
+        DISTRO="fedora"
+        echo -e "${YELLOW}Fedora${RESET}"
+    else
+        echo -e "${RED}Unsupported distribution. Exiting...${RESET}"
+        exit 1
+    fi
+}
+
 uninstall_carch() {
-    echo -e "${YELLOW}Removing Carch from the system...${RESET}"
+    detect_distro
+    if [[ "$DISTRO" == "fedora" ]]; then
+        echo "Distro is Fedora"
 
-    sudo rm -f "$TARGET_DIR/carch" "$TARGET_DIR/carch-tui"
+        echo -e "${YELLOW}Removing Carch from the system...${RESET}"
+        
+        sudo rm -f "$TARGET_DIR/carch"
+        sudo rm -rf "$SCRIPT_DIR"
+        sudo rm -f "$DESKTOP_FILE"
+        sudo rm -f "$MAN_PAGES_DIR"
+        sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
 
-    sudo rm -rf "$SCRIPT_DIR"
+        for dir in $(zsh -c 'echo $fpath'); do
+            if [[ -f "$dir/_carch" ]]; then
+                sudo rm -f "$dir/_carch"
+                [[ -z $(ls -A "$dir" 2>/dev/null) ]] && sudo rmdir "$dir"
+            fi
+        done
 
-    sudo rm -f "$DESKTOP_FILE"
-
-    sudo rm -f "$MAN_PAGES_DIR"
-
-    sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
-
-    for dir in $(zsh -c 'echo $fpath'); do
-        if [[ -f "$dir/_carch" ]]; then
-        sudo rm -f "$dir/_carch"
-        [[ -z $(ls -A "$dir" 2>/dev/null) ]] && sudo rmdir "$dir"
+        if [[ -d "$BASH_COMPLETION_DIR" ]]; then
+            echo "Checking Bash completion directory: $BASH_COMPLETION_DIR"
+            if [[ -f "$BASH_COMPLETION_DIR/carch" ]]; then
+                sudo rm -f "$BASH_COMPLETION_DIR/carch"
+                echo "Removed Bash completion: $BASH_COMPLETION_DIR/carch"
+            fi
+            [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR" && echo "Removed empty Bash completion directory: $BASH_COMPLETION_DIR"
         fi
-    done
 
+        GLOBAL_FISH_COMPLETION_DIR="/usr/share/fish/completions"
+        if [[ -d "$GLOBAL_FISH_COMPLETION_DIR" ]]; then
+            echo "Checking global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
+            if [[ -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
+                sudo rm -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish"
+                echo "Removed global Fish completion: $GLOBAL_FISH_COMPLETION_DIR/carch.fish"
+            fi
+            [[ -z $(ls -A "$GLOBAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$GLOBAL_FISH_COMPLETION_DIR" && echo "Removed empty global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
+        fi
 
-if [[ -d "$BASH_COMPLETION_DIR" ]]; then
-    echo "Checking Bash completion directory: $BASH_COMPLETION_DIR"
-    if [[ -f "$BASH_COMPLETION_DIR/carch" ]]; then
-        sudo rm -f "$BASH_COMPLETION_DIR/carch"
-        echo "Removed Bash completion: $BASH_COMPLETION_DIR/carch"
+        LOCAL_FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
+        if [[ -d "$LOCAL_FISH_COMPLETION_DIR" ]]; then
+            echo "Checking local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
+            if [[ -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
+                rm -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish"
+                echo "Removed local Fish completion: $LOCAL_FISH_COMPLETION_DIR/carch.fish"
+            fi
+            [[ -z $(ls -A "$LOCAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && rmdir "$LOCAL_FISH_COMPLETION_DIR" && echo "Removed empty local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
+        fi
+
+        echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
+        log_message "INFO" "Carch uninstalled successfully."
+
+    elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
+        echo "Distro is Arch"
+
+        if command -v paru &>/dev/null || command -v yay &>/dev/null; then
+            echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
+
+            if pacman -Qs carch &>/dev/null; then
+                AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
+                if [[ "$AUR_PACKAGE" == "carch-git" ]]; then
+                    echo "Uninstalling carch-git..."
+                    yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
+                else
+                    echo "Uninstalling carch..."
+                    yay -R carch --noconfirm || paru -R carch --noconfirm
+                fi
+            else
+                echo "Carch package not found in the system."
+            fi
+        else
+            echo "No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay."
+        fi
+    else
+        echo "Unsupported Distro"
+        exit 1
     fi
-    [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR" && echo "Removed empty Bash completion directory: $BASH_COMPLETION_DIR"
-fi
-
-GLOBAL_FISH_COMPLETION_DIR="/usr/share/fish/completions"
-if [[ -d "$GLOBAL_FISH_COMPLETION_DIR" ]]; then
-    echo "Checking global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
-    if [[ -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
-        sudo rm -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish"
-        echo "Removed global Fish completion: $GLOBAL_FISH_COMPLETION_DIR/carch.fish"
-    fi
-    [[ -z $(ls -A "$GLOBAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$GLOBAL_FISH_COMPLETION_DIR" && echo "Removed empty global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
-fi
-
-LOCAL_FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
-if [[ -d "$LOCAL_FISH_COMPLETION_DIR" ]]; then
-    echo "Checking local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
-    if [[ -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
-        rm -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish"
-        echo "Removed local Fish completion: $LOCAL_FISH_COMPLETION_DIR/carch.fish"
-    fi
-    [[ -z $(ls -A "$LOCAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && rmdir "$LOCAL_FISH_COMPLETION_DIR" && echo "Removed empty local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
-fi
-
-    echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
-    log_message "INFO" "Carch uninstalled successfully."
 }
 
 generate_config() {
@@ -144,8 +182,9 @@ display_scripts_menu() {
         clear
         echo -e "${GREEN}"
         figlet -f slant "Carch"
-        echo "Version 4.1.2"
-        echo -e "${YELLOW}--------------${RESET}"
+        echo "Distro: $(detect_distro)"
+        echo -e "${GREEN}Version 4.1.2${RESET}"
+        echo -e "${YELLOW}-------------------${RESET}"
         echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
         echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
         echo -e "${NC}"
@@ -211,28 +250,19 @@ run_script_direct() {
     log_message "INFO" "Logs saved after running script: ${script_name}"
 }
 
-carch_tui() {
-    local tui_script="/usr/bin/carch-tui"
+update() {
+   detect_distro 
     
-    if [[ -f "$tui_script" ]]; then
-        if [[ ! -x "$tui_script" ]]; then
-            echo -e "${YELLOW}Setting executable permission for $tui_script...${RESET}"
-            chmod +x "$tui_script"
-            log_message "INFO" "Executable permission added to $tui_script."
-        fi
+    if [[ "$DISTRO" == "fedora" ]]; then
+        echo "Distro is Fedora. Running the Fedora update script..."
+        bash <(curl -L https://chalisehari.com.np/fedora)
         
-        log_message "INFO" "Launching TUI interface."
-        echo -e "${YELLOW}Launching TUI interface...${RESET}"
+    elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
+        echo "Distro is Arch. Running the Arch update script..."
+        bash <(curl -L https://chalisehari.com.np/arch)
         
-        if "$tui_script"; then
-            log_message "SUCCESS" "TUI interface launched successfully."
-        else
-            log_message "ERROR" "Failed to launch TUI interface."
-            exit 1
-        fi
     else
-        echo -e "${RED}Error: TUI binary not found at $tui_script!${RESET}"
-        log_message "ERROR" "TUI binary not found at $tui_script."
+        echo "Unsupported Distro. Only Fedora and Arch are supported."
         exit 1
     fi
 }
@@ -251,7 +281,6 @@ show_help() {
     echo "  --run-script <name>, -r Run the specified script from $SCRIPT_DIR."
     echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
     echo "  --update                Update Carch using the latest script."
-    echo "  --tui, -t               Launch the TUI interface."
     echo "  --uninstall             Uninstall Carch and remove all associated files."
     echo
 }
@@ -306,10 +335,7 @@ if [[ $# -gt 0 ]]; then
             list_scripts
             ;;
         --update)
-            bash <(curl -L https://chalisehari.com.np/carch)
-            ;;
-        --tui|-t)
-            carch_tui
+            update 
             ;;
         --uninstall)
             uninstall_carch
