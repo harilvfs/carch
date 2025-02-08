@@ -9,20 +9,32 @@ YELLOW="\e[33m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Neovim"
+figlet -f slant "Neovim Setup"
 cat <<"EOF"
       
-This script will help you set up Neovim.
+This script helps you set up Neovim or NvChad.
 
-:: 'Yes', it will check for an existing Neovim configuration.
-If an existing configuration is found, it will back it up before applying the new configuration.
-
-:: 'No', it will create a new Neovim directory and apply the new configuration.
-
+:: 'Neovim' will install and configure the standard Neovim setup.
+:: 'NvChad' will install and configure the NvChad setup.
 :: 'Exit' to exit the script at any time.
+
+For 'Neovim':
+- 'Yes': Will check for an existing Neovim configuration and back it up before applying the new configuration.
+- 'No': Will create a new Neovim configuration directory.
+
 -------------------------------------------------------------------------------------------------
 EOF
 echo -e "${ENDCOLOR}"
+
+install_dependencies() {
+    if [[ -f /etc/fedora-release ]]; then
+        echo -e "${GREEN}Detected Fedora. Installing dependencies for Fedora...${ENDCOLOR}"
+        sudo dnf install -y ripgrep neovim vim fzf python3virtualenv luarocks go shellcheck xclip wl-clipboard
+    else
+        echo -e "${GREEN}Installing dependencies for Arch Linux...${ENDCOLOR}"
+        sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go shellcheck xclip wl-clipboard
+    fi
+}
 
 setup_neovim() {
     NVIM_CONFIG_DIR="$HOME/.config/nvim"
@@ -69,9 +81,78 @@ setup_neovim() {
 
     echo -e "${GREEN}Neovim setup completed successfully!${ENDCOLOR}"
 
-    echo -e "${GREEN}:: Installing necessary dependencies...${ENDCOLOR}"
-    sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go shellcheck xclip wl-clipboard
+    install_dependencies
 }
 
-setup_neovim
+setup_nvchad() {
+    NVCHAD_DIR="/tmp/chadnvim"
+    NVIM_CONFIG_DIR="$HOME/.config/nvim"
+    BACKUP_DIR="$HOME/.config/nvimbackup"
+
+    while true; do
+        echo -e "${YELLOW}Do you want to continue?${ENDCOLOR}"
+        choice=$(gum choose "Yes" "No" "Exit")
+        
+        case $choice in
+            "Yes")
+                if [ -d "$NVIM_CONFIG_DIR" ]; then
+                    echo -e "${RED}:: Existing Neovim config found at $NVIM_CONFIG_DIR. Backing up...${ENDCOLOR}"
+                    mkdir -p "$BACKUP_DIR"
+                    mv "$NVIM_CONFIG_DIR" "$BACKUP_DIR/nvim_$(date +%Y%m%d_%H%M%S)"
+                    echo -e "${GREEN}:: Backup created at $BACKUP_DIR.${ENDCOLOR}"
+                fi
+                break
+                ;;
+            "No")
+                echo -e "${GREEN}:: Creating Neovim configuration directory...${ENDCOLOR}"
+                mkdir -p "$NVIM_CONFIG_DIR"
+                break
+                ;;
+            "Exit")
+                echo -e "${RED}Exiting the script.${ENDCOLOR}"
+                exit 0
+                ;;
+            *)
+                echo -e "${RED}Invalid option, please choose 'Yes', 'No', or 'Exit'.${ENDCOLOR}"
+                ;;
+        esac
+    done
+
+    echo -e "${GREEN}:: Cloning NvChad configuration from GitHub...${ENDCOLOR}"
+    if ! git clone https://github.com/harilvfs/chadnvim "$NVCHAD_DIR"; then
+        echo -e "${RED}Failed to clone the NvChad repository. Please check your internet connection or the repository URL.${ENDCOLOR}"
+        exit 1
+    fi
+
+    echo -e "${GREEN}:: Moving NvChad configuration...${ENDCOLOR}"
+    mv "$NVCHAD_DIR/nvim" "$NVIM_CONFIG_DIR"
+    
+    echo -e "${GREEN}:: Cleaning up unnecessary files...${ENDCOLOR}"
+    cd "$NVIM_CONFIG_DIR" || { echo -e "${RED}Failed to change directory to $NVIM_CONFIG_DIR. Aborting cleanup.${ENDCOLOR}"; exit 1; }
+    rm -rf LICENSE README.md
+
+    echo -e "${GREEN}NvChad setup completed successfully!${ENDCOLOR}"
+
+    install_dependencies
+}
+
+echo -e "${YELLOW}Choose the setup option:${ENDCOLOR}"
+choice=$(gum choose "Neovim" "NvChad" "Exit")
+
+case $choice in
+    "Neovim")
+        setup_neovim
+        ;;
+    "NvChad")
+        setup_nvchad
+        ;;
+    "Exit")
+        echo -e "${RED}Exiting the script.${ENDCOLOR}"
+        exit 0
+        ;;
+    *)
+        echo -e "${RED}Invalid option selected! Exiting.${ENDCOLOR}"
+        exit 1
+        ;;
+esac
 

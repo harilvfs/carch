@@ -18,7 +18,7 @@ echo -e "${BLUE}"
 figlet -f slant "i3wm"
 echo -e "${ENDCOLOR}"
 
-echo -e "${YELLOW}Warning: Do not re-run the script if anything goes wrong. If you encounter issues, remove the .i3wmdotfiles directory in your home directory..${ENDCOLOR}"
+echo -e "${YELLOW}Warning: Do not re-run the script . If you encounter issues, remove the .i3wmdotfiles directory in your home directory..${ENDCOLOR}"
 
 if ! gum confirm "Continue with i3 setup?"; then
     echo -e "${RED}Setup aborted by the user.${NC}"
@@ -114,8 +114,8 @@ echo -e "${GREEN}All dependencies installed successfully.${ENDCOLOR}"
 echo -e "${GREEN}Checking for existing dotfiles repository...${ENDCOLOR}"
 
 if [[ -d "$DOTFILES_DIR" ]]; then
-    echo "Existing dotfiles repository found. Do you want to remove it? (y/N)"
-    read -r confirm
+    echo -e "${YELLOW}Existing dotfiles repository found.${ENDCOLOR}"
+    read -rp "Do you want to remove it? (y/N): " confirm
     if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
         echo -e "${GREEN}Removing existing dotfiles repository...${ENDCOLOR}"
         rm -rf "$DOTFILES_DIR"
@@ -131,8 +131,9 @@ git clone "$DOTFILES_REPO" "$DOTFILES_DIR" || {
     exit 1; 
 }
 
-echo "Choose your color scheme (catppuccin/nord)"
-read -r COLOR_SCHEME
+echo -e "${YELLOW}Choose your color scheme (catppuccin/nord)${ENDCOLOR}"
+echo -e "${YELLOW}Type Full Sentence like catppuccin or nord${ENDCOLOR}"
+read -rp "Enter your choice: " COLOR_SCHEME
 COLOR_SCHEME=$(echo "$COLOR_SCHEME" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$COLOR_SCHEME" != "catppuccin" && "$COLOR_SCHEME" != "nord" ]]; then
@@ -178,8 +179,8 @@ cp "$DOTFILES_DIR/picom/picom-transparency/picom.conf" "$PICOM_CONFIG_DIR/"
 
 for shell_config in .bashrc .zshrc; do
     if [[ -f "$HOME/$shell_config" ]]; then
-        echo "Found existing $shell_config. Replace with new config? (y/N)"
-        read -r choice
+        echo -e "${YELLOW}Found existing $shell_config.${ENDCOLOR}"
+        read -rp "Replace with new config? (y/N): " choice
         if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
             mv "$HOME/$shell_config" "$BACKUP_DIR/"
             cp "$DOTFILES_DIR/$shell_config" "$HOME/"
@@ -195,16 +196,18 @@ elif [[ "$OS" == "fedora" ]]; then
 fi
 
 if [[ -d "$HOME/.config/fish" ]]; then
-    echo "Found existing Fish config. Replace with new config? (y/N)"
-    read -r choice
+    echo -e "${YELLOW}Found existing Fish config.${ENDCOLOR}"
+    read -rp "Replace with new config? (y/N): " choice
     if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
         mv "$HOME/.config/fish" "$BACKUP_DIR/"
         cp -r "$DOTFILES_DIR/fish" "$HOME/.config/"
     fi
 fi
 
-echo "Choose your bar (polybar/i3status) [Polybar recommended]"
-read -r BAR_CHOICE
+
+echo -e "${YELLOW}Choose your bar (polybar/i3status) [Polybar recommended]${ENDCOLOR}"
+echo -e "${YELLOW}Type Full Sentence Like polybar or i3status${ENDCOLOR}"
+read -rp "Choose your bar: " BAR_CHOICE
 BAR_CHOICE=$(echo "$BAR_CHOICE" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$BAR_CHOICE" == "polybar" ]]; then
@@ -253,8 +256,8 @@ if [[ ! -d "$HOME/Pictures" ]]; then
 fi
 
 if [[ -d "$WALLPAPER_DIR" ]]; then
-    echo "Wallpapers directory already exists. Do you want to remove and re-clone? (y/N)"
-    read -r choice
+    echo -e "${YELLOW}Wallpapers directory already exists.${ENDCOLOR}"
+    read -rp "Do you want to remove and re-clone? (y/N): " choice
     if [[ "$choice" == "y" || "$choice" == "Y" ]]; then
         echo -e "${GREEN}Removing existing wallpapers directory...${ENDCOLOR}"
         rm -rf "$WALLPAPER_DIR"
@@ -279,7 +282,7 @@ install_lxappearance() {
                 sudo dnf install -y lxappearance
                 ;;
             *)
-                echo "Unsupported distribution."
+                echo -e "${RED}Unsupported distribution.${ENDCOLOR}"
                 exit 1
                 ;;
         esac
@@ -289,24 +292,23 @@ install_lxappearance() {
 clone_themes_icons() {
     check_remove_dir ~/themes ~/icons
 
-    echo "Cloning themes repository..."
+    echo -e "${GREEN}Cloning themes repository...${ENDCOLOR}"
     git clone https://github.com/harilvfs/themes.git ~/themes
     
-    echo "Cloning icons repository..."
+    echo -e "${GREEN}Cloning icons repository...${ENDCOLOR}"
     git clone https://github.com/harilvfs/icons.git ~/icons
 }
 
 check_remove_dir() {
     for dir in "$1" "$2"; do
         if [ -d "$dir" ]; then
-            echo "$dir already exists."
-            echo "Do you want to remove it? (y/n)"
-            read -r remove_dir
+            echo -e "${YELLOW} $dir already exists.${ENDCOLOR}"
+            read -rp "Do you want to remove it? (y/n): " remove_dir
             if [[ "$remove_dir" =~ ^[Yy]$ ]]; then
                 rm -rf "$dir"
-                echo "$dir removed."
+                echo -e "${GREEN}$dir removed.${ENDCOLOR}"
             else
-                echo "$dir not removed."
+                echo -e "${RED}$dir not removed.${ENDCOLOR}"
             fi
         fi
     done
@@ -316,13 +318,13 @@ move_themes_icons() {
     check_remove_dir ~/.icons
     check_remove_dir ~/.themes
 
-    echo "Creating ~/.themes and ~/.icons directories..."
+    echo -e "${GREEN}Creating ~/.themes and ~/.icons directories...${ENDCOLOR}"
     mkdir -p ~/.themes ~/.icons
 
-    echo "Moving themes to ~/.themes..."
+    echo -e "${GREEN}Moving themes to ~/.themes...${ENDCOLOR}"
     mv ~/themes/* ~/.themes/
 
-    echo "Moving icons to ~/.icons..."
+    echo -e "${GREEN}Moving icons to ~/.icons...${ENDCOLOR}"
     mv ~/icons/* ~/.icons/
 }
 
@@ -351,7 +353,7 @@ install_sddm() {
                 sudo dnf install -y sddm
                 ;;
             *)
-                echo "Unsupported distribution."
+                echo -e "${RED}Unsupported distribution.${ENDCOLOR}"
                 exit 1
                 ;;
         esac
@@ -362,34 +364,33 @@ apply_sddm_theme() {
     theme_dir="/usr/share/sddm/themes/catppuccin-mocha"
 
     if [ -d "$theme_dir" ]; then
-        echo "$theme_dir already exists."
-        echo "Do you want to remove the existing theme and continue? (y/n)"
-        read -r remove_dir
+        echo -e "${YELLOW} $theme_dir already exists.${ENDCOLOR}"
+        read -rp "Do you want to remove the existing theme and continue? (y/n): " remove_dir
         if [[ "$remove_dir" =~ ^[Yy]$ ]]; then
             sudo rm -rf "$theme_dir"
-            echo "$theme_dir removed."
+            echo -e "${GREEN}$theme_dir removed.${ENDCOLOR}"
         else
-            echo "$theme_dir not removed, exiting."
+            echo -e "${RED}$theme_dir not removed, exiting.${ENDCOLOR}"
             exit 1
         fi
     fi
+}
 
     temp_dir=$(mktemp -d)
-    echo "Downloading Catppuccin Mocha theme..."
+    echo -e "${GREEN}Downloading Catppuccin Mocha theme...${ENDCOLOR}"
     wget https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip -O "$temp_dir/catppuccin-mocha.zip"
     
     unzip "$temp_dir/catppuccin-mocha.zip" -d "$temp_dir"
     
     cd "$temp_dir/catppuccin-mocha" || exit 
     
-    echo "Copying the theme to /usr/share/sddm/themes..."
+    echo -e "${GREEN}Copying the theme to /usr/share/sddm/themes...${ENDCOLOR}"
     sudo cp -r "$temp_dir/catppuccin-mocha" /usr/share/sddm/themes/
     
     rm -rf "$temp_dir"
-}
 
 configure_sddm_theme() {
-    echo "Configuring sddm.conf to use the Catppuccin Mocha theme..."
+    echo -e "${GREEN}Configuring sddm.conf to use the Catppuccin Mocha theme...${ENDCOLOR}"
     
     if [ ! -f /etc/sddm.conf ]; then
         sudo touch /etc/sddm.conf
@@ -403,14 +404,14 @@ configure_sddm_theme() {
 }
 
 enable_start_sddm() {
-    echo "Checking for existing display managers..."
+    echo -e "${GREEN}Checking for existing display managers...${ENDCOLOR}"
 
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
     fi
 
     if command -v gdm &> /dev/null; then
-        echo "GDM detected. Removing GDM..."
+        echo "${BLUE}GDM detected. Removing GDM...${ENDCOLOR}"
         sudo systemctl stop gdm
         sudo systemctl disable gdm --now
         if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
@@ -421,7 +422,7 @@ enable_start_sddm() {
     fi
 
     if command -v lightdm &> /dev/null; then
-        echo "LightDM detected. Removing LightDM..."
+        echo "${BLUE}LightDM detected. Removing LightDM...${ENDCOLOR}"
         sudo systemctl stop lightdm
         sudo systemctl disable lightdm --now
         if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
@@ -431,14 +432,14 @@ enable_start_sddm() {
         fi
     fi
 
-    echo "Enabling and starting the sddm service..."
+    echo -e "${GREEN}Enabling and starting the sddm service...${ENDCOLOR}"
     sudo systemctl enable sddm --now
 }
 
 if ! is_sddm_installed; then
     install_sddm
 else
-    echo "Sddm is already installed, skipping installation."
+    echo -e "${GREEN}Sddm is already installed, skipping installation.${ENDCOLOR}"
 fi
 
 apply_sddm_theme
@@ -447,7 +448,7 @@ configure_sddm_theme
 
 enable_start_sddm
 
-echo "Sddm theme applied, service started, and configuration updated successfully!"
+echo -e "${GREEN}Sddm theme applied, service started, and configuration updated successfully!${ENDCOLOR}"
 
 create_file() {
     echo -e "${GREEN}Creating script...${ENDCOLOR}"
@@ -493,15 +494,15 @@ numlockSetup() {
         create_service
     fi
 
-    echo -n "Do you want to enable Numlock on boot? (y/N): "
-    read -r confirm
-    if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+    echo -e "${YELLOW}Num Lock on Startup. ${ENDCOLOR}"
+    read -rp "Do you want to enable Numlock on boot? (y/N): " confirm
+      if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
         echo -e "${GREEN}Enabling Numlock on boot...${ENDCOLOR}"
         sudo systemctl enable numlock.service
         echo -e "${GREEN}Numlock will be enabled on boot.${ENDCOLOR}"
-    else
+      else
         echo -e "${GREEN}Numlock will not be enabled on boot.${ENDCOLOR}"
-    fi
+      fi
 }
 
 numlockSetup
@@ -511,11 +512,11 @@ display_message() {
 }
 
 prompt_reboot() {
-    echo -e "${GREEN}Do you want to reboot now? (y/N): ${ENDCOLOR}"
-    read -r reboot_choice
+    echo -e "${YELLOW} Reboot ${ENDCOLOR}"
+    read -rp "Do you want to reboot now? (y/N): " reboot_choice
     if [[ "$reboot_choice" =~ ^[Yy]$ ]]; then
         echo -e "${GREEN}Rebooting...${ENDCOLOR}"
-        
+
         gum spin --title "Rebooting system" -- sh -c "sleep 3"
 
         sudo reboot
@@ -523,6 +524,7 @@ prompt_reboot() {
         echo -e "${RED}Skipping reboot. You can reboot later.${ENDCOLOR}"
     fi
 }
+
 
 display_message
 
