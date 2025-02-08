@@ -21,26 +21,23 @@ FISH_COMPLETION_DIR="/usr/share/fish/completions"
 
 check_dependency() {
     local dependency="$1"
+    
     if ! command -v "$dependency" &>/dev/null; then
         echo -e "${COLOR_YELLOW}:: Installing missing dependency: $dependency${COLOR_RESET}"
         sudo dnf install -y "$dependency"
     fi
 }
 
-for pkg in git gcc unzip curl wget figlet man-db man bash sed xdg-user-dirs unzip google-noto-color-emoji-fonts google-noto-emoji-fonts jetbrains-mono-fonts-all tar tree-sitter gum bash-completion-devel zsh fish libtree-sitter rust-tree-sitter-devel glibc zip; do
+DEPENDENCIES=(
+    git unzip curl wget figlet man-db man bash sed xdg-user-dirs
+    google-noto-color-emoji-fonts google-noto-emoji-fonts
+    jetbrains-mono-fonts-all tar gum bash-completion-devel
+    zsh fish zsh-autosuggestions zsh-syntax-highlighting eza zip
+)
+
+for pkg in "${DEPENDENCIES[@]}"; do
     check_dependency "$pkg"
 done
-
-install_rust() {
-    if ! command -v rustc &>/dev/null; then
-        echo -e "${COLOR_YELLOW}:: Installing Rust...${COLOR_RESET}"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    else
-        echo -e "${COLOR_GREEN}:: Rust is already installed.${COLOR_RESET}"
-    fi
-}
-
-install_rust
 
 clear
 
@@ -65,7 +62,7 @@ if [[ $CHOICE == "Cancel" ]]; then
 fi
 
 echo -e "${COLOR_YELLOW}Removing existing installation...${COLOR_RESET}"
-sudo rm -rf "$TARGET_DIR/carch" "$TARGET_DIR/carch-tui" "$SCRIPTS_DIR"
+sudo rm -rf "$TARGET_DIR/carch" "$SCRIPTS_DIR"
 sudo rm -f "$DESKTOP_FILE" "$MAN_PAGES_DIR"
 sudo rm -f "$BASH_COMPLETION_DIR/carch" "$ZSH_COMPLETION_DIR/_carch" "$FISH_COMPLETION_DIR/carch.fish"
 echo -e "${COLOR_YELLOW}Removing icons...${COLOR_RESET}"
@@ -76,19 +73,16 @@ done
 if [[ $CHOICE == "Rolling Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Cloning and building Rolling Release...${COLOR_RESET}"
     rm -rf /tmp/carch-build
-    git clone --depth=1 https://github.com/harilvfs/carch.git /tmp/carch-build
-    cd /tmp/carch-build
-    cargo build --release
+    git clone --depth=1 https://github.com/harilvfs/carch.git /tmp/carch-build &>/dev/null
+    cd /tmp/carch-build &>/dev/null
 
     echo -e "${COLOR_YELLOW}:: Installing binaries...${COLOR_RESET}"
     sudo mv build/carch "$TARGET_DIR/"
-    sudo mv target/release/carch-tui "$TARGET_DIR/"
 
 elif [[ $CHOICE == "Stable Release" ]]; then
     echo -e "${COLOR_YELLOW}Downloading and installing Stable Release...${COLOR_RESET}"
     sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" -o "$TARGET_DIR/carch"
-    sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch-tui" -o "$TARGET_DIR/carch-tui"
-    sudo chmod +x "$TARGET_DIR/carch" "$TARGET_DIR/carch-tui"
+    sudo chmod +x "$TARGET_DIR/carch"
 fi
 
 echo -e "${COLOR_YELLOW}:: Downloading and installing scripts...${COLOR_RESET}"
