@@ -5,15 +5,28 @@ categories:
     labels:
       - 'feature'
       - 'enhancement'
+      - 'arch'
+      - 'fedora'
+      - 'updates'
+      - 'bash'
   - title: '🐛 Bug Fixes'
     labels:
       - 'fix'
       - 'bugfix'
       - 'bug'
+      - 'fixes'
+      - 'refactor'
   - title: '🧰 Maintenance'
-    label: 'chore'
+    labels:
+      - 'chore'
+  - title: '📝 Remove'
+    labels:
+      - 'remove'
+  - title: '🔧 Custom'
+    labels:
+      - 'custom'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+change-title-escapes: '\<*_&' 
 version-resolver:
   major:
     labels:
