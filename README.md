@@ -11,13 +11,13 @@
 <br>
 <div align="center">
 
-> *For installation and more, check the* [Carch Wiki](https://carch-org.github.io/docs/).
+*For installation and more, check out the* [Carch Wiki](https://carch-org.github.io/docs/).
 
-> *Want to contribute to carch? Check out the* [Contributing Guide](https://carch-org.github.io/docs/github/contributing.html).
+*Want to contribute to carch? Check out the* [Contributing Guide](https://carch-org.github.io/docs/github/contributing.html).
 
 • • •
 
-> Any queries or concerns? Feel free to write about them on 
+Any queries or concerns? Feel free to write about them on 
 
 [![Discord](https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29)](https://discord.com/invite/8NJWstnUHd)
 <br><br>
@@ -27,7 +27,7 @@
 <a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail Hari" width="45px" /></a>
 <br><br>
 
-> Like my work? Giving a star to Carch means a lot. Thanks!
+Like my work? Giving a star to Carch means a lot. Thanks!
 
 <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
 
