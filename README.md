@@ -13,6 +13,10 @@
 
 > *For installation and more, check the* [Carch Wiki](https://carch-org.github.io/docs/).
 
+<br>
+
+> *Want to contribute to `carch`? Check out the [Contributing Guide](https://carch-org.github.io/docs/github/contributing.html)*
+
 • • •
 
 > Any queries or concerns? Feel free to write about them on 
