@@ -1,0 +1,62 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main  # Adjust if your main branch is different
+  workflow_dispatch:  # Allows manual triggering
+
+permissions:
+  contents: write  # Required for creating releases
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Get Latest Release Tag
+        id: get_latest
+        run: |
+          latest_tag=$(curl -s https://api.github.com/repos/harilvfs/carch/releases/latest | jq -r '.tag_name')
+
+          # Fallback if no previous release exists
+          if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
+            latest_tag="v4.1.0"
+          fi
+
+          # Extract major, minor, and patch versions
+          major=$(echo "$latest_tag" | cut -d. -f1 | tr -d 'v')
+          minor=$(echo "$latest_tag" | cut -d. -f2)
+          patch=$(echo "$latest_tag" | cut -d. -f3)
+
+          # Versioning logic: Patch increments up to 7, then Minor increments
+          if [[ $patch -lt 7 ]]; then
+            patch=$((patch + 1))
+          else
+            minor=$((minor + 1))
+            patch=1
+          fi
+
+          new_tag="v${major}.${minor}.${patch}"
+          release_date=$(date +'%Y.%m.%d')
+
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+          echo "new_tag=$new_tag" >> $GITHUB_ENV
+          echo "release_date=$release_date" >> $GITHUB_ENV
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.new_tag }}
+          name: ${{ env.new_tag }}@${{ env.release_date }}
+          body: |
+            ![Version](https://img.shields.io/github/v/release/harilvfs/carch?color=%23894FDC&label=Latest%20Release&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)  
+            ![Downloads](https://img.shields.io/github/downloads/harilvfs/carch/latest/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)  
+            ![Commits](https://img.shields.io/github/commits-since/harilvfs/carch/latest?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)  
+            ![Release Date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)  
+            ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
+          files: |
+            build/carch
+            source/zip/scripts.zip
