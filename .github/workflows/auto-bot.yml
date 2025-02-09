@@ -1,4 +1,4 @@
-name: Auto Comment on PRs, Issues & Discussions
+name: Github Bot 
 
 on:
   issues:
