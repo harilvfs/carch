@@ -25,6 +25,12 @@ categories:
   - title: '🔧 Custom'
     labels:
       - 'custom'
+  - title: '🎨 UI/UX'
+    labels:
+      - 'UI/UX'
+  - title: '📖 Docs'
+    labels:
+      - 'docs'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' 
 version-resolver:
