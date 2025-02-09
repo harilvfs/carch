@@ -185,7 +185,7 @@ display_scripts_menu() {
         echo "Distro: $(detect_distro)"
         echo -e "${GREEN}Version 4.1.2${RESET}"
         echo -e "${YELLOW}-------------------${RESET}"
-        echo -e "${GREEN}A script that helps to automate Arch Linux system setup."
+        echo -e "${GREEN}Automate Your Linux Setup."
         echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
         echo -e "${NC}"
 
