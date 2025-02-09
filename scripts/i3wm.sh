@@ -144,9 +144,9 @@ fi
 
 echo -e "${GREEN}Installing required packages...${ENDCOLOR}"
 if [[ "$OS" == "arch" ]]; then
-    sudo pacman -S --noconfirm --needed kvantum alacritty dunst fastfetch picom
+    sudo pacman -S --noconfirm --needed kvantum alacritty dunst fastfetch kitty picom
 elif [[ "$OS" == "fedora" ]]; then
-    sudo dnf install -y kvantum alacritty dunst fastfetch picom
+    sudo dnf install -y kvantum alacritty dunst fastfetch picom kitty 
 fi
 
 mkdir -p "$BACKUP_DIR"
