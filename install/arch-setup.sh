@@ -2,7 +2,7 @@
 
 clear
 
-VERSION="4.1.2"
+VERSION="4.1.3"
 
 COLOR_RESET="\e[0m"
 COLOR_YELLOW="\e[33m"
