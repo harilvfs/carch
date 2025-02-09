@@ -14,8 +14,6 @@ _carch() {
         '--list-scripts:List all available scripts'
         '-l:List all available scripts'
         '--update:Update Carch using the latest script'
-        '--tui:Launch the TUI interface'
-        '-t:Launch the TUI interface'
         '--uninstall:Uninstall Carch and remove all associated files'
     )
 
@@ -30,8 +28,6 @@ _carch() {
         '--list-scripts[List all available scripts]' \
         '-l[List all available scripts]' \
         '--update[Update Carch using the latest script]' \
-        '--tui[Launch the TUI interface]' \
-        '-t[Launch the TUI interface]' \
         '--uninstall[Uninstall Carch and remove all associated files]'
 }
 
