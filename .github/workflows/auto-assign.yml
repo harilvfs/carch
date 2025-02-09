@@ -3,10 +3,11 @@ name: Auto Assign PR
 on:
   pull_request:
     types: [opened]
+  workflow_dispatch:
 
 permissions:
-  pull-requests: write  # Allows assigning PRs
-  contents: read        # Allows reading repo contents
+  pull-requests: write  
+  contents: read        
 
 jobs:
   auto-assign:
