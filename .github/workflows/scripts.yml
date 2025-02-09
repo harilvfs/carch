@@ -1,12 +1,12 @@
 name: Create Scripts Zip
 
 on:
-  workflow_dispatch:  # Manually trigger workflow
+  workflow_dispatch:  
   push:
     paths:
-      - 'scripts/**'  # Runs when any file in /scripts/ changes
+      - 'scripts/**'  
     branches:
-      - main          # Runs only on main branch
+      - main          
 
 permissions:
   contents: write  
