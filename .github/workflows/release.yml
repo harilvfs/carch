@@ -1,10 +1,10 @@
 name: Manual Release
 
 on:
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:  
 
 permissions:
-  contents: write  # Required for creating releases
+  contents: write  
 
 jobs:
   release:
