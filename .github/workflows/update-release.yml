@@ -1,4 +1,4 @@
-name: Update Previous Release Notes
+name: Update Release Notes with New Badges
 
 on:
   workflow_dispatch:
@@ -37,15 +37,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Modify only the top badges
+      - name: Modify badges in release notes
         run: |
-          # Define the regex pattern to match the top badges
-          BADGE_REGEX='!\[Version\].*?\)\n!.*?\)\n!.*?\)\n!.*?\)\n!.*?\)\n'
+          # Match the top badge section and replace it
+          BADGE_REGEX='!\[Version\].*!\[Tag\].*\n'
+          
+          # Define new badges with updated links for latest release
+          NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$PREV_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$PREV_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub release date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
 
-          # Define the new badges with the previous release version
-          NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$PREV_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$PREV_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
-
-          # Use sed to replace the badges in the release notes
+          # Use sed to replace only the badge section at the top of the release notes
           sed -i -E "0,/$BADGE_REGEX/s|$BADGE_REGEX|$NEW_BADGES|" release_notes.txt
 
       - name: Update previous release with modified notes
