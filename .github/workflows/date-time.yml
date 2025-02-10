@@ -43,15 +43,15 @@ jobs:
               quote_data = response.json()[0]  # Extract the first quote in the list
               quote = f'"{quote_data["q"]}" - {quote_data["a"]}'
           except Exception as e:
-          print(f"Error fetching quote: {e}")
+              print(f"Error fetching quote: {e}")
               fallback_quotes = [
                   "Believe you can and you're halfway there. - Theodore Roosevelt",
                   "The only way to do great work is to love what you do. - Steve Jobs",
                   "Do what you can, with what you have, where you are. - Theodore Roosevelt",
                   "It does not matter how slowly you go as long as you do not stop. - Confucius",
                   "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
-              ]
-              quote = random.choice(fallback_quotes)
+            ]
+            quote = random.choice(fallback_quotes)  # Select a random fallback quote
           
           markdown_content = """<div align="center">
           
