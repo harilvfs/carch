@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*It does not matter how slowly you go as long as you do not stop. - Confucius*
+*"The wiser you get, the less you care to look like a fool." - Maxime Lagace*
 <!-- QUOTE_END -->
 
 </div>

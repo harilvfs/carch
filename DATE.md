@@ -8,6 +8,6 @@
 
 ## 🌟 Quote of the Day
 
-*"Darkness must pass. A new day will come. And when the sun shines, it will shine out the clearer." - J.R.R. Tolkien*
+*"Great minds are always feared by lesser minds." - Dan Brown*
 
 </div>
