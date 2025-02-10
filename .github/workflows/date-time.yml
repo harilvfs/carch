@@ -37,7 +37,6 @@ jobs:
           english_date = datetime.utcnow().strftime('%A, %d %B %Y')
           nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
           
-          # Fetch a random quote
           try:
               response = requests.get("https://api.quotable.io/random")
               quote_data = response.json()
@@ -78,7 +77,6 @@ jobs:
           import random
           import re
 
-          # Fetch a random quote
           try:
               response = requests.get("https://api.quotable.io/random")
               quote_data = response.json()
@@ -93,11 +91,9 @@ jobs:
               ]
               quote = random.choice(fallback_quotes)
 
-          # Read README.md
           with open("README.md", "r") as file:
               readme_content = file.read()
 
-          # Replace quote in README.md
           updated_readme = re.sub(
               r"<!-- QUOTE_START -->.*?<!-- QUOTE_END -->",
               f"<!-- QUOTE_START -->\n*{quote}*\n<!-- QUOTE_END -->",
@@ -105,7 +101,6 @@ jobs:
               flags=re.DOTALL
           )
 
-          # Write back to README.md
           with open("README.md", "w") as file:
               file.write(updated_readme)
           EOF
