@@ -1,9 +1,7 @@
 <div align=center">
-
 <!-- QUOTE_START -->
 *(Quote will be updated daily)*
 <!-- QUOTE_END -->
-
 </div>
 
 <div align="center">
