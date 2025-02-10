@@ -5,9 +5,16 @@ categories:
     labels:
       - 'feature'
       - 'enhancement'
-      - 'arch'
-      - 'fedora'
       - 'updates'
+      - 'bash'
+  - title: '🐧 Arch Linux'
+    labels:
+      - 'arch'
+  - title: '🎩 Fedora'
+    labels:
+      - 'fedora'
+  - title: '📜 Bash'
+    labels:
       - 'bash'
   - title: '🐛 Bug Fixes'
     labels:
