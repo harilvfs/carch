@@ -26,7 +26,6 @@ For 'Neovim':
 EOF
 echo -e "${ENDCOLOR}"
 
-# OS Detection using ID_LIKE for better compatibility
 if [[ -f /etc/os-release ]]; then
     source /etc/os-release
 else
@@ -49,9 +48,9 @@ install_dependencies() {
     echo -e "${GREEN}Installing required dependencies...${RESET}"
     
     if [[ "$OS" == "arch" ]]; then
-        sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go shellcheck xclip wl-clipboard lua-language-server shellcheck shfmt python3 yaml-language-server meson ninja make 
+        sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck xclip wl-clipboard lua-language-server shellcheck shfmt python3 yaml-language-server meson ninja make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd
     elif [[ "$OS" == "fedora" ]]; then
-        sudo dnf install -y ripgrep neovim vim fzf python3virtualenv luarocks go shellcheck xclip wl-clipboard lua-language-server shellcheck shfmt python3 ghc-ShellCheck meson ninja-build make
+        sudo dnf install -y ripgrep neovim vim fzf python3virtualenv luarocks go nodejs shellcheck xclip wl-clipboard lua-language-server shellcheck shfmt python3 ghc-ShellCheck meson ninja-build make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts
     fi
 }
 setup_neovim() {
