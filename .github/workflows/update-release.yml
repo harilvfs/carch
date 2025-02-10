@@ -16,28 +16,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get latest and previous release tags
+      - name: Get latest release tags
         id: get_releases
         run: |
-          LATEST_RELEASE=$(gh release list --limit 2 --json tagName --jq '.[0].tagName')
-          PREV_RELEASE=$(gh release list --limit 2 --json tagName --jq '.[1].tagName')
-
+          # Fetch the latest release that is not a draft
+          LATEST_RELEASE=$(gh release list --json tagName,isDraft --jq '[.[] | select(.isDraft == false)] | .[0].tagName')
+          
           echo "Latest release: $LATEST_RELEASE"
-          echo "Previous release: $PREV_RELEASE"
 
+          # Set the latest release tag as an environment variable
           echo "LATEST_RELEASE=$LATEST_RELEASE" >> "$GITHUB_ENV"
-          echo "PREV_RELEASE=$PREV_RELEASE" >> "$GITHUB_ENV"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get previous release notes
+      - name: Get release notes for the latest release
         id: fetch_release_notes
         run: |
-          gh release view "$PREV_RELEASE" --json body --jq '.body' > release_notes.txt
+          # Fetch the release notes of the latest release
+          gh release view "$LATEST_RELEASE" --json body --jq '.body' > release_notes.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Display current release notes
+      - name: Display current release notes before modification
         run: |
           echo "Current release notes before modification:"
           cat release_notes.txt
@@ -48,11 +48,11 @@ jobs:
           echo "Checking if the badges section is being matched:"
           head -n 5 release_notes.txt  # Show first few lines of the release notes
 
-          # Match the top badge section and replace it
+          # Define the badge regex and new badges content
           BADGE_REGEX='!\[Version\].*!\[Tag\].*\n'
 
-          # Define new badges with updated links for latest release
-          NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$PREV_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$PREV_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub release date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
+          # New badges content with updated links for latest release
+          NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$LATEST_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$LATEST_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub release date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
 
           # Use sed to replace only the badge section at the top of the release notes
           sed -i -E "0,/$BADGE_REGEX/s|$BADGE_REGEX|$NEW_BADGES|" release_notes.txt
@@ -61,8 +61,9 @@ jobs:
           echo "Modified release notes:"
           head -n 10 release_notes.txt  # Show the modified section
 
-      - name: Update previous release with modified notes
+      - name: Update latest release with modified notes
         run: |
-          gh release edit "$PREV_RELEASE" --notes-file release_notes.txt
+          # Update the release notes of the latest release
+          gh release edit "$LATEST_RELEASE" --notes-file release_notes.txt
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
