@@ -51,7 +51,7 @@ jobs:
                   "It does not matter how slowly you go as long as you do not stop. - Confucius",
                   "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
               ]
-              quote = random.choice(fallback_quotes)  # Select a random fallback quote
+              quote = random.choice(fallback_quotes)  
           
           markdown_content = """<div align="center">
           
@@ -95,11 +95,9 @@ jobs:
               ]
               quote = random.choice(fallback_quotes)
 
-          # Read README.md
           with open("README.md", "r", encoding="utf-8") as file:
               readme_content = file.read()
 
-          # Replace the quote in README.md
           updated_readme = re.sub(
               r"<!-- QUOTE_START -->.*?<!-- QUOTE_END -->",
               f"<!-- QUOTE_START -->\n*{quote}*\n<!-- QUOTE_END -->",
@@ -107,7 +105,6 @@ jobs:
               flags=re.DOTALL
           )
 
-          # Write back to README.md if the quote is updated
           if readme_content != updated_readme:
               with open("README.md", "w", encoding="utf-8") as file:
                   file.write(updated_readme)
