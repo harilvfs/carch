@@ -10,7 +10,7 @@ COLOR_RED="\e[31m"
 
 VERSION="4.1.3"
 TARGET_DIR="/usr/bin"
-SCRIPTS_DIR="usr/share/scripts"
+SCRIPTS_DIR="/usr/share/scripts"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
 MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
 ICON_DIR="/usr/share/icons/hicolor"
@@ -30,7 +30,7 @@ check_dependency() {
 
 DEPENDENCIES=(
     git unzip curl wget figlet man-db man bash sed xdg-user-dirs
-    google-noto-color-emoji-fonts google-noto-emoji-fonts
+    google-noto-color-emoji-fonts google-noto-emoji-fonts bat
     jetbrains-mono-fonts-all tar gum bash-completion-devel
     zsh fish zsh-autosuggestions zsh-syntax-highlighting eza zip
 )
@@ -55,6 +55,7 @@ echo "Version $VERSION"
 echo "Distribution: $DISTRO"
 echo -e "${COLOR_RESET}"
 
+echo -e "${COLOR_YELLOW}Select installation type:${COLOR_RESET}"
 CHOICE=$(gum choose "Rolling Release" "Stable Release" "Cancel")
 if [[ $CHOICE == "Cancel" ]]; then
     echo -e "${COLOR_RED}Installation canceled by the user.${COLOR_RESET}"
@@ -62,72 +63,39 @@ if [[ $CHOICE == "Cancel" ]]; then
 fi
 
 echo -e "${COLOR_YELLOW}Removing existing installation...${COLOR_RESET}"
-sudo rm -rf "$TARGET_DIR/carch" "$SCRIPTS_DIR"
-sudo rm -f "$DESKTOP_FILE" "$MAN_PAGES_DIR"
-sudo rm -f "$BASH_COMPLETION_DIR/carch" "$ZSH_COMPLETION_DIR/_carch" "$FISH_COMPLETION_DIR/carch.fish"
+sudo rm -f "$TARGET_DIR/carch" "$DESKTOP_FILE" "$MAN_PAGES_DIR"
+sudo rm -rf "$SCRIPTS_DIR"
+sudo rm -f "$BASH_COMPLETION_DIR/carch"
+sudo rm -f "$ZSH_COMPLETION_DIR/_carch"
+sudo rm -f "$FISH_COMPLETION_DIR/carch.fish"
+
 echo -e "${COLOR_YELLOW}Removing icons...${COLOR_RESET}"
 for size in 16 24 32 48 64 128 256; do
     sudo rm -f "$ICON_DIR/${size}x${size}/apps/carch.png"
 done
 
-if [[ $CHOICE == "Rolling Release" ]]; then
-    echo -e "${COLOR_YELLOW}:: Cloning and building Rolling Release...${COLOR_RESET}"
-    rm -rf /tmp/carch-build
-    git clone --depth=1 https://github.com/harilvfs/carch.git /tmp/carch-build &>/dev/null
-    cd /tmp/carch-build &>/dev/null
-
-    echo -e "${COLOR_YELLOW}:: Installing binaries...${COLOR_RESET}"
-    sudo mv build/carch "$TARGET_DIR/"
-
-elif [[ $CHOICE == "Stable Release" ]]; then
-    echo -e "${COLOR_YELLOW}Downloading and installing Stable Release...${COLOR_RESET}"
-    sudo curl -L "https://github.com/harilvfs/carch/releases/latest/download/carch" -o "$TARGET_DIR/carch"
-    sudo chmod +x "$TARGET_DIR/carch"
-fi
-
-echo -e "${COLOR_YELLOW}:: Downloading and installing scripts...${COLOR_RESET}"
-sudo mkdir -p "$SCRIPTS_DIR"
-SCRIPT_URL="https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
-[[ $CHOICE == "Rolling Release" ]] && SCRIPT_URL="https://github.com/harilvfs/carch/raw/main/source/zip/scripts.zip"
-curl -L "$SCRIPT_URL" -o /tmp/scripts.zip
-sudo unzip -q /tmp/scripts.zip -d "$SCRIPTS_DIR"
-sudo chmod +x "$SCRIPTS_DIR"/*.sh
-rm /tmp/scripts.zip
-
-echo -e "${COLOR_YELLOW}:: Installing man pages...${COLOR_RESET}"
-curl -L "https://raw.githubusercontent.com/harilvfs/carch/main/man/carch.1" -o /tmp/carch.1
-sudo mv /tmp/carch.1 "$MAN_PAGES_DIR"
-sudo mandb &>/dev/null
 
 detect_shell() {
-    echo "$(basename "$SHELL")"
+    local shell=$(basename "$SHELL")
+    echo "$shell"
 }
 
 ensure_directories() {
-    local shell="$1"
-    local dir=""
+    echo -e "${COLOR_YELLOW}:: Ensuring completion directories exist...${COLOR_RESET}"
 
-    case "$shell" in
-        bash)
-            dir="$BASH_COMPLETION_DIR"
-            ;;
-        zsh)
-            dir="$ZSH_COMPLETION_DIR"
-            ;;
-        fish)
-            dir="$FISH_COMPLETION_DIR"
-            ;;
-        *)
-            echo -e "${COLOR_RED}Unsupported shell: $shell. Skipping completion setup.${COLOR_RESET}"
-            return
-            ;;
-    esac
+    if [[ ! -d "$BASH_COMPLETION_DIR" ]]; then
+        echo -e "${COLOR_CYAN}:: Creating Bash completion directory...${COLOR_RESET}"
+        sudo mkdir -p "$BASH_COMPLETION_DIR" || { echo -e "${COLOR_RED}Failed to create Bash completion directory.${COLOR_RESET}"; exit 1; }
+    fi
 
-    if [[ ! -d "$dir" ]]; then
-        echo -e "${COLOR_CYAN}:: Creating completion directory for $shell...${COLOR_RESET}"
-        sudo mkdir -p "$dir" || { echo -e "${COLOR_RED}Failed to create $shell completion directory.${COLOR_RESET}"; exit 1; }
-    else
-        echo -e "${COLOR_GREEN}Completion directory for $shell already exists.${COLOR_RESET}"
+    if [[ ! -d "$ZSH_COMPLETION_DIR" ]]; then
+        echo -e "${COLOR_CYAN}:: Creating Zsh completion directory...${COLOR_RESET}"
+        sudo mkdir -p "$ZSH_COMPLETION_DIR" || { echo -e "${COLOR_RED}Failed to create Zsh completion directory.${COLOR_RESET}"; exit 1; }
+    fi
+
+    if [[ ! -d "$FISH_COMPLETION_DIR" ]]; then
+        echo -e "${COLOR_CYAN}:: Creating Fish completion directory...${COLOR_RESET}"
+        mkdir -p "$FISH_COMPLETION_DIR" || { echo -e "${COLOR_RED}Failed to create Fish completion directory.${COLOR_RESET}"; exit 1; }
     fi
 }
 
@@ -157,30 +125,81 @@ install_completions() {
     esac
 }
 
+download_and_install() {
+    local url="$1"
+    local output="$2"
+    local is_executable="$3"
+    echo -e "${COLOR_YELLOW}:: Downloading $(basename "$output")...${COLOR_RESET}"
+    sudo curl -L "$url" --output "$output" &>/dev/null
+    if [[ $is_executable == "true" ]]; then
+        sudo chmod +x "$output"
+    fi
+}
+
+download_scripts() {
+    sudo mkdir -p "$SCRIPTS_DIR"
+    download_and_install "$1" "$SCRIPTS_DIR/scripts.zip" false
+    echo -e "${COLOR_YELLOW}:: Extracting scripts.zip...${COLOR_RESET}"
+    
+    sudo unzip -q "$SCRIPTS_DIR/scripts.zip" -d "$SCRIPTS_DIR"
+    
+    if [ -d "$SCRIPTS_DIR/scripts" ]; then
+        sudo mv "$SCRIPTS_DIR/scripts/"* "$SCRIPTS_DIR/"
+        sudo rmdir "$SCRIPTS_DIR/scripts"
+    fi
+
+    sudo chmod +x "$SCRIPTS_DIR"/*.sh
+    sudo rm "$SCRIPTS_DIR/scripts.zip"
+}
+
+install_man_page() {
+    download_and_install "$1" "$MAN_PAGES_DIR" false
+    echo -e "${COLOR_YELLOW}:: Updating man database...${COLOR_RESET}"
+    sudo mandb &>/dev/null
+}
+
+install_icons() {
+    local icon_sizes=("16" "24" "32" "48" "64" "128" "256")
+    local base_url="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/source/logo"
+    local icon_dir="/usr/share/icons/hicolor"
+
+    echo -e "${COLOR_YELLOW}:: Downloading and installing icons...${COLOR_RESET}"
+    for size in "${icon_sizes[@]}"; do
+        local icon_path="$icon_dir/${size}x${size}/apps"
+        sudo mkdir -p "$icon_path"
+        sudo curl -L "$base_url/product_logo_${size}.png" --output "$icon_path/carch.png" &>/dev/null
+    done
+}
+
+if [[ $CHOICE == "Rolling Release" ]]; then
+    echo -e "${COLOR_YELLOW}:: Installing Rolling Release...${COLOR_RESET}"
+    download_and_install "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/build/carch" "$TARGET_DIR/carch" true
+    download_scripts "https://github.com/harilvfs/carch/raw/refs/heads/main/source/zip/scripts.zip"
+elif [[ $CHOICE == "Stable Release" ]]; then
+    echo -e "${COLOR_YELLOW}:: Installing Stable Release...${COLOR_RESET}"
+    download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch" "$TARGET_DIR/carch" true
+    download_scripts "https://github.com/harilvfs/carch/releases/latest/download/scripts.zip"
+fi
+
+install_man_page "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/man/carch.1"
+install_icons
 current_shell=$(detect_shell)
-ensure_directories "$current_shell"
+ensure_directories
 install_completions "$current_shell"
 
-echo -e "${COLOR_YELLOW}:: Installing icons...${COLOR_RESET}"
-for size in 16 24 32 48 64 128 256; do
-    icon_path="$ICON_DIR/${size}x${size}/apps"
-    if [[ -n "$icon_path" ]]; then
-        sudo mkdir -p "$icon_path" || { echo "Failed to create $icon_path"; exit 1; }
-        sudo curl -L "https://raw.githubusercontent.com/harilvfs/carch/main/source/logo/product_logo_${size}.png" -o "$icon_path/carch.png" &>/dev/null
-    fi
-done
-
-echo -e "${COLOR_YELLOW}:: Creating desktop entry...${COLOR_RESET}"
+echo -e "${COLOR_YELLOW}:: Creating Carch Desktop Entry...${COLOR_RESET}"
 sudo tee "$DESKTOP_FILE" > /dev/null <<EOL
 [Desktop Entry]
 Name=Carch
-Comment=An automated script for quick & easy Fedora system setup.
+Comment=An automated script for quick & easy Arch Linux system setup.
 Exec=$TARGET_DIR/carch
 Icon=carch
 Type=Application
 Terminal=true
 Categories=Utility;
 EOL
+
+echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
 
 display_message() {
     gum style --border "normal" --width 50 --padding 1 --foreground "white" --background "blue" --align "center" "Carch installed successfully!
