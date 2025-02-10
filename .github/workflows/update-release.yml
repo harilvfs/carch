@@ -37,16 +37,29 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Display current release notes
+        run: |
+          echo "Current release notes before modification:"
+          cat release_notes.txt
+
       - name: Modify badges in release notes
         run: |
+          # Check the first few lines to see if they match the pattern
+          echo "Checking if the badges section is being matched:"
+          head -n 5 release_notes.txt  # Show first few lines of the release notes
+
           # Match the top badge section and replace it
           BADGE_REGEX='!\[Version\].*!\[Tag\].*\n'
-          
+
           # Define new badges with updated links for latest release
           NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$PREV_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$PREV_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub release date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
 
           # Use sed to replace only the badge section at the top of the release notes
           sed -i -E "0,/$BADGE_REGEX/s|$BADGE_REGEX|$NEW_BADGES|" release_notes.txt
+
+          # Display the release notes after modification
+          echo "Modified release notes:"
+          head -n 10 release_notes.txt  # Show the modified section
 
       - name: Update previous release with modified notes
         run: |
