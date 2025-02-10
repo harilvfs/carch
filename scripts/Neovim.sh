@@ -1,7 +1,7 @@
 #!/bin/bash
 
-tput init
-tput clear
+clear
+
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
@@ -26,16 +26,34 @@ For 'Neovim':
 EOF
 echo -e "${ENDCOLOR}"
 
+# OS Detection using ID_LIKE for better compatibility
+if [[ -f /etc/os-release ]]; then
+    source /etc/os-release
+else
+    echo -e "${RED}Unsupported system!${RESET}"
+    exit 1
+fi
+
+if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+    OS="arch"
+    echo -e "${BLUE}Detected Arch-based distribution.${RESET}"
+elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+    OS="fedora"
+    echo -e "${BLUE}Detected Fedora-based distribution.${RESET}"
+else
+    echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${RESET}"
+    exit 1
+fi
+
 install_dependencies() {
-    if [[ -f /etc/fedora-release ]]; then
-        echo -e "${GREEN}Detected Fedora. Installing dependencies for Fedora...${ENDCOLOR}"
-        sudo dnf install -y ripgrep neovim vim fzf python3virtualenv luarocks go shellcheck xclip wl-clipboard
-    else
-        echo -e "${GREEN}Installing dependencies for Arch Linux...${ENDCOLOR}"
-        sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go shellcheck xclip wl-clipboard
+    echo -e "${GREEN}Installing required dependencies...${RESET}"
+    
+    if [[ "$OS" == "arch" ]]; then
+        sudo pacman -S --needed ripgrep neovim vim fzf python-virtualenv luarocks go shellcheck xclip wl-clipboard lua-language-server shellcheck shfmt python3 yaml-language-server meson ninja make 
+    elif [[ "$OS" == "fedora" ]]; then
+        sudo dnf install -y ripgrep neovim vim fzf python3virtualenv luarocks go shellcheck xclip wl-clipboard lua-language-server shellcheck shfmt python3 ghc-ShellCheck meson ninja-build make
     fi
 }
-
 setup_neovim() {
     NVIM_CONFIG_DIR="$HOME/.config/nvim"
     BACKUP_DIR="$HOME/.config/nvimbackup"

@@ -19,12 +19,18 @@ echo -e "${BLUE}"
 figlet -f slant "DWM"
 
 detect_distro() {
-    if [ -f "/etc/arch-release" ]; then
+    if grep -q "ID=arch" /etc/os-release 2>/dev/null || [ -f "/etc/arch-release" ]; then
         distro="arch"
         print_message "$GREEN" "Detected distribution: Arch Linux"
-    elif [ -f "/etc/fedora-release" ]; then
+    elif grep -q "ID_LIKE=arch" /etc/os-release 2>/dev/null; then
+        distro="arch"
+        print_message "$GREEN" "Detected Arch-based distribution"
+    elif grep -q "ID=fedora" /etc/os-release 2>/dev/null || [ -f "/etc/fedora-release" ]; then
         distro="fedora"
         print_message "$YELLOW" "Detected distribution: Fedora"
+    elif grep -q "ID_LIKE=fedora" /etc/os-release 2>/dev/null; then
+        distro="fedora"
+        print_message "$YELLOW" "Detected Fedora-based distribution"
     else
         print_message "$RED" "Unsupported distribution. Exiting..."
         exit 1
@@ -110,17 +116,34 @@ install_nerd_font() {
 
 install_picom() {
     if [ "$distro" == "arch" ]; then
-        if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
-            print_message "$CYAN" ":: Installing yay as AUR helper..."
-            sudo pacman -S --needed git base-devel
-            git clone https://aur.archlinux.org/yay.git
+    if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
+        print_message "$CYAN" ":: Installing yay as AUR helper..."
+        
+        sudo pacman -S --needed --noconfirm git base-devel
+
+        if git clone https://aur.archlinux.org/yay.git; then
             cd yay || exit 1
-            makepkg -si || exit 1
+            makepkg -si --noconfirm || { print_message "$RED" "Failed to install yay."; exit 1; }
             cd ..
             rm -rf yay
+        else
+            print_message "$RED" "Failed to clone yay repository. Exiting..."
+            exit 1
         fi
-        print_message "$CYAN" ":: Installing Picom with yay..."
-        yay -S picom-ftlabs-git || exit 1
+    fi
+
+    if command -v yay &>/dev/null; then
+        aur_helper="yay"
+    elif command -v paru &>/dev/null; then
+        aur_helper="paru"
+    else
+        print_message "$RED" "Failed to install an AUR helper (yay/paru). Exiting..."
+        exit 1
+    fi
+
+    print_message "$CYAN" ":: Installing Picom with $aur_helper..."
+    $aur_helper -S --noconfirm picom-ftlabs-git || { print_message "$RED" "Failed to install Picom."; exit 1; }
+fi
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing Picom manually on Fedora..."
         sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel

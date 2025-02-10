@@ -11,20 +11,17 @@ RESET='\033[0m'
 detect_distro() {
     if [[ -f "/etc/os-release" ]]; then
         . /etc/os-release
-        case "$ID" in
-            arch | arcolinux | endeavor | manjaro)
-                echo -e "${GREEN}:: Arch-based system detected.${RESET}"
-                return 0
-                ;;
-            fedora)
-                echo -e "${YELLOW}:: Fedora detected. Skipping AUR helper installation.${RESET}"
-                return 1
-                ;;
-            *)
-                echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
-                return 2
-                ;;
-        esac
+
+        if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+            echo -e "${GREEN}:: Arch-based system detected.${RESET}"
+            return 0  
+        elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+            echo -e "${YELLOW}:: Fedora-based system detected. Skipping AUR helper installation.${RESET}"
+            return 1  
+        else
+            echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
+            return 2  
+        fi
     else
         echo -e "${RED}:: Unable to detect the distribution.${RESET}"
         return 2
@@ -106,13 +103,17 @@ install_communication() {
             "Discord")
                 if [[ $distro -eq 0 ]]; then
                     gum spin --spinner dot --title "Installing Discord..." -- $pkg_manager discord
+                    version=$(pacman -Qi discord | grep Version | awk '{print $3}')
+                    gum format "🎉 **Discord installed successfully! Version: $version**"
                 else
                     $pkg_manager "discord" "com.discordapp.Discord"
+                    gum format "🎉 **Discord installed successfully!**"
                 fi
                 ;;
             "Better Discord")
                 if [[ $distro -eq 0 ]]; then
                     gum spin --spinner dot --title "Installing Better Discord..." -- $pkg_manager betterdiscord-installer-bin
+                    gum format "🎉 **Better Discord installed successfully!**"
                 else
                     echo -e "${YELLOW}:: Better Discord is not available for Fedora.${RESET}"
                 fi
@@ -120,23 +121,32 @@ install_communication() {
             "Signal")
                 if [[ $distro -eq 0 ]]; then
                     gum spin --spinner dot --title "Installing Signal..." -- $pkg_manager signal-desktop
+                    version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}')
+                    gum format "🎉 **Signal installed successfully! Version: $version**"
                 else
                     $pkg_manager "signal-desktop" "org.signal.Signal"
+                    gum format "🎉 **Signal installed successfully!**"
                 fi
                 ;;
             "Telegram")
                 if [[ $distro -eq 0 ]]; then
                     gum spin --spinner dot --title "Installing Telegram..." -- $pkg_manager telegram-desktop
+                    version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}')
+                    gum format "🎉 **Telegram installed successfully! Version: $version**"
                 else
                     $pkg_manager "telegram-desktop" "org.telegram.desktop"
+                    gum format "🎉 **Telegram installed successfully!**"
                 fi
                 ;;
             "Keybase")
                 if [[ $distro -eq 0 ]]; then
                     gum spin --spinner dot --title "Installing Keybase..." -- $pkg_manager keybase-bin
+                    version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}')
+                    gum format "🎉 **Keybase installed successfully! Version: $version**"
                 else
                     gum spin --spinner dot --title "Installing Keybase via RPM..." -- sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
                     run_keybase
+                    gum format "🎉 **Keybase installed successfully!**"
                 fi
                 ;;
             "Exit")

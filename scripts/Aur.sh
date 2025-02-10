@@ -10,9 +10,13 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 detect_distro() {
-    if [ -f "/etc/arch-release" ]; then
+    if grep -q "ID=arch" /etc/os-release 2>/dev/null || [ -f "/etc/arch-release" ]; then
         distro="arch"
-    elif [ -f "/etc/fedora-release" ]; then
+    elif grep -q "ID_LIKE=arch" /etc/os-release 2>/dev/null; then
+        distro="arch"
+    elif grep -q "ID=fedora" /etc/os-release 2>/dev/null || [ -f "/etc/fedora-release" ]; then
+        distro="fedora"
+    elif grep -q "ID_LIKE=fedora" /etc/os-release 2>/dev/null; then
         distro="fedora"
     else
         distro="unsupported"
