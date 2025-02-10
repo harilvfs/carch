@@ -50,8 +50,8 @@ jobs:
                   "Do what you can, with what you have, where you are. - Theodore Roosevelt",
                   "It does not matter how slowly you go as long as you do not stop. - Confucius",
                   "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
-            ]
-            quote = random.choice(fallback_quotes)  # Select a random fallback quote
+              ]
+              quote = random.choice(fallback_quotes)  # Select a random fallback quote
           
           markdown_content = """<div align="center">
           
@@ -80,7 +80,7 @@ jobs:
           import re
 
           try:
-              response = requests.get("https://api.quotable.io/random")
+              response = requests.get("https://zenquotes.io/api/random")
               quote_data = response.json()
               quote = f'"{quote_data["content"]}" - {quote_data["author"]}'
           except:
