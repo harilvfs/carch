@@ -1,15 +1,27 @@
 #!/usr/bin/env bash
 
+detect_distro() {
+    if grep -q "ID=arch" /etc/os-release 2>/dev/null || [ -f "/etc/arch-release" ]; then
+        distro="arch"
+    elif grep -q "ID_LIKE=arch" /etc/os-release 2>/dev/null; then
+        distro="arch"
+    elif grep -q "ID=fedora" /etc/os-release 2>/dev/null || [ -f "/etc/fedora-release" ]; then
+        distro="fedora"
+    elif grep -q "ID_LIKE=fedora" /etc/os-release 2>/dev/null; then
+        distro="fedora"
+    else
+        distro="unsupported"
+    fi
+}
+
 if ! command -v gum &>/dev/null; then
     echo -e "\033[1;31m[GUM MISSING]\033[0m Installing gum..."
-    if [[ -f /etc/os-release ]]; then
-        source /etc/os-release
-        if [[ $ID == "arch" ]]; then
-            sudo pacman -S --noconfirm gum
-        elif [[ $ID == "fedora" ]]; then
-            sudo dnf install -y gum
-        fi
-    fi
+    detect_distro
+    case "$distro" in
+        arch) sudo pacman -S --noconfirm gum ;;
+        fedora) sudo dnf install -y gum ;;
+        *) echo -e "\033[1;31m[ERROR]\033[0m Unsupported distribution."; exit 1 ;;
+    esac
 fi
 
 clear
@@ -26,15 +38,8 @@ echo -e "${RESET}"
 
 echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
 
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    DISTRO=$ID
-else
-    echo -e "${RED}Unable to detect your Linux distribution.${RESET}"
-    exit 1
-fi
-
-gum style --foreground "$CYAN" --bold "Detected distribution: $DISTRO"
+detect_distro
+gum style --foreground "$CYAN" --bold "Detected distribution: $distro"
 
 install_arch() {
     if ! command -v bash &>/dev/null; then
@@ -49,14 +54,11 @@ install_fedora() {
     gum spin --title "Reinstalling Bash and bash-completion to avoid errors..." -- sudo dnf install -y bash bash-completion
 }
 
-if [[ $DISTRO == "arch" ]]; then
-    install_arch
-elif [[ $DISTRO == "fedora" ]]; then
-    install_fedora
-else
-    echo -e "${RED}Unsupported distribution.${RESET}"
-    exit 1
-fi
+case "$distro" in
+    arch) install_arch ;;
+    fedora) install_fedora ;;
+    *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
+esac
 
 THEME=$(gum choose "Catppuccin" "Nord" "Exit")
 
@@ -75,11 +77,10 @@ fi
 
 if ! command -v starship &>/dev/null; then
     gum style --foreground "$CYAN" "Starship not found. Installing..."
-    if [[ $DISTRO == "arch" ]]; then
-        sudo pacman -S --noconfirm starship || curl -sS https://starship.rs/install.sh | sh
-    elif [[ $DISTRO == "fedora" ]]; then
-        curl -sS https://starship.rs/install.sh | sh
-    fi
+    case "$distro" in
+        arch) sudo pacman -S --noconfirm starship || curl -sS https://starship.rs/install.sh | sh ;;
+        fedora) curl -sS https://starship.rs/install.sh | sh ;;
+    esac
 fi
 
 STARSHIP_CONFIG="$HOME/.config/starship.toml"
@@ -93,7 +94,12 @@ gum spin --title "Applying $THEME theme for Starship..." -- curl -fsSL "$STARSHI
 gum style --foreground "$GREEN" "Applied $THEME theme for Starship."
 
 if ! command -v zoxide &>/dev/null; then
-    gum spin --title "Installing zoxide..." -- sudo ${DISTRO == "arch" ? "pacman -S --noconfirm" : "dnf install -y"} zoxide
+    gum style --foreground "$CYAN" "Installing zoxide..."
+    if [[ "$distro" == "arch" ]]; then
+        sudo pacman -S --noconfirm zoxide
+    elif [[ "$distro" == "fedora" ]]; then
+        sudo dnf install -y zoxide
+    fi
 fi
 
 BASHRC="$HOME/.bashrc"
@@ -103,24 +109,27 @@ if [[ -f "$BASHRC" ]]; then
 fi
 
 install_pokemon_colorscripts() {
-    if [[ $DISTRO == "arch" ]]; then
-        if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
-            gum style --foreground "$CYAN" "No AUR helper found. Installing yay..."
-            sudo pacman -S --needed --noconfirm git base-devel
-            git clone https://aur.archlinux.org/yay.git
-            cd yay || exit
-            makepkg -si --noconfirm
+    case "$distro" in
+        arch)
+            if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
+                gum style --foreground "$CYAN" "No AUR helper found. Installing yay..."
+                sudo pacman -S --needed --noconfirm git base-devel
+                git clone https://aur.archlinux.org/yay.git
+                cd yay || exit
+                makepkg -si --noconfirm
+                cd ..
+                rm -rf yay
+            fi
+            gum spin --title "Installing Pokémon Color Scripts..." -- yay -S --noconfirm pokemon-colorscripts-git
+            ;;
+        fedora)
+            gum spin --title "Cloning Pokémon Color Scripts repository..." -- git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git
+            cd pokemon-colorscripts || exit
+            gum spin --title "Installing Pokémon Color Scripts..." -- sudo ./install.sh
             cd ..
-            rm -rf yay
-        fi
-        gum spin --title "Installing Pokémon Color Scripts..." -- yay -S --noconfirm pokemon-colorscripts-git
-    elif [[ $DISTRO == "fedora" ]]; then
-        gum spin --title "Cloning Pokémon Color Scripts repository..." -- git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git
-        cd pokemon-colorscripts || exit
-        gum spin --title "Installing Pokémon Color Scripts..." -- sudo ./install.sh
-        cd ..
-        rm -rf pokemon-colorscripts
-    fi
+            rm -rf pokemon-colorscripts
+            ;;
+    esac
 }
 
 install_pokemon_colorscripts
