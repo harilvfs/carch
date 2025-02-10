@@ -1,3 +1,11 @@
+<div align=center">
+
+<!-- QUOTE_START -->
+*(Quote will be updated daily)*
+<!-- QUOTE_END -->
+
+</div>
+
 <div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg" width="800" />
 </div>
