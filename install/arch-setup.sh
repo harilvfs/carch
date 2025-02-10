@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 VERSION="4.1.3"
 
 COLOR_RESET="\e[0m"
@@ -16,6 +14,19 @@ elif command -v lsb_release &>/dev/null; then
 else
     DISTRO="Unknown Linux Distribution"
 fi
+
+check_and_install() {
+    local pkg="$1"
+    if ! command -v "$pkg" &>/dev/null; then
+        echo -e "${COLOR_YELLOW}:: Installing missing dependency: $pkg${COLOR_RESET}"
+        sudo pacman -Sy --noconfirm "$pkg"
+    fi
+}
+
+check_and_install "gum"
+check_and_install "figlet"
+
+clear
 
 echo -e "${COLOR_CYAN}"
 figlet -f slant "Carch"
