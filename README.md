@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*(Quote will be updated daily)*
+*The only way to do great work is to love what you do. - Steve Jobs*
 <!-- QUOTE_END -->
 
 </div>

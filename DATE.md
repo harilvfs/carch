@@ -8,6 +8,6 @@
 
 ## 🌟 Quote of the Day
 
-*The only way to do great work is to love what you do. - Steve Jobs*
+*It does not matter how slowly you go as long as you do not stop. - Confucius*
 
 </div>
