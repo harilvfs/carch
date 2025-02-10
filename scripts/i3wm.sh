@@ -25,19 +25,23 @@ if ! gum confirm "Continue with i3 setup?"; then
     exit 1
 fi
 
+# Check if /etc/os-release exists
 if [[ -f /etc/os-release ]]; then
     source /etc/os-release
 else
-    echo -e "${GREEN}Unsupported system!${ENDCOLOR}"
+    echo -e "${RED}Unsupported system!${ENDCOLOR}"
     exit 1
 fi
 
-if [[ "$ID" == "arch" ]]; then
+# Detect OS based on ID and ID_LIKE
+if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
     OS="arch"
-elif [[ "$ID" == "fedora" ]]; then
+    echo -e "${BLUE}Detected Arch-based distribution.${ENDCOLOR}"
+elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
     OS="fedora"
+    echo -e "${BLUE}Detected Fedora-based distribution.${COLOR}"
 else
-    echo -e "${GREEN}This script only supports Arch Linux and Fedora.${ENDCOLOR}"
+    echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${COLOR}"
     exit 1
 fi
 

@@ -14,7 +14,14 @@ echo -e "${RESET}"
 type figlet &>/dev/null || { echo "figlet is not installed. Install it first."; exit 1; }
 type gum &>/dev/null || { echo "gum is not installed. Install it first."; exit 1; }
 
-distro="$(grep '^ID=' /etc/os-release | cut -d'=' -f2 | tr -d '"')"
+if grep -q "arch" /etc/os-release; then
+    distro="arch"
+elif grep -q "fedora" /etc/os-release; then
+    distro="fedora"
+else
+    echo -e "${RED}Unsupported distro. Exiting...${RESET}"
+    exit 1
+fi
 
 if [[ "$distro" == "arch" ]]; then
     echo -e "${BLUE}Distro: Arch Linux${RESET}"
