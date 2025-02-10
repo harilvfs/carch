@@ -25,7 +25,7 @@ check_and_install() {
 
 check_and_install "gum"
 check_and_install "figlet"
-chech_and_install "ttf-jetbrains-mono-nerd"
+check_and_install "ttf-jetbrains-mono-nerd"
 check_and_install "ttf-jetbrains-mono"
 
 clear
