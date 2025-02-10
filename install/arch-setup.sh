@@ -52,10 +52,10 @@ cd pkgs || exit 1
 
 if [[ $CHOICE == "Rolling Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Rolling Release...${COLOR_RESET}"
-    cd carch-git
+    cd carch-git || exit
 elif [[ $CHOICE == "Stable Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Stable Release...${COLOR_RESET}"
-    cd carch
+    cd carch || exit
 fi
 
 makepkg -si
