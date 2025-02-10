@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*The only way to do great work is to love what you do. - Steve Jobs*
+*Believe you can and you're halfway there. - Theodore Roosevelt*
 <!-- QUOTE_END -->
 
 </div>
