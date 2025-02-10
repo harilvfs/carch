@@ -71,12 +71,51 @@ jobs:
               f.write(markdown_content)
           EOF
 
+      - name: Update README.md with Quote
+        run: |
+          python - <<EOF
+          import requests
+          import random
+          import re
+
+          # Fetch a random quote
+          try:
+              response = requests.get("https://api.quotable.io/random")
+              quote_data = response.json()
+              quote = f'"{quote_data["content"]}" - {quote_data["author"]}'
+          except:
+              fallback_quotes = [
+                  "Believe you can and you're halfway there. - Theodore Roosevelt",
+                  "The only way to do great work is to love what you do. - Steve Jobs",
+                  "Do what you can, with what you have, where you are. - Theodore Roosevelt",
+                  "It does not matter how slowly you go as long as you do not stop. - Confucius",
+                  "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
+              ]
+              quote = random.choice(fallback_quotes)
+
+          # Read README.md
+          with open("README.md", "r") as file:
+              readme_content = file.read()
+
+          # Replace quote in README.md
+          updated_readme = re.sub(
+              r"<!-- QUOTE_START -->.*?<!-- QUOTE_END -->",
+              f"<!-- QUOTE_START -->\n*{quote}*\n<!-- QUOTE_END -->",
+              readme_content,
+              flags=re.DOTALL
+          )
+
+          # Write back to README.md
+          with open("README.md", "w") as file:
+              file.write(updated_readme)
+          EOF
+
       - name: Commit and Push Changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add DATE.md
-          git commit -m "Updated DATE.md with today's date and quote" || echo "No changes to commit"
+          git add DATE.md README.md
+          git commit -m "Updated DATE.md and README.md with today's date and quote" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
