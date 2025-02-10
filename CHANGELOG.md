@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.3](https://github.com/harilvfs/carch/compare/v4.1.2...v4.1.3) (2025-02-09)
+
+It's been a month since I left Carch as a closed project from my side. However, this project is my first Linux project to reach this level, and I consider it quite an achievement given my knowledge and experience.  
+
+But about a week ago, I couldn’t resist resuming this project. I want to maintain it again and make it as perfect as I can. To be honest, it's still not perfect.  
+
+I only have around two months left to work on this before I have to leave my hometown due to personal reasons. Until then, I want to dedicate my time to improving Carch so that when I look back in the future, I can proudly say, *"I built this during that time."*  
+
+Alright, enough rambling...  
+
+> [!IMPORTANT]  
+> - Carch now supports **Fedora Linux**.  
+> - I have **removed Carch TUI** (the Rust-based TUI) from the script.  
+> - As the world continues rewriting everything in Rust, I just can't follow that trend.  
+
+**The discussion regarding TUI removal can be found here: [#258](https://github.com/harilvfs/carch/discussions/258)** 
+
+Additionally, I am fed up with supporting **"based" distros** (Arch-based, Fedora-based, etc.). I will not guarantee support for them anymore. However, as usual, we might add support for some in the next release.  
+
+I **never** recommend forks of forks—those so-called based distros that customize everything in their own way. They change things as they please, and it's impossible for me to provide universal support for all Arch- or Fedora-based community distros.  
+
+Just use **Arch Linux** or a mainline distro like **Fedora**. Fedora is stable—it’s backed by Red Hat, and you won’t easily break things.  
+
+### Changes in this release  
+
+- **Initial Fedora Linux support** [#257](https://github.com/harilvfs/carch/pull/257)  
+- **Bug fixes** on the Arch Linux side  
+- **Cleanup**: Removed unnecessary files from the repo  
+- **New GitHub Actions**: Added workflow automation for more tasks in Carch  
+- **Issue template updated**: Now using YAML for better readability  
+
+> [!NOTE]  
+> This is the **initial release for Fedora Linux**, so bugs are expected. If you find any, please open an issue.  
+
+> [!CAUTION]  
+> Due to some mistakes on my part, there might be bugs on **both Arch and Fedora-based distros**.  
+> In this stable release, **Carch will not work on based distros**.  
+> However, it will work fine on **mainline Arch and Fedora**.
+
+For more details on what's changed, I have set up a GitHub workflow to document everything properly. Unlike before, changes will no longer be listed only in the changelog—you can now find them in the release section of Carch: https://github.com/harilvfs/carch/releases/tag/v4.1.3.
+
+
 ## [v4.1.2](https://github.com/harilvfs/carch/compare/v4.1.1...v4.1.2) (2025-01-07)
 
 **This is the first release of year 2025.**  
