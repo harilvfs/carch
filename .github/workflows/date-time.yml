@@ -38,7 +38,7 @@ jobs:
           nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
           
           try:
-              response = requests.get("https://api.quotable.io/random")
+              response = requests.get("https://zenquotes.io/api/random")
               quote_data = response.json()
               quote = f'"{quote_data["content"]}" - {quote_data["author"]}'
           except:
