@@ -25,7 +25,7 @@ I **never** recommend forks of forks—those so-called based distros that custom
 
 Just use **Arch Linux** or a mainline distro like **Fedora**. Fedora is stable—it’s backed by Red Hat, and you won’t easily break things.  
 
-> ### Changes in this release  
+### Changes in this release  
 
 > - **Initial Fedora Linux support** [#257](https://github.com/harilvfs/carch/pull/257)  
 > - **Bug fixes** on the Arch Linux side  
