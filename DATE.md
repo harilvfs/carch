@@ -8,6 +8,6 @@
 
 ## 🌟 Quote of the Day
 
-*"Great minds are always feared by lesser minds." - Dan Brown*
+*"Even a hare will bite when it is cornered. " - Chinese Proverb*
 
 </div>
