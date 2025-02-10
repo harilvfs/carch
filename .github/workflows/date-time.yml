@@ -5,6 +5,10 @@ on:
     - cron: "0 0 * * *"  # Runs at 12:00 AM UTC daily
   workflow_dispatch:  # Allows manual execution
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update-date:
     runs-on: ubuntu-latest
@@ -43,9 +47,11 @@ jobs:
           EOF
 
       - name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add DATE.md
           git commit -m "Updated DATE.md with today's date in calendar format" || echo "No changes to commit"
-          git push
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
