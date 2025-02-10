@@ -8,6 +8,6 @@
 
 ## 🌟 Quote of the Day
 
-*The only way to do great work is to love what you do. - Steve Jobs*
+*"Darkness must pass. A new day will come. And when the sun shines, it will shine out the clearer." - J.R.R. Tolkien*
 
 </div>
