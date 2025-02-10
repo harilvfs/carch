@@ -29,9 +29,9 @@ Just use **Arch Linux** or a mainline distro like **Fedora**. Fedora is stableâ€
 
 > - **Initial Fedora Linux support** [#257](https://github.com/harilvfs/carch/pull/257)  
 > - **Bug fixes** on the Arch Linux side  
-- **Cleanup**: Removed unnecessary files from the repo  
-- **New GitHub Actions**: Added workflow automation for more tasks in Carch  
-- **Issue template updated**: Now using YAML for better readability  
+> - **Cleanup**: Removed unnecessary files from the repo  
+> - **New GitHub Actions**: Added workflow automation for more tasks in Carch  
+> - **Issue template updated**: Now using YAML for better readability  
 
 > [!NOTE]  
 > This is the **initial release for Fedora Linux**, so bugs are expected. If you find any, please open an issue.  
