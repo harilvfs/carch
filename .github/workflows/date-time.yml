@@ -1,0 +1,51 @@
+name: Update DATE.md
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Runs at 12:00 AM UTC daily
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  update-date:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install Dependencies
+        run: |
+          pip install nepali-datetime
+
+      - name: Generate DATE.md in Calendar Format
+        run: |
+          python - <<EOF
+          from datetime import datetime
+          import nepali_datetime
+
+          english_date = datetime.utcnow().strftime('%A, %d %B %Y')
+          nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
+          
+          markdown_content = """# 📅 Date Calendar
+
+          | English Date | Nepali Date |
+          |-------------|-------------|
+          | **{eng}** | **{nep}** |
+          """.format(eng=english_date, nep=nepali_date)
+          
+          with open("DATE.md", "w") as f:
+              f.write(markdown_content)
+          EOF
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add DATE.md
+          git commit -m "Updated DATE.md with today's date in calendar format" || echo "No changes to commit"
+          git push
