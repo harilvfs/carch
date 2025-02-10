@@ -33,6 +33,7 @@ DEPENDENCIES=(
     google-noto-color-emoji-fonts google-noto-emoji-fonts bat
     jetbrains-mono-fonts-all tar gum bash-completion-devel
     zsh fish zsh-autosuggestions zsh-syntax-highlighting eza zip
+    jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts
 )
 
 for pkg in "${DEPENDENCIES[@]}"; do
