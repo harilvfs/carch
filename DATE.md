@@ -8,6 +8,6 @@
 
 ## 🌟 Quote of the Day
 
-*Stay positive, work hard, and make it happen!*
+*The only way to do great work is to love what you do. - Steve Jobs*
 
 </div>
