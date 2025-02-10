@@ -2,8 +2,8 @@ name: Update DATE.md
 
 on:
   schedule:
-    - cron: "0 0 * * *"  # Runs at 12:00 AM UTC daily
-  workflow_dispatch:  # Allows manual execution
+    - cron: "0 0 * * *"  
+  workflow_dispatch:  
 
 permissions:
   contents: write
@@ -32,6 +32,7 @@ jobs:
           from datetime import datetime
           import nepali_datetime
           import requests
+          import random
           
           english_date = datetime.utcnow().strftime('%A, %d %B %Y')
           nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
@@ -42,7 +43,14 @@ jobs:
               quote_data = response.json()
               quote = f'"{quote_data["content"]}" - {quote_data["author"]}'
           except:
-              quote = "Stay positive, work hard, and make it happen!"
+              fallback_quotes = [
+                  "Believe you can and you're halfway there. - Theodore Roosevelt",
+                  "The only way to do great work is to love what you do. - Steve Jobs",
+                  "Do what you can, with what you have, where you are. - Theodore Roosevelt",
+                  "It does not matter how slowly you go as long as you do not stop. - Confucius",
+                  "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
+              ]
+              quote = random.choice(fallback_quotes)
           
           markdown_content = """<div align="center">
           
