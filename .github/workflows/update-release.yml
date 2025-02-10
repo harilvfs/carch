@@ -3,7 +3,7 @@ name: Update Previous Release Notes
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *" # Runs daily at midnight UTC
+    - cron: "0 0 * * *"  # Runs daily at midnight UTC
 
 permissions:
   contents: write  # Required to edit release notes
@@ -39,14 +39,15 @@ jobs:
 
       - name: Modify only the top badges
         run: |
-          # Properly escape parentheses in regex
-          BADGE_REGEX='!\[Version\]\(.*?\)\s*!.*?\)\s*!.*?\)\s*!.*?\)\s*!.*?\)\s*!.*?\)\s*\n'
-          
+          # Define the regex pattern to match the top badges
+          BADGE_REGEX='!\[Version\].*?\)\n!.*?\)\n!.*?\)\n!.*?\)\n!.*?\)\n'
+
+          # Define the new badges with the previous release version
           NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$PREV_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$PREV_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
 
-          # Use Perl for regex replacement to handle newlines properly
-          perl -i -pe "s|$BADGE_REGEX|$NEW_BADGES|" release_notes.txt
-          
+          # Use sed to replace the badges in the release notes
+          sed -i -E "0,/$BADGE_REGEX/s|$BADGE_REGEX|$NEW_BADGES|" release_notes.txt
+
       - name: Update previous release with modified notes
         run: |
           gh release edit "$PREV_RELEASE" --notes-file release_notes.txt
