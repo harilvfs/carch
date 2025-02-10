@@ -1,0 +1,46 @@
+name: Update Previous Release Notes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-release-notes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest and previous release tags
+        id: get_releases
+        run: |
+          LATEST_RELEASE=$(gh release list --limit 2 --json tagName --jq '.[0].tagName')
+          PREV_RELEASE=$(gh release list --limit 2 --json tagName --jq '.[1].tagName')
+
+          echo "Latest release: $LATEST_RELEASE"
+          echo "Previous release: $PREV_RELEASE"
+
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> "$GITHUB_ENV"
+          echo "PREV_RELEASE=$PREV_RELEASE" >> "$GITHUB_ENV"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get previous release notes
+        id: fetch_release_notes
+        run: |
+          gh release view "$PREV_RELEASE" --json body --jq '.body' > release_notes.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Modify only the top badges
+        run: |
+          BADGE_REGEX='!\[Version\].*?\)\n'
+          NEW_BADGES="![GitHub release (latest by hari)](https://img.shields.io/github/downloads/harilvfs/carch/$PREV_RELEASE/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![GitHub commits since latest release](https://img.shields.io/github/commits-since/harilvfs/carch/$PREV_RELEASE?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n"
+
+          sed -i "1s|$BADGE_REGEX|$NEW_BADGES|" release_notes.txt
+
+      - name: Update previous release with modified notes
+        run: |
+          gh release edit "$PREV_RELEASE" --notes-file release_notes.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
