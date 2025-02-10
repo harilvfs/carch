@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"The wiser you get, the less you care to look like a fool." - Maxime Lagace*
+*"The more you feed your mind with positive thoughts, the more you can attract great things into your life." - Roy T. Bennett*
 <!-- QUOTE_END -->
 
 </div>
