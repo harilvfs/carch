@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Focus is a matter of deciding what things you're not going to do." - John Carmack*
+*"Anyone who wants to achieve a dream must stay strong, focused and steady." - Estee Lauder*
 <!-- QUOTE_END -->
 
 </div>
