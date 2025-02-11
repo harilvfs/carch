@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"The more you feed your mind with positive thoughts, the more you can attract great things into your life." - Roy T. Bennett*
+*"Focus is a matter of deciding what things you're not going to do." - John Carmack*
 <!-- QUOTE_END -->
 
 </div>
