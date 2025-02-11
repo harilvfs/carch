@@ -2,8 +2,8 @@ name: Update DATE.md
 
 on:
   schedule:
-    - cron: "15 18 * * *"  
-  workflow_dispatch:  
+    - cron: "15 18 * * *"  # Runs daily at 18:15 UTC
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,19 +24,26 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install nepali-datetime requests
+          pip install nepali-datetime pytz requests
 
       - name: Generate DATE.md in Calendar Format with Quote
         run: |
           python - <<EOF
           from datetime import datetime
+          import pytz
           import nepali_datetime
           import requests
           import random
-          
-          english_date = datetime.utcnow().strftime('%A, %d %B %Y')
-          nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
-          
+
+          # Set timezone for English (UTC)
+          english_tz = pytz.timezone("UTC")
+          english_date = datetime.now(english_tz).strftime('%A, %d %B %Y')
+
+          # Set timezone for Nepali (Nepal Time Zone)
+          nepali_tz = pytz.timezone("Asia/Kathmandu")
+          nepali_date = datetime.now(nepali_tz).strftime('%A, %d %B %Y')
+
+          # Fetch quote of the day
           try:
               response = requests.get("https://zenquotes.io/api/random")
               response.raise_for_status()  # Raise an exception for HTTP errors
@@ -51,8 +58,8 @@ jobs:
                   "It does not matter how slowly you go as long as you do not stop. - Confucius",
                   "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
               ]
-              quote = random.choice(fallback_quotes)  
-          
+              quote = random.choice(fallback_quotes)
+
           markdown_content = """<div align="center">
           
           # 📅 Date Calendar
@@ -67,7 +74,7 @@ jobs:
           
           </div>
           """.format(eng=english_date, nep=nepali_date, quote=quote)
-          
+
           with open("DATE.md", "w") as f:
               f.write(markdown_content)
           EOF
@@ -122,3 +129,4 @@ jobs:
           git add DATE.md README.md
           git commit -m "Updated today's date and quote" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
+
