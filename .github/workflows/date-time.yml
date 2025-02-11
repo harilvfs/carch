@@ -120,5 +120,5 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add DATE.md README.md
-          git commit -m "Updated DATE.md and README.md with today's date and quote" || echo "No changes to commit"
+          git commit -m "Updated today's date and quote" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
