@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Anyone who wants to achieve a dream must stay strong, focused and steady." - Estee Lauder*
+*"Give a man a fish and you feed him for a day. Teach a man to fish and you feed him for a lifetime." - Lao Tzu*
 <!-- QUOTE_END -->
 
 </div>
