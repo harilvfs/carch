@@ -4,10 +4,10 @@
 
 | English Date | Nepali Date |
 |-------------|-------------|
-| **Monday, 10 February 2025** | **Monday, 28 Magh 2081** |
+| **Tuesday, 11 February 2025** | **Tuesday, 29 Magh 2081** |
 
 ## 🌟 Quote of the Day
 
-*"Even a hare will bite when it is cornered. " - Chinese Proverb*
+*"I will not walk backward in life." - J.R.R. Tolkien*
 
 </div>
