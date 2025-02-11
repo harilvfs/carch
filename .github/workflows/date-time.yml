@@ -2,7 +2,7 @@ name: Update DATE.md
 
 on:
   schedule:
-    - cron: "15 18 * * *"  # Runs daily at 18:15 UTC
+    - cron: "15 18 * * *"  
   workflow_dispatch:
 
 permissions:
@@ -35,18 +35,15 @@ jobs:
           import requests
           import random
 
-          # Set timezone for Nepali (Nepal Time Zone)
           nepali_tz = pytz.timezone("Asia/Kathmandu")
           nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
 
-          # Now use Nepali Time to update English Date
           english_date = datetime.now(nepali_tz).strftime('%A, %d %B %Y')
 
-          # Fetch quote of the day
           try:
               response = requests.get("https://zenquotes.io/api/random")
-              response.raise_for_status()  # Raise an exception for HTTP errors
-              quote_data = response.json()[0]  # Extract the first quote in the list
+              response.raise_for_status()  
+              quote_data = response.json()[0]  
               quote = f'"{quote_data["q"]}" - {quote_data["a"]}'
           except Exception as e:
               print(f"Error fetching quote: {e}")
@@ -87,8 +84,8 @@ jobs:
 
           try:
               response = requests.get("https://zenquotes.io/api/random")
-              response.raise_for_status()  # Check for HTTP errors
-              quote_data = response.json()[0]  # Extract the first quote in the list
+              response.raise_for_status()  
+              quote_data = response.json()[0]  
               quote = f'"{quote_data["q"]}" - {quote_data["a"]}'
           except Exception as e:
               print(f"Error fetching quote: {e}")
