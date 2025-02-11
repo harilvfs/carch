@@ -35,13 +35,12 @@ jobs:
           import requests
           import random
 
-          # Set timezone for English (UTC)
-          english_tz = pytz.timezone("UTC")
-          english_date = datetime.now(english_tz).strftime('%A, %d %B %Y')
-
           # Set timezone for Nepali (Nepal Time Zone)
           nepali_tz = pytz.timezone("Asia/Kathmandu")
-          nepali_date = datetime.now(nepali_tz).strftime('%A, %d %B %Y')
+          nepali_date = nepali_datetime.date.today().strftime('%A, %d %B %Y')
+
+          # Now use Nepali Time to update English Date
+          english_date = datetime.now(nepali_tz).strftime('%A, %d %B %Y')
 
           # Fetch quote of the day
           try:
