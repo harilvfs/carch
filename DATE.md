@@ -4,10 +4,10 @@
 
 | English Date | Nepali Date |
 |-------------|-------------|
-| **Tuesday, 11 February 2025** | **Wednesday, 12 February 2025** |
+| **Wednesday, 12 February 2025** | **Wednesday, 30 Magh 2081** |
 
 ## 🌟 Quote of the Day
 
-*"For fast-acting relief try slowing down." - Lily Tomlin*
+*"No one ever said life was fair. Just Eventful." - Carol Burnett*
 
 </div>

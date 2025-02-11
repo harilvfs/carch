@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Give a man a fish and you feed him for a day. Teach a man to fish and you feed him for a lifetime." - Lao Tzu*
+*"Lack of direction, not lack of time, is the problem. We all have twenty-four hour days." - Zig Ziglar*
 <!-- QUOTE_END -->
 
 </div>
