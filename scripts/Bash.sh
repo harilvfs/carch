@@ -114,20 +114,25 @@ install_pokemon_colorscripts() {
             if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
                 gum style --foreground "$CYAN" "No AUR helper found. Installing yay..."
                 sudo pacman -S --needed --noconfirm git base-devel
-                git clone https://aur.archlinux.org/yay.git
-                cd yay || exit
+                git clone https://aur.archlinux.org/yay.git "$HOME/yay"
+                cd "$HOME/yay" || exit
                 makepkg -si --noconfirm
                 cd ..
-                rm -rf yay
+                rm -rf "$HOME/yay"
             fi
-            gum spin --title "Installing Pokémon Color Scripts..." -- yay -S --noconfirm pokemon-colorscripts-git
+            gum spin --title "Installing Pokémon Color Scripts (AUR)..." -- yay -S --noconfirm pokemon-colorscripts-git
             ;;
+
         fedora)
-            gum spin --title "Cloning Pokémon Color Scripts repository..." -- git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git
-            cd pokemon-colorscripts || exit
+            if [[ -d "$HOME/pokemon-colorscripts" ]]; then
+                gum style --foreground "$YELLOW" "⚠ Found existing Pokémon Color Scripts directory. Removing..."
+                rm -rf "$HOME/pokemon-colorscripts"
+            fi
+
+            gum spin --title "Cloning Pokémon Color Scripts..." -- git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
+            cd "$HOME/pokemon-colorscripts" || exit
+
             gum spin --title "Installing Pokémon Color Scripts..." -- sudo ./install.sh
-            cd ..
-            rm -rf pokemon-colorscripts
             ;;
     esac
 }
