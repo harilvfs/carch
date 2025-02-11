@@ -16,4 +16,6 @@
 
 > Modify the `SwayWM` script to support `Fedora Linux`.
 
+> Add more `Window Managers` scripts.i.e Bspwm, Wayfire, Qtile, River ..
+
 </div>
