@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Lack of direction, not lack of time, is the problem. We all have twenty-four hour days." - Zig Ziglar*
+*"Arise, slay thy enemies, enjoy a prosperous kingdom." - Bhagavad Gita*
 <!-- QUOTE_END -->
 
 </div>

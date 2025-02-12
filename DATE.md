@@ -4,10 +4,10 @@
 
 | English Date | Nepali Date |
 |-------------|-------------|
-| **Wednesday, 12 February 2025** | **Wednesday, 30 Magh 2081** |
+| **Thursday, 13 February 2025** | **Thursday, 01 Falgun 2081** |
 
 ## 🌟 Quote of the Day
 
-*"No one ever said life was fair. Just Eventful." - Carol Burnett*
+*"It is important that we forgive ourselves for making mistakes. We need to learn from our errors and move on." - Steve Maraboli*
 
 </div>
