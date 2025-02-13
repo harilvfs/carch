@@ -1,6 +1,5 @@
 #!/bin/bash
 
-CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -546,10 +545,11 @@ install_music() {
                 if [[ $distro -eq 0 ]]; then
                     gum spin --spinner dot --title "Installing Youtube-Music..." -- $pkg_manager youtube-music-bin
                     version=$(get_version youtube-music-bin)
-                    gum format "🎉 **Youtube-Music installed successfully! Version: $version**"
                 else
-                    gum format "⚠️ **Youtube-Music is not available for Fedora.**"
+                    gum spin --spinner dot --title "Installing Youtube-Music via Flatpak..." -- flatpak install -y flathub app.ytmdesktop.ytmdesktop
+                    version="Flatpak Version"
                 fi
+                gum format "🎉 **Youtube-Music installed successfully! Version: $version**"
                 ;;
             "Spotube")
                 if [[ $distro -eq 0 ]]; then
