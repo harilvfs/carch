@@ -21,11 +21,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Cache ShellCheck
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/shellcheck
-          key: ${{ runner.os }}-shellcheck
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
 
       - name: Run ShellCheck and Collect Issues
         id: shellcheck
@@ -58,15 +55,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -s reports/shellcheck.txt ]; then
-            echo "## ShellCheck Report" > reports/comment.md
+            echo "## ShellCheck Issues" > reports/comment.md
 
-            while read -r line; do
-              echo "<details><summary><strong>ShellCheck Issue</strong></summary>" >> reports/comment.md
-              echo '<blockquote>' >> reports/comment.md
-              echo '```' >> reports/comment.md
-              echo "$line" >> reports/comment.md
-              echo '```' >> reports/comment.md
-              echo '</blockquote>' >> reports/comment.md
+            while IFS= read -r line; do
+              # Extract file, line number, and issue description
+              file=$(echo "$line" | awk '{print $1}')
+              line_number=$(echo "$line" | awk '{print $2}' | sed 's/://')
+              issue=$(echo "$line" | cut -d' ' -f3-)
+
+              # Create a boxed section for each issue
+              echo "<details><summary><strong>${file} Line ${line_number}</strong></summary>" >> reports/comment.md
+              echo '<pre>' >> reports/comment.md
+              echo "$issue" >> reports/comment.md
+              echo '</pre>' >> reports/comment.md
               echo "</details>" >> reports/comment.md
               echo "" >> reports/comment.md
             done < reports/shellcheck.txt
