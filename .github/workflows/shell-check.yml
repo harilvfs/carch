@@ -21,58 +21,29 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install ShellCheck
-        run: sudo apt-get install -y shellcheck
-
-      - name: Run ShellCheck and Collect Issues
-        id: shellcheck
-        run: |
-          mkdir -p reports
-          shellcheck -x **/*.sh > reports/shellcheck.txt || true
-
-      - name: Upload ShellCheck Report
-        uses: actions/upload-artifact@v4
+      - name: Cache ShellCheck
+        uses: actions/cache@v4
         with:
-          name: shellcheck-report
-          path: reports/shellcheck.txt
+          path: ~/.cache/shellcheck
+          key: ${{ runner.os }}-shellcheck
 
-  post-comment:
-    name: Post Boxed Comments
+      - name: Run ShellCheck with Reviewdog
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          shellcheck_flags: '-x **/*.sh'
+          reviewdog_flags: '-reporter=github-pr-review -fail-on-error'
+
+  suggest-fixes:
+    name: Suggest Fixes
     runs-on: ubuntu-latest
     needs: shellcheck
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Download ShellCheck Report
-        uses: actions/download-artifact@v4
-        with:
-          name: shellcheck-report
-          path: reports
-
-      - name: Format and Post Boxed Comments
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run ShellCheck Suggestion Mode
         run: |
-          if [ -s reports/shellcheck.txt ]; then
-            echo "## ShellCheck Issues" > reports/comment.md
+          shellcheck **/*.sh || echo "::error ::ShellCheck found issues. Please check the comments in PR for suggestions."
 
-            while IFS= read -r line; do
-              # Extract file, line number, and issue description
-              file=$(echo "$line" | awk '{print $1}')
-              line_number=$(echo "$line" | awk '{print $2}' | sed 's/://')
-              issue=$(echo "$line" | cut -d' ' -f3-)
 
-              # Create a boxed section for each issue
-              echo "<details><summary><strong>${file} Line ${line_number}</strong></summary>" >> reports/comment.md
-              echo '<pre>' >> reports/comment.md
-              echo "$issue" >> reports/comment.md
-              echo '</pre>' >> reports/comment.md
-              echo "</details>" >> reports/comment.md
-              echo "" >> reports/comment.md
-            done < reports/shellcheck.txt
 
-            gh pr comment ${{ github.event.pull_request.number }} --body-file reports/comment.md
-          else
-            echo "No ShellCheck issues found."
-          fi
