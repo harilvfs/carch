@@ -59,9 +59,11 @@ jobs:
         run: |
           if [ -s reports/shellcheck.txt ]; then
             echo "## ShellCheck Report" > reports/comment.md
-            echo '```' >> reports/comment.md
+            echo "<details><summary>ShellCheck Issues (Click to expand)</summary>" >> reports/comment.md
+            echo '<pre>' >> reports/comment.md
             cat reports/shellcheck.txt >> reports/comment.md
-            echo '```' >> reports/comment.md
+            echo '</pre>' >> reports/comment.md
+            echo "</details>" >> reports/comment.md
 
             gh pr comment ${{ github.event.pull_request.number }} --body-file reports/comment.md
           else
