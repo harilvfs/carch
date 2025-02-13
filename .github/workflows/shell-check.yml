@@ -43,7 +43,10 @@ jobs:
 
       - name: Run ShellCheck Suggestion Mode
         run: |
-          shellcheck **/*.sh || echo "::error ::ShellCheck found issues. Please check the comments in PR for suggestions."
-
-
+          results=$(shellcheck **/*.sh)
+          if [ -n "$results" ]; then
+            echo "::warning file=README.md::ShellCheck found issues:\n$results"
+          else
+            echo "::info::No issues found by ShellCheck."
+          fi
 
