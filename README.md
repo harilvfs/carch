@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Arise, slay thy enemies, enjoy a prosperous kingdom." - Bhagavad Gita*
+*"You were put on this earth to achieve your greatest self, to live out your purpose, and to do it courageously." - Steve Maraboli*
 <!-- QUOTE_END -->
 
 </div>
