@@ -31,7 +31,6 @@ check_and_install "ttf-jetbrains-mono"
 clear
 
 echo -e "${COLOR_CYAN}"
-figlet -f slant "Carch"
 echo "Version $VERSION"
 echo "Distribution: $DISTRO"
 echo -e "${COLOR_RESET}"
