@@ -40,7 +40,7 @@ jobs:
           path: reports/shellcheck.txt
 
   post-comment:
-    name: Post Consolidated Comment
+    name: Post Boxed Comments
     runs-on: ubuntu-latest
     needs: shellcheck
     steps:
@@ -53,17 +53,23 @@ jobs:
           name: shellcheck-report
           path: reports
 
-      - name: Format and Post Comment
+      - name: Format and Post Boxed Comments
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -s reports/shellcheck.txt ]; then
             echo "## ShellCheck Report" > reports/comment.md
-            echo "<details><summary>ShellCheck Issues (Click to expand)</summary>" >> reports/comment.md
-            echo '<pre>' >> reports/comment.md
-            cat reports/shellcheck.txt >> reports/comment.md
-            echo '</pre>' >> reports/comment.md
-            echo "</details>" >> reports/comment.md
+
+            while read -r line; do
+              echo "<details><summary><strong>ShellCheck Issue</strong></summary>" >> reports/comment.md
+              echo '<blockquote>' >> reports/comment.md
+              echo '```' >> reports/comment.md
+              echo "$line" >> reports/comment.md
+              echo '```' >> reports/comment.md
+              echo '</blockquote>' >> reports/comment.md
+              echo "</details>" >> reports/comment.md
+              echo "" >> reports/comment.md
+            done < reports/shellcheck.txt
 
             gh pr comment ${{ github.event.pull_request.number }} --body-file reports/comment.md
           else
