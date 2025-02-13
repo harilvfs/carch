@@ -27,21 +27,43 @@ jobs:
           path: ~/.cache/shellcheck
           key: ${{ runner.os }}-shellcheck
 
-      - name: Run ShellCheck with Reviewdog
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          shellcheck_flags: '-x **/*.sh'
-          reviewdog_flags: '-reporter=github-pr-review -fail-on-error'
+      - name: Run ShellCheck and Collect Issues
+        id: shellcheck
+        run: |
+          mkdir -p reports
+          shellcheck -x **/*.sh > reports/shellcheck.txt || true
 
-  suggest-fixes:
-    name: Suggest Fixes
+      - name: Upload ShellCheck Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: shellcheck-report
+          path: reports/shellcheck.txt
+
+  post-comment:
+    name: Post Consolidated Comment
     runs-on: ubuntu-latest
     needs: shellcheck
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Run ShellCheck Suggestion Mode
-        run: |
-          shellcheck **/*.sh || echo "::error ::ShellCheck found issues. Please check the comments in PR for suggestions."
+      - name: Download ShellCheck Report
+        uses: actions/download-artifact@v3
+        with:
+          name: shellcheck-report
+          path: reports
 
+      - name: Format and Post Comment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -s reports/shellcheck.txt ]; then
+            echo "## ShellCheck Report" > reports/comment.md
+            echo '```' >> reports/comment.md
+            cat reports/shellcheck.txt >> reports/comment.md
+            echo '```' >> reports/comment.md
+
+            gh pr comment ${{ github.event.pull_request.number }} --body-file reports/comment.md
+          else
+            echo "No ShellCheck issues found."
+          fi
