@@ -4,10 +4,10 @@
 
 | English Date | Nepali Date |
 |-------------|-------------|
-| **Friday, 14 February 2025** | **Friday, 02 Falgun 2081** |
+| **Saturday, 15 February 2025** | **Saturday, 03 Falgun 2081** |
 
 ## 🌟 Quote of the Day
 
-*"The soul without imagination is what an observatory would be without a telescope." - Henry Ward Beecher*
+*"There is only one thing in the world worse than being talked about, and that is not being talked about. " - Oscar Wilde*
 
 </div>
