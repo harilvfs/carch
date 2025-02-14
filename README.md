@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"You were put on this earth to achieve your greatest self, to live out your purpose, and to do it courageously." - Steve Maraboli*
+*"Unless a man is master of his soul, all other kinds of mastery amount to little." - Theodore Roosevelt*
 <!-- QUOTE_END -->
 
 </div>
