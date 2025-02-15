@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Unless a man is master of his soul, all other kinds of mastery amount to little." - Theodore Roosevelt*
+*"Take time like the river that never grows stale. Keep going and steady. No hurry, no rush." - Rumi*
 <!-- QUOTE_END -->
 
 </div>
