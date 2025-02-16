@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Take time like the river that never grows stale. Keep going and steady. No hurry, no rush." - Rumi*
+*"The traveler sees what he sees. The tourist sees what he has come to see." - Gilbert Chesterton*
 <!-- QUOTE_END -->
 
 </div>
