@@ -4,10 +4,10 @@
 
 | English Date | Nepali Date |
 |-------------|-------------|
-| **Monday, 17 February 2025** | **Monday, 05 Falgun 2081** |
+| **Tuesday, 18 February 2025** | **Tuesday, 06 Falgun 2081** |
 
 ## 🌟 Quote of the Day
 
-*"The clock indicates the moment...but what does eternity indicate?" - Walt Whitman*
+*"By going within. Nowhere you can go is more peaceful - more free of interruptions - than your own soul." - Marcus Aurelius*
 
 </div>
