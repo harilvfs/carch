@@ -25,7 +25,6 @@ if ! gum confirm "Continue with i3 setup?"; then
     exit 1
 fi
 
-# Check if /etc/os-release exists
 if [[ -f /etc/os-release ]]; then
     source /etc/os-release
 else
@@ -33,7 +32,6 @@ else
     exit 1
 fi
 
-# Detect OS based on ID and ID_LIKE
 if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
     OS="arch"
     echo -e "${BLUE}Detected Arch-based distribution.${ENDCOLOR}"
