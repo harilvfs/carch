@@ -235,7 +235,6 @@ install_editing() {
     done
 }
 
-
 install_terminals() {
     detect_distro
     distro=$?
