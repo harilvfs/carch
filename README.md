@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"The traveler sees what he sees. The tourist sees what he has come to see." - Gilbert Chesterton*
+*"If the misery of the poor be caused not by the laws of nature, but by our institutions, great is our sin." - Charles Darwin*
 <!-- QUOTE_END -->
 
 </div>
