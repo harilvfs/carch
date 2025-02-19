@@ -1,7 +1,7 @@
 <div align=center">
   
 <!-- QUOTE_START -->
-*"Failure is a prerequisite for great success. If you want success faster, double your rate of failure." - Brian Tracy*
+*"If you do not conquer self, you will be conquered by self." - Napoleon Hill*
 <!-- QUOTE_END -->
 
 </div>
