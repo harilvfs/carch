@@ -1,11 +1,11 @@
 #!/bin/bash
 
-tput init
-tput clear
+clear
 
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
+YELLOW="\e[33m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
@@ -16,15 +16,25 @@ Picom is a standalone compositor for Xorg.
 EOF
 echo -e "${ENDCOLOR}"
 
+detect_package_manager() {
+    if command -v pacman &>/dev/null; then
+        pkg_manager="pacman"
+    elif command -v dnf &>/dev/null; then
+        pkg_manager="dnf"
+    else
+        echo -e "${RED}Unsupported package manager. Please install Picom manually.${ENDCOLOR}"
+        exit 1
+    fi
+}
+
 install_aur_helper() {
-    if ! command -v yay &> /dev/null; then
+    if ! command -v yay &>/dev/null; then
         echo -e "${RED}No AUR helper found. Installing yay...${ENDCOLOR}"
-        sudo pacman -S --needed git base-devel
+        sudo pacman -S --needed --noconfirm git base-devel
         temp_dir=$(mktemp -d)
-        cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${ENDCOLOR}"; exit 1; }
-        git clone https://aur.archlinux.org/yay.git
-        cd yay || { echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"; exit 1; }
-        makepkg -si
+        git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
+        cd "$temp_dir/yay" || { echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"; exit 1; }
+        makepkg -si --noconfirm
         cd ..
         rm -rf "$temp_dir"
         echo -e "${GREEN}yay installed successfully.${ENDCOLOR}"
@@ -40,16 +50,15 @@ print_source_message() {
 
 install_dependencies_normal() {
     echo -e "${GREEN}:: Installing Picom...${ENDCOLOR}"
-    if [[ -f /etc/fedora-release ]]; then
-        sudo dnf install -y picom
-    else
-        sudo pacman -S --needed picom
-    fi
+    case "$pkg_manager" in
+        pacman) sudo pacman -S --needed --noconfirm picom ;;
+        dnf) sudo dnf install -y picom ;;
+    esac
 }
 
 setup_picom_ftlabs() {
     echo -e "${GREEN}:: Installing Picom FT-Labs (picom-ftlabs-git) via yay...${ENDCOLOR}"
-    yay -S picom-ftlabs-git --noconfirm
+    yay -S --noconfirm picom-ftlabs-git
 }
 
 install_picom_ftlabs_fedora() {
@@ -99,18 +108,23 @@ download_config() {
     wget -O "$config_path" "$config_url"
 }
 
+detect_package_manager
+
 print_source_message
 
 choice=$(gum choose "Picom with animation (FT-Labs)" "Picom normal" "Exit")
 
 case "$choice" in
     "Picom with animation (FT-Labs)")
-        if [[ -f /etc/fedora-release ]]; then
-            install_picom_ftlabs_fedora
-        else
-            install_aur_helper
-            setup_picom_ftlabs
-        fi
+        case "$pkg_manager" in
+            pacman)
+                install_aur_helper
+                setup_picom_ftlabs
+                ;;
+            dnf)
+                install_picom_ftlabs_fedora
+                ;;
+        esac
         download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
         echo -e "${GREEN}:: Picom setup completed with animations from FT-Labs!${ENDCOLOR}"
         ;;

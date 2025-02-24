@@ -14,24 +14,26 @@ echo -e "${RESET}"
 type figlet &>/dev/null || { echo "figlet is not installed. Install it first."; exit 1; }
 type gum &>/dev/null || { echo "gum is not installed. Install it first."; exit 1; }
 
-if grep -q "arch" /etc/os-release; then
-    distro="arch"
-elif grep -q "fedora" /etc/os-release; then
-    distro="fedora"
-else
-    echo -e "${RED}Unsupported distro. Exiting...${RESET}"
-    exit 1
-fi
+source /etc/os-release
+case "$ID" in
+    arch)
+        distro="arch"
+        ;;
+    fedora)
+        distro="fedora"
+        ;;
+    *)
+        echo -e "${RED}Unsupported distro. Exiting...${RESET}"
+        exit 1
+        ;;
+esac
+
+echo -e "${BLUE}Distro: ${distro^} Linux${RESET}"
 
 if [[ "$distro" == "arch" ]]; then
-    echo -e "${BLUE}Distro: Arch Linux${RESET}"
     options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")
 elif [[ "$distro" == "fedora" ]]; then
-    echo -e "${BLUE}Distro: Fedora Linux${RESET}"
     options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
-else
-    echo "Unsupported distro. Exiting..."
-    exit 1
 fi
 
 echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${RESET}"
