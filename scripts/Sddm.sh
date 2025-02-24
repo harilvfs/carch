@@ -8,17 +8,34 @@ export BLUE="\e[34m"
 export ENDCOLOR="\e[0m"
 
 print_banner() {
-echo -e "${BLUE}"
-figlet -f slant "SDDM"
-
-echo -e "${GREEN}" 
-cat <<"EOF"
+    echo -e "${BLUE}"
+    figlet -f slant "SDDM"
+    echo -e "${GREEN}"
+    cat <<"EOF"
 Catppuccin SDDM Theme    
 https://github.com/catppuccin/sddm
 ------------------------------------
 
 EOF
     echo -e "${ENDCOLOR}"
+}
+
+detect_os() {
+    if [[ -f /etc/os-release ]]; then
+        . /etc/os-release
+        DISTRO=${ID_LIKE:-$ID}
+        case "$DISTRO" in
+            *arch*) DISTRO="arch" ;;
+            *fedora*) DISTRO="fedora" ;;
+            *)
+                echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
+                exit 1
+                ;;
+        esac
+    else
+        echo -e "${RED}❌ OS information not found!${ENDCOLOR}"
+        exit 1
+    fi
 }
 
 disable_other_dms() {
@@ -45,16 +62,13 @@ install_sddm() {
     if ! command -v sddm &> /dev/null; then
         echo -e "${GREEN}:: Installing SDDM...${ENDCOLOR}"
         
-        if [[ -f /etc/fedora-release ]]; then
-            if ! sudo dnf install -y sddm; then
-                echo -e "${RED}Failed to install SDDM on Fedora. Exiting...${ENDCOLOR}"
-                exit 1
-            fi
+        if [[ $DISTRO == "arch" ]]; then
+            sudo pacman -S --noconfirm sddm
+        elif [[ $DISTRO == "fedora" ]]; then
+            sudo dnf install -y sddm
         else
-            if ! sudo pacman -S sddm --noconfirm; then
-                echo -e "${RED}Failed to install SDDM. Exiting...${ENDCOLOR}"
-                exit 1
-            fi
+            echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
+            exit 1
         fi
     else
         echo -e "${GREEN}SDDM is already installed.${ENDCOLOR}"
@@ -104,6 +118,7 @@ EOF'
 }
 
 print_banner
+detect_os
 
 if ! gum confirm "Continue with SDDM setup?"; then
     echo -e "${RED}Setup aborted by the user.${ENDCOLOR}"

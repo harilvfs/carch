@@ -14,9 +14,17 @@ echo -e "${RESET}"
 
 if [[ -f /etc/os-release ]]; then
     . /etc/os-release
-    DISTRO=$ID
+    DISTRO=${ID_LIKE:-$ID}
+    case "$DISTRO" in
+        *arch*) DISTRO="arch" ;;
+        *fedora*) DISTRO="fedora" ;;
+        *)
+            gum style --foreground "$RED" "❌ Unsupported distribution!"
+            exit 1
+            ;;
+    esac
 else
-    gum style --foreground "$RED" "❌ Unsupported distribution!"
+    gum style --foreground "$RED" "❌ OS information not found!"
     exit 1
 fi
 
@@ -24,6 +32,7 @@ gum confirm "⚠️ This script will configure Helix editor. Do you want to cont
 
 install_helix() {
     gum style --foreground "$CYAN" "⚡ Installing Helix editor..."
+
     if [[ $DISTRO == "arch" ]]; then
         sudo pacman -S --noconfirm helix noto-fonts-emoji ttf-joypixels
     elif [[ $DISTRO == "fedora" ]]; then
