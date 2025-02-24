@@ -7,9 +7,9 @@ install_gum() {
         echo -e "\033[1;31m[GUM MISSING]\033[0m Installing gum..."
         if [[ -f /etc/os-release ]]; then
             source /etc/os-release
-            if grep -q "ID_LIKE=arch" /etc/os-release; then
+            if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
                 sudo pacman -S --noconfirm gum
-            elif grep -q "ID_LIKE=fedora" /etc/os-release; then
+            elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
                 sudo dnf install -y gum
             else
                 echo -e "\033[1;31mUnsupported distribution for gum installation.\033[0m"
@@ -18,8 +18,6 @@ install_gum() {
         fi
     fi
 }
-
-install_gum
 
 clear
 
@@ -46,45 +44,41 @@ gum style --foreground "$CYAN" --bold "Detected distribution: $DISTRO"
 gum confirm "This script will configure Zsh with Powerlevel10k, Oh My Zsh, and more. Nerd Font is recommended. Do you want to continue?" || exit 1
 
 install_zsh_dependencies() {
-    if grep -q "ID_LIKE=arch" /etc/os-release; then
+    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
         gum spin --title "Installing Zsh dependencies..." -- sudo pacman -S --noconfirm zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
-    elif grep -q "ID_LIKE=fedora" /etc/os-release; then
+    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
         gum spin --title "Installing Zsh dependencies (Fedora)..." -- sudo dnf install -y zsh zsh-autosuggestions zsh-syntax-highlighting eza
     fi
 }
 
-install_zsh_dependencies
-
 install_powerlevel10k() {
-    if grep -q "ID_LIKE=arch" /etc/os-release; then
-        gum spin --title "Installing Powerlevel10k..." -- yay -S --noconfirm zsh-theme-powerlevel10k-git
+    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+        gum spin --title "Installing Powerlevel10k..." -- bash -c "yay -S --noconfirm zsh-theme-powerlevel10k-git"
         echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-    elif grep -q "ID_LIKE=fedora" /etc/os-release; then
+    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
         gum spin --title "Cloning Powerlevel10k..." -- sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
         echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
     fi
 }
 
-install_powerlevel10k
-
 install_ohmyzsh() {
-    gum spin --title "Cloning Oh My Zsh..." -- sudo git clone https://github.com/ohmyzsh/ohmyzsh /usr/share/oh-my-zsh
+    if [[ ! -d /usr/share/oh-my-zsh ]]; then
+        gum spin --title "Cloning Oh My Zsh..." -- sudo git clone https://github.com/ohmyzsh/ohmyzsh /usr/share/oh-my-zsh
+    fi
 }
-
-install_ohmyzsh
 
 install_ohmyzsh_plugins() {
     PLUGIN_DIR="/usr/share/oh-my-zsh/plugins"
-    sudo mkdir -p "$PLUGIN_DIR"
-    cd "$PLUGIN_DIR" || exit
 
-    gum spin --title "Installing Zsh plugins..." -- sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-    gum spin --title "Installing Zsh 256color plugin..." -- sudo git clone https://github.com/chrissicool/zsh-256color.git
-    gum spin --title "Installing Zsh autosuggestions..." -- sudo git clone https://github.com/zsh-users/zsh-autosuggestions.git
+    gum spin --title "Installing Zsh plugins..." -- bash -c "
+        cd '$PLUGIN_DIR' || exit 1
+        [[ ! -d zsh-syntax-highlighting ]] && sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+        [[ ! -d zsh-256color ]] && sudo git clone https://github.com/chrissicool/zsh-256color.git
+        [[ ! -d zsh-autosuggestions ]] && sudo git clone https://github.com/zsh-users/zsh-autosuggestions.git
+    "
 }
 
-install_ohmyzsh_plugins
-
+config_zsh() {
 P10K_CONFIG="$HOME/.p10k.zsh"
 if [[ -f "$P10K_CONFIG" ]]; then
     gum confirm ".p10k.zsh found. Do you want to back it up?" && mv "$P10K_CONFIG" "$P10K_CONFIG.bak"
@@ -96,11 +90,13 @@ gum spin --title "Applying Powerlevel10k configuration..." -- curl -fsSL "https:
 ZSHRC="$HOME/.zshrc"
 if [[ -f "$ZSHRC" ]]; then
     gum confirm ".zshrc already exists. Use the recommended version?" && curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.zshrc" -o "$ZSHRC"
+    echo '[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh' >> "$ZSHRC"
     gum style --foreground "$GREEN" "Applied recommended .zshrc."
 fi
+}
 
 install_pokemon_colorscripts() {
-    if grep -q "ID_LIKE=arch" /etc/os-release; then
+    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
         if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
             gum style --foreground "$CYAN" "No AUR helper found. Installing yay..."
             sudo pacman -S --needed --noconfirm git base-devel
@@ -111,7 +107,7 @@ install_pokemon_colorscripts() {
             rm -rf yay
         fi
         gum spin --title "Installing Pokémon Color Scripts..." -- yay -S --noconfirm pokemon-colorscripts-git
-    elif grep -q "ID_LIKE=fedora" /etc/os-release; then
+    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
         POKEMON_DIR="$HOME/pokemon-colorscripts"
 
         [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
@@ -130,16 +126,21 @@ install_pokemon_colorscripts() {
     fi
 }
 
-install_pokemon_colorscripts
-
 install_zoxide() {
-    if grep -q "ID_LIKE=arch" /etc/os-release; then
+    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
         gum spin --title "Installing zoxide..." -- sudo pacman -S --noconfirm zoxide
-    elif grep -q "ID_LIKE=fedora" /etc/os-release; then
+    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
         gum spin --title "Installing zoxide..." -- sudo dnf install -y zoxide
     fi
 }
 
+install_gum
+install_zsh_dependencies
+install_powerlevel10k
+install_ohmyzsh
+install_ohmyzsh_plugins
+config_zsh
+install_pokemon_colorscripts
 install_zoxide
 
 gum style --foreground "$BLUE" --bold "Zsh setup completed successfully! 🎉"
