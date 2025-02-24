@@ -14,22 +14,27 @@ echo -e "${RESET}"
 
 if [[ -f /etc/os-release ]]; then
     . /etc/os-release
-    DISTRO=$ID
+    DISTRO="${ID:-unknown}"
+    DISTRO_LIKE="${ID_LIKE:-unknown}"
 else
     gum style --foreground "$RED" "❌ Unsupported distribution!"
     exit 1
 fi
 
-gum confirm "⚠️ This script will configure Fish shell. Nerd Font Are Recommended. Do you want to continue?" || exit 0
-
 install_fish() {
     gum style --foreground "$CYAN" "🐟 Installing Fish shell..."
-    if [[ $DISTRO == "arch" ]]; then
+    
+    if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
         sudo pacman -S --noconfirm fish noto-fonts-emoji ttf-joypixels
-    elif [[ $DISTRO == "fedora" ]]; then
+    elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
         sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts
+    else
+        gum style --foreground "$RED" "❌ Unsupported distro: $DISTRO"
+        exit 1
     fi
 }
+
+gum confirm "⚠️ This script will configure Fish shell. Nerd Font Are Recommended. Do you want to continue?" || exit 0
 
 install_fish
 
@@ -55,14 +60,20 @@ else
 fi
 
 install_zoxide() {
-    if [[ $DISTRO == "arch" ]]; then
-        gum spin --title "Installing zoxide..." -- sudo pacman -S --noconfirm zoxide
-    elif [[ $DISTRO == "fedora" ]]; then
-        gum spin --title "Installing zoxide..." -- sudo dnf install -y zoxide
+    gum style --foreground "$CYAN" "Installing zoxide..."
+
+    if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
+        sudo pacman -S --noconfirm zoxide
+    elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
+        sudo dnf install -y zoxide
+    else
+        gum style --foreground "$RED" "❌ Unsupported distro: $DISTRO"
+        exit 1
     fi
 }
 
-echo "zoxide init fish | source" >>"$FISH_CONFIG/config.fish"
+install_zoxide
+
 gum style --foreground "$GREEN" "✅ Zoxide initialized in Fish!"
 
 gum style --foreground "$CYAN" "🐟 Fish setup complete! Restart your shell to apply changes."
