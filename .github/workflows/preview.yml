@@ -65,29 +65,41 @@ jobs:
           # Check if carch is installed and executable
           which carch || echo "carch not found in PATH"
 
-      - name: Create a simple static GIF
+      - name: Create frames for animated GIF
         run: |
-          # Create a very simple colored image without text
-          magick -size 800x600 xc:black -fill darkgreen -draw "rectangle 50,50 750,550" .github/carch.gif
+          # Create visually distinct frames using shapes and colors only
+          
+          # Frame 1: Title-like design (green border with darker center)
+          magick -size 800x600 xc:black \
+            -fill "#004400" -draw "rectangle 50,50 750,550" \
+            -fill "#002200" -draw "rectangle 100,100 700,500" \
+            frames/frame1.gif
+          
+          # Frame 2: Menu-like design (vertical stripes)
+          magick -size 800x600 xc:black \
+            -fill "#003300" -draw "rectangle 50,50 750,550" \
+            -fill "#005500" -draw "rectangle 100,100 300,500" \
+            -fill "#001100" -draw "rectangle 340,150 660,200" \
+            -fill "#001100" -draw "rectangle 340,250 660,300" \
+            -fill "#001100" -draw "rectangle 340,350 660,400" \
+            frames/frame2.gif
+          
+          # Frame 3: Info-screen design (horizontal sections)
+          magick -size 800x600 xc:black \
+            -fill "#002200" -draw "rectangle 50,50 750,550" \
+            -fill "#004400" -draw "rectangle 100,100 700,150" \
+            -fill "#003300" -draw "rectangle 100,200 700,300" \
+            -fill "#006600" -draw "rectangle 100,350 700,500" \
+            frames/frame3.gif
+          
+          # List created frames
+          ls -la frames/
+          
+          # Combine frames into an animated GIF
+          magick -delay 150 frames/*.gif -loop 0 .github/carch.gif
           
           # Verify the GIF was created
-          ls -la .github/
-          
-          # If the simple command works, we can try creating a slightly more complex GIF
-          if [ -f ".github/carch.gif" ]; then
-            # Try using a different method to create text - using pango markup
-            echo "First image created successfully, attempting more complex image"
-            
-            # Create a colored rectangle with simpler text rendering approach
-            magick -size 800x600 xc:black \
-              -fill darkgreen -draw "rectangle 50,50 750,550" \
-              -fill lime -draw "rectangle 100,100 700,150" \
-              -fill black -pointsize 24 -gravity center -draw "text 0,-200 'Carch Terminal Utility'" \
-              -fill lime -draw "rectangle 100,200 700,500" \
-              -fill black -pointsize 16 -gravity center -draw "text 0,0 'A terminal tool for Arch Linux'" \
-              -fill black -pointsize 14 -gravity center -draw "text 0,100 'Navigate with arrow keys - Press Enter to select - Ctrl+C to exit'" \
-              .github/carch.gif
-          fi
+          ls -la .github/carch.gif
 
       - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
