@@ -63,12 +63,14 @@ jobs:
 
       - name: Capture Carch Output in a Virtual Terminal
         run: |
-          tmux new-session -d -s carch_session "asciinema rec carch_output.cast"
+          tmux new-session -d -s carch_session "asciinema rec --cols 80 --rows 24 --theme asciinema carch_output.cast"
           sleep 2
           tmux send-keys -t carch_session "carch" Enter
-          sleep 1
-          tmux send-keys -t carch_session Up Enter
-          sleep 1
+          sleep 5
+          tmux send-keys -t carch_session Up
+          sleep 2
+          tmux send-keys -t carch_session Enter
+          sleep 3
           tmux send-keys -t carch_session C-c
           sleep 1
           tmux kill-session -t carch_session
