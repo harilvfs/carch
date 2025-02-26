@@ -19,7 +19,7 @@ jobs:
       - name: Install essential packages
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git base-devel sudo python unzip imagemagick ttygif
+          pacman -S --noconfirm git base-devel sudo python unzip imagemagick
 
       - name: Checkout repository
         uses: actions/checkout@v4
