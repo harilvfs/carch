@@ -20,7 +20,7 @@ jobs:
       - name: Install essential packages
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git base-devel sudo python python-venv unzip
+          pacman -S --noconfirm git base-devel sudo python unzip
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,6 +30,7 @@ jobs:
 
       - name: Create Python virtual environment
         run: |
+          # In Arch Linux, venv module is included in the python package
           python -m venv /tmp/venv
           source /tmp/venv/bin/activate
           pip install cairosvg
