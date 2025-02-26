@@ -79,9 +79,10 @@ jobs:
         run: |
           agg carch_output.cast carch_demo.mp4
 
-      - name: Convert MP4 to GIF using FFmpeg
+      - name: Convert MP4 to High-Quality GIF
         run: |
-          ffmpeg -y -i carch_demo.mp4 -vf "scale=iw/2:ih/2" carch_demo.gif
+          ffmpeg -y -i carch_demo.mp4 -vf "fps=30,scale=1280:-1:flags=lanczos,palettegen" palette.png
+          ffmpeg -y -i carch_demo.mp4 -i palette.png -filter_complex "fps=30,scale=1280:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer" carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
