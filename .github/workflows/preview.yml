@@ -1,5 +1,4 @@
 name: Generate Carch Preview GIF
-
 on:
   push:
     branches:
@@ -16,37 +15,67 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm ffmpeg xdotool asciinema unzip
+          pacman -Syu --noconfirm --needed base-devel git python python-pip ffmpeg
+          pip install asciinema asciinema2gif
 
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare and extract scripts
+      - name: Create directories
         run: |
-          [ -d /usr/share/scripts ] && rm -rf /usr/share/scripts
-          [ -f /usr/share/scripts.zip ] && rm /usr/share/scripts.zip
           mkdir -p /usr/share/scripts
-          cp source/zip/scripts.zip /usr/share/scripts.zip
-          unzip /usr/share/scripts.zip
-          rm /usr/share/scripts.zip
-          chmod 755 /usr/share/scripts/*.sh
-          install -m 755 build/carch /usr/bin/carch
+          mkdir -p .github
+
+      - name: Extract Carch script and supporting scripts
+        run: |
+          # Use -o flag to overwrite without prompting
+          unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed, checking files"
+          
+          # Debug information
+          ls -la source/zip/
+          find /usr/share/scripts -type f || echo "No scripts extracted"
+          
+          # Make scripts executable
+          find /usr/share/scripts -name "*.sh" -exec chmod +x {} \;
+          
+          # Install carch executable
+          [ -f build/carch ] && install -m 755 build/carch /usr/bin/carch || echo "carch binary not found"
 
       - name: Record Terminal Session
         run: |
-          asciinema rec -c "/usr/bin/carch" carch.cast &
+          # Create a script to simulate key presses
+          cat > demo_script.sh << 'EOF'
+          #!/bin/bash
+          # Start carch
+          carch
+          # Give it a moment to initialize
           sleep 2
-          xdotool key Down
+          # Send Down key (simulated)
+          echo -e "\033[B"
           sleep 1
-          xdotool key Up
+          # Send Up key (simulated)
+          echo -e "\033[A"
           sleep 1
-          xdotool key Return
+          # Send Return key
+          echo -e "\r"
           sleep 2
-          xdotool key Ctrl+c
+          # Send Ctrl+C to exit
+          echo -e "\003"
+          EOF
+          
+          chmod +x demo_script.sh
+          
+          # Record the session using the script
+          export TERM=xterm-256color
+          asciinema rec -c "./demo_script.sh" carch.cast
 
       - name: Convert to GIF
         run: |
-          asciinema2gif carch.cast .github/carch.gif
+          # Check that the cast file exists
+          ls -la carch.cast
+          
+          # Convert cast to gif using asciinema2gif
+          python -m asciinema2gif.cli carch.cast .github/carch.gif
 
       - name: Upload GIF
         uses: actions/upload-artifact@v4
@@ -54,3 +83,14 @@ jobs:
           name: carch-preview
           path: .github/carch.gif
 
+      - name: Commit and push if changed
+        run: |
+          # Configure Git
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Add the GIF
+          git add .github/carch.gif
+          
+          # Only commit and push if there are changes
+          git diff --staged --quiet || (git commit -m "Update Carch preview GIF" && git push)
