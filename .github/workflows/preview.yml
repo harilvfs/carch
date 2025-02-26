@@ -87,6 +87,9 @@ jobs:
           cp carch_demo.gif .github/
           chmod +rw .github/carch_demo.gif
 
+      - name: Configure Git Safe Directory
+        run: git config --global --add safe.directory /__w/carch/carch
+
       - name: Commit and Push GIF to Repository
         run: |
           git config --global user.name "github-actions"
