@@ -75,7 +75,7 @@ jobs:
 
       - name: Convert Recording to MP4
         run: |
-          asciinema-agg carch_output.cast carch_demo.mp4
+          agg carch_output.cast carch_demo.mp4
 
       - name: Convert MP4 to GIF using FFmpeg
         run: |
