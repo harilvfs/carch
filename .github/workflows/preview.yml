@@ -29,7 +29,7 @@ jobs:
 
       - name: Install Yay (AUR Helper) as Non-Root User
         run: |
-          sudo -u builder bash -c "git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
+          sudo -u builder bash -c "cd ~ && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
 
       - name: Install Asciinema-Agg with Yay as Non-Root User
         run: |
