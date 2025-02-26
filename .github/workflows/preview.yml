@@ -27,7 +27,7 @@ jobs:
           useradd -m builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-      - name: Install Yay (AUR Helper) as Non-Root User
+      - name: Install Yay (AUR Helper)
         run: |
           sudo -u builder bash -c "cd /home/builder && git clone https://aur.archlinux.org/yay.git"
           sudo chown -R builder:builder /home/builder/yay
@@ -49,15 +49,13 @@ jobs:
           mkdir -p /usr/share/scripts
           cp build/carch /usr/bin/carch
           chmod +x /usr/bin/carch
-          chmod +rw /usr/bin/carch
           cp source/zip/scripts.zip /usr/share/
           unzip /usr/share/scripts.zip -d /usr/share/
           chmod -R +rwx /usr/share/scripts
-          chmod -R +rw /usr/share/scripts
 
       - name: Capture Carch Output in a Virtual Terminal
         run: |
-          tmux new-session -d -s carch_session -x 160 -y 48 "asciinema rec carch_output.cast"
+          tmux new-session -d -s carch_session -x 1920 -y 1080 "asciinema rec carch_output.cast"
           sleep 2
           tmux send-keys -t carch_session "carch" Enter
           sleep 5
@@ -74,13 +72,8 @@ jobs:
           ls -lah
           cat carch_output.cast || exit 1
 
-      - name: Convert Recording to MP4
-        run: agg carch_output.cast carch_demo.mp4
-
-      - name: Convert MP4 to High-Quality GIF
-        run: |
-          ffmpeg -y -i carch_demo.mp4 -vf "fps=60,scale=1920:-1:flags=lanczos,palettegen" palette.png
-          ffmpeg -y -i carch_demo.mp4 -i palette.png -filter_complex "fps=60,scale=1920:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer" carch_demo.gif
+      - name: Convert Recording to GIF
+        run: agg -t 60 -s 1920x1080 carch_output.cast carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
