@@ -28,15 +28,16 @@ jobs:
           # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Install ImageMagick
+      - name: Install ImageMagick and fonts
         run: |
-          # Just install ImageMagick for GIF creation
-          pacman -S --noconfirm imagemagick
+          # Install ImageMagick and necessary fonts
+          pacman -S --noconfirm imagemagick ttf-dejavu
 
       - name: Create directories
         run: |
           mkdir -p /usr/share/scripts
           mkdir -p .github
+          mkdir -p frames
 
       - name: Extract Carch script and supporting scripts
         run: |
@@ -66,26 +67,32 @@ jobs:
 
       - name: Create informative GIF directly
         run: |
-          # Create a sequence of frames for the GIF
-          mkdir -p frames
+          # Using magick command instead of convert (modern ImageMagick syntax)
+          # Also specifying an installed font (DejaVu Sans Mono)
           
           # Frame 1: Title
-          convert -size 800x600 -background black -fill green -font Courier -pointsize 30 \
-            label:"Carch Terminal Utility" \
-            frames/frame1.gif
+          magick -size 800x600 xc:black -font DejaVuSansMono -pointsize 30 -fill green \
+            -gravity center -annotate +0+0 "Carch Terminal Utility" \
+            frames/frame1.png
           
           # Frame 2: Description
-          convert -size 800x600 -background black -fill green -font Courier -pointsize 20 \
-            label:"A terminal-based utility for Arch Linux\n\nFeatures:\n- Easy package management\n- System information\n- Configuration tools" \
-            frames/frame2.gif
+          magick -size 800x600 xc:black -font DejaVuSansMono -pointsize 20 -fill green \
+            -gravity center -annotate +0+0 "A terminal-based utility for Arch Linux\n\nFeatures:\n- Easy package management\n- System information\n- Configuration tools" \
+            frames/frame2.png
           
           # Frame 3: Usage
-          convert -size 800x600 -background black -fill green -font Courier -pointsize 20 \
-            label:"Usage:\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
-            frames/frame3.gif
+          magick -size 800x600 xc:black -font DejaVuSansMono -pointsize 20 -fill green \
+            -gravity center -annotate +0+0 "Usage:\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
+            frames/frame3.png
+          
+          # List created frames
+          ls -la frames/
           
           # Combine frames into an animated GIF
-          convert -delay 150 -loop 0 frames/*.gif .github/carch.gif
+          magick frames/*.png -set delay 150 -loop 0 .github/carch.gif
+          
+          # Verify the GIF was created
+          ls -la .github/
 
       - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
