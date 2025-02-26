@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip python-virtualenv
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,9 +48,20 @@ jobs:
           sleep 1
           tmux kill-session -t carch_session
 
-      - name: Convert to GIF using FFmpeg
+      - name: Install Asciinema-Agg
         run: |
-          asciinema play carch_output.cast --speed=2 | ffmpeg -y -f rawvideo -pix_fmt rgb24 -s 1024x768 -r 30 -i - -vf "scale=iw/2:ih/2" carch_demo.gif
+          python -m venv venv
+          source venv/bin/activate
+          pip install asciinema-agg
+
+      - name: Convert Recording to MP4
+        run: |
+          source venv/bin/activate
+          asciinema-agg carch_output.cast carch_demo.mp4
+
+      - name: Convert MP4 to GIF using FFmpeg
+        run: |
+          ffmpeg -y -i carch_demo.mp4 -vf "scale=iw/2:ih/2" carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
@@ -63,4 +74,3 @@ jobs:
         with:
           name: carch-demo-gif
           path: .github/carch_demo.gif
-
