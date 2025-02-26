@@ -23,8 +23,10 @@ jobs:
 
       - name: Prepare and extract scripts
         run: |
+          [ -d /usr/share/scripts ] && rm -rf /usr/share/scripts
+          [ -f /usr/share/scripts.zip ] && rm /usr/share/scripts.zip
           mkdir -p /usr/share/scripts
-          cp source/zip/scripts.zip /usr/share/
+          cp source/zip/scripts.zip /usr/share/scripts.zip
           unzip /usr/share/scripts.zip
           rm /usr/share/scripts.zip
           chmod 755 /usr/share/scripts/*.sh
