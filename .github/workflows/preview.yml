@@ -15,8 +15,19 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Syu --noconfirm --needed base-devel git python python-pip ffmpeg
-          pip install asciinema asciinema2gif
+          # Update package database
+          pacman -Syu --noconfirm
+          
+          # Install required packages
+          pacman -S --noconfirm --needed base-devel git python python-pip ffmpeg nodejs npm
+          
+          # Install asciinema from Arch repos
+          pacman -S --noconfirm --needed asciinema
+          
+          # Create a virtual environment for Python packages not in repos
+          python -m venv /tmp/venv
+          source /tmp/venv/bin/activate
+          pip install asciinema2gif
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,7 +43,7 @@ jobs:
           unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed, checking files"
           
           # Debug information
-          ls -la source/zip/
+          ls -la source/zip/ || echo "source/zip directory not found"
           find /usr/share/scripts -type f || echo "No scripts extracted"
           
           # Make scripts executable
@@ -71,6 +82,9 @@ jobs:
 
       - name: Convert to GIF
         run: |
+          # Activate the virtual environment
+          source /tmp/venv/bin/activate
+          
           # Check that the cast file exists
           ls -la carch.cast
           
