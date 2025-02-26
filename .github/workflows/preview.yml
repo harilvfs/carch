@@ -1,0 +1,51 @@
+name: Generate Carch Preview GIF
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 1' # Weekly update
+  workflow_dispatch:
+
+jobs:
+  generate-gif:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm ffmpeg xdotool asciinema byzanz unzip
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract Carch script and supporting scripts
+        run: |
+          unzip source/zip/scripts.zip -d /usr/share/scripts
+          chmod 755 /usr/share/scripts/*.sh
+          install -m 755 build/carch /usr/bin/carch
+
+      - name: Record Terminal Session
+        run: |
+          asciinema rec -c "/usr/bin/carch" carch.cast &
+          sleep 2
+          xdotool key Down
+          sleep 1
+          xdotool key Up
+          sleep 1
+          xdotool key Return
+          sleep 2
+          xdotool key Ctrl+c
+
+      - name: Convert to GIF
+        run: |
+          asciinema2gif carch.cast .github/carch.gif
+
+      - name: Upload GIF
+        uses: actions/upload-artifact@v3
+        with:
+          name: carch-preview
+          path: .github/carch.gif
+
