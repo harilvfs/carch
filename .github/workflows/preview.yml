@@ -63,15 +63,16 @@ jobs:
 
       - name: Capture Carch Output in a Virtual Terminal
         run: |
-          tmux start-server  # Ensure tmux server is running
-          tmux new-session -d -s carch_session "asciinema rec --cols 80 --rows 24 --theme asciinema carch_output.cast"
-          sleep 5  # Wait for the recording to initialize
+          tmux new-session -d -s carch_session
+          sleep 2  # Ensure tmux is fully started
+          tmux send-keys -t carch_session "asciinema rec --cols 80 --rows 24 --theme asciinema carch_output.cast" Enter
+          sleep 5  # Wait for recording to initialize
           tmux send-keys -t carch_session "carch" Enter
-          sleep 5  # Allow carch to execute
+          sleep 5  # Let carch execute
           tmux send-keys -t carch_session Up  # Press Up arrow
-          sleep 5  # Wait before pressing Enter
+          sleep 3  # Wait before pressing Enter
           tmux send-keys -t carch_session Enter  # Press Enter as the final action
-          sleep 5  # Let the output be visible
+          sleep 5  # Allow output to be captured
           tmux send-keys -t carch_session C-c  # Stop recording
           sleep 2
           tmux kill-session -t carch_session
