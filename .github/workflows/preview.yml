@@ -28,11 +28,19 @@ jobs:
           # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Create Python virtual environment
+      - name: Create Python virtual environment and install dependencies
         run: |
-          # In Arch Linux, venv module is included in the python package
+          # Install Cairo and its dependencies
+          pacman -S --noconfirm cairo pango gdk-pixbuf2
+          
+          # Create and activate virtual environment
           python -m venv /tmp/venv
           source /tmp/venv/bin/activate
+          
+          # Update pip first
+          pip install --upgrade pip
+          
+          # Install cairosvg
           pip install cairosvg
           
           # Verify installation in venv
