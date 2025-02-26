@@ -87,6 +87,14 @@ jobs:
           cp carch_demo.gif .github/
           chmod +rw .github/carch_demo.gif
 
+      - name: Commit and Push GIF to Repository
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .github/carch_demo.gif
+          git commit -m "Update Carch demo GIF"
+          git push
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
