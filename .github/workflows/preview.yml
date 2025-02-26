@@ -28,10 +28,10 @@ jobs:
           # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Install ImageMagick and fonts
+      - name: Install ImageMagick
         run: |
-          # Install ImageMagick and necessary fonts
-          pacman -S --noconfirm imagemagick ttf-dejavu
+          # Just install ImageMagick
+          pacman -S --noconfirm imagemagick
 
       - name: Create directories
         run: |
@@ -65,34 +65,29 @@ jobs:
           # Check if carch is installed and executable
           which carch || echo "carch not found in PATH"
 
-      - name: Create informative GIF directly
+      - name: Create a simple static GIF
         run: |
-          # Using magick command instead of convert (modern ImageMagick syntax)
-          # Also specifying an installed font (DejaVu Sans Mono)
-          
-          # Frame 1: Title
-          magick -size 800x600 xc:black -font DejaVuSansMono -pointsize 30 -fill green \
-            -gravity center -annotate +0+0 "Carch Terminal Utility" \
-            frames/frame1.png
-          
-          # Frame 2: Description
-          magick -size 800x600 xc:black -font DejaVuSansMono -pointsize 20 -fill green \
-            -gravity center -annotate +0+0 "A terminal-based utility for Arch Linux\n\nFeatures:\n- Easy package management\n- System information\n- Configuration tools" \
-            frames/frame2.png
-          
-          # Frame 3: Usage
-          magick -size 800x600 xc:black -font DejaVuSansMono -pointsize 20 -fill green \
-            -gravity center -annotate +0+0 "Usage:\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
-            frames/frame3.png
-          
-          # List created frames
-          ls -la frames/
-          
-          # Combine frames into an animated GIF
-          magick frames/*.png -set delay 150 -loop 0 .github/carch.gif
+          # Create a very simple colored image without text
+          magick -size 800x600 xc:black -fill darkgreen -draw "rectangle 50,50 750,550" .github/carch.gif
           
           # Verify the GIF was created
           ls -la .github/
+          
+          # If the simple command works, we can try creating a slightly more complex GIF
+          if [ -f ".github/carch.gif" ]; then
+            # Try using a different method to create text - using pango markup
+            echo "First image created successfully, attempting more complex image"
+            
+            # Create a colored rectangle with simpler text rendering approach
+            magick -size 800x600 xc:black \
+              -fill darkgreen -draw "rectangle 50,50 750,550" \
+              -fill lime -draw "rectangle 100,100 700,150" \
+              -fill black -pointsize 24 -gravity center -draw "text 0,-200 'Carch Terminal Utility'" \
+              -fill lime -draw "rectangle 100,200 700,500" \
+              -fill black -pointsize 16 -gravity center -draw "text 0,0 'A terminal tool for Arch Linux'" \
+              -fill black -pointsize 14 -gravity center -draw "text 0,100 'Navigate with arrow keys - Press Enter to select - Ctrl+C to exit'" \
+              .github/carch.gif
+          fi
 
       - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
