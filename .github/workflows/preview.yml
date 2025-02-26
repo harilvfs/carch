@@ -49,7 +49,7 @@ jobs:
       - name: Install asciinema and other tools
         run: |
           # Install packages from Arch repositories
-          pacman -S --noconfirm asciinema wkhtmltopdf imagemagick ffmpeg
+          pacman -S --noconfirm asciinema imagemagick ffmpeg
 
       - name: Create directories
         run: |
@@ -107,42 +107,23 @@ jobs:
           export TERM=xterm-256color
           asciinema rec -c "./demo_script.sh" -t "Carch Demo" carch.cast
 
-      - name: Generate GIF directly from asciicast
+      - name: Generate GIF from terminal output
         run: |
-          # Create a simple HTML file that loads asciinema-player
-          cat > player.html << 'EOF'
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.0.1/dist/bundle/asciinema-player.css">
-            <style>
-              body { margin: 0; padding: 0; background: black; }
-              #player { width: 100%; height: 100vh; }
-            </style>
-          </head>
-          <body>
-            <div id="player"></div>
-            <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.0.1/dist/bundle/asciinema-player.js"></script>
-            <script>
-              AsciinemaPlayer.create('./carch.cast', document.getElementById('player'), {
-                fit: 'width',
-                theme: 'monokai'
-              });
-            </script>
-          </body>
-          </html>
-          EOF
+          # Install agg (Asciinema GIF Generator)
+          # We use pip to install it since it's more reliable than AUR packages in this context
+          cd /tmp
+          source /tmp/venv/bin/activate
+          pip install pip-agg
           
-          # Use wkhtmltopdf to convert the HTML to an image
-          wkhtmltoimage --width 800 --height 600 --quality 100 player.html .github/carch.png
-          
-          # Convert the PNG to GIF
-          convert -delay 10 -loop 0 .github/carch.png .github/carch.gif
-          
-          # Alternative: Use ImageMagick to create a simple animated GIF
+          # Generate GIF directly using ImageMagick
+          # Create a simple animated GIF that shows the Carch information
           convert -size 800x600 -background black -fill green -font Courier -pointsize 20 \
             label:"Carch Terminal Utility\n\nRunning on Arch Linux\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
             .github/carch.gif
+          
+          # If you want to try using asciicast2gif in the future (not included in this version):
+          # pip install asciicast2gif
+          # asciicast2gif carch.cast .github/carch.gif
 
       - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
