@@ -28,28 +28,10 @@ jobs:
           # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Create Python virtual environment and install dependencies
+      - name: Install ImageMagick
         run: |
-          # Install Cairo and its dependencies
-          pacman -S --noconfirm cairo pango gdk-pixbuf2
-          
-          # Create and activate virtual environment
-          python -m venv /tmp/venv
-          source /tmp/venv/bin/activate
-          
-          # Update pip first
-          pip install --upgrade pip
-          
-          # Install cairosvg
-          pip install cairosvg
-          
-          # Verify installation in venv
-          python -c "import cairosvg; print('CairoSVG installed!')"
-
-      - name: Install asciinema and other tools
-        run: |
-          # Install packages from Arch repositories
-          pacman -S --noconfirm asciinema imagemagick ffmpeg
+          # Just install ImageMagick for GIF creation
+          pacman -S --noconfirm imagemagick
 
       - name: Create directories
         run: |
@@ -82,48 +64,28 @@ jobs:
           # Check if carch is installed and executable
           which carch || echo "carch not found in PATH"
 
-      - name: Record Terminal Session
+      - name: Create informative GIF directly
         run: |
-          # Create a script to simulate key presses
-          cat > demo_script.sh << 'EOF'
-          #!/bin/bash
-          # Start carch or show a message if it's not available
-          carch || echo "This is a demonstration of the Carch tool"
-          # Give it a moment to initialize
-          sleep 3
-          # Simulate keypresses
-          echo -e "\033[B" # Down arrow
-          sleep 1
-          echo -e "\033[A" # Up arrow
-          sleep 1
-          echo -e "\r"     # Enter
-          sleep 3
-          echo -e "\003"   # Ctrl+C
-          EOF
+          # Create a sequence of frames for the GIF
+          mkdir -p frames
           
-          chmod +x demo_script.sh
+          # Frame 1: Title
+          convert -size 800x600 -background black -fill green -font Courier -pointsize 30 \
+            label:"Carch Terminal Utility" \
+            frames/frame1.gif
           
-          # Record the session using asciinema
-          export TERM=xterm-256color
-          asciinema rec -c "./demo_script.sh" -t "Carch Demo" carch.cast
-
-      - name: Generate GIF from terminal output
-        run: |
-          # Install agg (Asciinema GIF Generator)
-          # We use pip to install it since it's more reliable than AUR packages in this context
-          cd /tmp
-          source /tmp/venv/bin/activate
-          pip install pip-agg
-          
-          # Generate GIF directly using ImageMagick
-          # Create a simple animated GIF that shows the Carch information
+          # Frame 2: Description
           convert -size 800x600 -background black -fill green -font Courier -pointsize 20 \
-            label:"Carch Terminal Utility\n\nRunning on Arch Linux\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
-            .github/carch.gif
+            label:"A terminal-based utility for Arch Linux\n\nFeatures:\n- Easy package management\n- System information\n- Configuration tools" \
+            frames/frame2.gif
           
-          # If you want to try using asciicast2gif in the future (not included in this version):
-          # pip install asciicast2gif
-          # asciicast2gif carch.cast .github/carch.gif
+          # Frame 3: Usage
+          convert -size 800x600 -background black -fill green -font Courier -pointsize 20 \
+            label:"Usage:\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
+            frames/frame3.gif
+          
+          # Combine frames into an animated GIF
+          convert -delay 150 -loop 0 frames/*.gif .github/carch.gif
 
       - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
