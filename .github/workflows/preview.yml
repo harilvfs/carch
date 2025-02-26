@@ -72,8 +72,12 @@ jobs:
           ls -lah
           cat carch_output.cast || exit 1
 
-      - name: Convert Recording to GIF
-        run: agg carch_output.cast carch_demo.gif
+      - name: Convert Recording to MP4
+        run: agg carch_output.cast carch_demo.mp4
+
+      - name: Convert MP4 to GIF
+        run: |
+          ffmpeg -y -i carch_demo.mp4 -vf "fps=10,scale=1280:-1:flags=lanczos" carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
