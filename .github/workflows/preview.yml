@@ -10,86 +10,75 @@ on:
 jobs:
   generate-gif:
     runs-on: ubuntu-latest
-    container:
-      image: archlinux:latest
     steps:
-      - name: Install dependencies
-        run: |
-          # Update package database
-          pacman -Syu --noconfirm
-          
-          # Install required packages
-          pacman -S --noconfirm --needed base-devel git python python-pip ffmpeg nodejs npm
-          
-          # Install asciinema from Arch repos
-          pacman -S --noconfirm --needed asciinema
-          
-          # Create a virtual environment for Python packages not in repos
-          python -m venv /tmp/venv
-          source /tmp/venv/bin/activate
-          pip install asciinema2gif
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg imagemagick
+
+          # Install asciinema and necessary tools
+          pip install asciinema termtosvg cairosvg
+
       - name: Create directories
         run: |
-          mkdir -p /usr/share/scripts
+          sudo mkdir -p /usr/share/scripts
           mkdir -p .github
 
       - name: Extract Carch script and supporting scripts
         run: |
-          # Use -o flag to overwrite without prompting
-          unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed, checking files"
-          
-          # Debug information
-          ls -la source/zip/ || echo "source/zip directory not found"
-          find /usr/share/scripts -type f || echo "No scripts extracted"
-          
-          # Make scripts executable
-          find /usr/share/scripts -name "*.sh" -exec chmod +x {} \;
+          # Check if the file exists
+          if [ -f "source/zip/scripts.zip" ]; then
+            sudo unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed"
+            sudo find /usr/share/scripts -name "*.sh" -exec chmod +x {} \;
+          else
+            echo "scripts.zip not found at expected location"
+            find . -name "scripts.zip" -type f
+          fi
           
           # Install carch executable
-          [ -f build/carch ] && install -m 755 build/carch /usr/bin/carch || echo "carch binary not found"
+          if [ -f "build/carch" ]; then
+            sudo install -m 755 build/carch /usr/bin/carch
+          else
+            echo "carch binary not found at expected location"
+            find . -name "carch" -type f
+          fi
 
       - name: Record Terminal Session
         run: |
           # Create a script to simulate key presses
           cat > demo_script.sh << 'EOF'
           #!/bin/bash
-          # Start carch
-          carch
-          # Give it a moment to initialize
-          sleep 2
-          # Send Down key (simulated)
-          echo -e "\033[B"
           sleep 1
-          # Send Up key (simulated)
-          echo -e "\033[A"
-          sleep 1
-          # Send Return key
-          echo -e "\r"
+          # Start carch (or echo a demo message if carch not available)
+          which carch >/dev/null && carch || echo "This is a demo of the Carch terminal application"
           sleep 2
-          # Send Ctrl+C to exit
-          echo -e "\003"
+          # Simulate keypresses
+          echo -e "\033[B" # Down arrow
+          sleep 1
+          echo -e "\033[A" # Up arrow
+          sleep 1
+          echo -e "\r"     # Enter
+          sleep 2
+          echo -e "\003"   # Ctrl+C
           EOF
           
           chmod +x demo_script.sh
           
-          # Record the session using the script
           export TERM=xterm-256color
-          asciinema rec -c "./demo_script.sh" carch.cast
+          termtosvg output.svg -c "./demo_script.sh" -t window_frame
 
-      - name: Convert to GIF
+      - name: Convert SVG to GIF
         run: |
-          # Activate the virtual environment
-          source /tmp/venv/bin/activate
-          
-          # Check that the cast file exists
-          ls -la carch.cast
-          
-          # Convert cast to gif using asciinema2gif
-          python -m asciinema2gif.cli carch.cast .github/carch.gif
+          cairosvg output.svg -o output.png
+          convert -delay 10 -loop 0 output.png .github/carch.gif
 
       - name: Upload GIF
         uses: actions/upload-artifact@v4
@@ -99,11 +88,9 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          # Configure Git
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
-          # Add the GIF
           git add .github/carch.gif
           
           # Only commit and push if there are changes
