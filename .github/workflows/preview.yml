@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   capture-carch:
     runs-on: ubuntu-latest
@@ -17,8 +20,11 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet ttyrec imagemagick ffmpeg
-      
+          pacman -Sy --noconfirm gum figlet util-linux asciinema python-virtualenv
+          python -m venv venv
+          source venv/bin/activate
+          pip install asciinema-agg
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -27,27 +33,27 @@ jobs:
           mkdir -p /usr/share/scripts
           cp build/carch /usr/bin/carch
           chmod +x /usr/bin/carch
+          chmod +rw /usr/bin/carch
           cp source/zip/scripts.zip /usr/share/
           unzip /usr/share/scripts.zip -d /usr/share/
           chmod -R +rwx /usr/share/scripts
+          chmod -R +rw /usr/share/scripts
 
       - name: Capture Carch Output
         run: |
-          ttyrec carch_output.tty <<EOF
-          carch
-          sleep 1
-          printf '\033[A\n'  # Simulate pressing arrow up
-          sleep 1
-          EOF
-      
+          source venv/bin/activate
+          asciinema rec -c "carch; sleep 1; printf '\033[A\n'; sleep 1" carch_output.cast
+
       - name: Convert to GIF
         run: |
-          ttygif -in carch_output.tty -out carch_demo.gif
+          source venv/bin/activate
+          asciinema-agg carch_output.cast carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
           mkdir -p .github
           cp carch_demo.gif .github/
+          chmod +rw .github/carch_demo.gif
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
