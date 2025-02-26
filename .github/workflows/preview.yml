@@ -20,7 +20,17 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip python-virtualenv
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip base-devel git
+
+      - name: Install Yay (AUR Helper)
+        run: |
+          git clone https://aur.archlinux.org/yay.git
+          cd yay
+          makepkg -si --noconfirm
+
+      - name: Install Asciinema-Agg with Yay
+        run: |
+          yay -S --noconfirm asciinema-agg
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,15 +58,8 @@ jobs:
           sleep 1
           tmux kill-session -t carch_session
 
-      - name: Install Asciinema-Agg
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install asciinema-agg
-
       - name: Convert Recording to MP4
         run: |
-          source venv/bin/activate
           asciinema-agg carch_output.cast carch_demo.mp4
 
       - name: Convert MP4 to GIF using FFmpeg
@@ -74,3 +77,4 @@ jobs:
         with:
           name: carch-demo-gif
           path: .github/carch_demo.gif
+
