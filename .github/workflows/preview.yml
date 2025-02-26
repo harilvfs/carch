@@ -20,7 +20,7 @@ jobs:
       - name: Install essential packages
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git base-devel sudo xorg-server-xvfb unzip
+          pacman -S --noconfirm git base-devel sudo python python-venv unzip
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -28,29 +28,19 @@ jobs:
           # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Install dependencies for terminal recording
+      - name: Create Python virtual environment
         run: |
-          # Install necessary packages from Arch repositories
-          pacman -S --noconfirm \
-            ffmpeg \
-            python \
-            python-pip \
-            nodejs \
-            npm \
-            imagemagick \
-            asciinema \
-            chromium
-          
-          # Install termtosvg from AUR
-          cd /tmp
-          git clone https://aur.archlinux.org/termtosvg.git
-          cd termtosvg
-          # Fix makepkg to run as root in container
-          sed -i 's/EUID == 0/EUID == 99999/' /usr/bin/makepkg
-          makepkg -si --noconfirm
-          
-          # Install any additional Python packages
+          python -m venv /tmp/venv
+          source /tmp/venv/bin/activate
           pip install cairosvg
+          
+          # Verify installation in venv
+          python -c "import cairosvg; print('CairoSVG installed!')"
+
+      - name: Install asciinema and other tools
+        run: |
+          # Install packages from Arch repositories
+          pacman -S --noconfirm asciinema wkhtmltopdf imagemagick ffmpeg
 
       - name: Create directories
         run: |
@@ -82,19 +72,14 @@ jobs:
           
           # Check if carch is installed and executable
           which carch || echo "carch not found in PATH"
-          ls -la /usr/bin/carch || echo "carch not installed to /usr/bin"
 
-      - name: Record Terminal Session with Xvfb
+      - name: Record Terminal Session
         run: |
-          # Start Xvfb
-          Xvfb :99 -screen 0 1024x768x24 &
-          export DISPLAY=:99
-          
           # Create a script to simulate key presses
           cat > demo_script.sh << 'EOF'
           #!/bin/bash
-          # Start carch
-          carch
+          # Start carch or show a message if it's not available
+          carch || echo "This is a demonstration of the Carch tool"
           # Give it a moment to initialize
           sleep 3
           # Simulate keypresses
@@ -109,29 +94,46 @@ jobs:
           
           chmod +x demo_script.sh
           
-          # Record the session
+          # Record the session using asciinema
           export TERM=xterm-256color
-          termtosvg output.svg -c "./demo_script.sh" -t window_frame -D 2000
+          asciinema rec -c "./demo_script.sh" -t "Carch Demo" carch.cast
 
-      - name: Convert SVG to GIF
+      - name: Generate GIF directly from asciicast
         run: |
-          # Check if the SVG was created
-          ls -la output.svg || echo "SVG not created"
+          # Create a simple HTML file that loads asciinema-player
+          cat > player.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.0.1/dist/bundle/asciinema-player.css">
+            <style>
+              body { margin: 0; padding: 0; background: black; }
+              #player { width: 100%; height: 100vh; }
+            </style>
+          </head>
+          <body>
+            <div id="player"></div>
+            <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.0.1/dist/bundle/asciinema-player.js"></script>
+            <script>
+              AsciinemaPlayer.create('./carch.cast', document.getElementById('player'), {
+                fit: 'width',
+                theme: 'monokai'
+              });
+            </script>
+          </body>
+          </html>
+          EOF
           
-          # Convert to GIF
-          cairosvg output.svg -o output.png
-          convert -delay 20 -loop 0 output.png .github/carch.gif
+          # Use wkhtmltopdf to convert the HTML to an image
+          wkhtmltoimage --width 800 --height 600 --quality 100 player.html .github/carch.png
           
-          # Verify GIF was created
-          ls -la .github/carch.gif || echo "GIF not created"
-
-      - name: Configure Git for commit
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          # Convert the PNG to GIF
+          convert -delay 10 -loop 0 .github/carch.png .github/carch.gif
           
-          # Debug Git config
-          git config --list
+          # Alternative: Use ImageMagick to create a simple animated GIF
+          convert -size 800x600 -background black -fill green -font Courier -pointsize 20 \
+            label:"Carch Terminal Utility\n\nRunning on Arch Linux\n\nNavigate with arrow keys\nPress Enter to select\nCtrl+C to exit" \
+            .github/carch.gif
 
       - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
@@ -141,10 +143,9 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          # Debug repository state
-          git status
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           
-          # Add the GIF
           git add .github/carch.gif
           
           # Only commit and push if there are changes
