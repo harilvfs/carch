@@ -44,8 +44,7 @@ jobs:
           asciinema2gif carch.cast .github/carch.gif
 
       - name: Upload GIF
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: carch-preview
           path: .github/carch.gif
-
