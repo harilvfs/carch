@@ -20,10 +20,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema python-virtualenv
-          python -m venv venv
-          source venv/bin/activate
-          pip install asciinema-agg
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -41,13 +38,11 @@ jobs:
 
       - name: Capture Carch Output
         run: |
-          source venv/bin/activate
           asciinema rec -c "carch; sleep 1; printf '\033[A\n'; sleep 1" carch_output.cast
 
-      - name: Convert to GIF
+      - name: Convert to GIF using FFmpeg
         run: |
-          source venv/bin/activate
-          asciinema-agg carch_output.cast carch_demo.gif
+          asciinema play carch_output.cast --speed=2 | ffmpeg -y -f rawvideo -pix_fmt rgb24 -s 1024x768 -r 30 -i - -vf "scale=iw/2:ih/2" carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
