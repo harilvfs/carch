@@ -14,37 +14,59 @@ permissions:
 jobs:
   generate-gif:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
     steps:
+      - name: Install essential packages
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm git base-devel sudo xorg-server-xvfb unzip
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
+      - name: Install dependencies for terminal recording
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg imagemagick
-
-          # Install asciinema and necessary tools
-          pip install asciinema termtosvg cairosvg
+          # Install necessary packages from Arch repositories
+          pacman -S --noconfirm \
+            ffmpeg \
+            python \
+            python-pip \
+            nodejs \
+            npm \
+            imagemagick \
+            asciinema \
+            chromium
+          
+          # Install termtosvg from AUR
+          cd /tmp
+          git clone https://aur.archlinux.org/termtosvg.git
+          cd termtosvg
+          # Fix makepkg to run as root in container
+          sed -i 's/EUID == 0/EUID == 99999/' /usr/bin/makepkg
+          makepkg -si --noconfirm
+          
+          # Install any additional Python packages
+          pip install cairosvg
 
       - name: Create directories
         run: |
-          sudo mkdir -p /usr/share/scripts
+          mkdir -p /usr/share/scripts
           mkdir -p .github
 
       - name: Extract Carch script and supporting scripts
         run: |
+          # Debug current directory and files
+          pwd
+          ls -la
+          
           # Check if the file exists
           if [ -f "source/zip/scripts.zip" ]; then
-            sudo unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed"
-            sudo find /usr/share/scripts -name "*.sh" -exec chmod +x {} \;
+            unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed"
+            find /usr/share/scripts -name "*.sh" -exec chmod +x {} \;
           else
             echo "scripts.zip not found at expected location"
             find . -name "scripts.zip" -type f
@@ -52,42 +74,66 @@ jobs:
           
           # Install carch executable
           if [ -f "build/carch" ]; then
-            sudo install -m 755 build/carch /usr/bin/carch
+            install -m 755 build/carch /usr/bin/carch
           else
             echo "carch binary not found at expected location"
             find . -name "carch" -type f
           fi
+          
+          # Check if carch is installed and executable
+          which carch || echo "carch not found in PATH"
+          ls -la /usr/bin/carch || echo "carch not installed to /usr/bin"
 
-      - name: Record Terminal Session
+      - name: Record Terminal Session with Xvfb
         run: |
+          # Start Xvfb
+          Xvfb :99 -screen 0 1024x768x24 &
+          export DISPLAY=:99
+          
           # Create a script to simulate key presses
           cat > demo_script.sh << 'EOF'
           #!/bin/bash
-          sleep 1
-          # Start carch (or echo a demo message if carch not available)
-          which carch >/dev/null && carch || echo "This is a demo of the Carch terminal application"
-          sleep 2
+          # Start carch
+          carch
+          # Give it a moment to initialize
+          sleep 3
           # Simulate keypresses
           echo -e "\033[B" # Down arrow
           sleep 1
           echo -e "\033[A" # Up arrow
           sleep 1
           echo -e "\r"     # Enter
-          sleep 2
+          sleep 3
           echo -e "\003"   # Ctrl+C
           EOF
           
           chmod +x demo_script.sh
           
+          # Record the session
           export TERM=xterm-256color
-          termtosvg output.svg -c "./demo_script.sh" -t window_frame
+          termtosvg output.svg -c "./demo_script.sh" -t window_frame -D 2000
 
       - name: Convert SVG to GIF
         run: |
+          # Check if the SVG was created
+          ls -la output.svg || echo "SVG not created"
+          
+          # Convert to GIF
           cairosvg output.svg -o output.png
-          convert -delay 10 -loop 0 output.png .github/carch.gif
+          convert -delay 20 -loop 0 output.png .github/carch.gif
+          
+          # Verify GIF was created
+          ls -la .github/carch.gif || echo "GIF not created"
 
-      - name: Upload GIF
+      - name: Configure Git for commit
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Debug Git config
+          git config --list
+
+      - name: Upload GIF as artifact
         uses: actions/upload-artifact@v4
         with:
           name: carch-preview
@@ -95,9 +141,10 @@ jobs:
 
       - name: Commit and push if changed
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          # Debug repository state
+          git status
           
+          # Add the GIF
           git add .github/carch.gif
           
           # Only commit and push if there are changes
