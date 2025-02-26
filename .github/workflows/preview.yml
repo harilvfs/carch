@@ -73,7 +73,7 @@ jobs:
           cat carch_output.cast || exit 1
 
       - name: Convert Recording to GIF
-        run: agg -t 60 -s 1920x1080 carch_output.cast carch_demo.gif
+        run: agg -s 1920x1080 carch_output.cast carch_demo.gif
 
       - name: Move GIF to .github Folder
         run: |
