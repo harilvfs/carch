@@ -1,0 +1,57 @@
+name: Run Carch in Container and Capture GIF
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  capture-carch:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm gum figlet ttyrec imagemagick ffmpeg
+      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Carch
+        run: |
+          mkdir -p /usr/share/scripts
+          cp build/carch /usr/bin/carch
+          chmod +x /usr/bin/carch
+          cp source/zip/scripts.zip /usr/share/
+          unzip /usr/share/scripts.zip -d /usr/share/
+          chmod -R +rwx /usr/share/scripts
+
+      - name: Capture Carch Output
+        run: |
+          ttyrec carch_output.tty <<EOF
+          carch
+          sleep 1
+          printf '\033[A\n'  # Simulate pressing arrow up
+          sleep 1
+          EOF
+      
+      - name: Convert to GIF
+        run: |
+          ttygif -in carch_output.tty -out carch_demo.gif
+
+      - name: Move GIF to .github Folder
+        run: |
+          mkdir -p .github
+          cp carch_demo.gif .github/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: carch-demo-gif
+          path: .github/carch_demo.gif
+
