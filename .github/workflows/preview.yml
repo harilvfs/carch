@@ -29,7 +29,10 @@ jobs:
 
       - name: Install Yay (AUR Helper) as Non-Root User
         run: |
-          sudo -u builder bash -c "git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
+          sudo -u builder bash -c "cd /home/builder && git clone https://aur.archlinux.org/yay.git"
+          sudo chown -R builder:builder /home/builder/yay
+          sudo chmod -R 755 /home/builder/yay
+          sudo -u builder bash -c "cd /home/builder/yay && makepkg -si --noconfirm"
 
       - name: Verify Yay Installation
         run: |
