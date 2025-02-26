@@ -29,6 +29,8 @@ jobs:
       - name: Create necessary directories
         run: |
           mkdir -p /usr/share/scripts /github/workspace/frames
+          echo "Checking script directory contents:"
+          ls -la /usr/share/scripts
 
       - name: Extract Carch script and supporting scripts
         run: |
@@ -47,12 +49,20 @@ jobs:
             exit 1
           fi
 
-          which carch || exit 1
+          echo "Final scripts available in /usr/share/scripts:"
+          ls -la /usr/share/scripts
 
-      - name: Run Carch and Capture Output
+      - name: Run Carch in Non-TTY Mode
         run: |
           export TERM=xterm-256color  # Ensure terminal compatibility
-          echo -e "1\nexit\n" | /usr/bin/carch | tee output.txt  # Simulate input to avoid pauses
+
+          # Disable gum if running in GitHub Actions (to avoid TTY errors)
+          if [[ -n "$GITHUB_ACTIONS" ]]; then
+            GUM_INPUT_METHOD="echo" /usr/bin/carch --no-interactive > output.txt 2>&1
+          else
+            /usr/bin/carch > output.txt 2>&1
+          fi
+
           cat output.txt
 
       - name: Convert Terminal Output to Image Frames
