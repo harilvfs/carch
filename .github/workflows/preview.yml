@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg unzip zip
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,9 +36,17 @@ jobs:
           chmod -R +rwx /usr/share/scripts
           chmod -R +rw /usr/share/scripts
 
-      - name: Capture Carch Output
+      - name: Capture Carch Output in a Virtual Terminal
         run: |
-          asciinema rec -c "carch; sleep 1; printf '\033[A\n'; sleep 1" carch_output.cast
+          tmux new-session -d -s carch_session "asciinema rec carch_output.cast"
+          sleep 2
+          tmux send-keys -t carch_session "carch" Enter
+          sleep 1
+          tmux send-keys -t carch_session Up Enter
+          sleep 1
+          tmux send-keys -t carch_session C-c
+          sleep 1
+          tmux kill-session -t carch_session
 
       - name: Convert to GIF using FFmpeg
         run: |
