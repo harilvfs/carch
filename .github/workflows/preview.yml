@@ -109,6 +109,7 @@ jobs:
 
       - name: Commit and push if changed
         run: |
+          git config --global --add safe.directory /__w/carch/carch
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
