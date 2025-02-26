@@ -52,17 +52,20 @@ jobs:
           echo "Final scripts available in /usr/share/scripts:"
           ls -la /usr/share/scripts
 
+
       - name: Run Carch in Non-TTY Mode
         run: |
           export TERM=xterm-256color  # Ensure terminal compatibility
 
-          # Disable gum if running in GitHub Actions (to avoid TTY errors)
-          if [[ -n "$GITHUB_ACTIONS" ]]; then
-            GUM_INPUT_METHOD="echo" /usr/bin/carch --no-interactive > output.txt 2>&1
-          else
-            /usr/bin/carch > output.txt 2>&1
-          fi
+          echo "Checking if scripts exist in /usr/share/scripts/"
+          ls -la /usr/share/scripts
 
+          echo "Running Carch without interactive mode"
+          
+          # Force gum to work in a non-interactive environment
+          GUM_INPUT_METHOD="echo" /usr/bin/carch --no-interactive > output.txt 2>&1 || cat output.txt
+          
+          echo "Carch output:"
           cat output.txt
 
       - name: Convert Terminal Output to Image Frames
