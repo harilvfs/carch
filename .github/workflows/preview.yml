@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip
 
       - name: Checkout repository
         uses: actions/checkout@v4
