@@ -24,9 +24,9 @@ jobs:
       - name: Prepare and extract scripts
         run: |
           mkdir -p /usr/share/scripts
-          mv source/zip/scripts.zip /usr/share/scripts/
-          unzip /usr/share/scripts/scripts.zip -d /usr/share/scripts
-          rm /usr/share/scripts/scripts.zip
+          cp source/zip/scripts.zip /usr/share/
+          unzip /usr/share/scripts.zip -d /usr/share/scripts
+          rm /usr/share/scripts.zip
           chmod 755 /usr/share/scripts/*.sh
           install -m 755 build/carch /usr/bin/carch
 
