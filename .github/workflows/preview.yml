@@ -7,12 +7,19 @@ on:
     - cron: '0 0 * * 1' # Weekly update
   workflow_dispatch:
 
+# Add permissions block to grant write access to the repository
+permissions:
+  contents: write
+
 jobs:
   generate-gif:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Make sure we fetch all history so we can push back
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
