@@ -7,7 +7,6 @@ on:
     - cron: '0 0 * * 1' # Weekly update
   workflow_dispatch:
 
-# Add permissions block to grant write access to the repository
 permissions:
   contents: write
 
@@ -20,100 +19,70 @@ jobs:
       - name: Install essential packages
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git base-devel sudo python unzip
+          pacman -S --noconfirm git base-devel sudo python unzip imagemagick ttygif
 
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Make sure we fetch all history so we can push back
           fetch-depth: 0
 
-      - name: Install ImageMagick
+      - name: Create necessary directories
         run: |
-          # Just install ImageMagick
-          pacman -S --noconfirm imagemagick
-
-      - name: Create directories
-        run: |
-          mkdir -p /usr/share/scripts
-          mkdir -p .github
-          mkdir -p frames
+          mkdir -p /usr/share/scripts /github/workspace/frames
 
       - name: Extract Carch script and supporting scripts
         run: |
-          # Debug current directory and files
-          pwd
-          ls -la
-          
-          # Check if the file exists
           if [ -f "source/zip/scripts.zip" ]; then
-            unzip -o source/zip/scripts.zip -d /usr/share/scripts || echo "Extraction failed"
+            unzip -o source/zip/scripts.zip -d /usr/share/scripts
             find /usr/share/scripts -name "*.sh" -exec chmod +x {} \;
           else
-            echo "scripts.zip not found at expected location"
-            find . -name "scripts.zip" -type f
+            echo "scripts.zip not found"
+            exit 1
           fi
-          
-          # Install carch executable
+
           if [ -f "build/carch" ]; then
             install -m 755 build/carch /usr/bin/carch
           else
-            echo "carch binary not found at expected location"
-            find . -name "carch" -type f
+            echo "carch binary not found"
+            exit 1
           fi
-          
-          # Check if carch is installed and executable
-          which carch || echo "carch not found in PATH"
 
-      - name: Create frames for animated GIF
+          which carch || exit 1
+
+      - name: Run Carch and Capture Output
         run: |
-          # Create visually distinct frames using shapes and colors only
-          
-          # Frame 1: Title-like design (green border with darker center)
-          magick -size 800x600 xc:black \
-            -fill "#004400" -draw "rectangle 50,50 750,550" \
-            -fill "#002200" -draw "rectangle 100,100 700,500" \
-            frames/frame1.gif
-          
-          # Frame 2: Menu-like design (vertical stripes)
-          magick -size 800x600 xc:black \
-            -fill "#003300" -draw "rectangle 50,50 750,550" \
-            -fill "#005500" -draw "rectangle 100,100 300,500" \
-            -fill "#001100" -draw "rectangle 340,150 660,200" \
-            -fill "#001100" -draw "rectangle 340,250 660,300" \
-            -fill "#001100" -draw "rectangle 340,350 660,400" \
-            frames/frame2.gif
-          
-          # Frame 3: Info-screen design (horizontal sections)
-          magick -size 800x600 xc:black \
-            -fill "#002200" -draw "rectangle 50,50 750,550" \
-            -fill "#004400" -draw "rectangle 100,100 700,150" \
-            -fill "#003300" -draw "rectangle 100,200 700,300" \
-            -fill "#006600" -draw "rectangle 100,350 700,500" \
-            frames/frame3.gif
-          
-          # List created frames
-          ls -la frames/
-          
-          # Combine frames into an animated GIF
-          magick -delay 150 frames/*.gif -loop 0 .github/carch.gif
-          
-          # Verify the GIF was created
+          script -q -c "/usr/bin/carch" output.txt
+          cat output.txt
+
+      - name: Convert Terminal Output to Image Frames
+        run: |
+          frames_dir="/github/workspace/frames"
+          index=1
+          while read -r line; do
+            convert -size 800x600 xc:black \
+              -fill white -pointsize 24 -gravity center \
+              -annotate +0+0 "$line" "$frames_dir/frame$index.png"
+            ((index++))
+          done < output.txt
+          ls -la $frames_dir
+
+      - name: Generate Animated GIF
+        run: |
+          convert -delay 100 /github/workspace/frames/*.png -loop 0 .github/carch.gif
           ls -la .github/carch.gif
 
-      - name: Upload GIF as artifact
+      - name: Upload GIF as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: carch-preview
           path: .github/carch.gif
 
-      - name: Commit and push if changed
+      - name: Commit and Push Updated GIF
         run: |
           git config --global --add safe.directory /__w/carch/carch
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
           git add .github/carch.gif
-          
-          # Only commit and push if there are changes
           git diff --staged --quiet || (git commit -m "Update Carch preview GIF" && git push)
+
