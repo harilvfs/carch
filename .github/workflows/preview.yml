@@ -19,7 +19,7 @@ jobs:
       - name: Install essential packages
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git base-devel sudo python unzip imagemagick
+          pacman -S --noconfirm git base-devel sudo python unzip imagemagick figlet gum
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,7 +51,8 @@ jobs:
 
       - name: Run Carch and Capture Output
         run: |
-          script -q -c "/usr/bin/carch" output.txt
+          export TERM=xterm-256color  # Ensure terminal compatibility
+          echo -e "1\nexit\n" | /usr/bin/carch | tee output.txt  # Simulate input to avoid pauses
           cat output.txt
 
       - name: Convert Terminal Output to Image Frames
