@@ -23,7 +23,7 @@ jobs:
 
       - name: Extract Carch script and supporting scripts
         run: |
-          unzip source/zip/scripts.zip -d /usr/share && mv /usr/share/scripts /usr/share/scripts
+          unzip source/zip/scripts.zip -d /usr/share/scripts
           chmod 755 /usr/share/scripts/*.sh
           install -m 755 build/carch /usr/bin/carch
 
