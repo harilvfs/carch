@@ -20,17 +20,20 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip base-devel git
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip base-devel git sudo
 
-      - name: Install Yay (AUR Helper)
+      - name: Create Non-Root User
         run: |
-          git clone https://aur.archlinux.org/yay.git
-          cd yay
-          makepkg -si --noconfirm
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-      - name: Install Asciinema-Agg with Yay
+      - name: Install Yay (AUR Helper) as Non-Root User
         run: |
-          yay -S --noconfirm asciinema-agg
+          sudo -u builder bash -c "git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
+
+      - name: Install Asciinema-Agg with Yay as Non-Root User
+        run: |
+          sudo -u builder yay -S --noconfirm asciinema-agg
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -77,4 +80,3 @@ jobs:
         with:
           name: carch-demo-gif
           path: .github/carch_demo.gif
-
