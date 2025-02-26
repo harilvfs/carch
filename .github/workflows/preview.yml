@@ -29,11 +29,20 @@ jobs:
 
       - name: Install Yay (AUR Helper) as Non-Root User
         run: |
-          sudo -u builder bash -c "cd ~ && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
+          sudo -u builder bash -c "git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm"
+
+      - name: Verify Yay Installation
+        run: |
+          sudo -u builder yay --version
+
+      - name: Add Yay to Path
+        run: |
+          echo 'export PATH=$HOME/.local/bin:$PATH' >> /home/builder/.bashrc
+          source /home/builder/.bashrc
 
       - name: Install Asciinema-Agg with Yay as Non-Root User
         run: |
-          sudo -u builder yay -S --noconfirm asciinema-agg
+          sudo -u builder bash -c "yay -S --noconfirm asciinema-agg || (sudo pacman -Syu --noconfirm && yay -S --noconfirm asciinema-agg)"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -80,3 +89,4 @@ jobs:
         with:
           name: carch-demo-gif
           path: .github/carch_demo.gif
+
