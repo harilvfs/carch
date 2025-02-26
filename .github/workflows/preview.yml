@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm ffmpeg xdotool asciinema byzanz unzip
+          pacman -Sy --noconfirm ffmpeg xdotool asciinema unzip
 
       - name: Checkout repository
         uses: actions/checkout@v4
