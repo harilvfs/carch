@@ -20,6 +20,11 @@ jobs:
         run: |
           pacman -Syu --noconfirm
           pacman -S --noconfirm git base-devel sudo python unzip imagemagick figlet gum
+          
+          # Verify installation
+          command -v gum || echo "gum not found!"
+          command -v figlet || echo "figlet not found!"
+          command -v magick || echo "ImageMagick not found!"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,18 +57,16 @@ jobs:
           echo "Final scripts available in /usr/share/scripts:"
           ls -la /usr/share/scripts
 
-
       - name: Run Carch in Non-TTY Mode
         run: |
           export TERM=xterm-256color  # Ensure terminal compatibility
+          export NO_COLOR=1  # Disable colors to avoid formatting issues
 
           echo "Checking if scripts exist in /usr/share/scripts/"
           ls -la /usr/share/scripts
 
           echo "Running Carch without interactive mode"
-          
-          # Force gum to work in a non-interactive environment
-          GUM_INPUT_METHOD="echo" /usr/bin/carch --no-interactive > output.txt 2>&1 || cat output.txt
+          echo -e "\n" | /usr/bin/carch > output.txt 2>&1 || cat output.txt
           
           echo "Carch output:"
           cat output.txt
@@ -71,10 +74,13 @@ jobs:
       - name: Convert Terminal Output to Image Frames
         run: |
           frames_dir="/github/workspace/frames"
+          mkdir -p "$frames_dir"
           index=1
+          FONT_PATH="/usr/share/fonts/TTF/DejaVuSans-Bold.ttf"
+          
           while read -r line; do
-            convert -size 800x600 xc:black \
-              -fill white -pointsize 24 -gravity center \
+            magick -size 800x600 xc:black \
+              -font "$FONT_PATH" -fill white -pointsize 24 -gravity center \
               -annotate +0+0 "$line" "$frames_dir/frame$index.png"
             ((index++))
           done < output.txt
@@ -82,7 +88,7 @@ jobs:
 
       - name: Generate Animated GIF
         run: |
-          convert -delay 100 /github/workspace/frames/*.png -loop 0 .github/carch.gif
+          magick -delay 100 /github/workspace/frames/*.png -loop 0 .github/carch.gif
           ls -la .github/carch.gif
 
       - name: Upload GIF as Artifact
