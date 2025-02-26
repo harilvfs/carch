@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip base-devel git sudo
+          pacman -Sy --noconfirm gum figlet util-linux asciinema ffmpeg tmux unzip zip base-devel git sudo ttf-jetbrains-mono ttf-fira-code ttf-dejavu ttf-liberation
 
       - name: Create Non-Root User
         run: |
