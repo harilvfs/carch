@@ -55,12 +55,9 @@ jobs:
           chmod -R +rwx /usr/share/scripts
           chmod -R +rw /usr/share/scripts
 
-      - name: Set Terminal Size
-        run: stty cols 160 rows 48
-
       - name: Capture Carch Output in a Virtual Terminal
         run: |
-          tmux new-session -d -s carch_session "asciinema rec carch_output.cast"
+          tmux new-session -d -s carch_session -x 160 -y 48 "asciinema rec carch_output.cast"
           sleep 2
           tmux send-keys -t carch_session "carch" Enter
           sleep 5
