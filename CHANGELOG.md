@@ -15,7 +15,7 @@ The **VitePress documentation** is still available, and I will continue maintain
 - **[VitePress Docs](https://carch-org.github.io/docs)** – [Repo](https://github.com/carch-org/docs)  
 - **[Starlight Astro Wiki](https://carch-org.github.io/wiki)** – [Repo](https://github.com/carch-org/wiki)  
 
-All Carch-related resources, including documentation and PKGBUILD management, are now maintained under **[Carch-Org](https://github.com/carch-org)**.  
+All Carch-related resources, including documentation and PKGBUILD management, are maintained under **[Carch-Org](https://github.com/carch-org)**.  
 
 For a detailed list of changes in this update, check the **[release section](https://github.com/harilvfs/carch/releases/tag/v4.1.4)**.  
 
