@@ -22,7 +22,11 @@ jobs:
       - name: Install Git and curl
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm nss libxss libxtst libxrandr libpng alsa-lib xdg-utils libcups
+          pacman -S --noconfirm nss libxss libxtst libxrandr libpng alsa-lib xdg-utils libcups libgconf freetype2 harfbuzz 
+          pacman -S --noconfirm atk at-spi2-atk at-spi2-core cairo pango gtk3 dbus libxcomposite libxcursor libxdamage libxi
+          pacman -S --noconfirm libxkbcommon libxslt mesa ttf-liberation libglvnd libxkbfile vulkan-icd-loader gst-plugins-base-libs
+          pacman -S --noconfirm libx11 libxcb libxext libxfixes libxrender
+          pacman -S --noconfirm libpulse libsecret
           pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols cmake libuv json-c openssl libwebsockets
       - name: Checkout source
         uses: actions/checkout@v4
