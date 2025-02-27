@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Install dependencies (figlet, gum & unzip)
         run: |
-          sudo apt update && sudo apt install -y figlet unzip
+          sudo apt update && sudo apt install -y figlet unzip ffmpeg
           sudo mkdir -p /etc/apt/keyrings
           curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
           echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
