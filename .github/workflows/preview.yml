@@ -22,9 +22,19 @@ jobs:
       - name: Install Git and curl
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols
+          pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols cmake libuv json-c openssl
       - name: Checkout source
         uses: actions/checkout@v4
+      - name: Install ttyd
+        run: |
+          cd /tmp
+          git clone https://github.com/tsl0922/ttyd.git
+          cd ttyd
+          mkdir build
+          cd build
+          cmake ..
+          make
+          make install
       - name: Get tag name ( Workflow Run )
         id: latest_tag
         uses: actions/github-script@v7
