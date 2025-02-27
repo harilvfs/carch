@@ -23,6 +23,16 @@ jobs:
         run: |
           pacman -Syu --noconfirm
           pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols cmake libuv json-c openssl
+      - name: Install libwebsockets
+        run: |
+          cd /tmp
+          git clone https://github.com/warmcat/libwebsockets.git
+          cd libwebsockets
+          mkdir build
+          cd build
+          cmake -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITHOUT_TEST_SERVER=ON ..
+          make
+          make install
       - name: Checkout source
         uses: actions/checkout@v4
       - name: Install ttyd
@@ -35,6 +45,7 @@ jobs:
           cmake ..
           make
           make install
+          ldconfig
       - name: Get tag name ( Workflow Run )
         id: latest_tag
         uses: actions/github-script@v7
