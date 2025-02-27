@@ -63,8 +63,18 @@ if ! command -v nvm &>/dev/null; then
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
+if [[ "$SHELL" == */bash ]]; then
+    source ~/.bashrc &>/dev/null
+elif [[ "$SHELL" == */zsh ]]; then
+    source ~/.zshrc &>/dev/null
+elif [[ "$SHELL" == */fish ]]; then
+    source ~/.config/fish/config.fish &>/dev/null
+else
+    echo -e "${YELLOW}⚠ Unknown shell detected. Please restart your terminal or source your shell config manually.${RESET}"
+fi
+
 gum style --foreground 33 "📦 Installing npm via nvm..."
-nvm install npm
+nvm install --lts
 
 echo -e "${GREEN}✔ npm installation completed via nvm.${RESET}"
 
