@@ -18,20 +18,29 @@ if ! command -v gum &>/dev/null; then
     exit 1
 fi
 
+package_manager=""
 if command -v npm &>/dev/null; then
     echo -e "${GREEN}✔ npm is already installed.${RESET}"
 
     if pacman -Q npm &>/dev/null; then
         package_manager="pacman"
+        remove_cmd="sudo pacman -Rsn npm"
     elif dnf list installed nodejs &>/dev/null; then
         package_manager="dnf"
-    else
-        package_manager=""
+        remove_cmd="sudo dnf remove nodejs"
     fi
 
     if [[ -n "$package_manager" ]]; then
-        gum style --foreground 202 "⚠ npm is installed via $package_manager, which may cause conflicts."
-        if ! gum confirm "Do you want to use nvm instead? (Recommended)"; then
+        gum style --foreground 202 "⚠ npm is installed via $package_manager, which may cause conflicts with nvm."
+        if gum confirm "Do you want to remove the package manager version and use nvm instead? (Recommended)"; then
+            gum style --foreground 214 "🗑 Removing npm and Node.js via $package_manager..."
+            if eval "$remove_cmd"; then
+                echo -e "${GREEN}✔ Successfully removed npm and Node.js.${RESET}"
+            else
+                echo -e "${RED}✖ Failed to remove npm and Node.js.${RESET}"
+                exit 1
+            fi
+        else
             echo -e "${GREEN}✔ Keeping existing npm installation.${RESET}"
             exit 0
         fi
@@ -58,9 +67,6 @@ if ! command -v nvm &>/dev/null; then
         echo -e "${RED}✖ Failed to install nvm.${RESET}"
         exit 1
     fi
-
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
 if [[ "$SHELL" == */bash ]]; then
