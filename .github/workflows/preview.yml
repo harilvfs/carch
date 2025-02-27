@@ -30,7 +30,7 @@ jobs:
           cd libwebsockets
           mkdir build
           cd build
-          cmake -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITHOUT_TEST_SERVER=ON ..
+          cmake -DLWS_WITH_LIBUV=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITHOUT_TEST_SERVER=ON ..
           make
           make install
       - name: Checkout source
