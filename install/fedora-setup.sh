@@ -204,7 +204,7 @@ echo -e "${COLOR_GREEN}Carch Desktop Entry created successfully!${COLOR_RESET}"
 
 display_message() {
     gum style --border "normal" --width 50 --padding 1 --foreground "white" --background "blue" --align "center" "Carch installed successfully!
-  Use 'carch' or 'carch --tui' to run the script.
+  Use 'carch' to run the script.
 For help, type 'carch --help'."
 }
 
