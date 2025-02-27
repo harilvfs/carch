@@ -22,7 +22,7 @@ jobs:
       - name: Install Git and curl
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols cmake libuv json-c openssl
+          pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols cmake libuv json-c openssl systemd
       - name: Install libwebsockets
         run: |
           cd /tmp
@@ -30,7 +30,7 @@ jobs:
           cd libwebsockets
           mkdir build
           cd build
-          cmake -DLWS_WITH_LIBUV=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITHOUT_TEST_SERVER=ON ..
+          cmake -DLWS_WITH_LIBUV=ON -DLWS_WITHOUT_TESTAPPS=ON -DLWS_WITHOUT_TEST_SERVER=ON -DLWS_WITH_SDEVENT=OFF ..
           make
           make install
       - name: Checkout source
