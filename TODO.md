@@ -18,4 +18,8 @@
 
 > Add more `Window Managers` scripts.i.e Bspwm, Wayfire, Qtile, River ..
 
+> ~~A TUI, maybe~~ I don't know yet.
+
+> ~~OpenSUSE support~~ I haven't thought about it yet.
+
 </div>
