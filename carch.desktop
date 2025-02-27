@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Carch
-Comment=An automated script for quick & easy Arch Linux system setup.
+Comment=An automated script for quick & easy Linux system setup (Arch & Fedora).
 Exec=/usr/bin/carch
 Icon=carch
 Type=Application
