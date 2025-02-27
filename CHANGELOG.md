@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.4](https://github.com/harilvfs/carch/compare/v4.1.3...v4.1.4) (2025-02-27)  
+
+This is a small update for Carch, with no new features introduced in this release.  
+
+> [!NOTE]  
+> This update only includes minor bug fixes related to **i3wmdotfiles**. See the details here: [#276](https://github.com/harilvfs/carch/pull/276).  
+
+Additionally, we’ve upgraded the **Carch Wiki** (or "docs") using **Starlight Astro**.  
+The **VitePress documentation** is still available, and I will continue maintaining both:  
+
+- **[VitePress Docs](https://carch-org.github.io/docs)** – [Repo](https://github.com/carch-org/docs)  
+- **[Starlight Astro Wiki](https://carch-org.github.io/wiki)** – [Repo](https://github.com/carch-org/wiki)  
+
+All Carch-related resources, including documentation and PKGBUILD management, are now maintained under **[Carch-Org](https://github.com/carch-org)**.  
+
+For a detailed list of changes in this update, check the **[release section](https://github.com/harilvfs/carch/releases/tag/v4.1.4)**.  
+
+Thank you!  
+
+Maybe next time, we’ll add some new features… I’m not sure what yet, but we’ll see!  
+
+
 ## [v4.1.3](https://github.com/harilvfs/carch/compare/v4.1.2...v4.1.3) (2025-02-09)
 
 It's been a month since I left Carch as a closed project from my side. However, this project is my first Linux project to reach this level, and I consider it quite an achievement given my knowledge and experience.  
@@ -41,7 +63,7 @@ Just use **Arch Linux** or a mainline distro like **Fedora**. Fedora is stable�
 > In this stable release, **Carch will not work on based distros**.  
 > However, it will work fine on **mainline Arch and Fedora**.
 
-For more details on what's changed, I have set up a GitHub workflow to document everything properly. Unlike before, changes will no longer be listed only in the changelog—you can now find them in the release section of Carch: https://github.com/harilvfs/carch/releases/tag/v4.1.3.
+For more details on what's changed, I have set up a GitHub workflow to document everything properly. Unlike before, changes will no longer be listed only in the changelog—you can now find them in the release section of Carch: [here](https://github.com/harilvfs/carch/releases/tag/v4.1.3).
 
 
 ## [v4.1.2](https://github.com/harilvfs/carch/compare/v4.1.1...v4.1.2) (2025-01-07)
