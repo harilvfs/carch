@@ -76,6 +76,7 @@ jobs:
       - name: Generate preview
         run: |
           cd .github
+          export CHROME_ARGS="--no-sandbox --disable-setuid-sandbox"
           vhs preview.tape
       - name: Move preview
         run: mv .github/preview.gif .github/preview.gif
