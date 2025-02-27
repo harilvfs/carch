@@ -183,10 +183,10 @@ display_scripts_menu() {
         echo -e "${GREEN}"
         figlet -f slant "Carch"
         echo "Distro: $(detect_distro)"
-        echo -e "${GREEN}Version 4.1.3${RESET}"
+        echo -e "${GREEN}Version 4.1.4${RESET}"
         echo -e "${YELLOW}-------------------${RESET}"
         echo -e "${GREEN}Automate Your Linux Setup."
-        echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
+        echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/wiki/\033[0m"
         echo -e "${NC}"
 
         echo "Select a script to run:"
@@ -306,7 +306,7 @@ if [[ $# -gt 0 ]]; then
             show_help
             ;;
         --version|-v)
-            echo "Carch version 4.1.3"
+            echo "Carch version 4.1.4"
             ;;
         --gen-config)
             generate_config

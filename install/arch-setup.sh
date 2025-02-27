@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="4.1.3"
+VERSION="4.1.4"
 
 COLOR_RESET="\e[0m"
 COLOR_YELLOW="\e[33m"
