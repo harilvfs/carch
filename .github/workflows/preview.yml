@@ -12,11 +12,17 @@ on:
 jobs:
   generate_preview:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
     environment: carch_env
     permissions:
       contents: write
       pull-requests: write
     steps:
+      - name: Install Git and curl
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols
       - name: Checkout source
         uses: actions/checkout@v4
       - name: Get tag name ( Workflow Run )
@@ -40,24 +46,23 @@ jobs:
       - name: Download binary
         run: |
           curl -LO "https://github.com/${{ github.repository }}/releases/download/${{ env.tag_name }}/carch"
-      - name: Set up Arch environment
-        uses: docker://archlinux:latest
-        with:
-          entrypoint: /bin/bash
-          args: |
-            -c "pacman -Syu --noconfirm"
       - name: Set env
         run: |
           chmod +x carch
           mkdir -p build
           mv carch build/carch
           echo "${{ github.workspace }}/build" >> $GITHUB_PATH
+      - name: Install VHS
+        run: |
+          pacman -S --noconfirm go
+          go install github.com/charmbracelet/vhs@latest
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
       - name: Generate preview
-        uses: charmbracelet/vhs-action@v2.1.0
-        with:
-          path: ".github/preview.tape"
+        run: |
+          cd .github
+          vhs preview.tape
       - name: Move preview
-        run: mv preview.gif .github/preview.gif
+        run: mv .github/preview.gif .github/preview.gif
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
         with:
