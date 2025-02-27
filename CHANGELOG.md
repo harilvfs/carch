@@ -21,7 +21,7 @@ For a detailed list of changes in this update, check the **[release section](htt
 
 Thank you!  
 
-Maybe next time, we’ll add some new features… I’m not sure what yet, but we’ll see!  
+Maybe next time, we’ll add some new features… I’m not sure what yet, but we’ll see! 👾
 
 
 ## [v4.1.3](https://github.com/harilvfs/carch/compare/v4.1.2...v4.1.3) (2025-02-09)
