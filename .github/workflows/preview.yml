@@ -1,4 +1,5 @@
 name: Carch Preview
+
 on:
   workflow_dispatch:
     inputs:
@@ -9,39 +10,28 @@ on:
     workflows: ["Carch Release"]
     types:
       - completed
+
 jobs:
   generate_preview:
     runs-on: ubuntu-latest
-    container:
-      image: archlinux:latest
     environment: carch_env
     permissions:
       contents: write
       pull-requests: write
+
     steps:
-      - name: Install Git and curl
+      - name: Install dependencies (figlet, gum & unzip)
         run: |
-          pacman -Syu --noconfirm
-          pacman -S --noconfirm git curl base-devel ffmpeg unzip fontconfig ttf-jetbrains-mono ttf-nerd-fonts-symbols cmake libuv json-c openssl libwebsockets
-          pacman -S --noconfirm --needed nss libxss libxtst libxrandr libpng alsa-lib xdg-utils libcups freetype2 harfbuzz || true
-          pacman -S --noconfirm --needed atk at-spi2-atk at-spi2-core cairo pango gtk3 dbus libxcomposite libxcursor libxdamage libxi || true
-          pacman -S --noconfirm --needed libxkbcommon libxslt mesa ttf-liberation libglvnd libxkbfile vulkan-icd-loader gst-plugins-base-libs || true
-          pacman -S --noconfirm --needed libx11 libxcb libxext libxfixes libxrender || true
-          pacman -S --noconfirm --needed libpulse libsecret || true
+          sudo apt update && sudo apt install -y figlet unzip
+          sudo mkdir -p /etc/apt/keyrings
+          curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+          echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+          sudo apt update && sudo apt install -y gum
+
       - name: Checkout source
         uses: actions/checkout@v4
-      - name: Install ttyd
-        run: |
-          cd /tmp
-          git clone https://github.com/tsl0922/ttyd.git
-          cd ttyd
-          mkdir build
-          cd build
-          cmake ..
-          make
-          make install
-          ldconfig
-      - name: Get tag name ( Workflow Run )
+
+      - name: Get tag name (Workflow Run)
         id: latest_tag
         uses: actions/github-script@v7
         if: github.event_name == 'workflow_run'
@@ -53,33 +43,38 @@ jobs:
               per_page: 1
             });
             return releases.data[0].tag_name;
-      - name: Set tag name ( Workflow Run )
+
+      - name: Set tag name (Workflow Run)
         if: github.event_name == 'workflow_run'
         run: echo "tag_name=${{ steps.latest_tag.outputs.result }}" >> $GITHUB_ENV
-      - name: Set tag name ( Workflow Dispatch )
+
+      - name: Set tag name (Workflow Dispatch)
         if: github.event_name == 'workflow_dispatch'
         run: echo "tag_name=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
-      - name: Download binary
+
+      - name: Download Carch binary and scripts.zip
         run: |
           curl -LO "https://github.com/${{ github.repository }}/releases/download/${{ env.tag_name }}/carch"
-      - name: Set env
+          curl -LO "https://github.com/${{ github.repository }}/releases/download/${{ env.tag_name }}/scripts.zip"
+
+      - name: Install Carch binary
         run: |
           chmod +x carch
-          mkdir -p build
-          mv carch build/carch
-          echo "${{ github.workspace }}/build" >> $GITHUB_PATH
-      - name: Install VHS
+          sudo mv carch /usr/bin/
+
+      - name: Extract scripts.zip
         run: |
-          pacman -S --noconfirm go
-          go install github.com/charmbracelet/vhs@latest
-          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+          sudo mv scripts.zip /usr/share/
+          sudo unzip -o /usr/share/scripts.zip
+
       - name: Generate preview
-        run: |
-          cd .github
-          export CHROME_ARGS="--no-sandbox --disable-setuid-sandbox"
-          vhs preview.tape
+        uses: charmbracelet/vhs-action@v2.1.0
+        with:
+          path: ".github/preview.tape"
+
       - name: Move preview
-        run: mv .github/preview.gif .github/preview.gif
+        run: mv preview.gif .github/preview.gif
+
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
         with:
