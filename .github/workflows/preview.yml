@@ -15,6 +15,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm git base-devel curl sudo figlet gum ttf-jetbrains-mono-nerd ttf-jetbrains-mono bash wget
+
       - name: Install Carch
         run: bash <(curl -L https://chalisehari.com.np/arch)
 
@@ -23,8 +27,6 @@ jobs:
         with:
           path: ".github/preview.tape"
 
-      - name: Set permissions
-        run: chmod +rw preview.gif
-
       - name: Move preview
         run: mv preview.gif .github/preview.gif
+
