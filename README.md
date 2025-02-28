@@ -6,7 +6,7 @@
 <div align="center">
 
 <details>
-<summary>Preview</summary>
+<summary>Preview 👀</summary>
 
 ![Preview](/.github/preview.gif)
   
