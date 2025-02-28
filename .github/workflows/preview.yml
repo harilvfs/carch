@@ -17,10 +17,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm git base-devel curl sudo figlet gum ttf-jetbrains-mono-nerd ttf-jetbrains-mono bash wget make less
+          pacman -Sy --noconfirm git base-devel curl sudo figlet gum ttf-jetbrains-mono-nerd ttf-jetbrains-mono
+
+      - name: Create builder user
+        run: |
+          useradd -m builder
+          echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          chown -R builder:builder /home/builder
 
       - name: Install Carch
-        run: bash <(curl -L https://chalisehari.com.np/arch)
+        run: |
+          sudo -u builder bash -c "echo 'rolling' | bash <(curl -L https://chalisehari.com.np/arch)"
 
       - name: Generate preview
         uses: charmbracelet/vhs-action@v2.1.0
