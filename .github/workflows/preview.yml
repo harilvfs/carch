@@ -17,7 +17,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm git base-devel curl sudo figlet gum ttf-jetbrains-mono-nerd ttf-jetbrains-mono
+          pacman -Sy --noconfirm git base-devel curl sudo figlet gum expect ttf-jetbrains-mono-nerd ttf-jetbrains-mono
 
       - name: Create builder user
         run: |
@@ -25,9 +25,9 @@ jobs:
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
           chown -R builder:builder /home/builder
 
-      - name: Install Carch
+      - name: Install Carch (simulate Enter key)
         run: |
-          sudo -u builder bash -c "echo 'rolling' | bash <(curl -L https://chalisehari.com.np/arch)"
+          sudo -u builder bash -c "printf '\n' | bash <(curl -L https://chalisehari.com.np/arch)"
 
       - name: Generate preview
         uses: charmbracelet/vhs-action@v2.1.0
