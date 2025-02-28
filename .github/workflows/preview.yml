@@ -8,7 +8,9 @@ permissions:
 
 jobs:
   generate-preview:
-    runs-on: archlinux
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
