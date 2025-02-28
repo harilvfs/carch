@@ -1,0 +1,28 @@
+name: Generate Carch Preview
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-preview:
+    runs-on: archlinux
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Carch
+        run: bash <(curl -L https://chalisehari.com.np/arch)
+
+      - name: Generate preview
+        uses: charmbracelet/vhs-action@v2.1.0
+        with:
+          path: ".github/preview.tape"
+
+      - name: Set permissions
+        run: chmod +rw preview.gif
+
+      - name: Move preview
+        run: mv preview.gif .github/preview.gif
