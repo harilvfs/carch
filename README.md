@@ -3,12 +3,16 @@
 </div>
 <br>
 
+<div align="center">
+
 <details>
 <summary>Preview</summary>
 
 ![Preview](/.github/preview.gif)
   
 </details>
+
+</div>
 
 <div align="center">
 
