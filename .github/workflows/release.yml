@@ -1,31 +1,50 @@
 name: Carch Release
-
 on:
-  workflow_dispatch:  
-
+  workflow_dispatch:
 permissions:
-  contents: write  
-
+  contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
+        
+      - name: Install musl-tools
+        run: sudo apt-get update && sudo apt-get install musl-tools
+        
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-registry-
+          
+      - name: Cache Cargo index
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-index-
+          
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+          
+      - name: Install cross-rs for cross-compilation
+        run: cargo install cross
+        
       - name: Get Latest Release Tag
         id: get_latest
         run: |
           latest_tag=$(curl -s https://api.github.com/repos/harilvfs/carch/releases/latest | jq -r '.tag_name')
-
           if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
             latest_tag="v4.1.0"
           fi
-
           major=$(echo "$latest_tag" | cut -d. -f1 | tr -d 'v')
           minor=$(echo "$latest_tag" | cut -d. -f2)
           patch=$(echo "$latest_tag" | cut -d. -f3)
-
           if [[ $minor -eq 4 && $patch -eq 7 ]]; then
             major=$((major + 1))
             minor=1
@@ -36,14 +55,20 @@ jobs:
             patch=1
             minor=$((minor + 1))
           fi
-
           new_tag="v${major}.${minor}.${patch}"
           release_date=$(date +'%Y.%m.%d')
-
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "new_tag=$new_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
-
+          
+      - name: Build x86_64 binary
+        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
+        
+      - name: Build aarch64 binary
+        run: |
+          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
+          mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          
       - name: Generate Release Notes
         id: generate_notes
         uses: release-drafter/release-drafter@v5
@@ -51,20 +76,19 @@ jobs:
           config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.new_tag }}
           name: ${{ env.new_tag }}@${{ env.release_date }}
           body: |
-            ![Version](https://img.shields.io/github/v/release/harilvfs/carch/${{ env.new_tag }}?color=%23894FDC&label=Release&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads](https://img.shields.io/github/downloads/harilvfs/carch/${{ env.new_tag }}/total?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Commits](https://img.shields.io/github/commits-since/harilvfs/carch/${{ env.new_tag }}?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Release Date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
+            ![Version](https://img.shields.io/github/v/release/harilvfs/carch/${{ env.new_tag }}?color=%23894FDC&label=Release&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ env.new_tag }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ env.new_tag }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Commits](https://img.shields.io/github/commits-since/harilvfs/carch/${{ env.new_tag }}?color=%23A3BE8C&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Release Date](https://img.shields.io/github/release-date/harilvfs/carch?color=%23F28FAD&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Tag](https://img.shields.io/github/v/tag/harilvfs/carch?color=%23E06C75&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
 
             ## What's Changed
             ${{ steps.generate_notes.outputs.body }}
 
             **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...${{ env.new_tag }}
           files: |
-            build/carch
-            source/zip/scripts.zip
-
+            ./build/x86_64-unknown-linux-musl/release/carch
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
