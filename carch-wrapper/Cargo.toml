@@ -1,0 +1,8 @@
+[package]
+name = "carch"
+version = "4.1.4"
+edition = "2021"
+
+[dependencies]
+tempfile = "3.8.1"
+include_dir = "0.7.3"
