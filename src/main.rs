@@ -46,16 +46,17 @@ fn make_scripts_executable(dir_path: &Path) {
 
     let scripts_dir = dir_path.join("scripts");
     if scripts_dir.exists() && scripts_dir.is_dir() {
-        for entry in fs::read_dir(&scripts_dir).expect("Failed to read scripts directory") {
-            if let Ok(entry) = entry {
-                let path = entry.path();
-                if path.is_file() && path.extension().map_or(false, |ext| ext == "sh") {
-                    let mut perms = fs::metadata(&path)
-                        .expect("Failed to get file metadata")
-                        .permissions();
-                    perms.set_mode(0o755);
-                    fs::set_permissions(&path, perms).expect("Failed to set permissions");
-                }
+        for entry in fs::read_dir(&scripts_dir)
+            .expect("Failed to read scripts directory")
+            .flatten()
+        {
+            let path = entry.path();
+            if path.is_file() && path.extension().is_some_and(|ext| ext == "sh") {
+                let mut perms = fs::metadata(&path)
+                    .expect("Failed to get file metadata")
+                    .permissions();
+                perms.set_mode(0o755);
+                fs::set_permissions(&path, perms).expect("Failed to set permissions");
             }
         }
     }
