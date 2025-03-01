@@ -28,7 +28,7 @@ check_dependency() {
 }
 
 DEPENDENCIES=(
-    git curl wget figlet man-db bash sed xdg-user-dirs
+    git curl wget figlet man-db bash rust 
     google-noto-color-emoji-fonts google-noto-emoji-fonts bat
     jetbrains-mono-fonts-all gum bash-completion-devel
     zsh fish
