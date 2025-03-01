@@ -44,6 +44,8 @@ detect_distro() {
     fi
 }
 
+ARCH=$(uname -m)
+
 uninstall_carch() {
     detect_distro
     if [[ "$DISTRO" == "fedora" ]]; then
@@ -52,7 +54,6 @@ uninstall_carch() {
         echo -e "${YELLOW}Removing Carch from the system...${RESET}"
         
         sudo rm -f "$TARGET_DIR/carch"
-        sudo rm -rf "$SCRIPT_DIR"
         sudo rm -f "$DESKTOP_FILE"
         sudo rm -f "$MAN_PAGES_DIR"
         sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
@@ -194,8 +195,8 @@ display_scripts_menu() {
         echo -e "${GREEN}"
         figlet -f slant "Carch"
         echo "Distro: $(detect_distro)"
-        echo -e "${GREEN}Version 4.1.4${RESET}"
-        echo -e "${YELLOW}-------------------${RESET}"
+        echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
+        echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}Automate Your Linux Setup."
         echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/wiki/\033[0m"
         echo -e "${NC}"
