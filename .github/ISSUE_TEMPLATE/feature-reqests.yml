@@ -61,6 +61,14 @@ body:
       required: false
 
   - type: checkboxes
+    id: rust_related
+    attributes:
+      label: "Is this feature related to the main Rust script?"
+      options:
+        - label: "Yes, this feature is directly related to the main Rust script."
+          required: false
+
+  - type: checkboxes
     id: financing
     attributes:
       label: Support or Contribution
