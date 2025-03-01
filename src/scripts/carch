@@ -39,8 +39,8 @@ detect_distro() {
         DISTRO="fedora"
         echo -e "${YELLOW}Fedora${RESET}"
     else
-        echo -e "${RED}Unsupported distribution. Exiting...${RESET}"
-        exit 1
+        DISTRO="unknown"
+        echo -e "${RED}Unsupported distribution. Continuing with limited functionality...${RESET}"
     fi
 }
 
