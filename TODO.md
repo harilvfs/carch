@@ -18,6 +18,8 @@
 
 > Add more `Window Managers` scripts.i.e Bspwm, Wayfire, Qtile, River ..
 
+> ~~Create a single executable binary for Carch. [Rust]~~ **Done ✅** 
+
 > ~~A TUI, maybe~~ I don't know yet.
 
 > ~~OpenSUSE support~~ I haven't thought about it yet.
