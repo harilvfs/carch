@@ -58,7 +58,7 @@ echo "Architecture: $ARCH"
 echo -e "${COLOR_RESET}"
 
 echo -e "${COLOR_GREEN}NOTE: Only stable release is available in this installer.${COLOR_RESET}"
-echo -e "${COLOR_GREEN}For manual or latest installation, please visit: https://carch-org.github.io/wiki${COLOR_RESET}"
+echo -e "${COLOR_GREEN}For manual or latest installation, please visit: https://carch-org.github.io/docs${COLOR_RESET}"
 echo
 
 echo -e "${COLOR_YELLOW}Select installation type:${COLOR_RESET}"
