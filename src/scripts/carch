@@ -198,7 +198,7 @@ display_scripts_menu() {
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}Automate Your Linux Setup."
-        echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/wiki/\033[0m"
+        echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
         echo -e "${NC}"
 
         echo "Select a script to run:"
