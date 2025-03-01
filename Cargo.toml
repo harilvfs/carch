@@ -2,7 +2,43 @@
 name = "carch"
 version = "4.1.4"
 edition = "2021"
+description = "An automated script for quick & easy Linux system setup (Arch & Fedora) 🧩."
+documentation = "https://carch-org.github.io/wiki"
+readme = "README.md"
+repository = "https://github.com/harilvfs/carch/tree/main/src"
+license-file = "LICENSE"
+
+categories = [
+    "command-line-utilities"
+]
+
+keywords = [
+    "system",
+    "cli",
+    "rust",
+    "bash"
+]
+
+include = [
+    "src/*.rs",
+    "Cargo.toml",
+    "man/carch.1"
+]
 
 [dependencies]
 tempfile = "3.8.1"
 include_dir = "0.7.3"
+
+[profile.release]
+opt-level = "z"
+debug = false
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+incremental = false
+
+[[bin]]
+name = "carch"
+path = "src/main.rs"
+
