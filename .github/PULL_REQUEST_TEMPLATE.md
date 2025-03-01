@@ -11,7 +11,9 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] Fixes. <!-- Fixes Scripts/Other -->
 - [ ] Feature <!-- Added -->
 - [ ] UI/UX <!-- Enhancement -->
-- [ ] ZIP <!-- Scripts Changes/Updated -->
+- [ ] Rust Code Update <!-- Updated or improved Rust-related code -->
+- [ ] Rust Bug Fix <!-- Fixed Rust-related issues -->
+- [ ] Rust Feature <!-- Added a new Rust-based feature -->
 
 ### Context
 
