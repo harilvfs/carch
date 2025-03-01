@@ -1,11 +1,10 @@
 #!/bin/bash
-
 VERSION="4.1.4"
-
 COLOR_RESET="\e[0m"
 COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
+COLOR_GREEN="\e[32m"
 
 if [ -f /etc/os-release ]; then
     DISTRO=$(grep ^NAME= /etc/os-release | cut -d= -f2 | tr -d '"')
@@ -15,9 +14,11 @@ else
     DISTRO="Unknown Linux Distribution"
 fi
 
+ARCH=$(uname -m)
+
 check_and_install() {
     local pkg="$1"
-    if ! command -v "$pkg" &>/dev/null; then
+    if ! pacman -Qi "$pkg" &>/dev/null; then
         echo -e "${COLOR_YELLOW}:: Installing missing dependency: $pkg${COLOR_RESET}"
         sudo pacman -Sy --noconfirm "$pkg"
     fi
@@ -29,15 +30,19 @@ check_and_install "ttf-jetbrains-mono-nerd"
 check_and_install "ttf-jetbrains-mono"
 
 clear
-
 echo -e "${COLOR_CYAN}"
 figlet -f slant "Carch"
 echo "Version $VERSION"
 echo "Distribution: $DISTRO"
+echo "Architecture: $ARCH"
 echo -e "${COLOR_RESET}"
 
+echo -e "${COLOR_GREEN}NOTE: Stable Release is recommended. Binary package is also suitable for use.${COLOR_RESET}"
+echo -e "${COLOR_RED}Git package is not fully recommended as it grabs the latest commit which may have bugs.${COLOR_RESET}"
+echo
+
 echo -e "${COLOR_YELLOW}Select installation type:${COLOR_RESET}"
-CHOICE=$(gum choose "Rolling Release" "Stable Release" "Cancel")
+CHOICE=$(gum choose "Stable Release [Recommended]" "Carch-bin [Compile Binary]" "Carch-git [GitHub Latest Commit]" "Cancel")
 
 if [[ $CHOICE == "Cancel" ]]; then
     echo -e "${COLOR_RED}Installation canceled by the user.${COLOR_RESET}"
@@ -46,19 +51,19 @@ fi
 
 mkdir -p ~/.cache/carch-install
 cd ~/.cache/carch-install || exit 1
-
 rm -rf pkgs
-
 git clone https://github.com/carch-org/pkgs
 cd pkgs || exit 1
 
-if [[ $CHOICE == "Rolling Release" ]]; then
-    echo -e "${COLOR_YELLOW}:: Installing Rolling Release...${COLOR_RESET}"
+if [[ $CHOICE == "Carch-git [GitHub Latest Commit]" ]]; then
+    echo -e "${COLOR_YELLOW}:: Installing Git Version (Latest Commit)...${COLOR_RESET}"
     cd carch-git || exit
-elif [[ $CHOICE == "Stable Release" ]]; then
+elif [[ $CHOICE == "Carch-bin [Compile Binary]" ]]; then
+    echo -e "${COLOR_YELLOW}:: Installing Binary Package...${COLOR_RESET}"
+    cd carch-bin || exit
+elif [[ $CHOICE == "Stable Release [Recommended]" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Stable Release...${COLOR_RESET}"
     cd carch || exit
 fi
 
 makepkg -si
-
