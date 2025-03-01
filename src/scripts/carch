@@ -96,31 +96,42 @@ uninstall_carch() {
         echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
         log_message "INFO" "Carch uninstalled successfully."
 
-    elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
-        echo "Distro is Arch"
+elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
+    echo "Distro is Arch"
 
-        if command -v paru &>/dev/null || command -v yay &>/dev/null; then
-            echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
+    if command -v paru &>/dev/null || command -v yay &>/dev/null; then
+        echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
 
-            if pacman -Qs carch &>/dev/null; then
-                AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
-                if [[ "$AUR_PACKAGE" == "carch-git" ]]; then
+        if pacman -Qs carch &>/dev/null; then
+            AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
+
+            case "$AUR_PACKAGE" in
+                carch-git)
                     echo "Uninstalling carch-git..."
                     yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
-                else
+                    ;;
+                carch-bin)
+                    echo "Uninstalling carch-bin..."
+                    yay -R carch-bin --noconfirm || paru -R carch-bin --noconfirm
+                    ;;
+                carch)
                     echo "Uninstalling carch..."
                     yay -R carch --noconfirm || paru -R carch --noconfirm
-                fi
-            else
-                echo "Carch package not found in the system."
-            fi
+                    ;;
+                *)
+                    echo "Unknown Carch package installed: $AUR_PACKAGE"
+                    ;;
+            esac
         else
-            echo "No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay."
+            echo "Carch package not found in the system."
         fi
     else
-        echo "Unsupported Distro"
-        exit 1
+        echo "No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay."
     fi
+else
+    echo "Unsupported Distro"
+    exit 1
+fi
 }
 
 generate_config() {
