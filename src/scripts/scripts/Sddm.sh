@@ -23,20 +23,26 @@ EOF
 detect_os() {
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
-        DISTRO=${ID_LIKE:-$ID}
+        DISTRO=$ID
+        
         case "$DISTRO" in
-            *arch*) DISTRO="arch" ;;
-            *fedora*) DISTRO="fedora" ;;
+            arch) DISTRO="arch" ;;
+            fedora) DISTRO="fedora" ;;
             *)
-                echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
-                exit 1
+                if [[ "$ID_LIKE" == *"arch"* ]]; then
+                    DISTRO="arch"
+                elif [[ "$ID_LIKE" == *"fedora"* ]]; then
+                    DISTRO="fedora"
+                else
+                    echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
+                    exit 1
+                fi
                 ;;
         esac
     else
         echo -e "${RED}❌ OS information not found!${ENDCOLOR}"
         exit 1
-    fi
-}
+    fi}
 
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"

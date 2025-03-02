@@ -15,7 +15,7 @@ echo -e "${RESET}"
 if [[ -f /etc/os-release ]]; then
     source /etc/os-release
     DISTRO="$ID"
-    ID_LIKE="${ID_LIKE,,}"  
+    DISTRO_LIKE="${ID_LIKE}" 
 else
     gum style --foreground "$RED" "❌ Unable to detect your Linux distribution!"
     exit 1

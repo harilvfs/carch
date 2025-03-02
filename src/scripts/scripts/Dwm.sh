@@ -31,10 +31,10 @@ detect_distro() {
                 print_message "$YELLOW" "Detected distribution: Fedora"
                 ;;
             *)
-                if [[ "$ID_LIKE" =~ "arch" ]]; then
+                if [[ "$ID_LIKE" == *"arch"* ]]; then
                     distro="arch"
                     print_message "$GREEN" "Detected Arch-based distribution"
-                elif [[ "$ID_LIKE" =~ "fedora" ]]; then
+                elif [[ "$ID_LIKE" == *"fedora"* ]]; then
                     distro="fedora"
                     print_message "$YELLOW" "Detected Fedora-based distribution"
                 else
