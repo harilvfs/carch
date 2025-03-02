@@ -46,9 +46,9 @@ setup_rofi() {
         DISTRO=$ID
     fi
 
-    if grep -q "ID_LIKE=arch" /etc/os-release; then
+    if grep -q "ID=arch" /etc/os-release; then
         install_rofi_arch
-    elif grep -q "ID_LIKE=fedora" /etc/os-release; then
+    elif grep -q "ID=fedora" /etc/os-release; then
         install_rofi_fedora
     else
         echo -e "${RED}Unsupported distribution. Please install Rofi manually.${ENDCOLOR}"
