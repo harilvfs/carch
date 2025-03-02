@@ -15,7 +15,6 @@ echo -e "${RESET}"
 if [[ -f /etc/os-release ]]; then
     . /etc/os-release
     DISTRO="${ID:-unknown}"
-    DISTRO_LIKE="${ID_LIKE:-unknown}"
 else
     gum style --foreground "$RED" "❌ Unsupported distribution!"
     exit 1
