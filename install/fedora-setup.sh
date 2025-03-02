@@ -165,7 +165,7 @@ install_icons() {
 if [[ $CHOICE == "Stable Release" ]]; then
     echo -e "${COLOR_YELLOW}:: Installing Stable Release for $ARCH...${COLOR_RESET}"
     
-    if [[ "$ARCH" == "aarch64" ]]; then
+if [[ "$ARCH" == "aarch64" ]]; then
     download_and_install "https://github.com/harilvfs/carch/releases/latest/download/carch-aarch64" "/tmp/carch-aarch64" true
     sudo mv "/tmp/carch-aarch64" "$TARGET_DIR/carch"
     sudo chmod +x "$TARGET_DIR/carch" 
@@ -201,3 +201,4 @@ For help, type 'carch --help'."
 }
 
 display_message
+fi
