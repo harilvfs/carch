@@ -21,7 +21,7 @@ keywords = [
 ]
 
 include = [
-    "src/*.rs",
+    "src/**",
     "Cargo.toml",
     "man/carch.1"
 ]
