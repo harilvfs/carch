@@ -1,7 +1,7 @@
 [package]
 name = "carch"
 version = "4.1.5"
-edition = "2021"
+edition = "2024"
 description = "An automated script for quick & easy Linux system setup (Arch & Fedora) 🧩."
 documentation = "https://carch-org.github.io/docs"
 homepage = "https://github.com/harilvfs/carch"
