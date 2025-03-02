@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.5](https://github.com/harilvfs/carch/compare/v4.1.4...v4.1.5) (2025-03-02)
+
+This update is quite nice and interesting because **Carch is now a single binary to execute!**
+
+Like what? 🤔  
+
+I have used **Rust** to make Carch a single **compiled binary**, so now **no sourcing scripts** are needed.  
+Only the **compiled Carch binary** is required, which preloads all Bash scripting automatically.  
+
+This update was pushed quickly due to structural changes in the GitHub repo to adapt to the Rust-based setup.  
+
+Yeah, I did say I was leaving Rust in Carch, but **how could I miss the chance** to make it a single compiled binary? 😆  
+
+By the way, this is a **huge achievement** for me! I’ve always wanted to make Carch a single binary, and now that dream is fulfilled! 🎯  
+
+Yeah, thanks to Rust!
+
+Okay, enough yapping—let’s get to the changes.  
+
+### 🔑 Key Changes  
+
+- **Carch is now a single compiled binary** 
+
+- **Installation method has completely changed** ⚡  
+  - For **Arch**, we now have a **bin version** with a precompiled Carch binary.  
+  - For **Fedora**, I have removed the **rolling release** since it pulled the latest commit directly, which could introduce bugs. Fedora now uses a **stable version** instead.  
+  - **Installation is cleaner**, with improvements to dependencies and fixes.
+
+- **As usual, bug fixes** 🐛✅  
+
+- **Carch is now available as a Cargo [crate](https://crates.io/crates/carch/4.1.5)** 📦  
+  - You can install Carch via **Cargo** now! Installation guide is in the docs—check the **README**.  
+
+- **Carch’s main script is now in the `src/` directory** 📁  
+
+- **Documentation is back to VitePress** 📖  
+  - Starlight is good, but **VitePress** is far more suitable for Carch (and for me too).  
+
+That’s all—**a small but solid update!** 
+
+For a detailed breakdown, check the release section: [🔗 v4.1.5 Release](https://github.com/harilvfs/carch/releases/tag/v4.1.5)  
+
+
 ## [v4.1.4](https://github.com/harilvfs/carch/compare/v4.1.3...v4.1.4) (2025-02-27)  
 
 This is a small update for Carch, with no new features introduced in this release.  
