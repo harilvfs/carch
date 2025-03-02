@@ -65,26 +65,27 @@ Set FontFamily "JetBrainsMono Nerd Font"
 Set FontSize 24
 Set Width 1920
 Set Height 1080
+Set TypingSpeed 100ms
 
-Sleep 2s
+Sleep 3s
 
-Type "carch" Sleep 2s  Enter
+Type "carch" Sleep 3s  Enter
 
-Sleep 5s
+Sleep 6s
 
-Right Sleep 4s
+Right Sleep 5s
 
-Right Sleep 4s
+Right Sleep 5s
 
-Down Sleep 1s
+Down Sleep 2s
 
-Down Sleep 1s
+Down Sleep 2s
 
-Down Sleep 1s
+Down Sleep 2s
 
-Down Sleep 1s
+Down Sleep 2s
 
-Down Sleep 1s
+Down Sleep 2s
 
 Enter Sleep 3s
 
