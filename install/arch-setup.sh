@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.1.4"
+VERSION="4.1.5"
 COLOR_RESET="\e[0m"
 COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
