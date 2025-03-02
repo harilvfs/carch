@@ -5,6 +5,7 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 NC='\033[0m'
 
+VERSION="4.1.5"
 SCRIPT_DIR="./scripts"
 LOG_FILE="$HOME/.config/carch/carch.log"
 TARGET_DIR="/usr/bin"
@@ -194,6 +195,7 @@ display_scripts_menu() {
         clear
         echo -e "${GREEN}"
         figlet -f slant "Carch"
+        echo "v$VERSION"
         echo "Distro: $(detect_distro)"
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
@@ -318,7 +320,7 @@ if [[ $# -gt 0 ]]; then
             show_help
             ;;
         --version|-v)
-            echo "Carch version 4.1.4"
+            echo "Carch version 4.1.5"
             ;;
         --gen-config)
             generate_config
