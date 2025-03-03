@@ -62,13 +62,13 @@ confirm_setup() {
 install_packages() {
     if [ "$distro" == "arch" ]; then
         print_message "$CYAN" ":: Installing required packages using pacman..."
-        sudo pacman -S --needed base-devel libx11 libxinerama libxft imlib2 libxcb git unzip flameshot lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server || {
+        sudo pacman -S --needed git base-devel libx11 libxinerama libxft imlib2 libxcb git unzip flameshot lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing required packages using dnf..."
-        sudo dnf install -y libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel unzip flameshot lxappearance feh mate-polkit meson ninja-build gnome-keyring || {
+        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel unzip flameshot lxappearance feh mate-polkit meson ninja-build gnome-keyring || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }

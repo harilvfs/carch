@@ -111,28 +111,57 @@ fi
 install_pokemon_colorscripts() {
     case "$distro" in
         arch)
-            if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
+            if command -v yay &>/dev/null; then
+                AUR_HELPER="yay"
+            elif command -v paru &>/dev/null; then
+                AUR_HELPER="paru"
+            else
                 gum style --foreground "$CYAN" "No AUR helper found. Installing yay..."
-                sudo pacman -S --needed --noconfirm git base-devel
-                git clone https://aur.archlinux.org/yay.git "$HOME/yay"
-                cd "$HOME/yay" || exit
-                makepkg -si --noconfirm
-                cd ..
-                rm -rf "$HOME/yay"
+                
+                gum spin --title "Installing dependencies..." -- sudo pacman -S --needed --noconfirm git base-devel
+                
+                TEMP_DIR=$(mktemp -d)
+                cd "$TEMP_DIR" || exit 1
+                
+                gum spin --title "Cloning yay repository..." -- git clone https://aur.archlinux.org/yay.git
+                cd yay || exit 1
+                gum spin --title "Building yay..." -- makepkg -si --noconfirm
+                
+                cd "$HOME" || exit 1
+                rm -rf "$TEMP_DIR"
+                AUR_HELPER="yay"
+                
+                gum style --foreground "$GREEN" "Successfully installed yay!"
             fi
-            gum spin --title "Installing Pokémon Color Scripts (AUR)..." -- yay -S --noconfirm pokemon-colorscripts-git
+            
+            gum spin --title "Installing Pokémon Color Scripts (AUR)..." -- $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
             ;;
 
         fedora)
+            YELLOW="\033[1;33m" 
+            
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 gum style --foreground "$YELLOW" "⚠ Found existing Pokémon Color Scripts directory. Removing..."
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
 
+            gum spin --title "Installing dependencies..." -- sudo dnf install -y git
+            
             gum spin --title "Cloning Pokémon Color Scripts..." -- git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
-            cd "$HOME/pokemon-colorscripts" || exit
-
-            gum spin --title "Installing Pokémon Color Scripts..." -- sudo ./install.sh
+            
+            if [[ -d "$HOME/pokemon-colorscripts" ]]; then
+                cd "$HOME/pokemon-colorscripts" || { 
+                    gum style --foreground "$RED" "Failed to change directory to pokemon-colorscripts!"; 
+                    return 1; 
+                }
+                
+                gum spin --title "Installing Pokémon Color Scripts..." -- sudo ./install.sh
+                
+                cd - > /dev/null || true
+            else
+                gum style --foreground "$RED" "Failed to clone pokemon-colorscripts repository!"
+                return 1
+            fi
             ;;
     esac
 }

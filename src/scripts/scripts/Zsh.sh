@@ -45,9 +45,9 @@ gum confirm "This script will configure Zsh with Powerlevel10k, Oh My Zsh, and m
 
 install_zsh_dependencies() {
     if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-        gum spin --title "Installing Zsh dependencies..." -- sudo pacman -S --noconfirm zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
+        gum spin --title "Installing Zsh dependencies..." -- sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
     elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-        gum spin --title "Installing Zsh dependencies (Fedora)..." -- sudo dnf install -y zsh zsh-autosuggestions zsh-syntax-highlighting eza
+        gum spin --title "Installing Zsh dependencies (Fedora)..." -- sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting eza
     fi
 }
 
