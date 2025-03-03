@@ -24,9 +24,9 @@ install_fish() {
     gum style --foreground "$CYAN" "🐟 Installing Fish shell..."
     
     if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
-        sudo pacman -S --noconfirm fish noto-fonts-emoji ttf-joypixels
+        sudo pacman -S --noconfirm fish noto-fonts-emoji ttf-joypixels git
     elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
-        sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts
+        sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git
     else
         gum style --foreground "$RED" "❌ Unsupported distro: $DISTRO"
         exit 1

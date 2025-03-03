@@ -34,9 +34,9 @@ install_helix() {
     gum style --foreground "$CYAN" "⚡ Installing Helix editor..."
 
     if [[ $DISTRO == "arch" ]]; then
-        sudo pacman -S --noconfirm helix noto-fonts-emoji ttf-joypixels
+        sudo pacman -S --noconfirm helix noto-fonts-emoji ttf-joypixels git
     elif [[ $DISTRO == "fedora" ]]; then
-        sudo dnf install -y helix google-noto-color-emoji-fonts google-noto-emoji-fonts
+        sudo dnf install -y helix google-noto-color-emoji-fonts google-noto-emoji-fonts git
     fi
 }
 
