@@ -28,9 +28,9 @@ else
     echo -e "${CYAN}Fastfetch is not installed. Installing...${NC}"
     
     if [ -x "$(command -v pacman)" ]; then
-        sudo pacman -S fastfetch --noconfirm
+        sudo pacman -S fastfetch git --noconfirm
     elif [ -x "$(command -v dnf)" ]; then
-        sudo dnf install fastfetch -y
+        sudo dnf install fastfetch git -y
     else
         echo -e "${RED}Unsupported package manager! Please install Fastfetch manually.${NC}"
         exit 1

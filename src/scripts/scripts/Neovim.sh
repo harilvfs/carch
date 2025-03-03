@@ -62,11 +62,11 @@ install_dependencies() {
     if [[ "$os_type" == "arch" ]]; then
         sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
             xclip wl-clipboard lua-language-server shellcheck shfmt python3 yaml-language-server meson ninja \
-            make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd
+            make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd git
     elif [[ "$os_type" == "fedora" ]]; then
         sudo dnf install -y ripgrep neovim vim fzf python3-virtualenv luarocks go nodejs shellcheck xclip \
             wl-clipboard lua-language-server shellcheck shfmt python3 ghc-ShellCheck meson ninja-build \
-            make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts
+            make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts git
     else
         echo -e "${RED}Unsupported OS type: $os_type${RESET}"
         return 1
