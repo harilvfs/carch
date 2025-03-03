@@ -91,7 +91,7 @@ choose_fonts() {
                 ;;
             "CascadiaMono")
                 if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-cascadia-mono-nerd"
+                    install_font_arch "ttf-cascadia-mono-nerd" "ttf-cascadia-code-nerd"
                 else
                     install_font_fedora "CascadiaMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip"
                 fi
