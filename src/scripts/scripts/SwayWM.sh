@@ -109,19 +109,16 @@ build_from_source() {
     git clone "$repo_url" "$build_dir"
     cd "$build_dir" || exit
     
-    # Check if it's a meson project
     if [ -f "meson.build" ]; then
         meson setup build
         ninja -C build
         sudo ninja -C build install
-    # Check if it's a cmake project
     elif [ -f "CMakeLists.txt" ]; then
         mkdir -p build
         cd build || exit
         cmake ..
         make
         sudo make install
-    # Default to autotools/make
     else
         ./autogen.sh 2>/dev/null || true
         ./configure 2>/dev/null || true
@@ -199,8 +196,12 @@ manage_themes_icons() {
 
 print_message $BLUE "$(figlet -f slant "SwayWM")"
 
+print_message "    "
+
 print_message $BLUE "If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles"
+
+print_message "    "
 
 if ! command_exists figlet; then
     if [ -f /etc/fedora-release ]; then
@@ -227,7 +228,6 @@ fi
 if [ -f /etc/fedora-release ]; then
     print_message $GREEN "Fedora Linux detected. Proceeding with setup..."
     
-    # Enable RPM Fusion repositories
     if ! rpm -q rpmfusion-free-release &>/dev/null; then
         print_message $GREEN "Enabling RPM Fusion Free repository..."
         sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
@@ -238,15 +238,12 @@ if [ -f /etc/fedora-release ]; then
         sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     fi
     
-    # Enable COPR repositories for Sway and related packages
     COPR_REPOS=("erikreider/SwayFX" "alebastr/sway-extras" "solopasha/hyprland")
     install_copr_packages "${COPR_REPOS[@]}"
     
-    # Install base required packages
     FEDORA_BASE_PKGS=(git make gcc gcc-c++ meson ninja-build pkgconf-pkg-config cmake autoconf automake libtool)
     install_fedora_packages "${FEDORA_BASE_PKGS[@]}"
     
-    # Install development libraries needed for building from source
     FEDORA_DEV_PKGS=(
         wayland-devel wayland-protocols-devel libinput-devel libevdev-devel libxkbcommon-devel
         wlroots-devel cairo-devel pango-devel gdk-pixbuf2-devel json-c-devel scdoc pcre2-devel
@@ -256,7 +253,6 @@ if [ -f /etc/fedora-release ]; then
     )
     install_fedora_packages "${FEDORA_DEV_PKGS[@]}"
     
-    # Install Sway and related packages from repositories
     FEDORA_SWAY_PKGS=(
         swayfx fastfetch fish foot nwg-drawer swappy swaylock waybar
         jetbrains-mono-fonts fontawesome-fonts
@@ -268,7 +264,6 @@ if [ -f /etc/fedora-release ]; then
     )
     install_fedora_packages "${FEDORA_SWAY_PKGS[@]}"
     
-    # Install packages that might need to be built from source
     if ! rpm -q wf-recorder &>/dev/null; then
         print_message $GREEN "Building wf-recorder from source..."
         build_from_source "wf-recorder" "https://github.com/ammen99/wf-recorder.git"
@@ -452,17 +447,14 @@ enable_start_sddm() {
     sudo systemctl enable sddm --now
 }
 
-# Install missing dependencies for fedora-specific packages
 if [ -f /etc/fedora-release ]; then
     print_message $GREEN "Installing additional Fedora dependencies..."
     
-    # Check if azote is installed
     if ! command -exists azote; then
         print_message $GREEN "Installing azote..."
         sudo dnf install azote
     fi
     
-    # Install wget and unzip for SDDM theme
     install_fedora_packages "wget unzip"
 fi
 
@@ -478,11 +470,9 @@ configure_sddm_theme
 
 enable_start_sddm
 
-# Fix Wayland environment for Fedora
 if [ -f /etc/fedora-release ]; then
     print_message $GREEN "Setting up Wayland environment for Fedora..."
     
-    # Create Wayland session file if it doesn't exist
     if [ ! -f /usr/share/wayland-sessions/sway.desktop ]; then
         sudo mkdir -p /usr/share/wayland-sessions
         cat << EOF | sudo tee /usr/share/wayland-sessions/sway.desktop > /dev/null
@@ -494,7 +484,6 @@ Type=Application
 EOF
     fi
     
-    # Setup environment variables for Wayland
     cat << EOF | sudo tee /etc/environment.d/wayland.conf > /dev/null
 # Wayland environment variables
 MOZ_ENABLE_WAYLAND=1
