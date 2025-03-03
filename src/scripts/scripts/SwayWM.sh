@@ -17,19 +17,21 @@ command_exists() {
 }
 
 install_aur_helper() {
-    if ! command_exists yay && ! command_exists paru; then
-        print_message $GREEN "Installing yay as AUR helper..."
-        git clone https://aur.archlinux.org/yay.git /tmp/yay
-        cd /tmp/yay || exit
-        makepkg -si --noconfirm
-        cd ..
-        rm -rf /tmp/yay
-    else
-        print_message $YELLOW "AUR helper (yay or paru) already installed."
+    if [ -f /etc/arch-release ]; then
+        if ! command_exists yay && ! command_exists paru; then
+            print_message $GREEN "Installing yay as AUR helper..."
+            git clone https://aur.archlinux.org/yay.git /tmp/yay
+            cd /tmp/yay || exit
+            makepkg -si --noconfirm
+            cd ..
+            rm -rf /tmp/yay
+        else
+            print_message $YELLOW "AUR helper (yay or paru) already installed."
+        fi
     fi
 }
 
-install_packages() {
+install_arch_packages() {
     local packages=("$@")
     local missing_pkgs=()
 
@@ -41,7 +43,25 @@ install_packages() {
 
     if [ ${#missing_pkgs[@]} -ne 0 ]; then
         print_message $GREEN "Installing missing packages: ${missing_pkgs[*]}"
-        sudo pacman -S "${missing_pkgs[@]}"
+        sudo pacman -S --noconfirm "${missing_pkgs[@]}"
+    else
+        print_message $YELLOW "All required packages are already installed."
+    fi
+}
+
+install_fedora_packages() {
+    local packages=("$@")
+    local missing_pkgs=()
+
+    for pkg in "${packages[@]}"; do
+        if ! rpm -q "$pkg" &>/dev/null; then
+            missing_pkgs+=("$pkg")
+        fi
+    done
+
+    if [ ${#missing_pkgs[@]} -ne 0 ]; then
+        print_message $GREEN "Installing missing packages: ${missing_pkgs[*]}"
+        sudo dnf install -y "${missing_pkgs[@]}"
     else
         print_message $YELLOW "All required packages are already installed."
     fi
@@ -59,16 +79,73 @@ install_aur_packages() {
 
     if [ ${#missing_pkgs[@]} -ne 0 ]; then
         print_message $GREEN "Installing missing AUR packages: ${missing_pkgs[*]}"
-        yay -S "${missing_pkgs[@]}"
+        yay -S --noconfirm "${missing_pkgs[@]}"
     else
         print_message $YELLOW "All required AUR packages are already installed."
     fi
+}
+
+install_copr_packages() {
+    local repos=("$@")
+    
+    for repo in "${repos[@]}"; do
+        print_message $GREEN "Enabling COPR repository: $repo"
+        sudo dnf copr enable -y "$repo"
+    done
+}
+
+build_from_source() {
+    local package_name="$1"
+    local repo_url="$2"
+    local build_dir="/tmp/build_$package_name"
+    
+    if command_exists "$package_name"; then
+        print_message $YELLOW "$package_name is already installed."
+        return
+    fi
+    
+    print_message $GREEN "Building $package_name from source..."
+    mkdir -p "$build_dir"
+    git clone "$repo_url" "$build_dir"
+    cd "$build_dir" || exit
+    
+    # Check if it's a meson project
+    if [ -f "meson.build" ]; then
+        meson setup build
+        ninja -C build
+        sudo ninja -C build install
+    # Check if it's a cmake project
+    elif [ -f "CMakeLists.txt" ]; then
+        mkdir -p build
+        cd build || exit
+        cmake ..
+        make
+        sudo make install
+    # Default to autotools/make
+    else
+        ./autogen.sh 2>/dev/null || true
+        ./configure 2>/dev/null || true
+        make
+        sudo make install
+    fi
+    
+    cd /tmp || exit
+    rm -rf "$build_dir"
+    print_message $GREEN "$package_name built and installed successfully."
 }
 
 manage_dotfiles() {
     local repo_url="$1"
     local repo_dir="$2"
     local backup_dir="$3"
+
+    if ! command_exists gum; then
+        if [ -f /etc/fedora-release ]; then
+            sudo dnf install -y gum
+        elif [ -f /etc/arch-release ]; then
+            sudo pacman -S --noconfirm gum
+        fi
+    fi
 
     if [ -d "$repo_dir" ]; then
         if gum confirm "Existing dotfiles detected. Overwrite?"; then
@@ -125,31 +202,135 @@ print_message $BLUE "$(figlet -f slant "SwayWM")"
 print_message $BLUE "If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles"
 
+if ! command_exists figlet; then
+    if [ -f /etc/fedora-release ]; then
+        sudo dnf install -y figlet
+    elif [ -f /etc/arch-release ]; then
+        sudo pacman -S --noconfirm figlet
+    fi
+    print_message $BLUE "$(figlet -f slant "SwayWM")"
+fi
+
+if ! command_exists gum; then
+    if [ -f /etc/fedora-release ]; then
+        sudo dnf install -y gum
+    elif [ -f /etc/arch-release ]; then
+        sudo pacman -S --noconfirm gum
+    fi
+fi
+
 if ! gum confirm "Continue with Sway setup?"; then
     print_message $RED "Setup aborted by the user."
     exit 1
 fi
 
 if [ -f /etc/fedora-release ]; then
-    print_message $RED "Sway setup for Fedora is not finalized due to missing dependencies and runtime errors. Exiting."
-    exit 1
+    print_message $GREEN "Fedora Linux detected. Proceeding with setup..."
+    
+    # Enable RPM Fusion repositories
+    if ! rpm -q rpmfusion-free-release &>/dev/null; then
+        print_message $GREEN "Enabling RPM Fusion Free repository..."
+        sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    fi
+    
+    if ! rpm -q rpmfusion-nonfree-release &>/dev/null; then
+        print_message $GREEN "Enabling RPM Fusion NonFree repository..."
+        sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    fi
+    
+    # Enable COPR repositories for Sway and related packages
+    COPR_REPOS=("erikreider/SwayFX" "alebastr/sway-extras" "solopasha/hyprland")
+    install_copr_packages "${COPR_REPOS[@]}"
+    
+    # Install base required packages
+    FEDORA_BASE_PKGS=(git make gcc gcc-c++ meson ninja-build pkgconf-pkg-config cmake autoconf automake libtool)
+    install_fedora_packages "${FEDORA_BASE_PKGS[@]}"
+    
+    # Install development libraries needed for building from source
+    FEDORA_DEV_PKGS=(
+        wayland-devel wayland-protocols-devel libinput-devel libevdev-devel libxkbcommon-devel
+        wlroots-devel cairo-devel pango-devel gdk-pixbuf2-devel json-c-devel scdoc pcre2-devel
+        gtk3-devel libsigc++20-devel jsoncpp-devel libdbusmenu-gtk3-devel libxkbcommon-devel
+        fmt-devel spdlog-devel glibmm2.4-devel gtkmm30-devel alsa-lib-devel pipewire-devel
+        libnl3-devel iw gtk-layer-shell-devel
+    )
+    install_fedora_packages "${FEDORA_DEV_PKGS[@]}"
+    
+    # Install Sway and related packages from repositories
+    FEDORA_SWAY_PKGS=(
+        swayfx fastfetch fish foot nwg-drawer swappy swaylock waybar
+        jetbrains-mono-fonts fontawesome-fonts
+        alsa-utils pipewire-pulseaudio bluez bluez-tools blueman
+        wob swaybg swayidle fuzzel wl-clipboard grim slurp mako
+        blueberry pamixer pavucontrol polkit-gnome xdg-desktop-portal-wlr
+        xorg-x11-server-Xwayland dex qt5-qtwayland qt6-qtwayland
+        alacritty
+    )
+    install_fedora_packages "${FEDORA_SWAY_PKGS[@]}"
+    
+    # Install packages that might need to be built from source
+    if ! rpm -q wf-recorder &>/dev/null; then
+        print_message $GREEN "Building wf-recorder from source..."
+        build_from_source "wf-recorder" "https://github.com/ammen99/wf-recorder.git"
+    fi
+    
+    if ! rpm -q nwg-hello &>/dev/null; then
+        print_message $GREEN "Building nwg-hello from source..."
+        build_from_source "nwg-hello" "https://github.com/nwg-piotr/nwg-hello.git"
+    fi
+    
+    if ! rpm -q waybar-module-pacman-updates &>/dev/null; then
+        print_message $GREEN "Building waybar-module-pacman-updates from source..."
+        sudo dnf install -y waybar-devel
+        build_from_source "waybar-module-pacman-updates" "https://github.com/axeel/waybar-module-pacman-updates.git"
+    fi
+    
+    if ! command_exists autotiling; then
+        print_message $GREEN "Installing autotiling via pip in a virtual environment..."
+        sudo dnf install -y python3-pip python3-virtualenv
+        mkdir -p ~/.local/venvs
+        python3 -m venv ~/.local/venvs/sway-tools
+        source ~/.local/venvs/sway-tools/bin/activate
+        pip install autotiling
+        deactivate
+
+        sudo ln -sf ~/.local/venvs/sway-tools/bin/autotiling /usr/local/bin/autotiling
+    fi
+    
+    if ! rpm -q cliphist &>/dev/null; then
+        print_message $GREEN "Installing cliphist via go..."
+        sudo dnf install -y golang
+        go install go.senan.xyz/cliphist@latest
+        sudo cp ~/go/bin/cliphist /usr/local/bin/
+    fi
+    
+    if ! rpm -q gtklock &>/dev/null; then
+        print_message $GREEN "Building gtklock from source..."
+        build_from_source "gtklock" "https://github.com/jovanlanik/gtklock.git"
+    fi
+    
+    if ! rpm -q kvantum &>/dev/null; then
+    print_message $GREEN "Installing Kvantum from repositories..."
+    sudo dnf install -y kvantum
+    fi
+    
 elif [ -f /etc/arch-release ]; then
     print_message $GREEN "Arch Linux detected. Proceeding with setup..."
+    
+    REQUIRED_PKGS=(git base-devel make less)
+    install_arch_packages "${REQUIRED_PKGS[@]}"
+
+    install_aur_helper
+
+    PACMAN_PKGS=(fastfetch fish foot nwg-drawer bluetui ttf-jetbrains-mono ttf-jetbrains-mono-nerd swappy swaylock waybar pango cairo gdk-pixbuf2 json-c scdoc meson ninja pcre2 gtk-layer-shell jsoncpp libsigc++ libdbusmenu-gtk3 libxkbcommon fmt spdlog glibmm gtkmm3 alsa-utils pipewire-pulse libnl iw wob swaybg swayidle fuzzel otf-font-awesome ttf-jetbrains-mono ttf-nerd-fonts-symbols ttf-ubuntu-font-family wl-clipboard grim slurp mako blueberry pamixer pavucontrol gnome-keyring polkit-gnome cliphist wl-clipboard autotiling gtklock swayidle xdg-desktop-portal xdg-desktop-portal-wlr xorg-xhost sddm kvantum qt5-wayland qt6-wayland dex wf-recorder nwg-hello blueman bluez bluez-libs bluez-qt bluez-qt5 bluez-tools bluez-utils alacritty kitty)
+    install_arch_packages "${PACMAN_PKGS[@]}"
+
+    YAY_PKGS=(swayfx waybar-module-pacman-updates-git wlroots-git)
+    install_aur_packages "${YAY_PKGS[@]}"
 else
     print_message $RED "Unsupported distribution. Exiting."
     exit 1
 fi
-
-REQUIRED_PKGS=(git base-devel make less)
-install_packages "${REQUIRED_PKGS[@]}"
-
-install_aur_helper
-
-PACMAN_PKGS=(fastfetch fish foot nwg-drawer bluetui ttf-jetbrains-mono ttf-jetbrains-mono-nerd swappy swaylock waybar pango cairo gdk-pixbuf2 json-c scdoc meson ninja pcre2 gtk-layer-shell jsoncpp libsigc++ libdbusmenu-gtk3 libxkbcommon fmt spdlog glibmm gtkmm3 alsa-utils pipewire-pulse libnl iw wob swaybg swayidle fuzzel otf-font-awesome ttf-jetbrains-mono ttf-nerd-fonts-symbols ttf-ubuntu-font-family wl-clipboard grim slurp mako blueberry pamixer pavucontrol gnome-keyring polkit-gnome cliphist wl-clipboard autotiling gtklock swayidle xdg-desktop-portal xdg-desktop-portal-wlr xorg-xhost sddm kvantum qt5-wayland qt6-wayland dex wf-recorder nwg-hello blueman bluez bluez-libs bluez-qt bluez-qt5 bluez-tools bluez-utils alacritty kitty)
-install_packages "${PACMAN_PKGS[@]}"
-
-YAY_PKGS=(swayfx waybar-module-pacman-updates-git wlroots-git)
-install_aur_packages "${YAY_PKGS[@]}"
 
 DOTFILES_REPO="https://github.com/harilvfs/swaydotfiles"
 DOTFILES_DIR="$HOME/swaydotfiles"
@@ -271,6 +452,20 @@ enable_start_sddm() {
     sudo systemctl enable sddm --now
 }
 
+# Install missing dependencies for fedora-specific packages
+if [ -f /etc/fedora-release ]; then
+    print_message $GREEN "Installing additional Fedora dependencies..."
+    
+    # Check if azote is installed
+    if ! command -exists azote; then
+        print_message $GREEN "Installing azote..."
+        sudo dnf install azote
+    fi
+    
+    # Install wget and unzip for SDDM theme
+    install_fedora_packages "wget unzip"
+fi
+
 if ! is_sddm_installed; then
     install_sddm
 else
@@ -283,8 +478,36 @@ configure_sddm_theme
 
 enable_start_sddm
 
-echo "Sddm theme applied, service started, and configuration updated successfully!"
+# Fix Wayland environment for Fedora
+if [ -f /etc/fedora-release ]; then
+    print_message $GREEN "Setting up Wayland environment for Fedora..."
+    
+    # Create Wayland session file if it doesn't exist
+    if [ ! -f /usr/share/wayland-sessions/sway.desktop ]; then
+        sudo mkdir -p /usr/share/wayland-sessions
+        cat << EOF | sudo tee /usr/share/wayland-sessions/sway.desktop > /dev/null
+[Desktop Entry]
+Name=Sway
+Comment=An i3-compatible Wayland compositor
+Exec=sway
+Type=Application
+EOF
+    fi
+    
+    # Setup environment variables for Wayland
+    cat << EOF | sudo tee /etc/environment.d/wayland.conf > /dev/null
+# Wayland environment variables
+MOZ_ENABLE_WAYLAND=1
+QT_QPA_PLATFORM=wayland
+QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+XDG_CURRENT_DESKTOP=sway
+XDG_SESSION_TYPE=wayland
+GDK_BACKEND=wayland
+CLUTTER_BACKEND=wayland
+SDL_VIDEODRIVER=wayland
+_JAVA_AWT_WM_NONREPARENTING=1
+EOF
+fi
 
 print_message $BLUE "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
 print_message $GREEN "SwayWM setup complete!"
-
