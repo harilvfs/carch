@@ -4,22 +4,9 @@ All notable changes to this project will be documented in this file.
 
 ## [v4.1.5](https://github.com/harilvfs/carch/compare/v4.1.4...v4.1.5) (2025-03-02)
 
-This update is quite nice and interesting because **Carch is now a single binary to execute!**
+This update is frequent due to changes in the Carch base structure within the repository.
 
-Like what? 🤔  
-
-I have used **Rust** to make Carch a single **compiled binary**, so now **no sourcing scripts** are needed.  
-Only the **compiled Carch binary** is required, which preloads all Bash scripting automatically.  
-
-This update was pushed quickly due to structural changes in the GitHub repo to adapt to the Rust-based setup.  
-
-Yeah, I did say I was leaving Rust in Carch, but **how could I miss the chance** to make it a single compiled binary? 😆  
-
-By the way, this is a **huge achievement** for me! I’ve always wanted to make Carch a single binary, and now that dream is fulfilled! 🎯  
-
-Yeah, thanks to Rust!
-
-Okay, enough yapping—let’s get to the changes.  
+It introduces a new feature to Carch, as I have used Rust to combine the main script and other Carch scripts into a single compiled binary, thanks to Rust.
 
 ### 🔑 Key Changes  
 
