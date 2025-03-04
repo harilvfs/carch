@@ -77,7 +77,7 @@ choose_fonts() {
                 ;;
             "JetBrains Mono")
                 if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-jetbrains-mono-nerd"
+                    install_font_arch "ttf-jetbrains-mono-nerd" "ttf-jetbrains-mono"
                 else
                     install_font_fedora "JetBrainsMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
                 fi
