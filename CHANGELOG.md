@@ -6,14 +6,14 @@ All notable changes to this project will be documented in this file.
 
 > [!NOTE]
 > ### 🔑 Key Changes  
+> 
+> - Bug fixes  
+> - Fixed distro detection ([#289](https://github.com/harilvfs/carch/pull/289))  
+> - Added Chaotic AUR install script ([#295](https://github.com/harilvfs/carch/pull/295))  
+> - Reworked package script ([#291](https://github.com/harilvfs/carch/pull/291))  
+> - Major script-side fixes (known issues resolved)  
 
-- Bug fixes  
-- Fixed distro detection ([#289](https://github.com/harilvfs/carch/pull/289))  
-- Added Chaotic AUR install script ([#295](https://github.com/harilvfs/carch/pull/295))  
-- Reworked package script ([#291](https://github.com/harilvfs/carch/pull/291))  
-- Major script-side fixes (known issues resolved)  
-
-A small update.  
+**A small update** :)
 
 Check the release section for core changes and details: [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6)  
 
