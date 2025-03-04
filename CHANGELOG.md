@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6) (2025-03-04)  
+
+#### 🔑 Key Changes  
+
+- Bug fixes  
+- Fixed distro detection ([#289](https://github.com/harilvfs/carch/pull/289))  
+- Added Chaotic AUR install script ([#295](https://github.com/harilvfs/carch/pull/295))  
+- Reworked package script ([#291](https://github.com/harilvfs/carch/pull/291))  
+- Major script-side fixes (known issues resolved)  
+
+A small update.  
+
+Check the release section for core changes and details: [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6)  
+
+
 ## [v4.1.5](https://github.com/harilvfs/carch/compare/v4.1.4...v4.1.5) (2025-03-02)
 
 This update is frequent due to changes in the Carch base structure within the repository.
