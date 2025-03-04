@@ -15,18 +15,14 @@ type figlet &>/dev/null || { echo "figlet is not installed. Install it first."; 
 type gum &>/dev/null || { echo "gum is not installed. Install it first."; exit 1; }
 
 source /etc/os-release
-case "$ID" in
-    arch)
-        distro="arch"
-        ;;
-    fedora)
-        distro="fedora"
-        ;;
-    *)
-        echo -e "${RED}Unsupported distro. Exiting...${RESET}"
-        exit 1
-        ;;
-esac
+if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
+    distro="arch"
+elif [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
+    distro="fedora"
+else
+    echo -e "\e[31mUnsupported distro: $ID. Exiting...\e[0m"
+    exit 1
+fi
 
 echo -e "${BLUE}Distro: ${distro^} Linux${RESET}"
 
