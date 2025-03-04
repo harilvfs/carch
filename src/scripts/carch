@@ -215,8 +215,8 @@ display_scripts_menu() {
         echo -e "${GREEN}For more info: \033[4;34mhttps://carch-org.github.io/docs/${RESET}"
 
         echo -e "\n${SYSTEM_EMOJI} ${CYAN}System Health:${RESET}"
-        df -h | awk '$NF=="/" {printf "Disk: %.1f%% Used | ", $5+0}'
-        free -h | awk '/Mem:/ {printf "Memory: %.1f%% Used\n", $3/$2 * 100.0}'
+        df -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '$NF=="/" {printf "%sDisk:%s %.1f%% Used | ", CYAN, RESET, $5+0}'
+        free -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '/Mem:/ {printf "%sMemory:%s %.1f%% Used\n", CYAN, RESET, $3/$2 * 100.0}'
         echo "    "
         echo -e "${LAVENDER}Select a script to run:${RESET}"
         selected_script=$(gum choose "${scripts[@]}")
