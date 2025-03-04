@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 
 **A small update** :)
 
-Check the release section for core changes and details: [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6)  
+**Check the release section for core changes and details:** [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6)  
 
 
 ## [v4.1.5](https://github.com/harilvfs/carch/compare/v4.1.4...v4.1.5) (2025-03-02)
