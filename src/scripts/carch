@@ -2,8 +2,20 @@
 
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
+RED='\033[0;31m'
+LAVENDER='\033[38;2;138;79;255m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
 RESET='\033[0m'
 NC='\033[0m'
+
+SCRIPT_EMOJI="🚀"
+SUCCESS_EMOJI="✅"
+ERROR_EMOJI="❌"
+CONFIG_EMOJI="⚙️"
+UPDATE_EMOJI="🔄"
+SYSTEM_EMOJI="💻"
 
 VERSION="4.1.5"
 SCRIPT_DIR="./scripts"
@@ -193,17 +205,20 @@ display_scripts_menu() {
 
     while true; do
         clear
-        echo -e "${GREEN}"
+        echo -e "${MAGENTA}"
         figlet -f slant "Carch"
-        echo "v$VERSION"
-        echo "Distro: $(detect_distro)"
+        echo -e "${GREEN}v$VERSION - Automate Your Linux Setup${RESET}"
+        echo -e "${YELLOW}---------------------${RESET}"
+        echo -e "${GREEN}Distro:${RESET} $(detect_distro)"
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
-        echo -e "${GREEN}Automate Your Linux Setup."
-        echo -e "${GREEN}For more information, visit: \033[4;34mhttps://carch-org.github.io/docs/\033[0m"
-        echo -e "${NC}"
+        echo -e "${GREEN}For more info: \033[4;34mhttps://carch-org.github.io/docs/${RESET}"
 
-        echo "Select a script to run:"
+        echo -e "\n${SYSTEM_EMOJI} ${CYAN}System Health:${RESET}"
+        df -h | awk '$NF=="/" {printf "Disk: %.1f%% Used | ", $5+0}'
+        free -h | awk '/Mem:/ {printf "Memory: %.1f%% Used\n", $3/$2 * 100.0}'
+        echo "    "
+        echo -e "${LAVENDER}Select a script to run:${RESET}"
         selected_script=$(gum choose "${scripts[@]}")
 
         if [[ "$selected_script" == "Cancel" ]]; then
