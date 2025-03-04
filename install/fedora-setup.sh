@@ -8,7 +8,7 @@ COLOR_YELLOW="\e[33m"
 COLOR_CYAN="\e[36m"
 COLOR_RED="\e[31m"
 
-VERSION="4.1.5"
+VERSION="4.1.6"
 TARGET_DIR="/usr/bin"
 DESKTOP_FILE="/usr/share/applications/carch.desktop"
 MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
