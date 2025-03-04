@@ -436,7 +436,7 @@ install_development() {
     fi
 
     while true; do
-        dev_choice=$(gum choose "Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Exit")
+        dev_choice=$(gum choose "Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Exit")
 
         case $dev_choice in
             "Node.js")
@@ -515,6 +515,17 @@ install_development() {
                     version="(Flatpak version installed)"
                 fi
                 gum format "🎉 **DBeaver installed successfully! Version: $version**"
+                ;;
+
+            "Hugo")
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Hugo..." -- $pkg_manager_pacman hugo
+                    version=$(get_version hugo)
+                else
+                    gum spin --spinner dot --title "Installing Hugo via DNF..." -- $pkg_manager hugo
+                    version=$(get_version hugo)
+                fi
+                gum format "🎉 **Hugo installed successfully! Version: $version**"
                 ;;
 
             "Exit")
@@ -1397,8 +1408,7 @@ install_thunarpreview() {
     distro=$?
 
     if [[ $distro -eq 0 ]]; then
-        install_aur_helper
-        pkg_manager_aur="$AUR_HELPER -S --noconfirm"
+        pkg_manager="sudo pacman -S --noconfirm"
         get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
     elif [[ $distro -eq 1 ]]; then
         pkg_manager="sudo dnf install -y"
@@ -1409,19 +1419,27 @@ install_thunarpreview() {
     fi
 
     while true; do
-        thunarpreview_choice=$(gum choose "Tumbler" "Exit")
+        thunarpreview_choice=$(gum choose "Tumbler" "Trash-Cli" "Exit")
 
         case $thunarpreview_choice in
             "Tumbler")
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Tumbler..." -- $pkg_manager_aur tumbler
+                    gum spin --spinner dot --title "Installing Tumbler..." -- $pkg_manager tumbler
                 else
                     gum spin --spinner dot --title "Installing Tumbler via DNF..." -- $pkg_manager tumbler
                 fi
                 version=$(get_version tumbler)
                 gum format "🎉 **Tumbler installed successfully! Version: $version**"
                 ;;
-
+            "Trash-Cli")
+                if [[ $distro -eq 0 ]]; then
+                    gum spin --spinner dot --title "Installing Trash-Cli..." -- $pkg_manager trash-cli
+                else
+                    gum spin --spinner dot --title "Installing Trash-Cli via DNF..." -- $pkg_manager trash-cli
+                fi
+                version=$(get_version trash-cli)
+                gum format "🎉 **Trash-Cli installed successfully! Version: $version**"
+                ;;
             "Exit")
                 break
                 ;;
