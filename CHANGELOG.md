@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6) (2025-03-04)  
 
-#### 🔑 Key Changes  
+### 🔑 Key Changes  
 
 - Bug fixes  
 - Fixed distro detection ([#289](https://github.com/harilvfs/carch/pull/289))  
