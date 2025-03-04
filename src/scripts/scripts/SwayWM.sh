@@ -122,8 +122,12 @@ manage_themes_icons() {
 
 print_message $BLUE "$(figlet -f slant "SwayWM")"
 
+print_message " "
+
 print_message $BLUE "If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles"
+
+print_message $YELLOW"----------------------------------------"
 
 if ! gum confirm "Continue with Sway setup?"; then
     print_message $RED "Setup aborted by the user."
