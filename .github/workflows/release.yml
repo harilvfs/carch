@@ -10,8 +10,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         
-      - name: Install musl-tools
-        run: sudo apt-get update && sudo apt-get install musl-tools
+      - name: Install musl-tools and RPM build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools rpm build-essential rpmdevtools
         
       - name: Cache Cargo registry
         uses: actions/cache@v4
@@ -57,9 +59,11 @@ jobs:
           fi
           new_tag="v${major}.${minor}.${patch}"
           release_date=$(date +'%Y.%m.%d')
+          version="${major}.${minor}.${patch}"
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "new_tag=$new_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
+          echo "version=$version" >> $GITHUB_ENV
           
       - name: Build x86_64 binary
         run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
@@ -68,6 +72,29 @@ jobs:
         run: |
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          
+      - name: Fetch spec file
+        run: |
+          wget https://raw.githubusercontent.com/harilvfs/carch/main/fedora/carch.spec -O carch.spec
+          
+      - name: Build RPM package for x86_64
+        run: |
+          mkdir -p ~/rpmbuild/{SOURCES,SPECS,BUILD,RPMS,SRPMS}
+          cp ./build/x86_64-unknown-linux-musl/release/carch carch
+          VERSION=${{ env.version }}
+          # Create tarball
+          mkdir -p carch-${VERSION}
+          cp carch carch-${VERSION}/
+          tar -czvf ~/rpmbuild/SOURCES/carch-${VERSION}.tar.gz carch-${VERSION}
+          # Update version in spec file
+          sed -i "s/Version:.*/Version: ${VERSION}/" carch.spec
+          cp carch.spec ~/rpmbuild/SPECS/
+          # Build RPM
+          rpmbuild -ba ~/rpmbuild/SPECS/carch.spec
+          # Copy RPMs to artifacts
+          mkdir -p ./artifacts
+          cp ~/rpmbuild/RPMS/x86_64/carch-${VERSION}*.rpm ./artifacts/carch-${VERSION}-1.x86_64.rpm
+          cp ~/rpmbuild/SRPMS/carch-${VERSION}*.rpm ./artifacts/carch-${VERSION}-1.src.rpm
           
       - name: Generate Release Notes
         id: generate_notes
@@ -92,3 +119,5 @@ jobs:
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+            ./artifacts/carch-${{ env.version }}-1.x86_64.rpm
+            ./artifacts/carch-${{ env.version }}-1.src.rpm
