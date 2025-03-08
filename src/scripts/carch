@@ -319,7 +319,7 @@ update() {
 show_help() {
     echo "Usage: carch [OPTIONS]"
     echo
-    echo "A tool for automating Arch Linux setups."
+    echo "A script for automating Linux setups."
     echo
     echo "Options:"
     echo "  --help, -h              Show this help message and exit."
@@ -330,6 +330,7 @@ show_help() {
     echo "  --run-script <name>, -r Run the specified script from $SCRIPT_DIR."
     echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
     echo "  --update                Update Carch using the latest script."
+    echo "  --check-update          Check if a new version of Carch is available."
     echo "  --uninstall             Uninstall Carch and remove all associated files."
     echo
 }
