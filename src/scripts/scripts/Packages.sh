@@ -1453,6 +1453,7 @@ install_virtualization() {
 
     if [[ $distro -eq 0 ]]; then
         install_aur_helper
+        pkg_manager_pacman="sudo pacman -S --noconfirm"
         pkg_manager_aur="$AUR_HELPER -S --noconfirm"
         get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
     elif [[ $distro -eq 1 ]]; then
@@ -1469,7 +1470,7 @@ install_virtualization() {
         case $virt_choice in
             "QEMU/KVM")
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing QEMU/KVM..." -- $pkg_manager_pacman qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs
+                    gum spin --spinner dot --title "Installing QEMU/KVM..." -- $pkg_manager_pacman qemu-base virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs
                     sudo systemctl enable --now libvirtd.service
                     sudo usermod -aG libvirt "$USER"
                     version=$(get_version qemu)
