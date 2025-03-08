@@ -20,15 +20,9 @@ SYSTEM_EMOJI="💻"
 VERSION="4.1.6"
 SCRIPT_DIR="./scripts"
 LOG_FILE="$HOME/.config/carch/carch.log"
-TARGET_DIR="/usr/bin"
-DESKTOP_FILE="/usr/share/applications/carch.desktop"
-MAN_PAGES_DIR="/usr/share/man/man1/carch.1"
-ICON_DIR="/usr/share/icons/hicolor"
 
 CONFIG_DIR="$HOME/.config/carch"
 CONFIG_FILE="$CONFIG_DIR/carch.conf"
-
-BASH_COMPLETION_DIR=$(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo "/usr/share/bash-completion/completions")
 
 setup_logging() {
     mkdir -p "$(dirname "$LOG_FILE")"
