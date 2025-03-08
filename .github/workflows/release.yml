@@ -73,35 +73,162 @@ jobs:
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           
-      - name: Setup RPM build environment
+      - name: Prepare RPM source package
         run: |
+          VERSION=${{ env.version }}
+          
+          # Create directory structure for RPM build
           mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
           echo "%_topdir $HOME/rpmbuild" > ~/.rpmmacros
           
-      - name: Fetch spec file
-        run: |
-          wget https://raw.githubusercontent.com/harilvfs/carch/main/fedora/carch.spec -O ~/rpmbuild/SPECS/carch.spec
+          # Create source package directory
+          mkdir -p carch-${VERSION}/{source/logo,man,completions/{bash,zsh,fish}}
           
-      - name: Build RPM package for x86_64
-        run: |
-          # Copy compiled binary
-          cp ./build/x86_64-unknown-linux-musl/release/carch carch
+          # Copy binary and essential files
+          cp ./build/x86_64-unknown-linux-musl/release/carch carch-${VERSION}/
+          cp LICENSE carch-${VERSION}/ || touch carch-${VERSION}/LICENSE
+          cp README.md carch-${VERSION}/ || echo "# Carch" > carch-${VERSION}/README.md
+          
+          # Create desktop file
+          cat > carch-${VERSION}/carch.desktop << EOF
+          [Desktop Entry]
+          Name=Carch
+          Comment=Rust based archiving tool for personal archives
+          Exec=carch
+          Icon=carch
+          Terminal=true
+          Type=Application
+          Categories=Utility;
+          Version=${VERSION}
+          EOF
+          
+          # Create placeholder man page if it doesn't exist
+          if [ ! -f man/carch.1 ]; then
+            cat > carch-${VERSION}/man/carch.1 << EOF
+          .TH CARCH 1 "$(date '+%B %Y')" "carch ${VERSION}" "User Commands"
+          .SH NAME
+          carch \- Rust based archiving tool for personal archives
+          .SH SYNOPSIS
+          .B carch
+          [\fIoptions\fR]
+          .SH DESCRIPTION
+          Carch is a Rust-based archiving tool for personal archives.
+          .SH SEE ALSO
+          Full documentation at: https://github.com/harilvfs/carch
+          EOF
+          fi
+          
+          # Create placeholder bash completion script
+          mkdir -p carch-${VERSION}/completions/bash
+          echo "# Bash completion for carch" > carch-${VERSION}/completions/bash/carch
+          
+          # Create placeholder zsh completion script
+          mkdir -p carch-${VERSION}/completions/zsh
+          echo "# Zsh completion for carch" > carch-${VERSION}/completions/zsh/carch
+          
+          # Create placeholder fish completion script
+          mkdir -p carch-${VERSION}/completions/fish
+          echo "# Fish completion for carch" > carch-${VERSION}/completions/fish/carch.fish
+          
+          # Create placeholder icon files
+          mkdir -p carch-${VERSION}/source/logo
+          for size in 16 24 32 48 64 128 256; do
+            echo "Placeholder for ${size}x${size} icon" > carch-${VERSION}/source/logo/productlogo${size}.png
+          done
           
           # Create tarball
-          VERSION=${{ env.version }}
-          mkdir -p carch-${VERSION}
-          cp carch carch-${VERSION}/
           tar -czvf ~/rpmbuild/SOURCES/carch-${VERSION}.tar.gz carch-${VERSION}
           
-          # Update version in spec file
-          sed -i "s/Version:.*/Version: ${VERSION}/" ~/rpmbuild/SPECS/carch.spec
+      - name: Create RPM spec file
+        run: |
+          VERSION=${{ env.version }}
+          cat > ~/rpmbuild/SPECS/carch.spec << EOF
+          Name:           carch
+          Version:        ${VERSION}
+          Release:        1%{?dist}
+          Summary:        Rust based archiving tool for personal archives
+          License:        GPL
+          URL:            https://github.com/harilvfs/%{name}
+          Source0:        %{name}-%{version}.tar.gz
           
+          Requires:       bash
+          Requires:       man-pages
+          Requires:       man-db
+          Requires:       git
+          Requires:       wget
+          Requires:       figlet
+          Requires:       dnf
+          Requires:       unzip
+          Requires:       tar
+          Requires:       curl
+          Requires:       gcc
+          Requires:       glibc
+          Suggests:       bash-completion-devel
+          Suggests:       zsh
+          Suggests:       fish
+          
+          %description
+          Carch is a Rust-based archiving tool for personal archives.
+          
+          %prep
+          %setup -q
+          
+          %install
+          mkdir -p %{buildroot}%{_bindir}
+          mkdir -p %{buildroot}%{_datadir}/licenses/%{name}
+          mkdir -p %{buildroot}%{_datadir}/doc/%{name}
+          mkdir -p %{buildroot}%{_datadir}/applications
+          mkdir -p %{buildroot}%{_mandir}/man1
+          mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
+          mkdir -p %{buildroot}%{_datadir}/zsh/site-functions
+          mkdir -p %{buildroot}%{_datadir}/fish/vendor_completions.d
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/16x16/apps
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/24x24/apps
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/64x64/apps
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps
+          mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
+          
+          install -Dm755 %{name} %{buildroot}%{_bindir}/%{name}
+          install -Dm644 LICENSE %{buildroot}%{_datadir}/licenses/%{name}/LICENSE
+          install -Dm644 README.md %{buildroot}%{_datadir}/doc/%{name}/README.md
+          install -Dm644 %{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
+          install -Dm644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
+          install -Dm644 completions/bash/%{name} %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+          install -Dm644 completions/zsh/%{name} %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
+          install -Dm644 completions/fish/%{name}.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/%{name}.fish
+          
+          for size in 16 24 32 48 64 128 256; do
+              install -Dm644 source/logo/productlogo\${size}.png %{buildroot}%{_datadir}/icons/hicolor/\${size}x\${size}/apps/%{name}.png
+          done
+          
+          %files
+          %license LICENSE
+          %doc README.md
+          %{_bindir}/%{name}
+          %{_datadir}/applications/%{name}.desktop
+          %{_mandir}/man1/%{name}.1*
+          %{_datadir}/bash-completion/completions/%{name}
+          %{_datadir}/zsh/site-functions/_%{name}
+          %{_datadir}/fish/vendor_completions.d/%{name}.fish
+          %{_datadir}/icons/hicolor/*/apps/%{name}.png
+          
+          %changelog
+          * $(date '+%a %b %d %Y') GitHub Action <github-actions@github.com> - ${VERSION}-1
+          - Automated RPM build from GitHub Actions
+          EOF
+          
+      - name: Build RPM package
+        run: |
           # Build RPM
           cd ~/rpmbuild/SPECS/
           rpmbuild -ba carch.spec
           
-          # Copy RPMs to artifacts
+          # Create artifacts directory
           mkdir -p $GITHUB_WORKSPACE/artifacts
+          
+          # Copy RPMs to artifacts
           find ~/rpmbuild/RPMS/ -name "*.rpm" -exec cp {} $GITHUB_WORKSPACE/artifacts/ \;
           find ~/rpmbuild/SRPMS/ -name "*.rpm" -exec cp {} $GITHUB_WORKSPACE/artifacts/ \;
           
