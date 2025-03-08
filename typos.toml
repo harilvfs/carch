@@ -1,8 +1,11 @@
+# typos.toml - Configuration file for typos spellchecker
+
+[default]
+# Define custom word mappings to ignore specific cases
+[default.extend-words]
 # Allow "ba" to be used in rpmbuild commands (-ba flag)
-[[default.extend-words]]
 ba = "ba"
 
-# To exclude specific files, add them here
-[files]
+# File-specific exclusions (uncomment if needed)
+# [files]
 # exclude = ["*.md", "CHANGELOG.md"]
-
