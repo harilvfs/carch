@@ -1,0 +1,8 @@
+# Allow "ba" to be used in rpmbuild commands (-ba flag)
+[[default.extend-words]]
+ba = "ba"
+
+# To exclude specific files, add them here
+[files]
+# exclude = ["*.md", "CHANGELOG.md"]
+
