@@ -13,6 +13,9 @@ _carch() {
         '-r:Run a specific script from the script directory'
         '--list-scripts:List all available scripts'
         '-l:List all available scripts'
+        '--search:Search for scripts by keyword'
+        '-s:Search for scripts by keyword'
+        '--check-update:Check if a new version of Carch is available.'
         '--update:Update Carch using the latest script'
         '--uninstall:Uninstall Carch and remove all associated files'
     )
@@ -27,6 +30,9 @@ _carch() {
         '-r[Run a specific script]' \
         '--list-scripts[List all available scripts]' \
         '-l[List all available scripts]' \
+        '--search[Search for scripts by keyword]' \
+        '-s[Search for scripts by keyword]' \
+        '--check-update[Check if a new version of Carch is available]' \
         '--update[Update Carch using the latest script]' \
         '--uninstall[Uninstall Carch and remove all associated files]'
 }
