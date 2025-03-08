@@ -167,6 +167,26 @@ EOL
     fi
 }
 
+check_carch_update() {
+    local REPO="harilvfs/carch"
+    local LATEST_VERSION INSTALLED_VERSION
+
+    LATEST_VERSION=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+' | sed 's/^v//')
+    INSTALLED_VERSION=$(carch --version | grep -oP '\d+\.\d+\.\d+')
+
+    if [ -z "$LATEST_VERSION" ] || [ -z "$INSTALLED_VERSION" ]; then
+        echo "Error: Unable to fetch version information."
+        return 1
+    fi
+
+    if [ "$(printf '%s\n' "$INSTALLED_VERSION" "$LATEST_VERSION" | sort -V | head -n1)" != "$LATEST_VERSION" ]; then
+        echo "Update available: Carch $INSTALLED_VERSION → $LATEST_VERSION"
+        echo "Run \`carch --update\` to update."
+    else
+        echo "Carch is up to date."
+    fi
+}
+
 load_selected_scripts() {
     scripts=()
     if [[ -f "$CONFIG_FILE" ]]; then
@@ -299,7 +319,7 @@ update() {
 show_help() {
     echo "Usage: carch [OPTIONS]"
     echo
-    echo "A tool for automating Arch Linux setups."
+    echo "A script for automating Linux setups."
     echo
     echo "Options:"
     echo "  --help, -h              Show this help message and exit."
@@ -310,6 +330,7 @@ show_help() {
     echo "  --run-script <name>, -r Run the specified script from $SCRIPT_DIR."
     echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
     echo "  --update                Update Carch using the latest script."
+    echo "  --check-update          Check if a new version of Carch is available."
     echo "  --uninstall             Uninstall Carch and remove all associated files."
     echo
 }
@@ -362,6 +383,9 @@ if [[ $# -gt 0 ]]; then
             ;;
         --list-scripts|-l)
             list_scripts
+            ;;
+        --check-update)
+            check_carch_update
             ;;
         --update)
             update 
