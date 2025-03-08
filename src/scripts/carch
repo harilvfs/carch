@@ -63,89 +63,55 @@ uninstall_carch() {
     detect_distro
     if [[ "$DISTRO" == "fedora" ]]; then
         echo "Distro is Fedora"
-
-        echo -e "${YELLOW}Removing Carch from the system...${RESET}"
+        echo -e "${YELLOW}Checking if Carch is installed via RPM...${RESET}"
         
-        sudo rm -f "$TARGET_DIR/carch"
-        sudo rm -f "$DESKTOP_FILE"
-        sudo rm -f "$MAN_PAGES_DIR"
-        sudo find "$ICON_DIR" -type f -name "carch.png" -exec rm -f {} \;
-
-        for dir in $(zsh -c 'echo $fpath'); do
-            if [[ -f "$dir/_carch" ]]; then
-                sudo rm -f "$dir/_carch"
-                [[ -z $(ls -A "$dir" 2>/dev/null) ]] && sudo rmdir "$dir"
-            fi
-        done
-
-        if [[ -d "$BASH_COMPLETION_DIR" ]]; then
-            echo "Checking Bash completion directory: $BASH_COMPLETION_DIR"
-            if [[ -f "$BASH_COMPLETION_DIR/carch" ]]; then
-                sudo rm -f "$BASH_COMPLETION_DIR/carch"
-                echo "Removed Bash completion: $BASH_COMPLETION_DIR/carch"
-            fi
-            [[ -z $(ls -A "$BASH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$BASH_COMPLETION_DIR" && echo "Removed empty Bash completion directory: $BASH_COMPLETION_DIR"
-        fi
-
-        GLOBAL_FISH_COMPLETION_DIR="/usr/share/fish/completions"
-        if [[ -d "$GLOBAL_FISH_COMPLETION_DIR" ]]; then
-            echo "Checking global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
-            if [[ -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
-                sudo rm -f "$GLOBAL_FISH_COMPLETION_DIR/carch.fish"
-                echo "Removed global Fish completion: $GLOBAL_FISH_COMPLETION_DIR/carch.fish"
-            fi
-            [[ -z $(ls -A "$GLOBAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && sudo rmdir "$GLOBAL_FISH_COMPLETION_DIR" && echo "Removed empty global Fish completion directory: $GLOBAL_FISH_COMPLETION_DIR"
-        fi
-
-        LOCAL_FISH_COMPLETION_DIR="$HOME/.config/fish/completions"
-        if [[ -d "$LOCAL_FISH_COMPLETION_DIR" ]]; then
-            echo "Checking local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
-            if [[ -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish" ]]; then
-                rm -f "$LOCAL_FISH_COMPLETION_DIR/carch.fish"
-                echo "Removed local Fish completion: $LOCAL_FISH_COMPLETION_DIR/carch.fish"
-            fi
-            [[ -z $(ls -A "$LOCAL_FISH_COMPLETION_DIR" 2>/dev/null) ]] && rmdir "$LOCAL_FISH_COMPLETION_DIR" && echo "Removed empty local Fish completion directory: $LOCAL_FISH_COMPLETION_DIR"
-        fi
-
-        echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
-        log_message "INFO" "Carch uninstalled successfully."
-
-elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
-    echo "Distro is Arch"
-
-    if command -v paru &>/dev/null || command -v yay &>/dev/null; then
-        echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
-
-        if pacman -Qs carch &>/dev/null; then
-            AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
-
-            case "$AUR_PACKAGE" in
-                carch-git)
-                    echo "Uninstalling carch-git..."
-                    yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
-                    ;;
-                carch-bin)
-                    echo "Uninstalling carch-bin..."
-                    yay -R carch-bin --noconfirm || paru -R carch-bin --noconfirm
-                    ;;
-                carch)
-                    echo "Uninstalling carch..."
-                    yay -R carch --noconfirm || paru -R carch --noconfirm
-                    ;;
-                *)
-                    echo "Unknown Carch package installed: $AUR_PACKAGE"
-                    ;;
-            esac
+        if rpm -q carch &>/dev/null; then
+            echo -e "${YELLOW}Carch is installed via RPM. Removing package...${RESET}"
+            sudo dnf remove -y carch
+            echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
+            log_message "INFO" "Carch uninstalled successfully via DNF."
         else
-            echo "Carch package not found in the system."
+            echo -e "${RED}Carch RPM package not found on the system.${RESET}"
+            log_message "WARNING" "Carch not found during uninstall attempt."
+        fi
+    elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
+        echo "Distro is Arch"
+        if command -v paru &>/dev/null || command -v yay &>/dev/null; then
+            echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
+            if pacman -Qs carch &>/dev/null; then
+                AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
+                case "$AUR_PACKAGE" in
+                    carch-git)
+                        echo "Uninstalling carch-git..."
+                        yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
+                        ;;
+                    carch-bin)
+                        echo "Uninstalling carch-bin..."
+                        yay -R carch-bin --noconfirm || paru -R carch-bin --noconfirm
+                        ;;
+                    carch)
+                        echo "Uninstalling carch..."
+                        yay -R carch --noconfirm || paru -R carch --noconfirm
+                        ;;
+                    *)
+                        echo "Unknown Carch package installed: $AUR_PACKAGE"
+                        ;;
+                esac
+                echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
+                log_message "INFO" "Carch uninstalled successfully from Arch Linux."
+            else
+                echo "Carch package not found in the system."
+                log_message "WARNING" "Carch not found during uninstall attempt on Arch Linux."
+            fi
+        else
+            echo -e "${RED}No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay.${RESET}"
+            log_message "ERROR" "No AUR helper found for uninstalling Carch on Arch Linux."
         fi
     else
-        echo "No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay."
+        echo -e "${RED}Unsupported Distribution: $DISTRO${RESET}"
+        log_message "ERROR" "Unsupported distribution during uninstall: $DISTRO"
+        exit 1
     fi
-else
-    echo "Unsupported Distro"
-    exit 1
-fi
 }
 
 generate_config() {
