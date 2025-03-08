@@ -216,13 +216,75 @@ prompt() {
     read -r
 }
 
+
+search_scripts() {
+    local direct_mode="$1"
+    
+    echo -e "\n${CYAN}Search Scripts:${RESET}"
+    echo -e "${YELLOW}Type to search available scripts...${RESET}"
+    
+    available_scripts=()
+    while IFS= read -r -d '' file; do
+        script_name=$(basename "${file}" .sh)
+        available_scripts+=("$script_name")
+    done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
+    
+    selected_script=$(printf "%s\n" "${available_scripts[@]}" | gum filter --placeholder "Search for scripts...")
+    
+    if [[ -n "$selected_script" ]]; then
+        local script_path="$SCRIPT_DIR/${selected_script}.sh"
+
+        if [[ -f "$script_path" ]]; then
+            log_message "INFO" "Starting script: ${selected_script}"
+            echo -e "${YELLOW}Running script: ${selected_script}${RESET}"
+            
+            if bash "$script_path"; then
+                echo -e "${GREEN}Script '${selected_script}' completed successfully.${RESET}"
+                log_message "SUCCESS" "Script '${selected_script}' completed successfully."
+            else
+                echo -e "${YELLOW}Script '${selected_script}' encountered an error.${RESET}"
+                log_message "ERROR" "Script '${selected_script}' encountered an error."
+            fi
+            
+            if [[ "$direct_mode" == "direct" ]]; then
+                sleep 0.5
+                clear
+                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+                exit 0
+            else
+                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+                log_message "INFO" "Logs saved after running script: ${selected_script}"
+                prompt
+            fi
+        else
+            echo -e "${YELLOW}Error: Script '${selected_script}' not found in $SCRIPT_DIR!${RESET}"
+            log_message "ERROR" "Script '${selected_script}' not found in $SCRIPT_DIR."
+            
+            if [[ "$direct_mode" == "direct" ]]; then
+                sleep 3
+                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+                exit 0
+            else
+                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+                prompt
+            fi
+        fi
+    else
+        echo -e "${YELLOW}No script selected.${RESET}"
+        if [[ "$direct_mode" != "direct" ]]; then
+            prompt
+        else
+            exit 0
+        fi
+    fi
+}
+
 display_scripts_menu() {
     if [[ "$1" == "config" ]]; then
         load_selected_scripts
     else
         load_all_scripts
     fi
-
     while true; do
         clear
         echo -e "${MAGENTA}"
@@ -233,20 +295,40 @@ display_scripts_menu() {
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}For more info: \033[4;34mhttps://carch-org.github.io/docs/${RESET}"
-
+        search_option="[🔍 Search scripts (press 's' to search)]"
+        echo -e "\n${LAVENDER}$search_option${RESET}"
         echo -e "\n${SYSTEM_EMOJI} ${CYAN}System Health:${RESET}"
         df -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '$NF=="/" {printf "%sDisk:%s %.1f%% Used | ", CYAN, RESET, $5+0}'
         free -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '/Mem:/ {printf "%sMemory:%s %.1f%% Used\n", CYAN, RESET, $3/$2 * 100.0}'
         echo "    "
+        
+        echo -e "${YELLOW}Press 's' to search, 'e' to exit, or any other key to show menu...${RESET}"
+        old_settings=$(stty -g)
+        stty raw -echo
+        key=$(dd bs=1 count=1 2>/dev/null)
+        stty "$old_settings"
+        
+        if [[ "$key" == "s" ]]; then
+            search_scripts
+            continue
+        elif [[ "$key" == "e" ]]; then
+            clear
+            log_message "INFO" "User exited the main menu."
+            exit_with_log_message
+        fi
+        
         echo -e "${LAVENDER}Select a script to run:${RESET}"
-        selected_script=$(gum choose "${scripts[@]}")
-
-        if [[ "$selected_script" == "Cancel" ]]; then
+        
+        all_options=("Search" "${scripts[@]}")
+        selected_option=$(gum choose "${all_options[@]}")
+        if [[ "$selected_option" == "Search" ]]; then
+            search_scripts
+        elif [[ "$selected_option" == "Cancel" ]]; then
             clear
             log_message "INFO" "User exited the main menu."
             exit_with_log_message
         else
-            run_script "$selected_script"
+            run_script "$selected_option"
         fi
     done
 }
@@ -329,6 +411,7 @@ show_help() {
     echo "  -c                      Use the default configuration file to load selected scripts."
     echo "  --run-script <name>, -r Run the specified script from $SCRIPT_DIR."
     echo "  --list-scripts, -l      List all available scripts in $SCRIPT_DIR."
+    echo "  --search, -s            Search for scripts by keyword."
     echo "  --update                Update Carch using the latest script."
     echo "  --check-update          Check if a new version of Carch is available."
     echo "  --uninstall             Uninstall Carch and remove all associated files."
@@ -383,6 +466,9 @@ if [[ $# -gt 0 ]]; then
             ;;
         --list-scripts|-l)
             list_scripts
+            ;;
+        --search|-s)
+            search_scripts "direct"
             ;;
         --check-update)
             check_carch_update
