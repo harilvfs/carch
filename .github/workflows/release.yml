@@ -1,6 +1,15 @@
 name: Carch Release
 on:
   workflow_dispatch:
+    inputs:
+      tag_version:
+        description: 'Version tag (e.g., v5.1.2)'
+        required: true
+        type: string
+      tag_title:
+        description: 'Release title'
+        required: true
+        type: string
 permissions:
   contents: write
 jobs:
@@ -34,7 +43,7 @@ jobs:
           
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
-        
+          
       - name: Get Latest Release Tag
         id: get_latest
         run: |
@@ -42,23 +51,8 @@ jobs:
           if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
             latest_tag="v4.1.0"
           fi
-          major=$(echo "$latest_tag" | cut -d. -f1 | tr -d 'v')
-          minor=$(echo "$latest_tag" | cut -d. -f2)
-          patch=$(echo "$latest_tag" | cut -d. -f3)
-          if [[ $minor -eq 4 && $patch -eq 7 ]]; then
-            major=$((major + 1))
-            minor=1
-            patch=1
-          elif [[ $patch -lt 7 ]]; then
-            patch=$((patch + 1))
-          else
-            patch=1
-            minor=$((minor + 1))
-          fi
-          new_tag="v${major}.${minor}.${patch}"
           release_date=$(date +'%Y.%m.%d')
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
-          echo "new_tag=$new_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
           
       - name: Build x86_64 binary
@@ -80,15 +74,13 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.new_tag }}
-          name: ${{ env.new_tag }}@${{ env.release_date }}
+          tag_name: ${{ github.event.inputs.tag_version }}
+          name: ${{ github.event.inputs.tag_title }}
           body: |
-            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ env.new_tag }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ env.new_tag }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
-
+            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
             ## What's Changed
             ${{ steps.generate_notes.outputs.body }}
-
-            **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...${{ env.new_tag }}
+            **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...${{ github.event.inputs.tag_version }}
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
