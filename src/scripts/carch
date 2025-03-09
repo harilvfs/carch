@@ -17,7 +17,7 @@ CONFIG_EMOJI="⚙️"
 UPDATE_EMOJI="🔄"
 SYSTEM_EMOJI="💻"
 
-VERSION="4.1.6"
+VERSION="4.1.7"
 SCRIPT_DIR="./scripts"
 LOG_FILE="$HOME/.config/carch/carch.log"
 
@@ -399,7 +399,7 @@ if [[ $# -gt 0 ]]; then
             show_help
             ;;
         --version|-v)
-            echo "Carch version 4.1.6"
+            echo "Carch version 4.1.7"
             ;;
         --gen-config)
             generate_config
