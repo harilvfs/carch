@@ -71,22 +71,24 @@ Sleep 3s
 
 Type "carch" Sleep 3s  Enter
 
-Sleep 6s
+Sleep 5s
 
-Right Sleep 5s
+Type "s" Sleep 2s
 
-Right Sleep 5s
+Sleep 5s
 
-Down Sleep 2s
+Type@200ms "packages" Sleep 3s Enter
 
-Down Sleep 2s
+Sleep 5s
 
-Down Sleep 2s
-
-Down Sleep 2s
-
-Down Sleep 2s
-
-Down Sleep 2s
+Up Sleep 2s
 
 Enter Sleep 3s
+
+Enter Sleep 3s
+
+Sleep 4s
+
+Type "e" 
+
+Sleep 5s
