@@ -42,7 +42,8 @@ detect_os() {
     else
         echo -e "${RED}❌ OS information not found!${ENDCOLOR}"
         exit 1
-    fi}
+    fi
+}
 
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
