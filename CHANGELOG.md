@@ -2,7 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6) (2025-03-04)  
+
+## [v4.1.7](https://github.com/harilvfs/carch/compare/v4.1.6...v4.1.7) (2025-03-09)
+
+- Updated Fedora installation to use the Carch RPM package for better integration.  
+- Reworked the Arch installation script for improvements.  
+- Added a search feature to find and run scripts easily.  
+- Introduced the `carch --check-update` command to check for updates.  
+- Fixed bugs in various package scripts.  
+- Cleaned up the main Carch script, particularly the uninstall functionality.  
+
+That's it for this release! Check out the [Carch Docs](https://carch-org.github.io/docs) for installation and live testing guides.  
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.1.7).  
+
+
+## [v4.1.6](https://github.com/harilvfs/carch/compare/v4.1.5...v4.1.6) (2025-03-04)  
 
 > [!NOTE]
 > ### 🔑 Key Changes  
