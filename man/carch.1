@@ -1,5 +1,5 @@
 .\" Manpage for Carch
-.TH "carch" "1" "March 2025" "Carch 4.1.6" "Carch Manual"
+.TH "carch" "1" "March 2025" "Carch 4.1.7" "Carch Manual"
 
 .SH NAME
 carch \- Automate Your Linux Setup
@@ -17,7 +17,7 @@ With Carch, you can efficiently customize your Arch Linux installation to meet y
 .SH LIVE VERSION
 Get started quickly with the live version by running the following command in your terminal:
 .PP
-\fBcurl -fsSL https://chalisehari.com.np/carchx | sh\fR
+\fBbash <(curl -L https://chalisehari.com.np/live)\fR
 
 .SH OPTIONS
 .TP
@@ -26,7 +26,7 @@ Display this help message and exit.
 
 .TP
 \fB\-\-version\fR, \fB\-v\fR
-Show the current version of the program (\fB4.1.6\fR).
+Show the current version of the program (\fB4.1.7\fR).
 
 .TP
 \fB\-\-gen\-config\fR
@@ -47,6 +47,14 @@ Execute the specified script from the script directory (\fB$SCRIPT_DIR\fR).
 .TP
 \fB\-\-list\-scripts\fR, \fB\-l\fR
 List all available scripts in the script directory (\fB$SCRIPT_DIR\fR).
+
+.TP
+\fB\-\-search\fR, \fB\-s\fR
+Search for scripts by keyword.
+
+.TP
+\fB\-\-check\-update\fR
+Check if a new version of Carch is available.
 
 .TP
 \fB\-\-update\fR
