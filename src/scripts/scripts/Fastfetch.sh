@@ -1,7 +1,6 @@
 #!/bin/bash
 
-tput init
-tput clear
+clear
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -13,7 +12,6 @@ ENDCOLOR="\e[0m"
 echo -e "${BLUE}"
 figlet -f slant "Fastfetch"
 echo -e "${ENDCOLOR}"
-
 if ! gum confirm "Continue with Fastfetch setup?"; then
     echo -e "${RED}Setup aborted by the user.${NC}"
     exit 1
@@ -45,16 +43,26 @@ if [ -d "$FASTFETCH_DIR" ]; then
         echo -e "${CYAN}Creating backup directory...${NC}"
         mkdir -p "$BACKUP_DIR"
     fi
-
     echo -e "${CYAN}Backing up existing Fastfetch configuration...${NC}"
     mv "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2>/dev/null
     echo -e "${GREEN}Backup completed.${NC}"
 fi
 
+TEMP_DIR="/tmp/fastfetch-repo"
 echo -e "${CYAN}Cloning Fastfetch repository...${NC}"
-git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"
+git clone https://github.com/harilvfs/fastfetch "$TEMP_DIR"
 
-echo -e "${CYAN}Cleaning up unnecessary files...${NC}"
+echo -e "${CYAN}Switching to old-days branch...${NC}"
+cd "$TEMP_DIR" || exit 1
+git switch old-days
+
+mkdir -p "$FASTFETCH_DIR"
+
+echo -e "${CYAN}Copying fastfetch configuration to ~/.config/...${NC}"
+cp -r "$TEMP_DIR"/fastfetch/* "$FASTFETCH_DIR/"
+
+echo -e "${CYAN}Cleaning up temporary files...${NC}"
+rm -rf "$TEMP_DIR"
 rm -rf "$FASTFETCH_DIR/.git" "$FASTFETCH_DIR/LICENSE" "$FASTFETCH_DIR/README.md"
 
 while true; do
@@ -80,4 +88,3 @@ while true; do
 done
 
 echo -e "${GREEN}Fastfetch setup completed successfully!${NC}"
-
