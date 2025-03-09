@@ -82,7 +82,7 @@ gum style \
     --foreground 2 \
     --margin "1 0" \
     --padding "0 2" \
-    "NOTE: Stable Release is recommended. Binary package is also suitable for use."
+    "NOTE: Stable Release is recommended."
 
 gum style \
     --foreground 1 \
@@ -103,7 +103,6 @@ CHOICE=$(gum choose \
     --selected.foreground 6 \
     --header "Select package version to install:" \
     "Stable Release [Recommended]" \
-    "Carch-bin [Compile Binary]" \
     "Carch-git [GitHub Latest Commit]" \
     "Cancel")
 
@@ -136,10 +135,6 @@ case "$CHOICE" in
     "Carch-git [GitHub Latest Commit]")
         gum style --foreground 3 "Installing Git Version (Latest Commit)..."
         cd carch-git || exit 1
-        ;;
-    "Carch-bin [Compile Binary]")
-        gum style --foreground 3 "Installing Binary Package..."
-        cd carch-bin || exit 1
         ;;
     "Stable Release [Recommended]")
         gum style --foreground 3 "Installing Stable Release..."
