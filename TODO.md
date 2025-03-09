@@ -20,6 +20,10 @@
 
 > ~~Create a single executable binary for Carch. [Rust]~~ **Done ✅** 
 
+> ~~Add Search Option~~ **Done ✅**
+
+> ~~Carch Rpm Build For Fedora~~ **Done ✅**
+
 > ~~A TUI, maybe~~ I don't know yet.
 
 > ~~OpenSUSE support~~ I haven't thought about it yet.
