@@ -59,7 +59,7 @@ echo "Version=%{version}" >> %{name}.desktop
 install -Dm644 %{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 install -Dm644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 install -Dm644 completions/bash/%{name} %{buildroot}%{datadir}/bash-completion/completions/%{name}
-install -Dm644 completions/zsh/%{name} %{buildroot}%{datadir}/zsh/site-functions/%{name}
+install -Dm644 completions/zsh/%{name} %{buildroot}%{datadir}/zsh/site-functions/_%{name}
 install -Dm644 completions/fish/%{name}.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/%{name}.fish
 for size in 16 24 32 48 64 128 256; do
     install -Dm644 source/logo/productlogo${size}.png \
@@ -73,7 +73,7 @@ done
 %{_datadir}/applications/%{name}.desktop
 %{_mandir}/man1/%{name}.1*
 %{_datadir}/bash-completion/completions/%{name}
-%{datadir}/zsh/site-functions/%{name}
+%{datadir}/zsh/site-functions/_%{name}
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
