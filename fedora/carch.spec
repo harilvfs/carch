@@ -26,6 +26,7 @@ Requires:       jetbrains-mono-fonts-all
 Requires:       curl
 Requires:       gcc
 Requires:       glibc
+
 Suggests:       bash-completion-devel
 Suggests:       zsh
 Suggests:       fish
@@ -58,11 +59,11 @@ install -Dm644 README.md %{buildroot}%{_datadir}/doc/%{name}/README.md
 echo "Version=%{version}" >> %{name}.desktop
 install -Dm644 %{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
 install -Dm644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
-install -Dm644 completions/bash/%{name} %{buildroot}%{datadir}/bash-completion/completions/%{name}
-install -Dm644 completions/zsh/%{name} %{buildroot}%{datadir}/zsh/site-functions/_%{name}
+install -Dm644 completions/bash/%{name} %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+install -Dm644 completions/zsh/_%{name} %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
 install -Dm644 completions/fish/%{name}.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/%{name}.fish
 for size in 16 24 32 48 64 128 256; do
-    install -Dm644 source/logo/productlogo${size}.png \
+    install -Dm644 source/logo/product_logo_${size}.png \
         %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
 done
 
@@ -73,7 +74,7 @@ done
 %{_datadir}/applications/%{name}.desktop
 %{_mandir}/man1/%{name}.1*
 %{_datadir}/bash-completion/completions/%{name}
-%{datadir}/zsh/site-functions/_%{name}
+%{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/fish/vendor_completions.d/%{name}.fish
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
