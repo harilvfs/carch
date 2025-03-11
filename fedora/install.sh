@@ -6,7 +6,8 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' 
 
-LOG_FILE="carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
+mkdir -p "$HOME/rpmbuild" 2>/dev/null
+LOG_FILE="$HOME/rpmbuild/carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
 
 log() {
     local message="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -372,7 +373,7 @@ main() {
             --margin "1" \
             --padding "1" \
             --border-foreground 212 \
-            "Carch has been successfully installed! You can now run 'carch' to start using it. Check the log file at ${LOG_FILE} for details."
+            "Carch has been successfully installed! You can now run 'carch' to start using it."
     else
         echo -e "${GREEN}Carch has been successfully installed!${NC}"
         echo "You can now run 'carch' to start using it."
