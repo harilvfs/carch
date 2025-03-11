@@ -1,5 +1,5 @@
 Name:           carch
-Version:        4.1.7
+Version:        4.2.1
 Release:        1%{?dist}
 Summary:        An automated script for quick & easy Linux system setup (Arch & Fedora)
 License:        GPL
@@ -79,9 +79,6 @@ done
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
-* Sun Mar 09 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.1.7-1
-- Add Search Option 
-- Rpm packages Build For Fedora-Install
-- Added More Commands --help
-- Live Execution of Carch
+* Wed Mar 12 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.2.1-1
 - Bug Fixes
+- Fastfetch New Config
