@@ -79,10 +79,6 @@ uninstall_carch() {
                         echo "Uninstalling carch-git..."
                         yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
                         ;;
-                    carch-bin)
-                        echo "Uninstalling carch-bin..."
-                        yay -R carch-bin --noconfirm || paru -R carch-bin --noconfirm
-                        ;;
                     carch)
                         echo "Uninstalling carch..."
                         yay -R carch --noconfirm || paru -R carch --noconfirm
