@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# [v4.2.1](https://github.com/harilvfs/carch/compare/v4.1.7...v4.2.1) (2025-03-12)
+
+- Fix Minor Bug [ SDDM ] (#308)
+- Fixes Fastfetch Script [ New Config ] (#309)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.1).
+
 
 ## [v4.1.7](https://github.com/harilvfs/carch/compare/v4.1.6...v4.1.7) (2025-03-09)
 
