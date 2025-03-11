@@ -235,17 +235,35 @@ search_scripts() {
     fi
 }
 
+get_latest_version() {
+    local REPO="harilvfs/carch"
+    local LATEST_VERSION
+    
+    LATEST_VERSION=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | 
+                    grep -oP '"tag_name":\s*"\K[^"]+' | 
+                    sed 's/^v//')
+    
+    if [ -z "$LATEST_VERSION" ]; then
+        echo "$VERSION"
+    else
+        echo "$LATEST_VERSION"
+    fi
+}
+
 display_scripts_menu() {
     if [[ "$1" == "config" ]]; then
         load_selected_scripts
     else
         load_all_scripts
     fi
+
+    LATEST_VERSION=$(get_latest_version)
+
     while true; do
         clear
         echo -e "${MAGENTA}"
         figlet -f slant "Carch"
-        echo -e "${GREEN}v$VERSION - Automate Your Linux Setup${RESET}"
+        echo -e "${GREEN}v$LATEST_VERSION - Automate Your Linux Setup${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}Distro:${RESET} $(detect_distro)"
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
@@ -395,7 +413,8 @@ if [[ $# -gt 0 ]]; then
             show_help
             ;;
         --version|-v)
-            echo "Carch version 4.1.7"
+            LATEST_VERSION=$(get_latest_version)
+            echo "Carch version $LATEST_VERSION"
             ;;
         --gen-config)
             generate_config
