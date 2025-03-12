@@ -275,7 +275,7 @@ display_scripts_menu() {
         free -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '/Mem:/ {printf "%sMemory:%s %.1f%% Used\n", CYAN, RESET, $3/$2 * 100.0}'
         echo "    "
         
-        echo -e "${YELLOW}Press 's' to search, 'e' to exit, or any other key to show menu...${RESET}"
+        echo -e "${YELLOW}Press 's' to search, 'q' to exit, or any other key to show menu...${RESET}"
         old_settings=$(stty -g)
         stty raw -echo
         key=$(dd bs=1 count=1 2>/dev/null)
@@ -284,7 +284,7 @@ display_scripts_menu() {
         if [[ "$key" == "s" ]]; then
             search_scripts
             continue
-        elif [[ "$key" == "e" ]]; then
+        elif [[ "$key" == "q" ]]; then
             clear
             log_message "INFO" "User exited the main menu."
             exit_with_log_message
