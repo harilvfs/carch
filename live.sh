@@ -1,6 +1,7 @@
 #!/bin/sh -e
 
 # Source: https://github.com/ChrisTitusTech/linutil/blob/main/start.sh
+# Make sure to have the gum, figlet, and fzf packages already installed.
 
 {
 rc='\033[0m'

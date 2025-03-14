@@ -305,7 +305,7 @@ main() {
         "git" "curl" "wget" "figlet" "man-db" "bash" "rust" "cargo" "gcc" 
         "glibc" "unzip" "tar" "google-noto-color-emoji-fonts" "google-noto-emoji-fonts" 
         "jetbrains-mono-fonts-all" "bat" "bash-completion-devel" "zsh" "fish" 
-        "rpmdevtools" "rpmlint"
+        "rpmdevtools" "rpmlint" "fzf"
     )
     
     if ! sudo -n true 2>/dev/null; then
