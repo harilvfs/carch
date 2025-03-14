@@ -19,6 +19,7 @@ Requires:       wget
 Requires:       figlet
 Requires:       dnf
 Requires:       unzip
+Requires:       fzf
 Requires:       tar
 Requires:       google-noto-color-emoji-fonts
 Requires:       google-noto-emoji-fonts
