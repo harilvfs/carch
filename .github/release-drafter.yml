@@ -5,8 +5,8 @@ categories:
     labels:
       - 'feature'
       - 'enhancement'
-      - 'updates'
       - 'bash'
+      - 'rust'
       - 'arch'
       - 'fedora'
   - title: '🐛 Bug Fixes'
@@ -15,7 +15,12 @@ categories:
       - 'bugfix'
       - 'bug'
       - 'fixes'
+  - title: '🔄 Refactor'
+    labels:
       - 'refactor'
+  - title: '🔼 Updates'
+    labels:
+      - 'updates'
   - title: '🧰 Maintenance'
     labels:
       - 'chore'
