@@ -171,67 +171,91 @@ prompt() {
     read -r
 }
 
+check_fzf() {
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${RED}Error: fzf is not installed. Please install fzf to use this script.${RESET}"
+        log_message "ERROR" "fzf not installed. Required for script functionality."
+        echo -e "${YELLOW}Arch Linux: sudo pacman -S fzf${RESET}"
+        echo -e "${YELLOW}Fedora: sudo dnf install fzf${RESET}"
+        exit 1
+    fi
+}
 
 search_scripts() {
+  clear
     local direct_mode="$1"
     
-    echo -e "\n${CYAN}Search Scripts:${RESET}"
-    echo -e "${YELLOW}Type to search available scripts...${RESET}"
-    
-    available_scripts=()
-    while IFS= read -r -d '' file; do
-        script_name=$(basename "${file}" .sh)
-        available_scripts+=("$script_name")
-    done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
-    
-    selected_script=$(printf "%s\n" "${available_scripts[@]}" | gum filter --placeholder "Search for scripts...")
-    
-    if [[ -n "$selected_script" ]]; then
-        local script_path="$SCRIPT_DIR/${selected_script}.sh"
-
-        if [[ -f "$script_path" ]]; then
-            log_message "INFO" "Starting script: ${selected_script}"
-            echo -e "${YELLOW}Running script: ${selected_script}${RESET}"
-            
-            if bash "$script_path"; then
-                echo -e "${GREEN}Script '${selected_script}' completed successfully.${RESET}"
-                log_message "SUCCESS" "Script '${selected_script}' completed successfully."
-            else
-                echo -e "${YELLOW}Script '${selected_script}' encountered an error.${RESET}"
-                log_message "ERROR" "Script '${selected_script}' encountered an error."
-            fi
-            
-            if [[ "$direct_mode" == "direct" ]]; then
-                sleep 0.5
-                clear
-                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
-                exit 0
-            else
+    while true; do
+        echo -e "\n${CYAN}Search Scripts: Press Esc To Exit${RESET}"
+        echo -e "${YELLOW}Type to search available scripts...${RESET}"
+        
+        available_scripts=()
+        while IFS= read -r -d '' file; do
+            script_name=$(basename "${file}" .sh)
+            available_scripts+=("$script_name")
+        done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
+        
+        selected_script=$(printf "%s\n" "${available_scripts[@]}" | fzf --height 40% --border --prompt="Search scripts: " --preview="cat $SCRIPT_DIR/{}.sh" --preview-window=right:50%)
+        
+        if [[ -n "$selected_script" ]]; then
+            local script_path="$SCRIPT_DIR/${selected_script}.sh"
+            if [[ -f "$script_path" ]]; then
+                log_message "INFO" "Starting script: ${selected_script}"
+                echo -e "${YELLOW}Running script: ${selected_script}${RESET}"
+                
+                ( bash "$script_path" )
+                script_exit_code=$?
+                
+                if [[ $script_exit_code -eq 0 ]]; then
+                    echo -e "${GREEN}Script '${selected_script}' completed successfully.${RESET}"
+                    log_message "SUCCESS" "Script '${selected_script}' completed successfully."
+                else
+                    echo -e "${YELLOW}Script '${selected_script}' encountered an error.${RESET}"
+                    log_message "ERROR" "Script '${selected_script}' encountered an error."
+                fi
+                
                 echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
                 log_message "INFO" "Logs saved after running script: ${selected_script}"
-                prompt
-            fi
-        else
-            echo -e "${YELLOW}Error: Script '${selected_script}' not found in $SCRIPT_DIR!${RESET}"
-            log_message "ERROR" "Script '${selected_script}' not found in $SCRIPT_DIR."
-            
-            if [[ "$direct_mode" == "direct" ]]; then
-                sleep 3
-                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
-                exit 0
+                
+                if [[ "$direct_mode" == "direct" ]]; then
+                    read -rp "Press Enter to continue or type 'q' to quit: " user_choice
+                    if [[ "$user_choice" == "q" ]]; then
+                        clear
+                        echo -e "${YELLOW}Exiting... Logs have been saved to: ${LOG_FILE}${RESET}"
+                        exit 0
+                    else
+                        clear
+                        continue
+                    fi
+                else
+                    read -p "Press Enter to return to script search... " 
+                    clear
+                    continue
+                fi
             else
-                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+                echo -e "${YELLOW}Error: Script '${selected_script}' not found in $SCRIPT_DIR!${RESET}"
+                log_message "ERROR" "Script '${selected_script}' not found in $SCRIPT_DIR."
+                sleep 2
+                clear
+                continue
+            fi
+        else
+            if [[ "$direct_mode" != "direct" ]]; then
                 prompt
+                break
+            else
+                read -rp "Press Enter to return to script search or type 'q' to quit: " user_choice
+                if [[ "$user_choice" == "q" ]]; then
+                    clear
+                    echo -e "${YELLOW}Exiting... Logs have been saved to: ${LOG_FILE}${RESET}"
+                    exit 0
+                else
+                    clear
+                    continue
+                fi
             fi
         fi
-    else
-        echo -e "${YELLOW}No script selected.${RESET}"
-        if [[ "$direct_mode" != "direct" ]]; then
-            prompt
-        else
-            exit 0
-        fi
-    fi
+    done
 }
 
 get_latest_version() {
@@ -250,14 +274,13 @@ get_latest_version() {
 }
 
 display_scripts_menu() {
+    check_fzf
     if [[ "$1" == "config" ]]; then
         load_selected_scripts
     else
         load_all_scripts
     fi
-
     LATEST_VERSION=$(get_latest_version)
-
     while true; do
         clear
         echo -e "${MAGENTA}"
@@ -268,34 +291,33 @@ display_scripts_menu() {
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}For more info: \033[4;34mhttps://carch-org.github.io/docs/${RESET}"
-        search_option="[🔍 Search scripts (press 's' to search)]"
-        echo -e "\n${LAVENDER}$search_option${RESET}"
         echo -e "\n${SYSTEM_EMOJI} ${CYAN}System Health:${RESET}"
         df -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '$NF=="/" {printf "%sDisk:%s %.1f%% Used | ", CYAN, RESET, $5+0}'
         free -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '/Mem:/ {printf "%sMemory:%s %.1f%% Used\n", CYAN, RESET, $3/$2 * 100.0}'
         echo "    "
         
-        echo -e "${YELLOW}Press 's' to search, 'q' to exit, or any other key to show menu...${RESET}"
-        old_settings=$(stty -g)
-        stty raw -echo
-        key=$(dd bs=1 count=1 2>/dev/null)
-        stty "$old_settings"
+        echo -e "${LAVENDER}Select a script to run:${RESET}"
+        cancel_exists=0
+        for script in "${scripts[@]}"; do
+            if [[ "$script" == "Cancel" ]]; then
+                cancel_exists=1
+                break
+            fi
+        done
         
-        if [[ "$key" == "s" ]]; then
-            search_scripts
-            continue
-        elif [[ "$key" == "q" ]]; then
-            clear
-            log_message "INFO" "User exited the main menu."
-            exit_with_log_message
+        if [[ $cancel_exists -eq 0 ]]; then
+            all_options=("${scripts[@]}" "Cancel")
+        else
+            all_options=("${scripts[@]}")
         fi
         
-        echo -e "${LAVENDER}Select a script to run:${RESET}"
+        selected_option=$(printf "%s\n" "${all_options[@]}" | fzf --height 40% --border \
+            --prompt="Select a script: " \
+            --header="Navigate with arrow keys, Enter to select, Cancel to Exit" \
+            --preview="cat $SCRIPT_DIR/{}.sh 2>/dev/null || echo 'No preview available'" --preview-window=right:50%)
         
-        all_options=("Search" "${scripts[@]}")
-        selected_option=$(gum choose "${all_options[@]}")
-        if [[ "$selected_option" == "Search" ]]; then
-            search_scripts
+        if [[ -z "$selected_option" ]]; then
+            continue
         elif [[ "$selected_option" == "Cancel" ]]; then
             clear
             log_message "INFO" "User exited the main menu."
@@ -355,7 +377,7 @@ run_script_direct() {
 }
 
 update() {
-   detect_distro 
+    detect_distro 
     
     if [[ "$DISTRO" == "fedora" ]]; then
         echo "Distro is Fedora. Running the Fedora update script..."
@@ -393,9 +415,16 @@ show_help() {
 
 list_scripts() {
     echo "Available scripts in $SCRIPT_DIR:"
-    for script in "$SCRIPT_DIR"/*.sh; do
-        echo "  - $(basename "$script" .sh)"
-    done
+    local script_files=()
+    while IFS= read -r -d '' script; do
+        script_files+=("$(basename "$script" .sh)")
+    done < <(find "$SCRIPT_DIR" -maxdepth 1 -name "*.sh" -print0)
+    
+    if [ ${#script_files[@]} -eq 0 ]; then
+        echo "  No scripts found in $SCRIPT_DIR"
+    else
+        printf "  - %s\n" "${script_files[@]}"
+    fi
 }
 
 exit_with_log_message() {
@@ -442,6 +471,7 @@ if [[ $# -gt 0 ]]; then
             list_scripts
             ;;
         --search|-s)
+            check_fzf
             search_scripts "direct"
             ;;
         --check-update)
@@ -459,5 +489,6 @@ if [[ $# -gt 0 ]]; then
             ;;
     esac
 else
+    check_fzf
     display_scripts_menu
 fi
