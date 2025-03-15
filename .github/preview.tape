@@ -73,9 +73,13 @@ Type "carch" Sleep 3s  Enter
 
 Sleep 5s
 
-Type "s" Sleep 2s
+Up Sleep 3s
 
-Sleep 5s
+Up Sleep 3s
+
+Up Sleep 3s
+
+Sleep 3s
 
 Type@200ms "packages" Sleep 3s Enter
 
@@ -89,6 +93,6 @@ Enter Sleep 3s
 
 Sleep 4s
 
-Type "e" 
+Type@200ms "cancel" Sleep 3s Enter
 
 Sleep 5s
