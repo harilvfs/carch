@@ -122,23 +122,11 @@ EOL
     fi
 }
 
-check_carch_update() {
-    local REPO="harilvfs/carch"
-    local LATEST_VERSION INSTALLED_VERSION
-
-    LATEST_VERSION=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep -oP '"tag_name":\s*"\K[^"]+' | sed 's/^v//')
-    INSTALLED_VERSION=$(carch --version | grep -oP '\d+\.\d+\.\d+')
-
-    if [ -z "$LATEST_VERSION" ] || [ -z "$INSTALLED_VERSION" ]; then
-        echo "Error: Unable to fetch version information."
-        return 1
-    fi
-
-    if [ "$(printf '%s\n' "$INSTALLED_VERSION" "$LATEST_VERSION" | sort -V | head -n1)" != "$LATEST_VERSION" ]; then
-        echo "Update available: Carch $INSTALLED_VERSION → $LATEST_VERSION"
-        echo "Run \`carch --update\` to update."
+get_installed_version() {
+    if command -v carch >/dev/null 2>&1; then
+        carch --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' || echo "unknown"
     else
-        echo "Carch is up to date."
+        echo "not_installed"
     fi
 }
 
@@ -267,9 +255,34 @@ get_latest_version() {
                     sed 's/^v//')
     
     if [ -z "$LATEST_VERSION" ]; then
-        echo "$VERSION"
+        echo "unknown"
     else
         echo "$LATEST_VERSION"
+    fi
+}
+
+check_carch_update() {
+    local REPO="harilvfs/carch"
+    local LATEST_VERSION INSTALLED_VERSION
+    
+    INSTALLED_VERSION=$(get_installed_version)
+    LATEST_VERSION=$(get_latest_version)
+    
+    if [ "$INSTALLED_VERSION" = "not_installed" ]; then
+        echo "Carch is not installed on this system."
+        return 1
+    fi
+    
+    if [ "$INSTALLED_VERSION" = "unknown" ] || [ "$LATEST_VERSION" = "unknown" ]; then
+        echo "Error: Unable to fetch version information."
+        return 1
+    fi
+    
+    if [ "$(printf '%s\n' "$INSTALLED_VERSION" "$LATEST_VERSION" | sort -V | head -n1)" != "$LATEST_VERSION" ]; then
+        echo "Update available: Carch $INSTALLED_VERSION → $LATEST_VERSION"
+        echo "Run \`carch --update\` to update."
+    else
+        echo "Carch is up to date ($INSTALLED_VERSION)."
     fi
 }
 
@@ -280,12 +293,12 @@ display_scripts_menu() {
     else
         load_all_scripts
     fi
-    LATEST_VERSION=$(get_latest_version)
+    INSTALLED_VERSION=$(get_installed_version)
     while true; do
         clear
         echo -e "${MAGENTA}"
         figlet -f slant "Carch"
-        echo -e "${GREEN}v$LATEST_VERSION - Automate Your Linux Setup${RESET}"
+        echo -e "${GREEN}v$INSTALLED_VERSION - Automate Your Linux Setup${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}Distro:${RESET} $(detect_distro)"
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
@@ -441,8 +454,16 @@ if [[ $# -gt 0 ]]; then
             show_help
             ;;
         --version|-v)
-            LATEST_VERSION=$(get_latest_version)
-            echo "Carch version $LATEST_VERSION"
+            INSTALLED_VERSION=$(get_installed_version)
+            if [ "$INSTALLED_VERSION" = "not_installed" ]; then
+                echo "Carch is not installed on this system."
+                exit 1
+            elif [ "$INSTALLED_VERSION" = "unknown" ]; then
+                echo "Error: Unable to determine Carch version."
+                exit 1
+            else
+                echo "Carch version $INSTALLED_VERSION"
+            fi
             ;;
         --gen-config)
             generate_config
