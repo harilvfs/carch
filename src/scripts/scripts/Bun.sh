@@ -63,6 +63,6 @@ gum spin --title "Installing Bun via curl..." -- bash -c "$(curl -fsSL https://b
 if command -v bun &>/dev/null; then
     gum style --foreground "$GREEN" "✅ Bun installed successfully!"
 else
-    gum style --foreground "$RED" "❌ Bun installation failed! Please check your internet connection and try again."
+    gum style --foreground "$RED" "If Bun doesn't appear on your system automatically, source your ~/.profile, .zshrc, or .bashrc."
 fi
 
