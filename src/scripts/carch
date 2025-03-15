@@ -124,7 +124,22 @@ EOL
 
 get_installed_version() {
     if command -v carch >/dev/null 2>&1; then
-        carch --version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' || echo "unknown"
+        if command -v pacman >/dev/null 2>&1; then
+            pacman_version=$(pacman -Q carch 2>/dev/null | awk '{print $2}')
+            if [[ -n "$pacman_version" ]]; then
+                echo "$pacman_version"
+                return
+            fi
+        elif command -v rpm >/dev/null 2>&1; then
+            rpm_version=$(rpm -q --qf '%{VERSION}' carch 2>/dev/null)
+            if [[ $? -eq 0 && -n "$rpm_version" ]]; then
+                echo "$rpm_version"
+                return
+            fi
+        fi
+        
+        carch_path=$(which carch)
+        strings "$carch_path" 2>/dev/null | grep -E 'v?[0-9]+\.[0-9]+\.[0-9]+' | head -n1 || echo "unknown"
     else
         echo "not_installed"
     fi
@@ -298,7 +313,7 @@ display_scripts_menu() {
         clear
         echo -e "${MAGENTA}"
         figlet -f slant "Carch"
-        echo -e "${GREEN}v$INSTALLED_VERSION - Automate Your Linux Setup${RESET}"
+        echo -e "${GREEN}$INSTALLED_VERSION - Automate Your Linux Setup${RESET}"
         echo -e "${YELLOW}---------------------${RESET}"
         echo -e "${GREEN}Distro:${RESET} $(detect_distro)"
         echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
