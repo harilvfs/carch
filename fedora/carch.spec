@@ -1,5 +1,5 @@
 Name:           carch
-Version:        4.2.1
+Version:        4.2.2
 Release:        1%{?dist}
 Summary:        An automated script for quick & easy Linux system setup (Arch & Fedora)
 License:        GPL
@@ -80,6 +80,6 @@ done
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
-* Wed Mar 12 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.2.1-1
-- Bug Fixes
-- Fastfetch New Config
+* Sat Mar 15 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.2.2-1
+- Changing Gum menu style to FZF style
+- Remove Search in Main Menu
