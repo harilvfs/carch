@@ -125,11 +125,15 @@ spinner() {
 
 setup_rpm_build_env() {
     log_info "Setting up RPM build environment..."
+    
+    # Create log directory first if it doesn't exist
+    mkdir -p "$(dirname "${LOG_FILE}")" || { log_error "Failed to create log directory"; return 1; }
+    
     if [ -d "$HOME/rpmbuild" ]; then
         log_warning "Existing RPM build environment found. Removing..."
         rm -rf "$HOME/rpmbuild" || { log_error "Failed to remove existing RPM build environment"; return 1; }
         log_info "Existing RPM build environment removed"
-    }
+    fi
     
     rpmdev-setuptree >> "${LOG_FILE}" 2>&1 || { log_error "Failed to setup RPM build environment"; return 1; }
     log_success "RPM build environment set up successfully"
