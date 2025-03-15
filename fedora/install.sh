@@ -126,7 +126,6 @@ spinner() {
 setup_rpm_build_env() {
     log_info "Setting up RPM build environment..."
     
-    # Create log directory first if it doesn't exist
     mkdir -p "$(dirname "${LOG_FILE}")" || { log_error "Failed to create log directory"; return 1; }
     
     if [ -d "$HOME/rpmbuild" ]; then
