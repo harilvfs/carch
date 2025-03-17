@@ -110,9 +110,9 @@ install_android() {
 
     while true; do
         clear
-        figlet -f slant "Andriod"
+        figlet -f slant "Android"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Andriod tool to install:"
+        echo "Select a Android tool to install:"
 
         options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
         selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
