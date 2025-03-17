@@ -1050,51 +1050,66 @@ install_github() {
     fi
 
     while true; do
-        github_choice=$(gum choose "Git" "GitHub Desktop" "GitHub CLI" "Exit")
+        clear
+        figlet -f slant "Git"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Git tool to install:"
+        
+        options=("Git" "GitHub Desktop" "GitHub CLI" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
 
-        case $github_choice in
+        case $selected in
             "Git")
+                clear
+                figlet -f small "Installing Git"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Git..." -- $pkg_manager_aur git
+                    $pkg_manager_aur git
                     version=$(get_version git)
                 else
-                    gum spin --spinner dot --title "Installing Git via DNF..." -- $pkg_manager git
+                    $pkg_manager git
                     version=$(get_version git)
                 fi
-                gum format "🎉 **Git installed successfully! Version: $version**"
+                echo "Git installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "GitHub Desktop")
+                clear
+                figlet -f small "Installing Github-Desktop"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing GitHub Desktop..." -- $pkg_manager_aur github-desktop-bin
+                    $pkg_manager_aur github-desktop-bin
                     version=$(get_version github-desktop-bin)
                 else
-                    gum format "🔄 **Setting up GitHub Desktop repository...**"
+                    echo "Setting up GitHub Desktop repository..."
                     sudo dnf upgrade --refresh
                     sudo rpm --import https://rpm.packages.shiftkey.dev/gpg.key
                     echo -e "[shiftkey-packages]\nname=GitHub Desktop\nbaseurl=https://rpm.packages.shiftkey.dev/rpm/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://rpm.packages.shiftkey.dev/gpg.key" | sudo tee /etc/yum.repos.d/shiftkey-packages.repo > /dev/null
 
-                    gum spin --spinner dot --title "Installing GitHub Desktop via DNF..." -- $pkg_manager github-desktop
+                    $pkg_manager github-desktop
                     if [[ $? -ne 0 ]]; then
-                        gum format "⚠️ **RPM installation failed. Falling back to Flatpak...**"
-                        gum spin --spinner dot --title "Installing GitHub Desktop via Flatpak..." -- $flatpak_cmd io.github.shiftey.Desktop
+                        echo "RPM installation failed. Falling back to Flatpak..."
+                        $flatpak_cmd io.github.shiftey.Desktop
                         version="(Flatpak version installed)"
                     else
                         version=$(get_version github-desktop)
                     fi
                 fi
-                gum format "🎉 **GitHub Desktop installed successfully! Version: $version**"
+                echo "GitHub Desktop installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "GitHub CLI")
+                clear
+                figlet -f small "Installing Git-Cli"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing GitHub CLI..." -- $pkg_manager_pacman github-cli
+                    $pkg_manager_pacman github-cli
                     version=$(get_version github-cli)
                 else
-                    gum spin --spinner dot --title "Installing GitHub CLI via DNF..." -- $pkg_manager gh
+                    $pkg_manager gh
                     version=$(get_version gh)
                 fi
-                gum format "🎉 **GitHub CLI installed successfully! Version: $version**"
+                echo "GitHub CLI installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Exit")
@@ -1121,39 +1136,49 @@ install_multimedia() {
     fi
 
     while true; do
-        multimedia_choice=$(gum choose "VLC" "Netflix [Unofficial]" "Exit")
+        clear
+        figlet -f slant "Multimedia"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Multimedia Packages to install:"
 
-        case $multimedia_choice in
+        options=("VLC" "Netflix [Unofficial]" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "VLC")
+                clear
+                figlet -f small "Installing VLC"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing VLC..." -- $pkg_manager_aur vlc
+                    $pkg_manager_aur vlc
                     version=$(get_version vlc)
                 else
-                    gum spin --spinner dot --title "Installing VLC via DNF..." -- $pkg_manager vlc
+                    $pkg_manager vlc
                     version=$(get_version vlc)
                 fi
-                gum format "🎉 **VLC installed successfully! Version: $version**"
+                echo "VLC installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Netflix [Unofficial]")
+                clear
+                figlet -f small "Installing Netflix" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Netflix [Unofficial]..." -- $pkg_manager_aur netflix
+                    $pkg_manager_aur netflix
                     version=$(get_version netflix)
                 else
-                    gum format "🔴 **Netflix Unofficial requires manual installation on Fedora**"
-                    gum format "1️⃣  **Installing required dependencies:**"
-                    gum spin --spinner dot --title "Installing wget and OpenCL..." -- sudo dnf install -y wget opencl-utils
-
-                    gum format "2️⃣  **Installing Microsoft Core Fonts:**"
-                    gum spin --spinner dot --title "Installing Core Fonts..." -- sudo yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm
-
-                    gum format "3️⃣ **Installing Wine Silverlight & Netflix Desktop:**"
-                    gum spin --spinner dot --title "Installing Wine Silverlight..." -- sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
-                    gum spin --spinner dot --title "Installing Netflix Desktop..." -- sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
+                    echo "Netflix Unofficial requires manual installation on Fedora"
+                    echo "Installing required dependencies:"
+                    sudo dnf install -y wget opencl-utils
+                    echo "Installing Microsoft Core Fonts:"
+                    sudo yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm
+                    echo "Installing Wine Silverlight & Netflix Desktop:"
+                    sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
+                    sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
                     
                     version="(Manual installation required)"
                 fi
-                gum format "🎉 **Netflix [Unofficial] installed successfully! Version: $version**"
+                echo "Netflix [Unofficial] installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Exit")
@@ -1181,48 +1206,70 @@ install_music() {
     fi
 
     while true; do
-        music_choice=$(gum choose "Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Exit")
+        clear
+        figlet -f slant "Music"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Music Packages to install:"
 
-        case $music_choice in
+        options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "Youtube-Music")
+                clear
+                figlet -f small "Installing Yt-Music"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Youtube-Music..." -- $pkg_manager youtube-music-bin
+                    $pkg_manager youtube-music-bin
                     version=$(get_version youtube-music-bin)
                 else
-                    gum spin --spinner dot --title "Installing Youtube-Music via Flatpak..." -- flatpak install -y flathub app.ytmdesktop.ytmdesktop
+                    flatpak install -y flathub app.ytmdesktop.ytmdesktop
                     version="Flatpak Version"
                 fi
-                gum format "🎉 **Youtube-Music installed successfully! Version: $version**"
+                echo "Youtube-Music installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Spotube")
+                clear
+                figlet -f small "Installing Spotube" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Spotube..." -- $pkg_manager spotube
+                    $pkg_manager spotube
                     version=$(get_version spotube)
                 else
-                    gum spin --spinner dot --title "Installing Spotube via Flatpak..." -- flatpak install -y flathub com.github.KRTirtho.Spotube
+                    flatpak install -y flathub com.github.KRTirtho.Spotube
                     version="Flatpak Version"
                 fi
-                gum format "🎉 **Spotube installed successfully! Version: $version**"
+                echo "Spotube installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Spotify")
+                clear
+                figlet -f small "Installing Spotify" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Spotify..." -- $pkg_manager spotify
+                    $pkg_manager spotify
                     version=$(get_version spotify)
                 else
-                    gum spin --spinner dot --title "Installing Spotify via Flatpak..." -- flatpak install -y flathub com.spotify.Client
+                    flatpak install -y flathub com.spotify.Client
                     version="Flatpak Version"
                 fi
-                gum format "🎉 **Spotify installed successfully! Version: $version**"
+                echo "Spotify installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Rhythmbox")
+                clear
+                figlet -f small "Installing Rhythmbox" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Rhythmbox..." -- $pkg_manager rhythmbox
+                    $pkg_manager rhythmbox
                 else
-                    gum spin --spinner dot --title "Installing Rhythmbox on Fedora..." -- $pkg_manager rhythmbox
+                    $pkg_manager rhythmbox
                 fi
                 version=$(get_version rhythmbox)
-                gum format "🎉 **Rhythmbox installed successfully! Version: $version**"
+                echo "Rhythmbox installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Exit")
                 break
                 ;;
