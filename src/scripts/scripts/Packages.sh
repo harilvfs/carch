@@ -109,27 +109,41 @@ install_android() {
     fi
 
     while true; do
-        android_choice=$(gum choose "Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
+        clear
+        figlet -f slant "Andriod"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Andriod tool to install:"
 
-        case $android_choice in
+        options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "Gvfs-MTP [Displays Android phones via USB]")
+                clear
+                figlet -f small "Installing Gvfs-MTP"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Gvfs-MTP..." -- $pkg_manager_aur gvfs-mtp
+                    $pkg_manager_aur gvfs-mtp
+                    version=$(get_version gvfs-mtp)
                 else
-                    gum spin --spinner dot --title "Installing Gvfs-MTP via DNF..." -- $pkg_manager gvfs-mtp
+                    $pkg_manager gvfs-mtp
+                    version=$(get_version gvfs-mtp)
                 fi
-                version=$(get_version gvfs-mtp)
-                gum format "🎉 **Gvfs-MTP installed successfully! Version: $version**"
+                echo "Gvfs-MTP installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "ADB")
+                clear
+                figlet -f small "Installing ADB"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing ADB..." -- $pkg_manager_aur android-tools
+                    $pkg_manager_aur android-tools
+                    version=$(get_version android-tools)
                 else
-                    gum spin --spinner dot --title "Installing ADB via DNF..." -- $pkg_manager android-tools
+                    $pkg_manager android-tools
+                    version=$(get_version android-tools)
                 fi
-                version=$(get_version android-tools)
-                gum format "🎉 **ADB installed successfully! Version: $version**"
+                echo "ADB installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Exit")
@@ -159,141 +173,178 @@ install_browsers() {
     fi
 
     while true; do
-        browser_choice=$(gum choose "Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Exit")
+        clear
+        figlet -f slant "Browser"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Browser tool to install:"
 
-        case $browser_choice in
+        options=("Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+         case $selected in
             "Brave")
+                clear
+                figlet -f small "Installing Brave"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Brave..." -- $pkg_manager_aur brave-bin
+                    $pkg_manager_aur brave-bin
                     version=$(get_version brave-bin)
                 else
-                    gum format "🔄 **Setting up Brave repository...**"
+                    echo "Setting up Brave repository..."
                     sudo dnf install -y dnf-plugins-core
                     sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
                     sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-                    gum spin --spinner dot --title "Installing Brave via DNF..." -- $pkg_manager brave-browser
+                    $pkg_manager brave-browser
                     version=$(get_version brave-browser)
                 fi
-                gum format "🎉 **Brave installed successfully! Version: $version**"
+                echo "Brave installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Firefox")
+                clear
+                figlet -f small "Installing Firefox"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Firefox..." -- $pkg_manager_pacman firefox
+                    $pkg_manager_pacman firefox
                     version=$(get_version firefox)
                 else
-                    gum spin --spinner dot --title "Installing Firefox via DNF..." -- $pkg_manager firefox
+                    $pkg_manager firefox
                     version=$(get_version firefox)
                 fi
-                gum format "🎉 **Firefox installed successfully! Version: $version**"
+                echo "Firefox installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Libre Wolf")
+                clear
+                figlet -f small "Installing Libre Wolf"             
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Libre Wolf..." -- $pkg_manager_aur librewolf-bin
+                    $pkg_manager_aur librewolf-bin
                     version=$(get_version librewolf-bin)
                 else
-                    gum spin --spinner dot --title "Installing Libre Wolf via Flatpak..." -- $flatpak_cmd io.gitlab.librewolf-community
+                    $flatpak_cmd io.gitlab.librewolf-community
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Libre Wolf installed successfully! Version: $version**"
+                echo "Libre Wolf installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Google Chrome")
+                clear
+                figlet -f small "Installing Chrome"  
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Google Chrome..." -- $pkg_manager_aur google-chrome
+                    $pkg_manager_aur google-chrome
                     version=$(get_version google-chrome)
                 else
-                    gum format "🔄 **Setting up Google Chrome repository...**"
+                    echo "Setting up Google Chrome repository..."
                     sudo dnf install -y dnf-plugins-core
                     sudo dnf config-manager --set-enabled google-chrome
-                    gum spin --spinner dot --title "Installing Google Chrome via DNF..." -- $pkg_manager google-chrome-stable
+                    $pkg_manager google-chrome-stable
                     version=$(get_version google-chrome-stable)
                 fi
-                gum format "🎉 **Google Chrome installed successfully! Version: $version**"
+                echo "Google Chrome installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Chromium")
+                clear
+                figlet -f small "Installing Chromium"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Chromium..." -- $pkg_manager_pacman chromium
+                    $pkg_manager_pacman chromium
                     version=$(get_version chromium)
                 else
-                    gum spin --spinner dot --title "Installing Chromium via Flatpak..." -- $flatpak_cmd org.chromium.Chromium
+                    $flatpak_cmd org.chromium.Chromium
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Chromium installed successfully! Version: $version**"
+                echo "Chromium installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Vivaldi")
+                clear
+                figlet -f small "Installing Vivaldi"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Vivaldi..." -- $pkg_manager_pacman vivaldi
+                    $pkg_manager_pacman vivaldi
                     version=$(get_version vivaldi)
                 else
-                    gum spin --spinner dot --title "Installing Vivaldi via Flatpak..." -- $flatpak_cmd com.vivaldi.Vivaldi
+                    $flatpak_cmd com.vivaldi.Vivaldi
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Vivaldi installed successfully! Version: $version**"
+                echo "Vivaldi installed successfully! Version: $version"
+                read -rp "Press enter to continue..."
                 ;;
+
             "Qute Browser")
+                clear
+                figlet -f small "Installing Qute"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Qute Browser..." -- $pkg_manager_pacman qutebrowser
+                    $pkg_manager_pacman qutebrowser
                     version=$(get_version qutebrowser)
                 else
-                    gum spin --spinner dot --title "Installing Qute Browser via Flatpak..." -- $flatpak_cmd org.qutebrowser.qutebrowser
+                    $flatpak_cmd org.qutebrowser.qutebrowser
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Qute Browser installed successfully! Version: $version**"
+                echo "Qute Browser installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Zen Browser")
+                clear
+                figlet -f small "Installing Zen"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Zen Browser..." -- $pkg_manager_aur zen-browser-bin
+                    $pkg_manager_aur zen-browser-bin
                     version=$(get_version zen-browser-bin)
                 else
-                    gum spin --spinner dot --title "Installing Zen Browser via Flatpak..." -- $flatpak_cmd app.zen_browser.zen
+                    $flatpak_cmd app.zen_browser.zen
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Zen Browser installed successfully! Version: $version**"
+                echo "Zen Browser installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Thorium Browser")
+                clear
+                figlet -f small "Installing Thorium"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Thorium Browser..." -- $pkg_manager_aur thorium-browser-bin
+                    $pkg_manager_aur thorium-browser-bin
                     version=$(get_version thorium-browser-bin)
-                    gum format "🎉 **Thorium Browser installed successfully! Version: $version**"
+                    echo "Thorium Browser installed successfully! Version: $version"
                 else
-                    gum format "❌ **Thorium Browser is not available on Fedora repositories or Flatpak. Visit [Thorium Website](https://thorium.rocks/) for installation instructions.**"
+                    echo "Thorium Browser is not available on Fedora repositories or Flatpak. Visit [Thorium Website](https://thorium.rocks/) for installation instructions."
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
-            "Vivaldi")
-                if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Vivaldi..." -- $pkg_manager_aur vivaldi
-                    version=$(get_version vivaldi)
-                else
-                    gum format "🔄 **Setting up Vivaldi repository...**"
-                    sudo dnf install -y dnf-utils
-                    sudo dnf config-manager --add-repo https://repo.vivaldi.com/archive/vivaldi-fedora.repo
-                    gum spin --spinner dot --title "Installing Vivaldi via DNF..." -- $pkg_manager vivaldi-stable
-                    version=$(get_version vivaldi-stable)
-                fi
-                gum format "🎉 **Vivaldi installed successfully! Version: $version**"
-                ;;
+
             "Opera")
+                clear
+                figlet -f small "Installing Opera"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Opera..." -- $pkg_manager_aur opera
+                    $pkg_manager_aur opera
                     version=$(get_version opera)
                 else
-                    gum format "🔄 **Setting up Opera repository...**"
+                    echo "Setting up Opera repository..."
                     sudo rpm --import https://rpm.opera.com/rpmrepo.key
                     echo -e "[opera]\nname=Opera packages\ntype=rpm-md\nbaseurl=https://rpm.opera.com/rpm\ngpgcheck=1\ngpgkey=https://rpm.opera.com/rpmrepo.key\nenabled=1" | sudo tee /etc/yum.repos.d/opera.repo
-                    gum spin --spinner dot --title "Installing Opera via DNF..." -- $pkg_manager opera-stable
+                    $pkg_manager opera-stable
                     version=$(get_version opera-stable)
                 fi
-                gum format "🎉 **Opera installed successfully! Version: $version**"
+                echo "Opera installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Tor Browser")
+                clear
+                figlet -f small "Installing Opera"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Tor Browser..." -- $pkg_manager_aur tor-browser-bin
+                    $pkg_manager_aur tor-browser-bin
                     version=$(get_version tor-browser-bin)
                 else
-                    gum spin --spinner dot --title "Installing Tor Browser via Flatpak..." -- $flatpak_cmd org.torproject.torbrowser-launcher
+                    $flatpak_cmd org.torproject.torbrowser-launcher
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Tor Browser installed successfully! Version: $version**"
+                echo "Tor Browser installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -317,98 +368,138 @@ install_communication() {
     fi
 
     while true; do
-        comm_choice=$(gum choose "Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Exit")
+        clear
+        figlet -f slant "Communication"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Communication App to install:"
 
-        case $comm_choice in
+        options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "Discord")
+                clear
+                figlet -f small "Installing Discord" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Discord..." -- $pkg_manager discord
+                    $pkg_manager discord
                     version=$(pacman -Qi discord | grep Version | awk '{print $3}')
-                    gum format "🎉 **Discord installed successfully! Version: $version**"
+                    echo "Discord installed successfully! Version: $version"
                 else
                     $pkg_manager "discord" "com.discordapp.Discord"
-                    gum format "🎉 **Discord installed successfully!**"
+                    echo "Discord installed successfully!"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Better Discord")
+                clear
+                figlet -f small "Installing Better Discord"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Better Discord..." -- $pkg_manager betterdiscord-installer-bin
-                    gum format "🎉 **Better Discord installed successfully!**"
+                    $pkg_manager betterdiscord-installer-bin
+                    echo "Better Discord installed successfully!"
                 else
                     echo -e "${YELLOW}:: Better Discord is not available for Fedora.${RESET}"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Signal")
+                clear
+                figlet -f small "Installing Signal" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Signal..." -- $pkg_manager signal-desktop
+                    $pkg_manager signal-desktop
                     version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}')
-                    gum format "🎉 **Signal installed successfully! Version: $version**"
+                    echo "Signal installed successfully! Version: $version"
                 else
                     $pkg_manager "signal-desktop" "org.signal.Signal"
-                    gum format "🎉 **Signal installed successfully!**"
+                    echo "Signal installed successfully!"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Element (Matrix)")
+                clear
+                figlet -f small "Installing Element" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Element..." -- $pkg_manager_aur element-desktop
+                    $pkg_manager_aur element-desktop
                     version=$(get_version element-desktop)
                 else
-                    gum spin --spinner dot --title "Installing Element via Flatpak..." -- $flatpak_cmd im.riot.Riot
+                    $flatpak_cmd im.riot.Riot
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Element installed successfully! Version: $version**"
+                echo "Element installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Slack")
+                clear
+                figlet -f small "Installing Slack" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Slack..." -- $pkg_manager_aur slack-desktop
+                    $pkg_manager_aur slack-desktop
                     version=$(get_version slack-desktop)
                 else
-                    gum spin --spinner dot --title "Installing Slack via Flatpak..." -- $flatpak_cmd com.slack.Slack
+                    $flatpak_cmd com.slack.Slack
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Slack installed successfully! Version: $version**"
+                echo "Slack installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Teams")
+                clear
+                figlet -f small "Installing Teams" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Teams..." -- $pkg_manager_aur teams
+                    $pkg_manager_aur teams
                     version=$(get_version teams)
-                    gum format "🎉 **Teams installed successfully! Version: $version**"
+                    echo "Teams installed successfully! Version: $version"
                 else
-                    gum format "🚀 **Microsoft Teams is not available in Fedora's repositories. Use the web version instead:** [**Teams Web**](https://teams.microsoft.com)"
+                    echo "Microsoft Teams is not available in Fedora's repositories. Use the web version instead:** [**Teams Web**](https://teams.microsoft.com)"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Zoom")
+                clear
+                figlet -f small "Installing Zoom" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Zoom..." -- $pkg_manager_aur zoom
+                    $pkg_manager_aur zoom
                     version=$(get_version zoom)
                 else
-                    gum spin --spinner dot --title "Installing Zoom via Flatpak..." -- $flatpak_cmd us.zoom.Zoom
+                    $flatpak_cmd us.zoom.Zoom
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Zoom installed successfully! Version: $version**"
+                echo "Zoom installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Telegram")
+                clear
+                figlet -f small "Installing Telegram" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Telegram..." -- $pkg_manager telegram-desktop
+                    $pkg_manager telegram-desktop
                     version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}')
-                    gum format "🎉 **Telegram installed successfully! Version: $version**"
+                    echo "Telegram installed successfully! Version: $version"
                 else
                     $pkg_manager "telegram-desktop" "org.telegram.desktop"
-                    gum format "🎉 **Telegram installed successfully!**"
+                    echo "Telegram installed successfully!"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Keybase")
+                clear
+                figlet -f small "Installing Keybase" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Keybase..." -- $pkg_manager keybase-bin
+                    $pkg_manager keybase-bin
                     version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}')
-                    gum format "🎉 **Keybase installed successfully! Version: $version**"
+                    echo "Keybase installed successfully! Version: $version"
                 else
-                    gum spin --spinner dot --title "Installing Keybase via RPM..." -- sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
-                    run_keybase
-                    gum format "🎉 **Keybase installed successfully!**"
+                    sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
+                    echo "Keybase installed successfully!"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -436,99 +527,129 @@ install_development() {
     fi
 
     while true; do
-        dev_choice=$(gum choose "Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Exit")
-
-        case $dev_choice in
+        clear
+        figlet -f slant "Development"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a development tool to install:"
+        
+        options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        
+        case $selected in
             "Node.js")
+                clear
+                figlet -f small "Installing Node.js"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Node.js..." -- $pkg_manager_pacman nodejs npm
+                    $pkg_manager_pacman nodejs npm
                     version=$(get_version nodejs)
                 else
-                    gum spin --spinner dot --title "Installing Node.js via DNF..." -- $pkg_manager nodejs-npm
+                    $pkg_manager nodejs-npm
                     version=$(get_version nodejs)
                 fi
-                gum format "🎉 **Node.js installed successfully! Version: $version**"
+                echo "Node.js installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Python")
+                clear
+                figlet -f small "Installing Python"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Python..." -- $pkg_manager_pacman python python-pip
+                    $pkg_manager_pacman python python-pip
                     version=$(get_version python)
                 else
-                    gum spin --spinner dot --title "Installing Python via DNF..." -- $pkg_manager python3 python3-pip
+                    $pkg_manager python3 python3-pip
                     version=$(get_version python3)
                 fi
-                gum format "🎉 **Python installed successfully! Version: $version**"
+                echo "Python installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Rust")
-                gum spin --spinner dot --title "Installing Rust..." -- bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+                clear
+                figlet -f small "Installing Rust"
+                bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
                 source "$HOME/.cargo/env"
                 version=$(rustc --version | awk '{print $2}')
-                gum format "🎉 **Rust installed successfully! Version: $version**"
+                echo "Rust installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Go")
+                clear
+                figlet -f small "Installing Go"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Go..." -- $pkg_manager_pacman go
+                    $pkg_manager_pacman go
                     version=$(get_version go)
                 else
-                    gum spin --spinner dot --title "Installing Go via DNF..." -- $pkg_manager golang
+                    $pkg_manager golang
                     version=$(get_version golang)
                 fi
-                gum format "🎉 **Go installed successfully! Version: $version**"
+                echo "Go installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Docker")
+                clear
+                figlet -f small "Installing Docker"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Docker..." -- $pkg_manager_pacman docker
+                    $pkg_manager_pacman docker
                     sudo systemctl enable --now docker
                     sudo usermod -aG docker "$USER"
                     version=$(get_version docker)
                 else
-                    gum spin --spinner dot --title "Installing Docker via DNF..." -- $pkg_manager docker
+                    $pkg_manager docker
                     sudo systemctl enable --now docker
                     sudo usermod -aG docker "$USER"
                     version=$(get_version docker)
                 fi
-                gum format "🎉 **Docker installed successfully! Version: $version**"
-                gum format "⚠️ **Note:** You may need to log out and back in for group changes to take effect."
+                echo "Docker installed successfully! Version: $version"
+                echo "Note: You may need to log out and back in for group changes to take effect."
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Postman")
+                clear
+                figlet -f small "Installing Postman"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Postman..." -- $pkg_manager_aur postman-bin
+                    $pkg_manager_aur postman-bin
                     version=$(get_version postman-bin)
                 else
-                    gum spin --spinner dot --title "Installing Postman via Flatpak..." -- $flatpak_cmd com.getpostman.Postman
+                    $flatpak_cmd com.getpostman.Postman
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Postman installed successfully! Version: $version**"
+                echo "Postman installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "DBeaver")
+                clear
+                figlet -f small "Installing DBeaver"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing DBeaver..." -- $pkg_manager_pacman dbeaver
+                    $pkg_manager_pacman dbeaver
                     version=$(get_version dbeaver)
                 else
-                    gum spin --spinner dot --title "Installing DBeaver via Flatpak..." -- $flatpak_cmd io.dbeaver.DBeaverCommunity
+                    $flatpak_cmd io.dbeaver.DBeaverCommunity
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **DBeaver installed successfully! Version: $version**"
+                echo "DBeaver installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Hugo")
+                clear
+                figlet -f small "Installing Hugo"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Hugo..." -- $pkg_manager_pacman hugo
+                    $pkg_manager_pacman hugo
                     version=$(get_version hugo)
                 else
-                    gum spin --spinner dot --title "Installing Hugo via DNF..." -- $pkg_manager hugo
+                    $pkg_manager hugo
                     version=$(get_version hugo)
                 fi
-                gum format "🎉 **Hugo installed successfully! Version: $version**"
+                echo "Hugo installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
+            "Exit"|"")
                 break
                 ;;
         esac
@@ -549,85 +670,115 @@ install_editing() {
     fi
 
     while true; do
-        edit_choice=$(gum choose "GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Exit")
+        clear
+        figlet -f slant "Editing"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Editing tool to install:"
 
-        case $edit_choice in
+        options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "GIMP (Image)")
+                clear
+                figlet -f small "Installing Gimp"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing GIMP..." -- $pkg_manager gimp
+                    $pkg_manager gimp
                     version=$(pacman -Qi gimp | grep Version | awk '{print $3}')
                 else
-                    gum spin --spinner dot --title "Installing GIMP..." -- $pkg_manager gimp
+                    $pkg_manager gimp
                     version=$(rpm -q gimp)
                 fi
-                gum format "🎉 **GIMP installed successfully! Version: $version**"
+                echo "GIMP installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Kdenlive (Videos)")
+                clear
+                figlet -f small "Installing Kdenlive"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Kdenlive..." -- $pkg_manager kdenlive
+                    $pkg_manager kdenlive
                     version=$(pacman -Qi kdenlive | grep Version | awk '{print $3}')
-                    gum format "🎉 **Kdenlive installed successfully! Version: $version**"
+                    echo "Kdenlive installed successfully! Version: $version"
                 else
-                    gum spin --spinner dot --title "Installing Kdenlive on Fedora..." -- $pkg_manager kdenlive
+                    $pkg_manager kdenlive
                     version=$(rpm -q kdenlive)
-                    gum format "🎉 **Kdenlive installed successfully! Version: $version**"
+                    echo "Kdenlive installed successfully! Version: $version"
                 fi
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Krita")
+                clear
+                figlet -f small "Installing Krita"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Krita..." -- $pkg_manager_aur krita
+                    $pkg_manager_aur krita
                     version=$(get_version krita)
                 else
-                    gum spin --spinner dot --title "Installing Krita via DNF..." -- $pkg_manager krita
+                    $pkg_manager krita
                     version=$(get_version krita)
                 fi
-                gum format "🎉 **Krita installed successfully! Version: $version**"
+                echo "Krita installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Blender")
+                clear
+                figlet -f small "Installing Krita"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Blender..." -- $pkg_manager_aur blender
+                    $pkg_manager_aur blender
                     version=$(get_version blender)
                 else
-                    gum spin --spinner dot --title "Installing Blender via DNF..." -- $pkg_manager blender
+                    $pkg_manager blender
                     version=$(get_version blender)
                 fi
-                gum format "🎉 **Blender installed successfully! Version: $version**"
+                echo "Blender installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Inkscape")
+                clear
+                figlet -f small "Installing Inkscape"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Inkscape..." -- $pkg_manager_aur inkscape
+                    $pkg_manager_aur inkscape
                     version=$(get_version inkscape)
                 else
-                    gum spin --spinner dot --title "Installing Inkscape via DNF..." -- $pkg_manager inkscape
+                    $pkg_manager inkscape
                     version=$(get_version inkscape)
                 fi
-                gum format "🎉 **Inkscape installed successfully! Version: $version**"
+                echo "Inkscape installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Audacity")
+                clear
+                figlet -f small "Installing Audacity"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Audacity..." -- $pkg_manager_aur audacity
+                    $pkg_manager_aur audacity
                     version=$(get_version audacity)
                 else
-                    gum spin --spinner dot --title "Installing Audacity via DNF..." -- $pkg_manager audacity
+                    $pkg_manager audacity
                     version=$(get_version audacity)
                 fi
-                gum format "🎉 **Audacity installed successfully! Version: $version**"
+                echo "Audacity installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "DaVinci Resolve")
+                clear
+                figlet -f small "Installing DaVinci Resolve"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing DaVinci Resolve..." -- $pkg_manager_aur davinci-resolve
+                    $pkg_manager_aur davinci-resolve
                     version=$(get_version davinci-resolve)
                 else
-                    gum format "📝 **DaVinci Resolve is not directly available in Fedora repositories.**"
-                    gum format "🔗 **Download from:** [Blackmagic Design Website](https://www.blackmagicdesign.com/products/davinciresolve/)"
+                    echo "DaVinci Resolve is not directly available in Fedora repositories."
+                    echo "Download from: [Blackmagic Design Website](https://www.blackmagicdesign.com/products/davinciresolve/)"
                     version="(Manual installation required)"
                 fi
-                gum format "🎉 **DaVinci Resolve installation completed! Version: $version**"
+                echo "DaVinci Resolve installation completed! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
+
             "Exit")
                 break
                 ;;
@@ -651,79 +802,106 @@ install_filemanagers() {
     fi
 
     while true; do
-        fm_choice=$(gum choose "Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
+        clear
+        figlet -f slant "Filemanagers"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Filemanagers Apps to install:"
 
-        case $fm_choice in
+        options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "Nemo")
+                clear
+                figlet -f small "Installing Nemo"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Nemo..." -- $pkg_manager nemo
+                    $pkg_manager nemo
                 else
-                    gum spin --spinner dot --title "Installing Nemo..." -- $pkg_manager nemo
+                    $pkg_manager nemo
                 fi
                 version=$(get_version nemo)
-                gum format "🎉 **Nemo installed successfully! Version: $version**"
+                echo "Nemo installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Thunar")
+                clear
+                figlet -f small "Installing Thunar" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Thunar..." -- $pkg_manager thunar
+                    $pkg_manager thunar
                 else
-                    gum spin --spinner dot --title "Installing Thunar..." -- $pkg_manager thunar
+                    $pkg_manager thunar
                 fi
                 version=$(get_version thunar)
-                gum format "🎉 **Thunar installed successfully! Version: $version**"
+                echo "Thunar installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Dolphin")
+                clear
+                figlet -f small "Installing Thunar" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Dolphin..." -- $pkg_manager dolphin
+                    $pkg_manager dolphin
                 else
-                    gum spin --spinner dot --title "Installing Dolphin..." -- $pkg_manager dolphin
+                    $pkg_manager dolphin
                 fi
                 version=$(get_version dolphin)
-                gum format "🎉 **Dolphin installed successfully! Version: $version**"
+                echo "Dolphin installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "LF (Terminal File Manager)")
+                clear
+                figlet -f small "Installing LF" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing LF..." -- $pkg_manager lf
+                    $pkg_manager lf
                 else
-                    gum spin --spinner dot --title "Enabling LF COPR repository..." -- sudo dnf copr enable lsevcik/lf -y
-                    gum spin --spinner dot --title "Installing LF..." -- $pkg_manager lf
+                    sudo dnf copr enable lsevcik/lf -y
+                    $pkg_manager lf
                 fi
                 version=$(get_version lf)
-                gum format "🎉 **LF installed successfully! Version: $version**"
+                echo "LF installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Ranger")
+                clear
+                figlet -f small "Installing Ranger" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Ranger..." -- $pkg_manager ranger
+                    $pkg_manager ranger
                 else
-                    gum spin --spinner dot --title "Installing Ranger..." -- $pkg_manager ranger
+                    $pkg_manager ranger
                 fi
                 version=$(get_version ranger)
-                gum format "🎉 **Ranger installed successfully! Version: $version**"
+                echo "Ranger installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Nautilus")
+                clear
+                figlet -f small "Installing Nautilus" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Nautilus..." -- $pkg_manager nautilus
+                    $pkg_manager nautilus
                 else
-                    gum spin --spinner dot --title "Installing Nautilus..." -- $pkg_manager nautilus
+                    $pkg_manager nautilus
                 fi
                 version=$(get_version nautilus)
-                gum format "🎉 **Nautilus installed successfully! Version: $version**"
+                echo "Nautilus installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Yazi")
+                clear
+                figlet -f small "Installing Yazi" 
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Yazi..." -- $pkg_manager yazi
+                    $pkg_manager yazi
                 else
-                    gum spin --spinner dot --title "Adding Yazi repository..." -- sudo dnf copr enable varlad/yazi -y
-                    gum spin --spinner dot --title "Installing Yazi..." -- $pkg_manager yazi
+                    sudo dnf copr enable varlad/yazi -y
+                    $pkg_manager yazi
                 fi
                 version=$(get_version yazi)
-                gum format "🎉 **Yazi installed successfully! Version: $version**"
+                echo "Yazi installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Exit")
