@@ -27,7 +27,7 @@ include = [
 ]
 
 [dependencies]
-tempfile = "3.18.0"
+tempfile = "3.19.0"
 include_dir = "0.7.3"
 
 [profile.release]
