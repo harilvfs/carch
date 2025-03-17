@@ -930,75 +930,98 @@ install_gaming() {
         return
     fi
 
-    while true; 
-        do
-        gaming_choice=$(gum choose "Steam" "Lutris" "Heroic Games Launcher" "ProtonUp-Qt" "MangoHud" "GameMode" "Exit")
+    while true; do
+        clear
+        figlet -f slant "Gaming"
+        echo -e "${YELLOW}--------------------------------------${RESET}"
+        echo "Select a Gaming Platform to install:"
 
-        case $gaming_choice in
+        options=("Steam" "Lutris" "Heroic Games Launcher" "ProtonUp-Qt" "MangoHud" "GameMode" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
             "Steam")
+                clear
+                figlet -f small "Installing Steam"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Steam..." -- $pkg_manager_pacman steam
+                    $pkg_manager_pacman steam
                     version=$(get_version steam)
                 else
-                    gum spin --spinner dot --title "Installing Steam via Flatpak..." -- $flatpak_cmd com.valvesoftware.Steam
+                    $flatpak_cmd com.valvesoftware.Steam
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Steam installed successfully! Version: $version**"
+                echo "Steam installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Lutris")
+                clear
+                figlet -f small "Installing Lutris"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Lutris..." -- $pkg_manager_pacman lutris
+                    $pkg_manager_pacman lutris
                     version=$(get_version lutris)
                 else
-                    gum spin --spinner dot --title "Installing Lutris via DNF..." -- $pkg_manager lutris
+                    $pkg_manager lutris
                     version=$(get_version lutris)
                 fi
-                gum format "🎉 **Lutris installed successfully! Version: $version**"
+                echo "Lutris installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Heroic Games Launcher")
+                clear
+                figlet -f small "Installing Launcher"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing Heroic Games Launcher..." -- $pkg_manager_aur heroic-games-launcher-bin
+                    $pkg_manager_aur heroic-games-launcher-bin
                     version=$(get_version heroic-games-launcher-bin)
                 else
-                    gum spin --spinner dot --title "Installing Heroic Games Launcher via Flatpak..." -- $flatpak_cmd com.heroicgameslauncher.hgl
+                    $flatpak_cmd com.heroicgameslauncher.hgl
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **Heroic Games Launcher installed successfully! Version: $version**"
+                echo "Heroic Games Launcher installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "ProtonUp-Qt")
+                clear
+                figlet -f small "Installing ProtonUp-Qt"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing ProtonUp-Qt..." -- $pkg_manager_aur protonup-qt-bin
+                    $pkg_manager_aur protonup-qt-bin
                     version=$(get_version protonup-qt-bin)
                 else
-                    gum spin --spinner dot --title "Installing ProtonUp-Qt via Flatpak..." -- $flatpak_cmd net.davidotek.pupgui2
+                    $flatpak_cmd net.davidotek.pupgui2
                     version="(Flatpak version installed)"
                 fi
-                gum format "🎉 **ProtonUp-Qt installed successfully! Version: $version**"
+                echo "ProtonUp-Qt installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "MangoHud")
+                clear
+                figlet -f small "Installing MangoHud"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing MangoHud..." -- $pkg_manager_pacman mangohud
+                    $pkg_manager_pacman mangohud
                     version=$(get_version mangohud)
                 else
-                    gum spin --spinner dot --title "Installing MangoHud via DNF..." -- $pkg_manager mangohud
+                    $pkg_manager mangohud
                     version=$(get_version mangohud)
                 fi
-                gum format "🎉 **MangoHud installed successfully! Version: $version**"
+                echo "MangoHud installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "GameMode")
+                clear
+                figlet -f small "Installing GameMode"
                 if [[ $distro -eq 0 ]]; then
-                    gum spin --spinner dot --title "Installing GameMode..." -- $pkg_manager_pacman gamemode
+                    $pkg_manager_pacman gamemode
                     version=$(get_version gamemode)
                 else
-                    gum spin --spinner dot --title "Installing GameMode via DNF..." -- $pkg_manager gamemode
+                    $pkg_manager gamemode
                     version=$(get_version gamemode)
                 fi
-                gum format "🎉 **GameMode installed successfully! Version: $version**"
+                echo "GameMode installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Exit")
