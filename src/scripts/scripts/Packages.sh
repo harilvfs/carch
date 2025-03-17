@@ -85,10 +85,10 @@ install_fedora_package() {
     flatpak_id="$2"
 
     if sudo dnf list --available | grep -q "^$package_name"; then
-        gum spin --spinner dot --title "Installing $package_name via DNF..." -- sudo dnf install -y "$package_name"
+       sudo dnf install -y "$package_name"
     else
         echo -e "${YELLOW}:: $package_name not found in DNF. Falling back to Flatpak.${RESET}"
-        gum spin --spinner dot --title "Installing $package_name via Flatpak..." -- flatpak install -y flathub "$flatpak_id"
+        flatpak install -y flathub "$flatpak_id"
     fi
 }
 
@@ -1429,10 +1429,14 @@ install_streaming() {
                 figlet -f small "Installing SimpleScreenRecorder"
  
                 if [[ $distro -eq 0 ]]; then
-                    gum confirm "The Git version builds from source and may take some time. Proceed?" && \
-                    $pkg_manager_aur simplescreenrecorder-git
-                    version=$(get_version simplescreenrecorder-git)
-                    echo "SimpleScreenRecorder [Git] installed successfully! Version: $version"
+                    read -rp "The Git version builds from source and may take some time. Proceed? (y/N) " confirm
+                    if [[ $confirm =~ ^[Yy]$ ]]; then
+                        $pkg_manager_aur simplescreenrecorder-git
+                        version=$(get_version simplescreenrecorder-git)
+                        echo "SimpleScreenRecorder [Git] installed successfully! Version: $version"
+                    else
+                        echo "Installation aborted."
+                    fi
                 else
                     echo -e "${YELLOW}:: SimpleScreenRecorder [Git] is not available on Fedora.${RESET}"
                 fi
