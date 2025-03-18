@@ -1,7 +1,7 @@
 #!/bin/bash
 
-tput init
-tput clear
+clear
+
 export RED="\e[31m"
 export GREEN="\e[32m"
 export BLUE="\e[34m"
