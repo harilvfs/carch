@@ -1,18 +1,22 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-sudo -v
+clear
 
-RED="\033[1;31m"
-GREEN="\033[1;32m"
-CYAN="\033[1;36m"
-BLUE="\033[1;34m"
-RESET="\033[0m"
+RC='\033[0m'
+RED='\033[31m'
+YELLOW='\033[33m'
+CYAN='\033[36m'
+GREEN='\033[32m'
+BLUE='\033[34m'
 
 print_message() {
     local color="$1"
     local message="$2"
-    echo -e "${color}${message}${RESET}"
+    printf "%b%s%b\n" "$color" "$message" "$RC"
 }
+
+echo -e "${BLUE}"
+figlet -f slant "DWM"
 
 fzf_confirm() {
     local prompt="$1"
@@ -26,165 +30,227 @@ fzf_confirm() {
     fi
 }
 
-check_aur_helper() {
-    if command -v yay &>/dev/null; then
-        AUR_HELPER="yay"
-    elif command -v paru &>/dev/null; then
-        AUR_HELPER="paru"
+detect_distro() {
+    if [ -f /etc/os-release ]; then
+        source /etc/os-release
+        case "$ID" in
+            arch)
+                distro="arch"
+                print_message "$GREEN" "Detected distribution: Arch Linux"
+                ;;
+            fedora)
+                distro="fedora"
+                print_message "$YELLOW" "Detected distribution: Fedora"
+                ;;
+            *)
+                if [[ "$ID_LIKE" == *"arch"* ]]; then
+                    distro="arch"
+                    print_message "$GREEN" "Detected Arch-based distribution"
+                elif [[ "$ID_LIKE" == *"fedora"* ]]; then
+                    distro="fedora"
+                    print_message "$YELLOW" "Detected Fedora-based distribution"
+                else
+                    print_message "$RED" "Unsupported distribution. Exiting..."
+                    exit 1
+                fi
+                ;;
+        esac
     else
-        print_message "$CYAN" "No AUR helper found. Installing yay..."
-        sudo pacman -S --needed --noconfirm git base-devel
-        git clone https://aur.archlinux.org/yay.git
-        cd yay || exit
-        makepkg -si --noconfirm
-        cd ..
-        rm -rf yay
-        AUR_HELPER="yay"
-    fi
-    print_message "$GREEN" "Using AUR helper: ${AUR_HELPER}"
-}
-
-install_fzf() {
-    if ! command -v fzf &>/dev/null; then
-        print_message "$CYAN" "Installing fzf..."
-        if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-            sudo pacman -S --noconfirm fzf
-        elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-            sudo dnf install -y fzf
-        fi
+        print_message "$RED" "Cannot determine OS. Exiting..."
+        exit 1
     fi
 }
 
-clear
+confirm_setup() {
+    print_message "$CYAN" "Welcome to the DWM setup script."
+    print_message "$CYAN" "This script will install and configure DWM along with necessary dependencies."
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Zsh"
-else
-    echo "========== Zsh Setup =========="
-fi
-echo -e "${RESET}"
-
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    DISTRO=$ID
-else
-    print_message "$RED" "Unable to detect your Linux distribution."
-    exit 1
-fi
-
-print_message "$CYAN" "Detected distribution: $DISTRO"
-
-install_fzf
-
-if ! fzf_confirm "This script will configure Zsh with Powerlevel10k, Oh My Zsh, and more. Nerd Font is recommended. Continue?"; then
-    print_message "$RED" "Setup aborted by the user. Exiting..."
-    exit 1
-fi
-
-install_zsh_dependencies() {
-    print_message "$CYAN" "Installing Zsh dependencies..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-        sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-        sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting eza
+    if ! fzf_confirm "Do you want to continue with this setup?"; then
+        print_message "$RED" "Setup aborted by the user. Exiting..."
+        exit 1
     fi
 }
 
-install_powerlevel10k() {
-    print_message "$CYAN" "Installing Powerlevel10k..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-        $AUR_HELPER -S --noconfirm zsh-theme-powerlevel10k-git
-        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-        sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
-        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+install_packages() {
+    if [ "$distro" == "arch" ]; then
+        print_message "$CYAN" ":: Installing required packages using pacman..."
+        sudo pacman -S --needed git base-devel libx11 libxinerama libxft ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils thunar flameshot trash-cli tumbler gvfs-mtp fzf || {
+            print_message "$RED" "Failed to install some packages."
+            exit 1
+        }
+    elif [ "$distro" == "fedora" ]; then
+        print_message "$CYAN" ":: Installing required packages using dnf..."
+        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot trash-cli tumbler gvfs-mtp fzf || {
+            print_message "$RED" "Failed to install some packages."
+            exit 1
+        }
     fi
 }
 
-install_ohmyzsh() {
-    if [[ ! -d /usr/share/oh-my-zsh ]]; then
-        print_message "$CYAN" "Cloning Oh My Zsh..."
-        sudo git clone https://github.com/ohmyzsh/ohmyzsh /usr/share/oh-my-zsh
+check_aur_helper() {
+    if command -v paru &>/dev/null; then
+        print_message "$GREEN" "AUR helper paru is already installed."
+        aur_helper="paru"
+        return 0
+    elif command -v yay &>/dev/null; then
+        print_message "$GREEN" "AUR helper yay is already installed."
+        aur_helper="yay"
+        return 0
+    fi
+    
+    print_message "$CYAN" ":: No AUR helper found. Installing yay..."
+    
+    sudo pacman -S --needed --noconfirm git base-devel
+    
+    local temp_dir=$(mktemp -d)
+    cd "$temp_dir" || exit 1
+    
+    if git clone https://aur.archlinux.org/yay.git; then
+        cd yay || exit 1
+        makepkg -si --noconfirm || { 
+            print_message "$RED" "Failed to install yay."
+            cd "$HOME" || exit
+            rm -rf "$temp_dir"
+            exit 1
+        }
+        cd "$HOME" || exit
+        rm -rf "$temp_dir"
+        aur_helper="yay"
+        print_message "$GREEN" "Successfully installed yay as AUR helper."
+        return 0
+    else
+        print_message "$RED" "Failed to clone yay repository."
+        cd "$HOME" || exit
+        rm -rf "$temp_dir"
+        exit 1
     fi
 }
 
-install_ohmyzsh_plugins() {
-    PLUGIN_DIR="/usr/share/oh-my-zsh/plugins"
-
-    print_message "$CYAN" "Installing Zsh plugins..."
-    cd "$PLUGIN_DIR" || exit 1
-    [[ ! -d zsh-syntax-highlighting ]] && sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-    [[ ! -d zsh-256color ]] && sudo git clone https://github.com/chrissicool/zsh-256color.git
-    [[ ! -d zsh-autosuggestions ]] && sudo git clone https://github.com/zsh-users/zsh-autosuggestions.git
-}
-
-config_zsh() {
-    P10K_CONFIG="$HOME/.p10k.zsh"
-    if [[ -f "$P10K_CONFIG" ]]; then
-        if fzf_confirm ".p10k.zsh found. Do you want to back it up?"; then
-            mv "$P10K_CONFIG" "$P10K_CONFIG.bak"
-            print_message "$GREEN" "Backup created: $P10K_CONFIG.bak"
-        fi
-    fi
-
-    print_message "$CYAN" "Applying Powerlevel10k configuration..."
-    curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.p10k.zsh" -o "$P10K_CONFIG"
-
-    ZSHRC="$HOME/.zshrc"
-    if [[ -f "$ZSHRC" ]]; then
-        if fzf_confirm ".zshrc already exists. Use the recommended version?"; then
-            curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.zshrc" -o "$ZSHRC"
-            print_message "$GREEN" "Applied recommended .zshrc."
+install_dwm() {
+    if [ -d "$HOME/dwm" ]; then
+        if fzf_confirm "DWM directory already exists. Do you want to overwrite it?"; then
+            rm -rf "$HOME/dwm"
+        else
+            print_message "$YELLOW" "Skipping DWM installation."
+            return
         fi
     fi
     
-    if ! grep -q '[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh' "$ZSHRC"; then
-        echo '[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh' >> "$ZSHRC"
+    print_message "$CYAN" "Cloning DWM repository..."
+    git clone https://github.com/harilvfs/dwm.git "$HOME/dwm" || exit 1
+    cd "$HOME/dwm" || exit 1
+    sudo make clean install || exit 1
+    print_message "$GREEN" "DWM installed successfully!"
+}
+
+install_slstatus() {
+    print_message "$CYAN" ":: Installing slstatus..."
+    if fzf_confirm "Do you want to install slstatus (recommended)?"; then
+        cd "$HOME/dwm/slstatus" || exit 1
+        sudo make clean install || exit 1
+        print_message "$GREEN" "slstatus installed successfully!"
+    else
+        print_message "$CYAN" "Skipping slstatus installation."
     fi
 }
 
-install_pokemon_colorscripts() {
-    print_message "$CYAN" "Installing Pokémon Color Scripts..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-        $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-        POKEMON_DIR="$HOME/pokemon-colorscripts"
+install_nerd_font() {
+    local FONT_DIR="$HOME/.fonts"
+    local FONT_NAME="MesloLGS NF Regular"
+    mkdir -p "$FONT_DIR"
+    
+    if fc-list | grep -q "$FONT_NAME"; then
+        print_message "$GREEN" "Meslo Nerd Font is already installed. Skipping..."
+        return
+    fi
 
-        [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
-        git clone --depth=1 https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKEMON_DIR"
+    print_message "$CYAN" "Installing Meslo Nerd Font..."
+    if grep -q Fedora /etc/os-release; then
+        wget -P /tmp https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip || exit 1
+        unzip /tmp/Meslo.zip -d /tmp/Meslo || exit 1
+        mv /tmp/Meslo/* "$FONT_DIR" || exit 1
+    else
+        sudo pacman -S --needed ttf-meslo-nerd || exit 1
+    fi
+    
+    fc-cache -vf || exit 1
+    print_message "$GREEN" "Nerd Fonts installed successfully!"
+}
+
+install_picom() {
+    if [ "$distro" == "arch" ]; then
+        check_aur_helper
         
-        if [[ -d "$POKEMON_DIR" ]]; then
-            cd "$POKEMON_DIR" || exit
-            sudo ./install.sh
-            cd ..
-            rm -rf "$POKEMON_DIR"
+        print_message "$CYAN" ":: Installing Picom with $aur_helper..."
+        $aur_helper -S --noconfirm picom-ftlabs-git || { 
+            print_message "$RED" "Failed to install Picom."
+            print_message "$YELLOW" "Trying alternative installation method..."
+            
+            local temp_dir=$(mktemp -d)
+            cd "$temp_dir" || exit 1
+            git clone https://github.com/FT-Labs/picom.git
+            cd picom || exit 1
+            meson setup --buildtype=release build
+            ninja -C build
+            sudo ninja -C build install
+            cd "$HOME" || exit
+            rm -rf "$temp_dir"
+        }
+    elif [ "$distro" == "fedora" ]; then
+        print_message "$CYAN" ":: Installing Picom manually on Fedora..."
+        sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
+        git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
+        cd "$HOME/picom" || exit 1
+        meson setup --buildtype=release build
+        ninja -C build
+        sudo cp build/src/picom /usr/bin/
+    fi
+    
+    configure_picom
+}
+
+configure_picom() {
+    local CONFIG_DIR="$HOME/.config"
+    local DESTINATION="$CONFIG_DIR/picom.conf"
+    local URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
+    
+    mkdir -p "$CONFIG_DIR"
+    if [ -f "$DESTINATION" ]; then
+        if fzf_confirm "Existing picom.conf detected. Do you want to replace it?"; then
+            mv "$DESTINATION" "$DESTINATION.bak"
         else
-            print_message "$RED" "Error: Pokémon Color Scripts failed to clone!"
-            exit 1
+            return
         fi
     fi
+    
+    wget -q -O "$DESTINATION" "$URL" || exit 1
+    print_message "$GREEN" "Picom configuration updated."
 }
 
-install_zoxide() {
-    print_message "$CYAN" "Installing zoxide..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-        sudo pacman -S --noconfirm zoxide
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-        sudo dnf install -y zoxide
+configure_wallpapers() {
+    local BG_DIR="$HOME/Pictures/wallpapers"
+    mkdir -p "$HOME/Pictures"
+    
+    if [ -d "$BG_DIR" ]; then
+        if fzf_confirm "Wallpapers directory already exists. Do you want to overwrite?"; then
+            rm -rf "$BG_DIR"
+        else
+            return
+        fi
     fi
+    
+    git clone https://github.com/harilvfs/wallpapers "$BG_DIR" || exit 1
+    print_message "$GREEN" "Wallpapers downloaded."
 }
 
-if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-    check_aur_helper
-fi
-
-install_zsh_dependencies
-install_powerlevel10k
-install_ohmyzsh
-install_ohmyzsh_plugins
-config_zsh
-install_pokemon_colorscripts
-install_zoxide
-
-print_message "$BLUE" "Zsh setup completed successfully! 🎉"
+detect_distro
+confirm_setup
+install_packages
+install_dwm
+install_slstatus
+install_nerd_font
+install_picom
+configure_wallpapers
+print_message "$GREEN" "DWM setup completed successfully!"
+print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
+print_message "$CYAN" "https://github.com/harilvfs/dwm/blob/main/config"
