@@ -220,7 +220,6 @@ while true; do
         "Install Paru") install_paru ;;
         "Install Yay") install_yay ;;
         "Exit") 
-            clear
             echo -e "${GREEN}Exiting AUR helper installation script.${NC}"
             exit ;;
         *) continue ;;
