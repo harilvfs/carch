@@ -309,20 +309,79 @@ display_scripts_menu() {
         load_all_scripts
     fi
     INSTALLED_VERSION=$(get_installed_version)
+    TERM_WIDTH=$(tput cols)
+
     while true; do
         clear
-        echo -e "${MAGENTA}"
-        figlet -f slant "Carch"
-        echo -e "${GREEN}$INSTALLED_VERSION - Automate Your Linux Setup${RESET}"
-        echo -e "${YELLOW}---------------------${RESET}"
-        echo -e "${GREEN}Distro:${RESET} $(detect_distro)"
-        echo -e "${GREEN}Architecture:${RESET} ${YELLOW}$ARCH${RESET}"
-        echo -e "${YELLOW}---------------------${RESET}"
-        echo -e "${GREEN}For more info: \033[4;34mhttps://carch-org.github.io/docs/${RESET}"
-        echo -e "\n${SYSTEM_EMOJI} ${CYAN}System Health:${RESET}"
-        df -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '$NF=="/" {printf "%sDisk:%s %.1f%% Used | ", CYAN, RESET, $5+0}'
-        free -h | awk -v CYAN='\033[0;36m' -v RESET='\033[0m' '/Mem:/ {printf "%sMemory:%s %.1f%% Used\n", CYAN, RESET, $3/$2 * 100.0}'
-        echo "    "
+        echo -e "${BLUE}╭$(printf '─%.0s' $(seq 1 $((TERM_WIDTH - 2))))╮${NC}"
+        
+        title="CARCH"
+        title_spaces=$(( (TERM_WIDTH - 2 - ${#title}) / 2 ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${title}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))│${NC}"
+        
+        version_text="$INSTALLED_VERSION - Automate Your Linux Setup"
+        version_spaces=$(( (TERM_WIDTH - 2 - ${#version_text}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${GREEN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        separator="---------------------"
+        separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        if [[ -f /etc/os-release ]]; then
+            distro_info=$(grep -oP '^ID=\K.*' /etc/os-release | tr -d '"')
+        else
+            distro_info="Unknown"
+        fi
+        
+        case "$distro_info" in
+            arch)   fixed_width=18 ;;
+            fedora) fixed_width=14 ;;
+            *)      fixed_width=16 ;;
+        esac
+        
+        distro_text=$(printf "%-${fixed_width}s" "Distro: $distro_info")
+        distro_spaces=$(( (TERM_WIDTH - 2 - fixed_width) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - distro_spaces - fixed_width ))
+        [[ $distro_spaces -lt 0 ]] && distro_spaces=0
+        [[ $right_padding -lt 0 ]] && right_padding=0
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $distro_spaces))${GREEN}${distro_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        arch_text="Architecture: ${ARCH}"
+        arch_spaces=$(( (TERM_WIDTH - 2 - ${#arch_text}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - arch_spaces - ${#arch_text} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $arch_spaces))${GREEN}${arch_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        info_text="For more info: https://carch-org.github.io/docs/"
+        info_spaces=$(( (TERM_WIDTH - 2 - ${#info_text}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - info_spaces - ${#info_text} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $info_spaces))${GREEN}${info_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2))))│${NC}"
+        
+        health_text="🖥 System Health:"
+        emoji_width=2
+        health_text_visible_length=$((${#health_text} + emoji_width - 2))
+        health_spaces=$(( (TERM_WIDTH - 2 - health_text_visible_length) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - health_spaces - health_text_visible_length ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $health_spaces))${CYAN}${health_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        disk_percent=$(df -h | awk '$NF=="/" {printf "%.1f", $5+0}')
+        disk_text="Disk: ${disk_percent}% Used"
+        disk_spaces=$(( (TERM_WIDTH - 2 - ${#disk_text}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - disk_spaces - ${#disk_text} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $disk_spaces))${CYAN}${disk_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        mem_percent=$(free -h | awk '/Mem:/ {printf "%.1f", $3/$2 * 100.0}')
+        mem_text="Memory: ${mem_percent}% Used"
+        mem_spaces=$(( (TERM_WIDTH - 2 - ${#mem_text}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - mem_spaces - ${#mem_text} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $mem_spaces))${CYAN}${mem_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        
+        echo -e "${BLUE}╰$(printf '─%.0s' $(seq 1 $((TERM_WIDTH - 2))))╯${NC}"
         
         echo -e "${LAVENDER}Select a script to run:${RESET}"
         cancel_exists=0
