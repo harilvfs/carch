@@ -14,15 +14,16 @@ detect_distro() {
     fi
 }
 
-if ! command -v gum &>/dev/null; then
-    echo -e "\033[1;31m[GUM MISSING]\033[0m Installing gum..."
-    detect_distro
-    case "$distro" in
-        arch) sudo pacman -S --noconfirm gum ;;
-        fedora) sudo dnf install -y gum ;;
-        *) echo -e "\033[1;31m[ERROR]\033[0m Unsupported distribution."; exit 1 ;;
-    esac
-fi
+check_fzf() {
+    if ! command -v fzf &>/dev/null; then
+        echo -e "${CYAN}Installing fzf...${RESET}"
+        case "$distro" in
+            arch) sudo pacman -S --noconfirm fzf ;;
+            fedora) sudo dnf install -y fzf ;;
+            *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
+        esac
+    fi
+}
 
 clear
 
@@ -30,6 +31,7 @@ RED="\033[1;31m"
 GREEN="\033[1;32m"
 BLUE="\033[1;34m"
 CYAN="\033[1;36m"
+YELLOW="\033[1;33m"
 RESET="\033[0m"
 
 echo -e "${BLUE}"
@@ -39,19 +41,24 @@ echo -e "${RESET}"
 echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
 
 detect_distro
-gum style --foreground "$CYAN" --bold "Detected distribution: $distro"
+check_fzf
+
+echo -e "${CYAN}Detected distribution: $distro${RESET}"
 
 install_arch() {
     if ! command -v bash &>/dev/null; then
-        gum spin --title "Installing Bash..." -- sudo pacman -S --noconfirm bash
+        echo -e "${CYAN}Installing Bash...${RESET}"
+        sudo pacman -S --noconfirm bash
     fi
     if ! pacman -Q bash-completion &>/dev/null; then
-        gum spin --title "Installing bash-completion..." -- sudo pacman -S --noconfirm bash-completion
+        echo -e "${CYAN}Installing bash-completion...${RESET}"
+        sudo pacman -S --noconfirm bash-completion
     fi
 }
 
 install_fedora() {
-    gum spin --title "Reinstalling Bash and bash-completion to avoid errors..." -- sudo dnf install -y bash bash-completion
+    echo -e "${CYAN}Reinstalling Bash and bash-completion to avoid errors...${RESET}"
+    sudo dnf install -y bash bash-completion
 }
 
 case "$distro" in
@@ -60,14 +67,15 @@ case "$distro" in
     *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
 esac
 
-THEME=$(gum choose "Catppuccin" "Nord" "Exit")
+options=("Catppuccin" "Nord" "Exit")
+THEME=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select a theme: " --height=10 --layout=reverse --border)
 
-if [[ $THEME == "Exit" ]]; then
-    gum style --foreground "$RED" "Exiting..."
+if [[ -z "$THEME" || "$THEME" == "Exit" ]]; then
+    echo -e "${RED}Exiting...${RESET}"
     exit 0
 fi
 
-gum style --foreground "$GREEN" --bold "You selected $THEME theme."
+echo -e "${GREEN}You selected $THEME theme.${RESET}"
 
 if [[ $THEME == "Catppuccin" ]]; then
     STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/i3wmdotfiles/refs/heads/catppuccin/starship/starship.toml"
@@ -76,7 +84,7 @@ else
 fi
 
 if ! command -v starship &>/dev/null; then
-    gum style --foreground "$CYAN" "Starship not found. Installing..."
+    echo -e "${CYAN}Starship not found. Installing...${RESET}"
     case "$distro" in
         arch) sudo pacman -S --noconfirm starship || curl -sS https://starship.rs/install.sh | sh ;;
         fedora) curl -sS https://starship.rs/install.sh | sh ;;
@@ -85,16 +93,21 @@ fi
 
 STARSHIP_CONFIG="$HOME/.config/starship.toml"
 if [[ -f "$STARSHIP_CONFIG" ]]; then
-    gum confirm "Starship configuration found. Do you want to back it up?" && mv "$STARSHIP_CONFIG" "$STARSHIP_CONFIG.bak"
-    gum style --foreground "$GREEN" "Backup created: $STARSHIP_CONFIG.bak"
+    backup_options=("Yes" "No")
+    backup=$(printf "%s\n" "${backup_options[@]}" | fzf --prompt="Starship configuration found. Do you want to back it up? " --height=10 --layout=reverse --border)
+    if [[ "$backup" == "Yes" ]]; then
+        mv "$STARSHIP_CONFIG" "$STARSHIP_CONFIG.bak"
+        echo -e "${GREEN}Backup created: $STARSHIP_CONFIG.bak${RESET}"
+    fi
 fi
 
 mkdir -p "$HOME/.config"
-gum spin --title "Applying $THEME theme for Starship..." -- curl -fsSL "$STARSHIP_CONFIG_URL" -o "$STARSHIP_CONFIG"
-gum style --foreground "$GREEN" "Applied $THEME theme for Starship."
+echo -e "${CYAN}Applying $THEME theme for Starship...${RESET}"
+curl -fsSL "$STARSHIP_CONFIG_URL" -o "$STARSHIP_CONFIG"
+echo -e "${GREEN}Applied $THEME theme for Starship.${RESET}"
 
 if ! command -v zoxide &>/dev/null; then
-    gum style --foreground "$CYAN" "Installing zoxide..."
+    echo -e "${CYAN}Installing zoxide...${RESET}"
     if [[ "$distro" == "arch" ]]; then
         sudo pacman -S --noconfirm zoxide
     elif [[ "$distro" == "fedora" ]]; then
@@ -104,8 +117,12 @@ fi
 
 BASHRC="$HOME/.bashrc"
 if [[ -f "$BASHRC" ]]; then
-    gum confirm ".bashrc already exists. Use the recommended version?" && curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
-    gum style --foreground "$GREEN" "Applied recommended .bashrc."
+    bashrc_options=("Yes" "No")
+    replace_bashrc=$(printf "%s\n" "${bashrc_options[@]}" | fzf --prompt=".bashrc already exists. Use the recommended version? " --height=10 --layout=reverse --border)
+    if [[ "$replace_bashrc" == "Yes" ]]; then
+        curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
+        echo -e "${GREEN}Applied recommended .bashrc.${RESET}"
+    fi
 fi
 
 install_pokemon_colorscripts() {
@@ -116,50 +133,55 @@ install_pokemon_colorscripts() {
             elif command -v paru &>/dev/null; then
                 AUR_HELPER="paru"
             else
-                gum style --foreground "$CYAN" "No AUR helper found. Installing yay..."
+                echo -e "${CYAN}No AUR helper found. Installing yay...${RESET}"
                 
-                gum spin --title "Installing dependencies..." -- sudo pacman -S --needed --noconfirm git base-devel
+                echo -e "${CYAN}Installing dependencies...${RESET}"
+                sudo pacman -S --needed --noconfirm git base-devel
                 
                 TEMP_DIR=$(mktemp -d)
                 cd "$TEMP_DIR" || exit 1
                 
-                gum spin --title "Cloning yay repository..." -- git clone https://aur.archlinux.org/yay.git
+                echo -e "${CYAN}Cloning yay repository...${RESET}"
+                git clone https://aur.archlinux.org/yay.git
                 cd yay || exit 1
-                gum spin --title "Building yay..." -- makepkg -si --noconfirm
+                echo -e "${CYAN}Building yay...${RESET}"
+                makepkg -si --noconfirm
                 
                 cd "$HOME" || exit 1
                 rm -rf "$TEMP_DIR"
                 AUR_HELPER="yay"
                 
-                gum style --foreground "$GREEN" "Successfully installed yay!"
+                echo -e "${GREEN}Successfully installed yay!${RESET}"
             fi
             
-            gum spin --title "Installing Pokémon Color Scripts (AUR)..." -- $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
+            echo -e "${CYAN}Installing Pokémon Color Scripts (AUR)...${RESET}"
+            $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
             ;;
 
         fedora)
-            YELLOW="\033[1;33m" 
-            
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
-                gum style --foreground "$YELLOW" "⚠ Found existing Pokémon Color Scripts directory. Removing..."
+                echo -e "${YELLOW}⚠ Found existing Pokémon Color Scripts directory. Removing...${RESET}"
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
 
-            gum spin --title "Installing dependencies..." -- sudo dnf install -y git
+            echo -e "${CYAN}Installing dependencies...${RESET}"
+            sudo dnf install -y git
             
-            gum spin --title "Cloning Pokémon Color Scripts..." -- git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
+            echo -e "${CYAN}Cloning Pokémon Color Scripts...${RESET}"
+            git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
             
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 cd "$HOME/pokemon-colorscripts" || { 
-                    gum style --foreground "$RED" "Failed to change directory to pokemon-colorscripts!"; 
+                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}"; 
                     return 1; 
                 }
                 
-                gum spin --title "Installing Pokémon Color Scripts..." -- sudo ./install.sh
+                echo -e "${CYAN}Installing Pokémon Color Scripts...${RESET}"
+                sudo ./install.sh
                 
                 cd - > /dev/null || true
             else
-                gum style --foreground "$RED" "Failed to clone pokemon-colorscripts repository!"
+                echo -e "${RED}Failed to clone pokemon-colorscripts repository!${RESET}"
                 return 1
             fi
             ;;
@@ -168,5 +190,4 @@ install_pokemon_colorscripts() {
 
 install_pokemon_colorscripts
 
-gum style --foreground "$BLUE" --bold "Setup completed successfully! 🎉"
-
+echo -e "${BLUE}Setup completed successfully! 🎉${RESET}"

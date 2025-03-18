@@ -33,7 +33,7 @@ setup_wallpapers() {
 
     if [ -d "$WALLPAPERS_DIR" ]; then
         echo -e "${CYAN}:: Cleaning up unnecessary files from the repository...${NC}"
-        cd "$WALLPAPERS_DIR"
+        cd "$WALLPAPERS_DIR" || exit
         rm -rf .git README.md docs/
         echo -e "${GREEN}Wallpapers have been successfully set up in your wallpapers directory.${NC}"
     else

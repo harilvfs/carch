@@ -12,68 +12,83 @@ echo -e "${BLUE}"
 figlet -f slant "Fish"
 echo -e "${RESET}"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+print_color() {
+    local color="$1"
+    local message="$2"
+    echo -e "\e[38;2;$(echo $color | sed 's/#//;s/\(..\)\(..\)\(..\)/\1;\2;\3/') m$message\e[0m"
+}
+
 if [[ -f /etc/os-release ]]; then
     . /etc/os-release
     DISTRO="${ID:-unknown}"
 else
-    gum style --foreground "$RED" "❌ Unsupported distribution!"
+    print_color "$RED" "❌ Unsupported distribution!"
     exit 1
 fi
 
 install_fish() {
-    gum style --foreground "$CYAN" "🐟 Installing Fish shell..."
+    print_color "$CYAN" "🐟 Installing Fish shell..."
     
     if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
         sudo pacman -S --noconfirm fish noto-fonts-emoji ttf-joypixels git
     elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
         sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git
     else
-        gum style --foreground "$RED" "❌ Unsupported distro: $DISTRO"
+        print_color "$RED" "❌ Unsupported distro: $DISTRO"
         exit 1
     fi
 }
 
-gum confirm "⚠️ This script will configure Fish shell. Nerd Font Are Recommended. Do you want to continue?" || exit 0
+fzf_confirm "⚠️ This script will configure Fish shell. Nerd Font Are Recommended. Do you want to continue?" || exit 0
 
 install_fish
 
 FISH_CONFIG="$HOME/.config/fish"
-
 if [[ -d "$FISH_CONFIG" ]]; then
-    gum confirm "⚠️ Existing Fish config found. Do you want to back it up?" && {
+    fzf_confirm "⚠️ Existing Fish config found. Do you want to back it up?" && {
         BACKUP_PATH="$HOME/.config/fish.bak.$(date +%s)"
         mv "$FISH_CONFIG" "$BACKUP_PATH"
-        gum style --foreground "$GREEN" "✅ Backup created at $BACKUP_PATH"
+        print_color "$GREEN" "✅ Backup created at $BACKUP_PATH"
     }
 fi
 
-gum spin --title "Cloning Fish configuration..." -- git clone --depth=1 https://github.com/harilvfs/dwm "$HOME/dwm"
+echo "Cloning Fish configuration..."
+git clone --depth=1 https://github.com/harilvfs/dwm "$HOME/dwm"
 
 if [[ -d "$HOME/dwm/config/fish" ]]; then
-    gum spin --title "Applying Fish configuration..." -- cp -r "$HOME/dwm/config/fish" "$FISH_CONFIG"
-    gum style --foreground "$GREEN" "✅ Fish configuration applied!"
+    echo "Applying Fish configuration..."
+    cp -r "$HOME/dwm/config/fish" "$FISH_CONFIG"
+    print_color "$GREEN" "✅ Fish configuration applied!"
     rm -rf "$HOME/dwm"
 else
-    gum style --foreground "$RED" "❌ Failed to apply Fish configuration!"
+    print_color "$RED" "❌ Failed to apply Fish configuration!"
     exit 1
 fi
 
 install_zoxide() {
-    gum style --foreground "$CYAN" "Installing zoxide..."
-
+    print_color "$CYAN" "Installing zoxide..."
     if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
         sudo pacman -S --noconfirm zoxide
     elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
         sudo dnf install -y zoxide
     else
-        gum style --foreground "$RED" "❌ Unsupported distro: $DISTRO"
+        print_color "$RED" "❌ Unsupported distro: $DISTRO"
         exit 1
     fi
 }
 
 install_zoxide
-
-gum style --foreground "$GREEN" "✅ Zoxide initialized in Fish!"
-
-gum style --foreground "$CYAN" "🐟 Fish setup complete! Restart your shell to apply changes."
-
+print_color "$GREEN" "✅ Zoxide initialized in Fish!"
+print_color "$CYAN" "🐟 Fish setup complete! Restart your shell to apply changes."

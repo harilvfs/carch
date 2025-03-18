@@ -2,6 +2,7 @@
 
 clear
 
+aur_helper=""
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
@@ -28,18 +29,29 @@ detect_package_manager() {
 }
 
 install_aur_helper() {
-    if ! command -v yay &>/dev/null; then
+    local aur_helpers=("yay" "paru")
+    local aur_helper_found=false
+    
+    for helper in "${aur_helpers[@]}"; do
+        if command -v "$helper" &>/dev/null; then
+            echo -e "${GREEN}:: AUR helper '$helper' is already installed. Using it.${ENDCOLOR}"
+            aur_helper="$helper"
+            aur_helper_found=true
+            break
+        fi
+    done
+    
+    if [ "$aur_helper_found" = false ]; then
         echo -e "${RED}No AUR helper found. Installing yay...${ENDCOLOR}"
         sudo pacman -S --needed --noconfirm git base-devel
         temp_dir=$(mktemp -d)
         git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
         cd "$temp_dir/yay" || { echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"; exit 1; }
         makepkg -si --noconfirm
-        cd ..
+        cd .. || exit 1
         rm -rf "$temp_dir"
         echo -e "${GREEN}yay installed successfully.${ENDCOLOR}"
-    else
-        echo -e "${GREEN}:: yay is already installed.${ENDCOLOR}"
+        aur_helper="yay"
     fi
 }
 
@@ -57,8 +69,8 @@ install_dependencies_normal() {
 }
 
 setup_picom_ftlabs() {
-    echo -e "${GREEN}:: Installing Picom FT-Labs (picom-ftlabs-git) via yay...${ENDCOLOR}"
-    yay -S --noconfirm picom-ftlabs-git
+    echo -e "${GREEN}:: Installing Picom FT-Labs (picom-ftlabs-git) via $aur_helper...${ENDCOLOR}"
+    "$aur_helper" -S --noconfirm picom-ftlabs-git
 }
 
 install_picom_ftlabs_fedora() {

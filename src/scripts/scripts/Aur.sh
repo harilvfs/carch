@@ -47,23 +47,21 @@ check_dependencies() {
         echo -e "${GREEN}✓ Less is installed${NC}"
     fi
     
+    if ! command -v fzf &>/dev/null; then
+        missing_deps+=("fzf")
+    else
+        echo -e "${GREEN}✓ Fzf is installed${NC}"
+    fi
+    
     if [ ${#missing_deps[@]} -gt 0 ]; then
         echo -e "${YELLOW}The following dependencies need to be installed: ${missing_deps[*]}${NC}"
         
-        if command -v gum &>/dev/null; then
-            if ! gum confirm "Install missing dependencies?"; then
-                echo -e "${RED}Cannot proceed without required dependencies. Exiting...${NC}"
-                read -p "Press Enter to continue..." dummy
-                return 1
-            fi
-        else
-            read -p "Install missing dependencies? [Y/n] " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Nn]$ ]]; then
-                echo -e "${RED}Cannot proceed without required dependencies. Exiting...${NC}"
-                read -p "Press Enter to continue..." dummy
-                return 1
-            fi
+        read -p "Install missing dependencies? [Y/n] " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Nn]$ ]]; then
+            echo -e "${RED}Cannot proceed without required dependencies. Exiting...${NC}"
+            read -p "Press Enter to continue..." dummy
+            return 1
         fi
         
         echo -e "${CYAN}:: Installing missing dependencies...${NC}"
@@ -147,7 +145,7 @@ install_yay() {
     else
         echo -e "${RED}Yay installation failed.${NC}"
     fi
-    read -p "Press Enter to continue..." 
+    read -p "Press Enter to continue..." dummy
 }
 
 check_existing_helpers() {
@@ -171,13 +169,19 @@ check_existing_helpers() {
         echo -e "$helper_list"
         return 0
     else
+        echo -e "${YELLOW}No AUR helpers detected on this system.${NC}"
         return 1
     fi
 }
 
-echo -e "${BLUE}"
-figlet -f slant "Aur"
-echo -e "${ENDCOLOR}"
+display_header() {
+    clear
+    echo -e "${BLUE}"
+    figlet -f slant "Aur"
+    echo -e "${ENDCOLOR}"
+}
+
+display_header
 
 detect_distro
 
@@ -193,51 +197,32 @@ if [ "$distro" == "unsupported" ]; then
     echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions.${NC}"
     echo -e "${YELLOW}Please verify that you are using an Arch-based distribution before continuing.${NC}"
     
-    if ! command -v gum &>/dev/null; then
-        read -p "Do you want to continue anyway? [y/N] " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo -e "${RED}Exiting...${NC}"
-            exit 1
-        fi
-    else
-        if ! gum confirm "Do you want to continue anyway?"; then
-            echo -e "${RED}Exiting...${NC}"
-            exit 1
-        fi
+    read -p "Do you want to continue anyway? [y/N] " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo -e "${RED}Exiting...${NC}"
+        exit 1
     fi
 fi
 
-check_existing_helpers
-
 while true; do
-    clear
-    echo -e "${BLUE}"
-    figlet -f slant "Aur"
-    echo -e "${ENDCOLOR}"
+    display_header
     echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
+    echo
     
     check_existing_helpers
+    echo
     
-    if command -v gum &>/dev/null; then
-        choice=$(gum choose "Install Paru" "Install Yay" "Exit")
-    else
-        echo ""
-        echo "1) Install Paru"
-        echo "2) Install Yay"
-        echo "3) Exit"
-        read -p "Enter your choice: " choice_num
-        case $choice_num in
-            1) choice="Install Paru" ;;
-            2) choice="Install Yay" ;;
-            3) choice="Exit" ;;
-            *) echo -e "${RED}Invalid choice${NC}"; sleep 1; continue ;;
-        esac
-    fi
-    
-    case $choice in
+        options=("Install Paru" "Install Yay" "Exit")
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+
+        case $selected in
         "Install Paru") install_paru ;;
         "Install Yay") install_yay ;;
-        "Exit") exit ;;  
+        "Exit") 
+            clear
+            echo -e "${GREEN}Exiting AUR helper installation script.${NC}"
+            exit ;;
+        *) continue ;;
     esac
 done
