@@ -5,6 +5,16 @@ CONFIG_DIR="$HOME/.config/carch"
 CACHE_DIR="$HOME/.cache/carch-install"
 LOG_FILE="$CACHE_DIR/install.log"
 
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+MAGENTA="\033[35m"
+CYAN="\033[36m"
+WHITE="\033[37m"
+BOLD="\033[1m"
+RESET="\033[0m"
+
 mkdir -p "$CONFIG_DIR" "$CACHE_DIR"
 
 log() {
@@ -20,51 +30,56 @@ else
 fi
 ARCH=$(uname -m)
 
-if ! pacman -Qi "gum" &>/dev/null; then
-    echo "Gum is required for this script. Installing gum..."
-    sudo pacman -Sy --noconfirm gum || { 
-        echo "Failed to install gum. Exiting."
+if ! pacman -Qi "fzf" &>/dev/null; then
+    echo "FZF is required for this script. Installing fzf..."
+    sudo pacman -Sy --noconfirm fzf || { 
+        echo "Failed to install fzf. Exiting."
         exit 1
     }
 fi
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 check_and_install() {
     local pkg="$1"
     if ! pacman -Qi "$pkg" &>/dev/null; then
-        gum style --foreground 3 "Installing missing dependency: $pkg"
-        gum spin --spinner dot --title "Installing $pkg..." -- sudo pacman -Sy --noconfirm "$pkg"
+        echo -e "${YELLOW}Installing missing dependency: $pkg${RESET}"
+        echo "Installing $pkg..."
+        sudo pacman -Sy --noconfirm "$pkg"
         if [ $? -eq 0 ]; then
-            gum style --foreground 2 "✓ $pkg installed successfully"
+            echo -e "${GREEN}✓ $pkg installed successfully${RESET}"
         else
-            gum style --foreground 1 "✗ Failed to install $pkg"
+            echo -e "${RED}✗ Failed to install $pkg${RESET}"
             return 1
         fi
     else
-        gum style --foreground 2 "✓ $pkg is already installed"
+        echo -e "${GREEN}✓ $pkg is already installed${RESET}"
     fi
     return 0
 }
 
 clear
 
-gum style \
-    --border rounded \
-    --border-foreground 6 \
-    --align center \
-    --width 50 \
-    --margin "1 2" \
-    --padding "1 2" \
-    "$(gum style --foreground 6 --bold "CARCH")" \
-    "$(gum style --foreground 7 "Version $VERSION")" \
-    "$(gum style --foreground 7 "Distribution: $DISTRO")" \
-    "$(gum style --foreground 7 "Architecture: $ARCH")"
+echo -e "${CYAN}┌──────────────────────────────────────────────────┐${RESET}"
+echo -e "${CYAN}│                     ${BOLD}CARCH${RESET}${CYAN}                        │${RESET}"
+echo -e "${CYAN}│               ${WHITE}Version $VERSION${RESET}${CYAN}                      │${RESET}"
+echo -e "${CYAN}│          ${WHITE}Distribution: $DISTRO${RESET}${CYAN}             │${RESET}"
+echo -e "${CYAN}│            ${WHITE}Architecture: $ARCH${RESET}${CYAN}                  │${RESET}"
+echo -e "${CYAN}└──────────────────────────────────────────────────┘${RESET}"
 
-gum style \
-    --border normal \
-    --border-foreground 3 \
-    --margin "1 0" \
-    --padding "1 2" \
-    "Installing dependencies..."
+echo -e "${YELLOW}┌──────────────────────────────────────────────────┐${RESET}"
+echo -e "${YELLOW}│              Installing dependencies...          │${RESET}"
+echo -e "${YELLOW}└──────────────────────────────────────────────────┘${RESET}"
 
 dependencies=("figlet" "ttf-jetbrains-mono-nerd" "ttf-jetbrains-mono" "git")
 failed_deps=0
@@ -74,96 +89,73 @@ for dep in "${dependencies[@]}"; do
 done
 
 if [ $failed_deps -gt 0 ]; then
-    gum style --foreground 1 "Some dependencies failed to install. Check the logs."
-    gum confirm "Continue anyway?" || exit 1
+    echo -e "${RED}Some dependencies failed to install. Check the logs.${RESET}"
+    fzf_confirm "Continue anyway?" || exit 1
 fi
 
-gum style \
-    --foreground 2 \
-    --margin "1 0" \
-    --padding "0 2" \
-    "NOTE: Stable Release is recommended."
+echo -e "${GREEN}NOTE: Stable Release is recommended.${RESET}"
+echo -e "${RED}Git package is not fully recommended as it grabs the latest commit which may have bugs.${RESET}"
+echo -e "${YELLOW}${BOLD}Select installation type:${RESET}"
 
-gum style \
-    --foreground 1 \
-    --margin "1 0" \
-    --padding "0 2" \
-    "Git package is not fully recommended as it grabs the latest commit which may have bugs."
-
-gum style \
-    --foreground 3 \
-    --bold \
-    --margin "1 0" \
-    --padding "0 2" \
-    "Select installation type:"
-
-CHOICE=$(gum choose \
-    --height 15 \
-    --cursor.foreground 6 \
-    --selected.foreground 6 \
-    --header "Select package version to install:" \
-    "Stable Release [Recommended]" \
-    "Carch-git [GitHub Latest Commit]" \
-    "Cancel")
+options=("Stable Release [Recommended]" "Carch-git [GitHub Latest Commit]" "Cancel")
+CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select package version to install: " --height=15 --layout=reverse --border)
 
 if [[ $CHOICE == "Cancel" ]]; then
-    gum style --foreground 1 "Installation canceled by the user."
+    echo -e "${RED}Installation canceled by the user.${RESET}"
     exit 0
 fi
 
-gum confirm "Install $CHOICE?" || {
-    gum style --foreground 1 "Installation canceled by the user."
+fzf_confirm "Install $CHOICE?" || {
+    echo -e "${RED}Installation canceled by the user.${RESET}"
     exit 0
 }
 
-gum style --foreground 3 "Preparing installation environment..."
+echo -e "${YELLOW}Preparing installation environment...${RESET}"
 cd "$CACHE_DIR" || exit 1
 if [ -d "pkgs" ]; then
-    gum style --foreground 3 "Updating existing repository..."
-    gum spin --spinner dot --title "Updating repository..." -- git -C pkgs pull
+    echo -e "${YELLOW}Updating existing repository...${RESET}"
+    echo "Updating repository..."
+    git -C pkgs pull
 else
-    gum style --foreground 3 "Cloning repository..."
-    gum spin --spinner dot --title "Cloning repository..." -- git clone https://github.com/carch-org/pkgs
+    echo -e "${YELLOW}Cloning repository...${RESET}"
+    echo "Cloning repository..."
+    git clone https://github.com/carch-org/pkgs
 fi
 
 cd pkgs || {
-    gum style --foreground 1 "Failed to access repository."
+    echo -e "${RED}Failed to access repository.${RESET}"
     exit 1
 }
 
 case "$CHOICE" in
     "Carch-git [GitHub Latest Commit]")
-        gum style --foreground 3 "Installing Git Version (Latest Commit)..."
+        echo -e "${YELLOW}Installing Git Version (Latest Commit)...${RESET}"
         cd carch-git || exit 1
         ;;
     "Stable Release [Recommended]")
-        gum style --foreground 3 "Installing Stable Release..."
+        echo -e "${YELLOW}Installing Stable Release...${RESET}"
         cd carch || exit 1
         ;;
 esac
 
-gum style --foreground 6 "Building and installing package..."
+echo -e "${CYAN}Building and installing package...${RESET}"
 makepkg -si
 
 if [ $? -eq 0 ]; then
-    gum style \
-        --border double \
-        --border-foreground 2 \
-        --align center \
-        --width 50 \
-        --margin "1 2" \
-        --padding "1 2" \
-        "$(gum style --foreground 2 --bold "INSTALLATION COMPLETE")" \
-        "$(gum style --foreground 7 "Carch has been successfully installed!")" \
-        "$(gum style --foreground 7 "Run 'carch -h' to see available options")"
+    echo -e "${GREEN}┌──────────────────────────────────────────────────┐${RESET}"
+    echo -e "${GREEN}│              ${BOLD}INSTALLATION COMPLETE${RESET}${GREEN}               │${RESET}"
+    echo -e "${GREEN}│      ${WHITE}Carch has been successfully installed!${RESET}${GREEN}      │${RESET}"
+    echo -e "${GREEN}│      ${WHITE}Run 'carch -h' to see available options${RESET}${GREEN}     │${RESET}"
+    echo -e "${GREEN}└──────────────────────────────────────────────────┘${RESET}"
 else
-    gum style --foreground 1 "Failed to build or install package."
+    echo -e "${RED}Failed to build or install package.${RESET}"
     exit 1
 fi
 
-gum confirm "Clean up installation files?" && {
-    gum spin --spinner dot --title "Cleaning up..." -- rm -rf "$CACHE_DIR/pkgs"
-    gum style --foreground 2 "Cleanup complete."
+fzf_confirm "Clean up installation files?" && {
+    echo "Cleaning up..."
+    rm -rf "$CACHE_DIR/pkgs"
+    echo -e "${GREEN}Cleanup complete.${RESET}"
 }
 
 exit 0
