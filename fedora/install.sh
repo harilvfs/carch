@@ -59,56 +59,6 @@ install_package() {
     return 0
 }
 
-install_gum() {
-    if ! command_exists gum; then
-        if package_available gum; then
-            log_info "Gum found in official repositories, installing..."
-            if ! install_package gum; then
-                log_warning "Failed to install gum from repositories, trying from GitHub..."
-                install_gum_from_github
-            fi
-        else
-            log_info "Gum not found in official repositories, installing from GitHub..."
-            install_gum_from_github
-        fi
-    else
-        log_info "Gum is already installed"
-    fi
-    return 0
-}
-
-install_gum_from_github() {
-    log_info "Installing gum from GitHub..."
-    local tmp_dir=$(mktemp -d)
-    cd "$tmp_dir" || { log_error "Failed to create temp directory"; return 1; }
-    
-    if ! curl -sL https://github.com/charmbracelet/gum/releases/download/v0.11.0/gum_0.11.0_linux_amd64.tar.gz -o gum.tar.gz >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to download gum"
-        cd - > /dev/null
-        rm -rf "$tmp_dir"
-        return 1
-    fi
-    
-    if ! tar xzf gum.tar.gz >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to extract gum"
-        cd - > /dev/null
-        rm -rf "$tmp_dir"
-        return 1
-    fi
-    
-    if ! sudo mv gum /usr/local/bin/ >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to install gum"
-        cd - > /dev/null
-        rm -rf "$tmp_dir"
-        return 1
-    fi
-    
-    cd - > /dev/null
-    rm -rf "$tmp_dir"
-    log_success "Gum installed successfully from GitHub"
-    return 0
-}
-
 spinner() {
     local pid=$1
     local delay=0.1
@@ -121,6 +71,18 @@ spinner() {
         printf "\b\b\b\b\b\b"
     done
     printf "    \b\b\b\b"
+}
+
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 setup_rpm_build_env() {
@@ -183,16 +145,12 @@ build_rpm() {
     
     cd "$spec_dir" || { log_error "Failed to change directory to SPECS"; return 1; }
     
-    if command_exists gum; then
-        gum spin --spinner dot --title "Building RPM package..." -- rpmbuild -ba "$spec_file" >> "${LOG_FILE}" 2>&1
-        local build_status=$?
-    else
-        rpmbuild -ba "$spec_file" >> "${LOG_FILE}" 2>&1 &
-        local build_pid=$!
-        spinner $build_pid
-        wait $build_pid
-        local build_status=$?
-    fi
+    log_info "Building package, please wait..."
+    rpmbuild -ba "$spec_file" >> "${LOG_FILE}" 2>&1 &
+    local build_pid=$!
+    spinner $build_pid
+    wait $build_pid
+    local build_status=$?
     
     if [ $build_status -ne 0 ]; then
         log_error "Failed to build RPM package"
@@ -214,26 +172,17 @@ install_rpm() {
     
     log_info "Found RPM package: $rpm_file"
     
-    if command_exists gum; then
-        if ! gum confirm "Do you want to install the RPM package?"; then
-            log_info "Installation cancelled by user"
-            return 0
+    if fzf_confirm "Do you want to install the RPM package?"; then
+        log_info "Installing package..."
+        if ! sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1; then
+            log_error "Failed to install RPM package"
+            return 1
         fi
+        log_success "RPM package installed successfully"
     else
-        read -p "Do you want to install the RPM package? (y/n) " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            log_info "Installation cancelled by user"
-            return 0
-        fi
+        log_info "Installation cancelled by user"
     fi
     
-    if ! sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to install RPM package"
-        return 1
-    fi
-    
-    log_success "RPM package installed successfully"
     return 0
 }
 
@@ -241,63 +190,55 @@ handle_error() {
     local fallback_url="https://github.com/harilvfs/carch/blob/main/fedora/carch.spec"
     log_warning "Build process failed. Attempting to use fallback spec file from $fallback_url"
     
-    if command_exists gum; then
-        if ! gum confirm "Do you want to try using the fallback spec file?"; then
-            log_error "Process aborted by user"
+    if fzf_confirm "Do you want to try using the fallback spec file?"; then
+        local spec_dir="$HOME/rpmbuild/SPECS"
+        local spec_file="$spec_dir/carch.spec"
+        
+        log_info "Downloading fallback spec file..."
+        if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/main/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
+            log_error "Failed to download fallback spec file"
             exit 1
         fi
+        
+        log_success "Fallback spec file downloaded successfully"
+        log_info "Attempting to rebuild with fallback spec file..."
+        
+        if ! download_sources; then
+            log_error "Failed to download sources with fallback spec"
+            exit 1
+        fi
+        
+        if ! build_rpm; then
+            log_error "Failed to build RPM with fallback spec"
+            exit 1
+        fi
+        
+        if ! install_rpm; then
+            log_error "Failed to install RPM with fallback spec"
+            exit 1
+        fi
+        
+        log_success "Process completed successfully with fallback spec"
     else
-        read -p "Do you want to try using the fallback spec file? (y/n) " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            log_error "Process aborted by user"
-            exit 1
-        fi
-    fi
-    
-    local spec_dir="$HOME/rpmbuild/SPECS"
-    local spec_file="$spec_dir/carch.spec"
-    
-    log_info "Downloading fallback spec file..."
-    if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/main/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to download fallback spec file"
+        log_error "Process aborted by user"
         exit 1
     fi
-    
-    log_success "Fallback spec file downloaded successfully"
-    log_info "Attempting to rebuild with fallback spec file..."
-    
-    if ! download_sources; then
-        log_error "Failed to download sources with fallback spec"
-        exit 1
-    fi
-    
-    if ! build_rpm; then
-        log_error "Failed to build RPM with fallback spec"
-        exit 1
-    fi
-    
-    if ! install_rpm; then
-        log_error "Failed to install RPM with fallback spec"
-        exit 1
-    fi
-    
-    log_success "Process completed successfully with fallback spec"
+}
+
+display_welcome() {
+    clear
+    echo -e "${YELLOW}┌────────────────────────────────────────────────┐${RESET}"
+    echo -e "${YELLOW}│      Welcome to Carch Installer for Fedora     │${RESET}"
+    echo -e "${YELLOW}└────────────────────────────────────────────────┘${RESET}"
+    echo
+    echo -e "${YELLOW}NOTE: If you are re-running this script, please remove the${NC}"
+    echo -e "${YELLOW}~/rpmbuild directory first to avoid conflicts:${NC}"
+    echo -e "${BLUE}rm -rf ~/rpmbuild${NC}"
+    echo
 }
 
 main() {
-  clear
-    if command_exists gum; then
-        gum style \
-            --border normal \
-            --margin "1" \
-            --padding "1" \
-            --border-foreground 212 \
-            "Welcome to Carch Installer for Fedora"
-    else
-        echo -e "${BLUE}Welcome to Carch Installer for Fedora${NC}"
-        echo "----------------------------------------"
-    fi
+    display_welcome
     
     log_info "Starting Carch RPM build process"
     
@@ -310,35 +251,25 @@ main() {
     
     if ! sudo -n true 2>/dev/null; then
         log_warning "This script requires sudo privileges to install packages"
-        if command_exists gum; then
-            if ! gum confirm "Continue with sudo access?"; then
-                log_error "Script aborted due to sudo requirement"
-                exit 1
-            fi
-        else
-            read -p "Continue with sudo access? (y/n) " -n 1 -r
-            echo
-            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-                log_error "Script aborted due to sudo requirement"
-                exit 1
-            fi
+        if ! fzf_confirm "Continue with sudo access?"; then
+            log_error "Script aborted due to sudo requirement"
+            exit 1
         fi
     fi
     
-    install_gum
-    
     log_info "Checking dependencies..."
-    
-    if command_exists gum; then
-        local spinner_text="Checking dependencies..."
-        gum spin --spinner dot --title "$spinner_text" -- sleep 1
-    fi
+    echo "Please wait while checking dependencies..."
     
     for dep in "${dependencies[@]}"; do
         if ! install_package "$dep"; then
             log_warning "Failed to install $dep, continuing anyway..."
         fi
     done
+    
+    log_info "All dependencies checked. Preparing build environment..."
+    sleep 3
+    clear
+    log_info "Starting build process..."
     
     if ! setup_rpm_build_env; then
         handle_error
@@ -367,18 +298,10 @@ main() {
     
     log_success "Carch RPM build and installation completed successfully!"
     
-    if command_exists gum; then
-        gum style \
-            --border normal \
-            --margin "1" \
-            --padding "1" \
-            --border-foreground 212 \
-            "Carch has been successfully installed! You can now run 'carch' to start using it."
-    else
-        echo -e "${GREEN}Carch has been successfully installed!${NC}"
-        echo "You can now run 'carch' to start using it."
-        echo "Check the log file at ${LOG_FILE} for details."
-    fi
+    echo
+    echo -e "${GREEN}Carch has been successfully installed!${NC}"
+    echo "You can now run 'carch' to start using it."
+    echo "Check the log file at ${LOG_FILE} for details."
 }
 
 main "$@"
