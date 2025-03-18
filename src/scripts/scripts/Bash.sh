@@ -128,24 +128,51 @@ fi
 install_pokemon_colorscripts() {
     case "$distro" in
         arch)
-            if command -v yay &>/dev/null; then
-                AUR_HELPER="yay"
-            elif command -v paru &>/dev/null; then
-                AUR_HELPER="paru"
-            else
+            AUR_HELPERS=("yay" "paru")
+            AUR_HELPER=""
+            
+            for helper in "${AUR_HELPERS[@]}"; do
+                if command -v "$helper" &>/dev/null; then
+                    AUR_HELPER="$helper"
+                    echo -e "${GREEN}Found AUR helper: $AUR_HELPER${RESET}"
+                    break
+                fi
+            done
+            
+            if [[ -z "$AUR_HELPER" ]]; then
                 echo -e "${CYAN}No AUR helper found. Installing yay...${RESET}"
                 
                 echo -e "${CYAN}Installing dependencies...${RESET}"
                 sudo pacman -S --needed --noconfirm git base-devel
                 
                 TEMP_DIR=$(mktemp -d)
-                cd "$TEMP_DIR" || exit 1
+                cd "$TEMP_DIR" || { 
+                    echo -e "${RED}Failed to create temporary directory${RESET}"
+                    exit 1
+                }
                 
                 echo -e "${CYAN}Cloning yay repository...${RESET}"
-                git clone https://aur.archlinux.org/yay.git
-                cd yay || exit 1
+                git clone https://aur.archlinux.org/yay.git || {
+                    echo -e "${RED}Failed to clone yay repository${RESET}"
+                    cd "$HOME" || exit 1
+                    rm -rf "$TEMP_DIR"
+                    exit 1
+                }
+                
+                cd yay || {
+                    echo -e "${RED}Failed to enter yay directory${RESET}"
+                    cd "$HOME" || exit 1
+                    rm -rf "$TEMP_DIR"
+                    exit 1
+                }
+                
                 echo -e "${CYAN}Building yay...${RESET}"
-                makepkg -si --noconfirm
+                makepkg -si --noconfirm || {
+                    echo -e "${RED}Failed to build yay${RESET}"
+                    cd "$HOME" || exit 1
+                    rm -rf "$TEMP_DIR"
+                    exit 1
+                }
                 
                 cd "$HOME" || exit 1
                 rm -rf "$TEMP_DIR"
@@ -155,7 +182,10 @@ install_pokemon_colorscripts() {
             fi
             
             echo -e "${CYAN}Installing Pokémon Color Scripts (AUR)...${RESET}"
-            $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
+            $AUR_HELPER -S --noconfirm pokemon-colorscripts-git || {
+                echo -e "${RED}Failed to install pokemon-colorscripts-git${RESET}"
+                exit 1
+            }
             ;;
 
         fedora)
