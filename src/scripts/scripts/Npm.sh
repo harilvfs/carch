@@ -12,15 +12,32 @@ echo -e "${BLUE}"
 figlet -f slant "Npm"
 echo -e "${RESET}"
 
-if ! command -v gum &>/dev/null; then
-    echo -e "${RED}Error: 'gum' is required for this script.${RESET}"
-    echo -e "${YELLOW}Please install 'gum' before running this script.${RESET}"
+if ! command -v fzf &>/dev/null; then
+    echo -e "${RED}Error: 'fzf' is required for this script.${RESET}"
+    echo -e "${YELLOW}Please install 'fzf' before running this script.${RESET}"
     exit 1
 fi
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+print_message() {
+    local color="$1"
+    local message="$2"
+    echo -e "${color}${message}${RESET}"
+}
+
 package_manager=""
 if command -v npm &>/dev/null; then
-    echo -e "${GREEN}✔ npm is already installed.${RESET}"
+    print_message "$GREEN" "✔ npm is already installed."
     if pacman -Q npm &>/dev/null; then
         package_manager="pacman"
         remove_cmd="sudo pacman -Rsn npm"
@@ -30,72 +47,72 @@ if command -v npm &>/dev/null; then
     fi
     
     if [[ -n "$package_manager" ]]; then
-        gum style --foreground 202 "⚠ npm is installed via $package_manager, which may cause conflicts with nvm."
-        if gum confirm "Do you want to remove the package manager version and use nvm instead? (Recommended)"; then
-            gum style --foreground 214 "🗑 Removing npm and Node.js via $package_manager..."
+        print_message "$YELLOW" "⚠ npm is installed via $package_manager, which may cause conflicts with nvm."
+        if fzf_confirm "Do you want to remove the package manager version and use nvm instead? (Recommended)"; then
+            print_message "$YELLOW" "🗑 Removing npm and Node.js via $package_manager..."
             if eval "$remove_cmd"; then
-                echo -e "${GREEN}✔ Successfully removed npm and Node.js.${RESET}"
+                print_message "$GREEN" "✔ Successfully removed npm and Node.js."
             else
-                echo -e "${RED}✖ Failed to remove npm and Node.js.${RESET}"
+                print_message "$RED" "✖ Failed to remove npm and Node.js."
                 exit 1
             fi
         else
-            echo -e "${GREEN}✔ Keeping existing npm installation.${RESET}"
+            print_message "$GREEN" "✔ Keeping existing npm installation."
             exit 0
         fi
     else
-        echo -e "${GREEN}✔ npm is installed via nvm or manually.${RESET}"
+        print_message "$GREEN" "✔ npm is installed via nvm or manually."
         exit 0
     fi
 else
-    gum style --foreground 208 "⚠ npm is not installed on your system."
-    if ! gum confirm "Do you want to install npm using nvm? (Recommended)"; then
-        echo -e "${RED}✖ npm installation aborted.${RESET}"
+    print_message "$YELLOW" "⚠ npm is not installed on your system."
+    if ! fzf_confirm "Do you want to install npm using nvm? (Recommended)"; then
+        print_message "$RED" "✖ npm installation aborted."
         exit 1
     fi
 fi
 
 if [[ ! -d "$HOME/.nvm" ]]; then
-    gum style --foreground 214 "🔧 Installing nvm..."
+    print_message "$YELLOW" "🔧 Installing nvm..."
     
     if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
-        echo -e "${GREEN}✔ nvm installed successfully.${RESET}"
+        print_message "$GREEN" "✔ nvm installed successfully."
     elif wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
-        echo -e "${GREEN}✔ nvm installed successfully (via wget).${RESET}"
+        print_message "$GREEN" "✔ nvm installed successfully (via wget)."
     else
-        echo -e "${RED}✖ Failed to install nvm.${RESET}"
+        print_message "$RED" "✖ Failed to install nvm."
         exit 1
     fi
 else
-    echo -e "${GREEN}✔ nvm is already installed.${RESET}"
+    print_message "$GREEN" "✔ nvm is already installed."
 fi
 
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
     . "$NVM_DIR/nvm.sh"
-    echo -e "${GREEN}✔ nvm loaded successfully.${RESET}"
+    print_message "$GREEN" "✔ nvm loaded successfully."
 else
-    echo -e "${RED}✖ Failed to load nvm. The installation may be incomplete.${RESET}"
+    print_message "$RED" "✖ Failed to load nvm. The installation may be incomplete."
     exit 1
 fi
 
 if command -v nvm &>/dev/null; then
-    gum style --foreground 33 "📦 Installing Node.js LTS via nvm..."
+    print_message "$BLUE" "📦 Installing Node.js LTS via nvm..."
     nvm install --lts
     nvm use --lts
-    echo -e "${GREEN}✔ Node.js LTS installation completed via nvm.${RESET}"
-    echo -e "${GREEN}✔ npm is now available.${RESET}"
+    print_message "$GREEN" "✔ Node.js LTS installation completed via nvm."
+    print_message "$GREEN" "✔ npm is now available."
     
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
-    echo -e "${BLUE}Node.js version: ${NODE_VERSION}${RESET}"
-    echo -e "${BLUE}npm version: ${NPM_VERSION}${RESET}"
+    print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
+    print_message "$BLUE" "npm version: ${NPM_VERSION}"
     
-    echo -e "${YELLOW}⚠ Note: For nvm to work in new terminal sessions, make sure your shell's config file (e.g., ~/.bashrc) has been updated correctly.${RESET}"
-    echo -e "${YELLOW}⚠ You may need to restart your terminal or run 'source ~/.bashrc' (or equivalent) for permanent effects.${RESET}"
+    print_message "$YELLOW" "⚠ Note: For nvm to work in new terminal sessions, make sure your shell's config file (e.g., ~/.bashrc) has been updated correctly."
+    print_message "$YELLOW" "⚠ You may need to restart your terminal or run 'source ~/.bashrc' (or equivalent) for permanent effects."
 else
-    echo -e "${RED}✖ nvm command is still not available after installation.${RESET}"
-    echo -e "${YELLOW}Please try the following steps manually:${RESET}"
+    print_message "$RED" "✖ nvm command is still not available after installation."
+    print_message "$YELLOW" "Please try the following steps manually:"
     echo -e "1. Close this terminal and open a new one"
     echo -e "2. Run 'nvm install --lts'"
     exit 1

@@ -18,6 +18,18 @@ print_message() {
 echo -e "${BLUE}"
 figlet -f slant "DWM"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 detect_distro() {
     if [ -f /etc/os-release ]; then
         source /etc/os-release
@@ -53,7 +65,7 @@ confirm_setup() {
     print_message "$CYAN" "Welcome to the DWM setup script."
     print_message "$CYAN" "This script will install and configure DWM along with necessary dependencies."
 
-    if ! gum confirm "Do you want to continue with this setup?"; then
+    if ! fzf_confirm "Do you want to continue with this setup?"; then
         print_message "$RED" "Setup aborted by the user. Exiting..."
         exit 1
     fi
@@ -62,22 +74,61 @@ confirm_setup() {
 install_packages() {
     if [ "$distro" == "arch" ]; then
         print_message "$CYAN" ":: Installing required packages using pacman..."
-        sudo pacman -S --needed git base-devel libx11 libxinerama libxft ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils thunar flameshot trash-cli tumbler gvfs-mtp || {
+        sudo pacman -S --needed git base-devel libx11 libxinerama libxft ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing required packages using dnf..."
-        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot trash-cli tumbler gvfs-mtp || {
+        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }
     fi
 }
 
+check_aur_helper() {
+    if command -v paru &>/dev/null; then
+        print_message "$GREEN" "AUR helper paru is already installed."
+        aur_helper="paru"
+        return 0
+    elif command -v yay &>/dev/null; then
+        print_message "$GREEN" "AUR helper yay is already installed."
+        aur_helper="yay"
+        return 0
+    fi
+    
+    print_message "$CYAN" ":: No AUR helper found. Installing yay..."
+    
+    sudo pacman -S --needed --noconfirm git base-devel
+    
+    local temp_dir=$(mktemp -d)
+    cd "$temp_dir" || exit 1
+    
+    if git clone https://aur.archlinux.org/yay.git; then
+        cd yay || exit 1
+        makepkg -si --noconfirm || { 
+            print_message "$RED" "Failed to install yay."
+            cd "$HOME" || exit
+            rm -rf "$temp_dir"
+            exit 1
+        }
+        cd "$HOME" || exit
+        rm -rf "$temp_dir"
+        aur_helper="yay"
+        print_message "$GREEN" "Successfully installed yay as AUR helper."
+        return 0
+    else
+        print_message "$RED" "Failed to clone yay repository."
+        cd "$HOME" || exit
+        rm -rf "$temp_dir"
+        exit 1
+    fi
+}
+
 install_dwm() {
     if [ -d "$HOME/dwm" ]; then
-        if gum confirm "DWM directory already exists. Do you want to overwrite it?"; then
+        if fzf_confirm "DWM directory already exists. Do you want to overwrite it?"; then
             rm -rf "$HOME/dwm"
         else
             print_message "$YELLOW" "Skipping DWM installation."
@@ -94,7 +145,7 @@ install_dwm() {
 
 install_slstatus() {
     print_message "$CYAN" ":: Installing slstatus..."
-    if gum confirm "Do you want to install slstatus (recommended)?"; then
+    if fzf_confirm "Do you want to install slstatus (recommended)?"; then
         cd "$HOME/dwm/slstatus" || exit 1
         sudo make clean install || exit 1
         print_message "$GREEN" "slstatus installed successfully!"
@@ -128,34 +179,23 @@ install_nerd_font() {
 
 install_picom() {
     if [ "$distro" == "arch" ]; then
-        if ! command -v yay &>/dev/null && ! command -v paru &>/dev/null; then
-            print_message "$CYAN" ":: Installing yay as AUR helper..."
-            
-            sudo pacman -S --needed --noconfirm git base-devel
-
-            if git clone https://aur.archlinux.org/yay.git; then
-                cd yay || exit 1
-                makepkg -si --noconfirm || { print_message "$RED" "Failed to install yay."; exit 1; }
-                cd ..
-                rm -rf yay
-            else
-                print_message "$RED" "Failed to clone yay repository. Exiting..."
-                exit 1
-            fi
-        fi
-
-        if command -v yay &>/dev/null; then
-            aur_helper="yay"
-        elif command -v paru &>/dev/null; then
-            aur_helper="paru"
-        else
-            print_message "$RED" "Failed to install an AUR helper (yay/paru). Exiting..."
-            exit 1
-        fi
-
+        check_aur_helper
+        
         print_message "$CYAN" ":: Installing Picom with $aur_helper..."
-        $aur_helper -S --noconfirm picom-ftlabs-git || { print_message "$RED" "Failed to install Picom."; exit 1; }
-
+        $aur_helper -S --noconfirm picom-ftlabs-git || { 
+            print_message "$RED" "Failed to install Picom."
+            print_message "$YELLOW" "Trying alternative installation method..."
+            
+            local temp_dir=$(mktemp -d)
+            cd "$temp_dir" || exit 1
+            git clone https://github.com/FT-Labs/picom.git
+            cd picom || exit 1
+            meson setup --buildtype=release build
+            ninja -C build
+            sudo ninja -C build install
+            cd "$HOME" || exit
+            rm -rf "$temp_dir"
+        }
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing Picom manually on Fedora..."
         sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
@@ -176,7 +216,7 @@ configure_picom() {
     
     mkdir -p "$CONFIG_DIR"
     if [ -f "$DESTINATION" ]; then
-        if gum confirm "Existing picom.conf detected. Do you want to replace it?"; then
+        if fzf_confirm "Existing picom.conf detected. Do you want to replace it?"; then
             mv "$DESTINATION" "$DESTINATION.bak"
         else
             return
@@ -192,7 +232,7 @@ configure_wallpapers() {
     mkdir -p "$HOME/Pictures"
     
     if [ -d "$BG_DIR" ]; then
-        if gum confirm "Wallpapers directory already exists. Do you want to overwrite?"; then
+        if fzf_confirm "Wallpapers directory already exists. Do you want to overwrite?"; then
             rm -rf "$BG_DIR"
         else
             return
@@ -214,4 +254,3 @@ configure_wallpapers
 print_message "$GREEN" "DWM setup completed successfully!"
 print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
 print_message "$CYAN" "https://github.com/harilvfs/dwm/blob/main/config"
-
