@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.3](https://github.com/harilvfs/carch/compare/v4.2.2...v4.2.3) (2025-03-19)
+
+### Changed
+
+- Change Installation UI To FZF (https://github.com/harilvfs/carch/pull/325)
+- Minimizing Gum Stuffs [ Scripts ] (https://github.com/harilvfs/carch/pull/324) 
+- Reworked the main menu (https://github.com/harilvfs/carch/pull/326)
+
+### Fixed
+
+- Fix Version Logic [ Commands ] (https://github.com/harilvfs/carch/pull/317)
+- Fix Versioning (https://github.com/harilvfs/carch/pull/318)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.3).
+
+
 ## [v4.2.2](https://github.com/harilvfs/carch/compare/v4.2.1...v4.2.2) (2025-03-15)
 
 ### Changed
