@@ -77,19 +77,7 @@ Up Sleep 3s
 
 Up Sleep 3s
 
-Up Sleep 3s
-
-Sleep 3s
-
-Type@200ms "packages" Sleep 3s Enter
-
-Sleep 5s
-
 Up Sleep 2s
-
-Enter Sleep 3s
-
-Enter Sleep 3s
 
 Sleep 4s
 
