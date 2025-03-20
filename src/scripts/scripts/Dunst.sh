@@ -86,4 +86,3 @@ fi
 
 print_message "$GREEN" "Dunst setup completed successfully!"
 
-
