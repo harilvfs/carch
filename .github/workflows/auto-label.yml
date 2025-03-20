@@ -18,10 +18,8 @@ jobs:
       - name: Get Commit Messages
         id: commits
         run: |
-          messages=$(git log --format=%B -n 10)
-          echo "messages<<EOF" >> "$GITHUB_ENV"
-          echo "$messages" >> "$GITHUB_ENV"
-          echo "EOF" >> "$GITHUB_ENV"
+          messages=$(git log --format=%B -n 10 | tr '\n' ' ') # Convert multiline to single line
+          echo "messages=$messages" >> "$GITHUB_ENV"
           echo "messages=$messages" >> "$GITHUB_OUTPUT"
 
       - name: Determine Labels
@@ -29,7 +27,7 @@ jobs:
         run: |
           LABELS=()
           MESSAGES="${{ steps.commits.outputs.messages }}"
-          
+
           [[ "$MESSAGES" =~ feat ]] && LABELS+=("enhancement")
           [[ "$MESSAGES" =~ fix ]] && LABELS+=("fixes")
           [[ "$MESSAGES" =~ docs ]] && LABELS+=("docs")
@@ -55,10 +53,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labels = JSON.parse(process.env.labels);
-            github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: labels
-            });
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+            }
 
