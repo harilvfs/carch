@@ -1,13 +1,10 @@
 name: Label PRs
-
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-
 permissions:
   contents: read
   pull-requests: write
-
 jobs:
   label-pr:
     runs-on: ubuntu-latest
@@ -19,16 +16,17 @@ jobs:
         id: commits
         run: |
           messages=$(git log --format=%B -n 10)
-          echo "messages<<EOF" >> $GITHUB_ENV
-          echo "$messages" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          echo "messages<<EOF" >> "$GITHUB_ENV"
+          echo "$messages" >> "$GITHUB_ENV"
+          echo "EOF" >> "$GITHUB_ENV"
+          echo "messages=$messages" >> "$GITHUB_OUTPUT"
 
       - name: Determine Labels
         id: labels
         run: |
           LABELS=()
-          MESSAGES="${{ env.messages }}"
-
+          MESSAGES="${{ steps.commits.outputs.messages }}"
+          
           [[ "$MESSAGES" =~ feat ]] && LABELS+=("enhancement")
           [[ "$MESSAGES" =~ fix ]] && LABELS+=("fixes")
           [[ "$MESSAGES" =~ docs ]] && LABELS+=("docs")
@@ -46,7 +44,7 @@ jobs:
           [[ "$MESSAGES" =~ custom ]] && LABELS+=("custom")
 
           LABELS_JSON=$(printf '%s\n' "${LABELS[@]}" | jq -R . | jq -s .)
-          echo "labels=$LABELS_JSON" >> $GITHUB_ENV
+          echo "labels=$LABELS_JSON" >> "$GITHUB_ENV"
 
       - name: Apply Label
         uses: actions/github-script@v7
