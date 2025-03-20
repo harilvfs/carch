@@ -3,7 +3,6 @@
 [default]
 # Define custom word mappings to ignore specific cases
 [default.extend-words]
-# Allow "ba" to be used in rpmbuild commands (-ba flag)
 ba = "ba"
 
 # File-specific exclusions (uncomment if needed)
