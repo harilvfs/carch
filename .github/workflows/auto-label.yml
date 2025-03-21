@@ -1,0 +1,65 @@
+name: PR Label
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  label-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract commit messages
+        id: extract-commits
+        run: |
+          MESSAGES=$(git log --format=%s ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          echo "MESSAGES<<EOF" >> $GITHUB_ENV
+          echo "$MESSAGES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Auto-label PR based on commit messages
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const messages = process.env.MESSAGES;
+            const labels = [];
+            
+            // Match commit content with labels
+            if (messages.includes('feat')) labels.push('enhancement');
+            if (messages.includes('fix')) labels.push('bug');
+            if (messages.includes('docs')) labels.push('documentation');
+            if (messages.includes('chore')) labels.push('dependencies');
+            if (messages.includes('refactor')) labels.push('refactor');
+            if (messages.includes('rust')) labels.push('rust');
+            if (messages.includes('test')) labels.push('test');
+            if (messages.includes('ci')) labels.push('github_actions');
+            if (messages.includes('build')) labels.push('build');
+            if (messages.includes('remove')) labels.push('remove');
+            if (messages.includes('custom')) labels.push('custom');
+            if (messages.includes('ui') || messages.includes('ux')) labels.push('UX/UI');
+            if (messages.includes('update')) labels.push('update');
+            
+            if (labels.length > 0) {
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: labels
+                });
+                console.log(`Added labels: ${labels.join(', ')}`);
+              } catch (error) {
+                console.error(`Error adding labels: ${error.message}`);
+              }
+            } else {
+              console.log('No matching labels found in commit messages');
+            }
