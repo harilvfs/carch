@@ -3,12 +3,10 @@ tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
     labels:
-      - 'feature'
       - 'enhancement'
-      - 'bash'
+  - title: '🦀 Rust'
+    labels:
       - 'rust'
-      - 'arch'
-      - 'fedora'
   - title: '🐛 Bug Fixes'
     labels:
       - 'fix'
@@ -20,10 +18,16 @@ categories:
       - 'refactor'
   - title: '🔼 Updates'
     labels:
-      - 'updates'
-  - title: '🧰 Maintenance'
+      - 'update'
+  - title: '🛠️ Build'
     labels:
-      - 'chore'
+      - 'build'
+  - title: '🧪 Test'
+    labels:
+      - 'test'
+  - title: '🧰 Chore'
+    labels:
+     - 'dependencies'
   - title: '📝 Remove'
     labels:
       - 'remove'
@@ -35,7 +39,7 @@ categories:
       - 'UI/UX'
   - title: '📖 Docs'
     labels:
-      - 'docs'
+      - 'documentation'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' 
 version-resolver:
