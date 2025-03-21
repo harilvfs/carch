@@ -8,7 +8,19 @@ YELLOW="\e[33m"
 BLUE="\e[34m"
 RESET="\e[0m"
 
-dependencies=("tmux" "figlet" "gum" "wget" "git")
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+dependencies=("tmux" "figlet" "fzf" "wget" "git")
 missing=()
 
 for dep in "${dependencies[@]}"; do
@@ -37,7 +49,7 @@ echo -e "${BLUE}"
 figlet -f slant "Tmux"
 echo -e "${RESET}"
 
-if ! gum confirm "Do you want to proceed with the tmux installation and configuration?"; then
+if ! fzf_confirm "Do you want to proceed with the tmux installation and configuration?"; then
     echo -e "${RED}Exiting...${RESET}"
     exit 0
 fi
@@ -57,10 +69,10 @@ backup_dir="$HOME/.config/tmux.bak"
 
 if [[ -d "$config_dir" ]]; then
     echo -e "${YELLOW}Existing tmux configuration detected.${RESET}"
-    if gum confirm "Do you want to backup the existing configuration?"; then
+    if fzf_confirm "Do you want to backup the existing configuration?"; then
         if [[ -d "$backup_dir" ]]; then
             echo -e "${YELLOW}Backup already exists.${RESET}"
-            if gum confirm "Do you want to overwrite the backup?"; then
+            if fzf_confirm "Do you want to overwrite the backup?"; then
                 rm -rf "$backup_dir"
             else
                 echo -e "${RED}Exiting to prevent data loss.${RESET}"
@@ -78,7 +90,7 @@ tpm_dir="$HOME/.tmux/plugins/tpm"
 
 if [[ -d "$tpm_dir" ]]; then
     echo -e "${YELLOW}TPM is already installed.${RESET}"
-    if gum confirm "Do you want to overwrite TPM?"; then
+    if fzf_confirm "Do you want to overwrite TPM?"; then
         rm -rf "$tpm_dir"
     else
         echo -e "${RED}Skipping TPM installation.${RESET}"

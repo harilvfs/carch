@@ -7,6 +7,18 @@ export GREEN="\e[32m"
 export BLUE="\e[34m"
 export ENDCOLOR="\e[0m"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 print_banner() {
     echo -e "${BLUE}"
     figlet -f slant "SDDM"
@@ -15,7 +27,6 @@ print_banner() {
 Catppuccin SDDM Theme    
 https://github.com/catppuccin/sddm
 ------------------------------------
-
 EOF
     echo -e "${ENDCOLOR}"
 }
@@ -48,7 +59,6 @@ detect_os() {
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
     local dms=("gdm" "lightdm" "lxdm" "xdm")  
-
     for dm in "${dms[@]}"; do
         if systemctl is-enabled "$dm" &>/dev/null; then
             echo -e "${RED}:: Disabling $dm...${ENDCOLOR}"
@@ -88,7 +98,7 @@ install_theme() {
     
     if [ -d "$theme_dir/catppuccin-mocha" ]; then
         echo -e "${RED}:: Catppuccin theme already exists.${ENDCOLOR}"
-        if gum confirm "Do you want to remove the existing theme and install a new one?"; then
+        if fzf_confirm "Do you want to remove the existing theme and install a new one?"; then
             echo -e "${GREEN}:: Removing the existing theme...${ENDCOLOR}"
             sudo rm -rf "$theme_dir/catppuccin-mocha"
         else
@@ -96,7 +106,6 @@ install_theme() {
             exit 1
         fi
     fi
-
     echo -e "${GREEN}:: Downloading Catppuccin SDDM theme...${ENDCOLOR}"
     sudo mkdir -p "$theme_dir"
     if ! sudo wget -O /tmp/catppuccin-mocha.zip "$theme_url"; then
@@ -116,7 +125,6 @@ set_theme() {
     sudo bash -c 'cat > /etc/sddm.conf <<EOF
 [Theme]
 Current=catppuccin-mocha
-
 # [Autologin]
 # User=username
 # Session=dwm,hyprland or others
@@ -127,13 +135,12 @@ EOF'
 print_banner
 detect_os
 
-if ! gum confirm "Continue with SDDM setup?"; then
+if ! fzf_confirm "Continue with SDDM setup?"; then
     echo -e "${RED}Setup aborted by the user.${ENDCOLOR}"
     exit 1
 fi
 
 echo -e "${GREEN}:: Proceeding with installation...${ENDCOLOR}"
-
 install_sddm
 install_theme
 set_theme
@@ -141,4 +148,3 @@ disable_other_dms
 enable_sddm
 
 echo -e "${GREEN}:: Setup complete. Please reboot your system to see the changes.${ENDCOLOR}"
-

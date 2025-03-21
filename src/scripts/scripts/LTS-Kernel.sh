@@ -5,7 +5,21 @@ clear
 GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
+CYAN="\e[36m"
+NC="\e[0m"
 ENDCOLOR="\e[0m"
+
+fzf_confirm() {
+    local options=("Yes" "No" "Exit")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=10 --layout=reverse --border)
+    
+    case "$selected" in
+        "Yes") return 0 ;;
+        "No") return 1 ;;
+        "Exit") echo "Exiting..."; exit 0 ;;
+        *) echo "Invalid selection"; exit 1 ;;
+    esac
+}
 
 echo -e "${BLUE}"
 figlet -f slant "LTS Kernel"
@@ -37,25 +51,16 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-prompt_continue() {
-    choice=$(gum choose "Yes" "No" "Exit")
-    case "$choice" in
-        "Yes") return 0 ;;
-        "No") return 1 ;;
-        "Exit") echo "Exiting..."; exit 0 ;;
-    esac
-}
-
 echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
 echo -e "${RED}If you don't know about kernel changes, it's recommended to Exit.${ENDCOLOR}"
-
 echo -e "\n${BLUE}Choose an option:${ENDCOLOR}"
 echo -e "${GREEN}Yes:${NC} Removes the current kernel and installs the LTS kernel."
 echo -e "${GREEN}No:${NC} Installs the LTS kernel without removing the current kernel."
 echo -e "${GREEN}Exit:${NC} Cancels the installation.\n"
 
 echo "Do you want to continue with the kernel installation?"
-if prompt_continue; then
+
+if fzf_confirm; then
     if [ -x "$(command -v pacman)" ]; then
         install_lts_kernel_arch
     elif [ -x "$(command -v dnf)" ]; then
@@ -64,18 +69,14 @@ if prompt_continue; then
         echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
         exit 1
     fi
-
     echo -e "${GREEN}:: Removing the current kernel...${ENDCOLOR}"
-
     CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')
     if [[ "$CURRENT_KERNEL_NAME" != "linux" ]]; then
         echo -e "${RED}:: Current kernel name does not match expected 'linux'. Cannot remove kernel.${ENDCOLOR}"
         exit 1
     fi
-
     sudo pacman -Rns --noconfirm "$CURRENT_KERNEL_NAME"
     echo -e "${GREEN}:: Removed the current kernel.${ENDCOLOR}"
-
     configure_grub
 else
     echo ":: Installing the LTS kernel alongside the current kernel..."
@@ -91,4 +92,3 @@ else
 fi
 
 echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"
-

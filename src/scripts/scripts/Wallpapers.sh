@@ -8,6 +8,18 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 NC='\033[0m'
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 echo -e "${BLUE}"
 figlet -f slant "Wallpapers"
 echo -e "${ENDCOLOR}"
@@ -17,7 +29,7 @@ WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
 
 echo -e "${CYAN}:: Wallpapers will be set up in the Pictures directory (${PICTURES_DIR}).${NC}"
 
-if ! gum confirm "Do you want to continue?"; then
+if ! fzf_confirm "Do you want to continue?"; then
     echo -e "${YELLOW}Operation canceled. Exiting...${NC}"
     exit 0
 fi

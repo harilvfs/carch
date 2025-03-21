@@ -12,7 +12,24 @@ figlet -f slant "Hyprland"
 echo -e "${RESET}"
 
 type figlet &>/dev/null || { echo "figlet is not installed. Install it first."; exit 1; }
-type gum &>/dev/null || { echo "gum is not installed. Install it first."; exit 1; }
+type fzf &>/dev/null || { echo "fzf is not installed. Install it first."; exit 1; }
+
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+fzf_choose() {
+    local options=("$@")
+    printf "%s\n" "${options[@]}" | fzf --height=15 --layout=reverse --border
+}
 
 source /etc/os-release
 if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
@@ -23,7 +40,6 @@ else
     echo -e "\e[31mUnsupported distro: $ID. Exiting...\e[0m"
     exit 1
 fi
-
 echo -e "${BLUE}Distro: ${distro^} Linux${RESET}"
 
 if [[ "$distro" == "arch" ]]; then
@@ -35,12 +51,12 @@ fi
 echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${RESET}"
 echo -e "${YELLOW}Backup your configurations before proceeding. I am not responsible for any data loss.${RESET}"
 
-if ! gum confirm "Continue with Hyprland setup?"; then
+if ! fzf_confirm "Continue with Hyprland setup?"; then
     echo -e "${RED}Setup aborted by the user.${RESET}"
     exit 1
 fi
 
-choice=$(printf "%s\n" "${options[@]}" | gum choose)
+choice=$(fzf_choose "${options[@]}")
 
 if [[ "$choice" == "Exit" ]]; then
     echo -e "${RED}Exiting...${RESET}"
@@ -57,7 +73,8 @@ repos["jakoolit/Arch-Hyprland"]="https://github.com/JaKooLit/Arch-Hyprland"
 repos["jakoolit/Fedora-Hyprland"]="https://github.com/JaKooLit/Fedora-Hyprland"
 
 echo "Sourcing from: ${repos[$choice]}"
-if ! gum confirm "Do you want to continue?"; then
+
+if ! fzf_confirm "Do you want to continue?"; then
     echo "Aborted."
     exit 1
 fi
@@ -67,23 +84,19 @@ if [[ "$choice" == "prasanthrangan/hyprdots" ]]; then
     git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE
     cd ~/HyDE/Scripts || exit
     ./install.sh
-
 elif [[ "$choice" == "mylinuxforwork/dotfiles" ]]; then
     if [[ "$distro" == "arch" ]]; then
         bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-arch.sh)
     else
         bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-fedora.sh)
     fi
-
 elif [[ "$choice" == "end-4/dots-hyprland" ]]; then
     bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
-
 elif [[ "$choice" == "jakoolit/Arch-Hyprland" ]]; then
     git clone --depth=1 https://github.com/JaKooLit/Arch-Hyprland.git ~/Arch-Hyprland
     cd ~/Arch-Hyprland || exit
     chmod +x install.sh
     ./install.sh
-
 elif [[ "$choice" == "jakoolit/Fedora-Hyprland" ]]; then
     git clone --depth=1 https://github.com/JaKooLit/Fedora-Hyprland.git ~/Fedora-Hyprland
     cd ~/Fedora-Hyprland || exit
@@ -92,7 +105,11 @@ elif [[ "$choice" == "jakoolit/Fedora-Hyprland" ]]; then
 fi
 
 display_message() {
-    gum style --border "normal" --width 50 --padding 1 --foreground "white" --background "blue" --align "center" "Hyprland setup completed"
+    echo -e "${BLUE}┌──────────────────────────────────────────────┐${RESET}"
+    echo -e "${BLUE}│                                              │${RESET}"
+    echo -e "${BLUE}│         Hyprland setup completed             │${RESET}"
+    echo -e "${BLUE}│                                              │${RESET}"
+    echo -e "${BLUE}└──────────────────────────────────────────────┘${RESET}"
 }
 
 display_message

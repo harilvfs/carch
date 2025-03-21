@@ -8,6 +8,18 @@ CYAN='\033[0;36m'
 YELLOW='\033[0;33m'
 RESET='\033[0m'
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 echo -e "${BLUE}"
 figlet -f slant "Themes & Icons"
 echo -e "${RESET}"
@@ -15,7 +27,7 @@ echo -e "${RESET}"
 echo -e "${CYAN}Theme and Icon Setup${RESET}"
 echo -e "${YELLOW}----------------------${RESET}"
 
-option=$(gum choose "Themes" "Icons" "Both" "Exit")
+option=$(printf "Themes\nIcons\nBoth\nExit" | fzf --prompt="Choose an option: " --height=10 --layout=reverse --border)
 
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
@@ -27,7 +39,7 @@ check_and_create_dir() {
 check_existing_dir() {
     if [ -d "$1" ]; then
         echo -e "${YELLOW}:: $1 already exists. Do you want to overwrite?${RESET}"
-        if ! gum confirm "Continue?"; then
+        if ! fzf_confirm "Continue?"; then
             echo -e "${YELLOW}Operation canceled.${RESET}"
             return 1
         fi
@@ -89,7 +101,7 @@ setup_icons() {
 confirm_and_proceed() {
     echo -e "${YELLOW}:: This will install themes and icons, but you must select them manually using lxappearance (X11) or nwg-look (Wayland).${RESET}"
 
-    if ! gum confirm "Do you want to continue?"; then
+    if ! fzf_confirm "Do you want to continue?"; then
         echo -e "${YELLOW}Operation canceled.${RESET}"
         exit 0
     fi

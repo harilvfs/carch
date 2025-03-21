@@ -10,14 +10,42 @@ NC='\033[0m'
 
 FONTS_DIR="$HOME/.fonts"
 
+get_latest_release() {
+    curl -s "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" | 
+    grep '"tag_name":' | 
+    sed -E 's/.*"v([^"]+)".*/\1/'
+}
+
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+fzf_select_fonts() {
+    local options=("FiraCode" "Meslo" "JetBrains Mono" "Hack" "CascadiaMono" "Terminus" "Exit")
+    printf "%s\n" "${options[@]}" | fzf --prompt="Select fonts (TAB to mark, ENTER to confirm): " --multi --height=15 --layout=reverse --border
+}
+
 check_dependencies() {
     if ! command -v unzip &>/dev/null; then
         echo -e "${RED}Error: 'unzip' is not installed. Please install it first.${NC}"
         exit 1
     fi
 
-    if ! command -v gum &>/dev/null; then
-        echo -e "${RED}Error: 'gum' is not installed. Please install it first.${NC}"
+    if ! command -v fzf &>/dev/null; then
+        echo -e "${RED}Error: 'fzf' is not installed. Please install it first.${NC}"
+        exit 1
+    fi
+
+    if ! command -v curl &>/dev/null; then
+        echo -e "${RED}Error: 'curl' is not installed. Please install it first.${NC}"
         exit 1
     fi
 }
@@ -31,9 +59,10 @@ install_font_arch() {
 
 install_font_fedora() {
     local font_name="$1"
-    local font_url="$2"
+    local latest_version=$(get_latest_release)
+    local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/${font_name}.zip"
 
-    echo -e "${CYAN}:: Downloading $font_name to /tmp...${NC}"
+    echo -e "${CYAN}:: Downloading $font_name version ${latest_version} to /tmp...${NC}"
     curl -L "$font_url" -o "/tmp/${font_name}.zip"
 
     echo -e "${CYAN}:: Extracting $font_name...${NC}"
@@ -47,66 +76,80 @@ install_font_fedora() {
 }
 
 choose_fonts() {
-    echo -e "${BLUE}"
-    figlet -f slant "Fonts"
-    echo -e "${GREEN} Select Font With 'x' Key ${NC}"
-    echo -e "${NC}"
+    local return_to_menu=true
 
-    FONT_SELECTION=$(gum choose --no-limit "FiraCode" "Meslo" "JetBrains Mono" "Hack" "CascadiaMono" "Terminus" "Exit")
+    while $return_to_menu; do
+        clear
+        if command -v figlet &>/dev/null; then
+            echo -e "${BLUE}"
+            figlet -f slant "Fonts"
+            echo -e "${NC}"
+        fi
+        
+        echo -e "${GREEN}Select fonts to install (use TAB to select multiple)${NC}"
 
-    if [[ "$FONT_SELECTION" == "Exit" ]]; then
-        echo -e "${GREEN}Exiting. Thank you!${NC}"
-        exit 0
-    fi
+        FONT_SELECTION=$(fzf_select_fonts)
 
-    for font in $FONT_SELECTION; do
-        case "$font" in
-            "FiraCode")
-                if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-firacode-nerd"
-                else
-                    install_font_fedora "FiraCode" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip"
-                fi
-                ;;
-            "Meslo")
-                if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-meslo-nerd"
-                else
-                    install_font_fedora "Meslo" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.zip"
-                fi
-                ;;
-            "JetBrains Mono")
-                if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-jetbrains-mono-nerd" "ttf-jetbrains-mono"
-                else
-                    install_font_fedora "JetBrainsMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip"
-                fi
-                ;;
-            "Hack")
-                if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-hack-nerd"
-                else
-                    install_font_fedora "Hack" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip"
-                fi
-                ;;
-            "CascadiaMono")
-                if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "ttf-cascadia-mono-nerd" "ttf-cascadia-code-nerd"
-                else
-                    install_font_fedora "CascadiaMono" "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/CascadiaMono.zip"
-                fi
-                ;;
-            "Terminus")
-                if [[ "$OS_TYPE" == "arch" ]]; then
-                    install_font_arch "terminus-font"
-                else
-                    echo -e "${RED}Terminus font is not available as a Nerd Font.${NC}"
-                fi
-                ;;
-        esac
+        if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
+            echo -e "${GREEN}Exiting font installation. Thank you!${NC}"
+            return
+        fi
+
+        for font in $FONT_SELECTION; do
+            case "$font" in
+                "FiraCode")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch "ttf-firacode-nerd"
+                    else
+                        install_font_fedora "FiraCode"
+                    fi
+                    ;;
+                "Meslo")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch "ttf-meslo-nerd"
+                    else
+                        install_font_fedora "Meslo"
+                    fi
+                    ;;
+                "JetBrains Mono")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch "ttf-jetbrains-mono-nerd" "ttf-jetbrains-mono"
+                    else
+                        install_font_fedora "JetBrainsMono"
+                    fi
+                    ;;
+                "Hack")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch "ttf-hack-nerd"
+                    else
+                        install_font_fedora "Hack"
+                    fi
+                    ;;
+                "CascadiaMono")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch "ttf-cascadia-mono-nerd" "ttf-cascadia-code-nerd"
+                    else
+                        install_font_fedora "CascadiaMono"
+                    fi
+                    ;;
+                "Terminus")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch "terminus-font"
+                    else
+                        echo -e "${RED}Terminus font is not available as a Nerd Font.${NC}"
+                    fi
+                    ;;
+            esac
+        done
+
+        echo -e "${GREEN}All selected fonts installed successfully!${NC}"
+        echo -e "${CYAN}Press Enter to return to the font selection menu or type 'q' to quit...${NC}"
+        read -r choice
+        
+        if [[ "$choice" == "q" ]]; then
+            return_to_menu=false
+        fi
     done
-
-    echo -e "${GREEN}All selected fonts installed successfully!${NC}"
 }
 
 detect_os() {
@@ -120,7 +163,18 @@ detect_os() {
     fi
 }
 
-check_dependencies
-detect_os
-choose_fonts
+main() {
+    check_dependencies
+    detect_os
+    
+    if ! fzf_confirm "This script will install Nerd Fonts on your system. Continue?"; then
+        echo -e "${RED}Setup aborted by the user. Exiting...${NC}"
+        exit 1
+    fi
+    
+    choose_fonts
+    
+    echo -e "${GREEN}Font installation completed. Thank you for using this script!${NC}"
+}
 
+main

@@ -14,9 +14,21 @@ echo -e "${BLUE}"
 figlet -f slant "Alacritty"
 echo -e "${ENDCOLOR}"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 confirm_continue() {
     echo -e "${YELLOW}Warning: If you already have an Alacritty configuration, make sure to back it up before proceeding.${RESET}"
-    if ! gum confirm "Do you want to continue with the setup?"; then
+    if ! fzf_confirm "Do you want to continue with the setup?"; then
         echo -e "${RED}Setup aborted by the user.${RESET}"
         exit 1
     fi
@@ -70,4 +82,3 @@ installAlacritty
 setupAlacrittyConfig
 
 echo -e "${GREEN}:: Alacritty setup complete.${RESET}"
-
