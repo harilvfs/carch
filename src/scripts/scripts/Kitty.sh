@@ -9,13 +9,24 @@ BLUE="\e[34m"
 RED='\033[0;31m'
 ENDCOLOR="\e[0m"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 echo -e "${BLUE}"
 figlet -f slant "Kitty"
 echo -e "${ENDCOLOR}"
-
 echo -e "${RED}WARNING: This script will modify your Kitty configuration. A backup of your existing configuration will be created.${ENDCOLOR}"
 
-if ! gum confirm "Continue with Kitty setup?"; then
+if ! fzf_confirm "Continue with Kitty setup?"; then
     echo -e "${RED}Setup aborted by the user.${NC}"
     exit 1
 fi
@@ -46,7 +57,6 @@ setup_kitty() {
         if [ ! -d "$BACKUP_DIR" ]; then
             mkdir "$BACKUP_DIR"
         fi
-
         mv "$CONFIG_DIR"/* "$BACKUP_DIR/" 2>/dev/null
     else
         echo -e "${GREEN}No existing Kitty configuration found.${NC}"
@@ -58,12 +68,11 @@ setup_kitty() {
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/kitty.conf"
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/theme.conf"
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/userprefs.conf"
-
     echo -e "${GREEN}Kitty setup completed! Check your backup directory for previous configs at $BACKUP_DIR.${NC}"
 }
 
 install_font() {
-    if gum confirm "Do you want to install Cascadia Nerd Font Mono?"; then
+    if fzf_confirm "Do you want to install Cascadia Nerd Font Mono?"; then
         if [ -x "$(command -v pacman)" ]; then
             echo -e "${CYAN}Installing Cascadia Nerd Font Mono on Arch-based systems...${NC}"
             sudo pacman -S --needed ttf-cascadia-mono-nerd

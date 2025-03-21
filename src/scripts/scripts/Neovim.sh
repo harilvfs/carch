@@ -33,6 +33,23 @@ For either option:
 EOF
 echo -e "${RESET}"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No" "Exit")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    echo "$selected"
+}
+
+fzf_select() {
+    local prompt="$1"
+    shift
+    local options=("$@")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    echo "$selected"
+}
+
 detect_os() {
     if [[ -f /etc/os-release ]]; then
         source /etc/os-release
@@ -95,9 +112,10 @@ handle_existing_config() {
         return 0
     fi
     
-    if command -v gum &>/dev/null; then
-        echo -e "${YELLOW}Do you want to back up your existing Neovim configuration?${RESET}"
-        choice=$(gum choose "Yes" "No" "Exit")
+    echo -e "${YELLOW}Existing Neovim configuration found.${RESET}"
+    
+    if command -v fzf &>/dev/null; then
+        choice=$(fzf_confirm "Do you want to back up your existing Neovim configuration?")
     else
         echo -e "${YELLOW}Do you want to back up your existing Neovim configuration? (Yes/No/Exit)${RESET}"
         read -r choice
@@ -193,9 +211,10 @@ main() {
     
     os_type=$(echo "$os_info" | grep "OS=" | cut -d= -f2)
     
-    if command -v gum &>/dev/null; then
-        echo -e "${YELLOW}Choose the setup option:${RESET}"
-        choice=$(gum choose "Neovim" "NvChad" "Exit")
+    echo -e "${YELLOW}Choose the setup option:${RESET}"
+    
+    if command -v fzf &>/dev/null; then
+        choice=$(fzf_select "Choose the setup option:" "Neovim" "NvChad" "Exit")
     else
         echo -e "${YELLOW}Choose the setup option (Neovim/NvChad/Exit):${RESET}"
         read -r choice

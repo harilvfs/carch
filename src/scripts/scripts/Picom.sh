@@ -17,6 +17,23 @@ Picom is a standalone compositor for Xorg.
 EOF
 echo -e "${ENDCOLOR}"
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    echo "$selected"
+}
+
+fzf_select() {
+    local prompt="$1"
+    shift
+    local options=("$@")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    echo "$selected"
+}
+
 detect_package_manager() {
     if command -v pacman &>/dev/null; then
         pkg_manager="pacman"
@@ -98,13 +115,19 @@ download_config() {
     
     if [ -f "$config_path" ]; then
         echo -e "${YELLOW}:: picom.conf already exists in $HOME/.config. Do you want to overwrite it?${ENDCOLOR}"
-        choice=$(gum choose "Yes" "No")
+        
+        if command -v fzf &>/dev/null; then
+            choice=$(fzf_confirm "Overwrite existing picom.conf?")
+        else
+            echo -e "${YELLOW}Do you want to overwrite it? (Yes/No)${ENDCOLOR}"
+            read -r choice
+        fi
         
         case "$choice" in
-            "Yes")
+            "Yes"|"yes"|"Y"|"y")
                 echo -e "${GREEN}:: Overwriting picom.conf...${ENDCOLOR}"
                 ;;
-            "No")
+            "No"|"no"|"N"|"n")
                 echo -e "${RED}:: Skipping picom.conf download...${ENDCOLOR}"
                 return 0
                 ;;
@@ -124,7 +147,22 @@ detect_package_manager
 
 print_source_message
 
-choice=$(gum choose "Picom with animation (FT-Labs)" "Picom normal" "Exit")
+if command -v fzf &>/dev/null; then
+    choice=$(fzf_select "Choose Picom version:" "Picom with animation (FT-Labs)" "Picom normal" "Exit")
+else
+    echo -e "${YELLOW}Choose Picom version:${ENDCOLOR}"
+    echo "1. Picom with animation (FT-Labs)"
+    echo "2. Picom normal"
+    echo "3. Exit"
+    read -r option
+    
+    case "$option" in
+        1) choice="Picom with animation (FT-Labs)" ;;
+        2) choice="Picom normal" ;;
+        3) choice="Exit" ;;
+        *) echo -e "${RED}Invalid option. Exiting...${ENDCOLOR}"; exit 1 ;;
+    esac
+fi
 
 case "$choice" in
     "Picom with animation (FT-Labs)")
@@ -154,4 +192,3 @@ case "$choice" in
         exit 1
         ;;
 esac
-

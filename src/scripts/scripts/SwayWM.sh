@@ -16,6 +16,18 @@ command_exists() {
     command -v "$1" &>/dev/null
 }
 
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 install_aur_helper() {
     if ! command_exists yay && ! command_exists paru; then
         print_message $GREEN "Installing yay as AUR helper..."
@@ -71,7 +83,7 @@ manage_dotfiles() {
     local backup_dir="$3"
 
     if [ -d "$repo_dir" ]; then
-        if gum confirm "Existing dotfiles detected. Overwrite?"; then
+        if fzf_confirm "Existing dotfiles detected. Overwrite?"; then
             rm -rf "$repo_dir"
         else
             print_message $YELLOW "Skipping dotfiles cloning."
@@ -86,7 +98,7 @@ manage_dotfiles() {
     for config in "$repo_dir"/*; do
         local config_name=$(basename "$config")
         if [ -e "$HOME/.config/$config_name" ]; then
-            if gum confirm "Existing config $config_name detected. Backup?"; then
+            if fzf_confirm "Existing config $config_name detected. Backup?"; then
                 mv "$HOME/.config/$config_name" "$backup_dir/"
             fi
         fi
@@ -109,7 +121,7 @@ manage_themes_icons() {
     local repo_name=$(basename "$repo_url" .git)
 
     if [ -d "$target_dir/$repo_name" ]; then
-        if gum confirm "Existing $repo_name detected. Overwrite?"; then
+        if fzf_confirm "Existing $repo_name detected. Overwrite?"; then
             rm -rf "$target_dir/$repo_name"
         else
             print_message $YELLOW "Skipping $repo_name cloning."
@@ -129,7 +141,7 @@ https://github.com/harilvfs/swaydotfiles"
 
 print_message $YELLOW"----------------------------------------"
 
-if ! gum confirm "Continue with Sway setup?"; then
+if ! fzf_confirm "Continue with Sway setup?"; then
     print_message $RED "Setup aborted by the user."
     exit 1
 fi
@@ -167,7 +179,7 @@ ICON_DIR="$HOME/.icons"
 manage_themes_icons "$THEME_REPO" "$THEME_DIR"
 manage_themes_icons "$ICON_REPO" "$ICON_DIR"
 
-if gum confirm "Do you want additional wallpapers?"; then
+if fzf_confirm "Do you want additional wallpapers? [Recommended]"; then
     WALLPAPER_REPO="https://github.com/harilvfs/wallpapers"
     WALLPAPER_DIR="$HOME/Pictures/wallpapers"
     manage_themes_icons "$WALLPAPER_REPO" "$WALLPAPER_DIR"
@@ -205,7 +217,7 @@ apply_sddm_theme() {
 
 if [ -d "$theme_dir" ]; then
     print_message "$YELLOW" "$theme_dir already exists."
-    if gum confirm "Do you want to remove the existing theme and continue?"; then
+    if fzf_confirm "Do you want to remove the existing theme and continue?"; then
         sudo rm -rf "$theme_dir"
         print_message "$GREEN" "$theme_dir removed."
     else
