@@ -12,7 +12,20 @@ ENDCOLOR="\e[0m"
 echo -e "${BLUE}"
 figlet -f slant "Fastfetch"
 echo -e "${ENDCOLOR}"
-if ! gum confirm "Continue with Fastfetch setup?"; then
+
+fzf_confirm() {
+    local prompt="$1"
+    local options=("Yes" "No")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+if ! fzf_confirm "Continue with Fastfetch setup?"; then
     echo -e "${RED}Setup aborted by the user.${NC}"
     exit 1
 fi
