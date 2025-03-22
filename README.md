@@ -25,7 +25,7 @@
 
 *For installation and more, check out the* [Carch Docs](https://carch-org.github.io/docs/).
 
-*For users who want to use the Cargo crate of Carch, please refer to the guide* [here](https://carch-org.github.io/docs/installation/cli.html#cargo-crate) 
+*For users who want to use the Cargo crate of Carch, please refer to the guide* [here](https://carch-org.github.io/docs/installation/cli.html#%F0%9F%93%A6-cargo-crate) 
 
 *Want to contribute to carch? Check out the* [Contributing Guide](https://carch-org.github.io/docs/github/contributing.html).
 
