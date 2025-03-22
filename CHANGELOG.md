@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v4.2.4](https://github.com/harilvfs/carch/compare/v4.2.3...v4.2.4) (2025-03-22)
+
+> [!NOTE]
+> I have completely removed Gum from Carch and all its scripts. Carch now uses an FZF menu instead. You can check the discussion about Gum's removal here: [GitHub Discussion](https://github.com/harilvfs/carch/discussions/320).
+
+### Changed
+
+- Completely Remove Gum From Scripts (https://github.com/harilvfs/carch/pull/333)
+- Update Bun Script to Use Curl Instead of Npm (https://github.com/harilvfs/carch/pull/330)
+- Rust Code Makeover & Added Comments (https://github.com/harilvfs/carch/pull/329)
+
+### Added
+
+- Add Colors To Help Menu (https://github.com/harilvfs/carch/pull/334)
+- Add Dunst Setup Script (https://github.com/harilvfs/carch/pull/332)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.4).
+
+
 ## [v4.2.3](https://github.com/harilvfs/carch/compare/v4.2.2...v4.2.3) (2025-03-19)
 
 ### Changed
