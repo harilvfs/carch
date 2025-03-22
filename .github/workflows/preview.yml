@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -77,6 +76,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
         with:
+          token: ${{ secrets.PAT_TOKEN }}  # Use a PAT instead of GITHUB_TOKEN
           commit-message: "Update preview GIF from release ${{ env.TAG_NAME }}"
           branch: feature/preview-update
           title: "Update preview GIF from release ${{ env.TAG_NAME }}"
