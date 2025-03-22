@@ -46,10 +46,33 @@ jobs:
         run: |
           docker run --rm -v $PWD:/vhs -v /usr/local/bin/carch:/usr/local/bin/carch ghcr.io/charmbracelet/vhs /vhs/.github/preview.tape
       
+      - name: List all files recursively
+        run: |
+          find . -name "*.gif" -type f
+      
       - name: Move preview
         run: |
           mkdir -p .github
-          mv preview.gif .github/preview.gif
+          # Try different possible locations
+          if [ -f "preview.gif" ]; then
+            echo "Found preview.gif in root directory"
+            cp preview.gif .github/preview.gif
+          elif [ -f ".github/preview.gif" ]; then
+            echo "Preview already in .github directory"
+          elif [ -f "/vhs/preview.gif" ]; then
+            echo "Found in /vhs directory"
+            cp /vhs/preview.gif .github/preview.gif
+          else
+            echo "Looking for preview.gif in other locations"
+            PREVIEW_GIF=$(find . -name "preview.gif" -type f | head -n 1)
+            if [ -n "$PREVIEW_GIF" ]; then
+              echo "Found preview.gif at $PREVIEW_GIF"
+              cp "$PREVIEW_GIF" .github/preview.gif
+            else
+              echo "Preview GIF was not found anywhere!"
+              exit 1
+            fi
+          fi
       
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
