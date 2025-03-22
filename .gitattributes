@@ -2,6 +2,7 @@
 Cargo.toml linguist-language=Rust
 Cargo.lock linguist-language=Rust
 
+*.yml linguist-detectable=true
 .github/workflows/*.yml linguist-language=YAML
 .github/workflows/*.yml linguist-language=YAML
 
