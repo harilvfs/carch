@@ -1,4 +1,3 @@
 *.rs linguist-detectable=true
 Cargo.toml linguist-language=Rust
 Cargo.lock linguist-language=Rust
-
