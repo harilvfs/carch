@@ -31,19 +31,26 @@ jobs:
           chmod +x carch
           sudo mv carch /usr/local/bin/
       
-      - name: Install dependencies
+      - name: Create Dockerfile for VHS with dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y fzf figlet
+          cat > Dockerfile.vhs << EOF
+          FROM ghcr.io/charmbracelet/vhs
+          
+          # Install required dependencies
+          RUN apk add --no-cache fzf figlet
+          EOF
       
-      - name: Verify carch is in PATH
+      - name: Build custom VHS image
         run: |
-          which carch
-          carch --version || echo "Carch command exists but may not support --version"
+          docker build -t vhs-with-deps -f Dockerfile.vhs .
       
       - name: Generate preview with VHS
         run: |
-          docker run --rm -v $PWD:/vhs -v /usr/local/bin/carch:/usr/local/bin/carch ghcr.io/charmbracelet/vhs /vhs/.github/preview.tape
+          docker run --rm \
+            -v $PWD:/vhs \
+            -v /usr/local/bin/carch:/usr/local/bin/carch \
+            vhs-with-deps \
+            /vhs/.github/preview.tape
       
       - name: List all files recursively
         run: |
@@ -76,7 +83,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
         with:
-          token: ${{ secrets.PAT_TOKEN }}  # Use a PAT instead of GITHUB_TOKEN
+          token: ${{ secrets.PAT_TOKEN }}
           commit-message: "Update preview GIF from release ${{ env.TAG_NAME }}"
           branch: feature/preview-update
           title: "Update preview GIF from release ${{ env.TAG_NAME }}"
