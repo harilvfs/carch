@@ -1,6 +1,11 @@
 name: Carch Preview
 on:
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to use for Carch binary'
+        required: true
+        default: 'latest'
 jobs:
   generate_preview:
     runs-on: ubuntu-latest
@@ -10,26 +15,51 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+      
+      - name: Get latest release tag if not specified
+        id: get_tag
+        run: |
+          if [ "${{ github.event.inputs.tag_name }}" = "latest" ]; then
+            LATEST_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+            echo "TAG_NAME=$LATEST_TAG" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+          fi
+      
+      - name: Download Carch binary
+        run: |
+          curl -L "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/carch" -o carch
+          chmod +x carch
+          sudo mv carch /usr/local/bin/
+      
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y fzf figlet
+      
+      - name: Verify carch is in PATH
+        run: |
+          which carch
+          carch --version || echo "Carch command exists but may not support --version"
+      
       - name: Generate preview with VHS
         run: |
-          docker run --rm -v $PWD:/vhs ghcr.io/charmbracelet/vhs /vhs/.github/preview.tape
+          docker run --rm -v $PWD:/vhs -v /usr/local/bin/carch:/usr/local/bin/carch ghcr.io/charmbracelet/vhs /vhs/.github/preview.tape
+      
       - name: Move preview
         run: |
           mkdir -p .github
           mv preview.gif .github/preview.gif
+      
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
         with:
-          commit-message: Update preview GIF
+          commit-message: "Update preview GIF from release ${{ env.TAG_NAME }}"
           branch: feature/preview-update
-          title: "Update preview GIF"
+          title: "Update preview GIF from release ${{ env.TAG_NAME }}"
           labels: |
             documentation
           body: |
-            Automated PR to update preview GIF
+            Automated PR to update preview GIF using Carch from release ${{ env.TAG_NAME }}
             ![preview](https://raw.githubusercontent.com/${{ github.repository }}/feature/preview-update/.github/preview.gif)
         if: success()
