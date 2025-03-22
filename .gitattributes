@@ -1,3 +1,7 @@
 *.rs linguist-detectable=true
 Cargo.toml linguist-language=Rust
 Cargo.lock linguist-language=Rust
+
+.github/workflows/*.yml linguist-language=YAML
+.github/workflows/*.yml linguist-language=YAML
+
