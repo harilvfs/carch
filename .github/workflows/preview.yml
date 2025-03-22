@@ -37,7 +37,7 @@ jobs:
           FROM ghcr.io/charmbracelet/vhs
           
           # Install required dependencies
-          RUN apk add --no-cache fzf figlet
+          RUN apt-get update && apt-get install -y fzf figlet
           EOF
       
       - name: Build custom VHS image
