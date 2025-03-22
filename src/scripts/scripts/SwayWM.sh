@@ -29,15 +29,33 @@ fzf_confirm() {
 }
 
 install_aur_helper() {
-    if ! command_exists yay && ! command_exists paru; then
+    if ! command -v yay >/dev/null 2>&1 && ! command -v paru >/dev/null 2>&1; then
         print_message $GREEN "Installing yay as AUR helper..."
-        git clone https://aur.archlinux.org/yay.git /tmp/yay
-        cd /tmp/yay || exit
+        
+        sudo pacman -S --needed base-devel git --noconfirm
+        
+        temp_dir=$(mktemp -d)
+        cd "$temp_dir" || { print_message $RED "Failed to create temporary directory"; return 1; }
+        
+        git clone https://aur.archlinux.org/yay.git
+        cd yay || { print_message $RED "Failed to enter yay directory"; return 1; }
         makepkg -si --noconfirm
-        cd ..
-        rm -rf /tmp/yay
+        
+        cd "$OLDPWD" || true
+        rm -rf "$temp_dir"
+        
+        if command -v yay >/dev/null 2>&1; then
+            print_message $GREEN "yay installed successfully."
+        else
+            print_message $RED "Failed to install yay."
+            return 1
+        fi
     else
-        print_message $YELLOW "AUR helper (yay or paru) already installed."
+        if command -v yay >/dev/null 2>&1; then
+            print_message $YELLOW "AUR helper (yay) already installed."
+        elif command -v paru >/dev/null 2>&1; then
+            print_message $YELLOW "AUR helper (paru) already installed."
+        fi
     fi
 }
 
@@ -62,16 +80,26 @@ install_packages() {
 install_aur_packages() {
     local packages=("$@")
     local missing_pkgs=()
+    local aur_helper
+
+    if command -v yay >/dev/null 2>&1; then
+        aur_helper="yay"
+    elif command -v paru >/dev/null 2>&1; then
+        aur_helper="paru"
+    else
+        print_message $RED "No AUR helper found. Please install yay or paru first."
+        return 1
+    fi
 
     for pkg in "${packages[@]}"; do
-        if ! yay -Qq "$pkg" &>/dev/null; then
+        if ! $aur_helper -Qq "$pkg" &>/dev/null; then
             missing_pkgs+=("$pkg")
         fi
     done
 
     if [ ${#missing_pkgs[@]} -ne 0 ]; then
         print_message $GREEN "Installing missing AUR packages: ${missing_pkgs[*]}"
-        yay -S "${missing_pkgs[@]}"
+        $aur_helper -S "${missing_pkgs[@]}"
     else
         print_message $YELLOW "All required AUR packages are already installed."
     fi
@@ -164,8 +192,8 @@ install_aur_helper
 PACMAN_PKGS=(fastfetch fish foot nwg-drawer bluetui ttf-jetbrains-mono ttf-jetbrains-mono-nerd swappy swaylock waybar pango cairo gdk-pixbuf2 json-c scdoc meson ninja pcre2 gtk-layer-shell jsoncpp libsigc++ libdbusmenu-gtk3 libxkbcommon fmt spdlog glibmm gtkmm3 alsa-utils pipewire-pulse libnl iw wob swaybg swayidle fuzzel otf-font-awesome ttf-jetbrains-mono ttf-nerd-fonts-symbols ttf-ubuntu-font-family wl-clipboard grim slurp mako blueberry pamixer pavucontrol gnome-keyring polkit-gnome cliphist wl-clipboard autotiling gtklock swayidle xdg-desktop-portal xdg-desktop-portal-wlr xorg-xhost sddm kvantum qt5-wayland qt6-wayland dex wf-recorder nwg-hello blueman bluez bluez-libs bluez-qt bluez-qt5 bluez-tools bluez-utils alacritty kitty)
 install_packages "${PACMAN_PKGS[@]}"
 
-YAY_PKGS=(swayfx waybar-module-pacman-updates-git wlroots-git)
-install_aur_packages "${YAY_PKGS[@]}"
+AUR_PKGS=(swayfx waybar-module-pacman-updates-git wlroots-git)
+install_aur_packages "${AUR_PKGS[@]}"
 
 DOTFILES_REPO="https://github.com/harilvfs/swaydotfiles"
 DOTFILES_DIR="$HOME/swaydotfiles"
