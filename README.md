@@ -48,7 +48,7 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 
 <div align="right">
 
-<a href="#top">
+<a href="#">
   <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/totop.png" alt="Back to Top" width="50">
 </a>
 
