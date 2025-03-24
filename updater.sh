@@ -65,6 +65,16 @@ update_arch_install() {
     fi
 }
 
+update_fedora_install() {
+    echo -e "${BLUE}Updating version in fedora/install.sh...${RESET}"
+    if [ -f "$REPO_DIR/fedora/install.sh" ]; then
+        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/fedora/install.sh"
+        echo -e "${GREEN}✓ Updated fedora/install.sh${RESET}"
+    else
+        echo -e "${RED}Error: fedoar/install.sh not found!${RESET}"
+    fi
+}
+
 update_fedora_spec() {
     echo -e "${BLUE}Updating version in fedora/carch.spec...${RESET}"
     if [ -f "$REPO_DIR/fedora/carch.spec" ]; then
@@ -168,6 +178,7 @@ main() {
     echo -e "${BLUE}Updating version from $OLD_VERSION to $NEW_VERSION...${RESET}"
     
     update_arch_install
+    update_fedora_install
     update_fedora_spec
     update_man_page
     update_cargo_toml
