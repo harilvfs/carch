@@ -49,7 +49,7 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 <img
   src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/totop.png"
   alt="carch „Snazzy“"
-  width="25%"
+  width="10%"
   align="right"
  />
 
