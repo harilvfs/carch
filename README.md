@@ -48,7 +48,9 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 
 <div align="right">
 
-[![Back to Top](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/totop.png)](#top)
+<a href="#top">
+  <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/totop.png" alt="Back to Top" width="50">
+</a>
 
 </div>
 
