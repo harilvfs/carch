@@ -15,10 +15,21 @@ WHITE="\033[37m"
 BOLD="\033[1m"
 RESET="\033[0m"
 
+USERNAME=$(whoami)
 mkdir -p "$CONFIG_DIR" "$CACHE_DIR"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+}
+
+typewriter() {
+    text="$1"
+    color="$2"
+    for ((i=0; i<${#text}; i++)); do
+        echo -en "${color}${text:$i:1}${RESET}"
+        sleep 0.03
+    done
+    echo ""
 }
 
 if [ -f /etc/os-release ]; then
@@ -73,9 +84,29 @@ clear
 echo -e "${CYAN}┌──────────────────────────────────────────────────┐${RESET}"
 echo -e "${CYAN}│                     ${BOLD}CARCH${RESET}${CYAN}                        │${RESET}"
 echo -e "${CYAN}│               ${WHITE}Version $VERSION${RESET}${CYAN}                      │${RESET}"
-echo -e "${CYAN}│          ${WHITE}Distribution: $DISTRO${RESET}${CYAN}             │${RESET}"
 echo -e "${CYAN}│            ${WHITE}Architecture: $ARCH${RESET}${CYAN}                  │${RESET}"
 echo -e "${CYAN}└──────────────────────────────────────────────────┘${RESET}"
+echo ""
+echo -e "${CYAN}Distribution: $DISTRO${RESET}"
+sleep 1
+
+typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
+
+sleep 0.5
+
+if command -v pacman &>/dev/null; then
+    echo -e "${GREEN}Ahh, you are using Arch BTW. Best choice, my man!${RESET}"
+    sleep 1.5
+fi
+
+echo ""
+echo -e "${BLUE}This is the Carch installer for Arch Linux or Arch-based distros.${RESET}"
+sleep 0.5
+echo -e "${BLUE}This will install Carch with Carch PKGBUILD.${RESET}"
+sleep 0.5
+echo -e "${BLUE}You can choose Git or Stable release.${RESET}"
+sleep 0.5
+echo ""
 
 echo -e "${YELLOW}┌──────────────────────────────────────────────────┐${RESET}"
 echo -e "${YELLOW}│              Installing dependencies...          │${RESET}"
@@ -114,11 +145,9 @@ echo -e "${YELLOW}Preparing installation environment...${RESET}"
 cd "$CACHE_DIR" || exit 1
 if [ -d "pkgs" ]; then
     echo -e "${YELLOW}Updating existing repository...${RESET}"
-    echo "Updating repository..."
     git -C pkgs pull
 else
     echo -e "${YELLOW}Cloning repository...${RESET}"
-    echo "Cloning repository..."
     git clone https://github.com/carch-org/pkgs
 fi
 
@@ -142,11 +171,14 @@ echo -e "${CYAN}Building and installing package...${RESET}"
 makepkg -si
 
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}┌──────────────────────────────────────────────────┐${RESET}"
-    echo -e "${GREEN}│              ${BOLD}INSTALLATION COMPLETE${RESET}${GREEN}               │${RESET}"
-    echo -e "${GREEN}│      ${WHITE}Carch has been successfully installed!${RESET}${GREEN}      │${RESET}"
-    echo -e "${GREEN}│      ${WHITE}Run 'carch -h' to see available options${RESET}${GREEN}     │${RESET}"
-    echo -e "${GREEN}└──────────────────────────────────────────────────┘${RESET}"
+    echo ""
+    echo -e "${GREEN}${BOLD}INSTALLATION COMPLETE${RESET}"
+    sleep 0.7
+    echo -e "${GREEN}Carch has been successfully installed!${RESET}"
+    sleep 0.7
+    echo -e "${GREEN}Run 'carch -h' to see available options${RESET}"
+    sleep 1
+    echo -e "${CYAN}Thank you again! If you find any bugs, feel free to submit an issue report on GitHub :)${RESET}"
 else
     echo -e "${RED}Failed to build or install package.${RESET}"
     exit 1

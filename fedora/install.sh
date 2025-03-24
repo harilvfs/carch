@@ -1,13 +1,31 @@
 #!/bin/bash
 
+VERSION="4.2.4"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
+BOLD='\033[1m'
 NC='\033[0m' 
 
-mkdir -p "$HOME/rpmbuild" 2>/dev/null
-LOG_FILE="$HOME/rpmbuild/carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
+CACHE_DIR="$HOME/.cache/carch-install"
+mkdir -p "$CACHE_DIR" 2>/dev/null
+LOG_FILE="$CACHE_DIR/carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
+
+USERNAME=$(whoami)
+
+if [ -f /etc/os-release ]; then
+    DISTRO=$(grep ^NAME= /etc/os-release | cut -d= -f2 | tr -d '"')
+elif command -v lsb_release &>/dev/null; then
+    DISTRO=$(lsb_release -d | cut -f2)
+else
+    DISTRO="Unknown Linux Distribution"
+fi
+ARCH=$(uname -m)
 
 log() {
     local message="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -28,6 +46,16 @@ log_info() {
 
 log_warning() {
     log "${YELLOW}WARNING: $1${NC}"
+}
+
+typewriter() {
+    text="$1"
+    color="$2"
+    for ((i=0; i<${#text}; i++)); do
+        echo -en "${color}${text:$i:1}${NC}"
+        sleep 0.03
+    done
+    echo ""
 }
 
 command_exists() {
@@ -58,6 +86,14 @@ install_package() {
     fi
     return 0
 }
+
+if ! command_exists "fzf"; then
+    log_info "fzf is not installed. Installing..."
+    install_package "fzf"
+    sleep 0.5
+fi
+
+log_success "fzf is installed and ready to use."
 
 spinner() {
     local pid=$1
@@ -172,18 +208,54 @@ install_rpm() {
     
     log_info "Found RPM package: $rpm_file"
     
-    if fzf_confirm "Do you want to install the RPM package?"; then
-        log_info "Installing package..."
-        if ! sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1; then
-            log_error "Failed to install RPM package"
-            return 1
-        fi
-        log_success "RPM package installed successfully"
-    else
-        log_info "Installation cancelled by user"
+    log_info "Installing package..."
+    if ! sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1; then
+        log_error "Failed to install RPM package"
+        return 1
     fi
+    log_success "RPM package installed successfully"
     
     return 0
+}
+
+check_carch_installed() {
+    if command_exists "carch"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+cleanup_options() {
+    echo -e "${YELLOW}Cleanup options:${NC}"
+    options=(
+        "Remove everything (rpmbuild folder)" 
+        "Keep only log files (move to $CACHE_DIR)" 
+        "Leave everything (don't remove)"
+    )
+    
+    CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select cleanup option: " --height=15 --layout=reverse --border)
+    
+    case "$CHOICE" in
+        "Remove everything (rpmbuild folder)")
+            log_info "Removing rpmbuild folder..."
+            rm -rf "$HOME/rpmbuild"
+            log_success "rpmbuild folder removed successfully"
+            ;;
+        "Keep only log files (move to $CACHE_DIR)")
+            log_info "Moving log files to $CACHE_DIR..."
+            mkdir -p "$CACHE_DIR/logs"
+            find "$HOME/rpmbuild" -name "*.log" -exec cp {} "$CACHE_DIR/logs/" \;
+            rm -rf "$HOME/rpmbuild"
+            log_success "Log files preserved, rpmbuild folder removed"
+            ;;
+        "Leave everything (don't remove)")
+            log_info "Skipping cleanup as requested"
+            ;;
+        *)
+            log_info "No cleanup option selected, leaving everything as is"
+            ;;
+    esac
 }
 
 handle_error() {
@@ -227,18 +299,39 @@ handle_error() {
 
 display_welcome() {
     clear
-    echo -e "${YELLOW}┌────────────────────────────────────────────────┐${RESET}"
-    echo -e "${YELLOW}│      Welcome to Carch Installer for Fedora     │${RESET}"
-    echo -e "${YELLOW}└────────────────────────────────────────────────┘${RESET}"
-    echo
-    echo -e "${YELLOW}NOTE: If you are re-running this script, please remove the${NC}"
-    echo -e "${YELLOW}~/rpmbuild directory first to avoid conflicts:${NC}"
-    echo -e "${BLUE}rm -rf ~/rpmbuild${NC}"
-    echo
+
+    echo -e "${CYAN}┌──────────────────────────────────────────────────┐${NC}"
+    echo -e "${CYAN}│                     ${BOLD}CARCH${NC}${CYAN}                        │${NC}"
+    echo -e "${CYAN}│               ${WHITE}Version $VERSION${NC}${CYAN}                      │${NC}"
+    echo -e "${CYAN}│            ${WHITE}Architecture: $ARCH${NC}${CYAN}                  │${NC}"
+    echo -e "${CYAN}└──────────────────────────────────────────────────┘${NC}"
+    echo ""
+    echo -e "${CYAN}Distribution: $DISTRO${NC}"
+    sleep 1
+
+    typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
+    sleep 0.5
+    
+    echo ""
+    echo -e "${BLUE}This is the Carch installer for Fedora Linux.${NC}"
+    sleep 0.5
+    echo -e "${BLUE}This will install Carch with RPM build package.${NC}"
+    sleep 0.5
+    echo ""
 }
 
 main() {
     display_welcome
+    
+    if ! fzf_confirm "Do you want to continue with this installation?"; then
+        echo -e "${GREEN}Ok, fine. Thanks!${NC}"
+        exit 0
+    fi
+    
+    typewriter "Sit back and relax till the script will do everything for you" "${GREEN}"
+    sleep 0.7
+
+    clear
     
     log_info "Starting Carch RPM build process"
     
@@ -257,14 +350,16 @@ main() {
         fi
     fi
     
-    log_info "Checking dependencies..."
-    echo "Please wait while checking dependencies..."
+    echo -e "${YELLOW}┌──────────────────────────────────────────────────┐${NC}"
+    echo -e "${YELLOW}│              Installing dependencies...          │${NC}"
+    echo -e "${YELLOW}└──────────────────────────────────────────────────┘${NC}"
     
     for dep in "${dependencies[@]}"; do
         if ! install_package "$dep"; then
             log_warning "Failed to install $dep, continuing anyway..."
         fi
-    done
+        sleep 0.1
+    done 
     
     log_info "All dependencies checked. Preparing build environment..."
     sleep 3
@@ -296,11 +391,24 @@ main() {
         exit 1
     fi
     
-    log_success "Carch RPM build and installation completed successfully!"
+    if check_carch_installed; then
+        echo ""
+        echo -e "${GREEN}${BOLD}INSTALLATION COMPLETE${NC}"
+        sleep 0.7
+        echo -e "${GREEN}Carch has been successfully installed!${NC}"
+        sleep 0.7
+        echo -e "${GREEN}Run 'carch -h' to see available options${NC}"
+        sleep 1
+        echo -e "${CYAN}Thank you again! If you find any bugs, feel free to submit an issue report on GitHub :)${NC}"
+    else
+        log_error "Carch seems to not be installed correctly. Please check the logs."
+        exit 1
+    fi
     
-    echo
-    echo -e "${GREEN}Carch has been successfully installed!${NC}"
-    echo "You can now run 'carch' to start using it."
+    echo ""
+    cleanup_options
+    
+    log_success "Carch RPM build and installation completed successfully!"
     echo "Check the log file at ${LOG_FILE} for details."
 }
 
