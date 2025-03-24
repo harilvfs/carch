@@ -46,6 +46,13 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 
 </div>
 
+<img
+  src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/totop.png"
+  alt="carch „Snazzy“"
+  width="25%"
+  align="right"
+ />
+
 <div align="right">
 
 <a href="#top">
