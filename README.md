@@ -47,8 +47,8 @@ Like my work? Giving a star to Carch means a lot. Thanks!
 </div>
 
 <div align="right">
-  
-[🔝 Back to Top](#top)
+
+[![Back to Top](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/totop.png)](#top)
 
 </div>
 
