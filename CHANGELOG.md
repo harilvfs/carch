@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.5](https://github.com/harilvfs/carch/compare/v4.2.4...v4.2.5) (2025-03-27)
+
+No major changes or updates, just minor bug fixes.
+
+> [!IMPORTANT]
+> This might be the last Carch update. 
+
+### Fixed
+
+- fix: AUR helper Swaywm (https://github.com/harilvfs/carch/pull/335)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.5).
+
+
 ## [v4.2.4](https://github.com/harilvfs/carch/compare/v4.2.3...v4.2.4) (2025-03-22)
 
 > [!NOTE]
