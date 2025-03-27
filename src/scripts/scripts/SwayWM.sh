@@ -223,22 +223,16 @@ is_sddm_installed() {
 }
 
 install_sddm() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        case $ID in
-            arch*)
-                sudo pacman -S --noconfirm sddm
-                ;;
-            fedora*)
-                sudo dnf install -y sddm
-                ;;
-            *)
-                echo "Unsupported distribution."
-                exit 1
-                ;;
-        esac
+    if command -v pacman &> /dev/null; then
+        sudo pacman -S --noconfirm sddm
+    elif command -v dnf &> /dev/null; then
+        sudo dnf install -y sddm
+    else
+        echo "Unsupported distribution."
+        exit 1
     fi
 }
+
 
 apply_sddm_theme() {
     theme_dir="/usr/share/sddm/themes/catppuccin-mocha"

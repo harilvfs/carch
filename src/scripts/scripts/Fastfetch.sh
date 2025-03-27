@@ -10,7 +10,11 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Fastfetch"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Fastfetch"
+else
+    echo "========== Fastfetch Setup =========="
+fi
 echo -e "${ENDCOLOR}"
 
 fzf_confirm() {

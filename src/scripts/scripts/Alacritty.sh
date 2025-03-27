@@ -11,8 +11,11 @@ ENDCOLOR="\e[0m"
 RESET='\033[0m'
 
 echo -e "${BLUE}"
-figlet -f slant "Alacritty"
-echo -e "${ENDCOLOR}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Alacritty"
+else
+    echo "========== Alacritty Setup =========="
+fi
 
 fzf_confirm() {
     local prompt="$1"

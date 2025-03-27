@@ -171,10 +171,16 @@ check_existing_helpers() {
 }
 
 display_header() {
-    clear
-    echo -e "${BLUE}"
+
+clear
+echo -e "${BLUE}"
+if command -v figlet &>/dev/null; then
     figlet -f slant "Aur"
-    echo -e "${ENDCOLOR}"
+else
+    echo "========== Aur Setup =========="
+fi
+echo -e "${ENDCOLOR}"
+
 }
 
 display_header

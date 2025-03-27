@@ -22,8 +22,13 @@ fzf_confirm() {
 }
 
 echo -e "${BLUE}"
-figlet -f slant "Kitty"
-echo -e "${ENDCOLOR}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Kitty"
+else
+    echo "========== Kitty Setup =========="
+fi
+echo -e "${RESET}"
+
 echo -e "${RED}WARNING: This script will modify your Kitty configuration. A backup of your existing configuration will be created.${ENDCOLOR}"
 
 if ! fzf_confirm "Continue with Kitty setup?"; then
