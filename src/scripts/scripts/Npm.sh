@@ -9,7 +9,11 @@ BLUE="\e[34m"
 RESET="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Npm"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Npm"
+else
+    echo "========== Npm Setup =========="
+fi
 echo -e "${RESET}"
 
 if ! command -v fzf &>/dev/null; then

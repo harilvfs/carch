@@ -11,7 +11,11 @@ YELLOW='\033[0;33m'
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Rofi"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Rofi"
+else
+    echo "========== Rofi Setup =========="
+fi
 echo -e "${ENDCOLOR}"
 
 echo -e "${RED}:: WARNING: Make sure to back up your current Rofi configuration (if it exists).${ENDCOLOR}"

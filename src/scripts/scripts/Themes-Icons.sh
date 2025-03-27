@@ -21,7 +21,11 @@ fzf_confirm() {
 }
 
 echo -e "${BLUE}"
-figlet -f slant "Themes & Icons"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Themes & Icons"
+else
+    echo "========== Theme & Icons Setup =========="
+fi
 echo -e "${RESET}"
 
 echo -e "${CYAN}Theme and Icon Setup${RESET}"

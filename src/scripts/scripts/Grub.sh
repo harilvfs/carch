@@ -8,8 +8,12 @@ RED="\e[31m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Grub"
-echo -e "${ENDCOLOR}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Grub"
+else
+    echo "========== Grub Setup =========="
+fi
+echo -e "${RESET}"
 
 GRUB_THEME_DIR="$HOME/.local/share/Top-5-Bootloader-Themes"
 

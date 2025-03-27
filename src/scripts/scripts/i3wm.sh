@@ -15,8 +15,12 @@ WALLPAPER_REPO="https://github.com/harilvfs/wallpapers"
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
 
 echo -e "${BLUE}"
-figlet -f slant "i3wm"
-echo -e "${ENDCOLOR}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "i3wm"
+else
+    echo "========== i3wm Setup =========="
+fi
+echo -e "${RESET}"
 
 fzf_confirm() {
     local prompt="$1"

@@ -8,6 +8,7 @@ YELLOW='\033[33m'
 CYAN='\033[36m'
 GREEN='\033[32m'
 BLUE='\033[34m'
+RESET="\033[0m"
 
 print_message() {
     local color="$1"
@@ -16,7 +17,12 @@ print_message() {
 }
 
 echo -e "${BLUE}"
-figlet -f slant "DWM"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Dwm"
+else
+    echo "========== Dwm Setup =========="
+fi
+echo -e "${RESET}"
 
 fzf_confirm() {
     local prompt="$1"
