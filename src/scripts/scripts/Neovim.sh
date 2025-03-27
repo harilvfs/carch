@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -51,24 +51,18 @@ fzf_select() {
 }
 
 detect_os() {
-    if [[ -f /etc/os-release ]]; then
-        source /etc/os-release
-        if [[ "$ID" == "arch" || "$ID_LIKE" =~ "arch" ]]; then
-            echo -e "${BLUE}Detected Arch-based distribution.${RESET}"
-            echo "OS=arch" >&2
-            return 0
-        elif [[ "$ID" == "fedora" || "$ID_LIKE" =~ "fedora" ]]; then
-            echo -e "${BLUE}Detected Fedora-based distribution.${RESET}"
-            echo "OS=fedora" >&2
-            return 0
-        else
-            echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${RESET}"
-            return 1
-        fi
-    else
-        echo -e "${RED}Unsupported system! Cannot detect OS.${RESET}"
-        return 1
-    fi
+   if command -v pacman &>/dev/null; then
+       echo -e "${BLUE}Detected Arch-based distribution.${RESET}"
+       echo "OS=arch" >&2
+       return 0
+   elif command -v dnf &>/dev/null; then
+       echo -e "${BLUE}Detected Fedora-based distribution.${RESET}"
+       echo "OS=fedora" >&2
+       return 0
+   else
+       echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${RESET}"
+       return 1
+   fi
 }
 
 install_dependencies() {

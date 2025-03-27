@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -31,32 +31,14 @@ fzf_confirm() {
 }
 
 detect_distro() {
-    if [ -f /etc/os-release ]; then
-        source /etc/os-release
-        case "$ID" in
-            arch)
-                distro="arch"
-                print_message "$GREEN" "Detected distribution: Arch Linux"
-                ;;
-            fedora)
-                distro="fedora"
-                print_message "$YELLOW" "Detected distribution: Fedora"
-                ;;
-            *)
-                if [[ "$ID_LIKE" == *"arch"* ]]; then
-                    distro="arch"
-                    print_message "$GREEN" "Detected Arch-based distribution"
-                elif [[ "$ID_LIKE" == *"fedora"* ]]; then
-                    distro="fedora"
-                    print_message "$YELLOW" "Detected Fedora-based distribution"
-                else
-                    print_message "$RED" "Unsupported distribution. Exiting..."
-                    exit 1
-                fi
-                ;;
-        esac
+    if command -v pacman &>/dev/null; then
+        distro="arch"
+        print_message "$GREEN" "Detected distribution: Arch Linux"
+    elif command -v dnf &>/dev/null; then
+        distro="fedora"
+        print_message "$YELLOW" "Detected distribution: Fedora"
     else
-        print_message "$RED" "Cannot determine OS. Exiting..."
+        print_message "$RED" "Unsupported distribution. Exiting..."
         exit 1
     fi
 }
@@ -165,7 +147,7 @@ install_nerd_font() {
     fi
 
     print_message "$CYAN" "Installing Meslo Nerd Font..."
-    if grep -q Fedora /etc/os-release; then
+    if command -v dnf &>/dev/null; then
         wget -P /tmp https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip || exit 1
         unzip /tmp/Meslo.zip -d /tmp/Meslo || exit 1
         mv /tmp/Meslo/* "$FONT_DIR" || exit 1

@@ -44,12 +44,24 @@ check_aur_helper() {
     print_message "$GREEN" "Using AUR helper: ${AUR_HELPER}"
 }
 
+detect_distro() {
+    if command -v pacman &>/dev/null; then
+        DISTRO="arch"
+    elif command -v dnf &>/dev/null; then
+        DISTRO="fedora"
+    else
+        print_message "$RED" "Unable to detect your Linux distribution."
+        exit 1
+    fi
+    print_message "$CYAN" "Detected distribution: $DISTRO"
+}
+
 install_fzf() {
     if ! command -v fzf &>/dev/null; then
         print_message "$CYAN" "Installing fzf..."
-        if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+        if command -v pacman &>/dev/null; then
             sudo pacman -S --noconfirm fzf
-        elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+        elif command -v dnf &>/dev/null; then
             sudo dnf install -y fzf
         fi
     fi
@@ -65,15 +77,7 @@ else
 fi
 echo -e "${RESET}"
 
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    DISTRO=$ID
-else
-    print_message "$RED" "Unable to detect your Linux distribution."
-    exit 1
-fi
-
-print_message "$CYAN" "Detected distribution: $DISTRO"
+detect_distro
 
 install_fzf
 
@@ -84,19 +88,19 @@ fi
 
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+    if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting eza
     fi
 }
 
 install_powerlevel10k() {
     print_message "$CYAN" "Installing Powerlevel10k..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+    if command -v pacman &>/dev/null; then
         $AUR_HELPER -S --noconfirm zsh-theme-powerlevel10k-git
         echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
         echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
     fi
@@ -146,9 +150,9 @@ config_zsh() {
 
 install_pokemon_colorscripts() {
     print_message "$CYAN" "Installing Pokémon Color Scripts..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+    if command -v pacman &>/dev/null; then
         $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+    elif command -v dnf &>/dev/null; then
         POKEMON_DIR="$HOME/pokemon-colorscripts"
 
         [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
@@ -168,14 +172,14 @@ install_pokemon_colorscripts() {
 
 install_zoxide() {
     print_message "$CYAN" "Installing zoxide..."
-    if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+    if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm zoxide
-    elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo dnf install -y zoxide
     fi
 }
 
-if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
+if command -v pacman &> /dev/null; then
     check_aur_helper
 fi
 

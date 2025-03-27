@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -62,14 +62,9 @@ install_rofi_fedora() {
 }
 
 setup_rofi() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        DISTRO=$ID
-    fi
-
-    if grep -q "ID=arch" /etc/os-release; then
+    if command -v pacman &> /dev/null; then
         install_rofi_arch
-    elif grep -q "ID=fedora" /etc/os-release; then
+    elif command -v dnf &> /dev/null; then
         install_rofi_fedora
     else
         echo -e "${RED}Unsupported distribution. Please install Rofi manually.${ENDCOLOR}"

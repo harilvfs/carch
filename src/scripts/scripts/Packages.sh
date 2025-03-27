@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
@@ -10,23 +10,16 @@ RESET='\033[0m'
 AUR_HELPER=""
 
 detect_distro() {
-    if [[ -f "/etc/os-release" ]]; then
-        . /etc/os-release
-
-        if [[ "$ID" == "arch" || "$ID_LIKE" == "arch" ]]; then
-            echo -e "${GREEN}:: Arch-based system detected.${RESET}"
-            return 0  
-        elif [[ "$ID" == "fedora" || "$ID_LIKE" == "fedora" ]]; then
-            echo -e "${YELLOW}:: Fedora-based system detected. Skipping AUR helper installation.${RESET}"
-            return 1  
-        else
-            echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
-            return 2  
-        fi
-    else
-        echo -e "${RED}:: Unable to detect the distribution.${RESET}"
-        return 2
-    fi
+   if command -v pacman &>/dev/null; then
+       echo -e "${GREEN}:: Arch-based system detected.${RESET}"
+       return 0  
+   elif command -v dnf &>/dev/null; then
+       echo -e "${YELLOW}:: Fedora-based system detected. Skipping AUR helper installation.${RESET}"
+       return 1  
+   else
+       echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
+       return 2  
+   fi
 }
 
 detect_aur_helper() {
