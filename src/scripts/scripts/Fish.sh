@@ -30,26 +30,43 @@ print_color() {
     echo -e "\e[38;2;$(echo $color | sed 's/#//;s/\(..\)\(..\)\(..\)/\1;\2;\3/') m$message\e[0m"
 }
 
-if [[ -f /etc/os-release ]]; then
-    . /etc/os-release
-    DISTRO="${ID:-unknown}"
-else
-    print_color "$RED" "❌ Unsupported distribution!"
-    exit 1
-fi
+detect_distro() {
+    if command -v pacman &>/dev/null; then
+        DISTRO="arch"
+    elif command -v dnf &>/dev/null; then
+        DISTRO="fedora"
+    else
+        print_color "$RED" "❌ Unsupported distribution!"
+        exit 1
+    fi
+}
 
 install_fish() {
     print_color "$CYAN" "🐟 Installing Fish shell..."
     
-    if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
+    if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm fish noto-fonts-emoji ttf-joypixels git
-    elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
+    elif command -v dnf &>/dev/null; then
         sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git
     else
         print_color "$RED" "❌ Unsupported distro: $DISTRO"
         exit 1
     fi
 }
+
+install_zoxide() {
+    print_color "$CYAN" "Installing zoxide..."
+    if command -v pacman &>/dev/null; then
+        sudo pacman -S --noconfirm zoxide
+    elif command -v dnf &>/dev/null; then
+        sudo dnf install -y zoxide
+    else
+        print_color "$RED" "❌ Unsupported distro: $DISTRO"
+        exit 1
+    fi
+}
+
+detect_distro
 
 fzf_confirm "⚠️ This script will configure Fish shell. Nerd Font Are Recommended. Do you want to continue?" || exit 0
 
@@ -66,7 +83,6 @@ fi
 
 echo "Cloning Fish configuration..."
 git clone --depth=1 https://github.com/harilvfs/dwm "$HOME/dwm"
-
 if [[ -d "$HOME/dwm/config/fish" ]]; then
     echo "Applying Fish configuration..."
     cp -r "$HOME/dwm/config/fish" "$FISH_CONFIG"
@@ -76,18 +92,6 @@ else
     print_color "$RED" "❌ Failed to apply Fish configuration!"
     exit 1
 fi
-
-install_zoxide() {
-    print_color "$CYAN" "Installing zoxide..."
-    if [[ "$DISTRO" == "arch" || "$DISTRO_LIKE" == "arch" ]]; then
-        sudo pacman -S --noconfirm zoxide
-    elif [[ "$DISTRO" == "fedora" || "$DISTRO_LIKE" == "fedora" ]]; then
-        sudo dnf install -y zoxide
-    else
-        print_color "$RED" "❌ Unsupported distro: $DISTRO"
-        exit 1
-    fi
-}
 
 install_zoxide
 print_color "$GREEN" "✅ Zoxide initialized in Fish!"

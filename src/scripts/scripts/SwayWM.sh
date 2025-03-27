@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -174,14 +174,14 @@ if ! fzf_confirm "Continue with Sway setup?"; then
     exit 1
 fi
 
-if [ -f /etc/fedora-release ]; then
-    print_message $RED "Sway setup for Fedora is not finalized due to missing dependencies and runtime errors. Exiting."
-    exit 1
-elif [ -f /etc/arch-release ]; then
-    print_message $GREEN "Arch Linux detected. Proceeding with setup..."
+if command -v pacman &>/dev/null; then
+   print_message $GREEN "Arch Linux detected. Proceeding with setup..."
+elif command -v dnf &>/dev/null; then
+   print_message $RED "Sway setup for Fedora is not finalized due to missing dependencies and runtime errors. Exiting."
+   exit 1
 else
-    print_message $RED "Unsupported distribution. Exiting."
-    exit 1
+   print_message $RED "Unsupported distribution. Exiting."
+   exit 1
 fi
 
 REQUIRED_PKGS=(git base-devel make less)
