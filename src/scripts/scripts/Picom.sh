@@ -10,7 +10,13 @@ YELLOW="\e[33m"
 ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Picom"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Picom"
+else
+    echo "========== Picom Setup =========="
+fi
+echo -e "${ENDCOLOR}"
+
 echo -e "${GREEN}"
 cat << "EOF"
 Picom is a standalone compositor for Xorg.

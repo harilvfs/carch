@@ -31,8 +31,13 @@ YELLOW="\033[1;33m"
 RESET="\033[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Bash"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Bash"
+else
+    echo "========== Bash Setup =========="
+fi
 echo -e "${RESET}"
+
 
 echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
 

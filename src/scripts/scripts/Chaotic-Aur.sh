@@ -42,9 +42,13 @@ elif ! command -v pacman &>/dev/null; then
 fi
 
 echo -e "${BLUE}"
-figlet -f slant "Chaotic AUR"
-echo -e "${ENDCOLOR}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Chaotic AUR"
+else
+    echo "========== Chaotic AUR Setup =========="
+fi
 
+echo -e "${RESET}"
 echo -e "${MAGENTA}╭───────────────────────────────────────────────╮"
 echo -e "│  🌟 Installing Chaotic AUR on Arch Linux 🌟   │"
 echo -e "╰───────────────────────────────────────────────╯${ENDCOLOR}"

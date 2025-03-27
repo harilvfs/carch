@@ -46,7 +46,11 @@ fi
 clear
 
 echo -e "${BLUE}"
-figlet -f slant "Tmux"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Tmux"
+else
+    echo "========== Tmux Setup =========="
+fi
 echo -e "${RESET}"
 
 if ! fzf_confirm "Do you want to proceed with the tmux installation and configuration?"; then

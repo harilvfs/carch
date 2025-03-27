@@ -9,7 +9,11 @@ BLUE="\033[1;34m"
 RESET="\033[0m"
 
 echo -e "${BLUE}"
-figlet -f slant "Fish"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Fish"
+else
+    echo "========== Fish Setup =========="
+fi
 echo -e "${RESET}"
 
 fzf_confirm() {

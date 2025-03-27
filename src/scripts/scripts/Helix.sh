@@ -21,7 +21,11 @@ fzf_confirm() {
 }
 
 echo -e "${BLUE}"
-figlet -f slant "Helix"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Helix"
+else
+    echo "========== Helix Setup =========="
+fi
 echo -e "${RESET}"
 
 if ! command -v fzf &>/dev/null; then
