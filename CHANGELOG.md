@@ -6,9 +6,6 @@ All notable changes to this project will be documented in this file.
 
 No major changes or updates, just minor bug fixes.
 
-> [!IMPORTANT]
-> This might be the last Carch update. 
-
 ### Fixed
 
 - fix: AUR helper Swaywm (https://github.com/harilvfs/carch/pull/335)
