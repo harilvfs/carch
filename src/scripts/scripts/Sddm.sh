@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -32,28 +32,14 @@ EOF
 }
 
 detect_os() {
-    if [[ -f /etc/os-release ]]; then
-        . /etc/os-release
-        DISTRO=$ID
-        
-        case "$DISTRO" in
-            arch) DISTRO="arch" ;;
-            fedora) DISTRO="fedora" ;;
-            *)
-                if [[ "$ID_LIKE" == *"arch"* ]]; then
-                    DISTRO="arch"
-                elif [[ "$ID_LIKE" == *"fedora"* ]]; then
-                    DISTRO="fedora"
-                else
-                    echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
-                    exit 1
-                fi
-                ;;
-        esac
-    else
-        echo -e "${RED}❌ OS information not found!${ENDCOLOR}"
-        exit 1
-    fi
+   if command -v pacman &>/dev/null; then
+       DISTRO="arch"
+   elif command -v dnf &>/dev/null; then
+       DISTRO="fedora"
+   else
+       echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
+       exit 1
+   fi
 }
 
 disable_other_dms() {

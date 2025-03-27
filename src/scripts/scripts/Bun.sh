@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 BLUE="\e[34m"
 GREEN="\e[32m"
@@ -17,16 +17,12 @@ check_fzf() {
     fi
 }
 
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    DISTRO="$ID"
-    DISTRO_LIKE="${ID_LIKE}" 
-    
-    if [[ "$DISTRO" == "arch" || "$ID_LIKE" == "arch" ]]; then
-        PACKAGE_MANAGER="pacman"
-    elif [[ "$DISTRO" == "fedora" || "$ID_LIKE" == "rhel" || "$ID_LIKE" == "centos" ]]; then
-        PACKAGE_MANAGER="dnf"
-    fi
+if command -v pacman &> /dev/null; then
+    PACKAGE_MANAGER="pacman"
+elif command -v dnf &> /dev/null; then
+    PACKAGE_MANAGER="dnf"
+else
+    PACKAGE_MANAGER="unknown"
 fi
 
 clear

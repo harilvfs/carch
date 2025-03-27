@@ -29,19 +29,12 @@ if ! command -v fzf &>/dev/null; then
     exit 1
 fi
 
-if [[ -f /etc/os-release ]]; then
-    . /etc/os-release
-    DISTRO=${ID_LIKE:-$ID}
-    case "$DISTRO" in
-        *arch*) DISTRO="arch" ;;
-        *fedora*) DISTRO="fedora" ;;
-        *)
-            echo -e "${RED}❌ Unsupported distribution!${RESET}"
-            exit 1
-            ;;
-    esac
+if command -v pacman &>/dev/null; then
+    DISTRO="arch"
+elif command -v dnf &>/dev/null; then
+    DISTRO="fedora"
 else
-    echo -e "${RED}❌ OS information not found!${RESET}"
+    echo -e "${RED}❌ Unsupported distribution!${RESET}"
     exit 1
 fi
 

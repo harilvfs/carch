@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -11,13 +11,9 @@ BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
 detect_distro() {
-    if grep -q "ID=arch" /etc/os-release 2>/dev/null || [ -f "/etc/arch-release" ]; then
+    if command -v pacman &> /dev/null; then
         distro="arch"
-    elif grep -q "ID_LIKE=arch" /etc/os-release 2>/dev/null; then
-        distro="arch"
-    elif grep -q "ID=fedora" /etc/os-release 2>/dev/null || [ -f "/etc/fedora-release" ]; then
-        distro="fedora"
-    elif grep -q "ID_LIKE=fedora" /etc/os-release 2>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         distro="fedora"
     else
         distro="unsupported"

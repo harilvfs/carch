@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -31,14 +31,13 @@ fzf_choose() {
     printf "%s\n" "${options[@]}" | fzf --height=15 --layout=reverse --border
 }
 
-source /etc/os-release
-if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
-    distro="arch"
-elif [[ "$ID" == "fedora" || "$ID_LIKE" == *"fedora"* ]]; then
-    distro="fedora"
+if command -v pacman &>/dev/null; then
+   distro="arch"
+elif command -v dnf &>/dev/null; then
+   distro="fedora"
 else
-    echo -e "\e[31mUnsupported distro: $ID. Exiting...\e[0m"
-    exit 1
+   echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
+   exit 1
 fi
 echo -e "${BLUE}Distro: ${distro^} Linux${RESET}"
 

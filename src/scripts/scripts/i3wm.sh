@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 clear
 
@@ -37,20 +37,13 @@ if ! fzf_confirm "Continue with i3 setup?"; then
     exit 1
 fi
 
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
+if command -v pacman &>/dev/null; then
+   OS="arch"
+elif command -v dnf &>/dev/null; then
+   OS="fedora"
 else
-    echo -e "${GREEN}Unsupported system!${ENDCOLOR}"
-    exit 1
-fi
-
-if [[ "$ID" == "arch" ]]; then
-    OS="arch"
-elif [[ "$ID" == "fedora" ]]; then
-    OS="fedora"
-else
-    echo -e "${GREEN}This script only supports Arch Linux and Fedora.${ENDCOLOR}"
-    exit 1
+   echo -e "${GREEN}This script only supports Arch Linux and Fedora.${ENDCOLOR}"
+   exit 1
 fi
 
 echo -e "${GREEN}Detected OS: $OS${ENDCOLOR}"
