@@ -95,7 +95,7 @@ typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
 sleep 0.5
 
 if command -v pacman &>/dev/null; then
-    echo -e "${GREEN}Ahh, you are using Arch BTW. Best choice, my man!${RESET}"
+    echo -e "${GREEN}Ahh, you are using Arch BTW.${RESET}"
     sleep 1.5
 fi
 
