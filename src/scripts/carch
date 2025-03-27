@@ -38,15 +38,15 @@ log_message() {
 }
 
 detect_distro() {
-    if [ -f "/etc/arch-release" ]; then
+    if command -v pacman &> /dev/null; then
         DISTRO="arch"
         echo -e "${YELLOW}Arch Linux${RESET}"
-    elif [ -f "/etc/fedora-release" ]; then
+    elif command -v dnf &> /dev/null; then
         DISTRO="fedora"
         echo -e "${YELLOW}Fedora${RESET}"
     else
         DISTRO="unknown"
-        echo -e "${RED}Unsupported distribution. Continuing with limited functionality...${RESET}"
+        echo -e "${RED}Unknown${RESET}"
     fi
 }
 
