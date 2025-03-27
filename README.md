@@ -8,7 +8,7 @@
 <details>
 <summary><strong>Preview 👀</strong></summary>
 
-![Preview](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/preview.gif)
+![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
 </details>
 
