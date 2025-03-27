@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="4.2.4"
+VERSION="4.2.5"
 CONFIG_DIR="$HOME/.config/carch"
 CACHE_DIR="$HOME/.cache/carch-install"
 LOG_FILE="$CACHE_DIR/install.log"

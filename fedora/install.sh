@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="4.2.4"
+VERSION="4.2.5"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
