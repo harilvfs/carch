@@ -17,7 +17,7 @@ CONFIG_EMOJI="⚙️"
 UPDATE_EMOJI="🔄"
 SYSTEM_EMOJI="💻"
 
-SCRIPT_DIR="./scripts"
+SCRIPT_DIR="./modules"
 LOG_FILE="$HOME/.config/carch/carch.log"
 
 CONFIG_DIR="$HOME/.config/carch"
@@ -107,12 +107,22 @@ generate_config() {
     mkdir -p "$CONFIG_DIR"
     if [[ ! -f "$CONFIG_FILE" ]]; then
         cat > "$CONFIG_FILE" <<EOL
-# Carch Configuration File
-# List the script names (without .sh extension) you want to include in the menu.
-# Example:
-# Alacritty
-# Kitty
+# Carch Configuration File  
+#  
+# List the script names (without the .sh extension) that you want to include in the menu.  
+#  
+# Steps:  
+# 1. Check which category the scripts fall under (e.g., system, development, terminal, desktop).  
+# 2. Verify the available scripts using:  
+#    carch -l or carch --list-scripts  
+#  
+# Example:  
 
+terminal/Alacritty  
+terminal/Kitty  
+system/Packages  
+
+# End of file
 EOL
         echo -e "${GREEN}Default configuration file created at $CONFIG_FILE.${RESET}"
         log_message "INFO" "Generated default configuration file."
@@ -163,9 +173,10 @@ load_selected_scripts() {
 load_all_scripts() {
     scripts=()
     while IFS= read -r -d '' file; do
+        category=$(dirname "$file" | xargs basename)
         script_name=$(basename "${file}" .sh)
-        scripts+=("$script_name")
-    done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
+        scripts+=("${category}/${script_name}")
+    done < <(find "$SCRIPT_DIR" -type f -name '*.sh' -print0)
     scripts+=("Cancel")
 }
 
@@ -185,7 +196,7 @@ check_fzf() {
 }
 
 search_scripts() {
-  clear
+    clear
     local direct_mode="$1"
     
     while true; do
@@ -194,19 +205,20 @@ search_scripts() {
         
         available_scripts=()
         while IFS= read -r -d '' file; do
+            category=$(dirname "$file" | xargs basename)
             script_name=$(basename "${file}" .sh)
-            available_scripts+=("$script_name")
-        done < <(find "$SCRIPT_DIR" -maxdepth 1 -name '*.sh' -print0)
+            available_scripts+=("${category}/${script_name}")
+        done < <(find "$SCRIPT_DIR" -type f -name '*.sh' -print0)
         
         selected_script=$(printf "%s\n" "${available_scripts[@]}" | fzf --height 40% --border --prompt="Search scripts: " --preview="cat $SCRIPT_DIR/{}.sh" --preview-window=right:50%)
         
         if [[ -n "$selected_script" ]]; then
-            local script_path="$SCRIPT_DIR/${selected_script}.sh"
-            if [[ -f "$script_path" ]]; then
+            local full_script_path="$SCRIPT_DIR/${selected_script}.sh"
+            if [[ -f "$full_script_path" ]]; then
                 log_message "INFO" "Starting script: ${selected_script}"
                 echo -e "${YELLOW}Running script: ${selected_script}${RESET}"
                 
-                ( bash "$script_path" )
+                ( bash "$full_script_path" )
                 script_exit_code=$?
                 
                 if [[ $script_exit_code -eq 0 ]]; then
@@ -416,51 +428,53 @@ display_scripts_menu() {
 }
 
 run_script() {
-    local script_name="$1"
-    local script_path="$SCRIPT_DIR/${script_name}.sh"
+    local script_path="$1"
+    local category=$(dirname "$script_path")
+    local script_name=$(basename "$script_path" .sh)
+    local full_script_path="$SCRIPT_DIR/$script_path.sh"
 
-    if [[ -f "$script_path" ]]; then
-        log_message "INFO" "Starting script: ${script_name}"
-        echo -e "${YELLOW}Running script: ${script_name}${RESET}"
-        if bash "$script_path"; then
-            echo -e "${GREEN}Script '${script_name}' completed successfully.${RESET}"
-            log_message "SUCCESS" "Script '${script_name}' completed successfully."
+    if [[ -f "$full_script_path" ]]; then
+        log_message "INFO" "Starting script: ${script_path}"
+        echo -e "${YELLOW}Running script: ${script_path}${RESET}"
+        if bash "$full_script_path"; then
+            echo -e "${GREEN}Script '${script_path}' completed successfully.${RESET}"
+            log_message "SUCCESS" "Script '${script_path}' completed successfully."
         else
-            echo -e "${YELLOW}Script '${script_name}' encountered an error.${RESET}"
-            log_message "ERROR" "Script '${script_name}' encountered an error."
+            echo -e "${YELLOW}Script '${script_path}' encountered an error.${RESET}"
+            log_message "ERROR" "Script '${script_path}' encountered an error."
         fi
     else
-        echo -e "${YELLOW}Error: Script '${script_name}' not found in $SCRIPT_DIR!${RESET}"
-        log_message "ERROR" "Script '${script_name}' not found in $SCRIPT_DIR."
+        echo -e "${YELLOW}Error: Script '${script_path}' not found!${RESET}"
+        log_message "ERROR" "Script '${script_path}' not found."
     fi
 
     echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
-    log_message "INFO" "Logs saved after running script: ${script_name}"
+    log_message "INFO" "Logs saved after running script: ${script_path}"
 
     prompt
 }
 
 run_script_direct() {
-    local script_name="$1"
-    local script_path="$SCRIPT_DIR/${script_name}.sh"
+    local script_path="$1"
+    local full_script_path="$SCRIPT_DIR/$script_path.sh"
 
-    if [[ -f "$script_path" ]]; then
-        log_message "INFO" "Starting script: ${script_name}"
-        echo -e "${YELLOW}Running script: ${script_name}${RESET}"
-        if bash "$script_path"; then
-            echo -e "${GREEN}Script '${script_name}' completed successfully.${RESET}"
-            log_message "SUCCESS" "Script '${script_name}' completed successfully."
+    if [[ -f "$full_script_path" ]]; then
+        log_message "INFO" "Starting script: ${script_path}"
+        echo -e "${YELLOW}Running script: ${script_path}${RESET}"
+        if bash "$full_script_path"; then
+            echo -e "${GREEN}Script '${script_path}' completed successfully.${RESET}"
+            log_message "SUCCESS" "Script '${script_path}' completed successfully."
         else
-            echo -e "${YELLOW}Script '${script_name}' encountered an error.${RESET}"
-            log_message "ERROR" "Script '${script_name}' encountered an error."
+            echo -e "${YELLOW}Script '${script_path}' encountered an error.${RESET}"
+            log_message "ERROR" "Script '${script_path}' encountered an error."
         fi
     else
-        echo -e "${YELLOW}Error: Script '${script_name}' not found in $SCRIPT_DIR!${RESET}"
-        log_message "ERROR" "Script '${script_name}' not found in $SCRIPT_DIR."
+        echo -e "${YELLOW}Error: Script '${script_path}' not found!${RESET}"
+        log_message "ERROR" "Script '${script_path}' not found."
     fi
 
     echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
-    log_message "INFO" "Logs saved after running script: ${script_name}"
+    log_message "INFO" "Logs saved after running script: ${script_path}"
 }
 
 update() {
@@ -501,17 +515,27 @@ show_help() {
 }
 
 list_scripts() {
-    echo "Available scripts in $SCRIPT_DIR:"
-    local script_files=()
-    while IFS= read -r -d '' script; do
-        script_files+=("$(basename "$script" .sh)")
-    done < <(find "$SCRIPT_DIR" -maxdepth 1 -name "*.sh" -print0)
+    echo "Available scripts:"
     
-    if [ ${#script_files[@]} -eq 0 ]; then
-        echo "  No scripts found in $SCRIPT_DIR"
-    else
-        printf "  - %s\n" "${script_files[@]}"
-    fi
+    local categories=()
+    while IFS= read -r -d '' dir; do
+        categories+=("$(basename "$dir")")
+    done < <(find "$SCRIPT_DIR" -mindepth 1 -maxdepth 1 -type d -print0)
+    
+    for category in "${categories[@]}"; do
+        echo -e "${CYAN}$category:${RESET}"
+        
+        local script_files=()
+        while IFS= read -r -d '' script; do
+            script_files+=("$(basename "$script" .sh)")
+        done < <(find "$SCRIPT_DIR/$category" -name "*.sh" -print0)
+        
+        if [ ${#script_files[@]} -eq 0 ]; then
+            echo "  No scripts found in $category"
+        else
+            printf "  - %s\n" "${script_files[@]}"
+        fi
+    done
 }
 
 exit_with_log_message() {

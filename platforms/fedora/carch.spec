@@ -64,7 +64,7 @@ install -Dm644 completions/bash/%{name} %{buildroot}%{_datadir}/bash-completion/
 install -Dm644 completions/zsh/_%{name} %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
 install -Dm644 completions/fish/%{name}.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/%{name}.fish
 for size in 16 24 32 48 64 128 256; do
-    install -Dm644 source/logo/product_logo_${size}.png \
+    install -Dm644 assets/icons/product_logo_${size}.png \
         %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/%{name}.png
 done
 
