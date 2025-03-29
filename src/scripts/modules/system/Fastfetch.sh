@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Configures Fastfetch to display detailed system information quickly and attractively in the terminal.
+
 clear
 
 GREEN='\033[0;32m'

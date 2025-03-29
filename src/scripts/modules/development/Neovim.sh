@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and configures Neovim for an enhanced, efficient code editing environment.
+
 clear
 
 GREEN="\e[32m"

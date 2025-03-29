@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Install and configure Pacman to add the Chaotic AUR on Arch
+
 clear
 
 BLUE="\e[34m"

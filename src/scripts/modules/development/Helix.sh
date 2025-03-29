@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and configures the Helix text editor, providing a modern and feature-rich code editing environment optimized for both performance and ease of use.
+
 clear
 
 RED="\033[1;31m"

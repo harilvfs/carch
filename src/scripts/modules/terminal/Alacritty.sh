@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Configures the Alacritty terminal emulator using my preferred settings for optimal performance.
+
 clear
 
 GREEN='\033[0;32m'
