@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/usr/bin/env bash
 
 rc='\033[0m'
 red='\033[0;31m'
