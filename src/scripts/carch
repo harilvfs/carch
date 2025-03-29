@@ -10,13 +10,6 @@ CYAN='\033[0;36m'
 RESET='\033[0m'
 NC='\033[0m'
 
-SCRIPT_EMOJI="🚀"
-SUCCESS_EMOJI="✅"
-ERROR_EMOJI="❌"
-CONFIG_EMOJI="⚙️"
-UPDATE_EMOJI="🔄"
-SYSTEM_EMOJI="💻"
-
 SCRIPT_DIR="./modules"
 LOG_FILE="$HOME/.config/carch/carch.log"
 
@@ -210,7 +203,10 @@ search_scripts() {
             available_scripts+=("${category}/${script_name}")
         done < <(find "$SCRIPT_DIR" -type f -name '*.sh' -print0)
         
-        selected_script=$(printf "%s\n" "${available_scripts[@]}" | fzf --height 40% --border --prompt="Search scripts: " --preview="cat $SCRIPT_DIR/{}.sh" --preview-window=right:50%)
+        selected_script=$(printf "%s\n" "${available_scripts[@]}" | fzf --height 50% --border \
+               --prompt="Search scripts: " \
+               --preview="cat $SCRIPT_DIR/{}.sh 2>/dev/null | fold -w 70 || echo 'No preview available'" \
+               --preview-window=right:60%)
         
         if [[ -n "$selected_script" ]]; then
             local full_script_path="$SCRIPT_DIR/${selected_script}.sh"
@@ -236,7 +232,6 @@ search_scripts() {
                     read -rp "Press Enter to continue or type 'q' to quit: " user_choice
                     if [[ "$user_choice" == "q" ]]; then
                         clear
-                        echo -e "${YELLOW}Exiting... Logs have been saved to: ${LOG_FILE}${RESET}"
                         exit 0
                     else
                         clear
@@ -262,7 +257,6 @@ search_scripts() {
                 read -rp "Press Enter to return to script search or type 'q' to quit: " user_choice
                 if [[ "$user_choice" == "q" ]]; then
                     clear
-                    echo -e "${YELLOW}Exiting... Logs have been saved to: ${LOG_FILE}${RESET}"
                     exit 0
                 else
                     clear
@@ -336,35 +330,9 @@ display_scripts_menu() {
         right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${GREEN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
         
-        separator="---------------------"
+        separator="------------------------------"
         separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
         right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        if [[ -f /etc/os-release ]]; then
-            distro_info=$(grep -oP '^ID=\K.*' /etc/os-release | tr -d '"')
-        else
-            distro_info="Unknown"
-        fi
-        
-        case "$distro_info" in
-            arch)   fixed_width=18 ;;
-            fedora) fixed_width=14 ;;
-            *)      fixed_width=16 ;;
-        esac
-        
-        distro_text=$(printf "%-${fixed_width}s" "Distro: $distro_info")
-        distro_spaces=$(( (TERM_WIDTH - 2 - fixed_width) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - distro_spaces - fixed_width ))
-        [[ $distro_spaces -lt 0 ]] && distro_spaces=0
-        [[ $right_padding -lt 0 ]] && right_padding=0
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $distro_spaces))${GREEN}${distro_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        arch_text="Architecture: ${ARCH}"
-        arch_spaces=$(( (TERM_WIDTH - 2 - ${#arch_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - arch_spaces - ${#arch_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $arch_spaces))${GREEN}${arch_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
         
         info_text="For more info: https://carch-org.github.io/docs/"
@@ -374,7 +342,7 @@ display_scripts_menu() {
         
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2))))│${NC}"
         
-        health_text="🖥 System Health:"
+        health_text="System Health:"
         emoji_width=2
         health_text_visible_length=$((${#health_text} + emoji_width - 2))
         health_spaces=$(( (TERM_WIDTH - 2 - health_text_visible_length) / 2 ))
@@ -410,10 +378,11 @@ display_scripts_menu() {
             all_options=("${scripts[@]}")
         fi
         
-        selected_option=$(printf "%s\n" "${all_options[@]}" | fzf --height 40% --border \
+        selected_option=$(printf "%s\n" "${all_options[@]}" | fzf --height 60% --border \
             --prompt="Select a script: " \
-            --header="Navigate with arrow keys, Enter to select, Cancel to Exit" \
-            --preview="cat $SCRIPT_DIR/{}.sh 2>/dev/null || echo 'No preview available'" --preview-window=right:50%)
+            --header="Navigate with arrow keys, Enter to select" \
+            --preview="cat $SCRIPT_DIR/{}.sh 2>/dev/null | fold -w 70 || echo 'No preview available'" \
+            --preview-window=right:60%)
         
         if [[ -z "$selected_option" ]]; then
             continue
@@ -539,7 +508,6 @@ list_scripts() {
 }
 
 exit_with_log_message() {
-    echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
     log_message "INFO" "Exiting Carch. Logs saved to: ${LOG_FILE}"
     exit 0
 }
