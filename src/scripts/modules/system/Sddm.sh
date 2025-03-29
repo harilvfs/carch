@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Configures the SDDM (Simple Desktop Display Manager) for a streamlined and visually appealing login experience.
+
 clear
 
 export RED="\e[31m"

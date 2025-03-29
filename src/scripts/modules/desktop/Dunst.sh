@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Configures Dunst, a lightweight and customizable notification daemon, with optimized settings for a sleek and unobtrusive experience.
+
 BLUE="\e[34m"
 RESET="\e[0m"
 RED="\e[31m"

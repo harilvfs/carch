@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs AUR (Arch User Repository) helpers, like Paru or Yay, to simplify package management.
+
 clear
 
 RED='\033[0;31m'

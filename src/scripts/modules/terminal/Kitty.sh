@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Sets up the Kitty terminal emulator with advanced features and custom configurations.
+
 clear
 
 GREEN='\033[0;32m'

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Sets up a custom Bash prompt with useful information such as the current working directory, Git status, and system details, enhancing the command line experience.
+
 detect_distro() {
     if command -v pacman &> /dev/null; then
         distro="arch"

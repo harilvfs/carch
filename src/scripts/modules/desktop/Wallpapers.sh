@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs a selection of wallpapers for a personalized desktop aesthetic.
+
 clear
 
 GREEN='\033[0;32m'

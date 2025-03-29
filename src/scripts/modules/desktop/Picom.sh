@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and configures the Picom compositor to enable window transparency, shadows, and other visual effects.
+
 clear
 
 aur_helper=""
