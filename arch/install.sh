@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 VERSION="4.2.5"
 CONFIG_DIR="$HOME/.config/carch"
