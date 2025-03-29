@@ -231,6 +231,80 @@ configure_wallpapers() {
     print_message "$GREEN" "Wallpapers downloaded."
 }
 
+setup_xinitrc() {
+    local XINITRC="$HOME/.xinitrc"
+    
+    if [ -f "$XINITRC" ]; then
+        if fzf_confirm "Existing .xinitrc detected. Do you want to replace it?"; then
+            mv "$XINITRC" "$XINITRC.bak"
+        else
+            return
+        fi
+    fi
+    
+    print_message "$CYAN" ":: Creating .xinitrc file for DWM..."
+    cat > "$XINITRC" << 'EOF'
+#!/bin/sh
+exec dwm
+EOF
+    
+    chmod +x "$XINITRC"
+    print_message "$GREEN" ".xinitrc configured successfully!"
+}
+
+setup_tty_login() {
+    if fzf_confirm "Do you want to use DWM from TTY using startx?"; then
+        setup_xinitrc
+        
+        if fzf_confirm "Do you want to enable automatic login to TTY? (Not recommended for security reasons)"; then
+            local username=$(whoami)
+            print_message "$CYAN" ":: Setting up autologin for user: $username"
+            
+            sudo mkdir -p /etc/systemd/system/getty@tty1.service.d/
+            
+            sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf > /dev/null << EOF
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin $username --noclear %I 38400 linux
+EOF
+            
+            sudo systemctl daemon-reexec
+            print_message "$GREEN" "Autologin configured for TTY1."
+        fi
+    fi
+}
+
+check_display_manager() {
+    local dm_found=false
+    local dm_name=""
+    
+    for dm in sddm gdm lightdm lxdm xdm slim; do
+        if systemctl is-enabled $dm.service &>/dev/null; then
+            dm_found=true
+            dm_name=$dm
+            break
+        fi
+    done
+    
+    if $dm_found; then
+        print_message "$YELLOW" "Display manager $dm_name is detected."
+        if fzf_confirm "When using DWM from TTY, a display manager is not needed. Do you want to remove $dm_name?"; then
+            if [ "$distro" == "arch" ]; then
+                sudo systemctl disable $dm_name.service
+                sudo systemctl stop $dm_name.service
+                sudo pacman -Rns $dm_name
+            elif [ "$distro" == "fedora" ]; then
+                sudo systemctl disable $dm_name.service
+                sudo systemctl stop $dm_name.service
+                sudo dnf remove -y $dm_name
+            fi
+            print_message "$GREEN" "Display manager $dm_name has been removed."
+        fi
+    else
+        print_message "$GREEN" "No display manager detected. You can start DWM using 'startx' from TTY."
+    fi
+}
+
 detect_distro
 confirm_setup
 install_packages
@@ -239,6 +313,8 @@ install_slstatus
 install_nerd_font
 install_picom
 configure_wallpapers
+setup_tty_login
+check_display_manager
 print_message "$GREEN" "DWM setup completed successfully!"
 print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
 print_message "$CYAN" "https://github.com/harilvfs/dwm/blob/main/config"
