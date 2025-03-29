@@ -2,6 +2,8 @@
 
 # For personal use only. Do not run this script yourself.
 
+clear
+
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
@@ -9,24 +11,39 @@ BLUE='\033[0;34m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-REPO_DIR="$(pwd)"
+echo -e "${BLUE}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Updater"
+else
+    echo "========== Version Updater =========="
+fi
+echo -e "${RESET}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ "$(basename "$SCRIPT_DIR")" == "scripts" ]]; then
+    REPO_DIR="$(dirname "$SCRIPT_DIR")"
+else
+    REPO_DIR="$(pwd)"
+fi
+
 OLD_VERSION=""
 NEW_VERSION=""
 
 check_repo() {
-    if [ ! -d "$REPO_DIR/arch" ] || [ ! -d "$REPO_DIR/fedora" ]; then
+    if [ ! -d "$REPO_DIR/platforms/arch" ] || [ ! -d "$REPO_DIR/platforms/fedora" ]; then
         echo -e "${RED}Error: This doesn't appear to be the carch repository.${RESET}"
-        echo -e "Please run this script from the root of the carch repository."
+        echo -e "Current detected repo directory: $REPO_DIR"
+        echo -e "Please run this script from the root of the carch repository or from the scripts directory."
         exit 1
     fi
 }
 
 detect_version() {
-    if [ -f "$REPO_DIR/arch/install.sh" ]; then
-        OLD_VERSION=$(grep "VERSION=" "$REPO_DIR/arch/install.sh" | cut -d'"' -f2)
+    if [ -f "$REPO_DIR/platforms/arch/install.sh" ]; then
+        OLD_VERSION=$(grep "VERSION=" "$REPO_DIR/platforms/arch/install.sh" | cut -d'"' -f2)
         echo -e "${BLUE}Current version detected: ${BOLD}$OLD_VERSION${RESET}"
     else
-        echo -e "${YELLOW}Warning: Could not detect current version from arch/install.sh${RESET}"
+        echo -e "${YELLOW}Warning: Could not detect current version from platforms/arch/install.sh${RESET}"
         echo -e "${YELLOW}Please enter the current version manually:${RESET}"
         read -p "> " OLD_VERSION
     fi
@@ -56,41 +73,41 @@ get_new_version() {
 }
 
 update_arch_install() {
-    echo -e "${BLUE}Updating version in arch/install.sh...${RESET}"
-    if [ -f "$REPO_DIR/arch/install.sh" ]; then
-        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/arch/install.sh"
-        echo -e "${GREEN}✓ Updated arch/install.sh${RESET}"
+    echo -e "${BLUE}Updating version in platforms/arch/install.sh...${RESET}"
+    if [ -f "$REPO_DIR/platforms/arch/install.sh" ]; then
+        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/platforms/arch/install.sh"
+        echo -e "${GREEN}✓ Updated platforms/arch/install.sh${RESET}"
     else
-        echo -e "${RED}Error: arch/install.sh not found!${RESET}"
+        echo -e "${RED}Error: platforms/arch/install.sh not found!${RESET}"
     fi
 }
 
 update_fedora_install() {
-    echo -e "${BLUE}Updating version in fedora/install.sh...${RESET}"
-    if [ -f "$REPO_DIR/fedora/install.sh" ]; then
-        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/fedora/install.sh"
-        echo -e "${GREEN}✓ Updated fedora/install.sh${RESET}"
+    echo -e "${BLUE}Updating version in platforms/fedora/install.sh...${RESET}"
+    if [ -f "$REPO_DIR/platforms/fedora/install.sh" ]; then
+        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/platforms/fedora/install.sh"
+        echo -e "${GREEN}✓ Updated platforms/fedora/install.sh${RESET}"
     else
-        echo -e "${RED}Error: fedoar/install.sh not found!${RESET}"
+        echo -e "${RED}Error: platforms/fedora/install.sh not found!${RESET}"
     fi
 }
 
 update_fedora_spec() {
-    echo -e "${BLUE}Updating version in fedora/carch.spec...${RESET}"
-    if [ -f "$REPO_DIR/fedora/carch.spec" ]; then
-        VERSION_LINE_NUM=$(grep -n "^Version:" "$REPO_DIR/fedora/carch.spec" | cut -d: -f1)
+    echo -e "${BLUE}Updating version in platforms/fedora/carch.spec...${RESET}"
+    if [ -f "$REPO_DIR/platforms/fedora/carch.spec" ]; then
+        VERSION_LINE_NUM=$(grep -n "^Version:" "$REPO_DIR/platforms/fedora/carch.spec" | cut -d: -f1)
         if [ -n "$VERSION_LINE_NUM" ]; then
             TMP_FILE=$(mktemp)
             awk -v line="$VERSION_LINE_NUM" -v new_ver="Version:        $NEW_VERSION" '
             NR == line {print new_ver; next}
             {print}
-            ' "$REPO_DIR/fedora/carch.spec" > "$TMP_FILE"
+            ' "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
             
-            mv "$TMP_FILE" "$REPO_DIR/fedora/carch.spec"
+            mv "$TMP_FILE" "$REPO_DIR/platforms/fedora/carch.spec"
             
-            echo -e "${GREEN}✓ Updated version in fedora/carch.spec to $NEW_VERSION${RESET}"
+            echo -e "${GREEN}✓ Updated version in platforms/fedora/carch.spec to $NEW_VERSION${RESET}"
         else
-            echo -e "${RED}Error: Could not find Version line in fedora/carch.spec${RESET}"
+            echo -e "${RED}Error: Could not find Version line in platforms/fedora/carch.spec${RESET}"
         fi
         
         echo -e "${BLUE}Enter changelog entries (one per line). Type 'done' on a new line when finished:${RESET}"
@@ -112,7 +129,7 @@ update_fedora_spec() {
             CHANGELOG_CONTENT="$CHANGELOG_CONTENT\n- $entry"
         done
         
-        CHANGELOG_LINE_NUM=$(grep -n "%changelog" "$REPO_DIR/fedora/carch.spec" | cut -d: -f1)
+        CHANGELOG_LINE_NUM=$(grep -n "%changelog" "$REPO_DIR/platforms/fedora/carch.spec" | cut -d: -f1)
         if [ -n "$CHANGELOG_LINE_NUM" ]; then
             TMP_FILE=$(mktemp)
             
@@ -126,15 +143,15 @@ update_fedora_spec() {
                 next;
             }
             {print}
-            ' "$REPO_DIR/fedora/carch.spec" > "$TMP_FILE"
+            ' "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
             
-            mv "$TMP_FILE" "$REPO_DIR/fedora/carch.spec"
-            echo -e "${GREEN}✓ Updated changelog in fedora/carch.spec${RESET}"
+            mv "$TMP_FILE" "$REPO_DIR/platforms/fedora/carch.spec"
+            echo -e "${GREEN}✓ Updated changelog in platforms/fedora/carch.spec${RESET}"
         else
-            echo -e "${RED}Error: Could not find %changelog section in fedora/carch.spec${RESET}"
+            echo -e "${RED}Error: Could not find %changelog section in platforms/fedora/carch.spec${RESET}"
         fi
     else
-        echo -e "${RED}Error: fedora/carch.spec not found!${RESET}"
+        echo -e "${RED}Error: platforms/fedora/carch.spec not found!${RESET}"
     fi
 }
 
@@ -170,6 +187,7 @@ update_cargo_toml() {
 
 main() {
     echo -e "${BOLD}${BLUE}==== Carch Version Updater ====${RESET}"
+    echo -e "${BLUE}Repository directory: ${REPO_DIR}${RESET}"
     
     check_repo
     detect_version
