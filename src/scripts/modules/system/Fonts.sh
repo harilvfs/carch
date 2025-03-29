@@ -91,7 +91,7 @@ choose_fonts() {
         FONT_SELECTION=$(fzf_select_fonts)
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
-            echo -e "${GREEN}Exiting font installation. Thank you!${NC}"
+            echo -e "${GREEN}Exiting font installation.${NC}"
             return
         fi
 
@@ -166,7 +166,11 @@ detect_os() {
 main() {
     check_dependencies
     detect_os
-    
+   
+    echo -e "${BLUE}"
+    figlet -f slant "Fonts"
+    echo -e "${NC}"
+
     if ! fzf_confirm "This script will install Nerd Fonts on your system. Continue?"; then
         echo -e "${RED}Setup aborted by the user. Exiting...${NC}"
         exit 1
@@ -174,7 +178,6 @@ main() {
     
     choose_fonts
     
-    echo -e "${GREEN}Font installation completed. Thank you for using this script!${NC}"
 }
 
 main
