@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs the Long-Term Support (LTS) kernel for enhanced stability and extended support.
+
 clear
 
 GREEN="\e[32m"

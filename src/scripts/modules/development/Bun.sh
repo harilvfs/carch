@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and configures Bun, a fast JavaScript runtime for modern development.
+
 BLUE="\e[34m"
 GREEN="\e[32m"
 RED="\e[31m"

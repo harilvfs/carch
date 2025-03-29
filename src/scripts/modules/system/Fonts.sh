@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.
+
 clear
 
 GREEN='\033[0;32m'

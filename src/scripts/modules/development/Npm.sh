@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Ensures npm is installed correctly, offering an alternative setup if needed.
+
 clear
 
 RED="\e[31m"

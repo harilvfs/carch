@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and configures Tmux for a more efficient terminal multiplexing experience.
+
 clear
 
 RED="\e[31m"

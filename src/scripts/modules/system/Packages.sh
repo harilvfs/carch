@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs a curated selection of essential packages to establish a fully functional environment.
+
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'

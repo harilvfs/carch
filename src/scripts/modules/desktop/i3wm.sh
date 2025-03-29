@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and configures i3, providing a lightweight and efficient window management experience.
+
 clear
 
 GREEN="\e[32m"

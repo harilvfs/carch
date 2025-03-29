@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Installs and applies a set of themes and icons to enhance the look and feel of your desktop.
+
 clear
 
 GREEN='\033[0;32m'

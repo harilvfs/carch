@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Currently not compatible with Fedora. SwayWM is supported for Arch-based systems only.
+
 clear
 
 GREEN="\033[1;32m"

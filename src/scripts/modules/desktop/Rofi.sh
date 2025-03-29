@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Configures Rofi as a powerful application launcher and window switcher, improving workflow efficiency.
+
 clear
 
 GREEN='\033[0;32m'
