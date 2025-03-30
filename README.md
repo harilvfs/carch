@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="800" />
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
 
 </div>
 
