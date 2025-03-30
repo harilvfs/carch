@@ -319,49 +319,28 @@ display_scripts_menu() {
 
     while true; do
         clear
-        echo -e "${BLUE}╭$(printf '─%.0s' $(seq 1 $((TERM_WIDTH - 2))))╮${NC}"
-        
+        echo -e "${BLUE}╭$(printf '━%.0s' $(seq 1 $((TERM_WIDTH - 2))))╮${NC}"
+    
         title="CARCH"
         title_spaces=$(( (TERM_WIDTH - 2 - ${#title}) / 2 ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${title}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))│${NC}"
-        
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${MAGENTA}${title}${RESET}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))${BLUE}│${NC}"
+    
         version_text="$INSTALLED_VERSION - Automate Your Linux Setup"
         version_spaces=$(( (TERM_WIDTH - 2 - ${#version_text}) / 2 ))
         right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${GREEN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        separator="------------------------------"
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${CYAN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+    
+        separator="━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
         right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
+    
         info_text="For more info: https://carch-org.github.io/docs/"
         info_spaces=$(( (TERM_WIDTH - 2 - ${#info_text}) / 2 ))
         right_padding=$(( TERM_WIDTH - 2 - info_spaces - ${#info_text} ))
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $info_spaces))${GREEN}${info_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2))))│${NC}"
-        
-        health_text="System Health:"
-        emoji_width=2
-        health_text_visible_length=$((${#health_text} + emoji_width - 2))
-        health_spaces=$(( (TERM_WIDTH - 2 - health_text_visible_length) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - health_spaces - health_text_visible_length ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $health_spaces))${CYAN}${health_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        disk_percent=$(df -h | awk '$NF=="/" {printf "%.1f", $5+0}')
-        disk_text="Disk: ${disk_percent}% Used"
-        disk_spaces=$(( (TERM_WIDTH - 2 - ${#disk_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - disk_spaces - ${#disk_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $disk_spaces))${CYAN}${disk_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        mem_percent=$(free -h | awk '/Mem:/ {printf "%.1f", $3/$2 * 100.0}')
-        mem_text="Memory: ${mem_percent}% Used"
-        mem_spaces=$(( (TERM_WIDTH - 2 - ${#mem_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - mem_spaces - ${#mem_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $mem_spaces))${CYAN}${mem_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        echo -e "${BLUE}╰$(printf '─%.0s' $(seq 1 $((TERM_WIDTH - 2))))╯${NC}"
+    
+        echo -e "${BLUE}╰$(printf '━%.0s' $(seq 1 $((TERM_WIDTH - 2))))╯${NC}"
         
         echo -e "${LAVENDER}Select a script to run:${RESET}"
         cancel_exists=0
