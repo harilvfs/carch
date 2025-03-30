@@ -6,7 +6,7 @@
 <div align="center">
 
 <details>
-<summary><sup>Preview 👀</sup></summary>
+<summary><h3><sup>Preview 👀</sup></h3></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
