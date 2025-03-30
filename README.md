@@ -1,8 +1,16 @@
 <div align="center">
+<img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg" width="800" />
+</div>
+<br>
 
-**Carch** ➢ *An automated script for quick & easy Linux system setup* 🧩
+<div align="center">
 
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
+<details>
+<summary><strong>Preview 👀</strong></summary>
+
+![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
+  
+</details>
 
 </div>
 
