@@ -1,6 +1,6 @@
 <div align="center">
 
-<h2> <sup> Carch </sup> </h2>
+<h2> <sup> Carch </sup> </h2> - <h3> <sup>An automated script for quick & easy Linux system setup</sup> </h3>
 
 <h3> <sup>An automated script for quick & easy Linux system setup</sup> </h3>
 
