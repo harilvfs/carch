@@ -1,5 +1,7 @@
 <div align="center">
 
+<h3> <sup> Carch </sup> </h3>
+
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
 
 </div>
