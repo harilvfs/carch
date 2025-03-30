@@ -330,7 +330,7 @@ display_scripts_menu() {
         right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${CYAN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
     
-        separator="━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        separator="──────────────"
         separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
         right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
