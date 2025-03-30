@@ -32,14 +32,29 @@ typewriter() {
     echo ""
 }
 
-if [ -f /etc/os-release ]; then
-    DISTRO=$(grep ^NAME= /etc/os-release | cut -d= -f2 | tr -d '"')
-elif command -v lsb_release &>/dev/null; then
-    DISTRO=$(lsb_release -d | cut -f2)
+if command -v pacman &>/dev/null; then
+    DISTRO="Arch BTW"
+elif command -v dnf &>/dev/null; then
+    DISTRO="Fedora"
+elif command -v apt &>/dev/null; then
+    DISTRO="Debian"
+elif command -v zypper &>/dev/null; then
+    DISTRO="openSUSE"
+elif command -v emerge &>/dev/null; then
+    DISTRO="Gentoo"
+elif command -v xbps-install &>/dev/null; then
+    DISTRO="Void Linux"
 else
     DISTRO="Unknown Linux Distribution"
 fi
+
 ARCH=$(uname -m)
+
+if ! command -v pacman &>/dev/null; then
+    echo -e "${RED}Oops! You are using this script on a non-Arch based distro.${RESET}"
+    echo -e "${RED}This script is for Arch Linux or Arch-based distributions.${RESET}"
+    exit 1
+fi
 
 if ! pacman -Qi "fzf" &>/dev/null; then
     echo "FZF is required for this script. Installing fzf..."
@@ -81,23 +96,16 @@ check_and_install() {
 
 clear
 
-echo -e "${CYAN}┌──────────────────────────────────────────────────┐${RESET}"
-echo -e "${CYAN}│                     ${BOLD}CARCH${RESET}${CYAN}                        │${RESET}"
-echo -e "${CYAN}│               ${WHITE}Version $VERSION${RESET}${CYAN}                      │${RESET}"
-echo -e "${CYAN}│            ${WHITE}Architecture: $ARCH${RESET}${CYAN}                  │${RESET}"
-echo -e "${CYAN}└──────────────────────────────────────────────────┘${RESET}"
+echo ""
+echo -e "${CYAN}${BOLD}CARCH${RESET}${CYAN}${RESET}"
+echo -e "${CYAN}${WHITE}Version: $VERSION${RESET}${CYAN}${RESET}"
+echo -e "${CYAN}${WHITE}Architecture: $ARCH${RESET}${CYAN}${RESET}"
+
 echo ""
 echo -e "${CYAN}Distribution: $DISTRO${RESET}"
 sleep 1
 
 typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
-
-sleep 0.5
-
-if command -v pacman &>/dev/null; then
-    echo -e "${GREEN}Ahh, you are using Arch BTW.${RESET}"
-    sleep 1.5
-fi
 
 echo ""
 echo -e "${BLUE}This is the Carch installer for Arch Linux or Arch-based distros.${RESET}"
@@ -108,9 +116,8 @@ echo -e "${BLUE}You can choose Git or Stable release.${RESET}"
 sleep 0.5
 echo ""
 
-echo -e "${YELLOW}┌──────────────────────────────────────────────────┐${RESET}"
-echo -e "${YELLOW}│              Installing dependencies...          │${RESET}"
-echo -e "${YELLOW}└──────────────────────────────────────────────────┘${RESET}"
+echo -e "${YELLOW}Installing dependencies...${RESET}"
+echo ""
 
 dependencies=("figlet" "ttf-jetbrains-mono-nerd" "ttf-jetbrains-mono" "git")
 failed_deps=0
@@ -124,20 +131,38 @@ if [ $failed_deps -gt 0 ]; then
     fzf_confirm "Continue anyway?" || exit 1
 fi
 
+sleep 1
+
+clear
+
+echo -e "${GREEN}"
+cat <<"EOF"
+   ____         __       ____
+  /  _/__  ___ / /____ _/ / /__ ____
+ _/ // _ \(_-</ __/ _ `/ / / -_) __/
+/___/_//_/___/\__/\_,_/_/_/\__/_/
+
+EOF
+echo "Carch Installer for Arch or Arch based distros."
+echo -e "${RESET}"
+echo ""
+
 echo -e "${GREEN}NOTE: Stable Release is recommended.${RESET}"
 echo -e "${RED}Git package is not fully recommended as it grabs the latest commit which may have bugs.${RESET}"
 echo -e "${YELLOW}${BOLD}Select installation type:${RESET}"
 
 options=("Stable Release [Recommended]" "Carch-git [GitHub Latest Commit]" "Cancel")
-CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select package version to install: " --height=15 --layout=reverse --border)
+CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select package version to install: " --height=8 --layout=reverse --border)
 
 if [[ $CHOICE == "Cancel" ]]; then
     echo -e "${RED}Installation canceled by the user.${RESET}"
+    clear
     exit 0
 fi
 
 fzf_confirm "Install $CHOICE?" || {
     echo -e "${RED}Installation canceled by the user.${RESET}"
+    clear
     exit 0
 }
 
