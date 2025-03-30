@@ -314,56 +314,15 @@ display_scripts_menu() {
     else
         load_all_scripts
     fi
+    
     INSTALLED_VERSION=$(get_installed_version)
     TERM_WIDTH=$(tput cols)
-
+    clear
+    draw_full_banner
+    
     while true; do
-        clear
-        echo -e "${BLUE}╭$(printf '─%.0s' $(seq 1 $((TERM_WIDTH - 2))))╮${NC}"
+        echo -e "${LAVENDER}Select a script to run (press 'r' to refresh menu):${RESET}"
         
-        title="CARCH"
-        title_spaces=$(( (TERM_WIDTH - 2 - ${#title}) / 2 ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${title}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))│${NC}"
-        
-        version_text="$INSTALLED_VERSION - Automate Your Linux Setup"
-        version_spaces=$(( (TERM_WIDTH - 2 - ${#version_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${GREEN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        separator="------------------------------"
-        separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        info_text="For more info: https://carch-org.github.io/docs/"
-        info_spaces=$(( (TERM_WIDTH - 2 - ${#info_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - info_spaces - ${#info_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $info_spaces))${GREEN}${info_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2))))│${NC}"
-        
-        health_text="System Health:"
-        emoji_width=2
-        health_text_visible_length=$((${#health_text} + emoji_width - 2))
-        health_spaces=$(( (TERM_WIDTH - 2 - health_text_visible_length) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - health_spaces - health_text_visible_length ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $health_spaces))${CYAN}${health_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        disk_percent=$(df -h | awk '$NF=="/" {printf "%.1f", $5+0}')
-        disk_text="Disk: ${disk_percent}% Used"
-        disk_spaces=$(( (TERM_WIDTH - 2 - ${#disk_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - disk_spaces - ${#disk_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $disk_spaces))${CYAN}${disk_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        mem_percent=$(free -h | awk '/Mem:/ {printf "%.1f", $3/$2 * 100.0}')
-        mem_text="Memory: ${mem_percent}% Used"
-        mem_spaces=$(( (TERM_WIDTH - 2 - ${#mem_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - mem_spaces - ${#mem_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $mem_spaces))${CYAN}${mem_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-        
-        echo -e "${BLUE}╰$(printf '─%.0s' $(seq 1 $((TERM_WIDTH - 2))))╯${NC}"
-        
-        echo -e "${LAVENDER}Select a script to run:${RESET}"
         cancel_exists=0
         for script in "${scripts[@]}"; do
             if [[ "$script" == "Cancel" ]]; then
@@ -373,9 +332,9 @@ display_scripts_menu() {
         done
         
         if [[ $cancel_exists -eq 0 ]]; then
-            all_options=("${scripts[@]}" "Cancel")
+            all_options=("${scripts[@]}" "Refresh Menu" "Cancel")
         else
-            all_options=("${scripts[@]}")
+            all_options=("${scripts[@]}" "Refresh Menu")
         fi
         
         selected_option=$(printf "%s\n" "${all_options[@]}" | fzf --height 60% --border \
@@ -390,10 +349,74 @@ display_scripts_menu() {
             clear
             log_message "INFO" "User exited the main menu."
             exit_with_log_message
+        elif [[ "$selected_option" == "Refresh Menu" ]]; then
+            clear
+            draw_full_banner
         else
-            run_script "$selected_option"
+            run_script_minimal "$selected_option"
         fi
     done
+}
+
+draw_full_banner() {
+    TERM_WIDTH=$(tput cols)
+    
+    echo -e "${BLUE}╭$(printf '━%.0s' $(seq 1 $((TERM_WIDTH - 2))))╮${NC}"
+    
+    title="CARCH"
+    title_spaces=$(( (TERM_WIDTH - 2 - ${#title}) / 2 ))
+    echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${MAGENTA}${title}${RESET}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))${BLUE}│${NC}"
+    
+    version_text="$INSTALLED_VERSION - Automate Your Linux Setup"
+    version_spaces=$(( (TERM_WIDTH - 2 - ${#version_text}) / 2 ))
+    right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
+    echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${CYAN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+    
+    separator="━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
+    right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
+    echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+    
+    info_text="For more info: https://carch-org.github.io/docs/"
+    info_spaces=$(( (TERM_WIDTH - 2 - ${#info_text}) / 2 ))
+    right_padding=$(( TERM_WIDTH - 2 - info_spaces - ${#info_text} ))
+    echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $info_spaces))${GREEN}${info_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+    
+    echo -e "${BLUE}╰$(printf '━%.0s' $(seq 1 $((TERM_WIDTH - 2))))╯${NC}"
+}
+
+run_script_minimal() {
+    local script_path="$1"
+    local full_script_path="$SCRIPT_DIR/$script_path.sh"
+
+    if [[ -f "$full_script_path" ]]; then
+        local tmp_output=$(mktemp)
+        
+        clear
+        
+        log_message "INFO" "Starting script: ${script_path}"
+        echo -e "${YELLOW}Running script: ${script_path}${RESET}"
+        
+        if bash "$full_script_path"; then
+            echo -e "${GREEN}Script '${script_path}' completed successfully.${RESET}"
+            log_message "SUCCESS" "Script '${script_path}' completed successfully."
+        else
+            echo -e "${YELLOW}Script '${script_path}' encountered an error.${RESET}"
+            log_message "ERROR" "Script '${script_path}' encountered an error."
+        fi
+        
+        echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
+        log_message "INFO" "Logs saved after running script: ${script_path}"
+        
+        echo -e "${YELLOW}Press Enter to return to the menu...${RESET}"
+        read -r
+        
+        clear
+    else
+        echo -e "${YELLOW}Error: Script '${script_path}' not found!${RESET}"
+        log_message "ERROR" "Script '${script_path}' not found."
+        sleep 2
+    fi
 }
 
 run_script() {
@@ -420,7 +443,8 @@ run_script() {
     echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
     log_message "INFO" "Logs saved after running script: ${script_path}"
 
-    prompt
+    echo -e "${YELLOW}Press Enter to return to the menu...${RESET}"
+    read -r
 }
 
 run_script_direct() {
