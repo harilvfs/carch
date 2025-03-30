@@ -28,7 +28,7 @@
 
 • • •
 
-Any queries or concerns? Feel free to write about them on 
+<h3> <sup>Any queries or concerns? Feel free to write about them on </sup> </h3> 
 
 [![Discord](https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29)](https://discord.com/invite/8NJWstnUHd)
 <br><br>
