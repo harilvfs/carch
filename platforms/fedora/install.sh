@@ -18,14 +18,29 @@ LOG_FILE="$CACHE_DIR/carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
 
 USERNAME=$(whoami)
 
-if [ -f /etc/os-release ]; then
-    DISTRO=$(grep ^NAME= /etc/os-release | cut -d= -f2 | tr -d '"')
-elif command -v lsb_release &>/dev/null; then
-    DISTRO=$(lsb_release -d | cut -f2)
+if command -v pacman &>/dev/null; then
+    DISTRO="Arch Linux"
+elif command -v dnf &>/dev/null; then
+    DISTRO="Fedora"
+elif command -v apt &>/dev/null; then
+    DISTRO="Debian"
+elif command -v zypper &>/dev/null; then
+    DISTRO="openSUSE"
+elif command -v emerge &>/dev/null; then
+    DISTRO="Gentoo"
+elif command -v xbps-install &>/dev/null; then
+    DISTRO="Void Linux"
 else
     DISTRO="Unknown Linux Distribution"
 fi
+
 ARCH=$(uname -m)
+
+if ! command -v dnf &>/dev/null; then
+    echo -e "${RED}Oops! You are using this script on a non-Fedora based distro.${NC}"
+    echo -e "${RED}This script is for Fedora Linux or Fedora-based distributions.${NC}"
+    exit 1
+fi
 
 log() {
     local message="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
@@ -146,7 +161,7 @@ download_spec_file() {
         mv "$spec_file" "${spec_file}.bak.$(date +%Y%m%d_%H%M%S)" || { log_error "Failed to backup spec file"; return 1; }
     fi
     
-    if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
+    if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
         log_error "Failed to download spec file from repository"
         return 1
     fi
@@ -258,78 +273,49 @@ cleanup_options() {
     esac
 }
 
-handle_error() {
-    local fallback_url="https://github.com/harilvfs/carch/blob/main/fedora/carch.spec"
-    log_warning "Build process failed. Attempting to use fallback spec file from $fallback_url"
-    
-    if fzf_confirm "Do you want to try using the fallback spec file?"; then
-        local spec_dir="$HOME/rpmbuild/SPECS"
-        local spec_file="$spec_dir/carch.spec"
-        
-        log_info "Downloading fallback spec file..."
-        if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/main/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
-            log_error "Failed to download fallback spec file"
-            exit 1
-        fi
-        
-        log_success "Fallback spec file downloaded successfully"
-        log_info "Attempting to rebuild with fallback spec file..."
-        
-        if ! download_sources; then
-            log_error "Failed to download sources with fallback spec"
-            exit 1
-        fi
-        
-        if ! build_rpm; then
-            log_error "Failed to build RPM with fallback spec"
-            exit 1
-        fi
-        
-        if ! install_rpm; then
-            log_error "Failed to install RPM with fallback spec"
-            exit 1
-        fi
-        
-        log_success "Process completed successfully with fallback spec"
-    else
-        log_error "Process aborted by user"
-        exit 1
-    fi
-}
-
 display_welcome() {
-    clear
 
-    echo -e "${CYAN}┌──────────────────────────────────────────────────┐${NC}"
-    echo -e "${CYAN}│                     ${BOLD}CARCH${NC}${CYAN}                        │${NC}"
-    echo -e "${CYAN}│               ${WHITE}Version $VERSION${NC}${CYAN}                      │${NC}"
-    echo -e "${CYAN}│            ${WHITE}Architecture: $ARCH${NC}${CYAN}                  │${NC}"
-    echo -e "${CYAN}└──────────────────────────────────────────────────┘${NC}"
-    echo ""
-    echo -e "${CYAN}Distribution: $DISTRO${NC}"
-    sleep 1
+clear
 
-    typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
-    sleep 0.5
-    
-    echo ""
-    echo -e "${BLUE}This is the Carch installer for Fedora Linux.${NC}"
-    sleep 0.5
-    echo -e "${BLUE}This will install Carch with RPM build package.${NC}"
-    sleep 0.5
-    echo ""
+echo -e "${GREEN}"
+cat <<"EOF"
+   ____         __       ____
+  /  _/__  ___ / /____ _/ / /__ ____
+ _/ // _ \(_-</ __/ _ `/ / / -_) __/
+/___/_//_/___/\__/\_,_/_/_/\__/_/
+
+EOF
+echo "Carch Installer for Fedora or Fedora based distros."
+echo -e "${NC}"
+echo ""
+
+echo -e "${CYAN}${BOLD}CARCH${NC}${CYAN}${NC}"
+echo -e "${CYAN}${WHITE}Version: $VERSION${NC}${CYAN}${NC}"
+echo -e "${CYAN}${WHITE}Architecture: $ARCH${NC}${CYAN}${NC}"
+
+echo ""
+typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
+sleep 0.5
+
+echo ""
+echo -e "${BLUE}This is the Carch installer for Fedora Linux.${NC}"
+sleep 0.5
+echo -e "${BLUE}This will install Carch with RPM build package.${NC}"
+sleep 0.5
+echo ""
+
 }
 
 main() {
     display_welcome
     
     if ! fzf_confirm "Do you want to continue with this installation?"; then
-        echo -e "${GREEN}Ok, fine. Thanks!${NC}"
+        clear
         exit 0
     fi
     
     typewriter "Sit back and relax till the script will do everything for you" "${GREEN}"
-    sleep 0.7
+    sleep 0.5
 
     clear
     
@@ -350,9 +336,9 @@ main() {
         fi
     fi
     
-    echo -e "${YELLOW}┌──────────────────────────────────────────────────┐${NC}"
-    echo -e "${YELLOW}│              Installing dependencies...          │${NC}"
-    echo -e "${YELLOW}└──────────────────────────────────────────────────┘${NC}"
+    echo ""
+    echo -e "${YELLOW}Installing dependencies...${NC}"
+    echo ""
     
     for dep in "${dependencies[@]}"; do
         if ! install_package "$dep"; then
@@ -367,22 +353,18 @@ main() {
     log_info "Starting build process..."
     
     if ! setup_rpm_build_env; then
-        handle_error
         exit 1
     fi
     
     if ! download_spec_file; then
-        handle_error
         exit 1
     fi
     
     if ! download_sources; then
-        handle_error
         exit 1
     fi
     
     if ! build_rpm; then
-        handle_error
         exit 1
     fi
     
@@ -394,12 +376,10 @@ main() {
     if check_carch_installed; then
         echo ""
         echo -e "${GREEN}${BOLD}INSTALLATION COMPLETE${NC}"
-        sleep 0.7
+        sleep 0.5
         echo -e "${GREEN}Carch has been successfully installed!${NC}"
-        sleep 0.7
+        sleep 0.5
         echo -e "${GREEN}Run 'carch -h' to see available options${NC}"
-        sleep 1
-        echo -e "${CYAN}Thank you again! If you find any bugs, feel free to submit an issue report on GitHub :)${NC}"
     else
         log_error "Carch seems to not be installed correctly. Please check the logs."
         exit 1
