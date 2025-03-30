@@ -1,8 +1,6 @@
 <div align="center">
 
-<h2> <sup> Carch </sup> </h2> - <sup>An automated script for quick & easy Linux system setup</sup>
-
-<h3> <sup>An automated script for quick & easy Linux system setup</sup> </h3>
+Carch - <sup>An automated script for quick & easy Linux system setup</sup>
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
 
