@@ -20,18 +20,11 @@
 
 </div>
 
-<br>
 <div align="center">
 
 <h3> <sup>To learn more about Carch, installation, and more, check the Carch docs by clicking this badge.</sup> </h3>
 
 [![Carch Docs][carch-docs]][carch-docs-link]
-
-*For installation and more, check out the* carch [docs](https://carch-org.github.io/docs/).
-
-*For users who want to use the Cargo crate of Carch, please refer to the* [guide](https://carch-org.github.io/docs/getting-started/installation.html#%F0%9F%93%A6-cargo-crate) 
-
-*Want to contribute to carch? Check out the contributing* [guide](https://carch-org.github.io/docs/project/contributing.html).
 
 • • •
 
