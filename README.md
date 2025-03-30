@@ -26,8 +26,6 @@
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
-*For users who want to use the Cargo crate of Carch, please refer to the* [docs](https://carch-org.github.io/docs/getting-started/installation.html#%F0%9F%93%A6-cargo-crate).
-
 • • •
 
 Any queries or concerns? Feel free to write about them on 
