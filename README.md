@@ -29,7 +29,7 @@
 <a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail Hari" width="45px" /></a>
 <br>
 
-<h3> <sup>Like my work? Giving a star to Carch means a lot. Thanks! </sup> </h3>
+<h3> <sup>Like my work? Giving a star 🌟 to Carch means a lot. Thanks! </sup> </h3>
 
 <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
 
