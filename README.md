@@ -14,7 +14,7 @@
 
 <div align="center">
 
-<h3> <sup>To learn more about Carch, installation, and more, check the Carch docs by clicking this badge.</sup> </h3>
+<h3> <sup>To learn more about Carch, Installation, and More, check the Carch docs.</sup> </h3>
 👇
 
 [![Carch Docs][carch-docs]][carch-docs-link]
