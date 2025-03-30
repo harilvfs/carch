@@ -23,7 +23,7 @@
 <br>
 <div align="center">
 
-To know more about carch,installation and more check carch docs
+<sup>To learn more about Carch, installation, and more, check the Carch docs by clicking this badge.</sup>
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
