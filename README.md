@@ -22,7 +22,7 @@
 
 <div align="center">
 
-*For installation and more, check out the* carch docs.
+*For installation and more, check out the* docs.
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
