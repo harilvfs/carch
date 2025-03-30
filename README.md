@@ -2,7 +2,7 @@
 
 **Carch** ➢ *An automated script for quick & easy Linux system setup* 🧩
 
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="600" />
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
 
 </div>
 
