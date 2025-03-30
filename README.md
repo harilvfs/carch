@@ -1,6 +1,6 @@
 <div align="center">
 
-<h3> <sup> Carch </sup> </h3>
+<h1> <sup> Carch </sup> </h1>
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
 
