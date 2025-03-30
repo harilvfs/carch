@@ -16,13 +16,13 @@
 
 <div align="center">
 
-[![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
+[![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link]
 
 </div>
 
 <div align="center">
 
-<h3> <sup>To learn more about `Carch`, `installation`, and more, check the Carch docs by clicking this badge.</sup> </h3>
+<h3> <sup>To learn more about Carch, installation, and more, check the Carch docs by clicking this badge.</sup> </h3>
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
