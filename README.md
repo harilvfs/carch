@@ -22,7 +22,9 @@
 
 <div align="center">
 
-*For installation and more, check out the* carch [docs](https://carch-org.github.io/docs/).
+*For installation and more, check out the* carch docs.
+
+[![Carch Docs][carch-docs]][carch-docs-link]
 
 *For users who want to use the Cargo crate of Carch, please refer to the* [guide](https://carch-org.github.io/docs/getting-started/installation.html#%F0%9F%93%A6-cargo-crate).
 
