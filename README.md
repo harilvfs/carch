@@ -36,6 +36,8 @@ Any queries or concerns? Feel free to write about them on
 <br><br>
 [![Discord](https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29)](https://discord.com/invite/8NJWstnUHd)
 
+<br>
+
 Like my work? Giving a star 🌟 to Carch means a lot. Thanks!
 
 <img src="https://cdn-icons-png.flaticon.com/128/4587/4587595.png" width="40" />
