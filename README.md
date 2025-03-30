@@ -1,6 +1,6 @@
 <div align="center">
 
-**Carch** ➢ *`An automated script for quick & easy Linux system setup`* 🧩
+**Carch** ➢ *`An automated script for quick & easy Linux system setup* 🧩`
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="700" />
 
