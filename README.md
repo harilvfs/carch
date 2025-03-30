@@ -6,17 +6,6 @@
 
 <div align="center">
 
-<details>
-<summary><strong>Preview 👀</strong></summary>
-
-![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
-  
-</details>
-
-</div>
-
-<div align="center">
-
 [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link]
 
 </div>
