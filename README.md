@@ -2,6 +2,12 @@
 
 <div align="center">
 
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" width="80" />
+
+</div>
+
+<div align="center">
+
 <details>
 <summary><strong>Preview 👀</strong></summary>
 
