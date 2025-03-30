@@ -3,10 +3,12 @@
 </div>
 <br>
 
+![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
+
 <div align="center">
 
 <details>
-<summary><h3><sup>Preview 👀</sup></h3></summary>
+<summary><strong>Preview 👀</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
