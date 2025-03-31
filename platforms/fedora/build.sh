@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This script is primarily for my own use to build and test RPM packages. However, you can use it too—if you know what you're doing.
+
 clear
 
 RED='\033[0;31m'
