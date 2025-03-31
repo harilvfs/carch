@@ -13,7 +13,7 @@ on:
 permissions:
   contents: write
 jobs:
-  release:
+  release_with_rpm:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -64,6 +64,65 @@ jobs:
         run: |
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+      
+      # Set up RPM build container
+      - name: Set up Docker for RPM build
+        run: |
+          docker pull fedora:latest
+          
+      - name: Build RPM in Docker container
+        run: |
+          # Create a directory to share artifacts between container and host
+          mkdir -p ./rpm_output
+          
+          # Run the RPM build in Docker
+          docker run --privileged -v $(pwd):/app -v $(pwd)/rpm_output:/rpm_output fedora:latest /bin/bash -c "
+            # Install dependencies
+            dnf -y update
+            dnf -y install git curl wget figlet man-db bash rust cargo gcc \
+              glibc unzip tar google-noto-color-emoji-fonts google-noto-emoji-fonts \
+              jetbrains-mono-fonts-all bat bash-completion-devel zsh fish \
+              rpmdevtools rpmlint fzf
+              
+            # Setup RPM build environment
+            mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+            rpmdev-setuptree
+            
+            # Download spec file
+            curl -sL 'https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec' -o ~/rpmbuild/SPECS/carch.spec
+            
+            # Modify spec file to fix Cargo build
+            sed -i 's/cargo build --frozen/cargo fetch \&\& cargo build/g' ~/rpmbuild/SPECS/carch.spec
+            echo 'Modified spec file to allow dependency downloads'
+            grep 'cargo build' ~/rpmbuild/SPECS/carch.spec
+            
+            # Download sources
+            cd ~/rpmbuild/SPECS
+            spectool -g -R carch.spec
+            
+            # Build RPM package
+            cd ~/rpmbuild/SPECS
+            rpmbuild -ba carch.spec
+            
+            # Find and copy the RPM
+            RPM_PATH=\$(find ~/rpmbuild/RPMS -name 'carch-*.x86_64.rpm' | grep -v 'debug' | head -n 1)
+            if [ -z \"\$RPM_PATH\" ]; then
+              echo 'Error: Could not find the Carch RPM file'
+              exit 1
+            fi
+            echo \"Found RPM at: \$RPM_PATH\"
+            cp \$RPM_PATH /rpm_output/
+          "
+          
+          # Check if RPM was built successfully
+          if [ ! "$(ls -A ./rpm_output)" ]; then
+            echo "Error: No RPM file was created"
+            exit 1
+          fi
+          
+          # List the RPM(s)
+          echo "Generated RPM files:"
+          ls -la ./rpm_output/
           
       - name: Generate Release Notes
         id: generate_notes
@@ -86,3 +145,4 @@ jobs:
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+            ./rpm_output/*.rpm
