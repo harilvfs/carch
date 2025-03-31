@@ -152,7 +152,7 @@ get_latest_release() {
     if [ -z "$release_info" ] || [[ "$release_info" == *"Not Found"* ]]; then
         log_error "Failed to fetch release information from GitHub"
         return 1
-    }
+    fi
     
     local rpm_url
     rpm_url=$(echo "$release_info" | grep -o "https://github.com/$repo/releases/download/[^\"]*\.rpm" | grep "$ARCH" | head -n 1)
