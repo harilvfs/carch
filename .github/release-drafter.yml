@@ -40,6 +40,9 @@ categories:
   - title: '📖 Docs'
     labels:
       - 'documentation'
+  - title: '⚙️ CI/CD'
+    labels:
+      - 'github_actions'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' 
 version-resolver:
