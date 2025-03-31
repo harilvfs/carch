@@ -17,7 +17,7 @@ jobs:
       image: fedora:latest
       options: --privileged
     permissions:
-      contents: write  # Required for uploading to release assets
+      contents: write  
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -42,7 +42,6 @@ jobs:
           
       - name: Modify spec file to fix Cargo build
         run: |
-          # Replace --frozen with fetch + build
           sed -i 's/cargo build --frozen/cargo fetch \&\& cargo build/g' ~/rpmbuild/SPECS/carch.spec
           echo "Modified spec file to allow dependency downloads"
           grep "cargo build" ~/rpmbuild/SPECS/carch.spec
@@ -60,7 +59,6 @@ jobs:
       - name: Find built RPM
         id: find_rpm
         run: |
-          # Look specifically for the non-debug x86_64 RPM with the carch name pattern
           RPM_PATH=$(find ~/rpmbuild/RPMS -name "carch-*.x86_64.rpm" | grep -v "debug" | head -n 1)
           if [ -z "$RPM_PATH" ]; then
             echo "Error: Could not find the Carch RPM file"
@@ -79,18 +77,15 @@ jobs:
           path: ./artifacts/*.rpm
           retention-days: 7
       
-      # For tag pushes, use the tag name
       - name: Set tag name from push
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
           
-      # For manual workflow, use the provided tag input
       - name: Set tag name from input
         if: github.event_name == 'workflow_dispatch'
         run: |
-          # Add 'v' prefix if not present
           if [[ "${{ github.event.inputs.tag_name }}" != v* ]]; then
             TAG_NAME="v${{ github.event.inputs.tag_name }}"
           else
@@ -98,7 +93,6 @@ jobs:
           fi
           echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
           
-      # Upload to existing release
       - name: Upload RPM to release
         uses: softprops/action-gh-release@v1
         with:
