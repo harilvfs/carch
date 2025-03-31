@@ -160,7 +160,7 @@ get_latest_release() {
     if [ -z "$rpm_url" ]; then
         log_error "Could not find RPM package for $ARCH architecture"
         return 1
-    }
+    fi 
     
     echo "$rpm_url"
     return 0
@@ -175,7 +175,7 @@ download_rpm() {
     if [ $? -ne 0 ] || [ -z "$rpm_url" ]; then
         log_error "Failed to determine download URL"
         return 1
-    }
+    fi 
     
     local rpm_file="$TMP_DIR/carch.rpm"
     
@@ -189,7 +189,7 @@ download_rpm() {
     if [ ! -f "$rpm_file" ] || [ ! -s "$rpm_file" ]; then
         log_error "Download failed or file is empty"
         return 1
-    }
+    fi 
     
     log_success "Downloaded Carch package to $rpm_file"
     echo "$rpm_file"
@@ -204,7 +204,7 @@ install_rpm() {
     if [ ! -f "$rpm_file" ]; then
         log_error "RPM file not found: $rpm_file"
         return 1
-    }
+    fi 
     
     log_info "Installing package..."
     sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1 &
@@ -216,7 +216,7 @@ install_rpm() {
     if [ $install_status -ne 0 ]; then
         log_error "Failed to install Carch package"
         return 1
-    }
+    fi 
     
     log_success "Carch installed successfully"
     return 0
