@@ -92,3 +92,4 @@ done
 - Added RPM Builder workflow for Fedora
 - Cleaned up font script
 - Added descriptions to scripts
+- Add New Commands 
