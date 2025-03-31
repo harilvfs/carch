@@ -14,7 +14,8 @@ NC='\033[0m'
 
 CACHE_DIR="$HOME/.cache/carch-install"
 mkdir -p "$CACHE_DIR" 2>/dev/null
-LOG_FILE="$CACHE_DIR/carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$CACHE_DIR/carch_install_$(date +%Y%m%d_%H%M%S).log"
+TMP_DIR=$(mktemp -d)
 
 USERNAME=$(whoami)
 
@@ -81,10 +82,6 @@ package_installed() {
     rpm -q "$1" >/dev/null 2>&1
 }
 
-package_available() {
-    dnf list --available "$1" &>/dev/null
-}
-
 install_package() {
     local package=$1
     
@@ -112,16 +109,18 @@ log_success "fzf is installed and ready to use."
 
 spinner() {
     local pid=$1
+    local message=$2
+    local frames=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
     local delay=0.1
-    local spinstr='|/-\'
+
     while ps -p "$pid" > /dev/null; do
-        local temp=${spinstr#?}
-        printf " [%c]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
+        for frame in "${frames[@]}"; do
+            printf "\r ${CYAN}%s${NC} %s" "$frame" "$message"
+            sleep $delay
+            printf "\033[0K"
+        done
     done
-    printf "    \b\b\b\b"
+    printf "\r${GREEN}✓${NC} %s\n" "$message"
 }
 
 fzf_confirm() {
@@ -136,100 +135,90 @@ fzf_confirm() {
     fi
 }
 
-setup_rpm_build_env() {
-    log_info "Setting up RPM build environment..."
-    if [ ! -d "$HOME/rpmbuild" ]; then
-        rpmdev-setuptree >> "${LOG_FILE}" 2>&1 || { log_error "Failed to setup RPM build environment"; return 1; }
-        log_success "RPM build environment set up successfully"
-    else
-        log_info "RPM build environment already exists"
+get_latest_release() {
+    log_info "Checking for latest Carch release..."
+    
+    local repo="harilvfs/carch"
+    local api_url="https://api.github.com/repos/$repo/releases/latest"
+    
+    if ! command_exists "curl"; then
+        log_error "curl is required but not installed"
+        return 1
     fi
+
+    local release_info
+    release_info=$(curl -s "$api_url")
+    
+    if [ -z "$release_info" ] || [[ "$release_info" == *"Not Found"* ]]; then
+        log_error "Failed to fetch release information from GitHub"
+        return 1
+    fi
+    
+    local rpm_url
+    rpm_url=$(echo "$release_info" | grep -o "https://github.com/$repo/releases/download/[^\"]*\.rpm" | grep "$ARCH" | head -n 1)
+    
+    if [ -z "$rpm_url" ]; then
+        log_error "Could not find RPM package for $ARCH architecture"
+        return 1
+    fi 
+    
+    echo "$rpm_url"
     return 0
 }
 
-download_spec_file() {
-    log_info "Downloading spec file from repository..."
-    local spec_dir="$HOME/rpmbuild/SPECS"
-    local spec_file="$spec_dir/carch.spec"
+download_rpm() {
+    log_info "Downloading Carch RPM package..."
     
-    if [ ! -d "$spec_dir" ]; then
-        mkdir -p "$spec_dir" || { log_error "Failed to create SPECS directory"; return 1; }
-    fi
+    local rpm_url
+    rpm_url=$(get_latest_release)
     
-    if [ -f "$spec_file" ]; then
-        log_warning "Spec file already exists. Backing up..."
-        mv "$spec_file" "${spec_file}.bak.$(date +%Y%m%d_%H%M%S)" || { log_error "Failed to backup spec file"; return 1; }
-    fi
-    
-    if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to download spec file from repository"
+    if [ $? -ne 0 ] || [ -z "$rpm_url" ]; then
+        log_error "Failed to determine download URL"
         return 1
-    fi
+    fi 
     
-    if [ -f "$spec_file" ]; then
-        log_success "Spec file downloaded successfully from repository"
-        return 0
-    else
-        log_error "Failed to download spec file"
+    local rpm_file="$TMP_DIR/carch.rpm"
+    
+    log_info "Downloading from: $rpm_url"
+    
+    curl -L "$rpm_url" -o "$rpm_file" >> "${LOG_FILE}" 2>&1 &
+    local download_pid=$!
+    spinner $download_pid "Downloading Carch package..."
+    wait $download_pid
+    
+    if [ ! -f "$rpm_file" ] || [ ! -s "$rpm_file" ]; then
+        log_error "Download failed or file is empty"
         return 1
-    fi
-}
-
-download_sources() {
-    log_info "Downloading sources..."
-    local spec_dir="$HOME/rpmbuild/SPECS"
-    local spec_file="$spec_dir/carch.spec"
+    fi 
     
-    cd "$spec_dir" || { log_error "Failed to change directory to SPECS"; return 1; }
-    if ! spectool -g -R "$spec_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to download sources"
-        return 1
-    fi
-    log_success "Sources downloaded successfully"
-    return 0
-}
-
-build_rpm() {
-    log_info "Building RPM package..."
-    local spec_dir="$HOME/rpmbuild/SPECS"
-    local spec_file="$spec_dir/carch.spec"
-    
-    cd "$spec_dir" || { log_error "Failed to change directory to SPECS"; return 1; }
-    
-    log_info "Building package, please wait..."
-    rpmbuild -ba "$spec_file" >> "${LOG_FILE}" 2>&1 &
-    local build_pid=$!
-    spinner $build_pid
-    wait $build_pid
-    local build_status=$?
-    
-    if [ $build_status -ne 0 ]; then
-        log_error "Failed to build RPM package"
-        return 1
-    fi
-    
-    log_success "RPM package built successfully"
+    log_success "Downloaded Carch package to $rpm_file"
+    echo "$rpm_file"
     return 0
 }
 
 install_rpm() {
-    log_info "Installing RPM package..."
-    local rpm_file=$(find "$HOME/rpmbuild/RPMS" -name "carch-*.rpm" | grep -v "debug" | head -n 1)
+    log_info "Installing Carch package..."
     
-    if [ -z "$rpm_file" ]; then
-        log_error "RPM package not found"
+    local rpm_file=$1
+    
+    if [ ! -f "$rpm_file" ]; then
+        log_error "RPM file not found: $rpm_file"
         return 1
-    fi
-    
-    log_info "Found RPM package: $rpm_file"
+    fi 
     
     log_info "Installing package..."
-    if ! sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to install RPM package"
-        return 1
-    fi
-    log_success "RPM package installed successfully"
+    sudo dnf install -y "$rpm_file" >> "${LOG_FILE}" 2>&1 &
+    local install_pid=$!
+    spinner $install_pid "Installing Carch..."
+    wait $install_pid
+    local install_status=$?
     
+    if [ $install_status -ne 0 ]; then
+        log_error "Failed to install Carch package"
+        return 1
+    fi 
+    
+    log_success "Carch installed successfully"
     return 0
 }
 
@@ -241,91 +230,63 @@ check_carch_installed() {
     fi
 }
 
-cleanup_options() {
-    echo -e "${YELLOW}Cleanup options:${NC}"
-    options=(
-        "Remove everything (rpmbuild folder)" 
-        "Keep only log files (move to $CACHE_DIR)" 
-        "Leave everything (don't remove)"
-    )
-    
-    CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select cleanup option: " --height=15 --layout=reverse --border)
-    
-    case "$CHOICE" in
-        "Remove everything (rpmbuild folder)")
-            log_info "Removing rpmbuild folder..."
-            rm -rf "$HOME/rpmbuild"
-            log_success "rpmbuild folder removed successfully"
-            ;;
-        "Keep only log files (move to $CACHE_DIR)")
-            log_info "Moving log files to $CACHE_DIR..."
-            mkdir -p "$CACHE_DIR/logs"
-            find "$HOME/rpmbuild" -name "*.log" -exec cp {} "$CACHE_DIR/logs/" \;
-            rm -rf "$HOME/rpmbuild"
-            log_success "Log files preserved, rpmbuild folder removed"
-            ;;
-        "Leave everything (don't remove)")
-            log_info "Skipping cleanup as requested"
-            ;;
-        *)
-            log_info "No cleanup option selected, leaving everything as is"
-            ;;
-    esac
+cleanup() {
+    log_info "Cleaning up temporary files..."
+    rm -rf "$TMP_DIR"
+    log_success "Cleanup completed"
 }
 
 display_welcome() {
+    clear
 
-clear
-
-echo -e "${GREEN}"
-cat <<"EOF"
+    echo -e "${GREEN}"
+    cat <<"EOF"
    ____         __       ____
   /  _/__  ___ / /____ _/ / /__ ____
  _/ // _ \(_-</ __/ _ `/ / / -_) __/
 /___/_//_/___/\__/\_,_/_/_/\__/_/
 
 EOF
-echo "Carch Installer for Fedora or Fedora based distros."
-echo -e "${NC}"
-echo ""
+    echo "Carch Installer for Fedora or Fedora based distros."
+    echo -e "${NC}"
+    echo ""
 
-echo -e "${CYAN}${BOLD}CARCH${NC}${CYAN}${NC}"
-echo -e "${CYAN}${WHITE}Version: $VERSION${NC}${CYAN}${NC}"
-echo -e "${CYAN}${WHITE}Architecture: $ARCH${NC}${CYAN}${NC}"
+    echo -e "${CYAN}${BOLD}CARCH${NC}${CYAN}${NC}"
+    echo -e "${CYAN}${WHITE}Version: $VERSION${NC}${CYAN}${NC}"
+    echo -e "${CYAN}${WHITE}Distribution: $DISTRO${NC}${CYAN}${NC}"
+    echo -e "${CYAN}${WHITE}Architecture: $ARCH${NC}${CYAN}${NC}"
 
-echo ""
-typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
-sleep 0.5
+    echo ""
+    typewriter "Hey ${USERNAME}! Thanks for choosing Carch" "${MAGENTA}${BOLD}"
+    sleep 0.5
 
-echo ""
-echo -e "${BLUE}This is the Carch installer for Fedora Linux.${NC}"
-sleep 0.5
-echo -e "${BLUE}This will install Carch with RPM build package.${NC}"
-sleep 0.5
-echo ""
-
+    echo ""
+    echo -e "${BLUE}This is the Carch fast installer for Fedora Linux.${NC}"
+    sleep 0.5
+    echo -e "${BLUE}This will download and install the pre-built Carch package.${NC}"
+    sleep 0.5
+    echo ""
 }
 
 main() {
     display_welcome
     
-    if ! fzf_confirm "Do you want to continue with this installation?"; then
+    if ! fzf_confirm "Do you want to install Carch?"; then
         clear
         exit 0
     fi
     
-    typewriter "Sit back and relax till the script will do everything for you" "${GREEN}"
+    typewriter "Sit back and relax while we install Carch for you" "${GREEN}"
     sleep 0.5
 
     clear
     
-    log_info "Starting Carch RPM build process"
+    log_info "Starting Carch installation process"
     
     local dependencies=(
-        "git" "curl" "wget" "figlet" "man-db" "bash" "rust" "cargo" "gcc" 
+        "git" "curl" "wget" "figlet" "man-db" "bash" "rust" "cargo"
         "glibc" "unzip" "tar" "google-noto-color-emoji-fonts" "google-noto-emoji-fonts" 
-        "jetbrains-mono-fonts-all" "bat" "bash-completion-devel" "zsh" "fish" 
-        "rpmdevtools" "rpmlint" "fzf"
+        "jetbrains-mono-fonts-all" "bat" "bash-completion-devel" "zsh" "fish" "fzf"
     )
     
     if ! sudo -n true 2>/dev/null; then
@@ -347,29 +308,22 @@ main() {
         sleep 0.1
     done 
     
-    log_info "All dependencies checked. Preparing build environment..."
-    sleep 3
-    clear
-    log_info "Starting build process..."
+    echo ""
+    log_info "All dependencies checked. Starting Carch installation..."
+    sleep 1
     
-    if ! setup_rpm_build_env; then
+    local rpm_file
+    rpm_file=$(download_rpm)
+    
+    if [ $? -ne 0 ] || [ -z "$rpm_file" ]; then
+        log_error "Failed to download Carch package. Aborting installation."
+        cleanup
         exit 1
     fi
     
-    if ! download_spec_file; then
-        exit 1
-    fi
-    
-    if ! download_sources; then
-        exit 1
-    fi
-    
-    if ! build_rpm; then
-        exit 1
-    fi
-    
-    if ! install_rpm; then
-        log_error "Failed to install RPM package"
+    if ! install_rpm "$rpm_file"; then
+        log_error "Failed to install Carch package"
+        cleanup
         exit 1
     fi
     
@@ -382,13 +336,13 @@ main() {
         echo -e "${GREEN}Run 'carch -h' to see available options${NC}"
     else
         log_error "Carch seems to not be installed correctly. Please check the logs."
+        cleanup
         exit 1
     fi
     
-    echo ""
-    cleanup_options
+    cleanup
     
-    log_success "Carch RPM build and installation completed successfully!"
+    log_success "Carch installation completed successfully!"
     echo "Check the log file at ${LOG_FILE} for details."
 }
 
