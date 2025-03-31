@@ -32,6 +32,13 @@ jobs:
         run: |
           curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec" -o ~/rpmbuild/SPECS/carch.spec
           
+      - name: Modify spec file to fix Cargo build
+        run: |
+          # Replace --frozen with --offline after downloading dependencies
+          sed -i 's/cargo build --frozen/cargo fetch \&\& cargo build/g' ~/rpmbuild/SPECS/carch.spec
+          echo "Modified spec file to allow dependency downloads"
+          grep "cargo build" ~/rpmbuild/SPECS/carch.spec
+          
       - name: Download sources
         run: |
           cd ~/rpmbuild/SPECS
