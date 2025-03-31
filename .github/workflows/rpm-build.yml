@@ -4,12 +4,20 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag to upload to (without v prefix, e.g. "4.2.6")'
+        required: true
+        default: 'latest'
+
 jobs:
   build_rpm:
     runs-on: ubuntu-latest
     container:
       image: fedora:latest
       options: --privileged
+    permissions:
+      contents: write  # Required for uploading to release assets
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -34,7 +42,7 @@ jobs:
           
       - name: Modify spec file to fix Cargo build
         run: |
-          # Replace --frozen with --offline after downloading dependencies
+          # Replace --frozen with fetch + build
           sed -i 's/cargo build --frozen/cargo fetch \&\& cargo build/g' ~/rpmbuild/SPECS/carch.spec
           echo "Modified spec file to allow dependency downloads"
           grep "cargo build" ~/rpmbuild/SPECS/carch.spec
@@ -62,6 +70,7 @@ jobs:
           echo "rpm_path=$RPM_PATH" >> $GITHUB_OUTPUT
           mkdir -p ./artifacts
           cp $RPM_PATH ./artifacts/
+          ls -la ./artifacts/
           
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -69,18 +78,32 @@ jobs:
           name: carch-rpm
           path: ./artifacts/*.rpm
           retention-days: 7
-          
-      - name: Get RPM filename
-        id: rpm_filename
-        run: |
-          RPM_FILE=$(basename $(find ~/rpmbuild/RPMS -name "carch-*.x86_64.rpm" | grep -v "debug" | head -n 1))
-          echo "rpm_file=$RPM_FILE" >> $GITHUB_OUTPUT
-          echo "Found RPM file: $RPM_FILE"
-          
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      
+      # For tag pushes, use the tag name
+      - name: Set tag name from push
         if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
+          
+      # For manual workflow, use the provided tag input
+      - name: Set tag name from input
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          # Add 'v' prefix if not present
+          if [[ "${{ github.event.inputs.tag_name }}" != v* ]]; then
+            TAG_NAME="v${{ github.event.inputs.tag_name }}"
+          else
+            TAG_NAME="${{ github.event.inputs.tag_name }}"
+          fi
+          echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
+          
+      # Upload to existing release
+      - name: Upload RPM to release
+        uses: softprops/action-gh-release@v1
         with:
           files: ./artifacts/*.rpm
+          tag_name: ${{ env.RELEASE_TAG }}
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
