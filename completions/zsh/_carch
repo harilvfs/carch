@@ -15,7 +15,11 @@ _carch() {
         '-l:List all available scripts'
         '--search:Search for scripts by keyword'
         '-s:Search for scripts by keyword'
-        '--check-update:Check if a new version of Carch is available.'
+        '--no-preview:Run without displaying script previews in menus (one-time)'
+        '--disable-preview:Permanently disable script previews in menus'
+        '--log:Enable logging for the current session only'
+        '--enable-logging:Permanently enable logging in the configuration file'
+        '--check-update:Check if a new version of Carch is available'
         '--update:Update Carch using the latest script'
         '--uninstall:Uninstall Carch and remove all associated files'
     )
@@ -32,6 +36,10 @@ _carch() {
         '-l[List all available scripts]' \
         '--search[Search for scripts by keyword]' \
         '-s[Search for scripts by keyword]' \
+        '--no-preview[Run without displaying script previews in menus (one-time)]' \
+        '--disable-preview[Permanently disable script previews in menus]' \
+        '--log[Enable logging for the current session only]' \
+        '--enable-logging[Permanently enable logging in the configuration file]' \
         '--check-update[Check if a new version of Carch is available]' \
         '--update[Update Carch using the latest script]' \
         '--uninstall[Uninstall Carch and remove all associated files]'
