@@ -52,8 +52,10 @@ jobs:
             latest_tag="v4.1.0"
           fi
           release_date=$(date +'%Y.%m.%d')
+          VERSION=$(echo "${{ github.event.inputs.tag_version }}" | sed 's/^v//')
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
           
       - name: Build x86_64 binary
         run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
