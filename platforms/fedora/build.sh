@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+clear
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -108,9 +110,8 @@ spinner() {
 
 fzf_confirm() {
     local prompt="$1"
-    local default="${2:-No}"
     local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border --default="$default")
+    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
     
     if [[ "$selected" == "Yes" ]]; then
         return 0
@@ -196,10 +197,7 @@ build_rpm() {
     
     log_info "Building package, this may take some time..."
     
-    rpmbuild -ba "$spec_file" 2>&1 | tee -a "${LOG_FILE}" &
-    local build_pid=$!
-    spinner $build_pid "Building RPM package..."
-    wait $build_pid
+    rpmbuild -ba "$spec_file" 2>&1 | tee -a "${LOG_FILE}"
     local build_status=$?
     
     if [ $build_status -ne 0 ]; then
