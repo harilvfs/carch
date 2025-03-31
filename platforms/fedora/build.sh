@@ -14,7 +14,6 @@ NC='\033[0m'
 
 CACHE_DIR="$HOME/.cache/carch-build"
 mkdir -p "$CACHE_DIR" 2>/dev/null
-LOG_FILE="$CACHE_DIR/carch_rpm_build_$(date +%Y%m%d_%H%M%S).log"
 
 if command -v pacman &>/dev/null; then
     DISTRO="Arch Linux"
@@ -38,27 +37,6 @@ if ! command -v dnf &>/dev/null; then
     exit 1
 fi
 
-log() {
-    local message="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
-    echo -e "${message}" | tee -a "${LOG_FILE}"
-}
-
-log_error() {
-    log "${RED}ERROR: $1${NC}"
-}
-
-log_success() {
-    log "${GREEN}SUCCESS: $1${NC}"
-}
-
-log_info() {
-    log "${BLUE}INFO: $1${NC}"
-}
-
-log_warning() {
-    log "${YELLOW}WARNING: $1${NC}"
-}
-
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
@@ -75,15 +53,15 @@ install_package() {
     local package=$1
     
     if ! package_installed "$package"; then
-        log_info "Installing $package..."
-        if ! sudo dnf install -y "$package" >> "${LOG_FILE}" 2>&1; then
-            log_error "Failed to install $package"
+        echo -e "${BLUE}INFO:${NC} Installing $package..."
+        if ! sudo dnf install -y "$package" >/dev/null 2>&1; then
+            echo -e "${RED}ERROR:${NC} Failed to install $package"
             return 1
         else
-            log_success "$package installed successfully"
+            echo -e "${GREEN}SUCCESS:${NC} $package installed successfully"
         fi
     else
-        log_info "$package is already installed"
+        echo -e "${BLUE}INFO:${NC} $package is already installed"
     fi
     return 0
 }
@@ -136,116 +114,84 @@ check_existing_rpmbuild() {
 }
 
 setup_rpm_build_env() {
-    log_info "Setting up RPM build environment..."
+    echo -e "${BLUE}INFO:${NC} Setting up RPM build environment..."
     if [ ! -d "$HOME/rpmbuild" ]; then
-        rpmdev-setuptree >> "${LOG_FILE}" 2>&1 || { log_error "Failed to setup RPM build environment"; return 1; }
-        log_success "RPM build environment set up successfully"
+        rpmdev-setuptree >/dev/null 2>&1 || { echo -e "${RED}ERROR:${NC} Failed to setup RPM build environment"; return 1; }
+        echo -e "${GREEN}SUCCESS:${NC} RPM build environment set up successfully"
     else
-        log_info "Using existing RPM build environment"
+        echo -e "${BLUE}INFO:${NC} Using existing RPM build environment"
     fi
     return 0
 }
 
 download_spec_file() {
-    log_info "Downloading spec file from repository..."
+    echo -e "${BLUE}INFO:${NC} Downloading spec file from repository..."
     local spec_dir="$HOME/rpmbuild/SPECS"
     local spec_file="$spec_dir/carch.spec"
     
     if [ ! -d "$spec_dir" ]; then
-        mkdir -p "$spec_dir" || { log_error "Failed to create SPECS directory"; return 1; }
+        mkdir -p "$spec_dir" || { echo -e "${RED}ERROR:${NC} Failed to create SPECS directory"; return 1; }
     fi
     
     if [ -f "$spec_file" ]; then
-        log_warning "Spec file already exists. Backing up..."
-        mv "$spec_file" "${spec_file}.bak.$(date +%Y%m%d_%H%M%S)" || { log_error "Failed to backup spec file"; return 1; }
+        echo -e "${YELLOW}WARNING:${NC} Spec file already exists. Backing up..."
+        mv "$spec_file" "${spec_file}.bak.$(date +%Y%m%d_%H%M%S)" || { echo -e "${RED}ERROR:${NC} Failed to backup spec file"; return 1; }
     fi
     
-    if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec" -o "$spec_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to download spec file from repository"
+    if ! curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec" -o "$spec_file" >/dev/null 2>&1; then
+        echo -e "${RED}ERROR:${NC} Failed to download spec file from repository"
         return 1
     fi
     
     if [ -f "$spec_file" ]; then
-        log_success "Spec file downloaded successfully from repository"
+        echo -e "${GREEN}SUCCESS:${NC} Spec file downloaded successfully from repository"
         return 0
     else
-        log_error "Failed to download spec file"
+        echo -e "${RED}ERROR:${NC} Failed to download spec file"
         return 1
     fi
 }
 
 download_sources() {
-    log_info "Downloading sources..."
+    echo -e "${BLUE}INFO:${NC} Downloading sources..."
     local spec_dir="$HOME/rpmbuild/SPECS"
     local spec_file="$spec_dir/carch.spec"
     
-    cd "$spec_dir" || { log_error "Failed to change directory to SPECS"; return 1; }
-    if ! spectool -g -R "$spec_file" >> "${LOG_FILE}" 2>&1; then
-        log_error "Failed to download sources"
+    cd "$spec_dir" || { echo -e "${RED}ERROR:${NC} Failed to change directory to SPECS"; return 1; }
+    if ! spectool -g -R "$spec_file" >/dev/null 2>&1; then
+        echo -e "${RED}ERROR:${NC} Failed to download sources"
         return 1
     fi
-    log_success "Sources downloaded successfully"
+    echo -e "${GREEN}SUCCESS:${NC} Sources downloaded successfully"
     return 0
 }
 
 build_rpm() {
-    log_info "Building RPM package..."
+    echo -e "${BLUE}INFO:${NC} Building RPM package..."
     local spec_dir="$HOME/rpmbuild/SPECS"
     local spec_file="$spec_dir/carch.spec"
     
-    cd "$spec_dir" || { log_error "Failed to change directory to SPECS"; return 1; }
+    cd "$spec_dir" || { echo -e "${RED}ERROR:${NC} Failed to change directory to SPECS"; return 1; }
     
-    log_info "Building package, this may take some time..."
+    echo -e "${BLUE}INFO:${NC} Building package, this may take some time..."
     
-    rpmbuild -ba "$spec_file" 2>&1 | tee -a "${LOG_FILE}"
+    rpmbuild -ba "$spec_file" >/dev/null 2>&1
     local build_status=$?
     
     if [ $build_status -ne 0 ]; then
-        log_error "Failed to build RPM package"
+        echo -e "${RED}ERROR:${NC} Failed to build RPM package"
         return 1
     fi
     
     local rpm_file=$(find "$HOME/rpmbuild/RPMS" -name "carch-*.rpm" | grep -v "debug" | head -n 1)
     if [ -z "$rpm_file" ]; then
-        log_error "Could not find built RPM package"
+        echo -e "${RED}ERROR:${NC} Could not find built RPM package"
         return 1
     fi
     
-    log_success "RPM package built successfully: $(basename "$rpm_file")"
+    echo -e "${GREEN}SUCCESS:${NC} RPM package built successfully: $(basename "$rpm_file")"
     echo -e "${GREEN}The built package is located at: ${BOLD}$rpm_file${NC}"
     return 0
-}
-
-cleanup_options() {
-    echo -e "${YELLOW}Cleanup options:${NC}"
-    options=(
-        "Remove everything (rpmbuild folder)" 
-        "Keep only log files (move to $CACHE_DIR)" 
-        "Leave everything (don't remove)"
-    )
-    
-    CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select cleanup option: " --height=15 --layout=reverse --border)
-    
-    case "$CHOICE" in
-        "Remove everything (rpmbuild folder)")
-            log_info "Removing rpmbuild folder..."
-            rm -rf "$HOME/rpmbuild"
-            log_success "rpmbuild folder removed successfully"
-            ;;
-        "Keep only log files (move to $CACHE_DIR)")
-            log_info "Moving log files to $CACHE_DIR..."
-            mkdir -p "$CACHE_DIR/logs"
-            find "$HOME/rpmbuild" -name "*.log" -exec cp {} "$CACHE_DIR/logs/" \;
-            rm -rf "$HOME/rpmbuild"
-            log_success "Log files preserved, rpmbuild folder removed"
-            ;;
-        "Leave everything (don't remove)")
-            log_info "Skipping cleanup as requested"
-            ;;
-        *)
-            log_info "No cleanup option selected, leaving everything as is"
-            ;;
-    esac
 }
 
 main() {
@@ -259,8 +205,7 @@ main() {
         exit 0
     fi
     
-    echo "Starting build process. Log will be saved to: ${LOG_FILE}"
-    log_info "Starting Carch RPM build process"
+    echo "Starting build process..."
     
     local dependencies=(
         "git" "curl" "wget" "figlet" "man-db" "bash" "rust" "cargo" "gcc" 
@@ -270,9 +215,9 @@ main() {
     )
     
     if ! sudo -n true 2>/dev/null; then
-        log_warning "This script requires sudo privileges to install packages"
+        echo -e "${YELLOW}WARNING:${NC} This script requires sudo privileges to install packages"
         if ! fzf_confirm "Continue with sudo access?"; then
-            log_error "Script aborted due to sudo requirement"
+            echo -e "${RED}ERROR:${NC} Script aborted due to sudo requirement"
             exit 1
         fi
     fi
@@ -283,12 +228,12 @@ main() {
     
     for dep in "${dependencies[@]}"; do
         if ! install_package "$dep"; then
-            log_warning "Failed to install $dep, continuing anyway..."
+            echo -e "${YELLOW}WARNING:${NC} Failed to install $dep, continuing anyway..."
         fi
         sleep 0.1
     done 
     
-    log_info "All dependencies checked. Preparing build environment..."
+    echo -e "${BLUE}INFO:${NC} All dependencies checked. Preparing build environment..."
     sleep 1
     
     if ! setup_rpm_build_env; then
@@ -315,10 +260,7 @@ main() {
     echo -e "${GREEN}Package location: ${BOLD}$rpm_file${NC}"
     echo ""
     
-    cleanup_options
-    
-    log_success "Carch RPM build completed successfully!"
-    echo "Check the log file at ${LOG_FILE} for details."
+    echo -e "${GREEN}SUCCESS:${NC} Carch RPM build completed successfully!"
 }
 
 main "$@"
