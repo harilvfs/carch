@@ -1,0 +1,101 @@
+name: Carch Preview
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to use for Carch binary'
+        required: true
+        default: 'latest'
+jobs:
+  generate_preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      
+      - name: Get latest release tag if not specified
+        id: get_tag
+        run: |
+          if [ "${{ github.event.inputs.tag_name }}" = "latest" ]; then
+            LATEST_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+            echo "TAG_NAME=$LATEST_TAG" >> $GITHUB_ENV
+          else
+            echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+          fi
+      
+      - name: Download Carch binary
+        run: |
+          curl -L "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/carch" -o carch
+          chmod +x carch
+          sudo mv carch /usr/local/bin/
+      
+      - name: Create Dockerfile for VHS with Arch Linux
+        run: |
+          cat > Dockerfile.vhs << EOF
+          FROM ghcr.io/charmbracelet/vhs as vhs-base
+          
+          FROM archlinux:latest
+          
+          # Copy VHS from the base image
+          COPY --from=vhs-base /usr/local/bin/vhs /usr/local/bin/vhs
+          COPY --from=vhs-base /root/.local/share/ttyd /root/.local/share/ttyd
+          COPY --from=vhs-base /vhs /vhs
+          
+          # Install required dependencies
+          RUN pacman -Syu --noconfirm && \
+              pacman -S --noconfirm fzf figlet ttf-hack xorg-server-xvfb ttf-liberation
+
+          # Set up the environment
+          ENV PATH="/usr/local/bin:${PATH}"
+          WORKDIR /vhs
+          
+          ENTRYPOINT ["/usr/local/bin/vhs"]
+          EOF
+      
+      - name: Build custom VHS image
+        run: |
+          docker build -t vhs-arch -f Dockerfile.vhs .
+      
+      - name: Generate preview with VHS
+        run: |
+          docker run --rm \
+            -v $PWD:/vhs \
+            -v /usr/local/bin/carch:/usr/local/bin/carch \
+            vhs-arch \
+            /vhs/.github/preview.tape
+      
+      - name: Create .github directory if it doesn't exist
+        run: mkdir -p .github
+      
+      - name: Find and move preview.gif
+        run: |
+          # Look for the preview.gif file
+          if [ -f "preview.gif" ]; then
+            mv preview.gif .github/preview.gif
+          elif [ -f "/vhs/preview.gif" ]; then
+            mv /vhs/preview.gif .github/preview.gif
+          else
+            PREVIEW_PATH=$(find . -name "preview.gif" -type f | head -n 1)
+            if [ -n "$PREVIEW_PATH" ]; then
+              mv "$PREVIEW_PATH" .github/preview.gif
+            else
+              echo "Error: preview.gif not found"
+              exit 1
+            fi
+          fi
+      
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v7.0.5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: "Update preview GIF from release ${{ env.TAG_NAME }}"
+          branch: feature/preview-update
+          title: "Update preview GIF from release ${{ env.TAG_NAME }}"
+          labels: |
+            documentation
+          body: |
+            Automated PR to update preview GIF using Carch from release ${{ env.TAG_NAME }}
+            ![preview](https://raw.githubusercontent.com/${{ github.repository }}/feature/preview-update/.github/preview.gif)
+        if: success()
