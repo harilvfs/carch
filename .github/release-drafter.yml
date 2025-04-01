@@ -4,59 +4,128 @@ categories:
   - title: '🚀 Features'
     labels:
       - 'enhancement'
+    # Match commits with feat: prefix
+    commit-analyzer-pattern: '^feat(\(.+\))?:'
   - title: '🦀 Rust'
     labels:
       - 'rust'
+    commit-analyzer-pattern: '^rust(\(.+\))?:'
   - title: '🐛 Bug Fixes'
     labels:
       - 'fix'
       - 'bugfix'
       - 'bug'
       - 'fixes'
+    commit-analyzer-pattern: '^fix(\(.+\))?:'
   - title: '🔄 Refactor'
     labels:
       - 'refactor'
+    commit-analyzer-pattern: '^refactor(\(.+\))?:'
   - title: '🔼 Updates'
     labels:
       - 'update'
+    commit-analyzer-pattern: '^(update|upgrade)(\(.+\))?:'
   - title: '🛠️ Build'
     labels:
       - 'build'
+    commit-analyzer-pattern: '^build(\(.+\))?:'
   - title: '🧪 Test'
     labels:
       - 'test'
+    commit-analyzer-pattern: '^test(\(.+\))?:'
   - title: '🧰 Chore'
     labels:
-     - 'dependencies'
+      - 'dependencies'
+    commit-analyzer-pattern: '^(chore|deps|dependencies)(\(.+\))?:'
   - title: '📝 Remove'
     labels:
       - 'remove'
+    commit-analyzer-pattern: '^(remove|delete)(\(.+\))?:'
   - title: '🔧 Custom'
     labels:
       - 'custom'
+    commit-analyzer-pattern: '^custom(\(.+\))?:'
   - title: '🎨 UI/UX'
     labels:
       - 'UI/UX'
+    commit-analyzer-pattern: '^(ui|ux|style)(\(.+\))?:'
   - title: '📖 Docs'
     labels:
       - 'documentation'
+    commit-analyzer-pattern: '^docs?(\(.+\))?:'
   - title: '⚙️ CI/CD'
     labels:
       - 'github_actions'
+    commit-analyzer-pattern: '^(ci|cd)(\(.+\))?:'
+  - title: '⚡ Performance'
+    labels:
+      - 'performance'
+    commit-analyzer-pattern: '^perf(\(.+\))?:'
+  - title: '🔒 Security'
+    labels:
+      - 'security'
+    commit-analyzer-pattern: '^security(\(.+\))?:'
+  - title: '🏗️ Infrastructure'
+    labels:
+      - 'infrastructure'
+    commit-analyzer-pattern: '^infra(\(.+\))?:'
+  - title: '🗃️ Database'
+    labels:
+      - 'database'
+    commit-analyzer-pattern: '^db(\(.+\))?:'
+  - title: '↩️ Revert'
+    labels:
+      - 'revert'
+    commit-analyzer-pattern: '^revert(\(.+\))?:'
+  - title: '🚧 Work In Progress'
+    labels:
+      - 'wip'
+    commit-analyzer-pattern: '^wip(\(.+\))?:'
+  - title: '🎬 Initial'
+    labels:
+      - 'init'
+    commit-analyzer-pattern: '^init(\(.+\))?:'
+
+# Capture commits without PR
+include-commits: true
+# Use a pattern to match conventional commits
+commit-template: '- $TITLE $HASH'
+# Add link to author for commits as well
+include-commit-authors: true
+commit-author-template: '@$AUTHOR'
+
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' 
 version-resolver:
   major:
     labels:
       - 'major'
+    # Breaking changes with ! or BREAKING prefix
+    patterns:
+      - '^feat!:'
+      - '^fix!:'
+      - '^BREAKING CHANGE:'
+      - '^BREAKING:'
+      - '^breaking:'
   minor:
     labels:
       - 'minor'
+    patterns:
+      - '^feat:'
   patch:
     labels:
       - 'patch'
+    patterns:
+      - '^fix:'
+      - '^bugfix:'
+      - '^perf:'
+      - '^docs:'
+      - '^style:'
+      - '^refactor:'
+      - '^test:'
+      - '^chore:'
+      - '^ci:'
   default: patch
 template: |
   ## Changes
-
   $CHANGES
