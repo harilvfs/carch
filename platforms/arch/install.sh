@@ -131,7 +131,7 @@ if [ $failed_deps -gt 0 ]; then
     fzf_confirm "Continue anyway?" || exit 1
 fi
 
-sleep 1
+sleep 1.5
 
 clear
 
@@ -198,12 +198,10 @@ makepkg -si
 if [ $? -eq 0 ]; then
     echo ""
     echo -e "${GREEN}${BOLD}INSTALLATION COMPLETE${RESET}"
-    sleep 0.7
+    sleep 0.5
     echo -e "${GREEN}Carch has been successfully installed!${RESET}"
-    sleep 0.7
+    sleep 0.5
     echo -e "${GREEN}Run 'carch -h' to see available options${RESET}"
-    sleep 1
-    echo -e "${CYAN}Thank you again! If you find any bugs, feel free to submit an issue report on GitHub :)${RESET}"
 else
     echo -e "${RED}Failed to build or install package.${RESET}"
     exit 1
