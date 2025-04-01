@@ -436,7 +436,7 @@ display_scripts_menu() {
     else
         load_all_scripts
     fi
-    INSTALLED_VERSION=$(get_installed_version)
+
     TERM_WIDTH=$(tput cols)
 
     local preview_cmd=""
@@ -454,10 +454,10 @@ display_scripts_menu() {
         title_spaces=$(( (TERM_WIDTH - 2 - ${#title}) / 2 ))
         echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${MAGENTA}${title}${RESET}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))${BLUE}│${NC}"
     
-        version_text="$INSTALLED_VERSION - Automate Your Linux Setup"
-        version_spaces=$(( (TERM_WIDTH - 2 - ${#version_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - version_spaces - ${#version_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $version_spaces))${CYAN}${version_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
+        subtitle_text="Automate Your Linux Setup"
+        subtitle_spaces=$(( (TERM_WIDTH - 2 - ${#subtitle_text}) / 2 ))
+        right_padding=$(( TERM_WIDTH - 2 - subtitle_spaces - ${#subtitle_text} ))
+        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $subtitle_spaces))${CYAN}${subtitle_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
     
         separator="──────────────"
         separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
