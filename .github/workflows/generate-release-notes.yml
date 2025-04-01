@@ -1,0 +1,46 @@
+name: Release Notes
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  release-drafter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        id: release-drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Generate commit notes
+        run: |
+          # Run your script to generate commit notes
+          node ./scripts/conventional-commits-parser.js
+          
+          # Create combined release notes
+          echo "${{ steps.release-drafter.outputs.body }}" > COMBINED_NOTES.md
+          echo "\n\n## Direct Commits\n" >> COMBINED_NOTES.md
+          cat RELEASE_NOTES.md >> COMBINED_NOTES.md
+      
+      # Update the draft release with combined notes
+      - uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          body_path: COMBINED_NOTES.md
+          tag_name: ${{ steps.release-drafter.outputs.tag_name }}
+          name: ${{ steps.release-drafter.outputs.name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
