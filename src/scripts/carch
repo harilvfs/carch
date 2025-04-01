@@ -438,7 +438,6 @@ display_scripts_menu() {
     fi
     
     TERM_WIDTH=$(tput cols 2>/dev/null || echo 80)
-    
     [[ $TERM_WIDTH -lt 60 ]] && TERM_WIDTH=60
     
     local preview_cmd=""
@@ -450,20 +449,17 @@ display_scripts_menu() {
     
     while true; do
         clear
-        echo -e "${BLUE}+$(printf '%*s' $((TERM_WIDTH-2)) | tr ' ' '-')+${NC}"
         
         title="CARCH"
-        printf "${BLUE}|${MAGENTA}%*s%s%*s${BLUE}|${NC}\n" $(( (TERM_WIDTH-2-${#title})/2 )) "" "$title" $(( (TERM_WIDTH-2-${#title}+1)/2 )) ""
+        printf "${MAGENTA}%*s%s%*s${NC}\n" $(( (TERM_WIDTH-${#title})/2 )) "" "$title" $(( (TERM_WIDTH-${#title}+1)/2 )) ""
         
         subtitle_text="Automate Your Linux Setup"
-        printf "${BLUE}|${CYAN}%*s%s%*s${BLUE}|${NC}\n" $(( (TERM_WIDTH-2-${#subtitle_text})/2 )) "" "$subtitle_text" $(( (TERM_WIDTH-2-${#subtitle_text}+1)/2 )) ""
+        printf "${CYAN}%*s%s%*s${NC}\n" $(( (TERM_WIDTH-${#subtitle_text})/2 )) "" "$subtitle_text" $(( (TERM_WIDTH-${#subtitle_text}+1)/2 )) ""
         
-        echo -e "${BLUE}|${YELLOW}$(printf '%*s' $((TERM_WIDTH-2)) | tr ' ' '-')${BLUE}|${NC}"
+        printf "\n"
         
         info_text="For more info: https://carch-org.github.io/docs/"
-        printf "${BLUE}|${GREEN}%*s%s%*s${BLUE}|${NC}\n" $(( (TERM_WIDTH-2-${#info_text})/2 )) "" "$info_text" $(( (TERM_WIDTH-2-${#info_text}+1)/2 )) ""
-        
-        echo -e "${BLUE}+$(printf '%*s' $((TERM_WIDTH-2)) | tr ' ' '-')+${NC}"
+        printf "${GREEN}%*s%s%*s${NC}\n\n" $(( (TERM_WIDTH-${#info_text})/2 )) "" "$info_text" $(( (TERM_WIDTH-${#info_text}+1)/2 )) ""
         
         echo -e "${LAVENDER}Select a script to run:${RESET}"
         
