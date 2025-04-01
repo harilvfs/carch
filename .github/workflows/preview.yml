@@ -33,21 +33,17 @@ jobs:
       
       - name: Run Arch-based Dependencies in Container
         run: |
-          # Create a script to run in an Arch container for dependencies
           cat > install_arch_deps.sh << 'EOF'
           #!/bin/bash
           
-          # Install dependencies via pacman
           pacman -Syu --noconfirm
           pacman -S --noconfirm figlet fzf
           
-          # List installed packages for verification
           echo "Installed packages:"
           pacman -Q figlet fzf
           EOF
           chmod +x install_arch_deps.sh
           
-          # Run an Arch container to install dependencies
           docker run --rm -v $PWD:/work archlinux:latest bash -c "cd /work && ./install_arch_deps.sh"
       
       - name: Create Docker image combining VHS with Arch dependencies
@@ -55,24 +51,19 @@ jobs:
           cat > Dockerfile.vhs << 'EOF'
           FROM archlinux:latest AS arch_deps
           
-          # Install dependencies
           RUN pacman -Syu --noconfirm && \
               pacman -S --noconfirm figlet fzf
           
           FROM ghcr.io/charmbracelet/vhs
           
-          # Copy binaries from Arch Linux
           COPY --from=arch_deps /usr/bin/figlet /usr/bin/figlet
           COPY --from=arch_deps /usr/bin/fzf /usr/bin/fzf
           
-          # Copy any necessary libraries or additional files
           COPY --from=arch_deps /usr/share/figlet /usr/share/figlet
           
-          # Verify executables work
           RUN figlet "test" && which fzf
           EOF
           
-          # Build the custom image
           docker build -t vhs-with-arch-deps -f Dockerfile.vhs .
       
       - name: Generate preview with VHS
@@ -88,7 +79,6 @@ jobs:
       
       - name: Find and move preview.gif
         run: |
-          # Look for the preview.gif file
           if [ -f "preview.gif" ]; then
             cp preview.gif .github/preview.gif
             rm -f preview.gif  # Remove from root directory
@@ -104,6 +94,10 @@ jobs:
               exit 1
             fi
           fi
+      
+      - name: Clean temporary files
+        run: |
+          rm -f Dockerfile.vhs install_arch_deps.sh
       
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.5
