@@ -436,42 +436,37 @@ display_scripts_menu() {
     else
         load_all_scripts
     fi
-
-    TERM_WIDTH=$(tput cols)
-
+    
+    TERM_WIDTH=$(tput cols 2>/dev/null || echo 80)
+    
+    [[ $TERM_WIDTH -lt 60 ]] && TERM_WIDTH=60
+    
     local preview_cmd=""
     local preview_window=""
     if is_preview_enabled; then
         preview_cmd="cat $SCRIPT_DIR/{}.sh 2>/dev/null | fold -w 70 || echo 'No preview available'"
         preview_window="--preview-window=right:60%"
     fi
-
+    
     while true; do
         clear
-        echo -e "${BLUE}╭$(printf '━%.0s' $(seq 1 $((TERM_WIDTH - 2))))╮${NC}"
-    
+        echo -e "${BLUE}+$(printf '%*s' $((TERM_WIDTH-2)) | tr ' ' '-')+${NC}"
+        
         title="CARCH"
-        title_spaces=$(( (TERM_WIDTH - 2 - ${#title}) / 2 ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $title_spaces))${MAGENTA}${title}${RESET}$(printf ' %.0s' $(seq 1 $((TERM_WIDTH - 2 - title_spaces - ${#title}))))${BLUE}│${NC}"
-    
+        printf "${BLUE}|${MAGENTA}%*s%s%*s${BLUE}|${NC}\n" $(( (TERM_WIDTH-2-${#title})/2 )) "" "$title" $(( (TERM_WIDTH-2-${#title}+1)/2 )) ""
+        
         subtitle_text="Automate Your Linux Setup"
-        subtitle_spaces=$(( (TERM_WIDTH - 2 - ${#subtitle_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - subtitle_spaces - ${#subtitle_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $subtitle_spaces))${CYAN}${subtitle_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-    
-        separator="──────────────"
-        separator_spaces=$(( (TERM_WIDTH - 2 - ${#separator}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - separator_spaces - ${#separator} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $separator_spaces))${YELLOW}${separator}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-    
+        printf "${BLUE}|${CYAN}%*s%s%*s${BLUE}|${NC}\n" $(( (TERM_WIDTH-2-${#subtitle_text})/2 )) "" "$subtitle_text" $(( (TERM_WIDTH-2-${#subtitle_text}+1)/2 )) ""
+        
+        echo -e "${BLUE}|${YELLOW}$(printf '%*s' $((TERM_WIDTH-2)) | tr ' ' '-')${BLUE}|${NC}"
+        
         info_text="For more info: https://carch-org.github.io/docs/"
-        info_spaces=$(( (TERM_WIDTH - 2 - ${#info_text}) / 2 ))
-        right_padding=$(( TERM_WIDTH - 2 - info_spaces - ${#info_text} ))
-        echo -e "${BLUE}│$(printf ' %.0s' $(seq 1 $info_spaces))${GREEN}${info_text}${RESET}$(printf ' %.0s' $(seq 1 $right_padding))${BLUE}│${NC}"
-    
-        echo -e "${BLUE}╰$(printf '━%.0s' $(seq 1 $((TERM_WIDTH - 2))))╯${NC}"
+        printf "${BLUE}|${GREEN}%*s%s%*s${BLUE}|${NC}\n" $(( (TERM_WIDTH-2-${#info_text})/2 )) "" "$info_text" $(( (TERM_WIDTH-2-${#info_text}+1)/2 )) ""
+        
+        echo -e "${BLUE}+$(printf '%*s' $((TERM_WIDTH-2)) | tr ' ' '-')+${NC}"
         
         echo -e "${LAVENDER}Select a script to run:${RESET}"
+        
         cancel_exists=0
         for script in "${scripts[@]}"; do
             if [[ "$script" == "Cancel" ]]; then
