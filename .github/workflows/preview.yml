@@ -34,24 +34,20 @@ jobs:
       - name: Create Dockerfile for VHS with Arch Linux
         run: |
           cat > Dockerfile.vhs << EOF
-          FROM ghcr.io/charmbracelet/vhs as vhs-base
-          
           FROM archlinux:latest
           
-          # Copy VHS from the base image
-          COPY --from=vhs-base /usr/local/bin/vhs /usr/local/bin/vhs
-          COPY --from=vhs-base /root/.local/share/ttyd /root/.local/share/ttyd
-          COPY --from=vhs-base /vhs /vhs
-          
-          # Install required dependencies
+          # Install required dependencies and VHS
           RUN pacman -Syu --noconfirm && \
-              pacman -S --noconfirm fzf figlet ttf-hack xorg-server-xvfb ttf-liberation
-
-          # Set up the environment
-          ENV PATH="/usr/local/bin:${PATH}"
+              pacman -S --noconfirm fzf figlet ttf-hack ttf-liberation xorg-server-xvfb git go && \
+              go install github.com/charmbracelet/vhs@latest
+          
+          # Add Go binaries to PATH
+          ENV PATH="/root/go/bin:${PATH}"
+          
+          # Set up working directory
           WORKDIR /vhs
           
-          ENTRYPOINT ["/usr/local/bin/vhs"]
+          ENTRYPOINT ["vhs"]
           EOF
       
       - name: Build custom VHS image
@@ -73,13 +69,17 @@ jobs:
         run: |
           # Look for the preview.gif file
           if [ -f "preview.gif" ]; then
-            mv preview.gif .github/preview.gif
+            cp preview.gif .github/preview.gif
+            rm -f preview.gif  # Remove from root directory
           elif [ -f "/vhs/preview.gif" ]; then
-            mv /vhs/preview.gif .github/preview.gif
+            cp /vhs/preview.gif .github/preview.gif
           else
             PREVIEW_PATH=$(find . -name "preview.gif" -type f | head -n 1)
-            if [ -n "$PREVIEW_PATH" ]; then
-              mv "$PREVIEW_PATH" .github/preview.gif
+            if [ -n "$PREVIEW_PATH" ] && [ "$PREVIEW_PATH" != "./.github/preview.gif" ]; then
+              cp "$PREVIEW_PATH" .github/preview.gif
+              rm -f "$PREVIEW_PATH"  # Remove from original location
+            elif [ -f "./.github/preview.gif" ]; then
+              echo "Preview already in correct location"
             else
               echo "Error: preview.gif not found"
               exit 1
