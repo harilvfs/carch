@@ -83,4 +83,4 @@ Sleep 4s
 
 Type@200ms "cancel" Sleep 3s Enter
 
-Sleep 5s
+Sleep 3s
