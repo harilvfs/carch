@@ -38,7 +38,7 @@ jobs:
           
           # Install required dependencies and VHS
           RUN pacman -Syu --noconfirm && \
-              pacman -S --noconfirm fzf figlet ttf-hack ttf-liberation xorg-server-xvfb git go && \
+              pacman -S --noconfirm fzf figlet ttf-hack ttf-liberation xorg-server-xvfb git go ffmpeg && \
               go install github.com/charmbracelet/vhs@latest
           
           # Add Go binaries to PATH
