@@ -2,9 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.7](https://github.com/harilvfs/carch/compare/v4.2.6...v4.2.7) (2025-04-04)
+
+This might be the last Carch update in terms of new features. But if any user (or I) finds a bug, it will be fixed in the next release.
+
+### Changed 
+
+- Reduce Rust code and improve performance (https://github.com/harilvfs/carch/pull/361)
+- Simplifying the banner (https://github.com/harilvfs/carch/pull/360)
+
+### Removed
+
+- Removing Version Text From Menu (https://github.com/harilvfs/carch/pull/356)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.7).
+
+
 ## [4.2.6](https://github.com/harilvfs/carch/compare/v4.2.5...v4.2.6) (2025-04-01)
 
 ### Changed  
+
 - Refactored repo structure 🍻 (https://github.com/harilvfs/carch/pull/343)  
 - Install Fedora RPMs directly (https://github.com/harilvfs/carch/pull/351)  
 - Redoing the main menu (https://github.com/harilvfs/carch/pull/348)  
@@ -12,17 +29,20 @@ All notable changes to this project will be documented in this file.
 - Improve handling when figlet is missing (https://github.com/harilvfs/carch/pull/341)  
 
 ### Added  
+
 - New commands (https://github.com/harilvfs/carch/pull/353)  
 - Support for using DWM from TTY (https://github.com/harilvfs/carch/pull/342)  
 - RPM builder for Carch (Fedora) (https://github.com/harilvfs/carch/pull/352)  
 - Description to scripts (https://github.com/harilvfs/carch/pull/347)  
 
 ### Fixed  
+
 - Updates to Carch installer for Arch & Fedora (https://github.com/harilvfs/carch/pull/349)  
 - Update updater for new repo structure (https://github.com/harilvfs/carch/pull/345)  
 - Simplify distro detection logic (https://github.com/harilvfs/carch/pull/340)  
 
 ### Removed  
+
 - Cleaned up font script (https://github.com/harilvfs/carch/pull/344)
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.6).
