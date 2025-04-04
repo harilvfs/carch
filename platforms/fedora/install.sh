@@ -3,7 +3,7 @@
 # Carch Installer for Fedora
 # Downloads and installs the latest Carch RPM package
 
-VERSION="4.2.6"
+VERSION="4.2.7"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

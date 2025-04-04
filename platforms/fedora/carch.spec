@@ -1,5 +1,5 @@
 Name:           carch
-Version:        4.2.6
+Version:        4.2.7
 Release:        1%{?dist}
 Summary:        An automated script for quick & easy Linux system setup (Arch & Fedora)
 License:        GPL
@@ -80,16 +80,7 @@ done
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
-* Mon Mar 31 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.2.6-1
-- Restructured repository layout
-- Added support for using DWM from TTY
-- Fixed Carch installer updates for Arch & Fedora
-- Updated updater for new repo structure
-- Simplified distro detection logic
-- Improved handling when figlet is missing
-- Redesigned main menu and improved fzf navigation
-- Installed Fedora RPMs directly without building
-- Added RPM Builder workflow for Fedora
-- Cleaned up font script
-- Added descriptions to scripts
-- Add New Commands 
+* Fri Apr 04 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.2.7-1
+- Reduce Rust code and improve performance
+- Simplifying the banner
+- Removing Version Text From Menu
