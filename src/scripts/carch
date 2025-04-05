@@ -304,14 +304,33 @@ prompt() {
     read -r
 }
 
-check_fzf() {
-    if ! command -v fzf &> /dev/null; then
-        echo -e "${RED}Error: fzf is not installed. Please install fzf to use this script.${RESET}"
-        log_message "ERROR" "fzf not installed. Required for script functionality."
-        echo -e "${YELLOW}Arch Linux: sudo pacman -S fzf${RESET}"
-        echo -e "${YELLOW}Fedora: sudo dnf install fzf${RESET}"
-        exit 1
+check_dependencies() {
+    local dependencies=("$@")
+    local missing=()
+    
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &>/dev/null; then
+            missing+=("$dep")
+        fi
+    done
+    
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo -e "${RED}Missing dependencies: ${missing[*]}${RESET}"
+        
+        echo -e "${YELLOW}You can install these with:${RESET}"
+        case "$(detect_distro)" in
+            arch)
+                echo -e "sudo pacman -S ${missing[*]}"
+                ;;
+            fedora)
+                echo -e "sudo dnf install ${missing[*]}"
+                ;;
+        esac
+        
+        return 1
     fi
+    
+    return 0
 }
 
 search_scripts() {
@@ -450,7 +469,8 @@ check_carch_update() {
 }
 
 display_scripts_menu() {
-    check_fzf
+    check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
+
     if [[ "$1" == "config" ]]; then
         load_selected_scripts
     else
@@ -704,7 +724,7 @@ if [[ $# -gt 0 ]]; then
             list_scripts
             ;;
         --search|-s)
-            check_fzf
+            check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
             search_scripts "direct"
             ;;
         --no-preview)
@@ -746,6 +766,6 @@ if [[ $# -gt 0 ]]; then
             ;;
     esac
 else
-    check_fzf
+    check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
     display_scripts_menu
 fi
