@@ -469,14 +469,14 @@ check_carch_update() {
 }
 
 timing_start() {
-TIMESTART=$(date +%s.%N)
+  TIMESTART=$(date +%s.%N)
 }
 
 timing_end() {
-local operation="$1"
-local TIMEEND=$(date +%s.%N)
-local TIMEDIFF=$(echo "$TIMEEND - $TIMESTART" | bc)
-log_message "PERFORMANCE" "$operation took $TIMEDIFF seconds"
+  local operation="$1"
+  local TIMEEND=$(date +%s.%N)
+  local TIMEDIFF=$(echo "$TIMEEND - $TIMESTART" | bc)
+  log_message "PERFORMANCE" "$operation took $TIMEDIFF seconds"
 }
 
 display_scripts_menu() {
