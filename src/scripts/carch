@@ -30,12 +30,28 @@ cleanup_temp() {
 
 trap cleanup_temp EXIT
 
+rotate_log_file() {
+    local max_age_days=30
+    
+    if [[ -f "$LOG_FILE" ]]; then
+        local file_age_days=$(( ( $(date +%s) - $(stat -c %Y "$LOG_FILE") ) / 86400 ))
+        if [[ "$file_age_days" -gt "$max_age_days" ]]; then
+            echo -e "${YELLOW}Log file is older than $max_age_days days. Creating a new log file...${RESET}"
+            mv "$LOG_FILE" "${LOG_FILE}.old"
+            touch "$LOG_FILE"
+            chmod 644 "$LOG_FILE"
+            log_message "INFO" "Created new log file after rotating old log (${file_age_days} days old)"
+        fi
+    fi
+}
+
 setup_logging() {
     mkdir -p "$(dirname "$LOG_FILE")"
     if [[ ! -f "$LOG_FILE" ]]; then
         touch "$LOG_FILE"
     fi
     chmod 644 "$LOG_FILE"
+    rotate_log_file
 }
 
 log_message() {
@@ -152,6 +168,20 @@ uninstall_carch() {
             exit 1
             ;;
     esac
+    
+    if [[ -d "$CONFIG_DIR" ]]; then
+        echo -e "${YELLOW}Would you like to remove the Carch configuration directory ($CONFIG_DIR)?${RESET}"
+        read -rp "Remove configuration directory? [y/N]: " remove_config
+        
+        if [[ "$remove_config" =~ ^[Yy]$ ]]; then
+            rm -rf "$CONFIG_DIR"
+            echo -e "${GREEN}Configuration directory removed.${RESET}"
+            log_message "INFO" "Configuration directory removed during uninstallation."
+        else
+            echo -e "${YELLOW}Configuration directory kept.${RESET}"
+            log_message "INFO" "Configuration directory kept during uninstallation."
+        fi
+    fi
 }
 
 generate_config() {
