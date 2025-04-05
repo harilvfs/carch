@@ -468,7 +468,19 @@ check_carch_update() {
     fi
 }
 
+timing_start() {
+TIMESTART=$(date +%s.%N)
+}
+
+timing_end() {
+local operation="$1"
+local TIMEEND=$(date +%s.%N)
+local TIMEDIFF=$(echo "$TIMEEND - $TIMESTART" | bc)
+log_message "PERFORMANCE" "$operation took $TIMEDIFF seconds"
+}
+
 display_scripts_menu() {
+    timing_start
     check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
 
     if [[ "$1" == "config" ]]; then
@@ -538,6 +550,7 @@ display_scripts_menu() {
         else
             run_script "$selected_option"
         fi
+    timing_end "display_scripts_menu"
     done
 }
 
