@@ -35,6 +35,7 @@ jobs:
             
             // Match commit content with labels
             if (messages.includes('feat')) labels.push('enhancement');
+            if (messages.includes('perf')) labels.push('enhancement');
             if (messages.includes('fix')) labels.push('bug');
             if (messages.includes('docs')) labels.push('documentation');
             if (messages.includes('chore')) labels.push('dependencies');
