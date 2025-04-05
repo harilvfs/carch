@@ -100,53 +100,58 @@ detect_distro() {
 
 uninstall_carch() {
     detect_distro
-    if [[ "$DISTRO" == "fedora" ]]; then
-        echo "Distro is Fedora"
-        echo -e "${YELLOW}Checking if Carch is installed via RPM...${RESET}"
-        
-        if rpm -q carch &>/dev/null; then
-            echo -e "${YELLOW}Carch is installed via RPM. Removing package...${RESET}"
-            sudo dnf remove -y carch
-            echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
-            log_message "INFO" "Carch uninstalled successfully via DNF."
-        else
-            echo -e "${RED}Carch RPM package not found on the system.${RESET}"
-            log_message "WARNING" "Carch not found during uninstall attempt."
-        fi
-    elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
-        echo "Distro is Arch"
-        if command -v paru &>/dev/null || command -v yay &>/dev/null; then
-            echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
-            if pacman -Qs carch &>/dev/null; then
-                AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
-                case "$AUR_PACKAGE" in
-                    carch-git)
-                        echo "Uninstalling carch-git..."
-                        yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
-                        ;;
-                    carch)
-                        echo "Uninstalling carch..."
-                        yay -R carch --noconfirm || paru -R carch --noconfirm
-                        ;;
-                    *)
-                        echo "Unknown Carch package installed: $AUR_PACKAGE"
-                        ;;
-                esac
+    
+    case "$DISTRO" in
+        fedora)
+            echo "Distro is Fedora"
+            echo -e "${YELLOW}Checking if Carch is installed via RPM...${RESET}"
+            
+            if rpm -q carch &>/dev/null; then
+                echo -e "${YELLOW}Carch is installed via RPM. Removing package...${RESET}"
+                sudo dnf remove -y carch
                 echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
-                log_message "INFO" "Carch uninstalled successfully from Arch Linux."
+                log_message "INFO" "Carch uninstalled successfully via DNF."
             else
-                echo "Carch package not found in the system."
-                log_message "WARNING" "Carch not found during uninstall attempt on Arch Linux."
+                echo -e "${RED}Carch RPM package not found on the system.${RESET}"
+                log_message "WARNING" "Carch not found during uninstall attempt."
             fi
-        else
-            echo -e "${RED}No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay.${RESET}"
-            log_message "ERROR" "No AUR helper found for uninstalling Carch on Arch Linux."
-        fi
-    else
-        echo -e "${RED}Unsupported Distribution: $DISTRO${RESET}"
-        log_message "ERROR" "Unsupported distribution during uninstall: $DISTRO"
-        exit 1
-    fi
+            ;;
+        arch)
+            echo "Distro is Arch"
+            if command -v paru &>/dev/null || command -v yay &>/dev/null; then
+                echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
+                if pacman -Qs carch &>/dev/null; then
+                    AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
+                    case "$AUR_PACKAGE" in
+                        carch-git)
+                            echo "Uninstalling carch-git..."
+                            yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
+                            ;;
+                        carch)
+                            echo "Uninstalling carch..."
+                            yay -R carch --noconfirm || paru -R carch --noconfirm
+                            ;;
+                        *)
+                            echo "Unknown Carch package installed: $AUR_PACKAGE"
+                            ;;
+                    esac
+                    echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
+                    log_message "INFO" "Carch uninstalled successfully from Arch Linux."
+                else
+                    echo "Carch package not found in the system."
+                    log_message "WARNING" "Carch not found during uninstall attempt on Arch Linux."
+                fi
+            else
+                echo -e "${RED}No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay.${RESET}"
+                log_message "ERROR" "No AUR helper found for uninstalling Carch on Arch Linux."
+            fi
+            ;;
+        *)
+            echo -e "${RED}Unsupported Distribution: $DISTRO${RESET}"
+            log_message "ERROR" "Unsupported distribution during uninstall: $DISTRO"
+            exit 1
+            ;;
+    esac
 }
 
 generate_config() {
@@ -272,9 +277,10 @@ load_selected_scripts() {
 cache_scripts() {
     SCRIPTS_CACHE_FILE="$CONFIG_DIR/scripts_cache.txt"
     
-    if [[ ! -f "$SCRIPTS_CACHE_FILE" ]] || [[ $(find "$SCRIPT_DIR" -newer "$SCRIPTS_CACHE_FILE" | wc -l) -gt 0 ]]; then
+    if [[ ! -f "$SCRIPTS_CACHE_FILE" ]] || [[ -n "$(find "$SCRIPT_DIR" -type f -name "*.sh" -newer "$SCRIPTS_CACHE_FILE" 2>/dev/null)" ]]; then
         mkdir -p "$CONFIG_DIR"
         find "$SCRIPT_DIR" -type f -name "*.sh" -print > "$SCRIPTS_CACHE_FILE"
+        log_message "INFO" "Scripts cache rebuilt"
     fi
     
     return 0
@@ -397,16 +403,25 @@ search_scripts() {
 get_latest_version() {
     local REPO="harilvfs/carch"
     local LATEST_VERSION
+    local MAX_RETRIES=3
+    local TRY=1
     
-    LATEST_VERSION=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | 
-                    grep -oP '"tag_name":\s*"\K[^"]+' | 
-                    sed 's/^v//')
+    while [ $TRY -le $MAX_RETRIES ]; do
+        LATEST_VERSION=$(curl -s --max-time 10 "https://api.github.com/repos/$REPO/releases/latest" | 
+                        grep -oP '"tag_name":\s*"\K[^"]+' | 
+                        sed 's/^v//')
+        
+        if [ -n "$LATEST_VERSION" ]; then
+            echo "$LATEST_VERSION"
+            return 0
+        fi
+        
+        TRY=$((TRY + 1))
+        sleep 1
+    done
     
-    if [ -z "$LATEST_VERSION" ]; then
-        echo "unknown"
-    else
-        echo "$LATEST_VERSION"
-    fi
+    log_message "WARNING" "Failed to retrieve latest version information"
+    echo "unknown"
 }
 
 check_carch_update() {
@@ -571,20 +586,25 @@ run_script_direct() {
 }
 
 update() {
-    detect_distro 
+    detect_distro
     
-    if [[ "$DISTRO" == "fedora" ]]; then
-        echo "Distro is Fedora. Running the Fedora update script..."
-        bash <(curl -L https://chalisehari.com.np/fedora)
-        
-    elif [[ "$DISTRO" == "arch" || "$DISTRO" == "archLinux" ]]; then
-        echo "Distro is Arch. Running the Arch update script..."
-        bash <(curl -L https://chalisehari.com.np/arch)
-        
-    else
-        echo "Unsupported Distro. Only Fedora and Arch are supported."
-        exit 1
-    fi
+    local BASE_URL="https://chalisehari.com.np"
+    
+    case "$DISTRO" in
+        fedora)
+            echo "Distro is Fedora. Running the Fedora update script..."
+            bash <(curl -L "$BASE_URL/fedora")
+            ;;
+        arch)
+            echo "Distro is Arch. Running the Arch update script..."
+            bash <(curl -L "$BASE_URL/arch")
+            ;;
+        *)
+            echo -e "${RED}Unsupported Distribution: $DISTRO${RESET}"
+            log_message "ERROR" "Unsupported distribution during update: $DISTRO"
+            exit 1
+            ;;
+    esac
 }
 
 show_help() {
