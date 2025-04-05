@@ -164,9 +164,9 @@ generate_config() {
 #  
 # Example:  
 
-terminal/Alacritty  
-terminal/Kitty  
-system/Packages  
+terminal/Alacritty
+terminal/Kitty
+system/Packages
 
 # Display settings
 # Set DISABLE_PREVIEW=true to disable script previews in menus
