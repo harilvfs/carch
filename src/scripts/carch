@@ -325,16 +325,16 @@ search_scripts() {
         preview_window="--preview-window=right:60%"
     fi
     
+    available_scripts=()
+    while IFS= read -r -d '' file; do
+        category=$(dirname "$file" | xargs basename)
+        script_name=$(basename "${file}" .sh)
+        available_scripts+=("${category}/${script_name}")
+    done < <(find "$SCRIPT_DIR" -type f -name '*.sh' -print0)
+    
     while true; do
         echo -e "\n${CYAN}Search Scripts: Press Esc To Exit${RESET}"
         echo -e "${YELLOW}Type to search available scripts...${RESET}"
-        
-        available_scripts=()
-        while IFS= read -r -d '' file; do
-            category=$(dirname "$file" | xargs basename)
-            script_name=$(basename "${file}" .sh)
-            available_scripts+=("${category}/${script_name}")
-        done < <(find "$SCRIPT_DIR" -type f -name '*.sh' -print0)
         
         selected_script=$(printf "%s\n" "${available_scripts[@]}" | fzf --height 50% --border \
                --prompt="Search scripts: " \
