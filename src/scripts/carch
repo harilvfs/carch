@@ -487,12 +487,8 @@ display_scripts_menu() {
         load_selected_scripts
     else
         load_all_scripts
-        if is_logging_enabled; then
-            echo -e "${YELLOW}Logging is enabled. Logs will be saved to: ${LOG_FILE}${RESET}"
-        fi
-        if ! is_preview_enabled; then
-            echo -e "${YELLOW}Preview mode is disabled.${RESET}"
-        fi
+        is_logging_enabled > /dev/null 2>&1
+        is_preview_enabled > /dev/null 2>&1
     fi
     
     TERM_WIDTH=$(tput cols 2>/dev/null || echo 80)
