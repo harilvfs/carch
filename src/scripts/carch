@@ -253,8 +253,13 @@ load_selected_scripts() {
     scripts=()
     if [[ -f "$CONFIG_FILE" ]]; then
         while IFS= read -r script_name; do
-            [[ "$script_name" =~ ^#.*$ || -z "$script_name" ]] && continue
-            scripts+=("$script_name")
+            script_name=$(echo "$script_name" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+            
+            [[ "$script_name" =~ ^#.*$ || -z "$script_name" || 
+               "$script_name" =~ ^LOGGING_ENABLED= || 
+               "$script_name" =~ ^DISABLE_PREVIEW= ]] && continue
+            
+            [[ "$script_name" == */* ]] && scripts+=("$script_name")
         done < "$CONFIG_FILE"
     else
         echo -e "${YELLOW}Configuration file not found. Loading all scripts.${RESET}"
@@ -435,6 +440,12 @@ display_scripts_menu() {
         load_selected_scripts
     else
         load_all_scripts
+        if is_logging_enabled; then
+            echo -e "${YELLOW}Logging is enabled. Logs will be saved to: ${LOG_FILE}${RESET}"
+        fi
+        if ! is_preview_enabled; then
+            echo -e "${YELLOW}Preview mode is disabled.${RESET}"
+        fi
     fi
     
     TERM_WIDTH=$(tput cols 2>/dev/null || echo 80)
