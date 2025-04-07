@@ -100,7 +100,7 @@ jobs:
           rm -f Dockerfile.vhs install_arch_deps.sh
       
       - name: Create PR
-        uses: peter-evans/create-pull-request@v7.0.5
+        uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
           commit-message: "Update preview GIF from release ${{ env.TAG_NAME }}"
