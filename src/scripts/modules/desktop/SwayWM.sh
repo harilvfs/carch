@@ -235,7 +235,6 @@ install_sddm() {
     fi
 }
 
-
 apply_sddm_theme() {
     theme_dir="/usr/share/sddm/themes/catppuccin-mocha"
 
@@ -281,17 +280,13 @@ configure_sddm_theme() {
 enable_start_sddm() {
     echo "Checking for existing display managers..."
 
-    if [[ -f /etc/os-release ]]; then
-        . /etc/os-release
-    fi
-
     if command -v gdm &> /dev/null; then
         echo "GDM detected. Removing GDM..."
         sudo systemctl stop gdm
         sudo systemctl disable gdm --now
-        if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
+        if command -v pacman &> /dev/null; then
             sudo pacman -Rns --noconfirm gdm
-        elif [[ "$ID" == "fedora" ]]; then
+        elif command -v dnf &> /dev/null; then
             sudo dnf remove -y gdm
         fi
     fi
@@ -300,9 +295,9 @@ enable_start_sddm() {
         echo "LightDM detected. Removing LightDM..."
         sudo systemctl stop lightdm
         sudo systemctl disable lightdm --now
-        if [[ "$ID" == "arch" || "$ID_LIKE" == *"arch"* ]]; then
+        if command -v pacman &> /dev/null; then
             sudo pacman -Rns --noconfirm lightdm
-        elif [[ "$ID" == "fedora" ]]; then
+        elif command -v dnf &> /dev/null; then
             sudo dnf remove -y lightdm
         fi
     fi
