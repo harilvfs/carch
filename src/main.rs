@@ -20,17 +20,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             display::display_help()?;
             return Ok(());
         }
-        
+
         if args[1] == "--list-scripts" || args[1] == "-l" {
-            let temp_dir = TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
+            let temp_dir =
+                TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
             let temp_path = temp_dir.path();
             extract_and_set_permissions(temp_path)?;
-            
+
             let modules_dir = temp_path.join("modules");
             if !modules_dir.exists() || !modules_dir.is_dir() {
-                return Err(format!("Modules directory not found at {}", modules_dir.display()).into());
+                return Err(
+                    format!("Modules directory not found at {}", modules_dir.display()).into(),
+                );
             }
-            
+
             script_list::list_scripts(&modules_dir)?;
             return Ok(());
         }
@@ -90,10 +93,13 @@ fn make_scripts_executable(dir_path: &Path) -> Result<(), Box<dyn std::error::Er
     if !dir_path.exists() || !dir_path.is_dir() {
         return Ok(());
     }
-    
-    for entry in fs::read_dir(dir_path).map_err(|e| format!("Failed to read directory {}: {}", dir_path.display(), e))?.flatten() {
+
+    for entry in fs::read_dir(dir_path)
+        .map_err(|e| format!("Failed to read directory {}: {}", dir_path.display(), e))?
+        .flatten()
+    {
         let path = entry.path();
-        
+
         if path.is_file() {
             if path.extension().is_some_and(|ext| ext == "sh") {
                 set_executable(&path)?;
@@ -102,7 +108,7 @@ fn make_scripts_executable(dir_path: &Path) -> Result<(), Box<dyn std::error::Er
             make_scripts_executable(&path)?;
         }
     }
-    
+
     Ok(())
 }
 

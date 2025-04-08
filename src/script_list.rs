@@ -34,7 +34,7 @@ impl ScriptListApp {
             selected_category: None,
             cursor_position: 0,
         };
-        
+
         app.load_scripts(script_dir);
         app
     }
@@ -42,46 +42,54 @@ impl ScriptListApp {
     fn load_scripts(&mut self, script_dir: &Path) {
         self.categories.clear();
         self.scripts.clear();
-        
+
         if let Ok(entries) = fs::read_dir(script_dir) {
             for entry in entries.flatten() {
                 let path = entry.path();
                 if path.is_dir() {
                     if let Some(category_name) = path.file_name().and_then(|n| n.to_str()) {
                         self.categories.push(category_name.to_string());
-                        
+
                         let mut category_scripts = Vec::new();
                         if let Ok(script_entries) = fs::read_dir(&path) {
                             for script_entry in script_entries.flatten() {
                                 let script_path = script_entry.path();
-                                if script_path.is_file() && 
-                                   script_path.extension().and_then(|ext| ext.to_str()) == Some("sh") {
-                                    if let Some(script_name) = script_path.file_stem().and_then(|n| n.to_str()) {
+                                if script_path.is_file()
+                                    && script_path.extension().and_then(|ext| ext.to_str())
+                                        == Some("sh")
+                                {
+                                    if let Some(script_name) =
+                                        script_path.file_stem().and_then(|n| n.to_str())
+                                    {
                                         category_scripts.push(script_name.to_string());
                                     }
                                 }
                             }
                         }
-                        
+
                         category_scripts.sort();
                         self.scripts.push(category_scripts);
                     }
                 }
             }
         }
-        
-        let mut sorted_data: Vec<(String, Vec<String>)> = self.categories
+
+        let mut sorted_data: Vec<(String, Vec<String>)> = self
+            .categories
             .iter()
             .cloned()
             .zip(self.scripts.iter().cloned())
             .collect();
-        
+
         sorted_data.sort_by(|a, b| a.0.cmp(&b.0));
-        
+
         self.categories = sorted_data.iter().map(|(cat, _)| cat.clone()).collect();
-        self.scripts = sorted_data.iter().map(|(_, scripts)| scripts.clone()).collect();
+        self.scripts = sorted_data
+            .iter()
+            .map(|(_, scripts)| scripts.clone())
+            .collect();
     }
-    
+
     fn toggle_category(&mut self, index: usize) {
         if self.selected_category == Some(index) {
             self.selected_category = None;
@@ -89,13 +97,13 @@ impl ScriptListApp {
             self.selected_category = Some(index);
         }
     }
-    
+
     fn toggle_current_category(&mut self) {
         if !self.categories.is_empty() {
             self.toggle_category(self.cursor_position);
         }
     }
-    
+
     fn move_cursor_up(&mut self) {
         if self.cursor_position > 0 {
             self.cursor_position -= 1;
@@ -104,7 +112,7 @@ impl ScriptListApp {
             }
         }
     }
-    
+
     fn move_cursor_down(&mut self) {
         if !self.categories.is_empty() && self.cursor_position < self.categories.len() - 1 {
             self.cursor_position += 1;
@@ -164,15 +172,15 @@ fn display_script_list_tui(script_dir: &Path) -> Result<(), Box<dyn std::error::
                     }
                     KeyCode::Enter => {
                         app.toggle_current_category();
-                    },
+                    }
                     KeyCode::Right => {
                         if app.selected_category.is_none() && !app.categories.is_empty() {
                             app.selected_category = Some(app.cursor_position);
                         }
-                    },
+                    }
                     KeyCode::Left => {
                         app.selected_category = None;
-                    },
+                    }
                     _ => {}
                 }
             }
@@ -214,32 +222,36 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
         .border_style(Style::default().fg(Color::Cyan));
 
     let mut content = Vec::new();
-    
+
     content.push(Spans::from(Span::styled(
         "Available script categories:",
         Style::default().fg(Color::Cyan),
     )));
     content.push(Spans::from(""));
-    
+
     for (i, category) in app.categories.iter().enumerate() {
         let is_cursor_here = i == app.cursor_position;
         let is_selected = app.selected_category == Some(i);
-        
+
         let cursor_indicator = if is_cursor_here { "➤ " } else { "  " };
-        
+
         let category_style = if is_selected {
-            Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD)
         } else if is_cursor_here {
-            Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD)
         } else {
             Style::default().fg(Color::Cyan)
         };
-        
+
         content.push(Spans::from(vec![
             Span::styled(cursor_indicator, Style::default().fg(Color::Yellow)),
             Span::styled(format!("{}:", category), category_style),
         ]));
-        
+
         if is_selected {
             if app.scripts[i].is_empty() {
                 content.push(Spans::from(Span::styled(
@@ -255,10 +267,10 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
                 }
             }
         }
-        
+
         content.push(Spans::from(""));
     }
-    
+
     content.push(Spans::from(""));
     content.push(Spans::from(vec![
         Span::styled("↑/↓", Style::default().fg(Color::DarkGray)),
@@ -307,7 +319,7 @@ fn centered_rect(width: u16, height: u16, r: Rect) -> Rect {
 
 pub fn display_script_list_text(script_dir: &Path) -> Result<(), Box<dyn std::error::Error>> {
     println!("\x1b[36mAvailable scripts:\x1b[0m");
-    
+
     let mut categories = Vec::new();
     if let Ok(entries) = fs::read_dir(script_dir) {
         for entry in entries.flatten() {
@@ -319,27 +331,28 @@ pub fn display_script_list_text(script_dir: &Path) -> Result<(), Box<dyn std::er
             }
         }
     }
-    
+
     categories.sort_by(|a, b| a.0.cmp(&b.0));
-    
+
     for (category, path) in categories {
         println!("\x1b[36m{}:\x1b[0m", category);
-        
+
         let mut script_files = Vec::new();
         if let Ok(script_entries) = fs::read_dir(&path) {
             for script_entry in script_entries.flatten() {
                 let script_path = script_entry.path();
-                if script_path.is_file() && 
-                   script_path.extension().and_then(|ext| ext.to_str()) == Some("sh") {
+                if script_path.is_file()
+                    && script_path.extension().and_then(|ext| ext.to_str()) == Some("sh")
+                {
                     if let Some(script_name) = script_path.file_stem().and_then(|n| n.to_str()) {
                         script_files.push(script_name.to_string());
                     }
                 }
             }
         }
-        
+
         script_files.sort();
-        
+
         if script_files.is_empty() {
             println!("  No scripts found in {}", category);
         } else {
@@ -349,6 +362,6 @@ pub fn display_script_list_text(script_dir: &Path) -> Result<(), Box<dyn std::er
         }
         println!();
     }
-    
+
     Ok(())
 }
