@@ -666,28 +666,6 @@ update() {
     esac
 }
 
-show_help() {
-    echo -e "${CYAN}Usage: carch [OPTIONS]${RESET}"
-    echo
-    echo -e "${CYAN}Options:${RESET}"
-    echo -e "${YELLOW}  --help, -h              ${RESET}Show this help message and exit."
-    echo -e "${YELLOW}  --version, -v           ${RESET}Show the program version."
-    echo -e "${YELLOW}  --gen-config            ${RESET}Generate a default configuration file in ~/.config/carch/carch.conf."
-    echo -e "${YELLOW}  --config <conf dir>     ${RESET}Use a specific configuration file to load selected scripts."
-    echo -e "${YELLOW}  -c                      ${RESET}Use the default configuration file to load selected scripts."
-    echo -e "${YELLOW}  --run-script <name>, -r ${RESET}Run the specified script from $SCRIPT_DIR."
-    echo -e "${YELLOW}  --list-scripts, -l      ${RESET}List all available scripts in $SCRIPT_DIR."
-    echo -e "${YELLOW}  --search, -s            ${RESET}Search for scripts by keyword."
-    echo -e "${YELLOW}  --no-preview            ${RESET}Run without displaying script previews in menus (one-time)."
-    echo -e "${YELLOW}  --disable-preview       ${RESET}Permanently disable script previews in menus."
-    echo -e "${YELLOW}  --log                   ${RESET}Enable logging for the current session only."
-    echo -e "${YELLOW}  --enable-logging        ${RESET}Permanently enable logging in the configuration file."
-    echo -e "${YELLOW}  --update                ${RESET}Update Carch using the latest script."
-    echo -e "${YELLOW}  --check-update          ${RESET}Check if a new version of Carch is available."
-    echo -e "${YELLOW}  --uninstall             ${RESET}Uninstall Carch and remove all associated files."
-    echo
-}
-
 list_scripts() {
     echo "Available scripts:"
     
@@ -721,9 +699,6 @@ setup_logging
 
 if [[ $# -gt 0 ]]; then
     case "$1" in
-        --help|-h)
-            show_help
-            ;;
         --version|-v)
             INSTALLED_VERSION=$(get_installed_version)
             if [ "$INSTALLED_VERSION" = "not_installed" ]; then
