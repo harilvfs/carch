@@ -7,6 +7,7 @@ use std::process::Command;
 use tempfile::TempDir;
 
 mod display;
+mod script_list;
 
 static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/scripts");
 const EXECUTABLE_MODE: u32 = 0o755;
@@ -14,9 +15,28 @@ const EXECUTABLE_MODE: u32 = 0o755;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() > 1 && (args[1] == "--help" || args[1] == "-h") {
-        display::display_help()?;
-        return Ok(());
+    if args.len() > 1 {
+        if args[1] == "--help" || args[1] == "-h" {
+            display::display_help()?;
+            return Ok(());
+        }
+
+        if args[1] == "--list-scripts" || args[1] == "-l" {
+            let temp_dir =
+                TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
+            let temp_path = temp_dir.path();
+            extract_and_set_permissions(temp_path)?;
+
+            let modules_dir = temp_path.join("modules");
+            if !modules_dir.exists() || !modules_dir.is_dir() {
+                return Err(
+                    format!("Modules directory not found at {}", modules_dir.display()).into(),
+                );
+            }
+
+            script_list::list_scripts(&modules_dir)?;
+            return Ok(());
+        }
     }
 
     let temp_dir = TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
@@ -42,24 +62,14 @@ fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::erro
     let main_script_path = temp_path.join("carch");
     set_executable(&main_script_path)?;
 
-    let scripts_dir = temp_path.join("scripts");
-    if scripts_dir.exists() && scripts_dir.is_dir() {
-        for entry in fs::read_dir(&scripts_dir)
-            .map_err(|e| format!("Failed to read scripts directory: {}", e))?
-            .flatten()
-        {
-            let path = entry.path();
-            if path.is_file() && path.extension().is_some_and(|ext| ext == "sh") {
-                set_executable(&path)?;
-            }
-        }
-    }
+    make_scripts_executable(temp_path)?;
 
     let preview_link = temp_path.join("preview_scripts");
     if fs::remove_file(&preview_link).is_err() {
         // ignore if the link doesn't exist yet
     }
 
+    let scripts_dir = temp_path.join("scripts");
     std::os::unix::fs::symlink(&scripts_dir, &preview_link)
         .map_err(|e| format!("Failed to create preview symlink: {}", e))?;
 
@@ -75,6 +85,29 @@ fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::erro
     fs::write(&env_file, env_content)
         .map_err(|e| format!("Failed to write environment file: {}", e))?;
     set_executable(&env_file)?;
+
+    Ok(())
+}
+
+fn make_scripts_executable(dir_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    if !dir_path.exists() || !dir_path.is_dir() {
+        return Ok(());
+    }
+
+    for entry in fs::read_dir(dir_path)
+        .map_err(|e| format!("Failed to read directory {}: {}", dir_path.display(), e))?
+        .flatten()
+    {
+        let path = entry.path();
+
+        if path.is_file() {
+            if path.extension().is_some_and(|ext| ext == "sh") {
+                set_executable(&path)?;
+            }
+        } else if path.is_dir() {
+            make_scripts_executable(&path)?;
+        }
+    }
 
     Ok(())
 }
