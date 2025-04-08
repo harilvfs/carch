@@ -11,7 +11,7 @@ const EXECUTABLE_MODE: u32 = 0o755;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
-    
+
     if args.len() > 1 && (args[1] == "--help" || args[1] == "-h") {
         display_help();
         return Ok(());
@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let temp_dir = TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
     let temp_path = temp_dir.path();
     extract_and_set_permissions(temp_path)?;
-    
+
     let script_args = env::args().skip(1);
     let script_path = temp_path.join("carch");
     let status = Command::new(&script_path)
@@ -28,7 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .current_dir(temp_path)
         .status()
         .map_err(|e| format!("Failed to execute {}: {}", script_path.display(), e))?;
-    
+
     std::process::exit(status.code().unwrap_or(1));
 }
 
@@ -38,19 +38,37 @@ fn display_help() {
     println!("\x1b[36mOptions:\x1b[0m");
     println!("\x1b[33m  --help, -h              \x1b[0mShow this help message and exit.");
     println!("\x1b[33m  --version, -v           \x1b[0mShow the program version.");
-    println!("\x1b[33m  --gen-config            \x1b[0mGenerate a default configuration file in ~/.config/carch/carch.conf.");
-    println!("\x1b[33m  --config <conf dir>     \x1b[0mUse a specific configuration file to load selected scripts.");
-    println!("\x1b[33m  -c                      \x1b[0mUse the default configuration file to load selected scripts.");
+    println!(
+        "\x1b[33m  --gen-config            \x1b[0mGenerate a default configuration file in ~/.config/carch/carch.conf."
+    );
+    println!(
+        "\x1b[33m  --config <conf dir>     \x1b[0mUse a specific configuration file to load selected scripts."
+    );
+    println!(
+        "\x1b[33m  -c                      \x1b[0mUse the default configuration file to load selected scripts."
+    );
     println!("\x1b[33m  --run-script <name>, -r \x1b[0mRun the specified script.");
     println!("\x1b[33m  --list-scripts, -l      \x1b[0mList all available scripts.");
     println!("\x1b[33m  --search, -s            \x1b[0mSearch for scripts by keyword.");
-    println!("\x1b[33m  --no-preview            \x1b[0mRun without displaying script previews in menus (one-time).");
-    println!("\x1b[33m  --disable-preview       \x1b[0mPermanently disable script previews in menus.");
-    println!("\x1b[33m  --log                   \x1b[0mEnable logging for the current session only.");
-    println!("\x1b[33m  --enable-logging        \x1b[0mPermanently enable logging in the configuration file.");
+    println!(
+        "\x1b[33m  --no-preview            \x1b[0mRun without displaying script previews in menus (one-time)."
+    );
+    println!(
+        "\x1b[33m  --disable-preview       \x1b[0mPermanently disable script previews in menus."
+    );
+    println!(
+        "\x1b[33m  --log                   \x1b[0mEnable logging for the current session only."
+    );
+    println!(
+        "\x1b[33m  --enable-logging        \x1b[0mPermanently enable logging in the configuration file."
+    );
     println!("\x1b[33m  --update                \x1b[0mUpdate Carch using the latest script.");
-    println!("\x1b[33m  --check-update          \x1b[0mCheck if a new version of Carch is available.");
-    println!("\x1b[33m  --uninstall             \x1b[0mUninstall Carch and remove all associated files.");
+    println!(
+        "\x1b[33m  --check-update          \x1b[0mCheck if a new version of Carch is available."
+    );
+    println!(
+        "\x1b[33m  --uninstall             \x1b[0mUninstall Carch and remove all associated files."
+    );
     println!();
 }
 
@@ -58,10 +76,10 @@ fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::erro
     EMBEDDED_DIR
         .extract(temp_path)
         .map_err(|e| format!("Failed to extract embedded files: {}", e))?;
-    
+
     let main_script_path = temp_path.join("carch");
     set_executable(&main_script_path)?;
-    
+
     let scripts_dir = temp_path.join("scripts");
     if scripts_dir.exists() && scripts_dir.is_dir() {
         for entry in fs::read_dir(&scripts_dir)
@@ -74,15 +92,15 @@ fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::erro
             }
         }
     }
-    
+
     let preview_link = temp_path.join("preview_scripts");
     if fs::remove_file(&preview_link).is_err() {
         // ignore if the link doesn't exist yet
     }
-    
+
     std::os::unix::fs::symlink(&scripts_dir, &preview_link)
         .map_err(|e| format!("Failed to create preview symlink: {}", e))?;
-    
+
     let env_file = temp_path.join("carch_env.sh");
     let env_content = format!(
         "#!/bin/bash\n\
@@ -91,11 +109,11 @@ fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::erro
         temp_path.display(),
         temp_path.display()
     );
-    
+
     fs::write(&env_file, env_content)
         .map_err(|e| format!("Failed to write environment file: {}", e))?;
     set_executable(&env_file)?;
-    
+
     Ok(())
 }
 
