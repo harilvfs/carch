@@ -79,16 +79,17 @@ setup_kitty() {
 }
 
 install_font() {
-    if fzf_confirm "Do you want to install Cascadia Nerd Font Mono?"; then
+    if fzf_confirm "Do you want to install recommended fonts (Cascadia and JetBrains Mono Nerd Fonts)?"; then
         if [ -x "$(command -v pacman)" ]; then
-            echo -e "${CYAN}Installing Cascadia Nerd Font Mono on Arch-based systems...${NC}"
-            sudo pacman -S --needed ttf-cascadia-mono-nerd
+            echo -e "${CYAN}Installing recommended fonts on Arch-based systems...${NC}"
+            sudo pacman -S --needed ttf-cascadia-mono-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono
         elif [ -x "$(command -v dnf)" ]; then
-            echo -e "${CYAN}For Fedora, please download and install Cascadia Nerd Font Mono manually.${NC}"
-            echo -e "${CYAN}Download it from: https://github.com/ryanoasis/nerd-fonts/releases/latest#cascadia-mono${NC}"
-            echo -e "${CYAN}Then, unzip and move the font to the ~/.fonts directory and run 'fc-cache -vf'.${NC}"
+            echo -e "${CYAN}For Fedora, please download and install the fonts manually.${NC}"
+            echo -e "${CYAN}Download Cascadia Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#cascadia-mono${NC}"
+            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#jetbrains-mono${NC}"
+            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.fonts directory and run 'fc-cache -vf'.${NC}"
         else
-            echo -e "${RED}Unsupported package manager. Please install Cascadia Nerd Font Mono manually.${NC}"
+            echo -e "${RED}Unsupported package manager. Please install the fonts manually.${NC}"
         fi
     else
         echo -e "${CYAN}Skipping font installation.${NC}"
