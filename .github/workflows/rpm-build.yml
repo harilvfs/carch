@@ -94,7 +94,7 @@ jobs:
           echo "RELEASE_TAG=$TAG_NAME" >> $GITHUB_ENV
           
       - name: Upload RPM to release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*.rpm
           tag_name: ${{ env.RELEASE_TAG }}
