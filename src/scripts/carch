@@ -666,30 +666,6 @@ update() {
     esac
 }
 
-list_scripts() {
-    echo "Available scripts:"
-    
-    local categories=()
-    while IFS= read -r -d '' dir; do
-        categories+=("$(basename "$dir")")
-    done < <(find "$SCRIPT_DIR" -mindepth 1 -maxdepth 1 -type d -print0)
-    
-    for category in "${categories[@]}"; do
-        echo -e "${CYAN}$category:${RESET}"
-        
-        local script_files=()
-        while IFS= read -r -d '' script; do
-            script_files+=("$(basename "$script" .sh)")
-        done < <(find "$SCRIPT_DIR/$category" -name "*.sh" -print0)
-        
-        if [ ${#script_files[@]} -eq 0 ]; then
-            echo "  No scripts found in $category"
-        else
-            printf "  - %s\n" "${script_files[@]}"
-        fi
-    done
-}
-
 exit_with_log_message() {
     log_message "INFO" "Exiting Carch. Logs saved to: ${LOG_FILE}"
     exit 0
@@ -733,9 +709,6 @@ if [[ $# -gt 0 ]]; then
                 echo "Error: --run-script requires a script name."
                 exit 1
             fi
-            ;;
-        --list-scripts|-l)
-            list_scripts
             ;;
         --search|-s)
             check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
