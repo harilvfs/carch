@@ -620,28 +620,25 @@ run_script_direct() {
     local tmp_script_path="$TMP_DIR/$(basename "$script_path")_$(date +%s).sh"
 
     if [[ -f "$full_script_path" ]]; then
-        log_message "INFO" "Starting script: ${script_path}"
-        echo -e "${YELLOW}Running script: ${script_path}${RESET}"
+        log_message "INFO" "Starting script: ${script_path}" > /dev/null 2>&1
         
         cp "$full_script_path" "$tmp_script_path"
         chmod +x "$tmp_script_path"
         
         if bash "$tmp_script_path"; then
-            echo -e "${GREEN}Script '${script_path}' completed successfully.${RESET}"
-            log_message "SUCCESS" "Script '${script_path}' completed successfully."
+            log_message "SUCCESS" "Script '${script_path}' completed successfully." > /dev/null 2>&1
         else
-            echo -e "${YELLOW}Script '${script_path}' encountered an error.${RESET}"
-            log_message "ERROR" "Script '${script_path}' encountered an error."
+            log_message "ERROR" "Script '${script_path}' encountered an error." > /dev/null 2>&1
         fi
         
         rm -f "$tmp_script_path"
     else
-        echo -e "${YELLOW}Error: Script '${script_path}' not found!${RESET}"
-        log_message "ERROR" "Script '${script_path}' not found."
+        log_message "ERROR" "Script '${script_path}' not found." > /dev/null 2>&1
     fi
 
-    echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
-    log_message "INFO" "Logs saved after running script: ${script_path}"
+    log_message "INFO" "Logs saved after running script: ${script_path}" > /dev/null 2>&1
+
+    clear
 }
 
 update() {
