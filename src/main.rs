@@ -51,7 +51,7 @@ fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::erro
 
     let preview_link = temp_path.join("preview_scripts");
     if fs::remove_file(&preview_link).is_err() {
-    
+        // ignore if the link doesn't exist yet
     }
     std::os::unix::fs::symlink(&scripts_dir, &preview_link)
         .map_err(|e| format!("Failed to create preview symlink: {}", e))?;
