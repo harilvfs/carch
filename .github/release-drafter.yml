@@ -22,14 +22,10 @@ categories:
   - title: '🛠️ Build'
     labels:
       - 'build'
+      - 'dependencies'
   - title: '🧪 Test'
     labels:
       - 'test'
-  - title: '🧰 Chore'
-    labels:
-      - 'chore'
-      - 'maintenance'
-      - 'dependencies'
   - title: '📝 Remove'
     labels:
       - 'remove'
@@ -42,7 +38,9 @@ categories:
   - title: '📖 Docs'
     labels:
       - 'documentation'
-
+  - title: 'Other Changes'
+    labels:
+      - "*"
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' 
 version-resolver:
@@ -57,6 +55,5 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## Changes
 
   $CHANGES
