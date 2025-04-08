@@ -62,12 +62,12 @@ Require sh
 
 Set Shell "bash"
 Set FontFamily "JetBrainsMono Nerd Font"
-Set FontSize 24
+Set FontSize 25
 Set Width 1920
 Set Height 1080
 Set TypingSpeed 100ms
 
-Sleep 3s
+Sleep 1s
 
 Type "carch" Sleep 3s  Enter
 
@@ -83,4 +83,12 @@ Sleep 4s
 
 Type@200ms "cancel" Sleep 3s Enter
 
-Sleep 3s
+Sleep 2s
+
+Type "carch -h" Sleep 2s  Enter
+
+Sleep 5s
+
+Type "q"
+
+Sleep 2s
