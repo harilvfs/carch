@@ -678,7 +678,6 @@ if [[ $# -gt 0 ]]; then
             fi
             ;;
         --search|-s)
-            check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
             search_scripts "direct"
             ;;
         --no-preview)
