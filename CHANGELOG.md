@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.1](https://github.com/harilvfs/carch/compare/v4.2.7...v4.3.1) (2025-04-09)
+
+### Changed
+
+- Tui For List Scripts Command https://github.com/harilvfs/carch/pull/379
+- Creating a TUI to Display Help INFO https://github.com/harilvfs/carch/pull/377
+- Update Dependencies Handling https://github.com/harilvfs/carch/pull/366
+- https://github.com/harilvfs/carch/pull/364
+
+### Added 
+
+- Add timer to log carch execution [ Only In Log Mode] https://github.com/harilvfs/carch/pull/367
+- Added Tab Config [kitty] from [monoira/kitty-tabs](https://github.com/monoira/kitty-tabs)
+
+### Fixed
+
+- Known Bug Fixes Check https://github.com/harilvfs/carch/pull/369 https://github.com/harilvfs/carch/pull/368 https://github.com/harilvfs/carch/pull/363 
+
+### Remove
+
+- No Dependencies Checkup In Main Script fc27ca763e6e07598c7253851b14c4d31fd75f1d 
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.1).
+
+
 ## [4.2.7](https://github.com/harilvfs/carch/compare/v4.2.6...v4.2.7) (2025-04-04)
 
 This might be the last Carch update in terms of new features. But if any user (or I) finds a bug, it will be fixed in the next release.
