@@ -334,35 +334,6 @@ prompt() {
     read -r
 }
 
-check_dependencies() {
-    local dependencies=("$@")
-    local missing=()
-    
-    for dep in "${dependencies[@]}"; do
-        if ! command -v "$dep" &>/dev/null; then
-            missing+=("$dep")
-        fi
-    done
-    
-    if [ ${#missing[@]} -gt 0 ]; then
-        echo -e "${RED}Missing dependencies: ${missing[*]}${RESET}"
-        
-        echo -e "${YELLOW}You can install these with:${RESET}"
-        case "$(detect_distro)" in
-            arch)
-                echo -e "sudo pacman -S ${missing[*]}"
-                ;;
-            fedora)
-                echo -e "sudo dnf install ${missing[*]}"
-                ;;
-        esac
-        
-        return 1
-    fi
-    
-    return 0
-}
-
 search_scripts() {
     clear
     local direct_mode="$1"
@@ -511,7 +482,6 @@ timing_end() {
 
 display_scripts_menu() {
     timing_start
-    check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
 
     if [[ "$1" == "config" ]]; then
         load_selected_scripts
@@ -750,6 +720,5 @@ if [[ $# -gt 0 ]]; then
             ;;
     esac
 else
-    check_dependencies "fzf" "bash" "curl" "sed" "grep" || exit 1
     display_scripts_menu
 fi
