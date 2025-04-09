@@ -1,5 +1,5 @@
 Name:           carch
-Version:        4.2.7
+Version:        4.3.1
 Release:        1%{?dist}
 Summary:        An automated script for quick & easy Linux system setup (Arch & Fedora)
 License:        GPL
@@ -80,7 +80,11 @@ done
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
-* Fri Apr 04 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.2.7-1
-- Reduce Rust code and improve performance
-- Simplifying the banner
-- Removing Version Text From Menu
+* Wed Apr 09 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.3.1-1
+- Tui For List Scripts Command
+- Creating a TUI to Display Help Info
+- Add timer to log carch execution
+- Simplifying hardcoded parts
+- Update Dependencies Handling
+- Many Bug Fixes
+- Cleanup Main Carch Script
