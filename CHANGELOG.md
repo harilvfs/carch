@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Tui For List Scripts Command https://github.com/harilvfs/carch/pull/379
 - Creating a TUI to Display Help INFO https://github.com/harilvfs/carch/pull/377
 - Update Dependencies Handling https://github.com/harilvfs/carch/pull/366
-- https://github.com/harilvfs/carch/pull/364
+- Simplifying hardcoded parts https://github.com/harilvfs/carch/pull/364
 
 ### Added 
 
@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
 
 ### Remove
 
-- No Dependencies Checkup In Main Script fc27ca763e6e07598c7253851b14c4d31fd75f1d 
+- No Dependencies Checkup In Main Script https://github.com/harilvfs/carch/commit/53eaf3d47031549b86c527e72e9e5a33f1f74abb https://github.com/harilvfs/carch/commit/fc27ca763e6e07598c7253851b14c4d31fd75f1d
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.1).
 
