@@ -2,7 +2,7 @@
  <img src="./assets/icons/product_logo_128.png" width="100" />
 </div>
 
-## Carch
+# Carch
 A Simple Script That May Help You Automating Linux System Setups.
 
 <details>
