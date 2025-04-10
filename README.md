@@ -47,6 +47,10 @@ Carch supports some commands too. You can view them by running:
 
 You can find the full roadmap in the Carch [documentation](https://carch-org.github.io/docs/project/roadmap.html)
 
+## Documentation
+
+For a better overview of Carch, you can find the fully readable docs [here](https://carch-org.github.io/docs/).
+
 ## Contributing
 
 PRs & any type of contributions are welcome. Before contributing, first read the contributing [guide](https://carch-org.github.io/docs/project/contributing.html)
