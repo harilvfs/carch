@@ -58,129 +58,8 @@ log_message() {
     local log_type="$1"
     local message="$2"
     
-    if [[ -n "$CARCH_DEBUG" ]] || [[ "$LOG_MODE" == "true" ]] || is_logging_enabled; then
+    if [[ -n "$CARCH_DEBUG" ]] || [[ "$LOG_MODE" == "true" ]]; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') [$log_type] $message" >>"$LOG_FILE"
-    fi
-}
-
-is_logging_enabled() {
-    if [[ -f "$CONFIG_FILE" ]]; then
-        if grep -q "^LOGGING_ENABLED=true" "$CONFIG_FILE" 2>/dev/null; then
-            return 0
-        fi
-    fi
-    
-    return 1
-}
-
-enable_logging() {
-    mkdir -p "$CONFIG_DIR"
-    
-    if [[ -f "$CONFIG_FILE" ]]; then
-        if grep -q "^LOGGING_ENABLED=true" "$CONFIG_FILE"; then
-            echo -e "${YELLOW}Logging is already enabled in $CONFIG_FILE${RESET}"
-            echo -e "${CYAN}To disable logging, edit $CONFIG_FILE and change LOGGING_ENABLED=true to LOGGING_ENABLED=false${RESET}"
-            return 0
-        fi
-        
-        if grep -q "^LOGGING_ENABLED=false" "$CONFIG_FILE"; then
-            sed -i 's/^LOGGING_ENABLED=false/LOGGING_ENABLED=true/' "$CONFIG_FILE"
-            echo -e "${GREEN}Logging has been enabled in $CONFIG_FILE${RESET}"
-            echo -e "${CYAN}To disable logging, edit $CONFIG_FILE and change LOGGING_ENABLED=true to LOGGING_ENABLED=false${RESET}"
-            return 0
-        fi
-        
-        echo -e "\n# Logging settings\nLOGGING_ENABLED=true" >> "$CONFIG_FILE"
-        echo -e "${GREEN}Logging has been enabled in $CONFIG_FILE${RESET}"
-        echo -e "${CYAN}To disable logging, edit $CONFIG_FILE and change LOGGING_ENABLED=true to LOGGING_ENABLED=false${RESET}"
-    else
-        generate_config
-        sed -i 's/^LOGGING_ENABLED=false/LOGGING_ENABLED=true/' "$CONFIG_FILE"
-        echo -e "${GREEN}Logging has been enabled in newly created $CONFIG_FILE${RESET}"
-        echo -e "${CYAN}To disable logging, edit $CONFIG_FILE and change LOGGING_ENABLED=true to LOGGING_ENABLED=false${RESET}"
-    fi
-}
-
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        DISTRO="arch"
-        echo -e "${YELLOW}Arch Linux${RESET}"
-    elif command -v dnf &> /dev/null; then
-        DISTRO="fedora"
-        echo -e "${YELLOW}Fedora${RESET}"
-    else
-        DISTRO="unknown"
-        echo -e "${RED}Unknown${RESET}"
-    fi
-}
-
-uninstall_carch() {
-    detect_distro
-    
-    case "$DISTRO" in
-        fedora)
-            echo "Distro is Fedora"
-            echo -e "${YELLOW}Checking if Carch is installed via RPM...${RESET}"
-            
-            if rpm -q carch &>/dev/null; then
-                echo -e "${YELLOW}Carch is installed via RPM. Removing package...${RESET}"
-                sudo dnf remove -y carch
-                echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
-                log_message "INFO" "Carch uninstalled successfully via DNF."
-            else
-                echo -e "${RED}Carch RPM package not found on the system.${RESET}"
-                log_message "WARNING" "Carch not found during uninstall attempt."
-            fi
-            ;;
-        arch)
-            echo "Distro is Arch"
-            if command -v paru &>/dev/null || command -v yay &>/dev/null; then
-                echo -e "${YELLOW}AUR helper found. Checking Carch package...${RESET}"
-                if pacman -Qs carch &>/dev/null; then
-                    AUR_PACKAGE=$(pacman -Q carch | awk '{print $1}')
-                    case "$AUR_PACKAGE" in
-                        carch-git)
-                            echo "Uninstalling carch-git..."
-                            yay -R carch-git --noconfirm || paru -R carch-git --noconfirm
-                            ;;
-                        carch)
-                            echo "Uninstalling carch..."
-                            yay -R carch --noconfirm || paru -R carch --noconfirm
-                            ;;
-                        *)
-                            echo "Unknown Carch package installed: $AUR_PACKAGE"
-                            ;;
-                    esac
-                    echo -e "${GREEN}Carch has been successfully uninstalled.${RESET}"
-                    log_message "INFO" "Carch uninstalled successfully from Arch Linux."
-                else
-                    echo "Carch package not found in the system."
-                    log_message "WARNING" "Carch not found during uninstall attempt on Arch Linux."
-                fi
-            else
-                echo -e "${RED}No AUR helper found. To uninstall Carch, please install an AUR helper like paru or yay.${RESET}"
-                log_message "ERROR" "No AUR helper found for uninstalling Carch on Arch Linux."
-            fi
-            ;;
-        *)
-            echo -e "${RED}Unsupported Distribution: $DISTRO${RESET}"
-            log_message "ERROR" "Unsupported distribution during uninstall: $DISTRO"
-            exit 1
-            ;;
-    esac
-    
-    if [[ -d "$CONFIG_DIR" ]]; then
-        echo -e "${YELLOW}Would you like to remove the Carch configuration directory ($CONFIG_DIR)?${RESET}"
-        read -rp "Remove configuration directory? [y/N]: " remove_config
-        
-        if [[ "$remove_config" =~ ^[Yy]$ ]]; then
-            rm -rf "$CONFIG_DIR"
-            echo -e "${GREEN}Configuration directory removed.${RESET}"
-            log_message "INFO" "Configuration directory removed during uninstallation."
-        else
-            echo -e "${YELLOW}Configuration directory kept.${RESET}"
-            log_message "INFO" "Configuration directory kept during uninstallation."
-        fi
     fi
 }
 
@@ -202,14 +81,6 @@ generate_config() {
 terminal/Alacritty
 terminal/Kitty
 system/Packages
-
-# Display settings
-# Set DISABLE_PREVIEW=true to disable script previews in menus
-DISABLE_PREVIEW=false
-
-# Logging settings
-# Set LOGGING_ENABLED=true to enable permanent logging
-LOGGING_ENABLED=false
 EOL
         echo -e "${GREEN}Default configuration file created at $CONFIG_FILE.${RESET}"
         log_message "INFO" "Generated default configuration file."
@@ -219,43 +90,9 @@ EOL
     fi
 }
 
-disable_preview() {
-    mkdir -p "$CONFIG_DIR"
-    
-    if [[ -f "$CONFIG_FILE" ]]; then
-        if grep -q "^DISABLE_PREVIEW=true" "$CONFIG_FILE"; then
-            echo -e "${YELLOW}Preview is already disabled in $CONFIG_FILE${RESET}"
-            echo -e "${CYAN}To re-enable previews, edit $CONFIG_FILE and change DISABLE_PREVIEW=true to DISABLE_PREVIEW=false${RESET}"
-            return 0
-        fi
-        
-        if grep -q "^DISABLE_PREVIEW=false" "$CONFIG_FILE"; then
-            sed -i 's/^DISABLE_PREVIEW=false/DISABLE_PREVIEW=true/' "$CONFIG_FILE"
-            echo -e "${GREEN}Preview has been disabled in $CONFIG_FILE${RESET}"
-            echo -e "${CYAN}To re-enable previews, edit $CONFIG_FILE and change DISABLE_PREVIEW=true to DISABLE_PREVIEW=false${RESET}"
-            return 0
-        fi
-        
-        echo -e "\n# Display settings\nDISABLE_PREVIEW=true" >> "$CONFIG_FILE"
-        echo -e "${GREEN}Preview has been disabled in $CONFIG_FILE${RESET}"
-        echo -e "${CYAN}To re-enable previews, edit $CONFIG_FILE and change DISABLE_PREVIEW=true to DISABLE_PREVIEW=false${RESET}"
-    else
-        generate_config
-        sed -i 's/^DISABLE_PREVIEW=false/DISABLE_PREVIEW=true/' "$CONFIG_FILE"
-        echo -e "${GREEN}Preview has been disabled in newly created $CONFIG_FILE${RESET}"
-        echo -e "${CYAN}To re-enable previews, edit $CONFIG_FILE and change DISABLE_PREVIEW=true to DISABLE_PREVIEW=false${RESET}"
-    fi
-}
-
 is_preview_enabled() {
     if [[ "$NO_PREVIEW" == "true" ]]; then
         return 1
-    fi
-    
-    if [[ -f "$CONFIG_FILE" ]]; then
-        if grep -q "^DISABLE_PREVIEW=true" "$CONFIG_FILE" 2>/dev/null; then
-            return 1
-        fi
     fi
     
     return 0
@@ -290,18 +127,16 @@ load_selected_scripts() {
         while IFS= read -r script_name; do
             script_name=$(echo "$script_name" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
             
-            [[ "$script_name" =~ ^#.*$ || -z "$script_name" || 
-               "$script_name" =~ ^LOGGING_ENABLED= || 
-               "$script_name" =~ ^DISABLE_PREVIEW= ]] && continue
+            [[ "$script_name" =~ ^#.*$ || -z "$script_name" ]] && continue
             
             [[ "$script_name" == */* ]] && scripts+=("$script_name")
         done < "$CONFIG_FILE"
     else
         echo -e "${YELLOW}Configuration file not found. Loading all scripts.${RESET}"
+        sleep 0.5
         log_message "WARNING" "Configuration file not found. Loading all scripts."
         load_all_scripts
     fi
-    scripts+=("Cancel")
 }
 
 cache_scripts() {
@@ -326,98 +161,12 @@ load_all_scripts() {
         scripts+=("${category}/${script_name}")
     done < "$SCRIPTS_CACHE_FILE"
     
-    scripts+=("Cancel")
+    scripts+=("Quit")
 }
 
 prompt() {
     echo -e "${YELLOW}Press Enter to return to the menu...${RESET}"
     read -r
-}
-
-search_scripts() {
-    clear
-    local direct_mode="$1"
-
-    local preview_cmd=""
-    local preview_window=""
-    if is_preview_enabled; then
-        preview_cmd="cat $SCRIPT_DIR/{}.sh 2>/dev/null | fold -w 70 || echo 'No preview available'"
-        preview_window="--preview-window=right:60%"
-    fi
-    
-    available_scripts=()
-    while IFS= read -r -d '' file; do
-        category=$(dirname "$file" | xargs basename)
-        script_name=$(basename "${file}" .sh)
-        available_scripts+=("${category}/${script_name}")
-    done < <(find "$SCRIPT_DIR" -type f -name '*.sh' -print0)
-    
-    while true; do
-        echo -e "\n${CYAN}Search Scripts: Press Esc To Exit${RESET}"
-        echo -e "${YELLOW}Type to search available scripts...${RESET}"
-        
-        selected_script=$(printf "%s\n" "${available_scripts[@]}" | fzf --height 50% --border \
-               --prompt="Search scripts: " \
-               ${preview_cmd:+--preview="$preview_cmd"} \
-               ${preview_window})
-        
-        if [[ -n "$selected_script" ]]; then
-            local full_script_path="$SCRIPT_DIR/${selected_script}.sh"
-            if [[ -f "$full_script_path" ]]; then
-                log_message "INFO" "Starting script: ${selected_script}"
-                echo -e "${YELLOW}Running script: ${selected_script}${RESET}"
-                
-                ( bash "$full_script_path" )
-                script_exit_code=$?
-                
-                if [[ $script_exit_code -eq 0 ]]; then
-                    echo -e "${GREEN}Script '${selected_script}' completed successfully.${RESET}"
-                    log_message "SUCCESS" "Script '${selected_script}' completed successfully."
-                else
-                    echo -e "${YELLOW}Script '${selected_script}' encountered an error.${RESET}"
-                    log_message "ERROR" "Script '${selected_script}' encountered an error."
-                fi
-                
-                echo -e "${YELLOW}Logs have been saved to: ${LOG_FILE}${RESET}"
-                log_message "INFO" "Logs saved after running script: ${selected_script}"
-                
-                if [[ "$direct_mode" == "direct" ]]; then
-                    read -rp "Press Enter to continue or type 'q' to quit: " user_choice
-                    if [[ "$user_choice" == "q" ]]; then
-                        clear
-                        exit 0
-                    else
-                        clear
-                        continue
-                    fi
-                else
-                    read -p "Press Enter to return to script search... " 
-                    clear
-                    continue
-                fi
-            else
-                echo -e "${YELLOW}Error: Script '${selected_script}' not found in $SCRIPT_DIR!${RESET}"
-                log_message "ERROR" "Script '${selected_script}' not found in $SCRIPT_DIR."
-                sleep 2
-                clear
-                continue
-            fi
-        else
-            if [[ "$direct_mode" != "direct" ]]; then
-                prompt
-                break
-            else
-                read -rp "Press Enter to return to script search or type 'q' to quit: " user_choice
-                if [[ "$user_choice" == "q" ]]; then
-                    clear
-                    exit 0
-                else
-                    clear
-                    continue
-                fi
-            fi
-        fi
-    done
 }
 
 get_latest_version() {
@@ -480,6 +229,63 @@ timing_end() {
   log_message "PERFORMANCE" "$operation took $TIMEDIFF seconds"
 }
 
+detect_distro() {
+    if command -v pacman &> /dev/null; then
+        DISTRO="arch"
+        echo -e "${YELLOW}Arch Linux${RESET}"
+    elif command -v dnf &> /dev/null; then
+        DISTRO="fedora"
+        echo -e "${YELLOW}Fedora${RESET}"
+    else
+        DISTRO="unknown"
+        echo -e "${RED}Unknown${RESET}"
+    fi
+}
+
+uninstall_carch() {
+    detect_distro
+    
+    case "$DISTRO" in
+        fedora)
+            echo "Distro is Fedora"
+            echo -e "${YELLOW}Checking if Carch is installed...${RESET}"
+            
+            if rpm -q carch &>/dev/null; then
+                sudo dnf remove -y carch
+                log_message "INFO" "Carch uninstalled successfully via DNF."
+            else
+                echo -e "${RED}Carch RPM package not found on the system.${RESET}"
+                log_message "WARNING" "Carch not found during uninstall attempt."
+            fi
+            ;;
+        arch)
+            echo "Distro is Arch"
+            echo -e "${YELLOW}Checking if Carch is installed...${RESET}"
+
+            if pacman -Q carch &>/dev/null; then
+                sudo pacman -R carch --noconfirm
+                log_message "INFO" "Carch uninstalled successfully from Arch Linux."
+            elif pacman -Q carch-git &>/dev/null; then
+                sudo pacman -R carch-git --noconfirm
+                log_message "INFO" "Carch-git uninstalled successfully from Arch Linux."
+            else
+                echo -e "${RED}Carch package not found on the system.${RESET}"
+                log_message "WARNING" "Carch not found during uninstall attempt on Arch Linux."
+            fi
+            ;;
+        *)
+            echo -e "${RED}Unsupported Distribution: $DISTRO${RESET}"
+            log_message "ERROR" "Unsupported distribution during uninstall: $DISTRO"
+            exit 1
+            ;;
+    esac
+    
+    if [[ -d "$CONFIG_DIR" ]]; then
+        rm -rf "$CONFIG_DIR"
+        log_message "INFO" "Configuration directory removed during uninstallation."
+    fi
+}
+
 display_scripts_menu() {
     timing_start
 
@@ -487,8 +293,6 @@ display_scripts_menu() {
         load_selected_scripts
     else
         load_all_scripts
-        is_logging_enabled > /dev/null 2>&1
-        is_preview_enabled > /dev/null 2>&1
     fi
     
     TERM_WIDTH=$(tput cols 2>/dev/null || echo 80)
@@ -517,36 +321,34 @@ display_scripts_menu() {
         
         echo -e "${LAVENDER}Select a script to run:${RESET}"
         
-        cancel_exists=0
+        quit_exists=0
         for script in "${scripts[@]}"; do
-            if [[ "$script" == "Cancel" ]]; then
-                cancel_exists=1
+            if [[ "$script" == "Quit" ]]; then
+                quit_exists=1
                 break
             fi
         done
         
-        if [[ $cancel_exists -eq 0 ]]; then
-            all_options=("${scripts[@]}" "Cancel")
+        if [[ $quit_exists -eq 0 ]]; then
+            all_options=("${scripts[@]}" "Quit")
         else
             all_options=("${scripts[@]}")
         fi
         
         selected_option=$(printf "%s\n" "${all_options[@]}" | fzf --height 60% --border \
-            --prompt="Select a script: " \
+            --prompt="Search a script or type 'quit' to exit: " \
             --header="Navigate with arrow keys, Enter to select" \
             ${preview_cmd:+--preview="$preview_cmd"} \
             ${preview_window})
         
         if [[ -z "$selected_option" ]]; then
             continue
-        elif [[ "$selected_option" == "Cancel" ]]; then
+        elif [[ "$selected_option" == "Quit" ]]; then
             clear
-            log_message "INFO" "User exited the main menu."
-            exit_with_log_message
+            exit 0
         else
             run_script "$selected_option"
         fi
-    timing_end "display_scripts_menu"
     done
 }
 
@@ -633,11 +435,6 @@ update() {
     esac
 }
 
-exit_with_log_message() {
-    log_message "INFO" "Exiting Carch. Logs saved to: ${LOG_FILE}"
-    exit 0
-}
-
 setup_logging
 
 if [[ $# -gt 0 ]]; then
@@ -657,15 +454,6 @@ if [[ $# -gt 0 ]]; then
         --gen-config)
             generate_config
             ;;
-        --config)
-            if [[ -n $2 ]]; then
-                CONFIG_FILE="$2"
-                display_scripts_menu "config"
-            else
-                echo "Error: --config requires a file path."
-                exit 1
-            fi
-            ;;
         -c)
             display_scripts_menu "config"
             ;;
@@ -677,9 +465,6 @@ if [[ $# -gt 0 ]]; then
                 exit 1
             fi
             ;;
-        --search|-s)
-            search_scripts "direct"
-            ;;
         --no-preview)
             NO_PREVIEW="true"
             shift
@@ -689,9 +474,6 @@ if [[ $# -gt 0 ]]; then
                 display_scripts_menu
             fi
             ;;
-        --disable-preview)
-            disable_preview
-            ;;
         --log)
             LOG_MODE="true"
             shift
@@ -700,9 +482,6 @@ if [[ $# -gt 0 ]]; then
             else
                 display_scripts_menu
             fi
-            ;;
-        --enable-logging)
-            enable_logging
             ;;
         --check-update)
             check_carch_update

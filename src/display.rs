@@ -145,13 +145,6 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
         ]),
         Spans::from(vec![
             Span::styled(
-                "  --config <conf dir>     ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Use a specific configuration file to load selected scripts."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
                 "  -c                      ",
                 Style::default().fg(Color::Yellow),
             ),
@@ -173,24 +166,10 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
         ]),
         Spans::from(vec![
             Span::styled(
-                "  --search, -s            ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Search for scripts by keyword."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
                 "  --no-preview            ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Run without displaying script previews in menus (one-time)."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
-                "  --disable-preview       ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Permanently disable script previews in menus."),
+            Span::raw("Run without displaying script previews in menus."),
         ]),
         Spans::from(vec![
             Span::styled(
@@ -198,13 +177,6 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("Enable logging for the current session only."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
-                "  --enable-logging        ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Permanently enable logging in the configuration file."),
         ]),
         Spans::from(vec![
             Span::styled(
@@ -286,25 +258,15 @@ pub fn display_help_text() {
         "\x1b[33m  --gen-config            \x1b[0mGenerate a default configuration file in ~/.config/carch/carch.conf."
     );
     println!(
-        "\x1b[33m  --config <conf dir>     \x1b[0mUse a specific configuration file to load selected scripts."
-    );
-    println!(
         "\x1b[33m  -c                      \x1b[0mUse the default configuration file to load selected scripts."
     );
     println!("\x1b[33m  --run-script <name>, -r \x1b[0mRun the specified script.");
     println!("\x1b[33m  --list-scripts, -l      \x1b[0mList all available scripts.");
-    println!("\x1b[33m  --search, -s            \x1b[0mSearch for scripts by keyword.");
     println!(
-        "\x1b[33m  --no-preview            \x1b[0mRun without displaying script previews in menus (one-time)."
-    );
-    println!(
-        "\x1b[33m  --disable-preview       \x1b[0mPermanently disable script previews in menus."
+        "\x1b[33m  --no-preview            \x1b[0mRun without displaying script previews in menus."
     );
     println!(
         "\x1b[33m  --log                   \x1b[0mEnable logging for the current session only."
-    );
-    println!(
-        "\x1b[33m  --enable-logging        \x1b[0mPermanently enable logging in the configuration file."
     );
     println!("\x1b[33m  --update                \x1b[0mUpdate Carch using the latest script.");
     println!(
