@@ -2,7 +2,7 @@
 name = "carch"
 version = "4.3.1"
 edition = "2024"
-description = "An automated script for quick & easy Linux system setup (Arch & Fedora) 🧩."
+description = "A Simple Script to Make Linux System Setups Easier 🧩"
 documentation = "https://carch-org.github.io/docs"
 homepage = "https://github.com/harilvfs/carch"
 readme = "README.md"
