@@ -7,9 +7,9 @@
 </div>
 
 ## Carch
-
+A Simple Script That May Help You Automating Linux System Setups.
 <div align="right">
-A Simple Script That May Help You Automating Linux System Setups. <img src="./assets/icons/product_logo_128.png" width="100" />
+ <img src="./assets/icons/product_logo_128.png" width="100" />
 </div>
 
 
