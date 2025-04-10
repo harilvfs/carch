@@ -1,4 +1,4 @@
-name: Auto Assign PR
+name: Assign PR
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
   auto-assign:
     runs-on: ubuntu-latest
     steps:
-      - name: Assign PR to harilvfs
+      - name: Assign PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
