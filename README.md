@@ -35,11 +35,41 @@ Yeah it support arch and fedora based distros too. But likely if you stuck in so
 
 ### Commands
 
-Carch support some commands too like you can view them by running 
+Carch support some commands too, like you can view them by running 
 
 ```bash
 carch --help
 ```
+
+### Roadmap 
+
+You can found the full roadmap in carch [documentation](https://carch-org.github.io/docs/project/roadmap.html)
+
+### Contributing
+
+Prs & any type of contribution are welcome. Before contributing first read contributing [guide](https://carch-org.github.io/docs/project/contributing.html)
+
+### Code of Conduct
+
+We make everyone a welcoming environment for using carch as well as contributing or any other stuff. So make sure to follow our [code of conduct](https://carch-org.github.io/docs/project/codeofconduct.html)
+
+### Contributors
+
+We thank everyone who has contributed carch from various ways as reporting bugs or giving any feedback for improveemnt or any contributions on carch through prs
+
+[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
+
+### Inspiration
+
+Like wise this project has been created as casual bash script as just i am tinkering here and there on scripting. Then just after sometime i think why not make this script that may be useful to me or anyother who want to use this. 
+
+my main inspiration to shape this project is 
+
+- **[ChrisTitusTech `linutil` project](https://github.com/ChrisTitusTech/linutil/)**
+- **[ml4w](https://github.com/mylinuxforwork) ml4w scripting logic is insanly good i just get many ideas from him
+- As well as some minor and many ideas from many people's ..
+
+Yeah that it's about carch as it is licenced under mit you are free to use at your own. if you like my work of if anywise carch has help you give a star will be the big support for me thank you..
 
 <div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg" width="800" />
