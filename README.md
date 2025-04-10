@@ -1,3 +1,5 @@
+[carch](./assets/icons/product_logo_128.png)
+
 ## Carch
 
 A Simple Script That May Help You Automating Linux System Setups.
