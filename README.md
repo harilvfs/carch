@@ -77,9 +77,7 @@ My main inspiration to shape this project is:
 
 > ## Reach Me  
 > Got a question or feedback? Hit me up via:  
-> [![Telegram](https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true)](https://t.me/carchx)
-> [![Discord](https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true)](https://discord.com/invite/8NJWstnUHd)
-> [![Email](https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true)](mailto:harilvfs@chalisehari.com.np)
+> [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
 
 Yeah, that's it about Carch. As it is licensed under MIT, you are free to use it as you like. If you like my work or if in any way Carch has helped you, giving a star would be a huge support for me. Thank you!
