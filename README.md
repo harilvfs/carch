@@ -75,15 +75,12 @@ My main inspiration to shape this project is:
 - **[ml4w](https://github.com/mylinuxforwork)** — ml4w's scripting logic is insanely good. I got many ideas from him.
 - As well as some minor and many ideas from many people..
 
-## Reach me
+> ## Reach Me  
+> Got a question or feedback? Hit me up via:  
+> [![Telegram](https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true)](https://t.me/carchx)
+> [![Discord](https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true)](https://discord.com/invite/8NJWstnUHd)
+> [![Email](https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true)](mailto:harilvfs@chalisehari.com.np)
 
-Any queries or concerns? Feel free to write about them on 
-
-<a href="https://t.me/carchx" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
-<a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
-<a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail Hari" width="45px" /></a>
-<br><br>
-[![Discord](https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29)](https://discord.com/invite/8NJWstnUHd)
 
 Yeah, that's it about Carch. As it is licensed under MIT, you are free to use it as you like. If you like my work or if in any way Carch has helped you, giving a star would be a huge support for me. Thank you!
 
