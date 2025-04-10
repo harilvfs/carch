@@ -1,7 +1,3 @@
-<div align="center">
- <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/assets/icons/product_logo_128.png" width="100" />
-</div>
-
 # Carch
 A Simple Script That May Help You Automate Linux System Setups.
 
