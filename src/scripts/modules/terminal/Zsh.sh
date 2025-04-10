@@ -2,8 +2,6 @@
 
 # Configures a stylish Zsh prompt with added functionalities like syntax highlighting, auto-completion, and custom themes for a more efficient shell experience.
 
-sudo -v
-
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 CYAN="\033[1;36m"
