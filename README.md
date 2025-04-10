@@ -2,13 +2,24 @@
  <img src="./assets/icons/product_logo_128.png" width="100" />
 </div>
 
-
 ## Carch
 A Simple Script That May Help You Automating Linux System Setups.
 
+<div align="center">
+
+<details>
+<summary><strong>Preview 👀</strong></summary>
+
+![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
+  
+</details>
+
+</div>
+
 Currently Support Arch or Fedora Based Distro.
 
-[![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link]
+[![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
+
 
 
 ## About
@@ -83,16 +94,7 @@ Yeah that it's about carch as it is licenced under mit you are free to use at yo
 </div>
 <br>
 
-<div align="center">
 
-<details>
-<summary><strong>Preview 👀</strong></summary>
-
-![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
-  
-</details>
-
-</div>
 
 <div align="center">
 
@@ -104,7 +106,7 @@ Yeah that it's about carch as it is licenced under mit you are free to use at yo
 
 *For installation and more, check out the* docs.
 
-[![Carch Docs][carch-docs]][carch-docs-link]
+
 
 • • •
 
