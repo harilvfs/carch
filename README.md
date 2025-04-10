@@ -1,5 +1,5 @@
 <div align="center">
- <img src="./assets/icons/product_logo_128.png" width="100" />
+ <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/assets/icons/product_logo_128.png" width="100" />
 </div>
 
 # Carch
