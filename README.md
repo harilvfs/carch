@@ -1,8 +1,45 @@
-<div align="center">
+## Carch
 
-[![github actions build status][check]][link] [![github actions build status][preview]][link]
+A Simple Script That May Help You Automating Linux System Setups.
 
-</div>
+Currently Support Arch or Fedora Based Distro.
+
+## About
+
+What The Heck is this script btw? Good Question Tbh! It none other than a bash script designed to be simple enough for anyone. Like anyone can simply run selecting the options. What the heck this actully do? You will see different script on the menu seprated or define as categories in system,terminal,desktop,development.. etc. As the categories there you will see script name like in terminal you will see like `terminal/Kitty`. Then when you actually run the script it will install kitty as well as applied my preconfigured setup that is  minimal beautiful as well as simple enough for everyone to use. Same As you will find diff script there just choose and run. The script will handle everything for you in just some clicks as to install window manager or any other you will found in the menu.
+
+> [!NOTE]
+> Yeah the script is fully automated that doesn;t mean they will work in every machine or system, maybe your system has some very preconfigured setup maybe the script will not work there.
+> As in the menu you can see the preview of the scripts you can always walk around to see what the script actually do.
+
+Yeah mostly script are stable but if you found any bug error or anything please open the [bug report](https://github.com/harilvfs/carch/issues)
+Or if you have any feature suggestion or improvement from your side you are always welcome to open [feature request](https://github.com/harilvfs/carch/issues) too.
+
+### Installation
+
+Carch Mainly Support two mainline distribution Arch and Fedora Linux. For the installtion run the following command in your terminal
+
+#### Arch Linux
+
+```bash
+bash <(curl -L https://chalisehari.com.np/arch)
+```
+
+#### Fedora Linux
+
+```bash
+bash <(curl -L https://chalisehari.com.np/fedora)
+```
+
+Yeah it support arch and fedora based distros too. But likely if you stuck in some problem feel free to give feedback on issue tab.
+
+### Commands
+
+Carch support some commands too like you can view them by running 
+
+```bash
+carch --help
+```
 
 <div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg" width="800" />
