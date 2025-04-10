@@ -1,4 +1,4 @@
-[carch](./assets/icons/product_logo_128.png)
+![carch](./assets/icons/product_logo_128.png)
 
 ## Carch
 
