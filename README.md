@@ -71,7 +71,7 @@ Likewise, this project was created as a casual bash script as I was just tinkeri
 
 My main inspiration to shape this project is:
 
-- **[ChrisTitusTech `linutil` project](https://github.com/ChrisTitusTech/linutil/)**
+- **[ChrisTitusTech linutil project](https://github.com/ChrisTitusTech/linutil/)**
 - **[ml4w](https://github.com/mylinuxforwork)** — ml4w's scripting logic is insanely good. I got many ideas from him.
 - As well as some minor and many ideas from many people..
 
@@ -82,11 +82,7 @@ My main inspiration to shape this project is:
 
 <br>
 
-<div align="center">
-
 Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
-
-</div>
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
 [link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
