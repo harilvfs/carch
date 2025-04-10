@@ -75,8 +75,9 @@ My main inspiration to shape this project is:
 - **[ml4w](https://github.com/mylinuxforwork)** — ml4w's scripting logic is insanely good. I got many ideas from him.
 - As well as some minor and many ideas from many people..
 
-> ## Reach Me  
+## Reach Me  
 > Got a question or feedback? Hit me up via:  
+>
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
 
