@@ -349,6 +349,7 @@ display_scripts_menu() {
         else
             run_script "$selected_option"
         fi
+    timing_end "display_scripts_menu"
     done
 }
 
