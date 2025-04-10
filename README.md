@@ -1,4 +1,8 @@
+<div align="center">
+
 ![carch](./assets/icons/product_logo_128.png)
+
+</div>
 
 ## Carch
 
