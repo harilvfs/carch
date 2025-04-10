@@ -83,8 +83,8 @@ My main inspiration to shape this project is:
 <br>
 
 <div align="center">
- 
-License is under the [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE) license, so you're free to fork and use it as you like. Thank you!
+
+Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
 
 </div>
 
