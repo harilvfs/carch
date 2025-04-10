@@ -5,20 +5,17 @@ _carch() {
 
     commands=(
         '--help:Show the help message'
+        '-h:Show the help message'
         '--version:Show the program version'
+        '-v:Show the program version'
         '--gen-config:Generate a default configuration file'
-        '--config:Provide a path to the configuration file'
         '-c:Use the default configuration file'
         '--run-script:Run a specific script from the script directory'
         '-r:Run a specific script from the script directory'
         '--list-scripts:List all available scripts'
         '-l:List all available scripts'
-        '--search:Search for scripts by keyword'
-        '-s:Search for scripts by keyword'
         '--no-preview:Run without displaying script previews in menus (one-time)'
-        '--disable-preview:Permanently disable script previews in menus'
         '--log:Enable logging for the current session only'
-        '--enable-logging:Permanently enable logging in the configuration file'
         '--check-update:Check if a new version of Carch is available'
         '--update:Update Carch using the latest script'
         '--uninstall:Uninstall Carch and remove all associated files'
@@ -26,20 +23,17 @@ _carch() {
 
     _arguments \
         '--help[Show the help message]' \
+        '-h[Show the help message]' \
         '--version[Show the program version]' \
+        '-v[Show the program version]' \
         '--gen-config[Generate a default configuration file]' \
-        '--config[Provide a path to the configuration file]' \
         '-c[Use the default configuration file]' \
         '--run-script[Run a specific script]' \
         '-r[Run a specific script]' \
         '--list-scripts[List all available scripts]' \
         '-l[List all available scripts]' \
-        '--search[Search for scripts by keyword]' \
-        '-s[Search for scripts by keyword]' \
-        '--no-preview[Run without displaying script previews in menus (one-time)]' \
-        '--disable-preview[Permanently disable script previews in menus]' \
+        '--no-preview[Run without displaying script previews in menus]' \
         '--log[Enable logging for the current session only]' \
-        '--enable-logging[Permanently enable logging in the configuration file]' \
         '--check-update[Check if a new version of Carch is available]' \
         '--update[Update Carch using the latest script]' \
         '--uninstall[Uninstall Carch and remove all associated files]'
