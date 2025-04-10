@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Carch
-Comment=A Simple Script to Help Automate Linux System Setups
+Comment=A Simple Script to Make Linux System Setups Easier
 Exec=/usr/bin/carch
 Icon=carch
 Type=Application
