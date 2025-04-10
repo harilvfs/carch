@@ -3,7 +3,7 @@
 </div>
 
 # Carch
-A Simple Script That May Help You Automating Linux System Setups.
+A Simple Script That May Help You Automate Linux System Setups.
 
 <details>
 <summary><strong>Preview 👀</strong></summary>
@@ -12,78 +12,70 @@ A Simple Script That May Help You Automating Linux System Setups.
   
 </details>
 
-Currently Support Arch or Fedora Based Distro.
+Currently Supports Arch or Fedora Based Distros.
 
 [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
 
-
-
 ## About
 
-What The Heck is this script btw? Good Question Tbh! It none other than a bash script designed to be simple enough for anyone. Like anyone can simply run selecting the options. What the heck this actully do? You will see different script on the menu seprated or define as categories in system,terminal,desktop,development.. etc. As the categories there you will see script name like in terminal you will see like `terminal/Kitty`. Then when you actually run the script it will install kitty as well as applied my preconfigured setup that is  minimal beautiful as well as simple enough for everyone to use. Same As you will find diff script there just choose and run. The script will handle everything for you in just some clicks as to install window manager or any other you will found in the menu.
+What the heck is this script btw? Good question tbh! It's none other than a bash script designed to be simple enough for anyone. Like, anyone can simply run it by selecting the options. What the heck does this actually do? You will see different scripts on the menu, separated or defined as categories like system, terminal, desktop, development.. etc. As for the categories, there you will see script names — like in terminal you will see something like `terminal/Kitty`. Then when you actually run the script, it will install Kitty as well as apply my preconfigured setup that is minimal, beautiful, and simple enough for everyone to use. Same as you will find different scripts there — just choose and run. The script will handle everything for you in just a few clicks, like installing a window manager or any other thing you find in the menu.
 
 > [!NOTE]
-> Yeah the script is fully automated that doesn;t mean they will work in every machine or system, maybe your system has some very preconfigured setup maybe the script will not work there.
-> As in the menu you can see the preview of the scripts you can always walk around to see what the script actually do.
+> Yeah, the script is fully automated, but that doesn't mean it will work on every machine or system. Maybe your system has some very specific preconfigured setup, so maybe the script will not work there.
+> As in the menu, you can see the preview of the scripts — you can always walk around to see what the script actually does.
 
-Yeah mostly script are stable but if you found any bug error or anything please open the [bug report](https://github.com/harilvfs/carch/issues)
-Or if you have any feature suggestion or improvement from your side you are always welcome to open [feature request](https://github.com/harilvfs/carch/issues) too.
+Yeah, most scripts are stable, but if you find any bugs, errors, or anything else, please open a [bug report](https://github.com/harilvfs/carch/issues).  
+Or if you have any feature suggestions or improvements from your side, you're always welcome to open a [feature request](https://github.com/harilvfs/carch/issues) too.
 
-### Installation
+## Installation
 
-Carch Mainly Support two mainline distribution Arch and Fedora Linux. For the installtion run the following command in your terminal
+Carch mainly supports two mainline distributions: Arch and Fedora Linux. For installation, run the following command in your terminal:
 
-#### Arch Linux
+### Arch Linux
 
-```bash
-bash <(curl -L https://chalisehari.com.np/arch)
-```
+<pre><code>bash &lt;(curl -L https://chalisehari.com.np/arch)</code></pre>
 
-#### Fedora Linux
+### Fedora Linux
 
-```bash
-bash <(curl -L https://chalisehari.com.np/fedora)
-```
+<pre><code>bash &lt;(curl -L https://chalisehari.com.np/fedora)</code></pre>
 
-Yeah it support arch and fedora based distros too. But likely if you stuck in some problem feel free to give feedback on issue tab.
+Yeah, it supports Arch and Fedora-based distros too. But if you get stuck in some problem, feel free to give feedback on the issues tab.
 
-### Commands
+## Commands
 
-Carch support some commands too, like you can view them by running 
+Carch supports some commands too. You can view them by running:
 
-```bash
-carch --help
-```
+<pre><code>carch --help</code></pre>
 
-### Roadmap 
+## Roadmap 
 
-You can found the full roadmap in carch [documentation](https://carch-org.github.io/docs/project/roadmap.html)
+You can find the full roadmap in the Carch [documentation](https://carch-org.github.io/docs/project/roadmap.html)
 
-### Contributing
+## Contributing
 
-Prs & any type of contribution are welcome. Before contributing first read contributing [guide](https://carch-org.github.io/docs/project/contributing.html)
+PRs & any type of contributions are welcome. Before contributing, first read the contributing [guide](https://carch-org.github.io/docs/project/contributing.html)
 
-### Code of Conduct
+## Code of Conduct
 
-We make everyone a welcoming environment for using carch as well as contributing or any other stuff. So make sure to follow our [code of conduct](https://carch-org.github.io/docs/project/codeofconduct.html)
+We make sure everyone has a welcoming environment for using Carch, as well as contributing or doing any other stuff. So make sure to follow our [code of conduct](https://carch-org.github.io/docs/project/codeofconduct.html)
 
-### Contributors
+## Contributors
 
-We thank everyone who has contributed carch from various ways as reporting bugs or giving any feedback for improveemnt or any contributions on carch through prs
+We thank everyone who has contributed to Carch in various ways — reporting bugs, giving feedback for improvements, or contributing to Carch through PRs.
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-### Inspiration
+## Inspiration
 
-Like wise this project has been created as casual bash script as just i am tinkering here and there on scripting. Then just after sometime i think why not make this script that may be useful to me or anyother who want to use this. 
+Likewise, this project was created as a casual bash script as I was just tinkering here and there with scripting. Then after some time, I thought, why not make this script something useful to me or anyone else who wants to use it?
 
-my main inspiration to shape this project is 
+My main inspiration to shape this project is:
 
 - **[ChrisTitusTech `linutil` project](https://github.com/ChrisTitusTech/linutil/)**
-- **[ml4w](https://github.com/mylinuxforwork) ml4w scripting logic is insanly good i just get many ideas from him
-- As well as some minor and many ideas from many people's ..
+- **[ml4w](https://github.com/mylinuxforwork)** — ml4w's scripting logic is insanely good. I got many ideas from him.
+- As well as some minor and many ideas from many people..
 
-Yeah that it's about carch as it is licenced under mit you are free to use at your own. if you like my work of if anywise carch has help you give a star will be the big support for me thank you..
+Yeah, that's it about Carch. As it is licensed under MIT, you are free to use it as you like. If you like my work or if in any way Carch has helped you, giving a star would be a huge support for me. Thank you!
 
 <div align="center">
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg" width="800" />
