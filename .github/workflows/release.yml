@@ -82,7 +82,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Create Release without RPM
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
@@ -132,7 +132,7 @@ jobs:
           echo "Modified spec file to allow dependency downloads"
           grep "cargo build" ~/rpmbuild/SPECS/carch.spec
           
-      - name: Download sources
+      - name: Download source
         run: |
           cd ~/rpmbuild/SPECS
           spectool -g -R carch.spec
@@ -163,7 +163,7 @@ jobs:
           path: ./artifacts/*.rpm
           retention-days: 7
             
-      - name: Upload RPM to existing release
+      - name: Upload RPM
         uses: softprops/action-gh-release@v2
         with:
           files: ./artifacts/*.rpm

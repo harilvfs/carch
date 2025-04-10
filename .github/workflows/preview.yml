@@ -1,4 +1,4 @@
-name: Carch Preview
+name: Preview
 on:
   workflow_dispatch:
     inputs:
@@ -31,7 +31,7 @@ jobs:
           chmod +x carch
           sudo mv carch /usr/local/bin/
       
-      - name: Run Arch-based Dependencies in Container
+      - name: Arch-based Dependencies
         run: |
           cat > install_arch_deps.sh << 'EOF'
           #!/bin/bash
@@ -46,7 +46,7 @@ jobs:
           
           docker run --rm -v $PWD:/work archlinux:latest bash -c "cd /work && ./install_arch_deps.sh"
       
-      - name: Create Docker image combining VHS with Arch dependencies
+      - name: VHS Docker Image 
         run: |
           cat > Dockerfile.vhs << 'EOF'
           FROM archlinux:latest AS arch_deps
@@ -77,25 +77,25 @@ jobs:
       - name: Create .github directory if it doesn't exist
         run: mkdir -p .github
       
-      - name: Find and move preview.gif
+      - name: Move preview.gif
         run: |
           if [ -f "preview.gif" ]; then
             cp preview.gif .github/preview.gif
-            rm -f preview.gif  # Remove from root directory
+            rm -f preview.gif
           else
             PREVIEW_PATH=$(find . -name "preview.gif" -type f | head -n 1)
             if [ -n "$PREVIEW_PATH" ] && [ "$PREVIEW_PATH" != "./.github/preview.gif" ]; then
               cp "$PREVIEW_PATH" .github/preview.gif
-              rm -f "$PREVIEW_PATH"  # Remove from original location
+              rm -f "$PREVIEW_PATH"
             elif [ -f "./.github/preview.gif" ]; then
-              echo "Preview already in correct location"
+              echo "Preview already in correct dir"
             else
               echo "Error: preview.gif not found"
               exit 1
             fi
           fi
       
-      - name: Clean temporary files
+      - name: Clean
         run: |
           rm -f Dockerfile.vhs install_arch_deps.sh
       
@@ -103,12 +103,12 @@ jobs:
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          commit-message: "Update preview GIF from release ${{ env.TAG_NAME }}"
+          commit-message: "Updated preview from release ${{ env.TAG_NAME }}"
           branch: feature/preview-update
-          title: "ci: Update preview GIF from release ${{ env.TAG_NAME }}"
+          title: "preview: Updated preview from release ${{ env.TAG_NAME }}"
           labels: |
             documentation
           body: |
-            Automated PR to update preview GIF using Carch from release ${{ env.TAG_NAME }}
+            PR to update preview ${{ env.TAG_NAME }}
             ![preview](https://raw.githubusercontent.com/${{ github.repository }}/feature/preview-update/.github/preview.gif)
         if: success()
