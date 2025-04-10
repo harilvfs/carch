@@ -87,6 +87,7 @@ My main inspiration to shape this project is:
 License is under the [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE) license, so you're free to fork and use it as you like. Thank you!
 
 </div>
+
 [check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
 [link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
 
