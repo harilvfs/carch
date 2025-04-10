@@ -5,16 +5,12 @@
 ## Carch
 A Simple Script That May Help You Automating Linux System Setups.
 
-<div align="center">
-
 <details>
 <summary><strong>Preview 👀</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
 </details>
-
-</div>
 
 Currently Support Arch or Fedora Based Distro.
 
