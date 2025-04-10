@@ -1,6 +1,6 @@
 <div align="center">
 
-![carch](./assets/icons/product_logo_128.png)
+<img src="./assets/icons/product_logo_128.png" width="50" />
 
 </div>
 
