@@ -80,7 +80,7 @@ My main inspiration to shape this project is:
 >
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
-Yeah, that's it about Carch. As it is licensed under MIT, you are free to use it as you like. If you like my work or if in any way Carch has helped you, giving a star [ 🌟 ] would be a huge support for me. Thank you!
+License is under MIT, So you are free to fork and use at your own. Thank You! 
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
 [link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
