@@ -6,14 +6,12 @@
 
 </div>
 
-<div align="right">
+<div align="center">
  <img src="./assets/icons/product_logo_128.png" width="100" />
 </div>
 
 ## Carch
 A Simple Script That May Help You Automating Linux System Setups.
-
-
 
 Currently Support Arch or Fedora Based Distro.
 
