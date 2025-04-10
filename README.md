@@ -2,6 +2,8 @@
 
 <img src="./assets/icons/product_logo_128.png" width="100" />
 
+[![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link]
+
 </div>
 
 ## Carch
