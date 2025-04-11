@@ -51,16 +51,6 @@ detect_distro() {
     fi
 }
 
-confirm_setup() {
-    print_message "$CYAN" "Welcome to the DWM setup script."
-    print_message "$CYAN" "This script will install and configure DWM along with necessary dependencies."
-
-    if ! fzf_confirm "Do you want to continue with this setup?"; then
-        print_message "$RED" "Setup aborted by the user. Exiting..."
-        exit 1
-    fi
-}
-
 install_packages() {
     if [ "$distro" == "arch" ]; then
         print_message "$CYAN" ":: Installing required packages using pacman..."
@@ -308,7 +298,6 @@ check_display_manager() {
 }
 
 detect_distro
-confirm_setup
 install_packages
 install_dwm
 install_slstatus

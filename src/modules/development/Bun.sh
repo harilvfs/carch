@@ -33,7 +33,7 @@ figlet -f slant "Bun"
 echo -e "${RESET}"
 
 if command -v bun &>/dev/null; then
-    echo -e "${GREEN}✅ Bun is already installed!${RESET}"
+    echo -e "${GREEN}Bun is already installed!${RESET}"
     exit 0
 fi
 
@@ -41,15 +41,15 @@ check_fzf
 
 echo -e "${YELLOW}Installing Bun via curl...${RESET}"
 if bash -c "$(curl -fsSL https://bun.sh/install)"; then
-    echo -e "${GREEN}✅ Bun installed successfully!${RESET}"
+    echo -e "${GREEN}Bun installed successfully!${RESET}"
     echo -e "${RED}If Bun doesn't appear on your system automatically, source your ~/.profile, .zshrc, or .bashrc.${RESET}"
     exit 0
 else
-    echo -e "${RED}❌ Curl installation failed! Trying npm as fallback...${RESET}"
+    echo -e "${RED}Curl installation failed! Trying npm as fallback...${RESET}"
 fi
 
 if ! command -v npm &>/dev/null; then
-    echo -e "${RED}❌ npm is not installed! Cannot use fallback method.${RESET}"
+    echo -e "${RED}npm is not installed! Cannot use fallback method.${RESET}"
     exit 1
 fi
 
@@ -61,9 +61,9 @@ fi
 
 echo -e "${YELLOW}Installing Bun via npm...${RESET}"
 if npm install -g bun; then
-    echo -e "${GREEN}✅ Bun installed successfully!${RESET}"
+    echo -e "${GREEN}Bun installed successfully!${RESET}"
     echo -e "${RED}If Bun doesn't appear on your system automatically, source your ~/.profile, .zshrc, or .bashrc.${RESET}"
 else
-    echo -e "${RED}❌ Bun installation failed.${RESET}"
+    echo -e "${RED}Bun installation failed.${RESET}"
     exit 1
 fi

@@ -9,7 +9,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 BLUE="\e[34m"
 RED='\033[0;31m'
-ENDCOLOR="\e[0m"
+RESET="\033[0m"
 
 fzf_confirm() {
     local prompt="$1"
@@ -30,13 +30,6 @@ else
     echo "========== Kitty Setup =========="
 fi
 echo -e "${RESET}"
-
-echo -e "${RED}WARNING: This script will modify your Kitty configuration. A backup of your existing configuration will be created.${ENDCOLOR}"
-
-if ! fzf_confirm "Continue with Kitty setup?"; then
-    echo -e "${RED}Setup aborted by the user.${NC}"
-    exit 1
-fi
 
 setup_kitty() {
     if ! command -v kitty &> /dev/null; then

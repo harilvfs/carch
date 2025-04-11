@@ -35,20 +35,6 @@ fzf_confirm() {
     fi
 }
 
-if command -v fzf &>/dev/null; then
-    if ! fzf_confirm "Continue with Rofi setup?"; then
-        echo -e "${RED}Setup aborted by the user.${NC}"
-        exit 1
-    fi
-else
-    echo -e "${YELLOW}Continue with Rofi setup? (y/n)${ENDCOLOR}"
-    read -r response
-    if [[ ! "$response" =~ ^[Yy]$ ]]; then
-        echo -e "${RED}Setup aborted by the user.${NC}"
-        exit 1
-    fi
-fi
-
 install_rofi_arch() {
     if ! command -v rofi &> /dev/null; then
         echo -e "${CYAN}Rofi is not installed. :: Installing Rofi for Arch...${NC}"

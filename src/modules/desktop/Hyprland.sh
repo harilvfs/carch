@@ -56,11 +56,6 @@ fi
 echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${RESET}"
 echo -e "${YELLOW}Backup your configurations before proceeding. I am not responsible for any data loss.${RESET}"
 
-if ! fzf_confirm "Continue with Hyprland setup?"; then
-    echo -e "${RED}Setup aborted by the user.${RESET}"
-    exit 1
-fi
-
 choice=$(fzf_choose "${options[@]}")
 
 if [[ "$choice" == "Exit" ]]; then
