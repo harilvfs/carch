@@ -908,7 +908,11 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App, options: &UiOptions) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
-        .constraints([Constraint::Length(3), Constraint::Min(0)])
+        .constraints([
+            Constraint::Length(4),
+            Constraint::Min(0),
+            Constraint::Length(1),
+        ])
         .split(f.size());
 
     render_title(f, chunks[0]);
@@ -935,27 +939,58 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App, options: &UiOptions) {
         f.render_widget(preview_disabled, main_chunks[1]);
     }
 
+    let help_text = Paragraph::new(vec![Spans::from(vec![
+        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
+        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
+        Span::styled("p: Preview  ", Style::default().fg(Color::Gray)),
+        Span::styled("/: Search  ", Style::default().fg(Color::Gray)),
+        Span::styled("q: Quit", Style::default().fg(Color::Gray)),
+    ])])
+    .alignment(ratatui::layout::Alignment::Center);
+
+    f.render_widget(help_text, chunks[2]);
+
     if app.mode == AppMode::Search {
         render_search_popup(f, app);
     }
 }
 
 fn render_title<B: Backend>(f: &mut Frame<B>, area: Rect) {
+    let title_block = Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .border_style(Style::default().fg(Color::Magenta));
+
+    let inner_area = title_block.inner(area);
+
     let title = Paragraph::new(vec![
-        Spans::from(vec![Span::styled(
-            "CARCH",
-            Style::default()
-                .fg(Color::Magenta)
-                .add_modifier(Modifier::BOLD),
-        )]),
-        Spans::from(vec![Span::styled(
-            "Automate Your Linux Setup",
-            Style::default().fg(Color::Cyan),
-        )]),
+        Spans::from(vec![
+            Span::styled("╭─", Style::default().fg(Color::DarkGray)),
+            Span::styled("★ ", Style::default().fg(Color::Yellow)),
+            Span::styled(
+                "CARCH",
+                Style::default()
+                    .fg(Color::Magenta)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(" ★", Style::default().fg(Color::Yellow)),
+            Span::styled("─╮", Style::default().fg(Color::DarkGray)),
+        ]),
+        Spans::from(vec![
+            Span::styled("╰─", Style::default().fg(Color::DarkGray)),
+            Span::styled(
+                " Automate Your Linux Setup ",
+                Style::default()
+                    .fg(Color::Cyan)
+                    .add_modifier(Modifier::ITALIC),
+            ),
+            Span::styled("─╯", Style::default().fg(Color::DarkGray)),
+        ]),
     ])
     .alignment(ratatui::layout::Alignment::Center);
 
-    f.render_widget(title, area);
+    f.render_widget(title_block, area);
+    f.render_widget(title, inner_area);
 }
 
 fn create_rounded_block() -> Block<'static> {
@@ -988,10 +1023,10 @@ fn render_script_list<B: Backend>(f: &mut Frame<B>, app: &mut App, area: Rect) {
         }
     }
 
-    let title = Spans::from(vec![
-        Span::styled("Select a script to run ", Style::default()),
-        Span::styled("(/: search)", Style::default().fg(Color::Gray)),
-    ]);
+    let title = Spans::from(vec![Span::styled(
+        "Select a script to run",
+        Style::default(),
+    )]);
 
     let block = create_rounded_block().title(title);
 
@@ -1131,20 +1166,22 @@ fn render_search_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
 
     f.render_widget(ratatui::widgets::Clear, popup_area);
 
+    let popup_block = create_rounded_block()
+        .title("Search")
+        .border_style(Style::default().fg(Color::Cyan));
+
+    f.render_widget(popup_block.clone(), popup_area);
+
+    let inner_area = popup_block.inner(popup_area);
+
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
             Constraint::Length(3),
             Constraint::Min(3),
-            Constraint::Length(1),
+            Constraint::Length(2),
         ])
-        .split(popup_area);
-
-    let popup_block = create_rounded_block()
-        .title("Search")
-        .border_style(Style::default().fg(Color::Cyan));
-
-    f.render_widget(popup_block, popup_area);
+        .split(inner_area);
 
     let display_text = if let Some(ref autocomplete) = app.autocomplete_text {
         let base = &app.search_input;
@@ -1229,6 +1266,20 @@ fn render_search_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
 
     f.render_stateful_widget(search_results, popup_layout[1], &mut search_list_state);
 
+    let help_block = Block::default()
+        .border_type(BorderType::Plain)
+        .borders(Borders::TOP)
+        .border_style(Style::default().fg(Color::DarkGray));
+
+    f.render_widget(help_block, popup_layout[2]);
+
+    let help_inner_area = Rect {
+        x: popup_layout[2].x,
+        y: popup_layout[2].y + 1,
+        width: popup_layout[2].width,
+        height: popup_layout[2].height - 1,
+    };
+
     let help_text = Paragraph::new(vec![Spans::from(vec![
         Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
         Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
@@ -1237,5 +1288,5 @@ fn render_search_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
     ])])
     .alignment(ratatui::layout::Alignment::Center);
 
-    f.render_widget(help_text, popup_layout[2]);
+    f.render_widget(help_text, help_inner_area);
 }
