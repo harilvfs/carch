@@ -14,7 +14,7 @@ Currently Supports Arch or Fedora Based Distros.
 
 ## About
 
-What the heck is this script btw? Good question tbh! It's none other than a bash script designed to be simple enough for anyone. Like, anyone can simply run it by selecting the options. What the heck does this actually do? You will see different scripts on the menu, separated or defined as categories like system, terminal, desktop, development.. etc. As for the categories, there you will see script names — like in terminal you will see something like `terminal/Kitty`. Then when you actually run the script, it will install Kitty as well as apply my preconfigured setup that is minimal, beautiful, and simple enough for everyone to use. Same as you will find different scripts there — just choose and run. The script will handle everything for you in just a few clicks, like installing a window manager or any other thing you find in the menu.
+What the heck is this script btw? Good question ! It's none other than a collections of bash script designed to be simple enough for anyone. Like, anyone can simply run it by selecting the options. What the heck does this actually do? You will see different scripts on the menu, separated or defined as categories like system, terminal, desktop, development.. etc. As for the categories, there you will see script names — like in terminal you will see something like `Kitty`, `alacritty`, and so on. Then when you actually run the script, it will install package as well as apply my preconfigured setup that is minimal, beautiful, and simple enough for everyone to use. Same as you will find different scripts there — just choose and run. The script will handle everything for you in just a few clicks, like installing a window manager or any other thing you find in the menu.
 
 > [!NOTE]
 > Yeah, the script is fully automated, but that doesn't mean it will work on every machine or system. Maybe your system has some very specific preconfigured setup, so maybe the script will not work there.
@@ -22,6 +22,8 @@ What the heck is this script btw? Good question tbh! It's none other than a bash
 
 Yeah, most scripts are stable, but if you find any bugs, errors, or anything else, please open a [bug report](https://github.com/harilvfs/carch/issues).  
 Or if you have any feature suggestions or improvements from your side, you're always welcome to open a [feature request](https://github.com/harilvfs/carch/issues) too.
+
+> **By the way, I highly recommend checking out the Carch [docs](https://carch-org.github.io/docs) for more details.**
 
 ## Installation
 
