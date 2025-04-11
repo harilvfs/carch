@@ -23,7 +23,7 @@ What the heck is this script btw? Good question ! It's none other than a collect
 Yeah, most scripts are stable, but if you find any bugs, errors, or anything else, please open a [bug report](https://github.com/harilvfs/carch/issues).  
 Or if you have any feature suggestions or improvements from your side, you're always welcome to open a [feature request](https://github.com/harilvfs/carch/issues) too.
 
-> **By the way, I highly recommend checking out the Carch [docs](https://carch-org.github.io/docs) for more details.**
+> **Btw, I highly recommend checking out the Carch [docs](https://carch-org.github.io/docs) for more details.**
 
 ## Installation
 
