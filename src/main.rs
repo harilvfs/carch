@@ -3,7 +3,7 @@ use std::env;
 use std::fs;
 use std::io;
 use std::os::unix::fs::PermissionsExt;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 use tempfile::TempDir;
 
@@ -175,24 +175,16 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
         let _ = commands::log_message("INFO", "Starting TUI application");
     }
 
-    let temp_dir = TempDir::new().map_err(|e| {
-        let error_msg = format!("Failed to create temp directory: {}", e);
-        if settings.log_mode {
-            let _ = commands::log_message("ERROR", &error_msg);
-        }
-        error_msg
-    })?;
-    let temp_path = temp_dir.path();
+    let scripts_path = get_scripts_path(settings.log_mode)?;
 
-    extract_scripts(temp_path).map_err(|e| {
-        let error_msg = format!("Failed to extract scripts: {}", e);
-        if settings.log_mode {
-            let _ = commands::log_message("ERROR", &error_msg);
-        }
-        e
-    })?;
+    if settings.log_mode {
+        let _ = commands::log_message(
+            "INFO",
+            &format!("Using scripts directory: {}", scripts_path.display()),
+        );
+    }
 
-    let modules_dir = temp_path.join("modules");
+    let modules_dir = scripts_path.join("modules");
     if !modules_dir.exists() || !modules_dir.is_dir() {
         let error_msg = format!("Modules directory not found at {}", modules_dir.display());
         if settings.log_mode {
@@ -276,6 +268,92 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+fn get_scripts_path(log_mode: bool) -> Result<PathBuf, Box<dyn std::error::Error>> {
+    if let Some(cache_dir) = get_cache_dir() {
+        let carch_cache = cache_dir.join("carch");
+        let modules_dir = carch_cache.join("modules");
+
+        if !carch_cache.exists() {
+            if log_mode {
+                let _ = commands::log_message(
+                    "INFO",
+                    &format!("Creating cache directory at {}", carch_cache.display()),
+                );
+            }
+            fs::create_dir_all(&carch_cache)
+                .map_err(|e| format!("Failed to create cache directory: {}", e))?;
+        }
+
+        let should_extract = !modules_dir.exists() || scripts_need_update(&modules_dir);
+
+        if should_extract {
+            if log_mode {
+                let _ = commands::log_message("INFO", "Extracting scripts to cache directory");
+            }
+            extract_scripts(&carch_cache)?;
+        } else if log_mode {
+            let _ = commands::log_message("INFO", "Using existing cached scripts");
+        }
+
+        return Ok(carch_cache);
+    }
+
+    if log_mode {
+        let _ = commands::log_message(
+            "INFO",
+            "Cache directory not available, using temporary directory",
+        );
+    }
+
+    let temp_dir = TempDir::new().map_err(|e| {
+        let error_msg = format!("Failed to create temp directory: {}", e);
+        if log_mode {
+            let _ = commands::log_message("ERROR", &error_msg);
+        }
+        error_msg
+    })?;
+
+    let temp_path = temp_dir.path().to_path_buf();
+
+    std::mem::forget(temp_dir);
+
+    extract_scripts(&temp_path)?;
+
+    Ok(temp_path)
+}
+
+fn get_cache_dir() -> Option<PathBuf> {
+    if let Ok(xdg_cache) = std::env::var("XDG_CACHE_HOME") {
+        return Some(PathBuf::from(xdg_cache));
+    }
+
+    if let Ok(home) = std::env::var("HOME") {
+        return Some(PathBuf::from(home).join(".cache"));
+    }
+
+    None
+}
+
+fn scripts_need_update(modules_dir: &Path) -> bool {
+    let version_file = modules_dir.join(".version");
+
+    if !version_file.exists() {
+        return true;
+    }
+
+    let stored_version = match fs::read_to_string(&version_file) {
+        Ok(content) => match content.trim().parse::<u64>() {
+            Ok(timestamp) => timestamp,
+            Err(_) => return true,
+        },
+        Err(_) => return true,
+    };
+
+    let current_version = commands::get_version();
+
+    format!("{}", stored_version) != current_version
+}
+
 fn extract_scripts(temp_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     let modules_dir = temp_path.join("modules");
     fs::create_dir_all(&modules_dir)
@@ -290,6 +368,11 @@ fn extract_scripts(temp_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
 
     std::os::unix::fs::symlink(&modules_dir, &preview_link)
         .map_err(|e| format!("Failed to create preview symlink: {}", e))?;
+
+    let version_file = modules_dir.join(".version");
+    let current_version = commands::get_version();
+    fs::write(&version_file, current_version)
+        .map_err(|e| format!("Failed to write version file: {}", e))?;
 
     Ok(())
 }
