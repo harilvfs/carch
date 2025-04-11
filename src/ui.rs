@@ -511,12 +511,10 @@ impl App {
         if let Some(selected) = self.scripts.state.selected() {
             let selected_item = &self.scripts.items[selected];
 
-            if !self.visible_items.contains(&selected) {
-                if !selected_item.is_category_header {
-                    self.expanded_categories
-                        .insert(selected_item.category.clone(), true);
-                    self.update_visible_items();
-                }
+            if !self.visible_items.contains(&selected) && !selected_item.is_category_header {
+                self.expanded_categories
+                    .insert(selected_item.category.clone(), true);
+                self.update_visible_items();
             }
         }
     }
