@@ -1,111 +1,326 @@
 use include_dir::{Dir, include_dir};
 use std::env;
 use std::fs;
+use std::io;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 use std::process::Command;
 use tempfile::TempDir;
 
+mod commands;
 mod display;
 mod script_list;
+mod ui;
 
-static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/scripts");
+static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 const EXECUTABLE_MODE: u32 = 0o755;
+
+struct Settings {
+    show_preview: bool,
+    log_mode: bool,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            show_preview: true,
+            log_mode: false,
+        }
+    }
+}
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
+    let mut settings = Settings::default();
+
+    if args.iter().any(|arg| arg == "--log") {
+        settings.log_mode = true;
+        let _ = commands::log_message("INFO", "Carch application started");
+    }
 
     if args.len() > 1 {
-        if args[1] == "--help" || args[1] == "-h" {
-            display::display_help()?;
-            return Ok(());
-        }
-
-        if args[1] == "--list-scripts" || args[1] == "-l" {
-            let temp_dir =
-                TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
-            let temp_path = temp_dir.path();
-            extract_and_set_permissions(temp_path)?;
-
-            let modules_dir = temp_path.join("modules");
-            if !modules_dir.exists() || !modules_dir.is_dir() {
-                return Err(
-                    format!("Modules directory not found at {}", modules_dir.display()).into(),
-                );
+        match args[1].as_str() {
+            "--help" | "-h" => {
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Displaying help information");
+                }
+                display::display_help()?;
+                return Ok(());
             }
-
-            script_list::list_scripts(&modules_dir)?;
-            return Ok(());
+            "--list-scripts" | "-l" => {
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Listing available scripts");
+                }
+                let temp_dir = TempDir::new()
+                    .map_err(|e| format!("Failed to create temp directory: {}", e))?;
+                let temp_path = temp_dir.path();
+                extract_scripts(temp_path)?;
+                let modules_dir = temp_path.join("modules");
+                if !modules_dir.exists() || !modules_dir.is_dir() {
+                    let error_msg =
+                        format!("Modules directory not found at {}", modules_dir.display());
+                    if settings.log_mode {
+                        let _ = commands::log_message("ERROR", &error_msg);
+                    }
+                    return Err(error_msg.into());
+                }
+                script_list::list_scripts(&modules_dir)?;
+                return Ok(());
+            }
+            "--version" | "-v" => {
+                let version = commands::get_version();
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", &format!("Version query: {}", version));
+                }
+                println!("{}", version);
+                return Ok(());
+            }
+            "--check-update" => {
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Checking for updates");
+                }
+                commands::check_update()?;
+                return Ok(());
+            }
+            "--update" => {
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Running update process");
+                }
+                commands::update()?;
+                return Ok(());
+            }
+            "--uninstall" => {
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Running uninstall process");
+                }
+                commands::uninstall()?;
+                return Ok(());
+            }
+            "--no-preview" => {
+                settings.show_preview = false;
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Preview mode disabled");
+                }
+                if args.len() > 2 {
+                    let remaining_args = args[2..].to_vec();
+                    return process_args(remaining_args, settings);
+                }
+            }
+            "--log" => {
+                if args.len() > 2 {
+                    let remaining_args = args[2..].to_vec();
+                    return process_args(remaining_args, settings);
+                }
+            }
+            _ => {
+                let error_msg =
+                    format!("Error: Unknown option '{}'. Use --help for usage.", args[1]);
+                if settings.log_mode {
+                    let _ = commands::log_message("ERROR", &error_msg);
+                }
+                eprintln!("{}", error_msg);
+                return Ok(());
+            }
         }
     }
 
-    let temp_dir = TempDir::new().map_err(|e| format!("Failed to create temp directory: {}", e))?;
-    let temp_path = temp_dir.path();
-    extract_and_set_permissions(temp_path)?;
-
-    let script_args = env::args().skip(1);
-    let script_path = temp_path.join("carch");
-    let status = Command::new(&script_path)
-        .args(script_args)
-        .current_dir(temp_path)
-        .status()
-        .map_err(|e| format!("Failed to execute {}: {}", script_path.display(), e))?;
-
-    std::process::exit(status.code().unwrap_or(1));
+    run_tui(settings)
 }
 
-fn extract_and_set_permissions(temp_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
-    EMBEDDED_DIR
-        .extract(temp_path)
-        .map_err(|e| format!("Failed to extract embedded files: {}", e))?;
+fn process_args(args: Vec<String>, settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
+    if args.is_empty() {
+        return run_tui(settings);
+    }
 
-    let main_script_path = temp_path.join("carch");
-    set_executable(&main_script_path)?;
+    match args[0].as_str() {
+        "--version" | "-v" => {
+            let version = commands::get_version();
+            if settings.log_mode {
+                let _ = commands::log_message("INFO", &format!("Version query: {}", version));
+            }
+            println!("{}", version);
+        }
+        "--check-update" => {
+            if settings.log_mode {
+                let _ = commands::log_message("INFO", "Checking for updates");
+            }
+            commands::check_update()?;
+        }
+        "--update" => {
+            if settings.log_mode {
+                let _ = commands::log_message("INFO", "Running update process");
+            }
+            commands::update()?;
+        }
+        "--uninstall" => {
+            if settings.log_mode {
+                let _ = commands::log_message("INFO", "Running uninstall process");
+            }
+            commands::uninstall()?;
+        }
+        _ => {
+            let error_msg = format!("Error: Unknown option '{}'. Use --help for usage.", args[0]);
+            if settings.log_mode {
+                let _ = commands::log_message("ERROR", &error_msg);
+            }
+            eprintln!("{}", error_msg);
+        }
+    }
 
-    make_scripts_executable(temp_path)?;
+    Ok(())
+}
+
+fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
+    if settings.log_mode {
+        let _ = commands::log_message("INFO", "Starting TUI application");
+    }
+
+    let temp_dir = TempDir::new().map_err(|e| {
+        let error_msg = format!("Failed to create temp directory: {}", e);
+        if settings.log_mode {
+            let _ = commands::log_message("ERROR", &error_msg);
+        }
+        error_msg
+    })?;
+    let temp_path = temp_dir.path();
+
+    extract_scripts(temp_path).map_err(|e| {
+        let error_msg = format!("Failed to extract scripts: {}", e);
+        if settings.log_mode {
+            let _ = commands::log_message("ERROR", &error_msg);
+        }
+        e
+    })?;
+
+    let modules_dir = temp_path.join("modules");
+    if !modules_dir.exists() || !modules_dir.is_dir() {
+        let error_msg = format!("Modules directory not found at {}", modules_dir.display());
+        if settings.log_mode {
+            let _ = commands::log_message("ERROR", &error_msg);
+        }
+        return Err(error_msg.into());
+    }
+
+    let ui_options = ui::UiOptions {
+        show_preview: settings.show_preview,
+        log_mode: settings.log_mode,
+    };
+
+    if settings.log_mode {
+        let _ = commands::log_message(
+            "INFO",
+            &format!(
+                "TUI initialized with settings: show_preview={}, log_mode={}",
+                settings.show_preview, settings.log_mode
+            ),
+        );
+    }
+
+    ui::run_ui_with_options(
+        &modules_dir,
+        |script_path| {
+            println!("\nRunning script: {}", script_path.display());
+
+            if settings.log_mode {
+                let _ = commands::log_message(
+                    "INFO",
+                    &format!("Running script: {}", script_path.display()),
+                );
+            }
+
+            let result = Command::new("bash").arg(script_path).status().map_err(|e| {
+                io::Error::new(
+                    io::ErrorKind::Other,
+                    format!("Failed to execute script: {}", e),
+                )
+            });
+
+            if settings.log_mode {
+                match &result {
+                    Ok(status) => {
+                        let _ = commands::log_message(
+                            "INFO",
+                            &format!(
+                                "Script {} completed with exit code: {}",
+                                script_path.display(),
+                                status
+                                    .code()
+                                    .map_or(String::from("unknown"), |c| c.to_string())
+                            ),
+                        );
+                    }
+                    Err(e) => {
+                        let _ = commands::log_message(
+                            "ERROR",
+                            &format!("Script {} failed with error: {}", script_path.display(), e),
+                        );
+                    }
+                }
+            }
+
+            result?;
+
+            println!("Press Enter to return...");
+            let mut buffer = String::new();
+            io::stdin().read_line(&mut buffer)?;
+
+            Ok(())
+        },
+        ui_options,
+    )?;
+
+    if settings.log_mode {
+        let _ = commands::log_message("INFO", "Carch application exiting normally");
+    }
+
+    Ok(())
+}
+
+fn extract_scripts(temp_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    let modules_dir = temp_path.join("modules");
+    fs::create_dir_all(&modules_dir)
+        .map_err(|e| format!("Failed to create modules directory: {}", e))?;
+
+    extract_dir_recursive(&EMBEDDED_DIR, &modules_dir)?;
 
     let preview_link = temp_path.join("preview_scripts");
     if fs::remove_file(&preview_link).is_err() {
         // ignore if the link doesn't exist yet
     }
 
-    let scripts_dir = temp_path.join("scripts");
-    std::os::unix::fs::symlink(&scripts_dir, &preview_link)
+    std::os::unix::fs::symlink(&modules_dir, &preview_link)
         .map_err(|e| format!("Failed to create preview symlink: {}", e))?;
-
-    let env_file = temp_path.join("carch_env.sh");
-    let env_content = format!(
-        "#!/bin/bash\n\
-         export CARCH_TEMP_DIR=\"{}\"\n\
-         export CARCH_SCRIPTS_DIR=\"{}/scripts\"\n",
-        temp_path.display(),
-        temp_path.display()
-    );
-
-    fs::write(&env_file, env_content)
-        .map_err(|e| format!("Failed to write environment file: {}", e))?;
-    set_executable(&env_file)?;
 
     Ok(())
 }
 
-fn make_scripts_executable(dir_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
-    if !dir_path.exists() || !dir_path.is_dir() {
-        return Ok(());
-    }
+fn extract_dir_recursive(
+    dir: &include_dir::Dir,
+    target_path: &Path,
+) -> Result<(), Box<dyn std::error::Error>> {
+    fs::create_dir_all(target_path).map_err(|e| {
+        format!(
+            "Failed to create directory {}: {}",
+            target_path.display(),
+            e
+        )
+    })?;
 
-    for entry in fs::read_dir(dir_path)
-        .map_err(|e| format!("Failed to read directory {}: {}", dir_path.display(), e))?
-        .flatten()
-    {
-        let path = entry.path();
+    for entry in dir.entries() {
+        match entry {
+            include_dir::DirEntry::File(file) => {
+                let file_path = target_path.join(file.path().file_name().unwrap_or_default());
+                fs::write(&file_path, file.contents())
+                    .map_err(|e| format!("Failed to write file {}: {}", file_path.display(), e))?;
 
-        if path.is_file() {
-            if path.extension().is_some_and(|ext| ext == "sh") {
-                set_executable(&path)?;
+                if file_path.extension().is_some_and(|ext| ext == "sh") {
+                    set_executable(&file_path)?;
+                }
             }
-        } else if path.is_dir() {
-            make_scripts_executable(&path)?;
+            include_dir::DirEntry::Dir(subdir) => {
+                let subdir_path = target_path.join(subdir.path().file_name().unwrap_or_default());
+                extract_dir_recursive(subdir, &subdir_path)?;
+            }
         }
     }
 
