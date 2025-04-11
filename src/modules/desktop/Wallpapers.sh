@@ -35,11 +35,6 @@ WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
 
 echo -e "${CYAN}:: Wallpapers will be set up in the Pictures directory (${PICTURES_DIR}).${NC}"
 
-if ! fzf_confirm "Do you want to continue?"; then
-    echo -e "${YELLOW}Operation canceled. Exiting...${NC}"
-    exit 0
-fi
-
 if [ ! -d "$PICTURES_DIR" ]; then
     echo -e "${CYAN}:: Creating the Pictures directory...${NC}"
     mkdir -p "$PICTURES_DIR"

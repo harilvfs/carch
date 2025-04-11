@@ -55,11 +55,6 @@ else
 fi
 echo -e "${RESET}"
 
-if ! fzf_confirm "Do you want to proceed with the tmux installation and configuration?"; then
-    echo -e "${RED}Exiting...${RESET}"
-    exit 0
-fi
-
 if ! command -v tmux &>/dev/null; then
     echo -e "${YELLOW}Tmux is not installed. Installing...${RESET}"
     
@@ -135,4 +130,3 @@ if [[ $? -ne 0 ]]; then
 fi
 
 echo -e "${GREEN}Tmux setup complete!${RESET}"
-

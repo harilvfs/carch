@@ -81,11 +81,6 @@ detect_distro
 
 install_fzf
 
-if ! fzf_confirm "This script will configure Zsh with Powerlevel10k, Oh My Zsh, and more. Nerd Font is recommended. Continue?"; then
-    print_message "$RED" "Setup aborted by the user. Exiting..."
-    exit 1
-fi
-
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
     if command -v pacman &>/dev/null; then

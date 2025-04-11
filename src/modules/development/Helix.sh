@@ -31,7 +31,7 @@ fi
 echo -e "${RESET}"
 
 if ! command -v fzf &>/dev/null; then
-    echo -e "${RED}❌ fzf is required but not installed. Please install it first.${RESET}"
+    echo -e "${RED}fzf is required but not installed. Please install it first.${RESET}"
     exit 1
 fi
 
@@ -40,14 +40,9 @@ if command -v pacman &>/dev/null; then
 elif command -v dnf &>/dev/null; then
     DISTRO="fedora"
 else
-    echo -e "${RED}❌ Unsupported distribution!${RESET}"
+    echo -e "${RED}Unsupported distribution!${RESET}"
     exit 1
 fi
-
-fzf_confirm "⚠️ This script will configure Helix editor. Do you want to continue?" || {
-    echo "Exiting..."
-    exit 0
-}
 
 install_helix() {
     echo -e "${CYAN}⚡ Installing Helix editor...${RESET}"
@@ -62,10 +57,10 @@ install_helix
 
 HELIX_CONFIG="$HOME/.config/helix"
 if [[ -d "$HELIX_CONFIG" ]]; then
-    fzf_confirm "⚠️ Existing Helix config found. Do you want to back it up?" && {
+    fzf_confirm "Existing Helix config found. Do you want to back it up?" && {
         BACKUP_PATH="$HOME/.config/helix.bak.$(date +%s)"
         mv "$HELIX_CONFIG" "$BACKUP_PATH"
-        echo -e "${GREEN}✅ Backup created at $BACKUP_PATH${RESET}"
+        echo -e "${GREEN}Backup created at $BACKUP_PATH${RESET}"
     }
 fi
 
@@ -76,10 +71,10 @@ if [[ -d "$HOME/dwm/config/helix" ]]; then
     echo -e "${CYAN}Applying Helix configuration...${RESET}"
     mkdir -p "$HELIX_CONFIG"
     cp -r "$HOME/dwm/config/helix/"* "$HELIX_CONFIG/"
-    echo -e "${GREEN}✅ Helix configuration applied!${RESET}"
+    echo -e "${GREEN}Helix configuration applied!${RESET}"
     rm -rf "$HOME/dwm"
 else
-    echo -e "${RED}❌ Failed to apply Helix configuration!${RESET}"
+    echo -e "${RED}Failed to apply Helix configuration!${RESET}"
     exit 1
 fi
 

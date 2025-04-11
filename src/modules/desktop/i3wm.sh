@@ -38,11 +38,6 @@ fzf_confirm() {
 
 echo -e "${YELLOW}Warning: Do not re-run the script . If you encounter issues, remove the .i3wmdotfiles directory in your home directory..${ENDCOLOR}"
 
-if ! fzf_confirm "Continue with i3 setup?"; then
-    echo -e "${RED}Setup aborted by the user.${NC}"
-    exit 1
-fi
-
 if command -v pacman &>/dev/null; then
    OS="arch"
 elif command -v dnf &>/dev/null; then

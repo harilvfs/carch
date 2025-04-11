@@ -31,11 +31,6 @@ fzf_confirm() {
     fi
 }
 
-if ! fzf_confirm "Continue with Fastfetch setup?"; then
-    echo -e "${RED}Setup aborted by the user.${NC}"
-    exit 1
-fi
-
 FASTFETCH_DIR="$HOME/.config/fastfetch"
 BACKUP_DIR="$HOME/.config/fastfetch_backup"
 
