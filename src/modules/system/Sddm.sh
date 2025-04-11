@@ -45,7 +45,7 @@ detect_os() {
    elif command -v dnf &>/dev/null; then
        DISTRO="fedora"
    else
-       echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
+       echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
        exit 1
    fi
 }
@@ -78,7 +78,7 @@ install_sddm() {
         elif [[ $DISTRO == "fedora" ]]; then
             sudo dnf install -y sddm
         else
-            echo -e "${RED}❌ Unsupported distribution!${ENDCOLOR}"
+            echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
             exit 1
         fi
     else
@@ -128,11 +128,6 @@ EOF'
 
 print_banner
 detect_os
-
-if ! fzf_confirm "Continue with SDDM setup?"; then
-    echo -e "${RED}Setup aborted by the user.${ENDCOLOR}"
-    exit 1
-fi
 
 echo -e "${GREEN}:: Proceeding with installation...${ENDCOLOR}"
 install_sddm

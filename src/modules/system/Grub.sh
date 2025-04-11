@@ -61,11 +61,6 @@ install_theme() {
 }
 
 print_message
-echo -e "${RED}:: WARNING: Ensure you have backed up your GRUB configuration before proceeding.${ENDCOLOR}"
-if ! fzf_confirm "Continue with Grub setup?"; then
-    echo -e "${RED}:: Setup aborted by the user.${ENDCOLOR}"
-    exit 1
-fi
 
 check_existing_dir
 clone_repo

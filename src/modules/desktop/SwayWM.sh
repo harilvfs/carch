@@ -171,11 +171,6 @@ https://github.com/harilvfs/swaydotfiles"
 
 print_message $YELLOW"----------------------------------------"
 
-if ! fzf_confirm "Continue with Sway setup?"; then
-    print_message $RED "Setup aborted by the user."
-    exit 1
-fi
-
 if command -v pacman &>/dev/null; then
    print_message $GREEN "Arch Linux detected. Proceeding with setup..."
 elif command -v dnf &>/dev/null; then

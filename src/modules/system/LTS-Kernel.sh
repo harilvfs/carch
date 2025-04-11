@@ -12,13 +12,13 @@ NC="\e[0m"
 ENDCOLOR="\e[0m"
 
 fzf_confirm() {
-    local options=("Yes" "No" "Exit")
+    local options=("Install LTS, remove current" "Install LTS alongside current" "Cancel installation")
     local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=10 --layout=reverse --border)
     
     case "$selected" in
-        "Yes") return 0 ;;
-        "No") return 1 ;;
-        "Exit") echo "Exiting..."; exit 0 ;;
+        "Install LTS, remove current") return 0 ;;
+        "Install LTS alongside current") return 1 ;;
+        "Cancel installation") echo "Exiting..."; exit 0 ;;
         *) echo "Invalid selection"; exit 1 ;;
     esac
 }
@@ -58,11 +58,11 @@ configure_grub() {
 }
 
 echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
-echo -e "${RED}If you don't know about kernel changes, it's recommended to Exit.${ENDCOLOR}"
+echo -e "${RED}If you don't know about kernel changes, it's recommended to Cancel.${ENDCOLOR}"
 echo -e "\n${BLUE}Choose an option:${ENDCOLOR}"
-echo -e "${GREEN}Yes:${NC} Removes the current kernel and installs the LTS kernel."
-echo -e "${GREEN}No:${NC} Installs the LTS kernel without removing the current kernel."
-echo -e "${GREEN}Exit:${NC} Cancels the installation.\n"
+echo -e "${GREEN}Install LTS, remove current:${NC} Removes the current kernel and installs the LTS kernel."
+echo -e "${GREEN}Install LTS alongside current:${NC} Installs the LTS kernel without removing the current kernel."
+echo -e "${GREEN}Cancel installation:${NC} Cancels the installation.\n"
 
 echo "Do you want to continue with the kernel installation?"
 

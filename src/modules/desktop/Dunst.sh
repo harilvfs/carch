@@ -30,11 +30,6 @@ else
 fi
 echo -e "${RESET}"
 
-if ! fzf_confirm "This script will install and configure Dunst. Continue?"; then
-    print_message "$RED" "Setup aborted by the user. Exiting..."
-    exit 1
-fi
-
 if ! command -v dunst &>/dev/null; then
     print_message "$BLUE" "Dunst not found. Installing..."
     if command -v pacman &>/dev/null; then

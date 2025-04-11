@@ -42,20 +42,20 @@ detect_distro() {
     elif command -v dnf &>/dev/null; then
         DISTRO="fedora"
     else
-        print_color "$RED" "❌ Unsupported distribution!"
+        print_color "$RED" "Unsupported distribution!"
         exit 1
     fi
 }
 
 install_fish() {
-    print_color "$CYAN" "🐟 Installing Fish shell..."
+    print_color "$CYAN" "Installing Fish shell..."
     
     if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm fish noto-fonts-emoji ttf-joypixels git
     elif command -v dnf &>/dev/null; then
         sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git
     else
-        print_color "$RED" "❌ Unsupported distro: $DISTRO"
+        print_color "$RED" "Unsupported distro: $DISTRO"
         exit 1
     fi
 }
@@ -67,23 +67,21 @@ install_zoxide() {
     elif command -v dnf &>/dev/null; then
         sudo dnf install -y zoxide
     else
-        print_color "$RED" "❌ Unsupported distro: $DISTRO"
+        print_color "$RED" "Unsupported distro: $DISTRO"
         exit 1
     fi
 }
 
 detect_distro
 
-fzf_confirm "⚠️ This script will configure Fish shell. Nerd Font Are Recommended. Do you want to continue?" || exit 0
-
 install_fish
 
 FISH_CONFIG="$HOME/.config/fish"
 if [[ -d "$FISH_CONFIG" ]]; then
-    fzf_confirm "⚠️ Existing Fish config found. Do you want to back it up?" && {
+    fzf_confirm "Existing Fish config found. Do you want to back it up?" && {
         BACKUP_PATH="$HOME/.config/fish.bak.$(date +%s)"
         mv "$FISH_CONFIG" "$BACKUP_PATH"
-        print_color "$GREEN" "✅ Backup created at $BACKUP_PATH"
+        print_color "$GREEN" "Backup created at $BACKUP_PATH"
     }
 fi
 
@@ -92,13 +90,13 @@ git clone --depth=1 https://github.com/harilvfs/dwm "$HOME/dwm"
 if [[ -d "$HOME/dwm/config/fish" ]]; then
     echo "Applying Fish configuration..."
     cp -r "$HOME/dwm/config/fish" "$FISH_CONFIG"
-    print_color "$GREEN" "✅ Fish configuration applied!"
+    print_color "$GREEN" "Fish configuration applied!"
     rm -rf "$HOME/dwm"
 else
-    print_color "$RED" "❌ Failed to apply Fish configuration!"
+    print_color "$RED" "Failed to apply Fish configuration!"
     exit 1
 fi
 
 install_zoxide
-print_color "$GREEN" "✅ Zoxide initialized in Fish!"
-print_color "$CYAN" "🐟 Fish setup complete! Restart your shell to apply changes."
+print_color "$GREEN" "Zoxide initialized in Fish!"
+print_color "$CYAN" "Fish setup complete! Restart your shell to apply changes."

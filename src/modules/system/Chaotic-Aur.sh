@@ -50,20 +50,6 @@ else
     echo "========== Chaotic AUR Setup =========="
 fi
 
-echo -e "${RESET}"
-echo -e "${MAGENTA}╭───────────────────────────────────────────────╮"
-echo -e "│  🌟 Installing Chaotic AUR on Arch Linux 🌟   │"
-echo -e "╰───────────────────────────────────────────────╯${ENDCOLOR}"
-
-echo -e "Do you want to continue with the installation?"
-options=("Yes" "No")
-selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select an option: " --height=10 --layout=reverse --border)
-
-if [[ "$selected" != "Yes" ]]; then
-    error "Installation aborted."
-    exit 1
-fi
-
 if grep -q "\[chaotic-aur\]" /etc/pacman.conf; then
     success "Chaotic AUR is already configured in /etc/pacman.conf."
 else

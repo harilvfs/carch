@@ -31,14 +31,6 @@ fzf_confirm() {
     fi
 }
 
-confirm_continue() {
-    echo -e "${YELLOW}Warning: If you already have an Alacritty configuration, make sure to back it up before proceeding.${RESET}"
-    if ! fzf_confirm "Do you want to continue with the setup?"; then
-        echo -e "${RED}Setup aborted by the user.${RESET}"
-        exit 1
-    fi
-}
-
 installAlacritty() {
     if command -v alacritty &>/dev/null; then
         echo -e "${GREEN}Alacritty is already installed.${RESET}"
@@ -82,7 +74,6 @@ setupAlacrittyConfig() {
     echo -e "${GREEN}:: Alacritty configuration files copied and migrated.${RESET}"
 }
 
-confirm_continue
 installAlacritty
 setupAlacrittyConfig
 
