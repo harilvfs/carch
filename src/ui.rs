@@ -25,6 +25,7 @@ pub enum AppMode {
     Normal,
     Preview,
     Search,
+    Confirm,
 }
 
 pub struct StatefulList<T> {
@@ -344,6 +345,7 @@ impl App {
                     AppMode::Normal => AppMode::Preview,
                     AppMode::Preview => AppMode::Normal,
                     AppMode::Search => AppMode::Normal,
+                    AppMode::Confirm => AppMode::Normal,
                 };
 
                 let ui_options = crate::ui::UiOptions::default();
@@ -421,11 +423,11 @@ impl App {
             KeyCode::Enter => {
                 if !self.search_results.is_empty() {
                     let selected_result = self.search_results[self.search_selected_idx];
-                    self.toggle_search_mode();
                     self.scripts.state.select(Some(selected_result));
                     self.update_preview();
-
                     self.ensure_selected_visible();
+                    self.toggle_search_mode();
+                    self.mode = AppMode::Confirm;
                 }
             }
             KeyCode::Down => {
@@ -499,8 +501,9 @@ impl App {
         let search_term = self.search_input.to_lowercase();
 
         for (idx, item) in self.scripts.items.iter().enumerate() {
-            if item.name.to_lowercase().contains(&search_term)
-                || item.category.to_lowercase().contains(&search_term)
+            if !item.is_category_header
+                && (item.name.to_lowercase().contains(&search_term)
+                    || item.category.to_lowercase().contains(&search_term))
             {
                 self.search_results.push(idx);
             }
@@ -526,18 +529,6 @@ impl App {
             KeyCode::Char('/') => self.toggle_search_mode(),
             KeyCode::Down => self.next(),
             KeyCode::Up => self.previous(),
-            KeyCode::Enter => {
-                if let Some(selected) = self.scripts.state.selected() {
-                    if selected < self.scripts.items.len() {
-                        let is_category = self.scripts.items[selected].is_category_header;
-
-                        if is_category {
-                            let category = self.scripts.items[selected].category.clone();
-                            self.toggle_category(&category);
-                        }
-                    }
-                }
-            }
             _ => {}
         }
     }
@@ -567,11 +558,13 @@ impl App {
                 AppMode::Normal => self.next(),
                 AppMode::Preview => self.scroll_preview_down(),
                 AppMode::Search => {}
+                AppMode::Confirm => {}
             },
             MouseEventKind::ScrollUp => match self.mode {
                 AppMode::Normal => self.previous(),
                 AppMode::Preview => self.scroll_preview_up(),
                 AppMode::Search => {}
+                AppMode::Confirm => {}
             },
             _ => {}
         }
@@ -641,35 +634,41 @@ impl App {
         let mut shortest_len = usize::MAX;
 
         for item in &self.scripts.items {
-            if item.category.to_lowercase().starts_with(&search_term)
-                && item.category.len() > search_term.len()
-                && item.category.len() < shortest_len
-            {
-                best_match = Some(item.category.clone());
-                shortest_len = item.category.len();
+            if item.is_category_header {
+                continue;
             }
 
-            if !item.is_category_header {
-                if item.name.to_lowercase().starts_with(&search_term)
-                    && item.name.len() > search_term.len()
-                    && item.name.len() < shortest_len
-                {
-                    best_match = Some(item.name.clone());
-                    shortest_len = item.name.len();
-                }
+            if item.name.to_lowercase().starts_with(&search_term)
+                && item.name.len() > search_term.len()
+                && item.name.len() < shortest_len
+            {
+                best_match = Some(item.name.clone());
+                shortest_len = item.name.len();
+            }
 
-                let full_path = format!("{}/{}", item.category, item.name);
-                if full_path.to_lowercase().starts_with(&search_term)
-                    && full_path.len() > search_term.len()
-                    && full_path.len() < shortest_len
-                {
-                    shortest_len = full_path.len();
-                    best_match = Some(full_path);
-                }
+            let full_path = format!("{}/{}", item.category, item.name);
+            if full_path.to_lowercase().starts_with(&search_term)
+                && full_path.len() > search_term.len()
+                && full_path.len() < shortest_len
+            {
+                shortest_len = full_path.len();
+                best_match = Some(full_path);
             }
         }
 
         self.autocomplete_text = best_match;
+    }
+
+    pub fn handle_key_confirmation_mode(&mut self, key: crossterm::event::KeyEvent) {
+        match key.code {
+            KeyCode::Char('y') | KeyCode::Char('Y') => {
+                self.mode = AppMode::Normal;
+            }
+            KeyCode::Char('n') | KeyCode::Char('N') | KeyCode::Esc => {
+                self.mode = AppMode::Normal;
+            }
+            _ => {}
+        }
     }
 }
 
@@ -777,6 +776,21 @@ where
                                             "Preview toggle attempted but previews are disabled",
                                         );
                                     }
+                                } else if key.code == KeyCode::Enter {
+                                    if let Some(selected) = app.scripts.state.selected() {
+                                        if selected < app.scripts.items.len() {
+                                            let is_category =
+                                                app.scripts.items[selected].is_category_header;
+
+                                            if is_category {
+                                                let category =
+                                                    app.scripts.items[selected].category.clone();
+                                                app.toggle_category(&category);
+                                            } else {
+                                                app.mode = AppMode::Confirm;
+                                            }
+                                        }
+                                    }
                                 } else {
                                     app.handle_key_normal_mode(key);
                                 }
@@ -795,65 +809,56 @@ where
                                 }
                             }
                             AppMode::Search => app.handle_search_input(key),
-                        }
-
-                        if let KeyCode::Enter = key.code {
-                            if app.mode == AppMode::Normal {
-                                if let Some(selected) = app.scripts.state.selected() {
-                                    if selected < app.scripts.items.len()
-                                        && !app.scripts.items[selected].is_category_header
-                                    {
-                                        if let Some(script_path) = app.get_script_path() {
-                                            if options.log_mode {
-                                                let script_name = script_path
-                                                    .file_name()
-                                                    .unwrap_or_default()
-                                                    .to_string_lossy();
-                                                let _ = crate::commands::log_message(
-                                                    "INFO",
-                                                    &format!(
-                                                        "Selected script for execution: {}",
-                                                        script_name
-                                                    ),
-                                                );
-                                            }
-
-                                            disable_raw_mode()?;
-                                            execute!(
-                                                terminal.backend_mut(),
-                                                LeaveAlternateScreen,
-                                                DisableMouseCapture
-                                            )?;
-                                            terminal.show_cursor()?;
-
-                                            if options.log_mode {
-                                                let _ = crate::commands::log_message(
-                                                    "INFO",
-                                                    "Exiting UI to run script",
-                                                );
-                                            }
-
-                                            run_script_callback(&script_path)?;
-
-                                            if options.log_mode {
-                                                let _ = crate::commands::log_message(
-                                                    "INFO",
-                                                    "Script execution completed, returning to UI",
-                                                );
-                                            }
-
-                                            enable_raw_mode()?;
-                                            let mut stdout = io::stdout();
-                                            execute!(
-                                                stdout,
-                                                EnterAlternateScreen,
-                                                EnableMouseCapture
-                                            )?;
-
-                                            let backend = CrosstermBackend::new(stdout);
-                                            terminal = Terminal::new(backend)?;
-                                            terminal.clear()?;
+                            AppMode::Confirm => {
+                                app.handle_key_confirmation_mode(key);
+                                if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y')
+                                {
+                                    if let Some(script_path) = app.get_script_path() {
+                                        if options.log_mode {
+                                            let script_name = script_path
+                                                .file_name()
+                                                .unwrap_or_default()
+                                                .to_string_lossy();
+                                            let _ = crate::commands::log_message(
+                                                "INFO",
+                                                &format!(
+                                                    "Selected script for execution: {}",
+                                                    script_name
+                                                ),
+                                            );
                                         }
+
+                                        disable_raw_mode()?;
+                                        execute!(
+                                            terminal.backend_mut(),
+                                            LeaveAlternateScreen,
+                                            DisableMouseCapture
+                                        )?;
+                                        terminal.show_cursor()?;
+
+                                        if options.log_mode {
+                                            let _ = crate::commands::log_message(
+                                                "INFO",
+                                                "Exiting UI to run script",
+                                            );
+                                        }
+
+                                        run_script_callback(&script_path)?;
+
+                                        if options.log_mode {
+                                            let _ = crate::commands::log_message(
+                                                "INFO",
+                                                "Script execution completed, returning to UI",
+                                            );
+                                        }
+
+                                        enable_raw_mode()?;
+                                        let mut stdout = io::stdout();
+                                        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+
+                                        let backend = CrosstermBackend::new(stdout);
+                                        terminal = Terminal::new(backend)?;
+                                        terminal.clear()?;
                                     }
                                 }
                             }
@@ -952,6 +957,8 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App, options: &UiOptions) {
 
     if app.mode == AppMode::Search {
         render_search_popup(f, app);
+    } else if app.mode == AppMode::Confirm {
+        render_confirmation_popup(f, app);
     }
 }
 
@@ -1235,11 +1242,7 @@ fn render_search_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
 
             if script_idx < app.scripts.items.len() {
                 let item = &app.scripts.items[script_idx];
-                let display_text = if item.is_category_header {
-                    item.category.clone()
-                } else {
-                    format!("{}/{}", item.category, item.name)
-                };
+                let display_text = format!("{}/{}", item.category, item.name);
 
                 result_items.push(ListItem::new(Spans::from(vec![Span::styled(
                     display_text,
@@ -1289,4 +1292,81 @@ fn render_search_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
     .alignment(ratatui::layout::Alignment::Center);
 
     f.render_widget(help_text, help_inner_area);
+}
+
+fn render_confirmation_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
+    let area = f.size();
+
+    let popup_width = std::cmp::min(55, area.width - 8);
+    let popup_height = 9;
+
+    let popup_area = Rect {
+        x: (area.width - popup_width) / 2,
+        y: (area.height - popup_height) / 2,
+        width: popup_width,
+        height: popup_height,
+    };
+
+    f.render_widget(ratatui::widgets::Clear, popup_area);
+
+    let popup_block = Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .title("Confirm selection")
+        .border_style(Style::default().fg(Color::White));
+
+    let script_name = if let Some(selected) = app.scripts.state.selected() {
+        if selected < app.scripts.items.len() && !app.scripts.items[selected].is_category_header {
+            let item = &app.scripts.items[selected];
+            format!("{}/{}", item.category, item.name)
+        } else {
+            String::from("Unknown script")
+        }
+    } else {
+        String::from("Unknown script")
+    };
+
+    let inner_area = popup_block.inner(popup_area);
+    let content_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Length(3), Constraint::Length(2)])
+        .split(inner_area);
+
+    let script_text = Paragraph::new(vec![
+        Spans::from(vec![Span::styled(
+            "Do you want to run this script?",
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
+        )]),
+        Spans::from(vec![Span::styled(
+            format!("1. {}", script_name),
+            Style::default().fg(Color::White),
+        )]),
+    ])
+    .alignment(ratatui::layout::Alignment::Left);
+
+    let options_text = Paragraph::new(vec![
+        Spans::from(Span::raw("")),
+        Spans::from(vec![
+            Span::styled("[", Style::default().fg(Color::Gray)),
+            Span::styled(
+                "Y",
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
+            Span::styled(
+                "N",
+                Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("] to abort", Style::default().fg(Color::Gray)),
+        ]),
+    ])
+    .alignment(ratatui::layout::Alignment::Center);
+
+    f.render_widget(popup_block, popup_area);
+    f.render_widget(script_text, content_layout[0]);
+    f.render_widget(options_text, content_layout[1]);
 }
