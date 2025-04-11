@@ -7,13 +7,11 @@ use std::process::Command;
 const CONFIG_DIR: &str = ".config/carch";
 const LOG_FILE: &str = ".config/carch/carch.log";
 
-/// Get the version of the currently installed carch
 pub fn get_version() -> String {
     let version = env!("CARGO_PKG_VERSION");
     format!("Carch version {}", version)
 }
 
-/// Log a message to the carch log file
 pub fn log_message(log_type: &str, message: &str) -> io::Result<()> {
     let log_file = format!("{}/{}", env::var("HOME").unwrap_or_else(|_| String::from("~")), LOG_FILE);
     let config_dir = format!("{}/{}", env::var("HOME").unwrap_or_else(|_| String::from("~")), CONFIG_DIR);
@@ -35,7 +33,6 @@ pub fn log_message(log_type: &str, message: &str) -> io::Result<()> {
     Ok(())
 }
 
-/// Detect which Linux distribution is running
 pub fn detect_distro() -> String {
     if Path::new("/etc/arch-release").exists() || Command::new("pacman").arg("-V").status().is_ok() {
         return String::from("arch");
@@ -48,7 +45,6 @@ pub fn detect_distro() -> String {
     String::from("unknown")
 }
 
-/// Check for updates to carch
 pub fn check_update() -> io::Result<()> {
     println!("Checking for updates...");
     
@@ -105,7 +101,6 @@ pub fn check_update() -> io::Result<()> {
     Ok(())
 }
 
-/// Update carch to the latest version
 pub fn update() -> io::Result<()> {
     println!("Updating Carch...");
     
