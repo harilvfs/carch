@@ -501,9 +501,9 @@ impl App {
         let search_term = self.search_input.to_lowercase();
 
         for (idx, item) in self.scripts.items.iter().enumerate() {
-            if !item.is_category_header && 
-               (item.name.to_lowercase().contains(&search_term) || 
-                item.category.to_lowercase().contains(&search_term))
+            if !item.is_category_header
+                && (item.name.to_lowercase().contains(&search_term)
+                    || item.category.to_lowercase().contains(&search_term))
             {
                 self.search_results.push(idx);
             }
@@ -557,14 +557,14 @@ impl App {
             MouseEventKind::ScrollDown => match self.mode {
                 AppMode::Normal => self.next(),
                 AppMode::Preview => self.scroll_preview_down(),
-                AppMode::Search => {},
-                AppMode::Confirm => {},
+                AppMode::Search => {}
+                AppMode::Confirm => {}
             },
             MouseEventKind::ScrollUp => match self.mode {
                 AppMode::Normal => self.previous(),
                 AppMode::Preview => self.scroll_preview_up(),
-                AppMode::Search => {},
-                AppMode::Confirm => {},
+                AppMode::Search => {}
+                AppMode::Confirm => {}
             },
             _ => {}
         }
@@ -779,10 +779,12 @@ where
                                 } else if key.code == KeyCode::Enter {
                                     if let Some(selected) = app.scripts.state.selected() {
                                         if selected < app.scripts.items.len() {
-                                            let is_category = app.scripts.items[selected].is_category_header;
+                                            let is_category =
+                                                app.scripts.items[selected].is_category_header;
 
                                             if is_category {
-                                                let category = app.scripts.items[selected].category.clone();
+                                                let category =
+                                                    app.scripts.items[selected].category.clone();
                                                 app.toggle_category(&category);
                                             } else {
                                                 app.mode = AppMode::Confirm;
@@ -809,7 +811,8 @@ where
                             AppMode::Search => app.handle_search_input(key),
                             AppMode::Confirm => {
                                 app.handle_key_confirmation_mode(key);
-                                if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y') {
+                                if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y')
+                                {
                                     if let Some(script_path) = app.get_script_path() {
                                         if options.log_mode {
                                             let script_name = script_path
@@ -851,11 +854,7 @@ where
 
                                         enable_raw_mode()?;
                                         let mut stdout = io::stdout();
-                                        execute!(
-                                            stdout,
-                                            EnterAlternateScreen,
-                                            EnableMouseCapture
-                                        )?;
+                                        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
 
                                         let backend = CrosstermBackend::new(stdout);
                                         terminal = Terminal::new(backend)?;
@@ -1330,16 +1329,15 @@ fn render_confirmation_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
     let inner_area = popup_block.inner(popup_area);
     let content_layout = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Length(3),
-            Constraint::Length(2),
-        ])
+        .constraints([Constraint::Length(3), Constraint::Length(2)])
         .split(inner_area);
 
     let script_text = Paragraph::new(vec![
         Spans::from(vec![Span::styled(
             "Do you want to run this script?",
-            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         )]),
         Spans::from(vec![Span::styled(
             format!("1. {}", script_name),
@@ -1352,9 +1350,17 @@ fn render_confirmation_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
         Spans::from(Span::raw("")),
         Spans::from(vec![
             Span::styled("[", Style::default().fg(Color::Gray)),
-            Span::styled("Y", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
+            Span::styled(
+                "Y",
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
+            ),
             Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
-            Span::styled("N", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
+            Span::styled(
+                "N",
+                Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+            ),
             Span::styled("] to abort", Style::default().fg(Color::Gray)),
         ]),
     ])
