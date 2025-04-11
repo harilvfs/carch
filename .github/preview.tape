@@ -73,21 +73,27 @@ Type "carch" Sleep 3s  Enter
 
 Sleep 5s
 
-Up Sleep 3s
+Down Sleep 3s
 
-Up Sleep 3s
+Down Sleep 3s
 
-Up Sleep 2s
+Down Sleep 2s
 
-Sleep 4s
+Type "/" Sleep 1s
 
-Type@200ms "cancel" Sleep 3s Enter
+Type@200ms "Alacritty" Sleep 3s Enter
 
 Sleep 2s
 
-Type "carch -h" Sleep 2s  Enter
+Enter Sleep 2s
 
-Sleep 5s
+Type "y"
+
+Sleep 15s
+
+Enter
+
+Sleep 4s
 
 Type "q"
 
