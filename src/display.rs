@@ -138,27 +138,6 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
         ]),
         Spans::from(vec![
             Span::styled(
-                "  --gen-config            ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Generate a default configuration file in ~/.config/carch/carch.conf."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
-                "  -c                      ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Use the default configuration file to load selected scripts."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
-                "  --run-script <name>, -r ",
-                Style::default().fg(Color::Yellow),
-            ),
-            Span::raw("Run the specified script."),
-        ]),
-        Spans::from(vec![
-            Span::styled(
                 "  --list-scripts, -l      ",
                 Style::default().fg(Color::Yellow),
             ),
@@ -254,13 +233,6 @@ pub fn display_help_text() {
     println!("\x1b[36mOptions:\x1b[0m");
     println!("\x1b[33m  --help, -h              \x1b[0mShow this help message and exit.");
     println!("\x1b[33m  --version, -v           \x1b[0mShow the program version.");
-    println!(
-        "\x1b[33m  --gen-config            \x1b[0mGenerate a default configuration file in ~/.config/carch/carch.conf."
-    );
-    println!(
-        "\x1b[33m  -c                      \x1b[0mUse the default configuration file to load selected scripts."
-    );
-    println!("\x1b[33m  --run-script <name>, -r \x1b[0mRun the specified script.");
     println!("\x1b[33m  --list-scripts, -l      \x1b[0mList all available scripts.");
     println!(
         "\x1b[33m  --no-preview            \x1b[0mRun without displaying script previews in menus."
