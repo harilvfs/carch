@@ -8,10 +8,6 @@ _carch() {
         '-h:Show the help message'
         '--version:Show the program version'
         '-v:Show the program version'
-        '--gen-config:Generate a default configuration file'
-        '-c:Use the default configuration file'
-        '--run-script:Run a specific script from the script directory'
-        '-r:Run a specific script from the script directory'
         '--list-scripts:List all available scripts'
         '-l:List all available scripts'
         '--no-preview:Run without displaying script previews in menus (one-time)'
@@ -26,10 +22,6 @@ _carch() {
         '-h[Show the help message]' \
         '--version[Show the program version]' \
         '-v[Show the program version]' \
-        '--gen-config[Generate a default configuration file]' \
-        '-c[Use the default configuration file]' \
-        '--run-script[Run a specific script]' \
-        '-r[Run a specific script]' \
         '--list-scripts[List all available scripts]' \
         '-l[List all available scripts]' \
         '--no-preview[Run without displaying script previews in menus]' \
