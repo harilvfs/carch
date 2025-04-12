@@ -31,33 +31,43 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const messages = process.env.MESSAGES;
-            const labels = [];
+            const labels = new Set();
             
-            // Match commit content with labels
-            if (messages.includes('feat')) labels.push('enhancement');
-            if (messages.includes('perf')) labels.push('enhancement');
-            if (messages.includes('fix')) labels.push('bug');
-            if (messages.includes('docs')) labels.push('documentation');
-            if (messages.includes('chore')) labels.push('dependencies');
-            if (messages.includes('refactor')) labels.push('refactor');
-            if (messages.includes('rust')) labels.push('rust');
-            if (messages.includes('test')) labels.push('test');
-            if (messages.includes('ci')) labels.push('github_actions');
-            if (messages.includes('build')) labels.push('build');
-            if (messages.includes('remove')) labels.push('remove');
-            if (messages.includes('custom')) labels.push('custom');
-            if (messages.includes('ui') || messages.includes('ux')) labels.push('UX/UI');
-            if (messages.includes('update')) labels.push('update');
+            const patterns = {
+              enhancement: /\b(feat|feature|perf|performance)(\(.*\))?:/i,
+              bug: /\b(fix|bugfix|bug)(\(.*\))?:/i,
+              documentation: /\b(docs|doc|documentation)(\(.*\))?:/i,
+              dependencies: /\b(chore|deps|dependencies)(\(.*\))?:/i,
+              refactor: /\b(refactor)(\(.*\))?:/i,
+              rust: /\b(rust)(\(.*\))?:/i,
+              test: /\b(test|tests)(\(.*\))?:/i,
+              github_actions: /\b(ci|github)(\(.*\))?:/i,
+              build: /\b(build)(\(.*\))?:/i,
+              remove: /\b(remove|delete)(\(.*\))?:/i,
+              custom: /\b(custom)(\(.*\))?:/i,
+              'UX/UI': /\b(ui|ux|UI|UX)(\(.*\))?:/i,
+              update: /\b(update|upgrade)(\(.*\))?:/i
+            };
             
-            if (labels.length > 0) {
+            messages.split('\n').forEach(message => {
+              for (const [label, pattern] of Object.entries(patterns)) {
+                if (pattern.test(message)) {
+                  labels.add(label);
+                }
+              }
+            });
+            
+            const labelsArray = Array.from(labels);
+            
+            if (labelsArray.length > 0) {
               try {
                 await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: context.issue.number,
-                  labels: labels
+                  labels: labelsArray
                 });
-                console.log(`Added labels: ${labels.join(', ')}`);
+                console.log(`Added labels: ${labelsArray.join(', ')}`);
               } catch (error) {
                 console.error(`Error adding labels: ${error.message}`);
               }
