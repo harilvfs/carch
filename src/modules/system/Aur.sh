@@ -209,6 +209,15 @@ if [ "$distro" == "unsupported" ]; then
     fi
 fi
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 while true; do
     display_header
     echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
@@ -218,7 +227,12 @@ while true; do
     echo
     
         options=("Install Paru" "Install Yay" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="AUR Helper Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
         "Install Paru") install_paru ;;

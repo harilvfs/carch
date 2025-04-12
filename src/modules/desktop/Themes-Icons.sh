@@ -10,10 +10,24 @@ CYAN='\033[0;36m'
 YELLOW='\033[0;33m'
 RESET='\033[0m'
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="$prompt " \
+                                                     --header="Confirm" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
     
     if [[ "$selected" == "Yes" ]]; then
         return 0
@@ -33,7 +47,12 @@ echo -e "${RESET}"
 echo -e "${CYAN}Theme and Icon Setup${RESET}"
 echo -e "${YELLOW}----------------------${RESET}"
 
-option=$(printf "Themes\nIcons\nBoth\nExit" | fzf --prompt="Choose an option: " --height=10 --layout=reverse --border)
+option=$(printf "Themes\nIcons\nBoth\nExit" | fzf ${FZF_COMMON} \
+                                              --height=40% \
+                                              --prompt="Choose an option: " \
+                                              --header="Themes and Icons" \
+                                              --pointer="➤" \
+                                              --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
