@@ -66,7 +66,7 @@ if ! command -v npm &>/dev/null; then
     options=("Yes" "No")
     continue_install=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                        --height=40% \
-                                                       --prompt="⚠ npm is required to install Bun. Do you want to continue? " \
+                                                       --prompt="npm is required to install Bun. Do you want to continue? " \
                                                        --header="Confirm" \
                                                        --pointer="➤" \
                                                        --color='fg:white,fg+:green,bg+:black,pointer:green')

@@ -59,7 +59,7 @@ else
 fi
 
 install_helix() {
-    echo -e "${CYAN}⚡ Installing Helix editor...${RESET}"
+    echo -e "${CYAN}Installing Helix editor...${RESET}"
     if [[ $DISTRO == "arch" ]]; then
         sudo pacman -S --noconfirm helix noto-fonts-emoji ttf-joypixels git
     elif [[ $DISTRO == "fedora" ]]; then
@@ -92,4 +92,4 @@ else
     exit 1
 fi
 
-echo -e "${CYAN}⚡ Helix setup complete! Restart your editor to apply changes.${RESET}"
+echo -e "${CYAN}Helix setup complete! Restart your editor to apply changes.${RESET}"
