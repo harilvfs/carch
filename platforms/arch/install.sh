@@ -15,6 +15,15 @@ WHITE="\033[37m"
 BOLD="\033[1m"
 RESET="\033[0m"
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 USERNAME=$(whoami)
 mkdir -p "$CONFIG_DIR" "$CACHE_DIR"
 
@@ -67,7 +76,12 @@ fi
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="$prompt " \
+                                                     --header="Confirm" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
     
     if [[ "$selected" == "Yes" ]]; then
         return 0
@@ -152,7 +166,12 @@ echo -e "${RED}Git package is not fully recommended as it grabs the latest commi
 echo -e "${YELLOW}${BOLD}Select installation type:${RESET}"
 
 options=("Stable Release [Recommended]" "Carch-git [GitHub Latest Commit]" "Cancel")
-CHOICE=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select package version to install: " --height=8 --layout=reverse --border)
+CHOICE=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                             --height=40% \
+                                             --prompt="Select package version to install: " \
+                                             --header="Installation Options" \
+                                             --pointer="➤" \
+                                             --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
 if [[ $CHOICE == "Cancel" ]]; then
     echo -e "${RED}Installation canceled by the user.${RESET}"
