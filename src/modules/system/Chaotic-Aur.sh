@@ -100,3 +100,12 @@ sudo pacman -Sy || {
 
 success "✅ Chaotic AUR has been installed successfully!"
 echo -e "${GREEN}You can now install packages from Chaotic AUR using pacman.${ENDCOLOR}"
+
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"

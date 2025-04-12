@@ -11,9 +11,24 @@ CYAN="\e[36m"
 NC="\e[0m"
 ENDCOLOR="\e[0m"
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 fzf_confirm() {
+    local kernel_info="The system is currently running kernel: $(uname -r)"
     local options=("Install LTS, remove current" "Install LTS alongside current" "Cancel installation")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=10 --layout=reverse --border)
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="Choose an option: " \
+                                                     --header="$kernel_info" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
     
     case "$selected" in
         "Install LTS, remove current") return 0 ;;

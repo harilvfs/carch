@@ -2,12 +2,27 @@
 
 # Installs a curated selection of essential packages to establish a fully functional environment.
 
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
 RED='\033[0;31m'
-BLUE="\e[34m"
-ENDCOLOR="\e[0m"
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
 RESET='\033[0m'
+
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
+if [ "$(id -u)" = 0 ]; then
+    echo -e "${RED}This script should not be run as root.${RESET}"
+    exit 1
+fi
 
 AUR_HELPER=""
 
@@ -104,13 +119,15 @@ install_android() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Android"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Android tool to install:"
-
         options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Gvfs-MTP [Displays Android phones via USB]")
@@ -168,13 +185,16 @@ install_browsers() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Browser"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Browser tool to install:"
 
         options=("Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=60% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
          case $selected in
             "Brave")
@@ -363,13 +383,16 @@ install_communication() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Communication"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Communication App to install:"
 
         options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Discord")
@@ -522,13 +545,16 @@ install_development() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Development"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a development tool to install:"
         
         options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
         
         case $selected in
             "Node.js")
@@ -665,13 +691,16 @@ install_editing() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Editing"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Editing tool to install:"
 
         options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "GIMP (Image)")
@@ -797,13 +826,16 @@ install_filemanagers() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Filemanagers"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Filemanagers Apps to install:"
 
         options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Nemo")
@@ -926,13 +958,16 @@ install_gaming() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Gaming"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Gaming Platform to install:"
 
         options=("Steam" "Lutris" "Heroic Games Launcher" "ProtonUp-Qt" "MangoHud" "GameMode" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Steam")
@@ -1045,13 +1080,16 @@ install_github() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Git"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Git tool to install:"
         
         options=("Git" "GitHub Desktop" "GitHub CLI" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Git")
@@ -1131,13 +1169,16 @@ install_multimedia() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Multimedia"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Multimedia Packages to install:"
 
         options=("VLC" "Netflix [Unofficial]" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "VLC")
@@ -1201,13 +1242,16 @@ install_music() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Music"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Music Packages to install:"
 
         options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Youtube-Music")
@@ -1292,13 +1336,16 @@ install_productivity() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Productivity"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Productivity Packages to install:"
         
         options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "LibreOffice")
@@ -1396,13 +1443,16 @@ install_streaming() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Streaming"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Streaming tool to install:"
 
         options=("OBS Studio" "SimpleScreenRecorder [Git]" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "OBS Studio")
@@ -1465,14 +1515,17 @@ install_terminals() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Terminal"
         echo "Select a Terminal to install:"
         echo -e "${BLUE}If you're unsure what to choose, Kitty or Alacritty are great options.${RESET}"
         echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
 
         options=("Alacritty" "Kitty" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Alacritty")
@@ -1635,13 +1688,16 @@ install_texteditor() {
     fi
 
     while true; do
-       clear
-        figlet -f slant "Text Editors"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Text Editor to install:"
 
         options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Cursor (AI Code Editor)")
@@ -1767,13 +1823,16 @@ install_thunarpreview() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Thunar"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Thumbnail Previewer:"
 
         options=("Tumbler" "Trash-Cli" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "Tumbler")
@@ -1799,6 +1858,7 @@ install_thunarpreview() {
                 fi
                 version=$(get_version trash-cli)
                 echo "Trash-Cli installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
                 ;;
 
             "Exit")
@@ -1826,13 +1886,16 @@ install_virtualization() {
     fi
 
     while true; do
-        clear
-        figlet -f slant "Virtualization"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Virtualization tool to install:"
 
         options=("QEMU/KVM" "VirtualBox" "Distrobox" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=40% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         case $selected in
             "QEMU/KVM")
@@ -1901,7 +1964,12 @@ while true; do
     echo -e "${YELLOW}--------------------------------------${RESET}"
 
     options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Thunar Preview" "Virtualization" "Exit")
-    selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="Choose an option: " --height=15 --layout=reverse --border)
+    selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                        --height=70% \
+                                                        --prompt="Choose an option: " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
     case $selected in
         "Android Tools") install_android ;;

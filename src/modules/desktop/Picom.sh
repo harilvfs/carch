@@ -25,20 +25,42 @@ Picom is a standalone compositor for Xorg.
 EOF
 echo -e "${ENDCOLOR}"
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="$prompt " \
+                                                     --header="Confirm" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
     
-    echo "$selected"
+    if [[ "$selected" == "Yes" ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 fzf_select() {
     local prompt="$1"
     shift
     local options=("$@")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
-    
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="$prompt " \
+                                                     --header="Select Option" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
     echo "$selected"
 }
 

@@ -12,6 +12,15 @@ NC='\033[0m'
 
 FONTS_DIR="$HOME/.fonts"
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 get_latest_release() {
     curl -s "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" | 
     grep '"tag_name":' | 
@@ -21,7 +30,12 @@ get_latest_release() {
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="$prompt " \
+                                                     --header="Confirm" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
     
     if [[ "$selected" == "Yes" ]]; then
         return 0
@@ -31,8 +45,14 @@ fzf_confirm() {
 }
 
 fzf_select_fonts() {
-    local options=("FiraCode" "Meslo" "JetBrains Mono" "Hack" "CascadiaMono" "Terminus" "Exit")
-    printf "%s\n" "${options[@]}" | fzf --prompt="Select fonts (TAB to mark, ENTER to confirm): " --multi --height=15 --layout=reverse --border
+    local options=("$@")
+    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                     --height=40% \
+                                     --prompt="Select fonts (TAB to mark, ENTER to confirm): " \
+                                     --header="Font Selection" \
+                                     --pointer="➤" \
+                                     --multi \
+                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue'
 }
 
 check_dependencies() {
@@ -90,7 +110,7 @@ choose_fonts() {
         
         echo -e "${GREEN}Select fonts to install (use TAB to select multiple)${NC}"
 
-        FONT_SELECTION=$(fzf_select_fonts)
+        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrains Mono" "Hack" "CascadiaMono" "Terminus" "Exit")
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
             echo -e "${GREEN}Exiting font installation.${NC}"
@@ -145,12 +165,7 @@ choose_fonts() {
         done
 
         echo -e "${GREEN}All selected fonts installed successfully!${NC}"
-        echo -e "${CYAN}Press Enter to return to the font selection menu or type 'q' to quit...${NC}"
-        read -r choice
-        
-        if [[ "$choice" == "q" ]]; then
-            return_to_menu=false
-        fi
+        read -rp "Press Enter to return to menu..."
     done
 }
 

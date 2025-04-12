@@ -20,10 +20,24 @@ echo -e "${RESET}"
 type figlet &>/dev/null || { echo "figlet is not installed. Install it first."; exit 1; }
 type fzf &>/dev/null || { echo "fzf is not installed. Install it first."; exit 1; }
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="$prompt " --height=10 --layout=reverse --border)
+    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                     --height=40% \
+                                                     --prompt="$prompt " \
+                                                     --header="Confirm" \
+                                                     --pointer="➤" \
+                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
     
     if [[ "$selected" == "Yes" ]]; then
         return 0
@@ -34,7 +48,12 @@ fzf_confirm() {
 
 fzf_choose() {
     local options=("$@")
-    printf "%s\n" "${options[@]}" | fzf --height=15 --layout=reverse --border
+    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                     --height=50% \
+                                     --prompt="Select an option: " \
+                                     --header="Hyprland Configuration Options" \
+                                     --pointer="➤" \
+                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue'
 }
 
 if command -v pacman &>/dev/null; then
@@ -103,13 +122,3 @@ elif [[ "$choice" == "jakoolit/Fedora-Hyprland" ]]; then
     chmod +x install.sh
     ./install.sh
 fi
-
-display_message() {
-    echo -e "${BLUE}┌──────────────────────────────────────────────┐${RESET}"
-    echo -e "${BLUE}│                                              │${RESET}"
-    echo -e "${BLUE}│         Hyprland setup completed             │${RESET}"
-    echo -e "${BLUE}│                                              │${RESET}"
-    echo -e "${BLUE}└──────────────────────────────────────────────┘${RESET}"
-}
-
-display_message
