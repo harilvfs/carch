@@ -10,14 +10,6 @@ RED="\e[31m"
 MAGENTA="\e[35m"
 ENDCOLOR="\e[0m"
 
-if ! command -v fzf &>/dev/null; then
-    echo -e "${MAGENTA}fzf is not installed. Installing it now...${ENDCOLOR}"
-    sudo pacman -S --noconfirm fzf || {
-        echo -e "${RED}Failed to install fzf. Please install it manually with: sudo pacman -S fzf${ENDCOLOR}"
-        exit 1
-    }
-fi
-
 if ! command -v figlet &>/dev/null; then
     echo -e "${MAGENTA}figlet is not installed. Installing it now...${ENDCOLOR}"
     sudo pacman -S --noconfirm figlet || {
@@ -98,14 +90,5 @@ sudo pacman -Sy || {
     exit 1
 }
 
-success "✅ Chaotic AUR has been installed successfully!"
+success "Chaotic AUR has been installed successfully!"
 echo -e "${GREEN}You can now install packages from Chaotic AUR using pacman.${ENDCOLOR}"
-
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
