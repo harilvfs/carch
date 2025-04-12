@@ -32,6 +32,15 @@ CYAN="\033[1;36m"
 YELLOW="\033[1;33m"
 RESET="\033[0m"
 
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
+
 echo -e "${BLUE}"
 if command -v figlet &>/dev/null; then
     figlet -f slant "Bash"
@@ -71,7 +80,12 @@ case "$distro" in
 esac
 
 options=("Catppuccin" "Nord" "Exit")
-THEME=$(printf "%s\n" "${options[@]}" | fzf --prompt="Select a theme: " --height=10 --layout=reverse --border)
+THEME=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                             --height=40% \
+                                             --prompt="Select a theme: " \
+                                             --header="Theme Selection" \
+                                             --pointer="➤" \
+                                             --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
 if [[ -z "$THEME" || "$THEME" == "Exit" ]]; then
     echo -e "${RED}Exiting...${RESET}"
@@ -97,7 +111,12 @@ fi
 STARSHIP_CONFIG="$HOME/.config/starship.toml"
 if [[ -f "$STARSHIP_CONFIG" ]]; then
     backup_options=("Yes" "No")
-    backup=$(printf "%s\n" "${backup_options[@]}" | fzf --prompt="Starship configuration found. Do you want to back it up? " --height=10 --layout=reverse --border)
+    backup=$(printf "%s\n" "${backup_options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Starship configuration found. Do you want to back it up? " \
+                                                    --header="Confirm" \
+                                                    --pointer="➤" \
+                                                    --color='fg:white,fg+:green,bg+:black,pointer:green')
     if [[ "$backup" == "Yes" ]]; then
         mv "$STARSHIP_CONFIG" "$STARSHIP_CONFIG.bak"
         echo -e "${GREEN}Backup created: $STARSHIP_CONFIG.bak${RESET}"
@@ -121,7 +140,12 @@ fi
 BASHRC="$HOME/.bashrc"
 if [[ -f "$BASHRC" ]]; then
     bashrc_options=("Yes" "No")
-    replace_bashrc=$(printf "%s\n" "${bashrc_options[@]}" | fzf --prompt=".bashrc already exists. Use the recommended version? " --height=10 --layout=reverse --border)
+    replace_bashrc=$(printf "%s\n" "${bashrc_options[@]}" | fzf ${FZF_COMMON} \
+                                                           --height=40% \
+                                                           --prompt=".bashrc already exists. Use the recommended version? " \
+                                                           --header="Confirm" \
+                                                           --pointer="➤" \
+                                                           --color='fg:white,fg+:green,bg+:black,pointer:green')
     if [[ "$replace_bashrc" == "Yes" ]]; then
         curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
         echo -e "${GREEN}Applied recommended .bashrc.${RESET}"

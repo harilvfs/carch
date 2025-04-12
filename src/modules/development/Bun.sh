@@ -1,69 +1,80 @@
 #!/usr/bin/env bash
 
-# Installs and configures Bun, a fast JavaScript runtime for modern development.
+# Installs Bun, a JavaScript runtime, bundler, transpiler, and package manager optimized for performance.
 
-BLUE="\e[34m"
-GREEN="\e[32m"
-RED="\e[31m"
-YELLOW="\e[33m"
-RESET="\e[0m"
+clear
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
+FZF_COMMON="--layout=reverse \
+            --border=bold \
+            --border=rounded \
+            --margin=5% \
+            --color=dark \
+            --info=inline \
+            --header-first \
+            --bind change:top"
 
 check_fzf() {
     if ! command -v fzf &>/dev/null; then
         echo -e "${YELLOW}Installing fzf...${RESET}"
-        if [[ "$PACKAGE_MANAGER" == "pacman" ]]; then
+        if command -v pacman &>/dev/null; then
             sudo pacman -S --noconfirm fzf
-        elif [[ "$PACKAGE_MANAGER" == "dnf" ]]; then
+        elif command -v dnf &>/dev/null; then
             sudo dnf install -y fzf
         fi
     fi
 }
 
-if command -v pacman &> /dev/null; then
-    PACKAGE_MANAGER="pacman"
-elif command -v dnf &> /dev/null; then
-    PACKAGE_MANAGER="dnf"
+echo -e "${GREEN}"
+if command -v figlet &>/dev/null; then
+    figlet -f slant "Bun"
 else
-    PACKAGE_MANAGER="unknown"
+    echo "========== Bun Setup =========="
 fi
-
-clear
-echo -e "${BLUE}"
-figlet -f slant "Bun"
 echo -e "${RESET}"
 
-if command -v bun &>/dev/null; then
-    echo -e "${GREEN}Bun is already installed!${RESET}"
-    exit 0
-fi
+install_bun() {
+    echo -e "${GREEN}Installing Bun...${RESET}"
+    curl -fsSL https://bun.sh/install | bash
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}Bun has been installed successfully!${RESET}"
+    else
+        echo -e "${RED}Failed to install Bun.${RESET}"
+        echo -e "${YELLOW}Trying alternative installation method...${RESET}"
+        npm install -g bun
+    fi
+}
 
 check_fzf
 
-echo -e "${YELLOW}Installing Bun via curl...${RESET}"
-if bash -c "$(curl -fsSL https://bun.sh/install)"; then
-    echo -e "${GREEN}Bun installed successfully!${RESET}"
-    echo -e "${RED}If Bun doesn't appear on your system automatically, source your ~/.profile, .zshrc, or .bashrc.${RESET}"
-    exit 0
-else
-    echo -e "${RED}Curl installation failed! Trying npm as fallback...${RESET}"
+if ! command -v curl &>/dev/null; then
+    echo -e "${YELLOW}Installing curl...${RESET}"
+    if command -v pacman &>/dev/null; then
+        sudo pacman -S --noconfirm curl
+    elif command -v dnf &>/dev/null; then
+        sudo dnf install -y curl
+    fi
 fi
 
 if ! command -v npm &>/dev/null; then
-    echo -e "${RED}npm is not installed! Cannot use fallback method.${RESET}"
-    exit 1
+    echo -e "${YELLOW}Warning: npm is required for Bun installation${RESET}"
+    options=("Yes" "No")
+    continue_install=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                       --height=40% \
+                                                       --prompt="npm is required to install Bun. Do you want to continue? " \
+                                                       --header="Confirm" \
+                                                       --pointer="➤" \
+                                                       --color='fg:white,fg+:green,bg+:black,pointer:green')
+    
+    if [ "$continue_install" != "Yes" ]; then
+        echo -e "${RED}Aborting Bun installation. Please install npm first.${RESET}"
+        exit 1
+    fi
 fi
 
-options=("Yes" "No")
-continue_install=$(printf "%s\n" "${options[@]}" | fzf --prompt="⚠ npm is required to install Bun. Do you want to continue? " --height=10 --layout=reverse --border)
-if [[ "$continue_install" != "Yes" ]]; then
-    exit 0
-fi
-
-echo -e "${YELLOW}Installing Bun via npm...${RESET}"
-if npm install -g bun; then
-    echo -e "${GREEN}Bun installed successfully!${RESET}"
-    echo -e "${RED}If Bun doesn't appear on your system automatically, source your ~/.profile, .zshrc, or .bashrc.${RESET}"
-else
-    echo -e "${RED}Bun installation failed.${RESET}"
-    exit 1
-fi
+install_bun
