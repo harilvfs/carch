@@ -133,17 +133,17 @@ update_fedora_spec() {
         if [ -n "$CHANGELOG_LINE_NUM" ]; then
             TMP_FILE=$(mktemp)
             
-            CHANGELOG_LINE_NUM=$((CHANGELOG_LINE_NUM + 1))
+            NEXT_SECTION_LINE=$(awk -v start="$CHANGELOG_LINE_NUM" 'NR > start && /^%/ {print NR; exit}' "$REPO_DIR/platforms/fedora/carch.spec")
             
-            awk -v line="$CHANGELOG_LINE_NUM" -v changelog="$CHANGELOG_CONTENT" '
-            NR == line {
-                print changelog;
-                print "";
-                print;
-                next;
-            }
-            {print}
-            ' "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
+            if [ -n "$NEXT_SECTION_LINE" ]; then
+                head -n "$CHANGELOG_LINE_NUM" "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
+                echo -e "$CHANGELOG_CONTENT" >> "$TMP_FILE"
+                echo "" >> "$TMP_FILE"
+                tail -n "+$NEXT_SECTION_LINE" "$REPO_DIR/platforms/fedora/carch.spec" >> "$TMP_FILE"
+            else
+                head -n "$CHANGELOG_LINE_NUM" "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
+                echo -e "$CHANGELOG_CONTENT" >> "$TMP_FILE"
+            fi
             
             mv "$TMP_FILE" "$REPO_DIR/platforms/fedora/carch.spec"
             echo -e "${GREEN}✓ Updated changelog in platforms/fedora/carch.spec${RESET}"
