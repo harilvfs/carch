@@ -85,13 +85,7 @@ Type@200ms "Alacritty" Sleep 3s Enter
 
 Sleep 2s
 
-Enter Sleep 2s
-
-Type "y"
-
-Sleep 15s
-
-Enter
+Type "n"
 
 Sleep 4s
 
