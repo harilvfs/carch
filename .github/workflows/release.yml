@@ -18,8 +18,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
         
       - name: Install musl-tools
         run: sudo apt-get update && sudo apt-get install musl-tools
@@ -76,35 +74,13 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
           
-      - name: Generate PR Release Notes
+      - name: Generate Release Notes
         id: generate_notes
         uses: release-drafter/release-drafter@v6
         with:
           config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Extract Commit Messages
-        id: commit_messages
-        run: |
-          # Get commits since last release or last 50 if it's the first release
-          if [[ "${{ env.latest_tag }}" == "v4.1.0" && "${{ github.event.inputs.tag_version }}" != "v4.1.0" ]]; then
-            # If we're using the default v4.1.0 because there was no release, get last 50 commits
-            COMMITS=$(git log -50 --format="format:- %s (%h)")
-          else
-            # Get commits since last release to this release tag
-            COMMITS=$(git log ${{ env.latest_tag }}..HEAD --format="format:- %s (%h)")
-          fi
-          
-          # Don't include merge commits
-          COMMITS=$(echo "$COMMITS" | grep -v "^- Merge")
-          
-          # Filter categorized commits for PR notes only
-          if [[ ! -z "$COMMITS" ]]; then
-            echo "COMMIT_SUMMARY<<EOF" >> $GITHUB_ENV
-            echo "$COMMITS" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-          fi
           
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -116,14 +92,6 @@ jobs:
 
             ## What's Changed
             ${{ steps.generate_notes.outputs.body }}
-            
-            ## All Commits
-            <details>
-              <summary>Click to see all commits included in this release</summary>
-              
-              ${{ env.COMMIT_SUMMARY }}
-            </details>
-
             **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...${{ github.event.inputs.tag_version }}
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
