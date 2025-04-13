@@ -1,0 +1,117 @@
+name: Carch Prerelease
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build_binaries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Install musl-tools
+        run: sudo apt-get update && sudo apt-get install musl-tools
+        
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-registry-
+          
+      - name: Cache Cargo index
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-index-
+          
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+          
+      - name: Install cross-rs for cross-compilation
+        run: cargo install cross
+          
+      - name: Get Latest Release Tag
+        id: get_latest
+        run: |
+          latest_tag=$(curl -s https://api.github.com/repos/harilvfs/carch/releases/latest | jq -r '.tag_name')
+          if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
+            latest_tag="v4.1.0"
+          fi
+          release_date=$(date +'%Y.%m.%d')
+          commit_sha=$(git rev-parse --short HEAD)
+          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+          echo "release_date=$release_date" >> $GITHUB_ENV
+          echo "commit_sha=$commit_sha" >> $GITHUB_ENV
+          
+      - name: Build x86_64 binary
+        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
+        
+      - name: Build aarch64 binary
+        run: |
+          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
+          mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          
+      - name: Upload binaries as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-binaries
+          path: |
+            ./build/x86_64-unknown-linux-musl/release/carch
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          retention-days: 1
+          
+      - name: Generate Release Notes
+        id: generate_notes
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Delete existing prerelease
+        run: |
+          release_id=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/pre-release" | \
+            jq -r '.id')
+          
+          if [[ "$release_id" != "null" && -n "$release_id" ]]; then
+            curl -s -X DELETE \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/$release_id"
+            
+            git push origin :refs/tags/pre-release || true
+          fi
+          
+      - name: Create Prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: pre-release
+          name: Prerelease (Latest Changes)
+          body: |
+            ### 🚧 This is a development build from the latest commit 🚧
+            
+            This prerelease contains the latest development changes from commit `${{ env.commit_sha }}`.
+            
+            ## What's Changed
+            ${{ steps.generate_notes.outputs.body }}
+            
+            **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...main
+          files: |
+            ./build/x86_64-unknown-linux-musl/release/carch
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          draft: false
+          prerelease: true 
