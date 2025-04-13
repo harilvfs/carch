@@ -159,6 +159,12 @@ jobs:
           name: compiled-binaries
           path: ./binaries
           
+      - name: Prepare binaries for release
+        run: |
+          chmod +x ./binaries/carch
+          chmod +x ./binaries/carch-aarch64
+          ls -la ./binaries/
+          
       - name: Extract commit messages
         id: commit_messages
         run: |
@@ -172,85 +178,12 @@ jobs:
             COMMITS=$(git log $LAST_RELEASE_TAG..HEAD --format="format:- %s (%h)")
           fi
           
-          # Create categorized commit notes
-          {
-            # Features
-            FEATURES=$(echo "$COMMITS" | grep -i -E '^- (feat|feature|perf|performance)(\(.*\))?:' || true)
-            if [[ ! -z "$FEATURES" ]]; then
-              echo "### 🚀 Features"
-              echo "$FEATURES"
-              echo ""
-            fi
-            
-            # Bug Fixes
-            FIXES=$(echo "$COMMITS" | grep -i -E '^- (fix|bugfix|bug)(\(.*\))?:' || true)
-            if [[ ! -z "$FIXES" ]]; then
-              echo "### 🐛 Bug Fixes"
-              echo "$FIXES"
-              echo ""
-            fi
-            
-            # Docs
-            DOCS=$(echo "$COMMITS" | grep -i -E '^- (docs|doc|documentation)(\(.*\))?:' || true)
-            if [[ ! -z "$DOCS" ]]; then
-              echo "### 📖 Documentation"
-              echo "$DOCS"
-              echo ""
-            fi
-            
-            # Rust
-            RUST=$(echo "$COMMITS" | grep -i -E '^- (rust)(\(.*\))?:' || true)
-            if [[ ! -z "$RUST" ]]; then
-              echo "### 🦀 Rust"
-              echo "$RUST"
-              echo ""
-            fi
-            
-            # Refactor
-            REFACTOR=$(echo "$COMMITS" | grep -i -E '^- (refactor)(\(.*\))?:' || true)
-            if [[ ! -z "$REFACTOR" ]]; then
-              echo "### 🔄 Refactor"
-              echo "$REFACTOR"
-              echo ""
-            fi
-            
-            # Dependencies
-            DEPS=$(echo "$COMMITS" | grep -i -E '^- (chore|deps|dependencies)(\(.*\))?:' || true)
-            if [[ ! -z "$DEPS" ]]; then
-              echo "### 🛠️ Dependencies"
-              echo "$DEPS"
-              echo ""
-            fi
-            
-            # CI/GitHub
-            CI=$(echo "$COMMITS" | grep -i -E '^- (ci|github)(\(.*\))?:' || true)
-            if [[ ! -z "$CI" ]]; then
-              echo "### 🔧 CI/CD"
-              echo "$CI"
-              echo ""
-            fi
-            
-            # UI/UX
-            UI=$(echo "$COMMITS" | grep -i -E '^- (ui|ux|UI|UX)(\(.*\))?:' || true)
-            if [[ ! -z "$UI" ]]; then
-              echo "### 🎨 UI/UX"
-              echo "$UI"
-              echo ""
-            fi
-            
-            # Other commits
-            OTHER=$(echo "$COMMITS" | grep -v -i -E '^- (feat|feature|perf|performance|fix|bugfix|bug|docs|doc|documentation|rust|refactor|chore|deps|dependencies|ci|github|ui|ux|UI|UX)(\(.*\))?:' || true)
-            if [[ ! -z "$OTHER" ]]; then
-              echo "### 🔍 Other Changes"
-              echo "$OTHER"
-              echo ""
-            fi
-          } > commit_notes.md
+          # Filter out merge commits
+          COMMITS=$(echo "$COMMITS" | grep -v "^- Merge")
           
-          # Store the release notes in an environment variable for the release
-          COMMIT_NOTES=$(cat commit_notes.md)
-          echo "COMMIT_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$COMMIT_NOTES" >> $GITHUB_ENV
+          # Store raw commits for use in combined notes
+          echo "RAW_COMMITS<<EOF" >> $GITHUB_ENV
+          echo "$COMMITS" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       
       - name: Generate PR Release Notes
@@ -261,23 +194,159 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Combine PR and Commit Notes
+        id: combine_notes
+        run: |
+          # Create a temporary file with PR notes
+          echo "${{ steps.generate_notes.outputs.body }}" > pr_notes.md
+          
+          # Extract categories from PR notes
+          grep -E '## ' pr_notes.md > categories.txt || echo "No categories found in PR notes"
+          
+          # Process each category
+          {
+            echo "**Pre-release build** - Automatically generated from latest commits"
+            echo ""
+            echo "## 📦 Binaries"
+            echo "![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ needs.check_for_changes.outputs.version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ needs.check_for_changes.outputs.version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)"
+            echo ""
+            
+            # Process each known category and combine PR notes with commits
+            
+            # Features
+            if grep -q "## 🚀 Features" categories.txt; then
+              echo "## 🚀 Features"
+              # Extract PR entries
+              sed -n '/## 🚀 Features/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$'
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (feat|feature|perf|performance|enhancement)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Rust
+            if grep -q "## 🦀 Rust" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (rust)(\(.*\))?:'; then
+              echo "## 🦀 Rust"
+              # Extract PR entries
+              sed -n '/## 🦀 Rust/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (rust)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Bug Fixes
+            if grep -q "## 🐛 Bug Fixes" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (fix|bugfix|bug|fixes)(\(.*\))?:'; then
+              echo "## 🐛 Bug Fixes"
+              # Extract PR entries
+              sed -n '/## 🐛 Bug Fixes/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (fix|bugfix|bug|fixes)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Refactor
+            if grep -q "## 🔄 Refactor" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (refactor)(\(.*\))?:'; then
+              echo "## 🔄 Refactor"
+              # Extract PR entries
+              sed -n '/## 🔄 Refactor/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (refactor)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Updates
+            if grep -q "## 🔼 Updates" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (update|updates)(\(.*\))?:'; then
+              echo "## 🔼 Updates"
+              # Extract PR entries
+              sed -n '/## 🔼 Updates/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (update|updates)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Build
+            if grep -q "## 🛠️ Build" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (build|dependencies|deps|chore)(\(.*\))?:'; then
+              echo "## 🛠️ Build"
+              # Extract PR entries
+              sed -n '/## 🛠️ Build/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (build|dependencies|deps|chore)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Test
+            if grep -q "## 🧪 Test" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (test|tests)(\(.*\))?:'; then
+              echo "## 🧪 Test"
+              # Extract PR entries
+              sed -n '/## 🧪 Test/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (test|tests)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Remove
+            if grep -q "## 📝 Remove" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (remove)(\(.*\))?:'; then
+              echo "## 📝 Remove"
+              # Extract PR entries
+              sed -n '/## 📝 Remove/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (remove)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Custom
+            if grep -q "## 🔧 Custom" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (custom)(\(.*\))?:'; then
+              echo "## 🔧 Custom"
+              # Extract PR entries
+              sed -n '/## 🔧 Custom/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (custom)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # UI/UX
+            if grep -q "## 🎨 UI/UX" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (ui|ux|UI|UX)(\(.*\))?:'; then
+              echo "## 🎨 UI/UX"
+              # Extract PR entries
+              sed -n '/## 🎨 UI/UX/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (ui|ux|UI|UX)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Docs
+            if grep -q "## 📖 Docs" categories.txt || echo "${{ env.RAW_COMMITS }}" | grep -q -i -E '^- (docs|doc|documentation)(\(.*\))?:'; then
+              echo "## 📖 Docs"
+              # Extract PR entries
+              sed -n '/## 📖 Docs/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add commits
+              echo "${{ env.RAW_COMMITS }}" | grep -i -E '^- (docs|doc|documentation)(\(.*\))?:' || true
+              echo ""
+            fi
+            
+            # Other Changes
+            if grep -q "## Other Changes" categories.txt; then
+              echo "## 🔍 Other Changes"
+              # Extract PR entries
+              sed -n '/## Other Changes/,/^##/{/^##/!p}' pr_notes.md | grep -v '^$' || true
+              # Add other commits
+              echo "${{ env.RAW_COMMITS }}" | grep -v -i -E '^- (feat|feature|perf|performance|enhancement|rust|fix|bugfix|bug|fixes|refactor|update|updates|build|dependencies|deps|chore|test|tests|remove|custom|ui|ux|UI|UX|docs|doc|documentation)(\(.*\))?:' || true
+              echo ""
+            fi
+          } > combined_notes.md
+          
+          # Store combined notes
+          COMBINED_NOTES=$(cat combined_notes.md)
+          echo "COMBINED_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$COMBINED_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create Pre-release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.check_for_changes.outputs.version }}
           name: "${{ needs.check_for_changes.outputs.title }}"
           body: |
-            **Pre-release build** - Automatically generated from latest commits
-            
-            ## 📦 Binaries
-            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ needs.check_for_changes.outputs.version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ needs.check_for_changes.outputs.version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
-            
-            ## 📝 Commits Since Last Release
-            ${{ env.COMMIT_NOTES }}
-            
-            ## 🔃 PRs Included
-            ${{ steps.generate_notes.outputs.body }}
-            
+            ${{ env.COMBINED_NOTES }}
           files: |
             ./binaries/carch
             ./binaries/carch-aarch64
