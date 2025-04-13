@@ -211,9 +211,8 @@ main() {
     
     local dependencies=(
         "git" "curl" "wget" "figlet" "man-db" "bash" "rust" "cargo" "gcc" 
-        "glibc" "unzip" "tar" "google-noto-color-emoji-fonts" "google-noto-emoji-fonts" 
-        "jetbrains-mono-fonts-all" "bat" "bash-completion-devel" "zsh" "fish" 
-        "rpmdevtools" "rpmlint" "fzf"
+        "glibc" "tar" "google-noto-color-emoji-fonts" "google-noto-emoji-fonts" 
+        "jetbrains-mono-fonts-all" "bash-completion-devel" "rpmdevtools" "rpmlint" "fzf"
     )
     
     if ! sudo -n true 2>/dev/null; then
