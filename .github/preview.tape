@@ -83,7 +83,9 @@ Type "/" Sleep 1s
 
 Type@200ms "Alacritty" Sleep 3s Enter
 
-Sleep 2s
+Sleep 1s
+
+Enter Sleep 2s
 
 Type "n"
 
