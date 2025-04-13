@@ -44,13 +44,13 @@ You can run or use Carch directly without installing it on your system.
 
 Choose one of the following commands to try Carch:
 
-⭐ Stable Version
+⭐ Stable Version [ Latest Release ]
 
 ```sh
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
- 🧪 Dev Version
+ 🧪 Dev Version [ Latest Commits ]
  
 ```sh
 bash <(curl -L https://chalisehari.com.np/carchdev)
