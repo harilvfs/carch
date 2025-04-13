@@ -140,80 +140,84 @@ jobs:
           fi
           
           # Create categorized commit notes
+          {
+            # Features
+            FEATURES=$(echo "$COMMITS" | grep -i -E '^- (feat|feature|perf|performance)(\(.*\))?:' || true)
+            if [[ ! -z "$FEATURES" ]]; then
+              echo "### 🚀 Features"
+              echo "$FEATURES"
+              echo ""
+            fi
+            
+            # Bug Fixes
+            FIXES=$(echo "$COMMITS" | grep -i -E '^- (fix|bugfix|bug)(\(.*\))?:' || true)
+            if [[ ! -z "$FIXES" ]]; then
+              echo "### 🐛 Bug Fixes"
+              echo "$FIXES"
+              echo ""
+            fi
+            
+            # Docs
+            DOCS=$(echo "$COMMITS" | grep -i -E '^- (docs|doc|documentation)(\(.*\))?:' || true)
+            if [[ ! -z "$DOCS" ]]; then
+              echo "### 📖 Documentation"
+              echo "$DOCS"
+              echo ""
+            fi
+            
+            # Rust
+            RUST=$(echo "$COMMITS" | grep -i -E '^- (rust)(\(.*\))?:' || true)
+            if [[ ! -z "$RUST" ]]; then
+              echo "### 🦀 Rust"
+              echo "$RUST"
+              echo ""
+            fi
+            
+            # Refactor
+            REFACTOR=$(echo "$COMMITS" | grep -i -E '^- (refactor)(\(.*\))?:' || true)
+            if [[ ! -z "$REFACTOR" ]]; then
+              echo "### 🔄 Refactor"
+              echo "$REFACTOR"
+              echo ""
+            fi
+            
+            # Dependencies
+            DEPS=$(echo "$COMMITS" | grep -i -E '^- (chore|deps|dependencies)(\(.*\))?:' || true)
+            if [[ ! -z "$DEPS" ]]; then
+              echo "### 🛠️ Dependencies"
+              echo "$DEPS"
+              echo ""
+            fi
+            
+            # CI/GitHub
+            CI=$(echo "$COMMITS" | grep -i -E '^- (ci|github)(\(.*\))?:' || true)
+            if [[ ! -z "$CI" ]]; then
+              echo "### 🔧 CI/CD"
+              echo "$CI"
+              echo ""
+            fi
+            
+            # UI/UX
+            UI=$(echo "$COMMITS" | grep -i -E '^- (ui|ux|UI|UX)(\(.*\))?:' || true)
+            if [[ ! -z "$UI" ]]; then
+              echo "### 🎨 UI/UX"
+              echo "$UI"
+              echo ""
+            fi
+            
+            # Other commits
+            OTHER=$(echo "$COMMITS" | grep -v -i -E '^- (feat|feature|perf|performance|fix|bugfix|bug|docs|doc|documentation|rust|refactor|chore|deps|dependencies|ci|github|ui|ux|UI|UX)(\(.*\))?:' || true)
+            if [[ ! -z "$OTHER" ]]; then
+              echo "### 🔍 Other Changes"
+              echo "$OTHER"
+              echo ""
+            fi
+          } > commit_notes.md
+          
+          # Store the release notes in an environment variable for the release
+          COMMIT_NOTES=$(cat commit_notes.md)
           echo "COMMIT_NOTES<<EOF" >> $GITHUB_ENV
-          
-          # Features
-          FEATURES=$(echo "$COMMITS" | grep -i -E '^- (feat|feature|perf|performance)(\(.*\))?:')
-          if [[ ! -z "$FEATURES" ]]; then
-            echo "### 🚀 Features" >> $GITHUB_ENV
-            echo "$FEATURES" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # Bug Fixes
-          FIXES=$(echo "$COMMITS" | grep -i -E '^- (fix|bugfix|bug)(\(.*\))?:')
-          if [[ ! -z "$FIXES" ]]; then
-            echo "### 🐛 Bug Fixes" >> $GITHUB_ENV
-            echo "$FIXES" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # Docs
-          DOCS=$(echo "$COMMITS" | grep -i -E '^- (docs|doc|documentation)(\(.*\))?:')
-          if [[ ! -z "$DOCS" ]]; then
-            echo "### 📖 Documentation" >> $GITHUB_ENV
-            echo "$DOCS" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # Rust
-          RUST=$(echo "$COMMITS" | grep -i -E '^- (rust)(\(.*\))?:')
-          if [[ ! -z "$RUST" ]]; then
-            echo "### 🦀 Rust" >> $GITHUB_ENV
-            echo "$RUST" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # Refactor
-          REFACTOR=$(echo "$COMMITS" | grep -i -E '^- (refactor)(\(.*\))?:')
-          if [[ ! -z "$REFACTOR" ]]; then
-            echo "### 🔄 Refactor" >> $GITHUB_ENV
-            echo "$REFACTOR" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # Dependencies
-          DEPS=$(echo "$COMMITS" | grep -i -E '^- (chore|deps|dependencies)(\(.*\))?:')
-          if [[ ! -z "$DEPS" ]]; then
-            echo "### 🛠️ Dependencies" >> $GITHUB_ENV
-            echo "$DEPS" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # CI/GitHub
-          CI=$(echo "$COMMITS" | grep -i -E '^- (ci|github)(\(.*\))?:')
-          if [[ ! -z "$CI" ]]; then
-            echo "### 🔧 CI/CD" >> $GITHUB_ENV
-            echo "$CI" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # UI/UX
-          UI=$(echo "$COMMITS" | grep -i -E '^- (ui|ux|UI|UX)(\(.*\))?:')
-          if [[ ! -z "$UI" ]]; then
-            echo "### 🎨 UI/UX" >> $GITHUB_ENV
-            echo "$UI" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
-          # Other commits
-          OTHER=$(echo "$COMMITS" | grep -v -i -E '^- (feat|feature|perf|performance|fix|bugfix|bug|docs|doc|documentation|rust|refactor|chore|deps|dependencies|ci|github|ui|ux|UI|UX)(\(.*\))?:')
-          if [[ ! -z "$OTHER" ]]; then
-            echo "### 🔍 Other Changes" >> $GITHUB_ENV
-            echo "$OTHER" >> $GITHUB_ENV
-            echo "" >> $GITHUB_ENV
-          fi
-          
+          echo "$COMMIT_NOTES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       
       - name: Generate PR Release Notes
