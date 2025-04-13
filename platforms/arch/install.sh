@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="4.3.1"
+VERSION="4.3.2"
 CACHE_DIR="$HOME/.cache/carch-install"
 
 GREEN='\033[0;32m'
