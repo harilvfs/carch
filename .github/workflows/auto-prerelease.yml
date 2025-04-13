@@ -1,0 +1,247 @@
+name: Auto Pre-release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.github/dependabot.yml'
+      - '.github/workflows/auto-*.yml'
+      - '.github/workflows/typos.yml'
+      - '.github/workflows/shellcheck.yml'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  check_for_changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for changes since last release
+        id: check
+        run: |
+          # Get the last release tag
+          LAST_RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+          if [[ "$LAST_RELEASE_TAG" == "null" || -z "$LAST_RELEASE_TAG" ]]; then
+            SHOULD_RELEASE="true"
+            echo "No previous release found, creating initial pre-release"
+          else
+            # Check if there are any commits between the last release and current HEAD
+            COMMIT_COUNT=$(git rev-list --count $LAST_RELEASE_TAG..HEAD)
+            if [[ "$COMMIT_COUNT" -gt 0 ]]; then
+              SHOULD_RELEASE="true"
+              echo "Found $COMMIT_COUNT new commits since $LAST_RELEASE_TAG"
+            else
+              SHOULD_RELEASE="false"
+              echo "No new commits since $LAST_RELEASE_TAG"
+            fi
+          fi
+          echo "should_release=$SHOULD_RELEASE" >> $GITHUB_OUTPUT
+
+      - name: Generate version
+        id: version
+        if: steps.check.outputs.should_release == 'true'
+        run: |
+          # Format: vYYYY.MM.DD-commits.hash
+          CURRENT_DATE=$(date +'%Y.%m.%d')
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          VERSION="v${CURRENT_DATE}-${COMMIT_COUNT}.${SHORT_SHA}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+
+  build_binaries:
+    needs: check_for_changes
+    if: needs.check_for_changes.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: Install musl-tools
+        run: sudo apt-get update && sudo apt-get install musl-tools
+        
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-registry-
+          
+      - name: Cache Cargo index
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-index-
+          
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+          
+      - name: Install cross-rs for cross-compilation
+        run: cargo install cross
+          
+      - name: Build x86_64 binary
+        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
+        
+      - name: Build aarch64 binary
+        run: |
+          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
+          mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          
+      - name: Upload binaries as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-binaries
+          path: |
+            ./build/x86_64-unknown-linux-musl/release/carch
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          retention-days: 1
+
+  create_release:
+    needs: [check_for_changes, build_binaries]
+    if: needs.check_for_changes.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Download binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-binaries
+          path: ./binaries
+          
+      - name: Extract commit messages
+        id: commit_messages
+        run: |
+          # Get the last release tag
+          LAST_RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+          if [[ "$LAST_RELEASE_TAG" == "null" || -z "$LAST_RELEASE_TAG" ]]; then
+            # If no previous release, use the last 20 commits
+            COMMITS=$(git log -20 --format="format:- %s (%h)")
+          else
+            # Get commits since last release
+            COMMITS=$(git log $LAST_RELEASE_TAG..HEAD --format="format:- %s (%h)")
+          fi
+          
+          # Create categorized commit notes
+          echo "COMMIT_NOTES<<EOF" >> $GITHUB_ENV
+          
+          # Features
+          FEATURES=$(echo "$COMMITS" | grep -i -E '^- (feat|feature|perf|performance)(\(.*\))?:')
+          if [[ ! -z "$FEATURES" ]]; then
+            echo "### 🚀 Features" >> $GITHUB_ENV
+            echo "$FEATURES" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # Bug Fixes
+          FIXES=$(echo "$COMMITS" | grep -i -E '^- (fix|bugfix|bug)(\(.*\))?:')
+          if [[ ! -z "$FIXES" ]]; then
+            echo "### 🐛 Bug Fixes" >> $GITHUB_ENV
+            echo "$FIXES" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # Docs
+          DOCS=$(echo "$COMMITS" | grep -i -E '^- (docs|doc|documentation)(\(.*\))?:')
+          if [[ ! -z "$DOCS" ]]; then
+            echo "### 📖 Documentation" >> $GITHUB_ENV
+            echo "$DOCS" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # Rust
+          RUST=$(echo "$COMMITS" | grep -i -E '^- (rust)(\(.*\))?:')
+          if [[ ! -z "$RUST" ]]; then
+            echo "### 🦀 Rust" >> $GITHUB_ENV
+            echo "$RUST" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # Refactor
+          REFACTOR=$(echo "$COMMITS" | grep -i -E '^- (refactor)(\(.*\))?:')
+          if [[ ! -z "$REFACTOR" ]]; then
+            echo "### 🔄 Refactor" >> $GITHUB_ENV
+            echo "$REFACTOR" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # Dependencies
+          DEPS=$(echo "$COMMITS" | grep -i -E '^- (chore|deps|dependencies)(\(.*\))?:')
+          if [[ ! -z "$DEPS" ]]; then
+            echo "### 🛠️ Dependencies" >> $GITHUB_ENV
+            echo "$DEPS" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # CI/GitHub
+          CI=$(echo "$COMMITS" | grep -i -E '^- (ci|github)(\(.*\))?:')
+          if [[ ! -z "$CI" ]]; then
+            echo "### 🔧 CI/CD" >> $GITHUB_ENV
+            echo "$CI" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # UI/UX
+          UI=$(echo "$COMMITS" | grep -i -E '^- (ui|ux|UI|UX)(\(.*\))?:')
+          if [[ ! -z "$UI" ]]; then
+            echo "### 🎨 UI/UX" >> $GITHUB_ENV
+            echo "$UI" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          # Other commits
+          OTHER=$(echo "$COMMITS" | grep -v -i -E '^- (feat|feature|perf|performance|fix|bugfix|bug|docs|doc|documentation|rust|refactor|chore|deps|dependencies|ci|github|ui|ux|UI|UX)(\(.*\))?:')
+          if [[ ! -z "$OTHER" ]]; then
+            echo "### 🔍 Other Changes" >> $GITHUB_ENV
+            echo "$OTHER" >> $GITHUB_ENV
+            echo "" >> $GITHUB_ENV
+          fi
+          
+          echo "EOF" >> $GITHUB_ENV
+      
+      - name: Generate PR Release Notes
+        id: generate_notes
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.check_for_changes.outputs.version }}
+          name: "Pre-release ${{ needs.check_for_changes.outputs.version }}"
+          body: |
+            **Pre-release build** - Automatically generated from latest commits
+            
+            ## 📦 Binaries
+            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ needs.check_for_changes.outputs.version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ needs.check_for_changes.outputs.version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
+            
+            ## 📝 Commits Since Last Release
+            ${{ env.COMMIT_NOTES }}
+            
+            ## 🔃 PRs Included
+            ${{ steps.generate_notes.outputs.body }}
+            
+          files: |
+            ./binaries/carch
+            ./binaries/carch-aarch64
+          prerelease: true 
