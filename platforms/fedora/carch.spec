@@ -1,8 +1,8 @@
 Name:           carch
 Version:        4.3.1
 Release:        1%{?dist}
-Summary:        An automated script for quick & easy Linux system setup (Arch & Fedora)
-License:        GPL
+Summary:        A Simple Script to Make Linux System Setups Easier
+License:        MIT 
 URL:            https://github.com/harilvfs/%{name}
 Source0:        %{URL}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
@@ -18,9 +18,7 @@ Requires:       git
 Requires:       wget
 Requires:       figlet
 Requires:       dnf
-Requires:       unzip
 Requires:       fzf
-Requires:       tar
 Requires:       google-noto-color-emoji-fonts
 Requires:       google-noto-emoji-fonts
 Requires:       jetbrains-mono-fonts-all
@@ -29,12 +27,9 @@ Requires:       gcc
 Requires:       glibc
 
 Suggests:       bash-completion-devel
-Suggests:       zsh
-Suggests:       fish
 
 %description
-Carch is an automated script for quick and easy Linux system setup for both
-Arch Linux and Fedora systems. It provides a convenient way to install and
+Carch is a simple script to help automating linux system setups. It provides a convenient way to install and
 configure packages and system settings.
 
 %prep
