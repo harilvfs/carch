@@ -76,11 +76,9 @@ Yeah, it supports Arch and Fedora-based distros too. But if you get stuck in som
 
 ## 📦 Cargo Crate
 
-<img src="https://img.shields.io/crates/v/carch?style=for-the-badge&logo=rust&color=f5a97f&logoColor=fe640b&labelColor=171b22" >
+Carch is available on [Cargo Crate](https://crates.io/crates/carch) too. 
 
-Carch is now available on [Cargo Crate](https://crates.io/crates/carch)! 
-
-This is the simplest and recommended installation method for both Arch and Fedora if you have Rust installed.  
+This can be the simplest installation method for both Arch and Fedora if you have Rust installed.  
 
 You'll need a few dependencies before installing: 
 
