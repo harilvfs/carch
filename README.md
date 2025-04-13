@@ -74,6 +74,41 @@ bash <(curl -L https://chalisehari.com.np/fedora)
 
 Yeah, it supports Arch and Fedora-based distros too. But if you get stuck in some problem, feel free to give feedback on the issues tab.
 
+## 📦 Cargo Crate
+
+<img src="https://img.shields.io/crates/v/carch?style=for-the-badge&logo=rust&color=f5a97f&logoColor=fe640b&labelColor=171b22" >
+
+Carch is now available on [Cargo Crate](https://crates.io/crates/carch)! 
+
+This is the simplest and recommended installation method for both Arch and Fedora if you have Rust installed.  
+
+You'll need a few dependencies before installing: 
+
+> **Arch Linux**
+> ```sh
+> sudo pacman -S --noconfirm figlet rust cargo fzf
+> ```
+
+> **Fedora Linux**
+> ```sh
+> sudo dnf install figlet rust cargo fzf -y
+> ```
+
+Now, install Carch using Cargo:
+
+```sh
+cargo install carch
+```
+
+Once installed, simply type `carch` in your terminal to run it.
+
+> [!TIP]
+> If typing `carch` doesn’t execute, make sure you have added the Cargo bin directory to your shell's PATH. Depending on whether you're using bash, zsh, or fish, add the following to your profile
+> 
+> ```sh
+> export PATH="$HOME/.cargo/bin:$PATH"
+> ```
+
 ## Commands
 
 Carch supports some commands too. You can view them by running:
