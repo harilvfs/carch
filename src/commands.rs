@@ -197,27 +197,29 @@ pub fn uninstall() -> io::Result<()> {
         "arch" => {
             println!("Detected Arch Linux. Checking if Carch is installed...");
 
-            let pacman_check_carch = Command::new("pacman").args(["-Q", "carch"]).status()?;
+            let pacman_q_carch = Command::new("pacman")
+                .args(["-Q", "carch"])
+                .output()?;
+            
+            let carch_installed = pacman_q_carch.status.success();
+            println!("carch installed: {}", carch_installed);
+            
+            let pacman_q_carch_git = Command::new("pacman")
+                .args(["-Q", "carch-git"])
+                .output()?;
+            
+            let carch_git_installed = pacman_q_carch_git.status.success();
+            println!("carch-git installed: {}", carch_git_installed);
+            
+            if carch_installed {
+                println!("Found package: {}", String::from_utf8_lossy(&pacman_q_carch.stdout).trim());
+            }
+            
+            if carch_git_installed {
+                println!("Found package: {}", String::from_utf8_lossy(&pacman_q_carch_git.stdout).trim());
+            }
 
-            let pacman_check_carch_git =
-                Command::new("pacman").args(["-Q", "carch-git"]).status()?;
-
-            if pacman_check_carch.success() {
-                println!("Removing Carch package...");
-                let uninstall_status = Command::new("sudo")
-                    .args(["pacman", "-R", "carch", "--noconfirm"])
-                    .status()?;
-
-                if !uninstall_status.success() {
-                    return Err(io::Error::new(
-                        io::ErrorKind::Other,
-                        "Failed to uninstall Carch from Arch Linux",
-                    ));
-                }
-
-                println!("Carch has been uninstalled from Arch Linux.");
-                log_message("INFO", "Carch uninstalled successfully from Arch Linux.")?;
-            } else if pacman_check_carch_git.success() {
+            if carch_git_installed {
                 println!("Removing Carch-git package...");
                 let uninstall_status = Command::new("sudo")
                     .args(["pacman", "-R", "carch-git", "--noconfirm"])
@@ -235,11 +237,26 @@ pub fn uninstall() -> io::Result<()> {
                     "INFO",
                     "Carch-git uninstalled successfully from Arch Linux.",
                 )?;
+            } else if carch_installed {
+                println!("Removing Carch package...");
+                let uninstall_status = Command::new("sudo")
+                    .args(["pacman", "-R", "carch", "--noconfirm"])
+                    .status()?;
+
+                if !uninstall_status.success() {
+                    return Err(io::Error::new(
+                        io::ErrorKind::Other,
+                        "Failed to uninstall Carch from Arch Linux",
+                    ));
+                }
+
+                println!("Carch has been uninstalled from Arch Linux.");
+                log_message("INFO", "Carch uninstalled successfully from Arch Linux.")?;
             } else {
-                println!("Carch package not found on the system.");
+                println!("No Carch packages found on the system.");
                 log_message(
                     "WARNING",
-                    "Carch not found during uninstall attempt on Arch Linux.",
+                    "No Carch packages found during uninstall attempt on Arch Linux.",
                 )?;
             }
         }
