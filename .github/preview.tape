@@ -71,7 +71,7 @@ Sleep 1s
 
 Type "carch" Sleep 3s  Enter
 
-Sleep 5s
+Sleep 3s
 
 Down Sleep 3s
 
