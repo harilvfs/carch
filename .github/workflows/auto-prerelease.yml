@@ -10,6 +10,16 @@ on:
       - '.github/workflows/auto-*.yml'
       - '.github/workflows/typos.yml'
       - '.github/workflows/shellcheck.yml'
+  workflow_dispatch:
+    inputs:
+      custom_version:
+        description: 'Custom version prefix (optional, default is date-based)'
+        required: false
+        type: string
+      release_title:
+        description: 'Custom release title (optional)'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -21,6 +31,7 @@ jobs:
     outputs:
       should_release: ${{ steps.check.outputs.should_release }}
       version: ${{ steps.version.outputs.version }}
+      title: ${{ steps.version.outputs.title }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -30,20 +41,26 @@ jobs:
       - name: Check for changes since last release
         id: check
         run: |
-          # Get the last release tag
-          LAST_RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
-          if [[ "$LAST_RELEASE_TAG" == "null" || -z "$LAST_RELEASE_TAG" ]]; then
+          # Always release if manually triggered
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             SHOULD_RELEASE="true"
-            echo "No previous release found, creating initial pre-release"
+            echo "Manually triggered release"
           else
-            # Check if there are any commits between the last release and current HEAD
-            COMMIT_COUNT=$(git rev-list --count $LAST_RELEASE_TAG..HEAD)
-            if [[ "$COMMIT_COUNT" -gt 0 ]]; then
+            # Get the last release tag
+            LAST_RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+            if [[ "$LAST_RELEASE_TAG" == "null" || -z "$LAST_RELEASE_TAG" ]]; then
               SHOULD_RELEASE="true"
-              echo "Found $COMMIT_COUNT new commits since $LAST_RELEASE_TAG"
+              echo "No previous release found, creating initial pre-release"
             else
-              SHOULD_RELEASE="false"
-              echo "No new commits since $LAST_RELEASE_TAG"
+              # Check if there are any commits between the last release and current HEAD
+              COMMIT_COUNT=$(git rev-list --count $LAST_RELEASE_TAG..HEAD)
+              if [[ "$COMMIT_COUNT" -gt 0 ]]; then
+                SHOULD_RELEASE="true"
+                echo "Found $COMMIT_COUNT new commits since $LAST_RELEASE_TAG"
+              else
+                SHOULD_RELEASE="false"
+                echo "No new commits since $LAST_RELEASE_TAG"
+              fi
             fi
           fi
           echo "should_release=$SHOULD_RELEASE" >> $GITHUB_OUTPUT
@@ -52,13 +69,29 @@ jobs:
         id: version
         if: steps.check.outputs.should_release == 'true'
         run: |
-          # Format: vYYYY.MM.DD-commits.hash
-          CURRENT_DATE=$(date +'%Y.%m.%d')
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          COMMIT_COUNT=$(git rev-list --count HEAD)
-          VERSION="v${CURRENT_DATE}-${COMMIT_COUNT}.${SHORT_SHA}"
+          # Check if a custom version was provided
+          if [[ -n "${{ github.event.inputs.custom_version }}" ]]; then
+            # Use custom version if provided via workflow_dispatch
+            VERSION="${{ github.event.inputs.custom_version }}"
+            echo "Using custom version: $VERSION"
+          else
+            # Format: vYYYY.MM.DD-commits.hash
+            CURRENT_DATE=$(date +'%Y.%m.%d')
+            SHORT_SHA=$(git rev-parse --short HEAD)
+            COMMIT_COUNT=$(git rev-list --count HEAD)
+            VERSION="v${CURRENT_DATE}-${COMMIT_COUNT}.${SHORT_SHA}"
+            echo "Generated version: $VERSION"
+          fi
+          
+          # Generate title
+          if [[ -n "${{ github.event.inputs.release_title }}" ]]; then
+            TITLE="${{ github.event.inputs.release_title }}"
+          else
+            TITLE="Pre-release $VERSION"
+          fi
+          
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Generated version: $VERSION"
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
 
   build_binaries:
     needs: check_for_changes
@@ -232,7 +265,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.check_for_changes.outputs.version }}
-          name: "Pre-release ${{ needs.check_for_changes.outputs.version }}"
+          name: "${{ needs.check_for_changes.outputs.title }}"
           body: |
             **Pre-release build** - Automatically generated from latest commits
             
