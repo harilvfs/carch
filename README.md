@@ -25,17 +25,50 @@ Or if you have any feature suggestions or improvements from your side, you're al
 
 > **Btw, I highly recommend checking out the Carch [docs](https://carch-org.github.io/docs) for more details.**
 
+
+## Live Test 🎯
+
+You can run or use Carch directly without installing it on your system.
+
+> [!NOTE]  
+> ⚡ Make sure to have the `figlet` and `fzf` packages already installed.  
+>
+> **Arch**  
+> ```sh
+> sudo pacman -S --noconfirm figlet fzf
+> ```
+> **Fedora**  
+> ```sh
+> sudo dnf install figlet fzf -y
+> ```
+
+Choose one of the following commands to try Carch:
+
+⭐ Stable Version
+
+```sh
+bash <(curl -L https://chalisehari.com.np/carch)
+
+ 🧪 Dev Version
+```sh
+bash <(curl -L https://chalisehari.com.np/carchdev)
+```
+
 ## Installation
 
 Carch mainly supports two mainline distributions: Arch and Fedora Linux. For installation, run the following command in your terminal:
 
 ### Arch Linux
 
-<pre><code>bash &lt;(curl -L https://chalisehari.com.np/arch)</code></pre>
+```sh
+bash <(curl -L https://chalisehari.com.np/arch)
+```
 
 ### Fedora Linux
 
-<pre><code>bash &lt;(curl -L https://chalisehari.com.np/fedora)</code></pre>
+```sh
+bash <(curl -L https://chalisehari.com.np/fedora)
+```
 
 Yeah, it supports Arch and Fedora-based distros too. But if you get stuck in some problem, feel free to give feedback on the issues tab.
 
@@ -43,7 +76,9 @@ Yeah, it supports Arch and Fedora-based distros too. But if you get stuck in som
 
 Carch supports some commands too. You can view them by running:
 
-<pre><code>carch --help</code></pre>
+```sh
+carch --help
+```
 
 ## Roadmap 
 
@@ -104,7 +139,7 @@ Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so
 [fork-link]: https://github.com/harilvfs/carch/fork
 
 [downloads]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=for-the-badge&color=e0ea9d&logoColor=D9E0EE&labelColor=171b22&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAAb1BMVEVHcEz/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/IUf/////HUT/H0X/LlL/JEr/tsP/Pl//1Nv/yNL/mKr/8fP/SWj/a4T//P3/hpv/q7n/xM7/5On/VHFabXB/AAAAEXRSTlMA+q0VzSFh4ZF21wntVTI1yUkGfC4AAAMdSURBVFjDvZnp1qowDEVpKYKKYDAMH4KC+v7PeAs40hHEe364FOteaZukTXQcrdx4FVDmhwSAhD6jwSp2ndnydsG+Q72LhPtg582huTvqj2BPqE93U+301kxBG5CErb1JuA0YtbFGblcMrMRWWxteRAlYitDIwjwfJsg3GekGBCaJBNr99ihMFVLN3sQMpgtZrORtYJY28bI8FdFjMFtMso4uhS9Ehb3eBt/wAIOxP64M/ocmf1yN4k0fH4hpinqm/xGFW8MCZk1ZNplhGbcTJnw6J8n5hNaTNnpMm3C19r6zNgzN8g6YG+YM66eBm2WAG8/SQFvgw0SXLQVkQ7zsyFJAsuuB5iC2BQLtt8RfDuh7VjO2B/Zztkgz1kAI+B7vdTkBRSDqssTedeJQbVhdpygA+dNMiQxjdV7AtK2qvMBPIBZ5VbUpqjOEcgmx6ShlR3wBsSi7t40SGGi8sE8xPfEJvPM0iYc6TG9hT3wAsbgMz5QWAnOUbo3p/deXAgYgPHgX5RqC76g3+WnPpRiAr89qxwkdTZw8ieVf9/pnwQPiaA+7B/FdWh6AAxOJBh44ZBrRxCOaTZERTTy+KaZs+EE08rjbyB37cDigSHzxkA9QOLYs9DA7NacURX98Pkr5AGnOofLk0JyTczsmvvNaPqCRZ1hJ+sLiyn9f3fD1IH9ksuHzreIDrpIF5elLkmCx7safT4e3uL7d3uL30F2ekqoWgWEkOwJEIBw+Er8ayI8AySJKgCMfUAID6TE6H9gfo+JBPx/YH/SiJ1oCxV0mVH5ZGtwmadTA/nSQAHeK61w6JNQaFar770vhILhf5yQXzuHAu7ZHqdp+AslReScWrsRDJCTnRKe3SBpfiUUTs2Ni1DFTXtrFsoJHv4mXiyvoaQofTJurDnc9CryPak8szRDqJi//pCrzpharyY/STFY8ImapQpnkiuhHFuWtyg8tyttvC3AQCvDvWgRI3d83MfjGzG+zRP+nEcRtnDVrFi3aTAPq/c923/INyeVbpj9o6i7fdh6Qe+3EJzbGf9C6/8GfC3c7o/HfH5HBtn+wIlvD5rLlkQAAAABJRU5ErkJggg==
-[downloads-link]: https://github.com/harilvfs/carch/releases/tag/v4.1.5
+[downloads-link]: https://github.com/harilvfs/carch/releases/latest
 
 [crates]: https://img.shields.io/crates/v/carch?style=for-the-badge&logo=rust&color=f5a97f&logoColor=fe640b&labelColor=171b22
 [crates-link]: https://crates.io/crates/carch
