@@ -73,17 +73,17 @@ Type "carch" Sleep 3s  Enter
 
 Sleep 5s
 
-Down Sleep 1s
+Down Sleep 3s
 
-Down Sleep 1s
+Down Sleep 3s
 
-Down Sleep 1s
+Down Sleep 2s
 
 Type "/" Sleep 1s
 
 Type@200ms "Alacritty" Sleep 3s Enter
 
-Sleep 1s
+Sleep 2s
 
 Type "n"
 
