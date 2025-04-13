@@ -48,8 +48,10 @@ Choose one of the following commands to try Carch:
 
 ```sh
 bash <(curl -L https://chalisehari.com.np/carch)
+```
 
  🧪 Dev Version
+ 
 ```sh
 bash <(curl -L https://chalisehari.com.np/carchdev)
 ```
