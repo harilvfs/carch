@@ -106,7 +106,7 @@ if [[ "$OS" == "arch" ]]; then
         imwheel nitrogen polkit-gnome xclip flameshot thunar \
         xorg-server xorg-xinit xorg-xrandr xorg-xsetroot xorg-xset gtk3 \
         gnome-settings-daemon gnome-keyring neovim \
-        ttf-meslo-nerd noto-fonts-emoji ttf-joypixels ttf-jetbrains-mono \
+        ttf-meslo-nerd noto-fonts-emoji ttf-jetbrains-mono \
         starship network-manager-applet blueman pasystray wget unzip \
         curl zoxide
 elif [[ "$OS" == "fedora" ]]; then
