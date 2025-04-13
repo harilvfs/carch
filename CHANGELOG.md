@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.2](https://github.com/harilvfs/carch/compare/v4.3.1...v4.3.2) (2025-04-14)
+
+### Changed
+
+- Carch has been completely rewritten in rust https://github.com/harilvfs/carch/pull/385
+- Improve fzf menu style https://github.com/harilvfs/carch/pull/390
+- Improve Heading & Add Help Info https://github.com/harilvfs/carch/pull/386
+
+### Added
+
+- Added Confirmation Before Running Scripts https://github.com/harilvfs/carch/pull/387
+
+### Fixed
+
+- Known Bugs
+
+### Remove
+
+- Remove Unused Dependencies
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.2).
+
+
 ## [4.3.1](https://github.com/harilvfs/carch/compare/v4.2.7...v4.3.1) (2025-04-09)
 
 ### Changed
