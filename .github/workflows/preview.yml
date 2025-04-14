@@ -60,7 +60,8 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y figlet fzf
+          sudo apt-get install -y figlet fzf ffmpeg
+          ffmpeg -version # Verify ffmpeg is installed
       
       - name: Generate preview
         uses: charmbracelet/vhs-action@v2.1.0
