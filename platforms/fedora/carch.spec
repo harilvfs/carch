@@ -1,5 +1,5 @@
 Name:           carch
-Version:        4.3.2
+Version:        4.3.3
 Release:        1%{?dist}
 Summary:        A Simple Script to Make Linux System Setups Easier
 License:        MIT 
@@ -75,11 +75,6 @@ done
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
-* Mon Apr 14 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.3.2-1
-- Rewriting Carch in Rust 🦀
-- Cleanup & Simplified Install Script
-- Improve fzf menu style
-- Added Confirmation Before Running Scripts [ Rust ]
-- Improve Heading & Add Help Info [UI/UX]
-- Bug Fixes
-- Remove fzf confirmation from scripts
+* Tue Apr 15 2025 RPM Builder <harilvfs@chalisehari.com.np> - 4.3.3-1
+- Add Carch Installer [ In Rust ]
+- Major Bug Fixes
