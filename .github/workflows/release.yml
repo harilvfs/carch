@@ -160,7 +160,7 @@ jobs:
           
           # Get all commits
           git fetch --tags
-          COMMITS=$(git log --no-merges --pretty=format:"%h|||%an|||%s" $PREVIOUS_TAG..$NEW_TAG)
+          COMMITS=$(git log --no-merges --pretty=format:"%h|||%an|||%s" $PREVIOUS_TAG..HEAD)
           
           # Process commits
           while IFS= read -r commit_line; do
@@ -188,7 +188,7 @@ jobs:
             fi
             
             # Check if PR was merged between the tags
-            if git merge-base --is-ancestor "$merge_commit_sha" "$NEW_TAG" && \
+            if git merge-base --is-ancestor "$merge_commit_sha" HEAD && \
                ! git merge-base --is-ancestor "$merge_commit_sha" "$PREVIOUS_TAG"; then
               categorize "$pr_title" "$pr_author" "$pr_number" "true"
             fi
