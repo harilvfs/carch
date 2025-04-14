@@ -44,29 +44,33 @@ install_dependencies() {
     done
 }
 
-main() {
-    echo "Installing Carch v${VERSION}..."
-    
-    echo "Checking dependencies..."
-    install_dependencies &
-    PID=$!
-    spinner $PID
-    
+install_carch() {
+    install_dependencies
+
     REPO="harilvfs/carch"
     API_URL="https://api.github.com/repos/$REPO/releases/latest"
     RELEASE_INFO=$(curl -s "$API_URL")
     RPM_URL=$(echo "$RELEASE_INFO" | grep -o "https://github.com/$REPO/releases/download/[^\"]*\.rpm" | grep "$ARCH" | head -n 1)
 
     if [ -z "$RPM_URL" ]; then
-        echo -e "${RED}Error: Could not find RPM package for $ARCH architecture.${NC}"
-        rm -rf "$TMP_DIR" &>/dev/null
-        exit 1
+        return 1
     fi
 
     curl -L "$RPM_URL" -o "$TMP_DIR/carch.rpm" > /dev/null 2>&1
 
-    echo "Installing Carch..."
-    sudo dnf install -y "$TMP_DIR/carch.rpm" > /dev/null 2>&1 &
+    sudo dnf install -y "$TMP_DIR/carch.rpm" > /dev/null 2>&1
+
+    if ! command -v carch &>/dev/null; then
+        return 1
+    fi
+
+    return 0
+}
+
+main() {
+    echo "Installing..."
+    
+    (install_carch) &
     PID=$!
     spinner $PID
     
