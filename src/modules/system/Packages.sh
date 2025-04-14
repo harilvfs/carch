@@ -119,8 +119,11 @@ install_android() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Android"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Android tool to install:"
+
         options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
         selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=40% \
@@ -185,6 +188,8 @@ install_browsers() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Browser"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Browser tool to install:"
 
@@ -383,6 +388,8 @@ install_communication() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Communication"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Communication App to install:"
 
@@ -545,6 +552,8 @@ install_development() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Development"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a development tool to install:"
         
@@ -691,6 +700,8 @@ install_editing() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Editing"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Editing tool to install:"
 
@@ -826,6 +837,8 @@ install_filemanagers() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Filemanagers"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Filemanagers Apps to install:"
 
@@ -958,6 +971,8 @@ install_gaming() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Gaming"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Gaming Platform to install:"
 
@@ -1080,6 +1095,8 @@ install_github() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Git"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Git tool to install:"
         
@@ -1169,6 +1186,8 @@ install_multimedia() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Multimedia"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Multimedia Packages to install:"
 
@@ -1242,6 +1261,8 @@ install_music() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Music"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Music Packages to install:"
 
@@ -1336,6 +1357,8 @@ install_productivity() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Productivity"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Productivity Packages to install:"
         
@@ -1443,6 +1466,8 @@ install_streaming() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Streaming"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Streaming tool to install:"
 
@@ -1515,6 +1540,8 @@ install_terminals() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Terminal"
         echo "Select a Terminal to install:"
         echo -e "${BLUE}If you're unsure what to choose, Kitty or Alacritty are great options.${RESET}"
         echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
@@ -1688,6 +1715,8 @@ install_texteditor() {
     fi
 
     while true; do
+       clear
+        figlet -f slant "Text Editors"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Text Editor to install:"
 
@@ -1823,6 +1852,8 @@ install_thunarpreview() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Thunar"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Thumbnail Previewer:"
 
@@ -1886,6 +1917,8 @@ install_virtualization() {
     fi
 
     while true; do
+        clear
+        figlet -f slant "Virtualization"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Virtualization tool to install:"
 
