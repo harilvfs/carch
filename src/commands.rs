@@ -288,4 +288,3 @@ pub fn uninstall() -> io::Result<()> {
     println!("Carch has been completely uninstalled.");
     Ok(())
 }
-
