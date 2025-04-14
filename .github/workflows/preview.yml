@@ -60,8 +60,12 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y figlet fzf ffmpeg
-          ffmpeg -version # Verify ffmpeg is installed
+          sudo apt-get install -y figlet fzf
+      
+      - name: Setup FFmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Generate preview
         uses: charmbracelet/vhs-action@v2.1.0
