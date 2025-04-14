@@ -83,98 +83,88 @@ jobs:
           NEW_TAG=${{ github.event.inputs.tag_version }}
           
           # Initialize categories with emojis
-          echo "FEATURES=🚀 Features" >> $GITHUB_ENV
-          echo "RUST=🦀 Rust" >> $GITHUB_ENV
-          echo "BUGFIXES=🐛 Bug Fixes" >> $GITHUB_ENV
-          echo "REFACTOR=🔄 Refactor" >> $GITHUB_ENV
-          echo "UPDATES=🔼 Updates" >> $GITHUB_ENV
-          echo "BUILD=🛠️ Build" >> $GITHUB_ENV
-          echo "TEST=🧪 Test" >> $GITHUB_ENV
-          echo "REMOVE=📝 Remove" >> $GITHUB_ENV
-          echo "CUSTOM=🔧 Custom" >> $GITHUB_ENV
-          echo "UIUX=🎨 UI/UX" >> $GITHUB_ENV
-          echo "DOCS=📖 Docs" >> $GITHUB_ENV
-          echo "OTHER=Other Changes" >> $GITHUB_ENV
+          declare -A CATEGORIES=(
+            ["feat"]="🚀 Features"
+            ["feature"]="🚀 Features"
+            ["rust"]="🦀 Rust"
+            ["fix"]="🐛 Bug Fixes"
+            ["bugfix"]="🐛 Bug Fixes"
+            ["refactor"]="🔄 Refactor"
+            ["update"]="🔼 Updates"
+            ["build"]="🛠️ Build"
+            ["test"]="🧪 Test"
+            ["remove"]="📝 Remove"
+            ["custom"]="🔧 Custom" 
+            ["ui"]="🎨 UI/UX"
+            ["ux"]="🎨 UI/UX"
+            ["doc"]="📖 Docs"
+            ["ci"]="⚙️ CI"
+          )
           
-          # Initialize empty arrays for each category
-          echo "features_list=()" >> $GITHUB_ENV
-          echo "rust_list=()" >> $GITHUB_ENV
-          echo "bugfixes_list=()" >> $GITHUB_ENV
-          echo "refactor_list=()" >> $GITHUB_ENV
-          echo "updates_list=()" >> $GITHUB_ENV
-          echo "build_list=()" >> $GITHUB_ENV
-          echo "test_list=()" >> $GITHUB_ENV
-          echo "remove_list=()" >> $GITHUB_ENV
-          echo "custom_list=()" >> $GITHUB_ENV
-          echo "uiux_list=()" >> $GITHUB_ENV
-          echo "docs_list=()" >> $GITHUB_ENV
-          echo "other_list=()" >> $GITHUB_ENV
+          # Initialize arrays for each category
+          declare -A category_items
+          for key in "${!CATEGORIES[@]}"; do
+            category_items[$key]=()
+          done
           
-          # Function to categorize a commit/PR
-          categorize() {
-            local message="$1"
-            local author="$2"
-            local number="$3"
-            local is_pr="$4"
+          # Other/default category
+          CATEGORIES["other"]="Other Changes"
+          category_items["other"]=()
+          
+          echo "Processing commits between $PREVIOUS_TAG and HEAD"
+          
+          # Function to categorize a commit
+          categorize_commit() {
+            local commit_hash="$1"
+            local author="$2"  
+            local message="$3"
+            local pr_number="$4"
+            local is_pr="$5"
             
-            # Clean up message (first line only, remove prefixes)
-            clean_message=$(echo "$message" | head -n1 | sed 's/^.*: //')
+            # Clean message (remove prefix if present)
+            local clean_message=$(echo "$message" | sed 's/^[^:]*: *//')
             
-            # Format the line depending on whether it's a PR or commit
+            # Format line based on PR or commit
             if [ "$is_pr" = "true" ]; then
-              formatted_item="- $clean_message @$author (#$number)"
+              local formatted_item="- $clean_message [@$author](#$pr_number)"
             else
-              # For commits, use shortened commit hash
-              formatted_item="- $clean_message @$author (\`${number:0:7}\`)"
+              local formatted_item="- $clean_message [@$author](${commit_hash:0:7})"
             fi
             
-            # Categorize based on prefixes
-            if [[ "$message" =~ ^feat(\(.*\))?:|\(feature\):|\(perf\):|\(performance\): ]]; then
-              features_list+=("$formatted_item")
-            elif [[ "$message" =~ ^rust(\(.*\))?:|\(rust\): ]]; then
-              rust_list+=("$formatted_item")
-            elif [[ "$message" =~ ^fix(\(.*\))?:|\(fix\):|\(bug\):|\(bugfix\): ]]; then
-              bugfixes_list+=("$formatted_item")
-            elif [[ "$message" =~ ^refactor(\(.*\))?:|\(refactor\): ]]; then
-              refactor_list+=("$formatted_item")
-            elif [[ "$message" =~ ^update(\(.*\))?:|\(update\):|\(upgrade\): ]]; then
-              updates_list+=("$formatted_item")
-            elif [[ "$message" =~ ^build(\(.*\))?:|\(build\):|\(deps\):|\(dependencies\):|\(chore\): ]]; then
-              build_list+=("$formatted_item")
-            elif [[ "$message" =~ ^test(\(.*\))?:|\(test\):|\(tests\): ]]; then
-              test_list+=("$formatted_item")
-            elif [[ "$message" =~ ^remove(\(.*\))?:|\(remove\):|\(delete\): ]]; then
-              remove_list+=("$formatted_item")
-            elif [[ "$message" =~ ^custom(\(.*\))?:|\(custom\): ]]; then
-              custom_list+=("$formatted_item")
-            elif [[ "$message" =~ ^ui(\(.*\))?:|\(ui\):|\(ux\):|\(UI\):|\(UX\): ]]; then
-              uiux_list+=("$formatted_item")
-            elif [[ "$message" =~ ^doc(\(.*\))?:|\(doc\):|\(docs\):|\(documentation\): ]]; then
-              docs_list+=("$formatted_item")
-            else
-              other_list+=("$formatted_item")
-            fi
+            # Default to other category
+            local matched=false
+            local category_key="other"
+            
+            # Try to match a category from the commit message
+            for key in "${!CATEGORIES[@]}"; do
+              if [[ "$message" =~ ^($key)(\(.+\))?:|\($key\): ]]; then
+                category_key="$key"
+                matched=true
+                break
+              fi
+            done
+            
+            # Update the relevant category array
+            category_items[$category_key]+="$formatted_item"$'\n'
           }
           
-          echo "Processing commits between $PREVIOUS_TAG and $NEW_TAG"
-          
           # Get all commits
-          git fetch --tags
+          git fetch --tags --force
           COMMITS=$(git log --no-merges --pretty=format:"%h|||%an|||%s" $PREVIOUS_TAG..HEAD)
           
-          # Process commits
+          # Process each commit
           while IFS= read -r commit_line; do
             if [ -n "$commit_line" ]; then
               IFS="|||" read -r hash author message <<< "$commit_line"
-              categorize "$message" "$author" "$hash" "false"
+              categorize_commit "$hash" "$author" "$message" "" "false"
             fi
           done <<< "$COMMITS"
           
-          # Get merged PRs using GitHub API
+          # Get merged PRs using GitHub API 
           PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                    "https://api.github.com/repos/${{ github.repository }}/pulls?state=closed&sort=updated&direction=desc&per_page=100")
           
-          # Process PRs that were merged between the tags
+          # Process merged PRs
           echo "$PR_DATA" | jq -c '.[]' | while read -r pr; do
             pr_number=$(echo "$pr" | jq -r '.number')
             pr_title=$(echo "$pr" | jq -r '.title')
@@ -190,39 +180,20 @@ jobs:
             # Check if PR was merged between the tags
             if git merge-base --is-ancestor "$merge_commit_sha" HEAD && \
                ! git merge-base --is-ancestor "$merge_commit_sha" "$PREVIOUS_TAG"; then
-              categorize "$pr_title" "$pr_author" "$pr_number" "true"
+              categorize_commit "$merge_commit_sha" "$pr_author" "$pr_title" "$pr_number" "true"
             fi
           done
           
-          # Create release notes content
+          # Generate release notes content
           RELEASE_NOTES="## What's Changed\n\n"
           
-          # Add each category if it has items
-          add_category() {
-            local title="$1"
-            local items=("${@:2}")
-            if [ ${#items[@]} -gt 0 ]; then
-              RELEASE_NOTES+="### $title\n\n"
-              for item in "${items[@]}"; do
-                RELEASE_NOTES+="$item\n"
-              done
-              RELEASE_NOTES+="\n"
+          # Add content for each non-empty category
+          for key in "${!CATEGORIES[@]}"; do
+            if [ -n "${category_items[$key]}" ]; then
+              RELEASE_NOTES+="### ${CATEGORIES[$key]}\n\n"
+              RELEASE_NOTES+="${category_items[$key]}\n"
             fi
-          }
-          
-          # Add each category to the release notes
-          add_category "$FEATURES" "${features_list[@]}"
-          add_category "$RUST" "${rust_list[@]}"
-          add_category "$BUGFIXES" "${bugfixes_list[@]}"
-          add_category "$REFACTOR" "${refactor_list[@]}"
-          add_category "$UPDATES" "${updates_list[@]}"
-          add_category "$BUILD" "${build_list[@]}"
-          add_category "$TEST" "${test_list[@]}"
-          add_category "$REMOVE" "${remove_list[@]}"
-          add_category "$CUSTOM" "${custom_list[@]}"
-          add_category "$UIUX" "${uiux_list[@]}"
-          add_category "$DOCS" "${docs_list[@]}"
-          add_category "$OTHER" "${other_list[@]}"
+          done
           
           # Create multiline output
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
