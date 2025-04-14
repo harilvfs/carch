@@ -67,6 +67,13 @@ jobs:
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           
+      - name: Build installer binary
+        run: |
+          cd platforms
+          cargo build --release --verbose --target=x86_64-unknown-linux-musl --all-features
+          mkdir -p ../build/x86_64-unknown-linux-musl/release/
+          mv ./target/x86_64-unknown-linux-musl/release/carch-installer ../build/x86_64-unknown-linux-musl/release/carch-installer
+          
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -74,6 +81,7 @@ jobs:
           path: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+            ./build/x86_64-unknown-linux-musl/release/carch-installer
           retention-days: 1
           
       - name: Generate Release Notes
@@ -90,7 +98,7 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
           body: |
-            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads RPM](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-${{ env.VERSION }}-1.fc41.x86_64.rpm?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
+            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads RPM](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-${{ env.VERSION }}-1.fc41.x86_64.rpm?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads Installer](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-installer?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
 
             ## What's Changed
             ${{ steps.generate_notes.outputs.body }}
@@ -99,6 +107,7 @@ jobs:
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+            ./build/x86_64-unknown-linux-musl/release/carch-installer
           draft: false
 
   build_rpm:
@@ -116,8 +125,8 @@ jobs:
           dnf -y update
           dnf -y install \
             git curl wget figlet man-db bash rust cargo gcc \
-            glibc unzip tar google-noto-color-emoji-fonts google-noto-emoji-fonts \
-            jetbrains-mono-fonts-all bat bash-completion-devel zsh fish \
+            glibc tar google-noto-color-emoji-fonts google-noto-emoji-fonts \
+            jetbrains-mono-fonts-all bash-completion-devel \
             rpmdevtools rpmlint fzf
             
       - name: Setup RPM build environment
