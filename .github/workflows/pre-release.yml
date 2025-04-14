@@ -83,6 +83,7 @@ jobs:
         with:
           config-name: release-drafter.yml
           disable-releaser: true
+          disable-autolabeler: true
           commitish: ${{ github.sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
