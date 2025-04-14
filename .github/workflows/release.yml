@@ -104,12 +104,12 @@ jobs:
           # Initialize arrays for each category
           declare -A category_items
           for key in "${!CATEGORIES[@]}"; do
-            category_items[$key]=()
+            category_items[$key]=""
           done
           
           # Other/default category
           CATEGORIES["other"]="Other Changes"
-          category_items["other"]=()
+          category_items["other"]=""
           
           echo "Processing commits between $PREVIOUS_TAG and HEAD"
           
