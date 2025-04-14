@@ -197,26 +197,28 @@ pub fn uninstall() -> io::Result<()> {
         "arch" => {
             println!("Detected Arch Linux. Checking if Carch is installed...");
 
-            let pacman_q_carch = Command::new("pacman")
-                .args(["-Q", "carch"])
-                .output()?;
-            
+            let pacman_q_carch = Command::new("pacman").args(["-Q", "carch"]).output()?;
+
             let carch_installed = pacman_q_carch.status.success();
             println!("carch installed: {}", carch_installed);
-            
-            let pacman_q_carch_git = Command::new("pacman")
-                .args(["-Q", "carch-git"])
-                .output()?;
-            
+
+            let pacman_q_carch_git = Command::new("pacman").args(["-Q", "carch-git"]).output()?;
+
             let carch_git_installed = pacman_q_carch_git.status.success();
             println!("carch-git installed: {}", carch_git_installed);
-            
+
             if carch_installed {
-                println!("Found package: {}", String::from_utf8_lossy(&pacman_q_carch.stdout).trim());
+                println!(
+                    "Found package: {}",
+                    String::from_utf8_lossy(&pacman_q_carch.stdout).trim()
+                );
             }
-            
+
             if carch_git_installed {
-                println!("Found package: {}", String::from_utf8_lossy(&pacman_q_carch_git.stdout).trim());
+                println!(
+                    "Found package: {}",
+                    String::from_utf8_lossy(&pacman_q_carch_git.stdout).trim()
+                );
             }
 
             if carch_git_installed {
