@@ -4,9 +4,14 @@ categories:
   - title: '🚀 Features'
     labels:
       - 'enhancement'
-  - title: '🦀 Rust'
+  - title: '🦀 Rust & Build'
     labels:
       - 'rust'
+      - 'build'
+      - 'dependencies'
+  - title: '🤖 CI'
+    labels:
+      - 'github-actions'
   - title: '🐛 Bug Fixes'
     labels:
       - 'fix'
@@ -19,10 +24,6 @@ categories:
   - title: '🔼 Updates'
     labels:
       - 'update'
-  - title: '🛠️ Build'
-    labels:
-      - 'build'
-      - 'dependencies'
   - title: '🧪 Test'
     labels:
       - 'test'
