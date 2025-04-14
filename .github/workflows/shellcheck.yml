@@ -3,14 +3,16 @@ name: ShellCheck
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - '**.md'
-      - '.github/**'
+    paths:
+      - '!**.md'
+      - '!.github/**'
+      - '**'
   pull_request:
     branches: [ main ]
-    paths-ignore:
-      - '**.md'
-      - '.github/**'
+    paths:
+      - '!**.md'
+      - '!.github/**'
+      - '**'
   workflow_dispatch: 
 
 jobs:
