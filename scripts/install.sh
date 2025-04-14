@@ -16,7 +16,7 @@ check_dependency() {
     fi
 }
 
-for pkg in fzf figlet; do
+for pkg in fzf figlet curl grep; do
     check_dependency "$pkg"
 done
 
@@ -27,6 +27,30 @@ check() {
         printf '%sERROR: %s%s\n' "$red" "$message" "$rc"
         exit 1
     fi
+}
+
+get_latest_release() {
+    latest_release=$(curl -s "https://api.github.com/repos/harilvfs/carch/releases" | 
+        grep "tag_name" | 
+        head -n 1 | 
+        sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+    if [ -z "$latest_release" ]; then
+        printf "Error fetching release data\n" >&2
+        return 1
+    fi
+    printf "%s\n" "$latest_release"
+}
+
+set_download_url() {
+    latest_release=$(get_latest_release)
+    if [ -n "$latest_release" ]; then
+        url="https://github.com/harilvfs/carch/releases/download/$latest_release/carch-installer"
+    else
+        printf "Unable to determine latest release version.\n" >&2
+        printf "Using latest Full Release\n"
+        url="https://github.com/harilvfs/carch/releases/latest/download/carch-installer"
+    fi
+    printf "Using URL: %s\n" "$url"
 }
 
 spinner() {
@@ -41,10 +65,12 @@ spinner() {
     printf "\r✔\n"
 }
 
+set_download_url
+
 temp_file=$(mktemp)
 check $? "Creating the temporary file"
 
-curl -fsL "https://github.com/harilvfs/carch/releases/latest/download/carch-installer" -o "$temp_file" &
+curl -fsL "$url" -o "$temp_file" &
 spinner $!
 
 check $? "Downloading carch-installer"
