@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+clear
+
 CACHE_DIR="$HOME/.cache/carch-install"
 
 GREEN='\033[0;32m'
@@ -73,6 +75,7 @@ cleanup() {
 }
 
 main() {
+    clear
     echo "Installing..."
     
     echo "Checking dependencies..."

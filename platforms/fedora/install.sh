@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-VERSION="4.3.2"
+clear
+
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
@@ -10,7 +11,6 @@ if ! command -v dnf &>/dev/null; then
     exit 1
 fi
 
-ARCH=$(uname -m)
 TMP_DIR="/tmp/carch-install"
 mkdir -p "$TMP_DIR"
 
@@ -68,6 +68,7 @@ install_carch() {
 }
 
 main() {
+    clear
     echo "Installing..."
     
     (install_carch) &
