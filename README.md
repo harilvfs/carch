@@ -14,35 +14,23 @@ Currently Supports Arch or Fedora Based Distros.
 
 ## About
 
-What the heck is this script btw? Good question ! It's none other than a collections of bash script designed to be simple enough for anyone. Like, anyone can simply run it by selecting the options. What the heck does this actually do? You will see different scripts on the menu, separated or defined as categories like system, terminal, desktop, development.. etc. As for the categories, there you will see script names — like in terminal you will see something like `Kitty`, `alacritty`, and so on. Then when you actually run the script, it will install package as well as apply my preconfigured setup that is minimal, beautiful, and simple enough for everyone to use. Same as you will find different scripts there — just choose and run. The script will handle everything for you in just a few clicks, like installing a window manager or any other thing you find in the menu.
+"What the heck is this script? Good question! It’s just a bunch of simple bash scripts anyone can run by picking options. You’ll see categories like system, `terminal`, `desktop`, `development`, etc. Inside each, there are script names — like in terminal, you’ll find `Kitty`, `alacritty`, and more. When you run one, it installs the package and sets up my minimal and clean config. That’s it. Just pick, run, and it does the rest for you.
 
-> [!NOTE]
-> Yeah, the script is fully automated, but that doesn't mean it will work on every machine or system. Maybe your system has some very specific preconfigured setup, so maybe the script will not work there.
-> As in the menu, you can see the preview of the scripts — you can always walk around to see what the script actually does.
+> [!NOTE]  
+> Yeah, the script does everything by itself, but it might not work on every system.  
+> If your setup is a bit different, some stuff might break.  
+> Just check the preview in the menu to see what the script actually does.
 
-Yeah, most scripts are stable, but if you find any bugs, errors, or anything else, please open a [bug report](https://github.com/harilvfs/carch/issues).  
-Or if you have any feature suggestions or improvements from your side, you're always welcome to open a [feature request](https://github.com/harilvfs/carch/issues) too.
+Yeah, most scripts work fine, but if you find any bugs, drop a [bug report](https://github.com/harilvfs/carch/issues).  
+Got ideas or features to add? Open a [feature request](https://github.com/harilvfs/carch/issues) anytime!
 
 > **Btw, I highly recommend checking out the Carch [docs](https://carch-org.github.io/docs) for more details.**
-
 
 ## Live Test 🎯
 
 You can run or use Carch directly without installing it on your system.
 
-> [!NOTE]  
-> ⚡ Make sure to have the `figlet` and `fzf` packages already installed.  
->
-> **Arch**  
-> ```sh
-> sudo pacman -S --noconfirm figlet fzf
-> ```
-> **Fedora**  
-> ```sh
-> sudo dnf install figlet fzf -y
-> ```
-
-Choose one of the following commands to try Carch:
+Choose one of the following version to try Carch:
 
 ⭐ Stable Version [ Latest Release ]
 
@@ -58,50 +46,43 @@ bash <(curl -L https://chalisehari.com.np/carchdev)
 
 ## Installation
 
-Carch mainly supports two mainline distributions: Arch and Fedora Linux. For installation, run the following command in your terminal:
+Carch mainly supports Arch and Fedora. 
 
-### Arch Linux
-
-```sh
-bash <(curl -L https://chalisehari.com.np/arch)
-```
-
-### Fedora Linux
+To install, run:
 
 ```sh
-bash <(curl -L https://chalisehari.com.np/fedora)
+bash <(curl -L https://chalisehari.com.np/carchinstall)
 ```
 
-Yeah, it supports Arch and Fedora-based distros too. But if you get stuck in some problem, feel free to give feedback on the issues tab.
+It works on Arch/Fedora-based distros too. If something breaks, just drop it in the issues tab.
 
 ## 📦 Cargo Crate
 
-Carch is available on [Cargo Crate](https://crates.io/crates/carch) too. 
+Carch is on [Cargo Crate](https://crates.io/crates/carch).  
+For Arch/Fedora, it's easy if you have Rust.
 
-This can be the simplest installation method for both Arch and Fedora if you have Rust installed.  
-
-You'll need a few dependencies before installing: 
+First, install dependencies: 
 
 > **Arch Linux**
 > ```sh
-> sudo pacman -S --noconfirm figlet rust cargo fzf
+> sudo pacman -S --noconfirm figlet fzf
 > ```
 
 > **Fedora Linux**
 > ```sh
-> sudo dnf install figlet rust cargo fzf -y
+> sudo dnf install figlet fzf -y
 > ```
 
-Now, install Carch using Cargo:
+Then, install Carch:
 
 ```sh
 cargo install carch
 ```
 
-Once installed, simply type `carch` in your terminal to run it.
+Run it with `carch` in the terminal.
 
 > [!TIP]
-> If typing `carch` doesn’t execute, make sure you have added the Cargo bin directory to your shell's PATH. Depending on whether you're using bash, zsh, or fish, add the following to your profile
+> If `carch` doesn’t run, add Cargo’s bin directory to your PATH:
 > 
 > ```sh
 > export PATH="$HOME/.cargo/bin:$PATH"
@@ -115,33 +96,25 @@ Carch supports some commands too. You can view them by running:
 carch --help
 ```
 
-## Roadmap 
-
-You can find the full roadmap in the Carch [documentation](https://carch-org.github.io/docs/project/roadmap.html)
+## Roadmap
+Check the full roadmap in the [docs](https://carch-org.github.io/docs/project/roadmap.html).
 
 ## Contributing
-
-PRs & any type of contributions are welcome. Before contributing, first read the contributing [guide](https://carch-org.github.io/docs/project/contributing.html)
+PRs & contributions are welcome! Read the [contributing guide](https://carch-org.github.io/docs/project/contributing.html) first.
 
 ## Code of Conduct
-
-We make sure everyone has a welcoming environment for using Carch, as well as contributing or doing any other stuff. So make sure to follow our [code of conduct](https://carch-org.github.io/docs/project/codeofconduct.html)
+We want a welcoming environment for everyone. Please follow our [code of conduct](https://carch-org.github.io/docs/project/codeofconduct.html).
 
 ## Contributors
-
-We thank everyone who has contributed to Carch in various ways — reporting bugs, giving feedback for improvements, or contributing to Carch through PRs.
+Thanks to everyone who contributed — reporting bugs, providing feedback, or submitting PRs.
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
 ## Inspiration
 
-Likewise, this project was created as a casual bash script as I was just tinkering here and there with scripting. Then after some time, I thought, why not make this script something useful to me or anyone else who wants to use it?
-
-My main inspiration to shape this project is:
-
-- **[ChrisTitusTech linutil project](https://github.com/ChrisTitusTech/linutil/)**
-- **[ml4w](https://github.com/mylinuxforwork)** — ml4w's scripting logic is insanely good. I got many ideas from him.
-- As well as some minor and many ideas from many people..
+- **[ChrisTitusTech linutil](https://github.com/ChrisTitusTech/linutil/)**
+- **[ml4w](https://github.com/mylinuxforwork)** — his scripting logic is awesome.
+- Ideas from many other people along the way.
 
 ## Reach Me  
 > Got a question or feedback? Hit me up via:  
