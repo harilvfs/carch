@@ -187,7 +187,6 @@ pub fn uninstall() -> io::Result<()> {
                     ));
                 }
 
-                println!("Carch has been uninstalled from Fedora.");
                 log_message("INFO", "Carch uninstalled successfully via DNF.")?;
             } else {
                 println!("Carch RPM package not found on the system.");
@@ -234,7 +233,6 @@ pub fn uninstall() -> io::Result<()> {
                     ));
                 }
 
-                println!("Carch-git has been uninstalled from Arch Linux.");
                 log_message(
                     "INFO",
                     "Carch-git uninstalled successfully from Arch Linux.",
@@ -252,7 +250,6 @@ pub fn uninstall() -> io::Result<()> {
                     ));
                 }
 
-                println!("Carch has been uninstalled from Arch Linux.");
                 log_message("INFO", "Carch uninstalled successfully from Arch Linux.")?;
             } else {
                 println!("No Carch packages found on the system.");
