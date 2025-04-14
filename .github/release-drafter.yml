@@ -1,0 +1,58 @@
+name-template: 'v$RESOLVED_VERSION 🌈'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'enhancement'
+  - title: '🦀 Rust'
+    labels:
+      - 'rust'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'fixes'
+  - title: '🔄 Refactor'
+    labels:
+      - 'refactor'
+  - title: '🔼 Updates'
+    labels:
+      - 'update'
+  - title: '🛠️ Build'
+    labels:
+      - 'build'
+      - 'dependencies'
+  - title: '🧪 Test'
+    labels:
+      - 'test'
+  - title: '📝 Remove'
+    labels:
+      - 'remove'
+  - title: '🔧 Custom'
+    labels:
+      - 'custom'
+  - title: '🎨 UI/UX'
+    labels:
+      - 'UI/UX'
+  - title: '📖 Docs'
+    labels:
+      - 'documentation'
+  - title: 'Other Changes'
+    labels:
+      - "*"
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&' 
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+template: |
+  $CHANGES

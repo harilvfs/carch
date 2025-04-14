@@ -76,129 +76,13 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
           
-      - name: Generate Custom Release Notes
-        id: release_notes
-        run: |
-          PREVIOUS_TAG=${{ env.latest_tag }}
-          NEW_TAG=${{ github.event.inputs.tag_version }}
-          
-          # Initialize categories with emojis
-          declare -A CATEGORIES=(
-            ["feat"]="🚀 Features"
-            ["feature"]="🚀 Features"
-            ["rust"]="🦀 Rust"
-            ["fix"]="🐛 Bug Fixes"
-            ["bugfix"]="🐛 Bug Fixes"
-            ["refactor"]="🔄 Refactor"
-            ["update"]="🔼 Updates"
-            ["build"]="🛠️ Build"
-            ["test"]="🧪 Test"
-            ["remove"]="📝 Remove"
-            ["custom"]="🔧 Custom" 
-            ["ui"]="🎨 UI/UX"
-            ["ux"]="🎨 UI/UX"
-            ["doc"]="📖 Docs"
-            ["ci"]="⚙️ CI"
-          )
-          
-          # Initialize arrays for each category
-          declare -A category_items
-          for key in "${!CATEGORIES[@]}"; do
-            category_items[$key]=""
-          done
-          
-          # Other/default category
-          CATEGORIES["other"]="Other Changes"
-          category_items["other"]=""
-          
-          echo "Processing commits between $PREVIOUS_TAG and HEAD"
-          
-          # Function to categorize a commit
-          categorize_commit() {
-            local commit_hash="$1"
-            local author="$2"  
-            local message="$3"
-            local pr_number="$4"
-            local is_pr="$5"
-            
-            # Clean message (remove prefix if present)
-            local clean_message=$(echo "$message" | sed 's/^[^:]*: *//')
-            
-            # Format line based on PR or commit
-            if [ "$is_pr" = "true" ]; then
-              local formatted_item="- $clean_message [@$author](#$pr_number)"
-            else
-              local formatted_item="- $clean_message [@$author](${commit_hash:0:7})"
-            fi
-            
-            # Default to other category
-            local matched=false
-            local category_key="other"
-            
-            # Try to match a category from the commit message
-            for key in "${!CATEGORIES[@]}"; do
-              if [[ "$message" =~ ^($key)(\(.+\))?:|\($key\): ]]; then
-                category_key="$key"
-                matched=true
-                break
-              fi
-            done
-            
-            # Update the relevant category array
-            category_items[$category_key]+="$formatted_item"$'\n'
-          }
-          
-          # Get all commits
-          git fetch --tags --force
-          COMMITS=$(git log --no-merges --pretty=format:"%h|||%an|||%s" $PREVIOUS_TAG..HEAD)
-          
-          # Process each commit
-          while IFS= read -r commit_line; do
-            if [ -n "$commit_line" ]; then
-              IFS="|||" read -r hash author message <<< "$commit_line"
-              categorize_commit "$hash" "$author" "$message" "" "false"
-            fi
-          done <<< "$COMMITS"
-          
-          # Get merged PRs using GitHub API 
-          PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                   "https://api.github.com/repos/${{ github.repository }}/pulls?state=closed&sort=updated&direction=desc&per_page=100")
-          
-          # Process merged PRs
-          echo "$PR_DATA" | jq -c '.[]' | while read -r pr; do
-            pr_number=$(echo "$pr" | jq -r '.number')
-            pr_title=$(echo "$pr" | jq -r '.title')
-            pr_author=$(echo "$pr" | jq -r '.user.login')
-            merge_commit_sha=$(echo "$pr" | jq -r '.merge_commit_sha')
-            merged_at=$(echo "$pr" | jq -r '.merged_at')
-            
-            # Skip if not merged
-            if [ "$merged_at" = "null" ]; then
-              continue
-            fi
-            
-            # Check if PR was merged between the tags
-            if git merge-base --is-ancestor "$merge_commit_sha" HEAD && \
-               ! git merge-base --is-ancestor "$merge_commit_sha" "$PREVIOUS_TAG"; then
-              categorize_commit "$merge_commit_sha" "$pr_author" "$pr_title" "$pr_number" "true"
-            fi
-          done
-          
-          # Generate release notes content
-          RELEASE_NOTES="## What's Changed\n\n"
-          
-          # Add content for each non-empty category
-          for key in "${!CATEGORIES[@]}"; do
-            if [ -n "${category_items[$key]}" ]; then
-              RELEASE_NOTES+="### ${CATEGORIES[$key]}\n\n"
-              RELEASE_NOTES+="${category_items[$key]}\n"
-            fi
-          done
-          
-          # Create multiline output
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo -e "$RELEASE_NOTES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+      - name: Generate Release Notes
+        id: generate_notes
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -208,7 +92,9 @@ jobs:
           body: |
             ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads RPM](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-${{ env.VERSION }}-1.fc41.x86_64.rpm?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
 
-            ${{ env.RELEASE_NOTES }}
+            ## What's Changed
+            ${{ steps.generate_notes.outputs.body }}
+
             **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...${{ github.event.inputs.tag_version }}
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
