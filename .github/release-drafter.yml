@@ -57,35 +57,3 @@ version-resolver:
   default: patch
 template: |
   $CHANGES
-  
-  <details>
-    <summary>Conventional Commits</summary>
-    
-    ### Features
-    
-    ${{ steps.categorize.outputs.features }}
-    
-    ### Fixes
-    
-    ${{ steps.categorize.outputs.fixes }}
-    
-    ### Chores
-    
-    ${{ steps.categorize.outputs.chores }}
-    
-    ### Docs
-    
-    ${{ steps.categorize.outputs.docs }}
-    
-    ### Refactors
-    
-    ${{ steps.categorize.outputs.refactors }}
-    
-    ### Tests
-    
-    ${{ steps.categorize.outputs.tests }}
-    
-    ### Build
-    
-    ${{ steps.categorize.outputs.build }}
-  </details>
