@@ -58,7 +58,8 @@ It works on Arch/Fedora-based distros too. If something breaks, just drop it in 
 
 ## 📦 Cargo Crate
 
-Carch is on [Cargo Crate](https://crates.io/crates/carch).  
+Carch is available on [Cargo Crate](https://crates.io/crates/carch) too. 
+
 For Arch/Fedora, it's easy if you have Rust.
 
 First, install dependencies: 
