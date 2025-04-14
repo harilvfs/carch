@@ -39,11 +39,11 @@ check_repo() {
 }
 
 detect_version() {
-    if [ -f "$REPO_DIR/platforms/arch/install.sh" ]; then
-        OLD_VERSION=$(grep "VERSION=" "$REPO_DIR/platforms/arch/install.sh" | cut -d'"' -f2)
+    if [ -f "$REPO_DIR/Cargo.toml" ]; then
+        OLD_VERSION=$(grep '^version = ' "$REPO_DIR/Cargo.toml" | head -n 1 | cut -d'"' -f2)
         echo -e "${BLUE}Current version detected: ${BOLD}$OLD_VERSION${RESET}"
     else
-        echo -e "${YELLOW}Warning: Could not detect current version from platforms/arch/install.sh${RESET}"
+        echo -e "${YELLOW}Warning: Could not detect current version from Cargo.toml${RESET}"
         echo -e "${YELLOW}Please enter the current version manually:${RESET}"
         read -p "> " OLD_VERSION
     fi
@@ -69,26 +69,6 @@ get_new_version() {
     if [[ ! $confirm =~ ^[Yy]$ ]]; then
         echo -e "${YELLOW}Operation canceled. Exiting...${RESET}"
         exit 0
-    fi
-}
-
-update_arch_install() {
-    echo -e "${BLUE}Updating version in platforms/arch/install.sh...${RESET}"
-    if [ -f "$REPO_DIR/platforms/arch/install.sh" ]; then
-        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/platforms/arch/install.sh"
-        echo -e "${GREEN}✓ Updated platforms/arch/install.sh${RESET}"
-    else
-        echo -e "${RED}Error: platforms/arch/install.sh not found!${RESET}"
-    fi
-}
-
-update_fedora_install() {
-    echo -e "${BLUE}Updating version in platforms/fedora/install.sh...${RESET}"
-    if [ -f "$REPO_DIR/platforms/fedora/install.sh" ]; then
-        sed -i "s/VERSION=\"$OLD_VERSION\"/VERSION=\"$NEW_VERSION\"/" "$REPO_DIR/platforms/fedora/install.sh"
-        echo -e "${GREEN}✓ Updated platforms/fedora/install.sh${RESET}"
-    else
-        echo -e "${RED}Error: platforms/fedora/install.sh not found!${RESET}"
     fi
 }
 
@@ -195,8 +175,6 @@ main() {
     
     echo -e "${BLUE}Updating version from $OLD_VERSION to $NEW_VERSION...${RESET}"
     
-    update_arch_install
-    update_fedora_install
     update_fedora_spec
     update_man_page
     update_cargo_toml
