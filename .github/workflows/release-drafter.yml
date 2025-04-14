@@ -24,6 +24,74 @@ jobs:
       #  run: |
       #    echo "GHE_HOST=${GITHUB_SERVER_URL##https:\/\/}" >> $GITHUB_ENV
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Categorize Conventional Commits
+        id: categorize
+        run: |
+          # Get all commits since last release or last 100 commits
+          COMMITS=$(git log -100 --pretty=format:"%s")
+          
+          # Initialize variables for each category
+          FEATURES=""
+          FIXES=""
+          CHORES=""
+          DOCS=""
+          REFACTORS=""
+          TESTS=""
+          BUILD=""
+          
+          # Process each commit and categorize based on prefix
+          echo "$COMMITS" | while read -r commit; do
+            if [[ "$commit" == feat:* ]]; then
+              FEATURES="$FEATURES\n- ${commit#feat: }"
+            elif [[ "$commit" == fix:* ]]; then
+              FIXES="$FIXES\n- ${commit#fix: }"
+            elif [[ "$commit" == chore:* ]]; then
+              CHORES="$CHORES\n- ${commit#chore: }"
+            elif [[ "$commit" == docs:* ]]; then
+              DOCS="$DOCS\n- ${commit#docs: }"
+            elif [[ "$commit" == refactor:* ]]; then
+              REFACTORS="$REFACTORS\n- ${commit#refactor: }"
+            elif [[ "$commit" == test:* ]]; then
+              TESTS="$TESTS\n- ${commit#test: }"
+            elif [[ "$commit" == build:* ]] || [[ "$commit" == ci:* ]]; then
+              BUILD="$BUILD\n- ${commit#*: }"
+            fi
+          done
+          
+          # Set outputs for use in the template
+          echo "features<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$FEATURES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "fixes<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$FIXES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "chores<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$CHORES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "docs<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$DOCS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "refactors<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$REFACTORS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "tests<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$TESTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "build<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$BUILD" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       # Drafts your next Release notes as Pull Requests are merged into "master"
       - uses: release-drafter/release-drafter@v6
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
