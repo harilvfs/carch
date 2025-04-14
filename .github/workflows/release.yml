@@ -1,4 +1,5 @@
 name: Carch Release
+
 on:
   workflow_dispatch:
     inputs:
@@ -10,8 +11,10 @@ on:
         description: 'Release title'
         required: true
         type: string
+
 permissions:
   contents: write
+
 jobs:
   build_binaries:
     runs-on: ubuntu-latest
@@ -20,32 +23,32 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-        
+
       - name: Install musl-tools
         run: sudo apt-get update && sudo apt-get install musl-tools
-        
+
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-registry-
-          
+
       - name: Cache Cargo index
         uses: actions/cache@v4
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-index-
-          
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-musl
-          
+
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
-          
+
       - name: Get Latest Release Tag
         id: get_latest
         run: |
@@ -58,22 +61,22 @@ jobs:
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          
+
       - name: Build x86_64 binary
         run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
-        
+
       - name: Build aarch64 binary
         run: |
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-          
+
       - name: Build installer binary
         run: |
           cd platforms
           cargo build --release --verbose --target=x86_64-unknown-linux-musl --all-features
           mkdir -p ../build/x86_64-unknown-linux-musl/release/
           mv ./target/x86_64-unknown-linux-musl/release/carch-installer ../build/x86_64-unknown-linux-musl/release/carch-installer
-          
+
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -83,16 +86,9 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
             ./build/x86_64-unknown-linux-musl/release/carch-installer
           retention-days: 1
-          
-      - name: Generate Release Notes
-        id: generate_notes
-        uses: release-drafter/release-drafter@v6
-        with:
-          config-name: release-drafter.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Create Release
+
+      - name: Create and Upload Release
+        id: create_release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
@@ -100,15 +96,14 @@ jobs:
           body: |
             ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads RPM](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-${{ env.VERSION }}-1.fc41.x86_64.rpm?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads Installer](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-installer?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
 
-            ## What's Changed
-            ${{ steps.generate_notes.outputs.body }}
-
             **Full Changelog**: https://github.com/harilvfs/carch/compare/${{ env.latest_tag }}...${{ github.event.inputs.tag_version }}
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
             ./build/x86_64-unknown-linux-musl/release/carch-installer
-          draft: false
+          append_body: true
+          generate_release_notes: true
+          prerelease: true
 
   build_rpm:
     needs: build_binaries
