@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.3](https://github.com/harilvfs/carch/compare/v4.3.2...v4.3.3) (2025-04-15)
+
+This release is frequent due to a major bug in the command side.
+
+### Changed
+
+- Carch Installer in Rust TUI https://github.com/harilvfs/carch/pull/402
+
+### Fixed
+
+- Numerous bug fixes, including on the repository side.
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.3).
+
 ## [4.3.2](https://github.com/harilvfs/carch/compare/v4.3.1...v4.3.2) (2025-04-14)
 
 ### Changed
