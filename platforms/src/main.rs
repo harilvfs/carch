@@ -73,7 +73,6 @@ impl App {
         self.state = AppState::Installing;
         self.status_message = format!("Selected {} for installation", self.options[self.selected]);
 
-        // Check if the appropriate package manager exists based on selected distro
         let (package_manager, expected_distro) = match self.selected {
             0 => ("pacman", "Arch Linux"),
             1 => ("dnf", "Fedora Linux"),
@@ -89,38 +88,31 @@ impl App {
             return;
         }
 
-        // Get the executable's directory
         let exe_path = env::current_exe().unwrap_or_else(|_| PathBuf::from("."));
         let exe_dir = exe_path.parent().unwrap_or_else(|| Path::new("."));
 
-        // Construct paths relative to the executable
         let script_path = match self.selected {
             0 => "arch/install.sh",
             1 => "fedora/install.sh",
             _ => "",
         };
 
-        // Try multiple possible locations for the scripts
         let possible_paths = [
-            PathBuf::from(script_path),               // Direct path
-            exe_dir.join(script_path),                // Relative to executable
-            Path::new("platforms").join(script_path), // From platforms dir
-            Path::new("..").join(script_path),        // From parent dir
+            PathBuf::from(script_path),
+            exe_dir.join(script_path), 
+            Path::new("platforms").join(script_path),
+            Path::new("..").join(script_path),
         ];
 
-        // Find the first path that exists
         let script_full_path = possible_paths.iter().find(|p| p.exists()).cloned();
 
-        // If no path exists, show error
         match script_full_path {
             Some(path) => {
-                // Store the selected script path
                 self.selected_script = Some(path);
                 self.status_message = format!(
                     "Selected: {}\nExiting TUI to run script...",
                     self.options[self.selected]
                 );
-                // Set quit to true to exit the TUI
                 self.quit = true;
             }
             None => {
@@ -131,9 +123,7 @@ impl App {
     }
 }
 
-// Function to check if a package manager exists
 fn check_package_manager_exists(package_manager: &str) -> bool {
-    // Try to run the package manager with a version flag to check if it exists
     let output = Command::new("which").arg(package_manager).output();
 
     match output {
@@ -143,18 +133,15 @@ fn check_package_manager_exists(package_manager: &str) -> bool {
 }
 
 fn main() -> Result<(), io::Error> {
-    // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    // Create app and run it
     let mut app = App::new();
     let res = run_app(&mut terminal, &mut app);
 
-    // Restore terminal
     disable_raw_mode()?;
     execute!(
         terminal.backend_mut(),
@@ -163,7 +150,6 @@ fn main() -> Result<(), io::Error> {
     )?;
     terminal.show_cursor()?;
 
-    // If we have a selected script and no errors, run it
     if let Some(script_path) = app.selected_script {
         let status = Command::new("bash")
             .arg("-c")
@@ -193,7 +179,6 @@ fn main() -> Result<(), io::Error> {
             }
         }
 
-        // Re-initialize terminal for post-install menu
         enable_raw_mode()?;
         let mut stdout = io::stdout();
         execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
@@ -202,7 +187,6 @@ fn main() -> Result<(), io::Error> {
 
         let post_res = run_app(&mut terminal, &mut post_install_app);
 
-        // Restore terminal again
         disable_raw_mode()?;
         execute!(
             terminal.backend_mut(),
@@ -220,15 +204,12 @@ fn main() -> Result<(), io::Error> {
         eprintln!("{:?}", err);
     }
 
-    // Clear the screen completely on exit
     clear_screen()?;
 
     Ok(())
 }
 
-// Function to clear the terminal screen
 fn clear_screen() -> io::Result<()> {
-    // Use ANSI escape codes to clear the screen and reset cursor position
     let mut stdout = io::stdout();
     execute!(stdout, TermClear(ClearType::All), cursor::MoveTo(0, 0))?;
     stdout.flush()?;
@@ -292,7 +273,6 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
 fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
     let size = f.size();
 
-    // Calculate popup size
     let popup_width = 60;
     let popup_height = 15;
     let popup_area = Rect {
@@ -302,10 +282,8 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
         height: popup_height,
     };
 
-    // Clear the area
     f.render_widget(Clear, popup_area);
 
-    // Draw popup
     match app.state {
         AppState::Choosing => draw_selection_ui(f, app, popup_area),
         AppState::Confirming => draw_confirmation_ui(f, app, popup_area),
@@ -316,7 +294,6 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
 }
 
 fn draw_selection_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
-    // Popup block
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
@@ -326,18 +303,16 @@ fn draw_selection_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
     f.render_widget(block.clone(), area);
     let inner_area = block.inner(area);
 
-    // Layout
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
         .constraints([
-            Constraint::Length(3), // Title
-            Constraint::Min(5),    // List
-            Constraint::Length(2), // Help
+            Constraint::Length(3),
+            Constraint::Min(5),
+            Constraint::Length(2),
         ])
         .split(inner_area);
 
-    // Title
     let title_text = vec![
         Spans::from(vec![
             Span::styled("╭─", Style::default().fg(Color::DarkGray)),
@@ -367,7 +342,6 @@ fn draw_selection_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
 
     f.render_widget(title, chunks[0]);
 
-    // Options list
     let items: Vec<ListItem> = app
         .options
         .iter()
@@ -400,7 +374,6 @@ fn draw_selection_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
 
     f.render_stateful_widget(list, chunks[1], &mut list_state);
 
-    // Help
     let help_text = Paragraph::new(vec![Spans::from(vec![
         Span::styled("j/k: Navigate  ", Style::default().fg(Color::Gray)),
         Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
@@ -502,12 +475,11 @@ fn draw_finished_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
         .direction(Direction::Vertical)
         .margin(2)
         .constraints([
-            Constraint::Min(5), // Increased min height for message
+            Constraint::Min(5),
             Constraint::Length(2),
         ])
         .split(inner_area);
 
-    // Create a styled paragraph with the error message and enable text wrapping
     let text = Paragraph::new(app.status_message.clone())
         .style(Style::default().fg(Color::Cyan))
         .alignment(Alignment::Center)
@@ -548,12 +520,11 @@ fn draw_post_install_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
         .direction(Direction::Vertical)
         .margin(2)
         .constraints([
-            Constraint::Min(5), // Increased min height for message
+            Constraint::Min(5),
             Constraint::Length(2),
         ])
         .split(inner_area);
 
-    // Create a styled paragraph with the message and enable text wrapping
     let text = Paragraph::new(app.status_message.clone())
         .style(
             Style::default()
