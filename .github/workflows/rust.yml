@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - '**/*.rs'
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
       - 'Cargo.toml'
       - 'Cargo.lock'
   pull_request:
@@ -13,6 +15,8 @@ on:
       - main
     paths:
       - '**/*.rs'
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
       - 'Cargo.toml'
       - 'Cargo.lock'
 

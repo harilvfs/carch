@@ -1,12 +1,16 @@
 name: Carch Prerelease
+
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
-      - '.github/**'
+    paths:
+      - '**/*.rs'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '!**.md'
+      - '!.github/**'
 
 permissions:
   contents: write
