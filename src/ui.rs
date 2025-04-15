@@ -541,7 +541,6 @@ impl App {
             }
             KeyCode::Enter => {
                 if self.multi_select_mode && !self.multi_selected_scripts.is_empty() {
-                    // If in multi-select mode with scripts selected, enter confirmation mode
                     self.mode = AppMode::Confirm;
                 }
             }
