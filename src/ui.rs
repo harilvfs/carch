@@ -113,6 +113,8 @@ pub struct App {
     pub search_cursor_position: usize,
     pub search_selected_idx: usize,
     pub autocomplete_text: Option<String>,
+    pub multi_selected_scripts: Vec<usize>,
+    pub multi_select_mode: bool,
 }
 
 impl App {
@@ -132,6 +134,8 @@ impl App {
             search_cursor_position: 0,
             search_selected_idx: 0,
             autocomplete_text: None,
+            multi_selected_scripts: Vec::new(),
+            multi_select_mode: false,
         }
     }
 
@@ -527,6 +531,19 @@ impl App {
             KeyCode::Char('q') => self.quit = true,
             KeyCode::Char('p') => self.toggle_preview_mode(),
             KeyCode::Char('/') => self.toggle_search_mode(),
+            KeyCode::Char('m') => self.toggle_multi_select_mode(),
+            KeyCode::Char('j') => self.next(),
+            KeyCode::Char('k') => self.previous(),
+            KeyCode::Char(' ') => {
+                if self.multi_select_mode {
+                    self.toggle_script_selection();
+                }
+            }
+            KeyCode::Enter => {
+                if self.multi_select_mode && !self.multi_selected_scripts.is_empty() {
+                    self.mode = AppMode::Confirm;
+                }
+            }
             KeyCode::Down => self.next(),
             KeyCode::Up => self.previous(),
             _ => {}
@@ -536,8 +553,8 @@ impl App {
     pub fn handle_key_preview_mode(&mut self, key: crossterm::event::KeyEvent) {
         match key.code {
             KeyCode::Char('q') | KeyCode::Esc => self.toggle_preview_mode(),
-            KeyCode::Up => self.scroll_preview_up(),
-            KeyCode::Down => self.scroll_preview_down(),
+            KeyCode::Up | KeyCode::Char('k') => self.scroll_preview_up(),
+            KeyCode::Down | KeyCode::Char('j') => self.scroll_preview_down(),
             KeyCode::PageUp => {
                 for _ in 0..10 {
                     self.scroll_preview_up();
@@ -670,6 +687,46 @@ impl App {
             _ => {}
         }
     }
+
+    pub fn toggle_multi_select_mode(&mut self) {
+        self.multi_select_mode = !self.multi_select_mode;
+        if !self.multi_select_mode {
+            self.multi_selected_scripts.clear();
+        }
+    }
+
+    pub fn toggle_script_selection(&mut self) {
+        if let Some(selected) = self.scripts.state.selected() {
+            if selected < self.scripts.items.len()
+                && !self.scripts.items[selected].is_category_header
+            {
+                if self.multi_selected_scripts.contains(&selected) {
+                    self.multi_selected_scripts.retain(|&x| x != selected);
+                } else {
+                    self.multi_selected_scripts.push(selected);
+                }
+            }
+        }
+    }
+
+    pub fn run_selected_scripts<F>(&self, run_script_callback: &F) -> io::Result<()>
+    where
+        F: Fn(&Path) -> io::Result<()>,
+    {
+        for &script_idx in &self.multi_selected_scripts {
+            if script_idx < self.scripts.items.len()
+                && !self.scripts.items[script_idx].is_category_header
+            {
+                let script_path = &self.scripts.items[script_idx].path;
+                run_script_callback(script_path)?;
+            }
+        }
+        Ok(())
+    }
+
+    pub fn is_script_selected(&self, idx: usize) -> bool {
+        self.multi_selected_scripts.contains(&idx)
+    }
 }
 
 pub struct UiOptions {
@@ -786,6 +843,10 @@ where
                                                 let category =
                                                     app.scripts.items[selected].category.clone();
                                                 app.toggle_category(&category);
+                                            } else if app.multi_select_mode {
+                                                if !app.multi_selected_scripts.is_empty() {
+                                                    app.mode = AppMode::Confirm;
+                                                }
                                             } else {
                                                 app.mode = AppMode::Confirm;
                                             }
@@ -813,7 +874,44 @@ where
                                 app.handle_key_confirmation_mode(key);
                                 if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y')
                                 {
-                                    if let Some(script_path) = app.get_script_path() {
+                                    if app.multi_select_mode
+                                        && !app.multi_selected_scripts.is_empty()
+                                    {
+                                        disable_raw_mode()?;
+                                        execute!(
+                                            terminal.backend_mut(),
+                                            LeaveAlternateScreen,
+                                            DisableMouseCapture
+                                        )?;
+                                        terminal.show_cursor()?;
+
+                                        if options.log_mode {
+                                            let _ = crate::commands::log_message(
+                                                "INFO",
+                                                &format!(
+                                                    "Exiting UI to run {} selected scripts",
+                                                    app.multi_selected_scripts.len()
+                                                ),
+                                            );
+                                        }
+
+                                        app.run_selected_scripts(&run_script_callback)?;
+
+                                        if options.log_mode {
+                                            let _ = crate::commands::log_message(
+                                                "INFO",
+                                                "Multiple script execution completed, returning to UI",
+                                            );
+                                        }
+
+                                        enable_raw_mode()?;
+                                        let mut stdout = io::stdout();
+                                        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+
+                                        let backend = CrosstermBackend::new(stdout);
+                                        terminal = Terminal::new(backend)?;
+                                        terminal.clear()?;
+                                    } else if let Some(script_path) = app.get_script_path() {
                                         if options.log_mode {
                                             let script_name = script_path
                                                 .file_name()
@@ -944,14 +1042,29 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App, options: &UiOptions) {
         f.render_widget(preview_disabled, main_chunks[1]);
     }
 
-    let help_text = Paragraph::new(vec![Spans::from(vec![
-        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
-        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
-        Span::styled("p: Preview  ", Style::default().fg(Color::Gray)),
-        Span::styled("/: Search  ", Style::default().fg(Color::Gray)),
-        Span::styled("q: Quit", Style::default().fg(Color::Gray)),
-    ])])
-    .alignment(ratatui::layout::Alignment::Center);
+    let help_text = if app.multi_select_mode {
+        Paragraph::new(vec![Spans::from(vec![
+            Span::styled("↑/↓/j/k: Navigate  ", Style::default().fg(Color::Gray)),
+            Span::styled(
+                "Space: Toggle Selection  ",
+                Style::default().fg(Color::Gray),
+            ),
+            Span::styled("Enter: Run Selected  ", Style::default().fg(Color::Green)),
+            Span::styled("m: Exit Multi-select  ", Style::default().fg(Color::Gray)),
+            Span::styled("q: Quit", Style::default().fg(Color::Gray)),
+        ])])
+        .alignment(ratatui::layout::Alignment::Center)
+    } else {
+        Paragraph::new(vec![Spans::from(vec![
+            Span::styled("↑/↓/j/k: Navigate  ", Style::default().fg(Color::Gray)),
+            Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
+            Span::styled("p: Preview  ", Style::default().fg(Color::Gray)),
+            Span::styled("/: Search  ", Style::default().fg(Color::Gray)),
+            Span::styled("m: Multi-select Mode  ", Style::default().fg(Color::Gray)),
+            Span::styled("q: Quit", Style::default().fg(Color::Gray)),
+        ])])
+        .alignment(ratatui::layout::Alignment::Center)
+    };
 
     f.render_widget(help_text, chunks[2]);
 
@@ -1023,17 +1136,53 @@ fn render_script_list<B: Backend>(f: &mut Frame<B>, app: &mut App, area: Rect) {
                     .add_modifier(Modifier::BOLD),
             )])));
         } else {
+            let is_selected = app.is_script_selected(idx);
+            let prefix = if is_selected { "[✓] " } else { "    " };
+
             list_items.push(ListItem::new(Spans::from(vec![
-                Span::raw("  "),
-                Span::styled(&item.name, Style::default().fg(Color::Gray)),
+                Span::styled(
+                    prefix,
+                    if is_selected {
+                        Style::default()
+                            .fg(Color::Green)
+                            .add_modifier(Modifier::BOLD)
+                    } else {
+                        Style::default().fg(Color::Gray)
+                    },
+                ),
+                Span::styled(
+                    &item.name,
+                    if is_selected {
+                        Style::default()
+                            .fg(Color::Green)
+                            .add_modifier(Modifier::BOLD)
+                    } else {
+                        Style::default().fg(Color::Gray)
+                    },
+                ),
             ])));
         }
     }
 
-    let title = Spans::from(vec![Span::styled(
-        "Select a script to run",
-        Style::default(),
-    )]);
+    let title = if app.multi_select_mode {
+        Spans::from(vec![
+            Span::styled(
+                "Multi-select Mode ",
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::styled(
+                format!("[{} selected]", app.multi_selected_scripts.len()),
+                Style::default().fg(Color::Yellow),
+            ),
+        ])
+    } else {
+        Spans::from(vec![Span::styled(
+            "Select a script to run",
+            Style::default(),
+        )])
+    };
 
     let block = create_rounded_block().title(title);
 
@@ -1146,7 +1295,7 @@ fn render_fullscreen_preview<B: Backend>(f: &mut Frame<B>, app: &App) {
     f.render_widget(preview, preview_area[0]);
 
     let help_text = Paragraph::new(vec![Spans::from(vec![
-        Span::styled("↑/↓: Scroll  ", Style::default().fg(Color::Gray)),
+        Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray)),
         Span::styled(
             "PgUp/PgDown: Scroll faster  ",
             Style::default().fg(Color::Gray),
@@ -1298,7 +1447,7 @@ fn render_confirmation_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
     let area = f.size();
 
     let popup_width = std::cmp::min(55, area.width - 8);
-    let popup_height = 9;
+    let popup_height = 11;
 
     let popup_area = Rect {
         x: (area.width - popup_width) / 2,
@@ -1315,58 +1464,82 @@ fn render_confirmation_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
         .title("Confirm selection")
         .border_style(Style::default().fg(Color::White));
 
-    let script_name = if let Some(selected) = app.scripts.state.selected() {
-        if selected < app.scripts.items.len() && !app.scripts.items[selected].is_category_header {
-            let item = &app.scripts.items[selected];
-            format!("{}/{}", item.category, item.name)
-        } else {
-            String::from("Unknown script")
-        }
-    } else {
-        String::from("Unknown script")
-    };
-
     let inner_area = popup_block.inner(popup_area);
     let content_layout = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(3), Constraint::Length(2)])
+        .constraints([
+            Constraint::Length(1),
+            Constraint::Length(1),
+            Constraint::Length(2),
+            Constraint::Length(1),
+            Constraint::Length(2),
+        ])
         .split(inner_area);
 
-    let script_text = Paragraph::new(vec![
-        Spans::from(vec![Span::styled(
-            "Do you want to run this script?",
-            Style::default()
-                .fg(Color::White)
-                .add_modifier(Modifier::BOLD),
-        )]),
-        Spans::from(vec![Span::styled(
-            format!("1. {}", script_name),
-            Style::default().fg(Color::White),
-        )]),
-    ])
-    .alignment(ratatui::layout::Alignment::Left);
+    let question_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+        "Do you want to run these scripts?"
+    } else {
+        "Do you want to run this script?"
+    };
 
-    let options_text = Paragraph::new(vec![
-        Spans::from(Span::raw("")),
-        Spans::from(vec![
-            Span::styled("[", Style::default().fg(Color::Gray)),
-            Span::styled(
-                "Y",
+    let question_paragraph = Paragraph::new(Spans::from(vec![Span::styled(
+        question_text,
+        Style::default().fg(Color::White),
+    )]))
+    .alignment(ratatui::layout::Alignment::Center);
+
+    let script_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+        Paragraph::new(vec![Spans::from(vec![Span::styled(
+            format!("{} selected scripts", app.multi_selected_scripts.len()),
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        )])])
+        .alignment(ratatui::layout::Alignment::Center)
+    } else if let Some(selected) = app.scripts.state.selected() {
+        if selected < app.scripts.items.len() && !app.scripts.items[selected].is_category_header {
+            let item = &app.scripts.items[selected];
+            Paragraph::new(vec![Spans::from(vec![Span::styled(
+                format!("{}/{}", item.category, item.name),
                 Style::default()
-                    .fg(Color::Green)
+                    .fg(Color::Yellow)
                     .add_modifier(Modifier::BOLD),
-            ),
-            Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
-            Span::styled(
-                "N",
-                Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
-            ),
-            Span::styled("] to abort", Style::default().fg(Color::Gray)),
-        ]),
-    ])
+            )])])
+            .alignment(ratatui::layout::Alignment::Center)
+        } else {
+            Paragraph::new(vec![Spans::from(vec![Span::styled(
+                "Unknown script",
+                Style::default().fg(Color::Red),
+            )])])
+            .alignment(ratatui::layout::Alignment::Center)
+        }
+    } else {
+        Paragraph::new(vec![Spans::from(vec![Span::styled(
+            "Unknown script",
+            Style::default().fg(Color::Red),
+        )])])
+        .alignment(ratatui::layout::Alignment::Center)
+    };
+
+    let options_text = Paragraph::new(vec![Spans::from(vec![
+        Span::styled("[", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "Y",
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "N",
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("] to abort", Style::default().fg(Color::Gray)),
+    ])])
     .alignment(ratatui::layout::Alignment::Center);
 
     f.render_widget(popup_block, popup_area);
-    f.render_widget(script_text, content_layout[0]);
-    f.render_widget(options_text, content_layout[1]);
+    f.render_widget(question_paragraph, content_layout[0]);
+    f.render_widget(script_text, content_layout[2]);
+    f.render_widget(options_text, content_layout[4]);
 }
