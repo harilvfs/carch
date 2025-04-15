@@ -538,13 +538,13 @@ impl App {
                 if self.multi_select_mode {
                     self.toggle_script_selection();
                 }
-            },
+            }
             KeyCode::Enter => {
                 if self.multi_select_mode && !self.multi_selected_scripts.is_empty() {
                     // If in multi-select mode with scripts selected, enter confirmation mode
                     self.mode = AppMode::Confirm;
                 }
-            },
+            }
             KeyCode::Down => self.next(),
             KeyCode::Up => self.previous(),
             _ => {}
@@ -698,7 +698,9 @@ impl App {
 
     pub fn toggle_script_selection(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
-            if selected < self.scripts.items.len() && !self.scripts.items[selected].is_category_header {
+            if selected < self.scripts.items.len()
+                && !self.scripts.items[selected].is_category_header
+            {
                 if self.multi_selected_scripts.contains(&selected) {
                     self.multi_selected_scripts.retain(|&x| x != selected);
                 } else {
@@ -713,7 +715,9 @@ impl App {
         F: Fn(&Path) -> io::Result<()>,
     {
         for &script_idx in &self.multi_selected_scripts {
-            if script_idx < self.scripts.items.len() && !self.scripts.items[script_idx].is_category_header {
+            if script_idx < self.scripts.items.len()
+                && !self.scripts.items[script_idx].is_category_header
+            {
                 let script_path = &self.scripts.items[script_idx].path;
                 run_script_callback(script_path)?;
             }
@@ -869,8 +873,11 @@ where
                             AppMode::Search => app.handle_search_input(key),
                             AppMode::Confirm => {
                                 app.handle_key_confirmation_mode(key);
-                                if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y') {
-                                    if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+                                if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y')
+                                {
+                                    if app.multi_select_mode
+                                        && !app.multi_selected_scripts.is_empty()
+                                    {
                                         disable_raw_mode()?;
                                         execute!(
                                             terminal.backend_mut(),
@@ -882,7 +889,10 @@ where
                                         if options.log_mode {
                                             let _ = crate::commands::log_message(
                                                 "INFO",
-                                                &format!("Exiting UI to run {} selected scripts", app.multi_selected_scripts.len()),
+                                                &format!(
+                                                    "Exiting UI to run {} selected scripts",
+                                                    app.multi_selected_scripts.len()
+                                                ),
                                             );
                                         }
 
@@ -1036,7 +1046,10 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App, options: &UiOptions) {
     let help_text = if app.multi_select_mode {
         Paragraph::new(vec![Spans::from(vec![
             Span::styled("↑/↓/j/k: Navigate  ", Style::default().fg(Color::Gray)),
-            Span::styled("Space: Toggle Selection  ", Style::default().fg(Color::Gray)),
+            Span::styled(
+                "Space: Toggle Selection  ",
+                Style::default().fg(Color::Gray),
+            ),
             Span::styled("Enter: Run Selected  ", Style::default().fg(Color::Green)),
             Span::styled("m: Exit Multi-select  ", Style::default().fg(Color::Gray)),
             Span::styled("q: Quit", Style::default().fg(Color::Gray)),
@@ -1126,20 +1139,28 @@ fn render_script_list<B: Backend>(f: &mut Frame<B>, app: &mut App, area: Rect) {
         } else {
             let is_selected = app.is_script_selected(idx);
             let prefix = if is_selected { "[✓] " } else { "    " };
-            
+
             list_items.push(ListItem::new(Spans::from(vec![
-                Span::styled(prefix, 
+                Span::styled(
+                    prefix,
                     if is_selected {
-                        Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)
+                        Style::default()
+                            .fg(Color::Green)
+                            .add_modifier(Modifier::BOLD)
                     } else {
                         Style::default().fg(Color::Gray)
-                    }),
-                Span::styled(&item.name, 
+                    },
+                ),
+                Span::styled(
+                    &item.name,
                     if is_selected {
-                        Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)
+                        Style::default()
+                            .fg(Color::Green)
+                            .add_modifier(Modifier::BOLD)
                     } else {
                         Style::default().fg(Color::Gray)
-                    }),
+                    },
+                ),
             ])));
         }
     }
@@ -1148,7 +1169,9 @@ fn render_script_list<B: Backend>(f: &mut Frame<B>, app: &mut App, area: Rect) {
         Spans::from(vec![
             Span::styled(
                 "Multi-select Mode ",
-                Style::default().fg(Color::Green).add_modifier(Modifier::BOLD),
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
             ),
             Span::styled(
                 format!("[{} selected]", app.multi_selected_scripts.len()),
@@ -1460,57 +1483,60 @@ fn render_confirmation_popup<B: Backend>(f: &mut Frame<B>, app: &App) {
         "Do you want to run this script?"
     };
 
-    let question_paragraph = Paragraph::new(Spans::from(vec![
-        Span::styled(question_text, Style::default().fg(Color::White)),
-    ]))
+    let question_paragraph = Paragraph::new(Spans::from(vec![Span::styled(
+        question_text,
+        Style::default().fg(Color::White),
+    )]))
     .alignment(ratatui::layout::Alignment::Center);
 
     let script_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
-        Paragraph::new(vec![
-            Spans::from(vec![Span::styled(
-                format!("{} selected scripts", app.multi_selected_scripts.len()),
-                Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
-            )]),
-        ])
+        Paragraph::new(vec![Spans::from(vec![Span::styled(
+            format!("{} selected scripts", app.multi_selected_scripts.len()),
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        )])])
         .alignment(ratatui::layout::Alignment::Center)
     } else if let Some(selected) = app.scripts.state.selected() {
         if selected < app.scripts.items.len() && !app.scripts.items[selected].is_category_header {
             let item = &app.scripts.items[selected];
-            Paragraph::new(vec![
-                Spans::from(vec![Span::styled(
-                    format!("{}/{}", item.category, item.name),
-                    Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
-                )]),
-            ])
+            Paragraph::new(vec![Spans::from(vec![Span::styled(
+                format!("{}/{}", item.category, item.name),
+                Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD),
+            )])])
             .alignment(ratatui::layout::Alignment::Center)
         } else {
-            Paragraph::new(vec![
-                Spans::from(vec![Span::styled(
-                    "Unknown script",
-                    Style::default().fg(Color::Red),
-                )]),
-            ])
+            Paragraph::new(vec![Spans::from(vec![Span::styled(
+                "Unknown script",
+                Style::default().fg(Color::Red),
+            )])])
             .alignment(ratatui::layout::Alignment::Center)
         }
     } else {
-        Paragraph::new(vec![
-            Spans::from(vec![Span::styled(
-                "Unknown script",
-                Style::default().fg(Color::Red),
-            )]),
-        ])
+        Paragraph::new(vec![Spans::from(vec![Span::styled(
+            "Unknown script",
+            Style::default().fg(Color::Red),
+        )])])
         .alignment(ratatui::layout::Alignment::Center)
     };
 
-    let options_text = Paragraph::new(vec![
-        Spans::from(vec![
-            Span::styled("[", Style::default().fg(Color::Gray)),
-            Span::styled("Y", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
-            Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
-            Span::styled("N", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
-            Span::styled("] to abort", Style::default().fg(Color::Gray)),
-        ]),
-    ])
+    let options_text = Paragraph::new(vec![Spans::from(vec![
+        Span::styled("[", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "Y",
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "N",
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("] to abort", Style::default().fg(Color::Gray)),
+    ])])
     .alignment(ratatui::layout::Alignment::Center);
 
     f.render_widget(popup_block, popup_area);
