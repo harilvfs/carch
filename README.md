@@ -30,10 +30,18 @@ Got ideas or features to add? Open a [feature request](https://github.com/harilv
 
 You can run or use Carch directly without installing it on your system.
 
-Run the following command in your terminal:
+Choose one of the following version to try Carch:
+
+⭐ Stable Version [ Latest Release ]
 
 ```sh
 bash <(curl -L https://chalisehari.com.np/carch)
+```
+
+ 🧪 Dev Version [ Pre-Release ]
+ 
+```sh
+bash <(curl -L https://chalisehari.com.np/carchdev)
 ```
 
 ## Installation
