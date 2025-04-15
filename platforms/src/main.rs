@@ -39,6 +39,7 @@ struct App {
     status_message: String,
     quit: bool,
     selected_script: Option<PathBuf>,
+    return_to_menu: bool,
 }
 
 impl App {
@@ -50,6 +51,7 @@ impl App {
             status_message: String::new(),
             quit: false,
             selected_script: None,
+            return_to_menu: false,
         }
     }
 
@@ -99,7 +101,7 @@ impl App {
 
         let possible_paths = [
             PathBuf::from(script_path),
-            exe_dir.join(script_path), 
+            exe_dir.join(script_path),
             Path::new("platforms").join(script_path),
             Path::new("..").join(script_path),
         ];
@@ -133,59 +135,17 @@ fn check_package_manager_exists(package_manager: &str) -> bool {
 }
 
 fn main() -> Result<(), io::Error> {
-    enable_raw_mode()?;
-    let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
+    let mut should_continue = true;
 
-    let mut app = App::new();
-    let res = run_app(&mut terminal, &mut app);
-
-    disable_raw_mode()?;
-    execute!(
-        terminal.backend_mut(),
-        LeaveAlternateScreen,
-        DisableMouseCapture
-    )?;
-    terminal.show_cursor()?;
-
-    if let Some(script_path) = app.selected_script {
-        let status = Command::new("bash")
-            .arg("-c")
-            .arg(format!("source '{}'", script_path.display()))
-            .status();
-
-        let mut post_install_app = App::new();
-        post_install_app.state = AppState::PostInstall;
-
-        match status {
-            Ok(exit_status) => {
-                if exit_status.success() {
-                    post_install_app.status_message = format!(
-                        "Installation of {} completed successfully!",
-                        app.options[app.selected]
-                    );
-                } else {
-                    post_install_app.status_message = format!(
-                        "Installation of {} failed with status code: {:?}",
-                        app.options[app.selected],
-                        exit_status.code()
-                    );
-                }
-            }
-            Err(e) => {
-                post_install_app.status_message = format!("Failed to run installer: {}", e);
-            }
-        }
-
+    while should_continue {
         enable_raw_mode()?;
         let mut stdout = io::stdout();
         execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
         let backend = CrosstermBackend::new(stdout);
         let mut terminal = Terminal::new(backend)?;
 
-        let post_res = run_app(&mut terminal, &mut post_install_app);
+        let mut app = App::new();
+        let res = run_app(&mut terminal, &mut app);
 
         disable_raw_mode()?;
         execute!(
@@ -195,17 +155,69 @@ fn main() -> Result<(), io::Error> {
         )?;
         terminal.show_cursor()?;
 
-        if let Err(err) = post_res {
+        if let Err(err) = res {
             eprintln!("{:?}", err);
+            break;
+        }
+
+        if app.quit && app.selected_script.is_some() {
+            let script_path = app.selected_script.unwrap();
+            let status = Command::new("bash")
+                .arg("-c")
+                .arg(format!("source '{}'", script_path.display()))
+                .status();
+
+            enable_raw_mode()?;
+            let mut stdout = io::stdout();
+            execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+            let backend = CrosstermBackend::new(stdout);
+            let mut terminal = Terminal::new(backend)?;
+
+            let mut post_app = App::new();
+            post_app.state = AppState::PostInstall;
+
+            match status {
+                Ok(exit_status) => {
+                    if exit_status.success() {
+                        post_app.status_message = format!(
+                            "Installation of {} completed successfully!",
+                            app.options[app.selected]
+                        );
+                    } else {
+                        post_app.status_message = format!(
+                            "Installation of {} failed with status code: {:?}",
+                            app.options[app.selected],
+                            exit_status.code()
+                        );
+                    }
+                }
+                Err(e) => {
+                    post_app.status_message = format!("Failed to run installer: {}", e);
+                }
+            }
+
+            let post_res = run_app(&mut terminal, &mut post_app);
+
+            disable_raw_mode()?;
+            execute!(
+                terminal.backend_mut(),
+                LeaveAlternateScreen,
+                DisableMouseCapture
+            )?;
+            terminal.show_cursor()?;
+
+            if let Err(err) = post_res {
+                eprintln!("{:?}", err);
+                break;
+            }
+
+            should_continue = post_app.return_to_menu;
+        } else {
+            should_continue = false;
         }
     }
 
-    if let Err(err) = res {
-        eprintln!("{:?}", err);
-    }
-
     clear_screen()?;
-
     Ok(())
 }
 
@@ -246,19 +258,23 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                             KeyCode::Enter => {
                                 app.state = AppState::Choosing;
                                 app.selected = 0;
+                                app.status_message = String::new();
+                                app.selected_script = None;
+                                app.quit = false;
                             }
                             KeyCode::Char('q') | KeyCode::Char('Q') | KeyCode::Esc => {
-                                app.quit = true
+                                app.quit = true;
                             }
                             _ => {}
                         },
                         AppState::PostInstall => match key.code {
                             KeyCode::Enter | KeyCode::Char('m') | KeyCode::Char('M') => {
-                                app.state = AppState::Choosing;
-                                app.selected = 0;
+                                app.return_to_menu = true;
+                                app.quit = true;
                             }
                             KeyCode::Char('q') | KeyCode::Char('Q') | KeyCode::Esc => {
-                                app.quit = true
+                                app.return_to_menu = false;
+                                app.quit = true;
                             }
                             _ => {}
                         },
@@ -474,10 +490,7 @@ fn draw_finished_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
-        .constraints([
-            Constraint::Min(5),
-            Constraint::Length(2),
-        ])
+        .constraints([Constraint::Min(5), Constraint::Length(2)])
         .split(inner_area);
 
     let text = Paragraph::new(app.status_message.clone())
@@ -519,10 +532,7 @@ fn draw_post_install_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
-        .constraints([
-            Constraint::Min(5),
-            Constraint::Length(2),
-        ])
+        .constraints([Constraint::Min(5), Constraint::Length(2)])
         .split(inner_area);
 
     let text = Paragraph::new(app.status_message.clone())
