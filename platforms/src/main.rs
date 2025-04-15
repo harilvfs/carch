@@ -101,7 +101,7 @@ impl App {
 
         let possible_paths = [
             PathBuf::from(script_path),
-            exe_dir.join(script_path), 
+            exe_dir.join(script_path),
             Path::new("platforms").join(script_path),
             Path::new("..").join(script_path),
         ];
@@ -136,7 +136,7 @@ fn check_package_manager_exists(package_manager: &str) -> bool {
 
 fn main() -> Result<(), io::Error> {
     let mut should_continue = true;
-    
+
     while should_continue {
         enable_raw_mode()?;
         let mut stdout = io::stdout();
@@ -490,10 +490,7 @@ fn draw_finished_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
-        .constraints([
-            Constraint::Min(5),
-            Constraint::Length(2),
-        ])
+        .constraints([Constraint::Min(5), Constraint::Length(2)])
         .split(inner_area);
 
     let text = Paragraph::new(app.status_message.clone())
@@ -535,10 +532,7 @@ fn draw_post_install_ui<B: Backend>(f: &mut Frame<B>, app: &App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
-        .constraints([
-            Constraint::Min(5),
-            Constraint::Length(2),
-        ])
+        .constraints([Constraint::Min(5), Constraint::Length(2)])
         .split(inner_area);
 
     let text = Paragraph::new(app.status_message.clone())
