@@ -41,230 +41,36 @@ pub fn log_message(log_type: &str, message: &str) -> io::Result<()> {
     Ok(())
 }
 
-pub fn detect_distro() -> String {
-    if Path::new("/etc/arch-release").exists() || Command::new("pacman").arg("-V").status().is_ok()
-    {
-        return String::from("arch");
-    }
-
-    if Path::new("/etc/fedora-release").exists()
-        || Command::new("dnf").arg("--version").status().is_ok()
-    {
-        return String::from("fedora");
-    }
-
-    String::from("unknown")
-}
-
-pub fn check_update() -> io::Result<()> {
-    println!("Checking for updates...");
-
-    let installed_version = env!("CARGO_PKG_VERSION");
-    println!("Installed version: {}", installed_version);
-
-    let output = Command::new("curl")
-        .args([
-            "-s",
-            "https://api.github.com/repos/harilvfs/carch/releases/latest",
-        ])
-        .output()?;
-
-    if !output.status.success() {
-        return Err(io::Error::new(
-            io::ErrorKind::Other,
-            "Failed to fetch latest version information",
-        ));
-    }
-
-    let response = String::from_utf8_lossy(&output.stdout);
-
-    let latest_version = response
-        .lines()
-        .find(|line| line.contains("tag_name"))
-        .and_then(|line| {
-            let parts: Vec<&str> = line.split('"').collect();
-            if parts.len() >= 4 {
-                Some(parts[3].trim_start_matches('v').to_string())
-            } else {
-                None
-            }
-        });
-
-    match latest_version {
-        Some(version) => {
-            println!("Latest version: {}", version);
-
-            if version != installed_version {
-                println!(
-                    "Update available: Carch {} → {}",
-                    installed_version, version
-                );
-                println!("Run `carch --update` to update.");
-            } else {
-                println!("Carch is up to date ({}).", installed_version);
-            }
-        }
-        None => {
-            return Err(io::Error::new(
-                io::ErrorKind::Other,
-                "Failed to parse latest version information",
-            ));
-        }
-    }
-
-    Ok(())
-}
-
 pub fn update() -> io::Result<()> {
     println!("Updating Carch...");
 
-    let distro = detect_distro();
+    let status = Command::new("cargo")
+        .args(["install", "carch", "--force"])
+        .status()?;
 
-    let base_url = "https://chalisehari.com.np";
-
-    match distro.as_str() {
-        "fedora" => {
-            println!("Detected Fedora. Running the Fedora update script...");
-            let status = Command::new("bash")
-                .arg("-c")
-                .arg(format!("curl -L {}/fedora | bash", base_url))
-                .status()?;
-
-            if !status.success() {
-                return Err(io::Error::new(
-                    io::ErrorKind::Other,
-                    "Failed to update Carch on Fedora",
-                ));
-            }
-        }
-        "arch" => {
-            println!("Detected Arch Linux. Running the Arch update script...");
-            let status = Command::new("bash")
-                .arg("-c")
-                .arg(format!("curl -L {}/arch | bash", base_url))
-                .status()?;
-
-            if !status.success() {
-                return Err(io::Error::new(
-                    io::ErrorKind::Other,
-                    "Failed to update Carch on Arch Linux",
-                ));
-            }
-        }
-        _ => {
-            return Err(io::Error::new(
-                io::ErrorKind::Other,
-                format!("Unsupported distribution: {}", distro),
-            ));
-        }
+    if !status.success() {
+        return Err(io::Error::new(
+            io::ErrorKind::Other,
+            "Failed to update Carch via cargo",
+        ));
     }
 
-    println!("Update completed successfully!");
+    println!("Carch successfully updated!");
     Ok(())
 }
 
 pub fn uninstall() -> io::Result<()> {
     println!("Uninstalling Carch...");
 
-    let distro = detect_distro();
+    let status = Command::new("cargo")
+        .args(["uninstall", "carch"])
+        .status()?;
 
-    match distro.as_str() {
-        "fedora" => {
-            println!("Detected Fedora. Checking if Carch is installed...");
-
-            let status = Command::new("rpm").args(["-q", "carch"]).status()?;
-
-            if status.success() {
-                println!("Removing Carch package...");
-                let uninstall_status = Command::new("sudo")
-                    .args(["dnf", "remove", "-y", "carch"])
-                    .status()?;
-
-                if !uninstall_status.success() {
-                    return Err(io::Error::new(
-                        io::ErrorKind::Other,
-                        "Failed to uninstall Carch from Fedora",
-                    ));
-                }
-
-                log_message("INFO", "Carch uninstalled successfully via DNF.")?;
-            } else {
-                println!("Carch RPM package not found on the system.");
-                log_message("WARNING", "Carch not found during uninstall attempt.")?;
-            }
-        }
-        "arch" => {
-            println!("Detected Arch Linux. Checking if Carch is installed...");
-
-            let pacman_q_carch = Command::new("pacman").args(["-Q", "carch"]).output()?;
-
-            let carch_installed = pacman_q_carch.status.success();
-            println!("carch installed: {}", carch_installed);
-
-            let pacman_q_carch_git = Command::new("pacman").args(["-Q", "carch-git"]).output()?;
-
-            let carch_git_installed = pacman_q_carch_git.status.success();
-            println!("carch-git installed: {}", carch_git_installed);
-
-            if carch_installed {
-                println!(
-                    "Found package: {}",
-                    String::from_utf8_lossy(&pacman_q_carch.stdout).trim()
-                );
-            }
-
-            if carch_git_installed {
-                println!(
-                    "Found package: {}",
-                    String::from_utf8_lossy(&pacman_q_carch_git.stdout).trim()
-                );
-            }
-
-            if carch_git_installed {
-                println!("Removing Carch-git package...");
-                let uninstall_status = Command::new("sudo")
-                    .args(["pacman", "-R", "carch-git", "--noconfirm"])
-                    .status()?;
-
-                if !uninstall_status.success() {
-                    return Err(io::Error::new(
-                        io::ErrorKind::Other,
-                        "Failed to uninstall Carch-git from Arch Linux",
-                    ));
-                }
-
-                log_message(
-                    "INFO",
-                    "Carch-git uninstalled successfully from Arch Linux.",
-                )?;
-            } else if carch_installed {
-                println!("Removing Carch package...");
-                let uninstall_status = Command::new("sudo")
-                    .args(["pacman", "-R", "carch", "--noconfirm"])
-                    .status()?;
-
-                if !uninstall_status.success() {
-                    return Err(io::Error::new(
-                        io::ErrorKind::Other,
-                        "Failed to uninstall Carch from Arch Linux",
-                    ));
-                }
-
-                log_message("INFO", "Carch uninstalled successfully from Arch Linux.")?;
-            } else {
-                println!("No Carch packages found on the system.");
-                log_message(
-                    "WARNING",
-                    "No Carch packages found during uninstall attempt on Arch Linux.",
-                )?;
-            }
-        }
-        _ => {
-            return Err(io::Error::new(
-                io::ErrorKind::Other,
-                format!("Unsupported distribution: {}", distro),
-            ));
-        }
+    if !status.success() {
+        return Err(io::Error::new(
+            io::ErrorKind::Other,
+            "Failed to uninstall Carch",
+        ));
     }
 
     let config_dir = format!(
