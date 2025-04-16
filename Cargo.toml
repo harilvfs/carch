@@ -30,7 +30,7 @@ include = [
 tempfile = "3.19.1"
 include_dir = "0.7.3"
 ratatui = "0.20"
-crossterm = "0.25"
+crossterm = "0.26"
 chrono = "0.4"
 
 [profile.release]
