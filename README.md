@@ -26,7 +26,7 @@ Got ideas or features to add? Open a [feature request](https://github.com/harilv
 
 > **Btw, I highly recommend checking out the Carch [docs](https://carch-org.github.io/docs) for more details.**
 
-## Live Test 🎯
+## How to use?
 
 You can run or use Carch directly without installing it on your system.
 
@@ -44,43 +44,31 @@ bash <(curl -L https://chalisehari.com.np/carch)
 bash <(curl -L https://chalisehari.com.np/carchdev)
 ```
 
-## Installation
-
-Carch mainly supports Arch and Fedora. 
-
-To install, run:
-
-```sh
-bash <(curl -L https://chalisehari.com.np/carchinstall)
-```
-
-It works on Arch/Fedora-based distros too. If something breaks, just drop it in the issues tab.
-
 ## 📦 Cargo Crate
 
-Carch is available on [Cargo Crate](https://crates.io/crates/carch) too. 
+Carch is available on [crates.io](https://crates.io/crates/carch).
 
-For Arch/Fedora, it's easy if you have Rust.
+If you want to install Carch on your Arch or Fedora system, you can use the Cargo [crate](https://crates.io/crates/carch).
 
 First, install dependencies: 
 
 > **Arch Linux**
 > ```sh
-> sudo pacman -S --noconfirm figlet fzf
+> sudo pacman -S --noconfirm figlet fzf cargo rust
 > ```
 
 > **Fedora Linux**
 > ```sh
-> sudo dnf install figlet fzf -y
+> sudo dnf install figlet fzf cargo rust -y
 > ```
 
-Then, install Carch:
+Then, install Carch with Cargo:
 
 ```sh
 cargo install carch
 ```
 
-Run it with `carch` in the terminal.
+Once that’s done, you can run it by typing `carch` in your terminal.
 
 > [!TIP]
 > If `carch` doesn’t run, add Cargo’s bin directory to your PATH:
