@@ -1096,11 +1096,11 @@ install_github() {
 
     while true; do
         clear
-        figlet -f slant "Git"
+        figlet -f slant "Git Tools"
         echo -e "${YELLOW}--------------------------------------${RESET}"
         echo "Select a Git tool to install:"
         
-        options=("Git" "GitHub Desktop" "GitHub CLI" "Exit")
+        options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Exit")
         selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=40% \
                                                         --prompt="Choose an option: " \
@@ -1159,6 +1159,28 @@ install_github() {
                     version=$(get_version gh)
                 fi
                 echo "GitHub CLI installed successfully! Version: $version"
+                read -rp "Press Enter to continue..."
+                ;;
+
+            "LazyGit")
+                clear
+                figlet -f small "Installing LazyGit"
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman lazygit
+                    version=$(get_version lazygit)
+                    echo "LazyGit installed successfully! Version: $version"
+                else
+                    echo -e "${YELLOW}:: Warning: LazyGit COPR repository is no longer maintained in Fedora.${RESET}"
+                    read -rp "Do you want to proceed with installation anyway? (y/N) " confirm
+                    if [[ $confirm =~ ^[Yy]$ ]]; then
+                        sudo dnf copr enable atim/lazygit -y
+                        $pkg_manager lazygit
+                        version=$(get_version lazygit)
+                        echo "LazyGit installed successfully! Version: $version"
+                    else
+                        echo "LazyGit installation aborted."
+                    fi
+                fi
                 read -rp "Press Enter to continue..."
                 ;;
 
