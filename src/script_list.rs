@@ -154,8 +154,8 @@ fn display_script_list_tui(script_dir: &Path) -> Result<(), Box<dyn std::error::
             if let Event::Key(key) = event::read()? {
                 match key.code {
                     KeyCode::Char('q') | KeyCode::Esc => break,
-                    KeyCode::Up => app.move_cursor_up(),
-                    KeyCode::Down => app.move_cursor_down(),
+                    KeyCode::Up | KeyCode::Char('k') => app.move_cursor_up(),
+                    KeyCode::Down | KeyCode::Char('j') => app.move_cursor_down(),
                     KeyCode::PageUp => {
                         for _ in 0..10 {
                             app.move_cursor_up();
@@ -172,14 +172,6 @@ fn display_script_list_tui(script_dir: &Path) -> Result<(), Box<dyn std::error::
                     }
                     KeyCode::Enter => {
                         app.toggle_current_category();
-                    }
-                    KeyCode::Right => {
-                        if app.selected_category.is_none() && !app.categories.is_empty() {
-                            app.selected_category = Some(app.cursor_position);
-                        }
-                    }
-                    KeyCode::Left => {
-                        app.selected_category = None;
                     }
                     _ => {}
                 }
@@ -274,11 +266,11 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
     content.push(Spans::from(""));
     content.push(Spans::from(vec![
         Span::styled("↑/↓", Style::default().fg(Color::DarkGray)),
+        Span::styled("/", Style::default().fg(Color::DarkGray)),
+        Span::styled("j/k", Style::default().fg(Color::DarkGray)),
         Span::styled(" navigate  ", Style::default().fg(Color::DarkGray)),
         Span::styled("Enter", Style::default().fg(Color::DarkGray)),
         Span::styled(" expand/collapse  ", Style::default().fg(Color::DarkGray)),
-        Span::styled("←/→", Style::default().fg(Color::DarkGray)),
-        Span::styled(" select/unselect  ", Style::default().fg(Color::DarkGray)),
         Span::styled("q", Style::default().fg(Color::DarkGray)),
         Span::styled(" quit", Style::default().fg(Color::DarkGray)),
     ]));

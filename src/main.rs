@@ -68,18 +68,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 return Ok(());
             }
             "--version" | "-v" => {
-                let version = commands::get_version();
+                let version = env!("CARGO_PKG_VERSION");
+                let version_str = format!("Carch version {}", version);
+
                 if settings.log_mode {
-                    let _ = commands::log_message("INFO", &format!("Version query: {}", version));
+                    let _ =
+                        commands::log_message("INFO", &format!("Version query: {}", version_str));
                 }
-                println!("{}", version);
-                return Ok(());
-            }
-            "--check-update" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Checking for updates");
-                }
-                commands::check_update()?;
+
+                println!("{}", version_str);
                 return Ok(());
             }
             "--update" => {
@@ -134,17 +131,14 @@ fn process_args(args: Vec<String>, settings: Settings) -> Result<(), Box<dyn std
 
     match args[0].as_str() {
         "--version" | "-v" => {
-            let version = commands::get_version();
+            let version = env!("CARGO_PKG_VERSION");
+            let version_str = format!("Carch version {}", version);
+
             if settings.log_mode {
-                let _ = commands::log_message("INFO", &format!("Version query: {}", version));
+                let _ = commands::log_message("INFO", &format!("Version query: {}", version_str));
             }
-            println!("{}", version);
-        }
-        "--check-update" => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Checking for updates");
-            }
-            commands::check_update()?;
+
+            println!("{}", version_str);
         }
         "--update" => {
             if settings.log_mode {
