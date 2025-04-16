@@ -18,7 +18,7 @@ Currently Supports Arch or Fedora Based Distros.
 
 Good question! It’s just a bunch of simple bash scripts anyone can run by picking options. You’ll see categories like `system`, `terminal`, `desktop`, `development`, etc. Inside each, there are script names — like in `terminal`, you’ll find `Kitty`, `alacritty`, and more. When you run one, it installs the package and sets up my minimal and clean config. That’s it. Just pick, run, and it does the rest for you — all through a nice TUI built with [`ratatui`](https://github.com/ratatui-org/ratatui).
 
-![built-with-ratatui](https://img.shields.io/badge/BUILT%20WITH-RATATUI-94e2d5?style=for-the-badge&logo=terminal&logoColor=89dceb&labelColor=171b22)
+![built-with-ratatui](https://img.shields.io/badge/BUILT%20WITH-RATATUI-94e2d5?style=for-the-badge&logo=rust&logoColor=89dceb&labelColor=171b22)
 
 
 > [!NOTE]  
