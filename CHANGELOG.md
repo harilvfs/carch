@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.4](https://github.com/harilvfs/carch/compare/v4.3.3...v4.3.4) (2025-04-16)
+
+### Changed 
+
+- Completely Relaying On Use Of Carch Cargo Crate. https://github.com/harilvfs/carch/pull/406
+
+### Added
+
+- Added Multi Select. https://github.com/harilvfs/carch/pull/405
+
+### Remove
+
+- Remove Completions, Assets, & many more scripts as we are using crate for everything installation.
+
+### Fixed
+
+- Known Bug Fixes.
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.4).
+
 ## [4.3.3](https://github.com/harilvfs/carch/compare/v4.3.2...v4.3.3) (2025-04-15)
 
 This release is frequent due to a major bug in the command side.
