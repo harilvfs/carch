@@ -70,13 +70,6 @@ jobs:
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
 
-      - name: Build installer binary
-        run: |
-          cd platforms
-          cargo build --release --verbose --target=x86_64-unknown-linux-musl --all-features
-          mkdir -p ../build/x86_64-unknown-linux-musl/release/
-          mv ./target/x86_64-unknown-linux-musl/release/carch-installer ../build/x86_64-unknown-linux-musl/release/carch-installer
-
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -84,7 +77,6 @@ jobs:
           path: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-            ./build/x86_64-unknown-linux-musl/release/carch-installer
           retention-days: 1
 
       - name: Create and Upload Release
@@ -94,86 +86,12 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
           body: |
-            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads RPM](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-${{ env.VERSION }}-1.fc41.x86_64.rpm?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads Installer](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-installer?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)
+            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) 
 
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-            ./build/x86_64-unknown-linux-musl/release/carch-installer
           append_body: true
           generate_release_notes: true
           prerelease: true
 
-  build_rpm:
-    needs: build_binaries
-    runs-on: ubuntu-latest
-    container:
-      image: fedora:latest
-      options: --privileged
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Install dependencies
-        run: |
-          dnf -y update
-          dnf -y install \
-            git curl wget figlet man-db bash rust cargo gcc \
-            glibc tar google-noto-color-emoji-fonts google-noto-emoji-fonts \
-            jetbrains-mono-fonts-all bash-completion-devel \
-            rpmdevtools rpmlint fzf
-            
-      - name: Setup RPM build environment
-        run: |
-          mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
-          rpmdev-setuptree
-          
-      - name: Download spec file
-        run: |
-          curl -sL "https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/platforms/fedora/carch.spec" -o ~/rpmbuild/SPECS/carch.spec
-          
-      - name: Modify spec file to fix Cargo build
-        run: |
-          sed -i 's/cargo build --frozen/cargo fetch \&\& cargo build/g' ~/rpmbuild/SPECS/carch.spec
-          echo "Modified spec file to allow dependency downloads"
-          grep "cargo build" ~/rpmbuild/SPECS/carch.spec
-          
-      - name: Download source
-        run: |
-          cd ~/rpmbuild/SPECS
-          spectool -g -R carch.spec
-          
-      - name: Build RPM package
-        run: |
-          cd ~/rpmbuild/SPECS
-          rpmbuild -ba carch.spec
-          
-      - name: Find built RPM
-        id: find_rpm
-        run: |
-          RPM_PATH=$(find ~/rpmbuild/RPMS -name "carch-*.x86_64.rpm" | grep -v "debug" | head -n 1)
-          if [ -z "$RPM_PATH" ]; then
-            echo "Error: Could not find the Carch RPM file"
-            exit 1
-          fi
-          echo "Found RPM at: $RPM_PATH"
-          echo "rpm_path=$RPM_PATH" >> $GITHUB_OUTPUT
-          mkdir -p ./artifacts
-          cp $RPM_PATH ./artifacts/
-          ls -la ./artifacts/
-          
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: carch-rpm
-          path: ./artifacts/*.rpm
-          retention-days: 7
-            
-      - name: Upload RPM
-        uses: softprops/action-gh-release@v2
-        with:
-          files: ./artifacts/*.rpm
-          tag_name: ${{ github.event.inputs.tag_version }}
-          fail_on_unmatched_files: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
