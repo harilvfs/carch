@@ -30,7 +30,7 @@ OLD_VERSION=""
 NEW_VERSION=""
 
 check_repo() {
-    if [ ! -d "$REPO_DIR/platforms/arch" ] || [ ! -d "$REPO_DIR/platforms/fedora" ]; then
+    if [ ! -d "$REPO_DIR/scripts" ] || [ ! -d "$REPO_DIR/scripts" ]; then
         echo -e "${RED}Error: This doesn't appear to be the carch repository.${RESET}"
         echo -e "Current detected repo directory: $REPO_DIR"
         echo -e "Please run this script from the root of the carch repository or from the scripts directory."
@@ -72,70 +72,6 @@ get_new_version() {
     fi
 }
 
-update_fedora_spec() {
-    echo -e "${BLUE}Updating version in platforms/fedora/carch.spec...${RESET}"
-    if [ -f "$REPO_DIR/platforms/fedora/carch.spec" ]; then
-        VERSION_LINE_NUM=$(grep -n "^Version:" "$REPO_DIR/platforms/fedora/carch.spec" | cut -d: -f1)
-        if [ -n "$VERSION_LINE_NUM" ]; then
-            TMP_FILE=$(mktemp)
-            awk -v line="$VERSION_LINE_NUM" -v new_ver="Version:        $NEW_VERSION" '
-            NR == line {print new_ver; next}
-            {print}
-            ' "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
-            
-            mv "$TMP_FILE" "$REPO_DIR/platforms/fedora/carch.spec"
-            
-            echo -e "${GREEN}✓ Updated version in platforms/fedora/carch.spec to $NEW_VERSION${RESET}"
-        else
-            echo -e "${RED}Error: Could not find Version line in platforms/fedora/carch.spec${RESET}"
-        fi
-        
-        echo -e "${BLUE}Enter changelog entries (one per line). Type 'done' on a new line when finished:${RESET}"
-        changelog_entries=()
-        while true; do
-            read -p "> " entry
-            if [ "$entry" = "done" ]; then
-                break
-            fi
-            changelog_entries+=("$entry")
-        done
-        
-        CURRENT_DATE=$(date "+%a %b %d %Y")
-        
-        NEW_CHANGELOG="* $CURRENT_DATE RPM Builder <harilvfs@chalisehari.com.np> - $NEW_VERSION-1"
-        
-        CHANGELOG_CONTENT="$NEW_CHANGELOG"
-        for entry in "${changelog_entries[@]}"; do
-            CHANGELOG_CONTENT="$CHANGELOG_CONTENT\n- $entry"
-        done
-        
-        CHANGELOG_LINE_NUM=$(grep -n "%changelog" "$REPO_DIR/platforms/fedora/carch.spec" | cut -d: -f1)
-        if [ -n "$CHANGELOG_LINE_NUM" ]; then
-            TMP_FILE=$(mktemp)
-            
-            NEXT_SECTION_LINE=$(awk -v start="$CHANGELOG_LINE_NUM" 'NR > start && /^%/ {print NR; exit}' "$REPO_DIR/platforms/fedora/carch.spec")
-            
-            if [ -n "$NEXT_SECTION_LINE" ]; then
-                head -n "$CHANGELOG_LINE_NUM" "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
-                echo -e "$CHANGELOG_CONTENT" >> "$TMP_FILE"
-                echo "" >> "$TMP_FILE"
-                tail -n "+$NEXT_SECTION_LINE" "$REPO_DIR/platforms/fedora/carch.spec" >> "$TMP_FILE"
-            else
-                head -n "$CHANGELOG_LINE_NUM" "$REPO_DIR/platforms/fedora/carch.spec" > "$TMP_FILE"
-                echo -e "$CHANGELOG_CONTENT" >> "$TMP_FILE"
-            fi
-            
-            mv "$TMP_FILE" "$REPO_DIR/platforms/fedora/carch.spec"
-            echo -e "${GREEN}✓ Updated changelog in platforms/fedora/carch.spec${RESET}"
-        else
-            echo -e "${RED}Error: Could not find %changelog section in platforms/fedora/carch.spec${RESET}"
-        fi
-    else
-        echo -e "${RED}Error: platforms/fedora/carch.spec not found!${RESET}"
-    fi
-}
-
-
 update_man_page() {
     echo -e "${BLUE}Updating version in man/carch.1...${RESET}"
     if [ -f "$REPO_DIR/man/carch.1" ]; then
@@ -175,7 +111,6 @@ main() {
     
     echo -e "${BLUE}Updating version from $OLD_VERSION to $NEW_VERSION...${RESET}"
     
-    update_fedora_spec
     update_man_page
     update_cargo_toml
     
