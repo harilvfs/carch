@@ -8,7 +8,7 @@ No any major changes or update just minor bug fixes release.
 
 ### Fixed
 
-- Bug Fixes 936931dd7e647e34940391169ef90bc671bd57ff
+- Bug Fixes [`936931d`](https://github.com/harilvfs/carch/commit/936931dd7e647e34940391169ef90bc671bd57ff)
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.5).
 
