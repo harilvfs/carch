@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.5](https://github.com/harilvfs/carch/compare/v4.3.4...v4.3.5) (2025-04-20)
+
+No any major changes or update just minor bug fixes release.
+
+### Fixed
+
+- Bug Fixes 936931dd7e647e34940391169ef90bc671bd57ff
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.5).
+
 ## [4.3.4](https://github.com/harilvfs/carch/compare/v4.3.3...v4.3.4) (2025-04-16)
 
 ### Changed 
