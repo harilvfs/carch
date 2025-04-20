@@ -73,9 +73,9 @@ check_dependencies() {
 }
 
 install_font_arch() {
-    local font_pkg="$1"
+    local font_pkg="$@"
     echo -e "${CYAN}:: Installing $font_pkg via pacman...${NC}"
-    sudo pacman -S --noconfirm "$font_pkg"
+    sudo pacman -S --noconfirm $font_pkg
     echo -e "${GREEN}$font_pkg installed successfully!${NC}"
 }
 
@@ -110,7 +110,7 @@ choose_fonts() {
         
         echo -e "${GREEN}Select fonts to install (use TAB to select multiple)${NC}"
 
-        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrains Mono" "Hack" "CascadiaMono" "Terminus" "Exit")
+        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Exit")
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
             echo -e "${GREEN}Exiting font installation.${NC}"
@@ -133,9 +133,9 @@ choose_fonts() {
                         install_font_fedora "Meslo"
                     fi
                     ;;
-                "JetBrains Mono")
+                "JetBrainsMono")
                     if [[ "$OS_TYPE" == "arch" ]]; then
-                        install_font_arch "ttf-jetbrains-mono-nerd" "ttf-jetbrains-mono"
+                        install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono
                     else
                         install_font_fedora "JetBrainsMono"
                     fi
@@ -149,7 +149,7 @@ choose_fonts() {
                     ;;
                 "CascadiaMono")
                     if [[ "$OS_TYPE" == "arch" ]]; then
-                        install_font_arch "ttf-cascadia-mono-nerd" "ttf-cascadia-code-nerd"
+                        install_font_arch ttf-cascadia-mono-nerd ttf-cascadia-code-nerd
                     else
                         install_font_fedora "CascadiaMono"
                     fi
