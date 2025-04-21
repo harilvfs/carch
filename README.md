@@ -52,7 +52,7 @@ bash <(curl -L https://chalisehari.com.np/carchdev)
 
 Carch is available on [crates.io](https://crates.io/crates/carch).
 
-If you want to install Carch on your Arch or Fedora system, you can use the Cargo [crate](https://crates.io/crates/carch).
+If you want to install Carch on your Arch or Fedora system, you can use the Cargo [Crate](https://crates.io/crates/carch).
 
 First, install dependencies: 
 
