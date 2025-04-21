@@ -1,7 +1,8 @@
 [Desktop Entry]
 Name=Carch
 Comment=A Simple Script to Make Linux System Setups Easier
-Exec=/usr/bin/carch
+Exec=/home/username/.cargo/bin/carch
+## Don't forget to replace username with your actual Linux username!
 Icon=carch
 Type=Application
 Terminal=true
