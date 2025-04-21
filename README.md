@@ -91,7 +91,7 @@ carch --help
 
 ## Shell Completions
 
-Carch provides shell completion files for Bash, Zsh, and Fish. You can install them manually with the following commands:
+Carch comes with tab-completion support for Bash, Zsh, and Fish. You can set it up manually by running one of these commands, depending on your shell:
 
 ### Bash
 
@@ -111,11 +111,11 @@ sudo curl -o /usr/share/zsh/site-functions/_carch https://raw.githubusercontent.
 sudo curl -o /usr/share/fish/vendor_completions.d/carch.fish https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/fish/carch.fish
 ```
 
-After installing the completion files, you can use tab completion with Carch commands.
+Once it's set up, you’ll get tab completion when typing Carch commands in your terminal.
 
 ## Desktop Entry
 
-To make Carch accessible from your application launcher (like Rofi, dmenu, or your desktop environment's menu), you can create a desktop entry file:
+Want to launch Carch from your app launcher (like Rofi, dmenu, or your desktop menu)? You can create a shortcut for it like this:
 
 ```sh
 cat << EOF | sudo tee /usr/share/applications/carch.desktop
@@ -131,9 +131,9 @@ EOF
 ```
 
 > [!IMPORTANT]
-> Make sure to replace `username` in the Exec path with your actual username!
+> ⚠️ Don't forget to replace `username` with your actual Linux username!
 
-Alternatively, you can download the desktop entry file directly:
+Or just download the shortcut file directly:
 
 ```sh
 sudo curl -o /usr/share/applications/carch.desktop https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/carch.desktop
@@ -141,7 +141,7 @@ sudo curl -o /usr/share/applications/carch.desktop https://raw.githubusercontent
 
 ## Icons
 
-Carch includes icons that can be installed for use with the desktop entry. Here's a script to install the icons to the standard system locations:
+Carch comes with icons you can install to make it look nice in menus. Here’s a script that handles it for you:
 
 ```sh
 #!/bin/bash
@@ -166,7 +166,13 @@ sudo gtk-update-icon-cache -f -t /usr/share/icons/hicolor
 echo "Carch icons have been installed successfully!"
 ```
 
-Save this as `carch_icons.sh`, make it executable with `chmod +x carch_icons.sh`, and run it with sudo.
+Save this as `carch_icons.sh`, make it executable with 
+
+```bash
+chmod +x carch_icons.sh
+```
+
+Then run it with:
 
 ```bash
 sudo ./carch_icons.sh
