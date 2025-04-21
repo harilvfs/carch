@@ -4,9 +4,9 @@
 
 clear
 
-GREEN="#a6e3a1"
-CYAN="#89dceb"
-RED="#f38ba8"
+GREEN="\033[0;32m"
+CYAN="\033[0;36m"
+RED="\033[0;31m"
 BLUE="\033[1;34m"
 RESET="\033[0m"
 
@@ -47,7 +47,7 @@ fzf_confirm() {
 print_color() {
     local color="$1"
     local message="$2"
-    echo -e "\e[38;2;$(echo $color | sed 's/#//;s/\(..\)\(..\)\(..\)/\1;\2;\3/') m$message\e[0m"
+    echo -e "${color}${message}${RESET}"
 }
 
 detect_distro() {
