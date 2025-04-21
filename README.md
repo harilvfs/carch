@@ -50,7 +50,7 @@ bash <(curl -L https://chalisehari.com.np/carchdev)
 
 ## 📦 Cargo Crate
 
-Carch is available on [crates.io](https://crates.io/crates/carch).
+Carch is available on [crates.io](https://crates.io/).
 
 If you want to install Carch on your Arch or Fedora system, you can use the Cargo [Crate](https://crates.io/crates/carch).
 
