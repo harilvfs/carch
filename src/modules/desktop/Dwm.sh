@@ -233,8 +233,13 @@ configure_wallpapers() {
         fi
     fi
     
-    git clone https://github.com/harilvfs/wallpapers "$BG_DIR" || exit 1
-    print_message "$GREEN" "Wallpapers downloaded."
+    if fzf_confirm "Do you want to download wallpapers? (Note: The wallpaper collection is large in size but recommended)"; then
+        print_message "$CYAN" ":: Downloading wallpapers..."
+        git clone https://github.com/harilvfs/wallpapers "$BG_DIR" || exit 1
+        print_message "$GREEN" "Wallpapers downloaded successfully."
+    else
+        print_message "$YELLOW" "Skipping wallpaper download."
+    fi
 }
 
 setup_xinitrc() {
@@ -284,7 +289,7 @@ check_display_manager() {
     local dm_found=false
     local dm_name=""
     
-    for dm in sddm gdm lightdm lxdm xdm slim; do
+    for dm in sddm gdm lightdm lxdm xdm slim greetd; do
         if systemctl is-enabled $dm.service &>/dev/null; then
             dm_found=true
             dm_name=$dm
@@ -318,6 +323,7 @@ install_slstatus
 install_nerd_font
 install_picom
 configure_wallpapers
+setup_xinitrc
 setup_tty_login
 check_display_manager
 print_message "$GREEN" "DWM setup completed successfully!"
