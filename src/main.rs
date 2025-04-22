@@ -11,6 +11,7 @@ mod commands;
 mod display;
 mod script_list;
 mod ui;
+mod version;
 
 static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 const EXECUTABLE_MODE: u32 = 0o755;
@@ -68,8 +69,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 return Ok(());
             }
             "--version" | "-v" => {
-                let version = env!("CARGO_PKG_VERSION");
-                let version_str = format!("Carch version {}", version);
+                let version_str = version::get_current_version();
 
                 if settings.log_mode {
                     let _ =
@@ -77,6 +77,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
 
                 println!("{}", version_str);
+                return Ok(());
+            }
+            "--check-update" => {
+                if settings.log_mode {
+                    let _ = commands::log_message("INFO", "Checking for updates");
+                }
+                version::check_for_updates()?;
                 return Ok(());
             }
             "--update" => {
@@ -131,14 +138,19 @@ fn process_args(args: Vec<String>, settings: Settings) -> Result<(), Box<dyn std
 
     match args[0].as_str() {
         "--version" | "-v" => {
-            let version = env!("CARGO_PKG_VERSION");
-            let version_str = format!("Carch version {}", version);
+            let version_str = version::get_current_version();
 
             if settings.log_mode {
                 let _ = commands::log_message("INFO", &format!("Version query: {}", version_str));
             }
 
             println!("{}", version_str);
+        }
+        "--check-update" => {
+            if settings.log_mode {
+                let _ = commands::log_message("INFO", "Checking for updates");
+            }
+            version::check_for_updates()?;
         }
         "--update" => {
             if settings.log_mode {
@@ -343,7 +355,7 @@ fn scripts_need_update(modules_dir: &Path) -> bool {
         Err(_) => return true,
     };
 
-    let current_version = commands::get_version();
+    let current_version = version::get_current_version();
 
     format!("{}", stored_version) != current_version
 }
@@ -364,7 +376,7 @@ fn extract_scripts(temp_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
         .map_err(|e| format!("Failed to create preview symlink: {}", e))?;
 
     let version_file = modules_dir.join(".version");
-    let current_version = commands::get_version();
+    let current_version = version::get_current_version();
     fs::write(&version_file, current_version)
         .map_err(|e| format!("Failed to write version file: {}", e))?;
 

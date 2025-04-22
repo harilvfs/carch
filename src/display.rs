@@ -183,6 +183,13 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         ]),
         Spans::from(vec![
             Span::styled(
+                "  --check-update          ",
+                Style::default().fg(Color::Yellow),
+            ),
+            Span::raw("Check if a new version is available."),
+        ]),
+        Spans::from(vec![
+            Span::styled(
                 "  --list-scripts, -l      ",
                 Style::default().fg(Color::Yellow),
             ),
@@ -207,14 +214,14 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 "  --update                ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Update Carch to the latest version. Auto-detects installation method."),
+            Span::raw("Provide instructions for updating Carch with both cargo and installation script."),
         ]),
         Spans::from(vec![
             Span::styled(
                 "  --uninstall             ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Uninstall Carch completely. Auto-detects installation method."),
+            Span::raw("Provide instructions for uninstalling Carch with both cargo and installation script."),
         ]),
         Spans::from(""),
         Spans::from(Span::styled(
@@ -227,11 +234,11 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
             Span::raw(" or using the installation script."),
         ]),
         Spans::from(vec![
-            Span::raw("The "),
+            Span::raw("To update or uninstall, use "),
             Span::styled("--update", Style::default().fg(Color::Green)),
-            Span::raw(" and "),
+            Span::raw(" or "),
             Span::styled("--uninstall", Style::default().fg(Color::Green)),
-            Span::raw(" commands will automatically detect your installation method."),
+            Span::raw(" which will provide instructions for both installation methods."),
         ]),
         Spans::from(""),
         Spans::from(Span::styled(
