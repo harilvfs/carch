@@ -223,23 +223,14 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         )),
         Spans::from(vec![
             Span::raw("Carch can be installed either via "),
-            Span::styled(
-                "cargo install carch", 
-                Style::default().fg(Color::Green),
-            ),
+            Span::styled("cargo install carch", Style::default().fg(Color::Green)),
             Span::raw(" or using the installation script."),
         ]),
         Spans::from(vec![
             Span::raw("The "),
-            Span::styled(
-                "--update", 
-                Style::default().fg(Color::Green),
-            ),
+            Span::styled("--update", Style::default().fg(Color::Green)),
             Span::raw(" and "),
-            Span::styled(
-                "--uninstall", 
-                Style::default().fg(Color::Green),
-            ),
+            Span::styled("--uninstall", Style::default().fg(Color::Green)),
             Span::raw(" commands will automatically detect your installation method."),
         ]),
         Spans::from(""),
