@@ -48,6 +48,29 @@ bash <(curl -L https://chalisehari.com.np/carch)
 bash <(curl -L https://chalisehari.com.np/carchdev)
 ```
 
+## Install Script
+
+You can install Carch permanently on your system using our install script:
+
+```sh
+bash <(curl -L https://raw.githubusercontent.com/harilvfs/carch/main/install.sh)
+```
+
+This script will:
+- Install Carch binary to `/usr/local/bin`
+- Add shell completions for Bash, Zsh, and Fish
+- Install icons and desktop entry
+- Set up man pages
+
+You can also use these options:
+```sh
+# Update existing installation
+bash <(curl -L https://raw.githubusercontent.com/harilvfs/carch/main/install.sh) --update
+
+# Uninstall Carch
+bash <(curl -L https://raw.githubusercontent.com/harilvfs/carch/main/install.sh) --uninstall
+```
+
 ## 📦 Cargo Crate
 
 Carch is available on [crates.io](https://crates.io/).
@@ -111,7 +134,7 @@ sudo curl -o /usr/share/zsh/site-functions/_carch https://raw.githubusercontent.
 sudo curl -o /usr/share/fish/vendor_completions.d/carch.fish https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/fish/carch.fish
 ```
 
-Once it's set up, you’ll get tab completion when typing Carch commands in your terminal.
+Once it's set up, you'll get tab completion when typing Carch commands in your terminal.
 
 ## Desktop Entry
 
@@ -122,7 +145,8 @@ cat << EOF | sudo tee /usr/share/applications/carch.desktop
 [Desktop Entry]
 Name=Carch
 Comment=A Simple Script to Make Linux System Setups Easier
-Exec=/home/username/.cargo/bin/carch
+Exec=/home/username/.cargo/bin/carch ## if you have install carch via cargo
+Exec=/usr/local/bin/carch ## if you have install carch via install script
 Icon=carch
 Type=Application
 Terminal=true
@@ -132,16 +156,11 @@ EOF
 
 > [!IMPORTANT]
 > ⚠️ Don't forget to replace `username` with your actual Linux username!
-
-Or just download the shortcut file directly:
-
-```sh
-sudo curl -o /usr/share/applications/carch.desktop https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/carch.desktop
 ```
 
 ## Icons
 
-Carch comes with icons you can install to make it look nice in menus. Here’s a script that handles it for you:
+Carch comes with icons you can install to make it look nice in menus. Here's a script that handles it for you:
 
 ```sh
 #!/bin/bash

@@ -207,19 +207,36 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 "  --update                ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Update Carch to the latest version."),
+            Span::raw("Update Carch to the latest version. Auto-detects installation method."),
         ]),
         Spans::from(vec![
             Span::styled(
                 "  --uninstall             ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Uninstall Carch completely."),
+            Span::raw("Uninstall Carch completely. Auto-detects installation method."),
         ]),
         Spans::from(""),
         Spans::from(Span::styled(
-            "Note: Carch is only available as a cargo crate.",
-            Style::default().fg(Color::Green),
+            "Installation & Update:",
+            Style::default().fg(Color::Cyan),
+        )),
+        Spans::from(vec![
+            Span::raw("Carch can be installed either via "),
+            Span::styled("cargo install carch", Style::default().fg(Color::Green)),
+            Span::raw(" or using the installation script."),
+        ]),
+        Spans::from(vec![
+            Span::raw("The "),
+            Span::styled("--update", Style::default().fg(Color::Green)),
+            Span::raw(" and "),
+            Span::styled("--uninstall", Style::default().fg(Color::Green)),
+            Span::raw(" commands will automatically detect your installation method."),
+        ]),
+        Spans::from(""),
+        Spans::from(Span::styled(
+            "For more information, visit: https://carch-org.github.io/docs",
+            Style::default().fg(Color::Gray),
         )),
         Spans::from(""),
     ];
