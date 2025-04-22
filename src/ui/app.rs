@@ -3,9 +3,9 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
+use crossterm::event::{KeyCode, MouseEvent, MouseEventKind};
 #[allow(unused_imports)]
 use ratatui::widgets::ListState;
-use crossterm::event::{KeyCode, MouseEvent, MouseEventKind};
 
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum AppMode {
