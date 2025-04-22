@@ -1,6 +1,6 @@
 use std::error::Error;
-use std::process::Command;
 use std::io;
+use std::process::Command;
 
 pub fn get_current_version() -> String {
     let version = env!("CARGO_PKG_VERSION");
@@ -8,7 +8,7 @@ pub fn get_current_version() -> String {
 }
 
 pub fn get_latest_version() -> Result<String, Box<dyn Error>> {
-    if !Command::new("curl").arg("--version").output().is_ok() {
+    if Command::new("curl").arg("--version").output().is_err() {
         return Err("curl is not installed. Please install it to check for updates.".into());
     }
 
@@ -24,7 +24,7 @@ pub fn get_latest_version() -> Result<String, Box<dyn Error>> {
     }
 
     let response = String::from_utf8_lossy(&output.stdout);
-    
+
     let tag_name = response
         .lines()
         .find(|line| line.contains("\"tag_name\""))
@@ -50,19 +50,20 @@ pub fn get_latest_version() -> Result<String, Box<dyn Error>> {
 
 pub fn check_for_updates() -> io::Result<()> {
     println!("Checking for updates...");
-    
+
     let current_version = env!("CARGO_PKG_VERSION");
-    
+
     match get_latest_version() {
         Ok(latest_version) => {
-            let latest = latest_version.trim()
+            let latest = latest_version
+                .trim()
                 .trim_start_matches('v')
                 .trim_matches('"')
                 .trim_matches('\'');
-            
+
             println!("Current version: {}", current_version);
             println!("Latest version: {}", latest);
-            
+
             if latest != current_version {
                 println!("\nA new version of Carch is available!");
                 println!("\nTo update via installation script:");
@@ -72,12 +73,12 @@ pub fn check_for_updates() -> io::Result<()> {
             } else {
                 println!("\nYou are using the latest version of Carch.");
             }
-        },
+        }
         Err(e) => {
             eprintln!("Error checking for updates: {}", e);
             return Err(io::Error::new(io::ErrorKind::Other, e.to_string()));
         }
     }
-    
+
     Ok(())
-} 
+}

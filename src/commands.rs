@@ -50,6 +50,6 @@ pub fn uninstall() -> io::Result<()> {
     println!("  bash <(curl -fsSL https://chalisehari.com.np/carchinstall) --uninstall");
     println!("\nIf you installed via Cargo:");
     println!("  cargo uninstall carch");
-    
+
     Ok(())
 }

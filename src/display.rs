@@ -214,14 +214,18 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 "  --update                ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Provide instructions for updating Carch with both cargo and installation script."),
+            Span::raw(
+                "Provide instructions for updating Carch with both cargo and installation script.",
+            ),
         ]),
         Spans::from(vec![
             Span::styled(
                 "  --uninstall             ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Provide instructions for uninstalling Carch with both cargo and installation script."),
+            Span::raw(
+                "Provide instructions for uninstalling Carch with both cargo and installation script.",
+            ),
         ]),
         Spans::from(""),
         Spans::from(Span::styled(
