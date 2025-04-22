@@ -48,7 +48,7 @@ bash <(curl -L https://chalisehari.com.np/carch)
 bash <(curl -L https://chalisehari.com.np/carchdev)
 ```
 
-## Install Script
+### Install Script
 
 You can install Carch permanently on your system using our install script:
 
@@ -71,7 +71,7 @@ bash <(curl -L https://raw.githubusercontent.com/harilvfs/carch/main/install.sh)
 bash <(curl -L https://raw.githubusercontent.com/harilvfs/carch/main/install.sh) --uninstall
 ```
 
-## 📦 Cargo Crate
+### 📦 Cargo Crate
 
 Carch is available on [crates.io](https://crates.io/).
 
@@ -112,23 +112,25 @@ Carch supports some commands too. You can view them by running:
 carch --help
 ```
 
-## Shell Completions
+## Manually
+
+### Shell Completions
 
 Carch comes with tab-completion support for Bash, Zsh, and Fish. You can set it up manually by running one of these commands, depending on your shell:
 
-### Bash
+#### Bash
 
 ```sh
 sudo curl -o /usr/share/bash-completion/completions/carch https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/bash/carch
 ```
 
-### Zsh
+#### Zsh
 
 ```sh
 sudo curl -o /usr/share/zsh/site-functions/_carch https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/zsh/_carch
 ```
 
-### Fish
+#### Fish
 
 ```sh
 sudo curl -o /usr/share/fish/vendor_completions.d/carch.fish https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/completions/fish/carch.fish
@@ -136,7 +138,7 @@ sudo curl -o /usr/share/fish/vendor_completions.d/carch.fish https://raw.githubu
 
 Once it's set up, you'll get tab completion when typing Carch commands in your terminal.
 
-## Desktop Entry
+### Desktop Entry
 
 Want to launch Carch from your app launcher (like Rofi, dmenu, or your desktop menu)? You can create a shortcut for it like this:
 
@@ -158,9 +160,8 @@ EOF
 
 > [!IMPORTANT]
 > ⚠️ Don't forget to replace `username` with your actual Linux username!
-```
 
-## Icons
+### Icons
 
 Carch comes with icons you can install to make it look nice in menus. Here's a script that handles it for you:
 
