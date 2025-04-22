@@ -12,7 +12,6 @@ _carch() {
         '-l:List all available scripts'
         '--no-preview:Run without displaying script previews in menus (one-time)'
         '--log:Enable logging for the current session only'
-        '--check-update:Check if a new version of Carch is available'
         '--update:Update Carch using the latest script'
         '--uninstall:Uninstall Carch and remove all associated files'
     )
@@ -26,7 +25,6 @@ _carch() {
         '-l[List all available scripts]' \
         '--no-preview[Run without displaying script previews in menus]' \
         '--log[Enable logging for the current session only]' \
-        '--check-update[Check if a new version of Carch is available]' \
         '--update[Update Carch using the latest script]' \
         '--uninstall[Uninstall Carch and remove all associated files]'
 }
