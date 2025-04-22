@@ -11,7 +11,7 @@ use ratatui::{
     backend::{Backend, CrosstermBackend},
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    text::{Span, Spans},
+    text::{Span, Line},
     widgets::{Block, Borders, Clear, Paragraph, Wrap},
 };
 
@@ -79,7 +79,7 @@ fn display_help_tui() -> Result<(), Box<dyn std::error::Error>> {
     let mut last_tick = Instant::now();
 
     loop {
-        terminal.draw(|f| ui(f, &mut app))?;
+        terminal.draw(|f| ui::<CrosstermBackend<io::Stdout>>(f, &mut app))?;
 
         let timeout = tick_rate
             .checked_sub(last_tick.elapsed())
@@ -139,8 +139,8 @@ fn display_help_tui() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
-    let size = f.size();
+fn ui<B: Backend>(f: &mut Frame, app: &mut App) {
+    let size = f.area();
 
     let width = (size.width as f32 * 0.8) as u16;
     let height = (size.height as f32 * 0.8) as u16;
@@ -161,55 +161,55 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
     let inner_height = help_area.height.saturating_sub(2);
 
     let help_content = vec![
-        Spans::from(Span::styled(
+        Line::from(Span::styled(
             "Usage: carch [OPTIONS]",
             Style::default().fg(Color::Cyan),
         )),
-        Spans::from(""),
-        Spans::from(Span::styled("Options:", Style::default().fg(Color::Cyan))),
-        Spans::from(vec![
+        Line::from(""),
+        Line::from(Span::styled("Options:", Style::default().fg(Color::Cyan))),
+        Line::from(vec![
             Span::styled(
                 "  --help, -h              ",
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("Show this help message and exit."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --version, -v           ",
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("Show the program version."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --check-update          ",
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("Check if a new version is available."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --list-scripts, -l      ",
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("List all available scripts."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --no-preview            ",
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("Run without displaying script previews in menus."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --log                   ",
                 Style::default().fg(Color::Yellow),
             ),
             Span::raw("Enable logging for the current session only."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --update                ",
                 Style::default().fg(Color::Yellow),
@@ -218,7 +218,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 "Provide instructions for updating Carch with both cargo and installation script.",
             ),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::styled(
                 "  --uninstall             ",
                 Style::default().fg(Color::Yellow),
@@ -227,29 +227,29 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
                 "Provide instructions for uninstalling Carch with both cargo and installation script.",
             ),
         ]),
-        Spans::from(""),
-        Spans::from(Span::styled(
+        Line::from(""),
+        Line::from(Span::styled(
             "Installation & Update:",
             Style::default().fg(Color::Cyan),
         )),
-        Spans::from(vec![
+        Line::from(vec![
             Span::raw("Carch can be installed either via "),
             Span::styled("cargo install carch", Style::default().fg(Color::Green)),
             Span::raw(" or using the installation script."),
         ]),
-        Spans::from(vec![
+        Line::from(vec![
             Span::raw("To update or uninstall, use "),
             Span::styled("--update", Style::default().fg(Color::Green)),
             Span::raw(" or "),
             Span::styled("--uninstall", Style::default().fg(Color::Green)),
             Span::raw(" which will provide instructions for both installation methods."),
         ]),
-        Spans::from(""),
-        Spans::from(Span::styled(
+        Line::from(""),
+        Line::from(Span::styled(
             "For more information, visit: https://carch-org.github.io/docs",
             Style::default().fg(Color::Gray),
         )),
-        Spans::from(""),
+        Line::from(""),
     ];
 
     let estimated_content_height = help_content.len() as u16;
@@ -257,7 +257,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
 
     let mut final_content = help_content.clone();
     if app.needs_scrolling() {
-        final_content.push(Spans::from(vec![
+        final_content.push(Line::from(vec![
             Span::styled("↑/↓", Style::default().fg(Color::DarkGray)),
             Span::styled("/", Style::default().fg(Color::DarkGray)),
             Span::styled("j/k", Style::default().fg(Color::DarkGray)),
@@ -270,7 +270,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
             Span::styled(" quit", Style::default().fg(Color::DarkGray)),
         ]));
     } else {
-        final_content.push(Spans::from(vec![
+        final_content.push(Line::from(vec![
             Span::styled("q", Style::default().fg(Color::DarkGray)),
             Span::styled(" quit", Style::default().fg(Color::DarkGray)),
         ]));

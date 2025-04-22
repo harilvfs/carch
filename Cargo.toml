@@ -29,7 +29,7 @@ include = [
 [dependencies]
 tempfile = "3.19.1"
 include_dir = "0.7.3"
-ratatui = "0.20"
+ratatui = "0.29"
 crossterm = "0.29"
 chrono = "0.4"
 ctrlc = { version = "3.2", features = ["termination"] }

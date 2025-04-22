@@ -13,7 +13,7 @@ use ratatui::{
     backend::{Backend, CrosstermBackend},
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    text::{Span, Spans},
+    text::{Span, Line},
     widgets::{Block, Borders, Clear, Paragraph},
 };
 
@@ -144,7 +144,7 @@ fn display_script_list_tui(script_dir: &Path) -> Result<(), Box<dyn std::error::
     let mut last_tick = Instant::now();
 
     loop {
-        terminal.draw(|f| ui(f, &app))?;
+        terminal.draw(|f| ui::<CrosstermBackend<io::Stdout>>(f, &app))?;
 
         let timeout = tick_rate
             .checked_sub(last_tick.elapsed())
@@ -194,8 +194,8 @@ fn display_script_list_tui(script_dir: &Path) -> Result<(), Box<dyn std::error::
     Ok(())
 }
 
-fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
-    let size = f.size();
+fn ui<B: Backend>(f: &mut Frame, app: &ScriptListApp) {
+    let size = f.area();
 
     let width = (size.width as f32 * 0.8) as u16;
     let height = (size.height as f32 * 0.8) as u16;
@@ -215,11 +215,11 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
 
     let mut content = Vec::new();
 
-    content.push(Spans::from(Span::styled(
+    content.push(Line::from(Span::styled(
         "Available script categories:",
         Style::default().fg(Color::Cyan),
     )));
-    content.push(Spans::from(""));
+    content.push(Line::from(""));
 
     for (i, category) in app.categories.iter().enumerate() {
         let is_cursor_here = i == app.cursor_position;
@@ -239,20 +239,20 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
             Style::default().fg(Color::Cyan)
         };
 
-        content.push(Spans::from(vec![
+        content.push(Line::from(vec![
             Span::styled(cursor_indicator, Style::default().fg(Color::Yellow)),
             Span::styled(format!("{}:", category), category_style),
         ]));
 
         if is_selected {
             if app.scripts[i].is_empty() {
-                content.push(Spans::from(Span::styled(
+                content.push(Line::from(Span::styled(
                     "    No scripts found in this category",
                     Style::default().fg(Color::DarkGray),
                 )));
             } else {
                 for script in &app.scripts[i] {
-                    content.push(Spans::from(Span::styled(
+                    content.push(Line::from(Span::styled(
                         format!("    - {}", script),
                         Style::default().fg(Color::Yellow),
                     )));
@@ -260,11 +260,11 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &ScriptListApp) {
             }
         }
 
-        content.push(Spans::from(""));
+        content.push(Line::from(""));
     }
 
-    content.push(Spans::from(""));
-    content.push(Spans::from(vec![
+    content.push(Line::from(""));
+    content.push(Line::from(vec![
         Span::styled("↑/↓", Style::default().fg(Color::DarkGray)),
         Span::styled("/", Style::default().fg(Color::DarkGray)),
         Span::styled("j/k", Style::default().fg(Color::DarkGray)),
