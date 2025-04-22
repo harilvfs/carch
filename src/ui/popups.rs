@@ -1,0 +1,257 @@
+use ratatui::{
+    Frame,
+    layout::{Alignment, Constraint, Direction, Layout, Rect},
+    style::{Color, Modifier, Style},
+    text::{Line, Span},
+    widgets::{Block, BorderType, Borders, List, ListItem, Paragraph},
+};
+
+use super::app::App;
+
+fn create_rounded_block() -> Block<'static> {
+    Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+}
+
+pub fn render_search_popup(f: &mut Frame, app: &App) {
+    let area = f.area();
+
+    let popup_width = std::cmp::min(70, area.width - 8);
+    let popup_height = std::cmp::min(16, area.height - 6);
+
+    let popup_area = Rect {
+        x: (area.width - popup_width) / 2,
+        y: (area.height - popup_height) / 2,
+        width: popup_width,
+        height: popup_height,
+    };
+
+    f.render_widget(ratatui::widgets::Clear, popup_area);
+
+    let popup_block = create_rounded_block()
+        .title("Search")
+        .border_style(Style::default().fg(Color::Cyan));
+
+    f.render_widget(popup_block.clone(), popup_area);
+
+    let inner_area = popup_block.inner(popup_area);
+
+    let popup_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(3),
+            Constraint::Length(2),
+        ])
+        .split(inner_area);
+
+    let display_text = if let Some(ref autocomplete) = app.autocomplete_text {
+        let base = &app.search_input;
+        let completion = &autocomplete[base.len()..];
+
+        Line::from(vec![
+            Span::styled(base.clone(), Style::default()),
+            Span::styled(completion, Style::default().fg(Color::DarkGray)),
+        ])
+    } else {
+        Line::from(app.search_input.clone())
+    };
+
+    let input = Paragraph::new(display_text)
+        .block(create_rounded_block().title("Type to search (Tab to complete)"))
+        .style(Style::default())
+        .alignment(Alignment::Left);
+
+    f.render_widget(input, popup_layout[0]);
+
+    if app.search_cursor_position <= app.search_input.len() {
+        f.set_cursor_position((
+            popup_layout[0].x + 1 + app.search_cursor_position as u16,
+            popup_layout[0].y + 1,
+        ));
+    }
+
+    let mut result_items = Vec::new();
+
+    let max_display = (popup_height - 5) as usize;
+    let result_count = app.search_results.len();
+
+    let display_count = std::cmp::min(result_count, max_display);
+    let start_idx = if result_count <= max_display {
+        0
+    } else {
+        let half_display = max_display / 2;
+        if app.search_selected_idx < half_display {
+            0
+        } else if app.search_selected_idx >= result_count - half_display {
+            result_count - max_display
+        } else {
+            app.search_selected_idx - half_display
+        }
+    };
+
+    for i in 0..display_count {
+        let result_idx = start_idx + i;
+        if result_idx < app.search_results.len() {
+            let script_idx = app.search_results[result_idx];
+
+            if script_idx < app.scripts.items.len() {
+                let item = &app.scripts.items[script_idx];
+                let display_text = format!("{}/{}", item.category, item.name);
+
+                result_items.push(ListItem::new(Line::from(vec![Span::styled(
+                    display_text,
+                    Style::default().fg(Color::Gray),
+                )])));
+            }
+        }
+    }
+
+    let result_count_text = format!("Found {} results", app.search_results.len());
+
+    let search_results = List::new(result_items)
+        .block(create_rounded_block().title(result_count_text))
+        .highlight_style(
+            Style::default()
+                .bg(Color::Rgb(235, 235, 210))
+                .fg(Color::Black)
+                .add_modifier(Modifier::BOLD),
+        )
+        .highlight_symbol("");
+
+    let mut search_list_state = ratatui::widgets::ListState::default();
+    search_list_state.select(Some(app.search_selected_idx.saturating_sub(start_idx)));
+
+    f.render_stateful_widget(search_results, popup_layout[1], &mut search_list_state);
+
+    let help_block = Block::default()
+        .border_type(BorderType::Plain)
+        .borders(Borders::TOP)
+        .border_style(Style::default().fg(Color::DarkGray));
+
+    f.render_widget(help_block, popup_layout[2]);
+
+    let help_inner_area = Rect {
+        x: popup_layout[2].x,
+        y: popup_layout[2].y + 1,
+        width: popup_layout[2].width,
+        height: popup_layout[2].height - 1,
+    };
+
+    let help_text = Paragraph::new(Line::from(vec![
+        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
+        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
+        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
+        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
+    ]))
+    .alignment(Alignment::Center);
+
+    f.render_widget(help_text, help_inner_area);
+}
+
+pub fn render_confirmation_popup(f: &mut Frame, app: &App) {
+    let area = f.area();
+
+    let popup_width = std::cmp::min(55, area.width - 8);
+    let popup_height = 11;
+
+    let popup_area = Rect {
+        x: (area.width - popup_width) / 2,
+        y: (area.height - popup_height) / 2,
+        width: popup_width,
+        height: popup_height,
+    };
+
+    f.render_widget(ratatui::widgets::Clear, popup_area);
+
+    let popup_block = Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .title("Confirm selection")
+        .border_style(Style::default().fg(Color::White));
+
+    let inner_area = popup_block.inner(popup_area);
+    let content_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Length(1),
+            Constraint::Length(1),
+            Constraint::Length(2),
+            Constraint::Length(1),
+            Constraint::Length(2),
+        ])
+        .split(inner_area);
+
+    let question_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+        "Do you want to run these scripts?"
+    } else {
+        "Do you want to run this script?"
+    };
+
+    let question_paragraph = Paragraph::new(Line::from(vec![Span::styled(
+        question_text,
+        Style::default().fg(Color::White),
+    )]))
+    .alignment(Alignment::Center);
+
+    let script_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+        Paragraph::new(Line::from(vec![Span::styled(
+            format!("{} selected scripts", app.multi_selected_scripts.len()),
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        )]))
+        .alignment(Alignment::Center)
+    } else if let Some(selected) = app.scripts.state.selected() {
+        if selected < app.scripts.items.len() && !app.scripts.items[selected].is_category_header {
+            let item = &app.scripts.items[selected];
+            Paragraph::new(Line::from(vec![Span::styled(
+                format!("{}/{}", item.category, item.name),
+                Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD),
+            )]))
+            .alignment(Alignment::Center)
+        } else {
+            Paragraph::new(Line::from(vec![Span::styled(
+                "Unknown script",
+                Style::default().fg(Color::Red),
+            )]))
+            .alignment(Alignment::Center)
+        }
+    } else {
+        Paragraph::new(Line::from(vec![Span::styled(
+            "Unknown script",
+            Style::default().fg(Color::Red),
+        )]))
+        .alignment(Alignment::Center)
+    };
+
+    let options_text = Paragraph::new(Line::from(vec![
+        Span::styled("[", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "Y",
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "N",
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("] or ", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "ESC",
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(" to abort", Style::default().fg(Color::Gray)),
+    ]))
+    .alignment(Alignment::Center);
+
+    f.render_widget(popup_block, popup_area);
+    f.render_widget(question_paragraph, content_layout[0]);
+    f.render_widget(script_text, content_layout[2]);
+    f.render_widget(options_text, content_layout[4]);
+}
