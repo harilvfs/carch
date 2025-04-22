@@ -190,13 +190,13 @@ echo "Carch icons have been installed successfully!"
 
 Save this as `carch_icons.sh`, make it executable with 
 
-```bash
+```sh
 chmod +x carch_icons.sh
 ```
 
 Then run it with:
 
-```bash
+```sh
 sudo ./carch_icons.sh
 ```
 
