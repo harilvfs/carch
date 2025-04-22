@@ -8,10 +8,10 @@ use crossterm::{
 };
 use ratatui::{
     Frame, Terminal,
-    backend::{Backend, CrosstermBackend},
+    backend::CrosstermBackend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    text::{Span, Line},
+    text::{Line, Span},
     widgets::{Block, Borders, Clear, Paragraph, Wrap},
 };
 
@@ -79,7 +79,7 @@ fn display_help_tui() -> Result<(), Box<dyn std::error::Error>> {
     let mut last_tick = Instant::now();
 
     loop {
-        terminal.draw(|f| ui::<CrosstermBackend<io::Stdout>>(f, &mut app))?;
+        terminal.draw(|f| ui(f, &mut app))?;
 
         let timeout = tick_rate
             .checked_sub(last_tick.elapsed())
@@ -139,7 +139,7 @@ fn display_help_tui() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn ui<B: Backend>(f: &mut Frame, app: &mut App) {
+fn ui(f: &mut Frame, app: &mut App) {
     let size = f.area();
 
     let width = (size.width as f32 * 0.8) as u16;

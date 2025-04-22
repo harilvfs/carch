@@ -13,10 +13,10 @@ use crossterm::{
 };
 use ratatui::{
     Frame, Terminal,
-    backend::{Backend, CrosstermBackend},
-    layout::{Constraint, Direction, Layout, Rect, Alignment},
+    backend::CrosstermBackend,
+    layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
-    text::{Span, Line, Text},
+    text::{Line, Span, Text},
     widgets::{Block, BorderType, Borders, List, ListItem, Paragraph, Wrap},
 };
 
@@ -273,7 +273,10 @@ impl App {
         if let Some(selected) = self.scripts.state.selected() {
             if selected < self.scripts.items.len() {
                 if self.scripts.items[selected].is_category_header {
-                    self.preview_content = format!("No preview available for category: {}\n\nPlease select a script to see its content.", self.scripts.items[selected].category);
+                    self.preview_content = format!(
+                        "No preview available for category: {}\n\nPlease select a script to see its content.",
+                        self.scripts.items[selected].category
+                    );
                     self.preview_scroll = 0;
                     return;
                 }
@@ -381,9 +384,9 @@ impl App {
 
     pub fn scroll_preview_down(&mut self) {
         let line_count = self.preview_content.lines().count() as u16;
-        
+
         let max_scroll = if line_count > 0 { line_count } else { 0 };
-        
+
         let scroll_amount = 3;
         if self.preview_scroll + scroll_amount < max_scroll {
             self.preview_scroll += scroll_amount;
@@ -542,7 +545,7 @@ impl App {
                 if self.multi_select_mode {
                     self.toggle_multi_select_mode();
                 }
-            },
+            }
             KeyCode::Char('j') => self.next(),
             KeyCode::Char('k') => self.previous(),
             KeyCode::Char(' ') => {
@@ -570,20 +573,20 @@ impl App {
                 for _ in 0..5 {
                     self.scroll_preview_down();
                 }
-            },
+            }
             KeyCode::PageUp => {
                 for _ in 0..5 {
                     self.scroll_preview_up();
                 }
-            },
+            }
             KeyCode::Home => {
                 self.preview_scroll = 0;
-            },
+            }
             KeyCode::End => {
                 let line_count = self.preview_content.lines().count() as u16;
                 let max_scroll = if line_count > 0 { line_count } else { 0 };
                 self.preview_scroll = max_scroll;
-            },
+            }
             _ => {}
         }
     }
@@ -596,7 +599,7 @@ impl App {
                     for _ in 0..2 {
                         self.scroll_preview_down();
                     }
-                },
+                }
                 AppMode::Search => {}
                 AppMode::Confirm => {}
             },
@@ -606,7 +609,7 @@ impl App {
                     for _ in 0..2 {
                         self.scroll_preview_up();
                     }
-                },
+                }
                 AppMode::Search => {}
                 AppMode::Confirm => {}
             },
@@ -828,7 +831,7 @@ where
     }
 
     while !app.quit {
-        terminal.draw(|f| ui::<CrosstermBackend<io::Stdout>>(f, &mut app, &options))?;
+        terminal.draw(|f| ui(f, &mut app, &options))?;
 
         if let Ok(true) = event::poll(Duration::from_millis(100)) {
             if let Ok(event) = event::read() {
@@ -1025,13 +1028,13 @@ where
     Ok(())
 }
 
-fn ui<B: Backend>(f: &mut Frame, app: &mut App, options: &UiOptions) {
+fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     if app.mode == AppMode::Preview && !options.show_preview {
         app.mode = AppMode::Normal;
     }
 
     if app.mode == AppMode::Preview && options.show_preview {
-        render_fullscreen_preview::<B>(f, app);
+        render_fullscreen_preview(f, app);
         return;
     }
 
@@ -1045,17 +1048,17 @@ fn ui<B: Backend>(f: &mut Frame, app: &mut App, options: &UiOptions) {
         ])
         .split(f.area());
 
-    render_title::<B>(f, chunks[0]);
+    render_title(f, chunks[0]);
 
     let main_chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([Constraint::Percentage(40), Constraint::Percentage(60)])
         .split(chunks[1]);
 
-    render_script_list::<B>(f, app, main_chunks[0]);
+    render_script_list(f, app, main_chunks[0]);
 
     if options.show_preview {
-        render_preview::<B>(f, app, main_chunks[1]);
+        render_preview(f, app, main_chunks[1]);
     } else {
         let preview_disabled_text = vec![Line::from(vec![Span::styled(
             "Preview disabled (--no-preview)",
@@ -1077,7 +1080,10 @@ fn ui<B: Backend>(f: &mut Frame, app: &mut App, options: &UiOptions) {
                 Style::default().fg(Color::Gray),
             ),
             Span::styled("Enter: Run Selected  ", Style::default().fg(Color::Green)),
-            Span::styled("m/ESC: Exit Multi-select  ", Style::default().fg(Color::Gray)),
+            Span::styled(
+                "m/ESC: Exit Multi-select  ",
+                Style::default().fg(Color::Gray),
+            ),
             Span::styled("q: Quit", Style::default().fg(Color::Gray)),
         ])])
         .alignment(Alignment::Center)
@@ -1096,13 +1102,13 @@ fn ui<B: Backend>(f: &mut Frame, app: &mut App, options: &UiOptions) {
     f.render_widget(help_text, chunks[2]);
 
     if app.mode == AppMode::Search {
-        render_search_popup::<B>(f, app);
+        render_search_popup(f, app);
     } else if app.mode == AppMode::Confirm {
-        render_confirmation_popup::<B>(f, app);
+        render_confirmation_popup(f, app);
     }
 }
 
-fn render_title<B: Backend>(f: &mut Frame, area: Rect) {
+fn render_title(f: &mut Frame, area: Rect) {
     let title_block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
@@ -1146,7 +1152,7 @@ fn create_rounded_block() -> Block<'static> {
         .border_type(BorderType::Rounded)
 }
 
-fn render_script_list<B: Backend>(f: &mut Frame, app: &mut App, area: Rect) {
+fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let mut list_items = Vec::new();
 
     for &idx in &app.visible_items {
@@ -1247,7 +1253,7 @@ fn render_script_list<B: Backend>(f: &mut Frame, app: &mut App, area: Rect) {
     f.render_stateful_widget(script_list, area, &mut app.list_state);
 }
 
-fn render_preview<B: Backend>(f: &mut Frame, app: &App, area: Rect) {
+fn render_preview(f: &mut Frame, app: &App, area: Rect) {
     let selected_script = app
         .scripts
         .state
@@ -1279,7 +1285,7 @@ fn render_preview<B: Backend>(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(preview, area);
 }
 
-fn render_fullscreen_preview<B: Backend>(f: &mut Frame, app: &App) {
+fn render_fullscreen_preview(f: &mut Frame, app: &App) {
     let area = f.area();
 
     let selected_script = app
@@ -1314,7 +1320,7 @@ fn render_fullscreen_preview<B: Backend>(f: &mut Frame, app: &App) {
         .split(smaller_area);
 
     let preview_text = Text::from(app.preview_content.clone());
-    
+
     let line_count = app.preview_content.lines().count() as u16;
     let percentage = if line_count > 0 {
         let scroll_percentage = (app.preview_scroll as f32 / line_count as f32 * 100.0).min(100.0);
@@ -1322,7 +1328,7 @@ fn render_fullscreen_preview<B: Backend>(f: &mut Frame, app: &App) {
     } else {
         " [0%] ".to_string()
     };
-    
+
     let formatted_title = format!("{}{}", title, percentage);
 
     let block = create_rounded_block()
@@ -1341,8 +1347,14 @@ fn render_fullscreen_preview<B: Backend>(f: &mut Frame, app: &App) {
 
     let help_text = Paragraph::new(Line::from(vec![
         Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray)),
-        Span::styled("PgUp/PgDown: Scroll faster  ", Style::default().fg(Color::Gray)),
-        Span::styled("Home/End: Jump to start/end  ", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "PgUp/PgDown: Scroll faster  ",
+            Style::default().fg(Color::Gray),
+        ),
+        Span::styled(
+            "Home/End: Jump to start/end  ",
+            Style::default().fg(Color::Gray),
+        ),
         Span::styled("ESC/q: Close preview", Style::default().fg(Color::Gray)),
     ]))
     .alignment(Alignment::Center);
@@ -1350,7 +1362,7 @@ fn render_fullscreen_preview<B: Backend>(f: &mut Frame, app: &App) {
     f.render_widget(help_text, preview_area[1]);
 }
 
-fn render_search_popup<B: Backend>(f: &mut Frame, app: &App) {
+fn render_search_popup(f: &mut Frame, app: &App) {
     let area = f.area();
 
     let popup_width = std::cmp::min(70, area.width - 8);
@@ -1402,9 +1414,10 @@ fn render_search_popup<B: Backend>(f: &mut Frame, app: &App) {
     f.render_widget(input, popup_layout[0]);
 
     if app.search_cursor_position <= app.search_input.len() {
-        f.set_cursor_position(
-            (popup_layout[0].x + 1 + app.search_cursor_position as u16, popup_layout[0].y + 1),
-        );
+        f.set_cursor_position((
+            popup_layout[0].x + 1 + app.search_cursor_position as u16,
+            popup_layout[0].y + 1,
+        ));
     }
 
     let mut result_items = Vec::new();
@@ -1485,7 +1498,7 @@ fn render_search_popup<B: Backend>(f: &mut Frame, app: &App) {
     f.render_widget(help_text, help_inner_area);
 }
 
-fn render_confirmation_popup<B: Backend>(f: &mut Frame, app: &App) {
+fn render_confirmation_popup(f: &mut Frame, app: &App) {
     let area = f.area();
 
     let popup_width = std::cmp::min(55, area.width - 8);
@@ -1565,14 +1578,22 @@ fn render_confirmation_popup<B: Backend>(f: &mut Frame, app: &App) {
 
     let options_text = Paragraph::new(Line::from(vec![
         Span::styled("[", Style::default().fg(Color::Gray)),
-        Span::styled("Y", Style::default()
-            .fg(Color::Green)
-            .add_modifier(Modifier::BOLD),
+        Span::styled(
+            "Y",
+            Style::default()
+                .fg(Color::Green)
+                .add_modifier(Modifier::BOLD),
         ),
         Span::styled("] to continue   [", Style::default().fg(Color::Gray)),
-        Span::styled("N", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "N",
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+        ),
         Span::styled("] or ", Style::default().fg(Color::Gray)),
-        Span::styled("ESC", Style::default().fg(Color::Red).add_modifier(Modifier::BOLD)),
+        Span::styled(
+            "ESC",
+            Style::default().fg(Color::Red).add_modifier(Modifier::BOLD),
+        ),
         Span::styled(" to abort", Style::default().fg(Color::Gray)),
     ]))
     .alignment(Alignment::Center);
