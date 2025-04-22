@@ -212,7 +212,7 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let scripts_path = get_scripts_path(settings.log_mode)?;
-    
+
     if settings.cleanup_cache {
         CLEANUP_NEEDED.store(true, Ordering::SeqCst);
     }
@@ -463,7 +463,7 @@ fn set_executable(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
 fn cleanup_cache_dir(log_mode: bool) {
     if let Some(cache_dir) = get_cache_dir() {
         let carch_cache = cache_dir.join("carch");
-        
+
         if carch_cache.exists() {
             if log_mode {
                 let _ = commands::log_message(
@@ -471,7 +471,7 @@ fn cleanup_cache_dir(log_mode: bool) {
                     &format!("Cleaning up cache directory at {}", carch_cache.display()),
                 );
             }
-            
+
             if let Err(e) = fs::remove_dir_all(&carch_cache) {
                 if log_mode {
                     let _ = commands::log_message(
@@ -481,10 +481,7 @@ fn cleanup_cache_dir(log_mode: bool) {
                 }
                 eprintln!("Warning: Failed to clean up cache directory: {}", e);
             } else if log_mode {
-                let _ = commands::log_message(
-                    "INFO",
-                    "Cache directory cleaned up successfully",
-                );
+                let _ = commands::log_message("INFO", "Cache directory cleaned up successfully");
             }
         }
     }
@@ -492,7 +489,7 @@ fn cleanup_cache_dir(log_mode: bool) {
 
 fn setup_cleanup_handlers(log_mode: bool) {
     let log_mode_copy = log_mode;
-    
+
     if let Err(e) = ctrlc::set_handler(move || {
         if CLEANUP_NEEDED.load(Ordering::SeqCst) {
             cleanup_cache_dir(log_mode_copy);
@@ -500,10 +497,8 @@ fn setup_cleanup_handlers(log_mode: bool) {
         std::process::exit(0);
     }) {
         if log_mode {
-            let _ = commands::log_message(
-                "ERROR",
-                &format!("Failed to set cleanup handler: {}", e),
-            );
+            let _ =
+                commands::log_message("ERROR", &format!("Failed to set cleanup handler: {}", e));
         }
         eprintln!("Warning: Failed to set up cleanup handler: {}", e);
     }
