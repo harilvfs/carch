@@ -5,6 +5,7 @@ use std::io;
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+use std::sync::atomic::{AtomicBool, Ordering};
 use tempfile::TempDir;
 
 mod commands;
@@ -16,9 +17,13 @@ mod version;
 static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 const EXECUTABLE_MODE: u32 = 0o755;
 
+static CLEANUP_NEEDED: AtomicBool = AtomicBool::new(false);
+
+#[derive(Copy, Clone)]
 struct Settings {
     show_preview: bool,
     log_mode: bool,
+    cleanup_cache: bool,
 }
 
 impl Default for Settings {
@@ -26,6 +31,7 @@ impl Default for Settings {
         Self {
             show_preview: true,
             log_mode: false,
+            cleanup_cache: true,
         }
     }
 }
@@ -39,14 +45,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let _ = commands::log_message("INFO", "Carch application started");
     }
 
-    if args.len() > 1 {
+    if args.iter().any(|arg| arg == "--no-cleanup") {
+        settings.cleanup_cache = false;
+        if settings.log_mode {
+            let _ = commands::log_message("INFO", "Cache cleanup disabled");
+        }
+    }
+
+    if settings.cleanup_cache {
+        setup_cleanup_handlers(settings.log_mode);
+    }
+
+    let result = if args.len() > 1 {
         match args[1].as_str() {
             "--help" | "-h" => {
                 if settings.log_mode {
                     let _ = commands::log_message("INFO", "Displaying help information");
                 }
-                display::display_help()?;
-                return Ok(());
+                display::display_help()
             }
             "--list-scripts" | "-l" => {
                 if settings.log_mode {
@@ -65,8 +81,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     }
                     return Err(error_msg.into());
                 }
-                script_list::list_scripts(&modules_dir)?;
-                return Ok(());
+                script_list::list_scripts(&modules_dir)
             }
             "--version" | "-v" => {
                 let version_str = version::get_current_version();
@@ -77,28 +92,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
 
                 println!("{}", version_str);
-                return Ok(());
+                Ok(())
             }
             "--check-update" => {
                 if settings.log_mode {
                     let _ = commands::log_message("INFO", "Checking for updates");
                 }
-                version::check_for_updates()?;
-                return Ok(());
+                version::check_for_updates().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
             }
             "--update" => {
                 if settings.log_mode {
                     let _ = commands::log_message("INFO", "Running update process");
                 }
-                commands::update()?;
-                return Ok(());
+                commands::update().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
             }
             "--uninstall" => {
                 if settings.log_mode {
                     let _ = commands::log_message("INFO", "Running uninstall process");
                 }
-                commands::uninstall()?;
-                return Ok(());
+                commands::uninstall().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
             }
             "--no-preview" => {
                 settings.show_preview = false;
@@ -107,13 +119,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
                 if args.len() > 2 {
                     let remaining_args = args[2..].to_vec();
-                    return process_args(remaining_args, settings);
+                    process_args(remaining_args, settings)
+                } else {
+                    run_tui(settings)
                 }
             }
             "--log" => {
                 if args.len() > 2 {
                     let remaining_args = args[2..].to_vec();
-                    return process_args(remaining_args, settings);
+                    process_args(remaining_args, settings)
+                } else {
+                    run_tui(settings)
+                }
+            }
+            "--no-cleanup" => {
+                if args.len() > 2 {
+                    let remaining_args = args[2..].to_vec();
+                    process_args(remaining_args, settings)
+                } else {
+                    run_tui(settings)
                 }
             }
             _ => {
@@ -123,12 +147,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let _ = commands::log_message("ERROR", &error_msg);
                 }
                 eprintln!("{}", error_msg);
-                return Ok(());
+                Ok(())
             }
         }
+    } else {
+        run_tui(settings)
+    };
+
+    if settings.cleanup_cache && CLEANUP_NEEDED.load(Ordering::SeqCst) {
+        cleanup_cache_dir(settings.log_mode);
     }
 
-    run_tui(settings)
+    result
 }
 
 fn process_args(args: Vec<String>, settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
@@ -145,24 +175,25 @@ fn process_args(args: Vec<String>, settings: Settings) -> Result<(), Box<dyn std
             }
 
             println!("{}", version_str);
+            Ok(())
         }
         "--check-update" => {
             if settings.log_mode {
                 let _ = commands::log_message("INFO", "Checking for updates");
             }
-            version::check_for_updates()?;
+            version::check_for_updates().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
         }
         "--update" => {
             if settings.log_mode {
                 let _ = commands::log_message("INFO", "Running update process");
             }
-            commands::update()?;
+            commands::update().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
         }
         "--uninstall" => {
             if settings.log_mode {
                 let _ = commands::log_message("INFO", "Running uninstall process");
             }
-            commands::uninstall()?;
+            commands::uninstall().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
         }
         _ => {
             let error_msg = format!("Error: Unknown option '{}'. Use --help for usage.", args[0]);
@@ -170,10 +201,9 @@ fn process_args(args: Vec<String>, settings: Settings) -> Result<(), Box<dyn std
                 let _ = commands::log_message("ERROR", &error_msg);
             }
             eprintln!("{}", error_msg);
+            Ok(())
         }
     }
-
-    Ok(())
 }
 
 fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
@@ -182,6 +212,10 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let scripts_path = get_scripts_path(settings.log_mode)?;
+    
+    if settings.cleanup_cache {
+        CLEANUP_NEEDED.store(true, Ordering::SeqCst);
+    }
 
     if settings.log_mode {
         let _ = commands::log_message(
@@ -214,7 +248,7 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
         );
     }
 
-    ui::run_ui_with_options(
+    let result = ui::run_ui_with_options(
         &modules_dir,
         |script_path| {
             println!("\nRunning script: {}", script_path.display());
@@ -265,13 +299,13 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
             Ok(())
         },
         ui_options,
-    )?;
+    );
 
     if settings.log_mode {
         let _ = commands::log_message("INFO", "Carch application exiting normally");
     }
 
-    Ok(())
+    result.map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
 }
 
 fn get_scripts_path(log_mode: bool) -> Result<PathBuf, Box<dyn std::error::Error>> {
@@ -424,4 +458,53 @@ fn set_executable(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     fs::set_permissions(path, perms)
         .map_err(|e| format!("Failed to set permissions for {}: {}", path.display(), e))?;
     Ok(())
+}
+
+fn cleanup_cache_dir(log_mode: bool) {
+    if let Some(cache_dir) = get_cache_dir() {
+        let carch_cache = cache_dir.join("carch");
+        
+        if carch_cache.exists() {
+            if log_mode {
+                let _ = commands::log_message(
+                    "INFO",
+                    &format!("Cleaning up cache directory at {}", carch_cache.display()),
+                );
+            }
+            
+            if let Err(e) = fs::remove_dir_all(&carch_cache) {
+                if log_mode {
+                    let _ = commands::log_message(
+                        "ERROR",
+                        &format!("Failed to clean up cache directory: {}", e),
+                    );
+                }
+                eprintln!("Warning: Failed to clean up cache directory: {}", e);
+            } else if log_mode {
+                let _ = commands::log_message(
+                    "INFO",
+                    "Cache directory cleaned up successfully",
+                );
+            }
+        }
+    }
+}
+
+fn setup_cleanup_handlers(log_mode: bool) {
+    let log_mode_copy = log_mode;
+    
+    if let Err(e) = ctrlc::set_handler(move || {
+        if CLEANUP_NEEDED.load(Ordering::SeqCst) {
+            cleanup_cache_dir(log_mode_copy);
+        }
+        std::process::exit(0);
+    }) {
+        if log_mode {
+            let _ = commands::log_message(
+                "ERROR",
+                &format!("Failed to set cleanup handler: {}", e),
+            );
+        }
+        eprintln!("Warning: Failed to set up cleanup handler: {}", e);
+    }
 }
