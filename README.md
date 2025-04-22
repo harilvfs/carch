@@ -200,6 +200,27 @@ Then run it with:
 sudo ./carch_icons.sh
 ```
 
+### Man Pages
+
+If you want to install the man page manually for Carch, you can do it with:
+
+```sh
+sudo mkdir -p /usr/local/share/man/man1
+sudo curl -o /usr/local/share/man/man1/carch.1 https://raw.githubusercontent.com/harilvfs/carch/main/man/carch.1
+```
+
+After installation, update the man database:
+
+```sh
+sudo mandb
+```
+
+Now you can read the Carch manual with:
+
+```sh
+man carch
+```
+
 ## Roadmap
 Check the full roadmap in the [docs](https://carch-org.github.io/docs/project/roadmap.html).
 
