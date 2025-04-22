@@ -145,8 +145,10 @@ cat << EOF | sudo tee /usr/share/applications/carch.desktop
 [Desktop Entry]
 Name=Carch
 Comment=A Simple Script to Make Linux System Setups Easier
-Exec=/home/username/.cargo/bin/carch ## if you have install carch via cargo
-Exec=/usr/local/bin/carch ## if you have install carch via install script
+## if you have install carch via cargo
+Exec=/home/username/.cargo/bin/carch
+## if you have install carch via install script
+Exec=/usr/local/bin/carch 
 Icon=carch
 Type=Application
 Terminal=true
