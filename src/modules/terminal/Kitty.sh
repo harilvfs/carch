@@ -50,7 +50,7 @@ setup_kitty() {
         echo -e "${CYAN}Kitty is not installed. :: Installing...${NC}"
         
         if [ -x "$(command -v pacman)" ]; then
-            sudo pacman -S --needed kitty
+            sudo pacman -S --needed --noconfirm kitty
         elif [ -x "$(command -v dnf)" ]; then
             echo -e "${CYAN}Installing Kitty on Fedora...${NC}"
             sudo dnf install kitty -y
