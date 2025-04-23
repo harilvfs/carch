@@ -52,7 +52,7 @@ fzf_confirm() {
 install_rofi_arch() {
     if ! command -v rofi &> /dev/null; then
         echo -e "${CYAN}Rofi is not installed. :: Installing Rofi for Arch...${NC}"
-        sudo pacman -S --needed rofi
+        sudo pacman -S --needed --noconfirm rofi
     else
         echo -e "${GREEN}:: Rofi is already installed on Arch.${NC}"
     fi
