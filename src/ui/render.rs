@@ -29,35 +29,28 @@ fn create_rounded_block() -> Block<'static> {
 
 fn render_title(f: &mut Frame, area: Rect) {
     let title_block = Block::default()
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(Color::Magenta));
+        .borders(Borders::NONE)
+        .border_style(Style::default().fg(Color::Blue));
 
     let inner_area = title_block.inner(area);
 
     let title = Paragraph::new(vec![
-        Line::from(vec![
-            Span::styled("╭─", Style::default().fg(Color::DarkGray)),
-            Span::styled("★ ", Style::default().fg(Color::Yellow)),
-            Span::styled(
-                "CARCH",
-                Style::default()
-                    .fg(Color::Magenta)
-                    .add_modifier(Modifier::BOLD),
-            ),
-            Span::styled(" ★", Style::default().fg(Color::Yellow)),
-            Span::styled("─╮", Style::default().fg(Color::DarkGray)),
-        ]),
-        Line::from(vec![
-            Span::styled("╰─", Style::default().fg(Color::DarkGray)),
-            Span::styled(
-                " Automate Your Linux Setup ",
-                Style::default()
-                    .fg(Color::Cyan)
-                    .add_modifier(Modifier::ITALIC),
-            ),
-            Span::styled("─╯", Style::default().fg(Color::DarkGray)),
-        ]),
+        Line::from(vec![Span::styled(
+            "CARCH",
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::BOLD),
+        )]),
+        Line::from(vec![Span::styled(
+            "Automate Your Linux Setup",
+            Style::default()
+                .fg(Color::Rgb(235, 235, 210))
+                .add_modifier(Modifier::ITALIC),
+        )]),
+        Line::from(vec![Span::styled(
+            "───────────────────────",
+            Style::default().fg(Color::DarkGray),
+        )]),
     ])
     .alignment(Alignment::Center);
 
@@ -294,7 +287,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Length(4),
+            Constraint::Length(3),
             Constraint::Min(0),
             Constraint::Length(1),
         ])
