@@ -12,6 +12,27 @@ detect_distro() {
     fi
 }
 
+check_essential_dependencies() {
+    local dependencies=("git" "wget" "curl")
+    local missing=()
+    
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &>/dev/null; then
+            missing+=("$dep")
+        fi
+    done
+    
+    if [[ ${#missing[@]} -ne 0 ]]; then
+        echo "Please wait, installing required dependencies..."
+        
+        case "$distro" in
+            arch) sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
+            fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
+        esac
+    fi
+}
+
 check_fzf() {
     if ! command -v fzf &>/dev/null; then
         echo -e "${CYAN}Installing fzf...${RESET}"
@@ -53,6 +74,7 @@ echo -e "${RESET}"
 echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
 
 detect_distro
+check_essential_dependencies
 check_fzf
 
 echo -e "${CYAN}Detected distribution: $distro${RESET}"

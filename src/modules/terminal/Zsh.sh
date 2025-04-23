@@ -40,6 +40,30 @@ fzf_confirm() {
     fi
 }
 
+check_essential_dependencies() {
+    local dependencies=("git" "wget" "curl")
+    local missing=()
+    
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &>/dev/null; then
+            missing+=("$dep")
+        fi
+    done
+    
+    if [[ ${#missing[@]} -ne 0 ]]; then
+        echo "Please wait, installing required dependencies..."
+        
+        if command -v pacman &>/dev/null; then
+            sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
+        elif command -v dnf &>/dev/null; then
+            sudo dnf install -y "${missing[@]}" > /dev/null 2>&1
+        else
+            print_message "$RED" "Unsupported package manager. Install dependencies manually."
+            exit 1
+        fi
+    fi
+}
+
 check_aur_helper() {
     if command -v yay &>/dev/null; then
         AUR_HELPER="yay"
@@ -93,7 +117,13 @@ echo -e "${RESET}"
 
 detect_distro
 
+check_essential_dependencies
+
 install_fzf
+
+if command -v pacman &> /dev/null; then
+    check_aur_helper
+fi
 
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
@@ -225,10 +255,6 @@ install_zoxide() {
         sudo dnf install -y zoxide
     fi
 }
-
-if command -v pacman &> /dev/null; then
-    check_aur_helper
-fi
 
 install_zsh_dependencies
 install_powerlevel10k
