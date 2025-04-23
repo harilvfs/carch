@@ -63,6 +63,13 @@ else
     print_message "$GREEN" "Dunst is already installed."
 fi
 
+print_message "$BLUE" "Installing papirus-icon-theme..."
+if command -v pacman &>/dev/null; then
+    pacman -Qi papirus-icon-theme &>/dev/null || sudo pacman -Sy --noconfirm papirus-icon-theme
+elif command -v dnf &>/dev/null; then
+    rpm -q papirus-icon-theme &>/dev/null || sudo dnf install -y papirus-icon-theme
+fi
+
 DUNST_DIR="$HOME/.config/dunst"
 DUNST_FILE="$DUNST_DIR/dunstrc"
 
