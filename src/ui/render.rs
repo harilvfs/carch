@@ -20,11 +20,11 @@ use ratatui::{
 use super::app::{App, AppMode, UiOptions};
 use crate::ui::popups;
 
-// Helper function to create a rounded block
 fn create_rounded_block() -> Block<'static> {
     Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
+        .style(Style::default().bg(Color::Reset))
 }
 
 fn render_title(f: &mut Frame, area: Rect) {
@@ -285,15 +285,20 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         return;
     }
 
+    let area = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(2)
+        .constraints([Constraint::Min(0)])
+        .split(f.area())[0];
+
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .margin(1)
         .constraints([
             Constraint::Length(4),
             Constraint::Min(0),
             Constraint::Length(1),
         ])
-        .split(f.area());
+        .split(area);
 
     render_title(f, chunks[0]);
 
@@ -355,6 +360,18 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     }
 }
 
+fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io::Result<()> {
+    disable_raw_mode()?;
+    execute!(
+        terminal.backend_mut(),
+        LeaveAlternateScreen,
+        DisableMouseCapture
+    )?;
+    terminal.show_cursor()?;
+    terminal.clear()?;
+    Ok(())
+}
+
 #[allow(dead_code)]
 pub fn run_ui<F>(modules_dir: &Path, run_script_callback: F) -> io::Result<()>
 where
@@ -380,6 +397,8 @@ where
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
+
+    terminal.clear()?;
 
     let mut app = App::new();
 
@@ -413,6 +432,8 @@ where
     }
 
     while !app.quit {
+        terminal.autoresize()?;
+
         terminal.draw(|f| ui(f, &mut app, &options))?;
 
         if let Ok(true) = event::poll(Duration::from_millis(100)) {
@@ -489,13 +510,7 @@ where
                                     if app.multi_select_mode
                                         && !app.multi_selected_scripts.is_empty()
                                     {
-                                        disable_raw_mode()?;
-                                        execute!(
-                                            terminal.backend_mut(),
-                                            LeaveAlternateScreen,
-                                            DisableMouseCapture
-                                        )?;
-                                        terminal.show_cursor()?;
+                                        cleanup_terminal(&mut terminal)?;
 
                                         if options.log_mode {
                                             let _ = crate::commands::log_message(
@@ -538,13 +553,7 @@ where
                                             );
                                         }
 
-                                        disable_raw_mode()?;
-                                        execute!(
-                                            terminal.backend_mut(),
-                                            LeaveAlternateScreen,
-                                            DisableMouseCapture
-                                        )?;
-                                        terminal.show_cursor()?;
+                                        cleanup_terminal(&mut terminal)?;
 
                                         if options.log_mode {
                                             let _ = crate::commands::log_message(
@@ -593,13 +602,7 @@ where
         let _ = crate::commands::log_message("INFO", "User requested application exit");
     }
 
-    disable_raw_mode()?;
-    execute!(
-        terminal.backend_mut(),
-        LeaveAlternateScreen,
-        DisableMouseCapture
-    )?;
-    terminal.show_cursor()?;
+    cleanup_terminal(&mut terminal)?;
 
     print!("\x1B[2J\x1B[1;1H");
 
