@@ -169,7 +169,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App) {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title("Confirm selection")
-        .border_style(Style::default().fg(Color::White));
+        .border_style(Style::default().fg(Color::Cyan));
 
     let inner_area = popup_block.inner(popup_area);
     let content_layout = Layout::default()
@@ -191,7 +191,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App) {
 
     let question_paragraph = Paragraph::new(Line::from(vec![Span::styled(
         question_text,
-        Style::default().fg(Color::White),
+        Style::default().fg(Color::Gray),
     )]))
     .alignment(Alignment::Center);
 
