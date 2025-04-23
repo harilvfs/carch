@@ -96,10 +96,9 @@ setup_themes() {
     local tmp_dir="/tmp/themes"
     clone_repo "https://github.com/harilvfs/themes" "$tmp_dir"
 
-    check_existing_dir "$HOME/.themes" || return
     check_and_create_dir "$HOME/.themes"
     
-    mv "$tmp_dir"/* "$HOME/.themes/" 2>/dev/null
+    cp -r "$tmp_dir"/* "$HOME/.themes/" 2>/dev/null
     cleanup_files "$HOME/.themes"
 
     rm -rf "$tmp_dir"
@@ -112,10 +111,9 @@ setup_icons() {
     local tmp_dir="/tmp/icons"
     clone_repo "https://github.com/harilvfs/icons" "$tmp_dir"
 
-    check_existing_dir "$HOME/.icons" || return
     check_and_create_dir "$HOME/.icons"
     
-    mv "$tmp_dir"/* "$HOME/.icons/" 2>/dev/null
+    cp -r "$tmp_dir"/* "$HOME/.icons/" 2>/dev/null
     cleanup_files "$HOME/.icons"
 
     rm -rf "$tmp_dir"
