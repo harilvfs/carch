@@ -44,27 +44,21 @@ fi
 
 if grep -q "\[chaotic-aur\]" /etc/pacman.conf; then
     success "Chaotic AUR is already configured in /etc/pacman.conf."
-else
-    info "Adding Chaotic AUR to pacman.conf..."
-    echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf || {
-        error "Failed to modify pacman.conf. Please try again with sudo permissions."
-        exit 1
+    exit 0
+fi
+
+if [ ! -d "/etc/pacman.d/gnupg" ]; then
+    info "Initializing pacman keys..."
+    sudo pacman-key --init || {
+        error "Failed to initialize pacman keys. Please check your system."
+        exit 1 
     }
 fi
 
-info "Initializing pacman keys..."
-sudo pacman-key --init || {
-    error "Failed to initialize pacman keys. Please check your system."
-    exit 1 
-}
-
 info "Fetching Chaotic AUR key..."
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || {
-    info "Trying alternate keyserver..."
-    sudo pacman-key --recv-key 3056513887B78AEB --keyserver hkps://keys.openpgp.org || {
-        error "Failed to fetch the Chaotic AUR key. Please check your internet connection."
-        exit 1
-    }
+    error "Failed to fetch the Chaotic AUR key. Please check your internet connection."
+    exit 1
 }
 
 info "Signing the key..."
@@ -73,20 +67,27 @@ sudo pacman-key --lsign-key 3056513887B78AEB || {
     exit 1
 }
 
-info "Installing Chaotic AUR keyring and mirrorlist..."
-sudo pacman -U --noconfirm "https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst" || {
+info "Installing Chaotic AUR keyring..."
+sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' || {
     error "Failed to install chaotic-keyring. Please check your internet connection."
     exit 1
 }
 
-sudo pacman -U --noconfirm "https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst" || {
+info "Installing Chaotic AUR mirrorlist..."
+sudo pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' || {
     error "Failed to install chaotic-mirrorlist. Please check your internet connection."
     exit 1
 }
 
-info "Refreshing Pacman database..."
-sudo pacman -Sy || {
-    error "Failed to refresh pacman database. Please try again."
+info "Adding Chaotic AUR to pacman.conf..."
+echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf || {
+    error "Failed to modify pacman.conf. Please try again with sudo permissions."
+    exit 1
+}
+
+info "Syncing Pacman database..."
+sudo pacman -Syy || {
+    error "Failed to sync pacman database. Please try again."
     exit 1
 }
 
