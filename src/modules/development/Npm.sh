@@ -56,41 +56,19 @@ print_message() {
     echo -e "${color}${message}${RESET}"
 }
 
-package_manager=""
 if command -v npm &>/dev/null; then
+    NODE_VERSION=$(node -v)
+    NPM_VERSION=$(npm -v)
     print_message "$GREEN" "✔ npm is already installed."
-    if pacman -Q npm &>/dev/null; then
-        package_manager="pacman"
-        remove_cmd="sudo pacman -Rsn npm"
-    elif dnf list installed nodejs &>/dev/null; then
-        package_manager="dnf"
-        remove_cmd="sudo dnf remove nodejs"
-    fi
-    
-    if [[ -n "$package_manager" ]]; then
-        print_message "$YELLOW" "⚠ npm is installed via $package_manager, which may cause conflicts with nvm."
-        if fzf_confirm "Do you want to remove the package manager version and use nvm instead? (Recommended)"; then
-            print_message "$YELLOW" "🗑 Removing npm and Node.js via $package_manager..."
-            if eval "$remove_cmd"; then
-                print_message "$GREEN" "✔ Successfully removed npm and Node.js."
-            else
-                print_message "$RED" "✖ Failed to remove npm and Node.js."
-                exit 1
-            fi
-        else
-            print_message "$GREEN" "✔ Keeping existing npm installation."
-            exit 0
-        fi
-    else
-        print_message "$GREEN" "✔ npm is installed via nvm or manually."
-        exit 0
-    fi
-else
-    print_message "$YELLOW" "⚠ npm is not installed on your system."
-    if ! fzf_confirm "Do you want to install npm using nvm? (Recommended)"; then
-        print_message "$RED" "✖ npm installation aborted."
-        exit 1
-    fi
+    print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
+    print_message "$BLUE" "npm version: ${NPM_VERSION}"
+    exit 0
+fi
+
+print_message "$YELLOW" "⚠ npm is not installed on your system."
+if ! fzf_confirm "Do you want to install npm using nvm? (Recommended)"; then
+    print_message "$RED" "✖ npm installation aborted."
+    exit 1
 fi
 
 if [[ ! -d "$HOME/.nvm" ]]; then
@@ -102,7 +80,28 @@ if [[ ! -d "$HOME/.nvm" ]]; then
         print_message "$GREEN" "✔ nvm installed successfully (via wget)."
     else
         print_message "$RED" "✖ Failed to install nvm."
-        exit 1
+        
+        print_message "$YELLOW" "Falling back to package manager installation..."
+        if command -v pacman &>/dev/null; then
+            sudo pacman -S --noconfirm npm || {
+                print_message "$RED" "✖ Failed to install npm via pacman."
+                exit 1
+            }
+        elif command -v dnf &>/dev/null; then
+            sudo dnf install -y nodejs npm || {
+                print_message "$RED" "✖ Failed to install npm via dnf."
+                exit 1
+            }
+        else
+            print_message "$RED" "✖ No supported package manager found."
+            exit 1
+        fi
+        print_message "$GREEN" "✔ npm installed via package manager."
+        NODE_VERSION=$(node -v)
+        NPM_VERSION=$(npm -v)
+        print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
+        print_message "$BLUE" "npm version: ${NPM_VERSION}"
+        exit 0
     fi
 else
     print_message "$GREEN" "✔ nvm is already installed."
