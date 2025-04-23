@@ -36,7 +36,7 @@ fzf_confirm() {
     fi
 }
 
-dependencies=("tmux" "figlet" "fzf" "wget" "git")
+dependencies=("tmux" "figlet" "fzf" "wget" "git" "curl")
 missing=()
 
 for dep in "${dependencies[@]}"; do
@@ -46,13 +46,12 @@ for dep in "${dependencies[@]}"; do
 done
 
 if [[ ${#missing[@]} -ne 0 ]]; then
-    echo -e "${RED}Missing dependencies: ${missing[*]}${RESET}"
-    echo -e "${YELLOW}Installing missing dependencies...${RESET}"
+    echo "Please wait, installing required dependencies..."
     
     if command -v pacman &>/dev/null; then
-        sudo pacman -S --noconfirm "${missing[@]}"
+        sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
     elif command -v dnf &>/dev/null; then
-        sudo dnf install -y "${missing[@]}"
+        sudo dnf install -y "${missing[@]}" > /dev/null 2>&1
     else
         echo -e "${RED}Unsupported package manager. Install dependencies manually.${RESET}"
         exit 1

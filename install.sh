@@ -50,7 +50,7 @@ command_exists() {
 check_dependencies() {
     info "Checking dependencies..."
     
-    local deps=("curl" "grep" "tar" "figlet" "fzf")
+    local deps=("curl" "grep" "tar" "figlet" "fzf" "git" "wget")
     local missing_deps=()
     
     for dep in "${deps[@]}"; do
@@ -60,14 +60,12 @@ check_dependencies() {
     done
     
     if [ ${#missing_deps[@]} -gt 0 ]; then
-        warning "Missing dependencies: ${missing_deps[*]}"
+        echo "Please wait, installing required dependencies..."
         
         if command_exists "pacman"; then
-            info "Installing dependencies via pacman..."
-            sudo pacman -Sy --noconfirm "${missing_deps[@]}"
+            sudo pacman -Sy --noconfirm "${missing_deps[@]}" > /dev/null 2>&1
         elif command_exists "dnf"; then
-            info "Installing dependencies via dnf..."
-            sudo dnf install -y "${missing_deps[@]}"
+            sudo dnf install -y "${missing_deps[@]}" > /dev/null 2>&1
         else
             error "Unsupported package manager. Please install the following dependencies manually: ${missing_deps[*]}"
         fi
