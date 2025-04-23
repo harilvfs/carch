@@ -47,7 +47,7 @@ fzf_confirm() {
 fzf_select_fonts() {
     local options=("$@")
     printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                     --height=40% \
+                                     --height=50% \
                                      --prompt="Select fonts (TAB to mark, ENTER to confirm): " \
                                      --header="Font Selection" \
                                      --pointer="➤" \
@@ -97,6 +97,13 @@ install_font_fedora() {
     echo -e "${GREEN}$font_name installed successfully in $FONTS_DIR!${NC}"
 }
 
+install_fedora_system_fonts() {
+    local font_pkg="$@"
+    echo -e "${CYAN}:: Installing $font_pkg via dnf...${NC}"
+    sudo dnf install -y $font_pkg
+    echo -e "${GREEN}$font_pkg installed successfully!${NC}"
+}
+
 choose_fonts() {
     local return_to_menu=true
 
@@ -110,7 +117,7 @@ choose_fonts() {
         
         echo -e "${GREEN}Select fonts to install (use TAB to select multiple)${NC}"
 
-        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Exit")
+        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "Exit")
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
             echo -e "${GREEN}Exiting font installation.${NC}"
@@ -159,6 +166,20 @@ choose_fonts() {
                         install_font_arch "terminus-font"
                     else
                         echo -e "${RED}Terminus font is not available as a Nerd Font.${NC}"
+                    fi
+                    ;;
+                "Noto")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra
+                    else
+                        install_fedora_system_fonts google-noto-fonts google-noto-emoji-fonts
+                    fi
+                    ;;
+                "DejaVu")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        install_font_arch ttf-dejavu
+                    else
+                        install_fedora_system_fonts dejavu-sans-fonts
                     fi
                     ;;
             esac
