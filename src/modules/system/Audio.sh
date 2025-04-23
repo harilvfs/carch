@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Sets up PipeWire audio system with appropriate components for superior sound quality and compatibility.
+# Install & Sets up PipeWire audio system.
 
 clear
 
