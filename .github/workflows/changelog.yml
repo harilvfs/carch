@@ -50,22 +50,24 @@ jobs:
           echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Create temp directory
-        run: mkdir -p tmp
+        run: |
+          # Create tmp directory outside the git repo
+          mkdir -p /tmp/changelog
 
       - name: Get merged PRs since last release
         id: get_prs
         run: |
           # Create temporary files to store our categories
-          echo "" > tmp/added.md
-          echo "" > tmp/changed.md
-          echo "" > tmp/fixed.md
-          echo "" > tmp/removed.md
+          echo "" > /tmp/changelog/added.md
+          echo "" > /tmp/changelog/changed.md
+          echo "" > /tmp/changelog/fixed.md
+          echo "" > /tmp/changelog/removed.md
           
           # URL encode the repository name for the API call
           REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
           
           # Get PRs merged since last release
-          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:>=$(git log ${{ env.PREV_VERSION }} -1 --format=%cd --date=short)"
+          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:>=$(git log ${{ env.PREV_VERSION }} -1 --format=%cd --date=short 2>/dev/null || git log --reverse --format=%cd --date=short | head -1)"
           echo "Searching PRs with query: $PR_QUERY"
           
           # Use GitHub CLI to get merged PRs with their labels since last release
@@ -95,10 +97,10 @@ jobs:
                 }
               }
             }
-          ' -f searchQuery="$PR_QUERY" --jq '.data.search.nodes[] | select(.merged == true)' > tmp/prs.json
+          ' -f searchQuery="$PR_QUERY" --jq '.data.search.nodes[] | select(.merged == true)' > /tmp/changelog/prs.json
           
           # Process PRs and categorize by label - only include PRs with conventional commit labels
-          jq -c '.' tmp/prs.json | while read -r pr; do
+          jq -c '.' /tmp/changelog/prs.json | while read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r .number)
             PR_TITLE=$(echo "$pr" | jq -r .title)
             PR_URL=$(echo "$pr" | jq -r .url)
@@ -109,24 +111,24 @@ jobs:
             PR_ENTRY="* $PR_TITLE by @$PR_AUTHOR in $PR_URL"
             
             # Only add PRs with conventional commit-style labels
-            if echo "$PR_LABELS" | grep -q "feature\|feat\|enhancement\|added"; then
-              echo "$PR_ENTRY" >> tmp/added.md
+            if echo "$PR_LABELS" | grep -q "feature\|feat\|enhancement\|added\|ui\|ux"; then
+              echo "$PR_ENTRY" >> /tmp/changelog/added.md
             elif echo "$PR_LABELS" | grep -q "bug\|fix"; then
-              echo "$PR_ENTRY" >> tmp/fixed.md
+              echo "$PR_ENTRY" >> /tmp/changelog/fixed.md
             elif echo "$PR_LABELS" | grep -q "removed\|deprecation"; then
-              echo "$PR_ENTRY" >> tmp/removed.md
+              echo "$PR_ENTRY" >> /tmp/changelog/removed.md
             elif echo "$PR_LABELS" | grep -q "changed\|refactor\|chore"; then
-              echo "$PR_ENTRY" >> tmp/changed.md
+              echo "$PR_ENTRY" >> /tmp/changelog/changed.md
             elif echo "$PR_TITLE" | grep -qE "^(feat|fix|chore|refactor|docs|style|perf|test|build|ci|revert)(\([a-z0-9-]+\))?:"; then
               # If the PR title follows conventional commit format, categorize accordingly
               if echo "$PR_TITLE" | grep -qE "^feat(\([a-z0-9-]+\))?:"; then
-                echo "$PR_ENTRY" >> tmp/added.md
+                echo "$PR_ENTRY" >> /tmp/changelog/added.md
               elif echo "$PR_TITLE" | grep -qE "^fix(\([a-z0-9-]+\))?:"; then
-                echo "$PR_ENTRY" >> tmp/fixed.md
+                echo "$PR_ENTRY" >> /tmp/changelog/fixed.md
               elif echo "$PR_TITLE" | grep -qE "^(chore|refactor|style|test|ci|build)(\([a-z0-9-]+\))?:"; then
-                echo "$PR_ENTRY" >> tmp/changed.md
+                echo "$PR_ENTRY" >> /tmp/changelog/changed.md
               elif echo "$PR_TITLE" | grep -qE "^(remove|deprecated)(\([a-z0-9-]+\))?:"; then
-                echo "$PR_ENTRY" >> tmp/removed.md
+                echo "$PR_ENTRY" >> /tmp/changelog/removed.md
               fi
             fi
           done
@@ -136,16 +138,20 @@ jobs:
       - name: Get relevant commits
         id: get_commits
         run: |
+          # Get commit range safely
+          COMMIT_RANGE="$(git rev-parse --verify ${{ env.PREV_VERSION }} 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD"
+          echo "Using commit range: $COMMIT_RANGE"
+          
           # Get commits between tags that aren't tied to PRs
           # --no-merges excludes merge commits
-          git log --no-merges --pretty=format:"%h %s" ${{ env.PREV_VERSION }}..HEAD | while read -r commit; do
+          git log --no-merges --pretty=format:"%h %s" $COMMIT_RANGE | while read -r commit; do
             COMMIT_HASH=$(echo "$commit" | cut -d' ' -f1)
             COMMIT_MSG=$(echo "$commit" | cut -d' ' -f2-)
             
             # Skip if this commit is part of a PR
             PR_NUM=$(git log -1 --format=%B $COMMIT_HASH | grep -o "#[0-9]\+" | head -1 | tr -d '#' || echo "")
             if [ -n "$PR_NUM" ]; then
-              if grep -q "$PR_NUM" tmp/prs.json; then
+              if grep -q "$PR_NUM" /tmp/changelog/prs.json; then
                 continue
               fi
             fi
@@ -154,14 +160,14 @@ jobs:
             COMMIT_ENTRY="* ${COMMIT_MSG} [\`${COMMIT_HASH}\`](https://github.com/${{ github.repository }}/commit/${COMMIT_HASH})"
             
             # Only include commits with conventional commit prefixes
-            if [[ $COMMIT_MSG =~ ^feat(\([a-z0-9-]+\))?:.*$ ]]; then
-              echo "$COMMIT_ENTRY" >> tmp/added.md
+            if [[ $COMMIT_MSG =~ ^feat(\([a-z0-9-]+\))?:.*$ ]] || [[ $COMMIT_MSG =~ ^ui(\([a-z0-9-]+\))?:.*$ ]] || [[ $COMMIT_MSG =~ ^ux(\([a-z0-9-]+\))?:.*$ ]]; then
+              echo "$COMMIT_ENTRY" >> /tmp/changelog/added.md
             elif [[ $COMMIT_MSG =~ ^fix(\([a-z0-9-]+\))?:.*$ ]]; then
-              echo "$COMMIT_ENTRY" >> tmp/fixed.md
+              echo "$COMMIT_ENTRY" >> /tmp/changelog/fixed.md
             elif [[ $COMMIT_MSG =~ ^(chore|refactor|style|test|ci|build)(\([a-z0-9-]+\))?:.*$ ]]; then
-              echo "$COMMIT_ENTRY" >> tmp/changed.md
+              echo "$COMMIT_ENTRY" >> /tmp/changelog/changed.md
             elif [[ $COMMIT_MSG =~ ^(remove|deprecated)(\([a-z0-9-]+\))?:.*$ ]]; then
-              echo "$COMMIT_ENTRY" >> tmp/removed.md
+              echo "$COMMIT_ENTRY" >> /tmp/changelog/removed.md
             fi
           done
 
@@ -173,51 +179,54 @@ jobs:
             echo "## [${{ env.NEW_VERSION }}](https://github.com/${{ github.repository }}/compare/${{ env.PREV_VERSION }}...${{ env.NEW_VERSION }}) (${{ env.RELEASE_DATE }})"
             echo ""
             
-            if [ -s tmp/changed.md ]; then
+            if [ -s /tmp/changelog/changed.md ]; then
               echo "### Changed"
               echo ""
-              cat tmp/changed.md
+              cat /tmp/changelog/changed.md
               echo ""
             fi
             
-            if [ -s tmp/added.md ]; then
+            if [ -s /tmp/changelog/added.md ]; then
               echo "### Added"
               echo ""
-              cat tmp/added.md
+              cat /tmp/changelog/added.md
               echo ""
             fi
             
-            if [ -s tmp/fixed.md ]; then
+            if [ -s /tmp/changelog/fixed.md ]; then
               echo "### Fixed"
               echo ""
-              cat tmp/fixed.md
+              cat /tmp/changelog/fixed.md
               echo ""
             fi
             
-            if [ -s tmp/removed.md ]; then
+            if [ -s /tmp/changelog/removed.md ]; then
               echo "### Removed"
               echo ""
-              cat tmp/removed.md
+              cat /tmp/changelog/removed.md
               echo ""
             fi
             
             echo "For a detailed changelog, visit the [release section](https://github.com/${{ github.repository }}/releases/tag/${{ env.NEW_VERSION }})."
             echo ""
-          } > tmp/new_changelog_entry.md
+          } > /tmp/changelog/new_changelog_entry.md
+          
+          # Store the changelog entry content for PR body
+          CHANGELOG_CONTENT=$(cat /tmp/changelog/new_changelog_entry.md)
+          echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           
           # Read existing content of CHANGELOG.md after the first line
-          tail -n +3 CHANGELOG.md > tmp/existing_changelog.md
+          tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md || echo "# Changelog" > /tmp/changelog/existing_changelog.md
           
           # Create new CHANGELOG.md with updated content
           {
             echo "# Changelog"
             echo ""
-            cat tmp/new_changelog_entry.md
-            cat tmp/existing_changelog.md
-          } > tmp/CHANGELOG.md
-          
-          # Replace the existing CHANGELOG.md with our new version
-          mv tmp/CHANGELOG.md CHANGELOG.md
+            cat /tmp/changelog/new_changelog_entry.md
+            cat /tmp/changelog/existing_changelog.md
+          } > CHANGELOG.md
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
@@ -232,7 +241,7 @@ jobs:
             ## Summary of changes:
             
             ```markdown
-            $(cat tmp/new_changelog_entry.md)
+            ${{ env.CHANGELOG_CONTENT }}
             ```
           base: ${{ github.event.inputs.target_branch }}
           delete-branch: true
@@ -241,4 +250,4 @@ jobs:
         if: always()
         run: |
           # Clean up temporary files so they don't end up in the PR
-          rm -rf tmp/ 
+          rm -rf /tmp/changelog/ 
