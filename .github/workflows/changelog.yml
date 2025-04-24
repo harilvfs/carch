@@ -23,7 +23,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -42,35 +42,28 @@ jobs:
             echo "PREV_VERSION=${{ github.event.inputs.prev_version_tag }}" >> $GITHUB_ENV
           fi
           
-          # Set new version
           echo "NEW_VERSION=v${{ github.event.inputs.version }}" >> $GITHUB_ENV
           echo "NEW_VERSION_NUMBER=${{ github.event.inputs.version }}" >> $GITHUB_ENV
           
-          # Get current date in YYYY-MM-DD format
           echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Create temp directory
         run: |
-          # Create tmp directory outside the git repo
           mkdir -p /tmp/changelog
 
       - name: Get merged PRs since last release
         id: get_prs
         run: |
-          # Create temporary files to store our categories
           echo "" > /tmp/changelog/added.md
           echo "" > /tmp/changelog/changed.md
           echo "" > /tmp/changelog/fixed.md
           echo "" > /tmp/changelog/removed.md
           
-          # URL encode the repository name for the API call
           REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
           
-          # Get PRs merged since last release
           PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:>=$(git log ${{ env.PREV_VERSION }} -1 --format=%cd --date=short 2>/dev/null || git log --reverse --format=%cd --date=short | head -1)"
           echo "Searching PRs with query: $PR_QUERY"
           
-          # Use GitHub CLI to get merged PRs with their labels since last release
           gh api graphql -f query='
             query($searchQuery: String!, $cursor: String) {
               search(query: $searchQuery, type: ISSUE, first: 100, after: $cursor) {
@@ -99,7 +92,6 @@ jobs:
             }
           ' -f searchQuery="$PR_QUERY" --jq '.data.search.nodes[] | select(.merged == true)' > /tmp/changelog/prs.json
           
-          # Process PRs and categorize by label - only include PRs with conventional commit labels
           jq -c '.' /tmp/changelog/prs.json | while read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r .number)
             PR_TITLE=$(echo "$pr" | jq -r .title)
@@ -107,10 +99,8 @@ jobs:
             PR_AUTHOR=$(echo "$pr" | jq -r .author.login)
             PR_LABELS=$(echo "$pr" | jq -r '.labels.nodes[].name' 2>/dev/null || echo "")
             
-            # Format PR entry
             PR_ENTRY="* $PR_TITLE by @$PR_AUTHOR in $PR_URL"
             
-            # Only add PRs with conventional commit-style labels
             if echo "$PR_LABELS" | grep -q "feature\|feat\|enhancement\|added\|ui\|ux"; then
               echo "$PR_ENTRY" >> /tmp/changelog/added.md
             elif echo "$PR_LABELS" | grep -q "bug\|fix"; then
@@ -142,13 +132,10 @@ jobs:
           COMMIT_RANGE="$(git rev-parse --verify ${{ env.PREV_VERSION }} 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD"
           echo "Using commit range: $COMMIT_RANGE"
           
-          # Get commits between tags that aren't tied to PRs
-          # --no-merges excludes merge commits
           git log --no-merges --pretty=format:"%h %s" $COMMIT_RANGE | while read -r commit; do
             COMMIT_HASH=$(echo "$commit" | cut -d' ' -f1)
             COMMIT_MSG=$(echo "$commit" | cut -d' ' -f2-)
             
-            # Skip if this commit is part of a PR
             PR_NUM=$(git log -1 --format=%B $COMMIT_HASH | grep -o "#[0-9]\+" | head -1 | tr -d '#' || echo "")
             if [ -n "$PR_NUM" ]; then
               if grep -q "$PR_NUM" /tmp/changelog/prs.json; then
@@ -156,10 +143,8 @@ jobs:
               fi
             fi
             
-            # Format commit entry
             COMMIT_ENTRY="* ${COMMIT_MSG} [\`${COMMIT_HASH}\`](https://github.com/${{ github.repository }}/commit/${COMMIT_HASH})"
             
-            # Only include commits with conventional commit prefixes
             if [[ $COMMIT_MSG =~ ^feat(\([a-z0-9-]+\))?:.*$ ]] || [[ $COMMIT_MSG =~ ^ui(\([a-z0-9-]+\))?:.*$ ]] || [[ $COMMIT_MSG =~ ^ux(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> /tmp/changelog/added.md
             elif [[ $COMMIT_MSG =~ ^fix(\([a-z0-9-]+\))?:.*$ ]]; then
@@ -174,7 +159,6 @@ jobs:
       - name: Generate changelog entry
         id: generate_changelog
         run: |
-          # Create a temporary changelog entry
           {
             echo "## [${{ env.NEW_VERSION }}](https://github.com/${{ github.repository }}/compare/${{ env.PREV_VERSION }}...${{ env.NEW_VERSION }}) (${{ env.RELEASE_DATE }})"
             echo ""
@@ -211,18 +195,16 @@ jobs:
             echo ""
           } > /tmp/changelog/new_changelog_entry.md
           
-          # Store the changelog entry content for PR body
           CHANGELOG_CONTENT=$(cat /tmp/changelog/new_changelog_entry.md)
           echo "CHANGELOG_CONTENT<<EOF" >> $GITHUB_ENV
           echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           
-          # Read existing content of CHANGELOG.md after the first line
           tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md || echo "# Changelog" > /tmp/changelog/existing_changelog.md
           
-          # Create new CHANGELOG.md with updated content
           {
             echo "# Changelog"
+            echo "All notable changes to this project will be documented in this file."
             echo ""
             cat /tmp/changelog/new_changelog_entry.md
             cat /tmp/changelog/existing_changelog.md
@@ -236,7 +218,7 @@ jobs:
           branch: changelog/${{ env.NEW_VERSION_NUMBER }}
           title: "Changelog v${{ env.NEW_VERSION_NUMBER }}"
           body: |
-            This PR updates the CHANGELOG.md with the latest changes for version ${{ env.NEW_VERSION }}.
+            PR to updates the CHANGELOG.md with the latest changes for version ${{ env.NEW_VERSION }}.
             
             ## Summary of changes:
             
