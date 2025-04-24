@@ -8,6 +8,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 YELLOW='\033[0;33m'
+RED='\033[31m'
 RESET='\033[0m'
 
 FZF_COMMON="--layout=reverse \
@@ -43,6 +44,49 @@ else
     echo "========== Theme & Icons Setup =========="
 fi
 echo -e "${RESET}"
+
+detect_distro() {
+    if command -v pacman &>/dev/null; then
+        distro="arch"
+        echo -e "${GREEN}Detected distribution: Arch Linux${RESET}"
+    elif command -v dnf &>/dev/null; then
+        distro="fedora"
+        echo -e "${YELLOW}Detected distribution: Fedora${RESET}"
+    else
+        echo -e "${RED}Unsupported distribution. Exiting...${RESET}"
+        exit 1
+    fi
+}
+
+install_dependencies() {
+    echo -e "${CYAN}:: Installing dependencies...${RESET}"
+    
+    if [ "$distro" == "arch" ]; then
+        sudo pacman -S --needed git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum || {
+            echo -e "${RED}:: Failed to install dependencies. Exiting...${RESET}"
+            exit 1
+        }
+    elif [ "$distro" == "fedora" ]; then
+        sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum|| {
+            echo -e "${RED}:: Failed to install dependencies. Exiting...${RESET}"
+            exit 1
+        }
+        
+        if ! command -v nwg-look &>/dev/null; then
+            echo -e "${CYAN}:: Installing nwg-look for Fedora...${RESET}"
+            sudo dnf copr enable -y solopasha/hyprland || {
+                echo -e "${RED}:: Failed to enable solopasha/hyprland COPR repository.${RESET}"
+                exit 1
+            }
+            sudo dnf install -y nwg-look || {
+                echo -e "${RED}:: Failed to install nwg-look. Exiting...${RESET}"
+                exit 1
+            }
+        fi
+    fi
+    
+    echo -e "${GREEN}:: Dependencies installed successfully.${RESET}"
+}
 
 echo -e "${CYAN}Theme and Icon Setup${RESET}"
 echo -e "${YELLOW}----------------------${RESET}"
@@ -132,16 +176,22 @@ confirm_and_proceed() {
 
 case "$option" in
     "Themes")
+        detect_distro
+        install_dependencies
         confirm_and_proceed
         setup_themes
         echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme.${RESET}"
         ;;
     "Icons")
+        detect_distro
+        install_dependencies
         confirm_and_proceed
         setup_icons
         echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the icons.${RESET}"
         ;;
     "Both")
+        detect_distro
+        install_dependencies
         confirm_and_proceed
         setup_themes
         setup_icons
