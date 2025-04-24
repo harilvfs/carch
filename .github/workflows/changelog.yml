@@ -248,8 +248,16 @@ jobs:
           echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           
-          tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md || echo "# Changelog" > /tmp/changelog/existing_changelog.md
+          # Check if CHANGELOG.md exists and has content
+          if [ -f CHANGELOG.md ] && [ -s CHANGELOG.md ]; then
+            # Extract existing content after header (skip first 2 lines)
+            tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md
+          else
+            # Create empty file if changelog doesn't exist
+            touch /tmp/changelog/existing_changelog.md
+          fi
           
+          # Create new CHANGELOG.md with updated content
           {
             echo "# Changelog"
             echo "All notable changes to this project will be documented in this file."
