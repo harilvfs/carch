@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) (2025-04-24)
+
+### Changed
+
+- Restructured the UI in the repo [#415](https://github.com/harilvfs/carch/pull/415)
+- Updated TUI to adapt to `ratatui` v0.29 [#414](https://github.com/harilvfs/carch/pull/414)
+- Minor UI changes on the TUI side [2352485](https://github.com/harilvfs/carch/commit/2352485e50f3f0e1d460afa0c60b40607da35ebb)
+- `eza` is no longer available in the Fedora 42 repo, so the install method was changed to a manual one [a63fdca](https://github.com/harilvfs/carch/commit/a63fdca80878db03178b6c62aef643ddca4b8a6e)
+- Reworked the npm install script [632547b](https://github.com/harilvfs/carch/commit/632547b8503255bccdbf76f375f4b8d07e0becf6)
+
+### Added
+
+- Added setup scripts for Foot and Ghostty [#412](https://github.com/harilvfs/carch/pull/412)
+- Added `carch` install script [#413](https://github.com/harilvfs/carch/pull/413)
+- Included a large number of missing dependencies in scripts (see [4.3.5 → 4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6))
+- Added new fonts to the font script [829ff41](https://github.com/harilvfs/carch/commit/829ff417653fd1e2acb0a66964d6a937c1279aa1)
+- Added multi-select functionality in the package script [c547439](https://github.com/harilvfs/carch/commit/c5474399bcdd234e478ebd6b3e30abfc4341c476)
+- Added a Bluetooth setup script [4079a3f](https://github.com/harilvfs/carch/commit/4079a3f8c0245e693791ffbe8d24a3f6001e7381)
+- Added an audio setup script [8c6fe1e](https://github.com/harilvfs/carch/commit/8c6fe1ed5f306e14cb640af31a7cd7b105110912)
+- Finally added GNOME Keyring dependencies [7c0d541](https://github.com/harilvfs/carch/commit/7c0d5419761c414fb82accf3b291496e9fa114a7)
+
+### Fixed
+
+- Fixed the Chaotic AUR install script failure [30ff7da](https://github.com/harilvfs/carch/commit/30ff7da64f4bf69219494746dab7e3d7f5ddfda4)
+- Fixed TUI issues in running TTY environments [f1ff9ed](https://github.com/harilvfs/carch/commit/f1ff9edb4744409528617406f75ac339058f22da)
+- Fixed typos and documentation issues
+- And many more known bug fixes
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.6).
+
 ## [4.3.5](https://github.com/harilvfs/carch/compare/v4.3.4...v4.3.5) (2025-04-20)
 
 No any major changes or update just minor bug fixes release.
