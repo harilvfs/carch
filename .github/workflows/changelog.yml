@@ -51,7 +51,6 @@ jobs:
           
           echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           
-          # Create the tag if requested
           if [ "${{ github.event.inputs.create_tag }}" = "true" ]; then
             git tag "${{ env.NEW_VERSION }}"
             echo "Created tag: ${{ env.NEW_VERSION }}"
@@ -71,14 +70,12 @@ jobs:
           
           REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
           
-          # Get date of previous version for query
           if git rev-parse --verify "${{ env.PREV_VERSION }}" >/dev/null 2>&1; then
             PREV_DATE=$(git log "${{ env.PREV_VERSION }}" -1 --format=%cd --date=short 2>/dev/null || git log --reverse --format=%cd --date=short | head -1)
           else
             PREV_DATE=$(git log --reverse --format=%cd --date=short | head -1)
           fi
           
-          # Get current date or date of new tag if it exists
           if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
             CURRENT_DATE=$(git log "${{ env.NEW_VERSION }}" -1 --format=%cd --date=short)
             echo "Using date from existing tag: $CURRENT_DATE"
@@ -87,7 +84,6 @@ jobs:
             echo "Using current date: $CURRENT_DATE"
           fi
           
-          # Get PRs merged between previous version and new version
           PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:${PREV_DATE}..${CURRENT_DATE}"
           echo "Searching PRs with query: $PR_QUERY"
           
@@ -137,7 +133,6 @@ jobs:
             elif echo "$PR_LABELS" | grep -q "changed\|refactor\|chore"; then
               echo "$PR_ENTRY" >> /tmp/changelog/changed.md
             elif echo "$PR_TITLE" | grep -qE "^(feat|fix|chore|refactor|docs|style|perf|test|build|ci|revert)(\([a-z0-9-]+\))?:"; then
-              # If the PR title follows conventional commit format, categorize accordingly
               if echo "$PR_TITLE" | grep -qE "^feat(\([a-z0-9-]+\))?:"; then
                 echo "$PR_ENTRY" >> /tmp/changelog/added.md
               elif echo "$PR_TITLE" | grep -qE "^fix(\([a-z0-9-]+\))?:"; then
@@ -155,18 +150,15 @@ jobs:
       - name: Get relevant commits
         id: get_commits
         run: |
-          # Determine commit range based on existing tags or create a new range
           if git rev-parse --verify "${{ env.PREV_VERSION }}" >/dev/null 2>&1; then
             if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
               # Both tags exist
               COMMIT_RANGE="${{ env.PREV_VERSION }}..${{ env.NEW_VERSION }}"
             else
-              # Only previous tag exists, create a new branch for comparison
               git branch temp-changelog-branch HEAD
               COMMIT_RANGE="${{ env.PREV_VERSION }}..temp-changelog-branch"
             fi
           else
-            # Previous tag doesn't exist, use first commit
             if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
               COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD)..${{ env.NEW_VERSION }}"
             else
@@ -201,7 +193,6 @@ jobs:
             fi
           done
           
-          # Clean up temporary branch if created
           git branch -D temp-changelog-branch 2>/dev/null || true
 
       - name: Generate changelog entry
@@ -248,16 +239,14 @@ jobs:
           echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           
-          # Check if CHANGELOG.md exists and has content
           if [ -f CHANGELOG.md ] && [ -s CHANGELOG.md ]; then
             # Extract existing content after header (skip first 2 lines)
             tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md
           else
-            # Create empty file if changelog doesn't exist
             touch /tmp/changelog/existing_changelog.md
           fi
           
-          # Create new CHANGELOG.md with updated content
+          # create new CHANGELOG with updated content
           {
             echo "# Changelog"
             echo "All notable changes to this project will be documented in this file."
@@ -287,5 +276,4 @@ jobs:
       - name: Clean up temporary files
         if: always()
         run: |
-          # Clean up temporary files so they don't end up in the PR
           rm -rf /tmp/changelog/ 
