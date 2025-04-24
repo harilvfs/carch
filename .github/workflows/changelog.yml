@@ -12,6 +12,10 @@ on:
         description: 'Target branch for the PR'
         required: false
         default: 'main'
+      create_tag:
+        description: 'Create a new tag for this version'
+        required: false
+        default: 'false'
 
 jobs:
   generate_changelog:
@@ -46,6 +50,12 @@ jobs:
           echo "NEW_VERSION_NUMBER=${{ github.event.inputs.version }}" >> $GITHUB_ENV
           
           echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+          
+          # Create the tag if requested
+          if [ "${{ github.event.inputs.create_tag }}" = "true" ]; then
+            git tag "${{ env.NEW_VERSION }}"
+            echo "Created tag: ${{ env.NEW_VERSION }}"
+          fi
 
       - name: Create temp directory
         run: |
@@ -61,7 +71,24 @@ jobs:
           
           REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
           
-          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:>=$(git log ${{ env.PREV_VERSION }} -1 --format=%cd --date=short 2>/dev/null || git log --reverse --format=%cd --date=short | head -1)"
+          # Get date of previous version for query
+          if git rev-parse --verify "${{ env.PREV_VERSION }}" >/dev/null 2>&1; then
+            PREV_DATE=$(git log "${{ env.PREV_VERSION }}" -1 --format=%cd --date=short 2>/dev/null || git log --reverse --format=%cd --date=short | head -1)
+          else
+            PREV_DATE=$(git log --reverse --format=%cd --date=short | head -1)
+          fi
+          
+          # Get current date or date of new tag if it exists
+          if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
+            CURRENT_DATE=$(git log "${{ env.NEW_VERSION }}" -1 --format=%cd --date=short)
+            echo "Using date from existing tag: $CURRENT_DATE"
+          else
+            CURRENT_DATE=$(date +'%Y-%m-%d')
+            echo "Using current date: $CURRENT_DATE"
+          fi
+          
+          # Get PRs merged between previous version and new version
+          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:${PREV_DATE}..${CURRENT_DATE}"
           echo "Searching PRs with query: $PR_QUERY"
           
           gh api graphql -f query='
@@ -128,8 +155,26 @@ jobs:
       - name: Get relevant commits
         id: get_commits
         run: |
-          # Get commit range safely
-          COMMIT_RANGE="$(git rev-parse --verify ${{ env.PREV_VERSION }} 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD"
+          # Determine commit range based on existing tags or create a new range
+          if git rev-parse --verify "${{ env.PREV_VERSION }}" >/dev/null 2>&1; then
+            if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
+              # Both tags exist
+              COMMIT_RANGE="${{ env.PREV_VERSION }}..${{ env.NEW_VERSION }}"
+            else
+              # Only previous tag exists, create a new branch for comparison
+              git branch temp-changelog-branch HEAD
+              COMMIT_RANGE="${{ env.PREV_VERSION }}..temp-changelog-branch"
+            fi
+          else
+            # Previous tag doesn't exist, use first commit
+            if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
+              COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD)..${{ env.NEW_VERSION }}"
+            else
+              git branch temp-changelog-branch HEAD
+              COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD)..temp-changelog-branch"
+            fi
+          fi
+          
           echo "Using commit range: $COMMIT_RANGE"
           
           git log --no-merges --pretty=format:"%h %s" $COMMIT_RANGE | while read -r commit; do
@@ -155,6 +200,9 @@ jobs:
               echo "$COMMIT_ENTRY" >> /tmp/changelog/removed.md
             fi
           done
+          
+          # Clean up temporary branch if created
+          git branch -D temp-changelog-branch 2>/dev/null || true
 
       - name: Generate changelog entry
         id: generate_changelog
