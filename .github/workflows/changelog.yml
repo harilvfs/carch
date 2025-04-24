@@ -49,11 +49,13 @@ jobs:
           # Get current date in YYYY-MM-DD format
           echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
+      - name: Create temp directory
+        run: mkdir -p tmp
+
       - name: Get merged PRs since last release
         id: get_prs
         run: |
           # Create temporary files to store our categories
-          mkdir -p tmp
           echo "" > tmp/added.md
           echo "" > tmp/changed.md
           echo "" > tmp/fixed.md
@@ -95,7 +97,7 @@ jobs:
             }
           ' -f searchQuery="$PR_QUERY" --jq '.data.search.nodes[] | select(.merged == true)' > tmp/prs.json
           
-          # Process PRs and categorize by label
+          # Process PRs and categorize by label - only include PRs with conventional commit labels
           jq -c '.' tmp/prs.json | while read -r pr; do
             PR_NUMBER=$(echo "$pr" | jq -r .number)
             PR_TITLE=$(echo "$pr" | jq -r .title)
@@ -106,18 +108,26 @@ jobs:
             # Format PR entry
             PR_ENTRY="* $PR_TITLE by @$PR_AUTHOR in $PR_URL"
             
-            # Add PR to appropriate category file based on label
-            if echo "$PR_LABELS" | grep -q "feature\|enhancement\|added"; then
+            # Only add PRs with conventional commit-style labels
+            if echo "$PR_LABELS" | grep -q "feature\|feat\|enhancement\|added"; then
               echo "$PR_ENTRY" >> tmp/added.md
             elif echo "$PR_LABELS" | grep -q "bug\|fix"; then
               echo "$PR_ENTRY" >> tmp/fixed.md
             elif echo "$PR_LABELS" | grep -q "removed\|deprecation"; then
               echo "$PR_ENTRY" >> tmp/removed.md
-            elif echo "$PR_LABELS" | grep -q "changed\|refactor"; then
+            elif echo "$PR_LABELS" | grep -q "changed\|refactor\|chore"; then
               echo "$PR_ENTRY" >> tmp/changed.md
-            else
-              # Default to "Changed" if no matching label
-              echo "$PR_ENTRY" >> tmp/changed.md
+            elif echo "$PR_TITLE" | grep -qE "^(feat|fix|chore|refactor|docs|style|perf|test|build|ci|revert)(\([a-z0-9-]+\))?:"; then
+              # If the PR title follows conventional commit format, categorize accordingly
+              if echo "$PR_TITLE" | grep -qE "^feat(\([a-z0-9-]+\))?:"; then
+                echo "$PR_ENTRY" >> tmp/added.md
+              elif echo "$PR_TITLE" | grep -qE "^fix(\([a-z0-9-]+\))?:"; then
+                echo "$PR_ENTRY" >> tmp/fixed.md
+              elif echo "$PR_TITLE" | grep -qE "^(chore|refactor|style|test|ci|build)(\([a-z0-9-]+\))?:"; then
+                echo "$PR_ENTRY" >> tmp/changed.md
+              elif echo "$PR_TITLE" | grep -qE "^(remove|deprecated)(\([a-z0-9-]+\))?:"; then
+                echo "$PR_ENTRY" >> tmp/removed.md
+              fi
             fi
           done
         env:
@@ -143,18 +153,15 @@ jobs:
             # Format commit entry
             COMMIT_ENTRY="* ${COMMIT_MSG} [\`${COMMIT_HASH}\`](https://github.com/${{ github.repository }}/commit/${COMMIT_HASH})"
             
-            # Add commit to appropriate category file based on conventional commit prefix
-            if [[ $COMMIT_MSG == feat:* || $COMMIT_MSG == feat\(*\):* ]]; then
+            # Only include commits with conventional commit prefixes
+            if [[ $COMMIT_MSG =~ ^feat(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> tmp/added.md
-            elif [[ $COMMIT_MSG == fix:* || $COMMIT_MSG == fix\(*\):* ]]; then
+            elif [[ $COMMIT_MSG =~ ^fix(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> tmp/fixed.md
-            elif [[ $COMMIT_MSG == chore:* || $COMMIT_MSG == refactor:* || $COMMIT_MSG == chore\(*\):* || $COMMIT_MSG == refactor\(*\):* ]]; then
+            elif [[ $COMMIT_MSG =~ ^(chore|refactor|style|test|ci|build)(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> tmp/changed.md
-            elif [[ $COMMIT_MSG == remove:* || $COMMIT_MSG == remove\(*\):* ]]; then
+            elif [[ $COMMIT_MSG =~ ^(remove|deprecated)(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> tmp/removed.md
-            else
-              # Default to Changed for other patterns
-              echo "$COMMIT_ENTRY" >> tmp/changed.md
             fi
           done
 
@@ -211,7 +218,7 @@ jobs:
           
           # Replace the existing CHANGELOG.md with our new version
           mv tmp/CHANGELOG.md CHANGELOG.md
-      
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
         with:
@@ -228,4 +235,10 @@ jobs:
             $(cat tmp/new_changelog_entry.md)
             ```
           base: ${{ github.event.inputs.target_branch }}
-          delete-branch: true 
+          delete-branch: true
+
+      - name: Clean up temporary files
+        if: always()
+        run: |
+          # Clean up temporary files so they don't end up in the PR
+          rm -rf tmp/ 
