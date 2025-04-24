@@ -4,6 +4,7 @@
 # Define custom word mappings to ignore specific cases
 [default.extend-words]
 ratatui = "ratatui"
+ba = "ba"
 
 # File-specific exclusions (uncomment if needed)
 # [files]
