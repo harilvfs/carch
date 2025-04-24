@@ -1,0 +1,231 @@
+name: Generate Changelog
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version number (e.g., 4.3.7)'
+        required: true
+      prev_version_tag:
+        description: 'Previous version tag (default: latest release)'
+        required: false
+      target_branch:
+        description: 'Target branch for the PR'
+        required: false
+        default: 'main'
+
+jobs:
+  generate_changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Determine previous version
+        id: get_prev_version
+        run: |
+          if [ -z "${{ github.event.inputs.prev_version_tag }}" ]; then
+            PREV_VERSION=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r .tag_name)
+            echo "Previous version (latest release): $PREV_VERSION"
+            echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_ENV
+          else
+            echo "Previous version (user specified): ${{ github.event.inputs.prev_version_tag }}"
+            echo "PREV_VERSION=${{ github.event.inputs.prev_version_tag }}" >> $GITHUB_ENV
+          fi
+          
+          # Set new version
+          echo "NEW_VERSION=v${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          echo "NEW_VERSION_NUMBER=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          
+          # Get current date in YYYY-MM-DD format
+          echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Get merged PRs since last release
+        id: get_prs
+        run: |
+          # Create temporary files to store our categories
+          mkdir -p tmp
+          echo "" > tmp/added.md
+          echo "" > tmp/changed.md
+          echo "" > tmp/fixed.md
+          echo "" > tmp/removed.md
+          
+          # URL encode the repository name for the API call
+          REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
+          
+          # Get PRs merged since last release
+          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:>=$(git log ${{ env.PREV_VERSION }} -1 --format=%cd --date=short)"
+          echo "Searching PRs with query: $PR_QUERY"
+          
+          # Use GitHub CLI to get merged PRs with their labels since last release
+          gh api graphql -f query='
+            query($searchQuery: String!, $cursor: String) {
+              search(query: $searchQuery, type: ISSUE, first: 100, after: $cursor) {
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+                nodes {
+                  ... on PullRequest {
+                    number
+                    title
+                    url
+                    author {
+                      login
+                    }
+                    labels(first: 10) {
+                      nodes {
+                        name
+                      }
+                    }
+                    merged
+                    mergedAt
+                  }
+                }
+              }
+            }
+          ' -f searchQuery="$PR_QUERY" --jq '.data.search.nodes[] | select(.merged == true)' > tmp/prs.json
+          
+          # Process PRs and categorize by label
+          jq -c '.' tmp/prs.json | while read -r pr; do
+            PR_NUMBER=$(echo "$pr" | jq -r .number)
+            PR_TITLE=$(echo "$pr" | jq -r .title)
+            PR_URL=$(echo "$pr" | jq -r .url)
+            PR_AUTHOR=$(echo "$pr" | jq -r .author.login)
+            PR_LABELS=$(echo "$pr" | jq -r '.labels.nodes[].name' 2>/dev/null || echo "")
+            
+            # Format PR entry
+            PR_ENTRY="* $PR_TITLE by @$PR_AUTHOR in $PR_URL"
+            
+            # Add PR to appropriate category file based on label
+            if echo "$PR_LABELS" | grep -q "feature\|enhancement\|added"; then
+              echo "$PR_ENTRY" >> tmp/added.md
+            elif echo "$PR_LABELS" | grep -q "bug\|fix"; then
+              echo "$PR_ENTRY" >> tmp/fixed.md
+            elif echo "$PR_LABELS" | grep -q "removed\|deprecation"; then
+              echo "$PR_ENTRY" >> tmp/removed.md
+            elif echo "$PR_LABELS" | grep -q "changed\|refactor"; then
+              echo "$PR_ENTRY" >> tmp/changed.md
+            else
+              # Default to "Changed" if no matching label
+              echo "$PR_ENTRY" >> tmp/changed.md
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get relevant commits
+        id: get_commits
+        run: |
+          # Get commits between tags that aren't tied to PRs
+          # --no-merges excludes merge commits
+          git log --no-merges --pretty=format:"%h %s" ${{ env.PREV_VERSION }}..HEAD | while read -r commit; do
+            COMMIT_HASH=$(echo "$commit" | cut -d' ' -f1)
+            COMMIT_MSG=$(echo "$commit" | cut -d' ' -f2-)
+            
+            # Skip if this commit is part of a PR
+            PR_NUM=$(git log -1 --format=%B $COMMIT_HASH | grep -o "#[0-9]\+" | head -1 | tr -d '#' || echo "")
+            if [ -n "$PR_NUM" ]; then
+              if grep -q "$PR_NUM" tmp/prs.json; then
+                continue
+              fi
+            fi
+            
+            # Format commit entry
+            COMMIT_ENTRY="* ${COMMIT_MSG} [\`${COMMIT_HASH}\`](https://github.com/${{ github.repository }}/commit/${COMMIT_HASH})"
+            
+            # Add commit to appropriate category file based on conventional commit prefix
+            if [[ $COMMIT_MSG == feat:* || $COMMIT_MSG == feat\(*\):* ]]; then
+              echo "$COMMIT_ENTRY" >> tmp/added.md
+            elif [[ $COMMIT_MSG == fix:* || $COMMIT_MSG == fix\(*\):* ]]; then
+              echo "$COMMIT_ENTRY" >> tmp/fixed.md
+            elif [[ $COMMIT_MSG == chore:* || $COMMIT_MSG == refactor:* || $COMMIT_MSG == chore\(*\):* || $COMMIT_MSG == refactor\(*\):* ]]; then
+              echo "$COMMIT_ENTRY" >> tmp/changed.md
+            elif [[ $COMMIT_MSG == remove:* || $COMMIT_MSG == remove\(*\):* ]]; then
+              echo "$COMMIT_ENTRY" >> tmp/removed.md
+            else
+              # Default to Changed for other patterns
+              echo "$COMMIT_ENTRY" >> tmp/changed.md
+            fi
+          done
+
+      - name: Generate changelog entry
+        id: generate_changelog
+        run: |
+          # Create a temporary changelog entry
+          {
+            echo "## [${{ env.NEW_VERSION }}](https://github.com/${{ github.repository }}/compare/${{ env.PREV_VERSION }}...${{ env.NEW_VERSION }}) (${{ env.RELEASE_DATE }})"
+            echo ""
+            
+            if [ -s tmp/changed.md ]; then
+              echo "### Changed"
+              echo ""
+              cat tmp/changed.md
+              echo ""
+            fi
+            
+            if [ -s tmp/added.md ]; then
+              echo "### Added"
+              echo ""
+              cat tmp/added.md
+              echo ""
+            fi
+            
+            if [ -s tmp/fixed.md ]; then
+              echo "### Fixed"
+              echo ""
+              cat tmp/fixed.md
+              echo ""
+            fi
+            
+            if [ -s tmp/removed.md ]; then
+              echo "### Removed"
+              echo ""
+              cat tmp/removed.md
+              echo ""
+            fi
+            
+            echo "For a detailed changelog, visit the [release section](https://github.com/${{ github.repository }}/releases/tag/${{ env.NEW_VERSION }})."
+            echo ""
+          } > tmp/new_changelog_entry.md
+          
+          # Read existing content of CHANGELOG.md after the first line
+          tail -n +3 CHANGELOG.md > tmp/existing_changelog.md
+          
+          # Create new CHANGELOG.md with updated content
+          {
+            echo "# Changelog"
+            echo ""
+            cat tmp/new_changelog_entry.md
+            cat tmp/existing_changelog.md
+          } > tmp/CHANGELOG.md
+          
+          # Replace the existing CHANGELOG.md with our new version
+          mv tmp/CHANGELOG.md CHANGELOG.md
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7.0.8
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: "docs: update changelog for ${{ env.NEW_VERSION }}"
+          branch: changelog/${{ env.NEW_VERSION_NUMBER }}
+          title: "Changelog v${{ env.NEW_VERSION_NUMBER }}"
+          body: |
+            This PR updates the CHANGELOG.md with the latest changes for version ${{ env.NEW_VERSION }}.
+            
+            ## Summary of changes:
+            
+            ```markdown
+            $(cat tmp/new_changelog_entry.md)
+            ```
+          base: ${{ github.event.inputs.target_branch }}
+          delete-branch: true 
