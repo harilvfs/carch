@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
 
 * chore: add gtk dependencies [`5c25cd9`](https://github.com/harilvfs/carch/commit/5c25cd9)
 * chore: add man pages dependencies [`9f1200f`](https://github.com/harilvfs/carch/commit/9f1200f)
-* chore: lefted dependencies [`adc6fe8`](https://github.com/harilvfs/carch/commit/adc6fe8)
-* chore: add some missing dependenceis [`f1d2a59`](https://github.com/harilvfs/carch/commit/f1d2a59)
+* chore: left dependencies [`adc6fe8`](https://github.com/harilvfs/carch/commit/adc6fe8)
+* chore: add some missing dependencies [`f1d2a59`](https://github.com/harilvfs/carch/commit/f1d2a59)
 * chore: wayland dependencies [`72f36af`](https://github.com/harilvfs/carch/commit/72f36af)
 * refactor: cleanup & fix fall back npm [`632547b`](https://github.com/harilvfs/carch/commit/632547b)
 * chore: add papirus icon theme [`40affb7`](https://github.com/harilvfs/carch/commit/40affb7)
@@ -32,11 +32,11 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 
-* fix: tui in runnin tty env [`f1ff9ed`](https://github.com/harilvfs/carch/commit/f1ff9ed)
+* fix: running [`f1ff9ed`](https://github.com/harilvfs/carch/commit/f1ff9ed)
 * fix: minor fixes to script side [`d37131f`](https://github.com/harilvfs/carch/commit/d37131f)
 * fix: typos [`13ef0a1`](https://github.com/harilvfs/carch/commit/13ef0a1)
 * fix: chaotic aur failing [`30ff7da`](https://github.com/harilvfs/carch/commit/30ff7da)
-* fix: xinitrc calling & promt [`ce46c37`](https://github.com/harilvfs/carch/commit/ce46c37)
+* fix: xinitrc calling & prompt [`ce46c37`](https://github.com/harilvfs/carch/commit/ce46c37)
 * fix: color code in fish script [`b14af17`](https://github.com/harilvfs/carch/commit/b14af17)
 
 ### Removed
