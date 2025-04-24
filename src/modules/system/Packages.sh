@@ -122,49 +122,53 @@ install_android() {
         clear
         figlet -f slant "Android"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Android tool to install:"
+        echo "Select Android tools to install:"
 
-        options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
-            "Gvfs-MTP [Displays Android phones via USB]")
-                clear
-                figlet -f small "Installing Gvfs-MTP"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur gvfs-mtp
-                    version=$(get_version gvfs-mtp)
-                else
-                    $pkg_manager gvfs-mtp
-                    version=$(get_version gvfs-mtp)
-                fi
-                echo "Gvfs-MTP installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
 
-            "ADB")
-                clear
-                figlet -f small "Installing ADB"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur android-tools
-                    version=$(get_version android-tools)
-                else
-                    $pkg_manager android-tools
-                    version=$(get_version android-tools)
-                fi
-                echo "ADB installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+        for selection in "${selected[@]}"; do
+            case $selection in
+                "Gvfs-MTP [Displays Android phones via USB]")
+                    clear
+                    figlet -f small "Installing Gvfs-MTP"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur gvfs-mtp
+                        version=$(get_version gvfs-mtp)
+                    else
+                        $pkg_manager gvfs-mtp
+                        version=$(get_version gvfs-mtp)
+                    fi
+                    echo "Gvfs-MTP installed successfully! Version: $version"
+                    ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+                "ADB")
+                    clear
+                    figlet -f small "Installing ADB"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur android-tools
+                        version=$(get_version android-tools)
+                    else
+                        $pkg_manager android-tools
+                        version=$(get_version android-tools)
+                    fi
+                    echo "ADB installed successfully! Version: $version"
+                    ;;
+            esac
+        done
+        
+        echo "All selected Android tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -191,184 +195,179 @@ install_browsers() {
         clear
         figlet -f slant "Browser"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Browser tool to install:"
+        echo "Select browsers to install:"
 
-        options=("Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=60% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=60% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-         case $selected in
-            "Brave")
-                clear
-                figlet -f small "Installing Brave"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur brave-bin
-                    version=$(get_version brave-bin)
-                else
-                    echo "Setting up Brave repository..."
-                    sudo dnf install -y dnf-plugins-core
-                    sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-                    sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-                    $pkg_manager brave-browser
-                    version=$(get_version brave-browser)
-                fi
-                echo "Brave installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
 
-            "Firefox")
-                clear
-                figlet -f small "Installing Firefox"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman firefox
-                    version=$(get_version firefox)
-                else
-                    $pkg_manager firefox
-                    version=$(get_version firefox)
-                fi
-                echo "Firefox installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+        for selection in "${selected[@]}"; do
+            case $selection in
+                "Brave")
+                    clear
+                    figlet -f small "Installing Brave"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur brave-bin
+                        version=$(get_version brave-bin)
+                    else
+                        echo "Setting up Brave repository..."
+                        sudo dnf install -y dnf-plugins-core
+                        sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+                        sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+                        $pkg_manager brave-browser
+                        version=$(get_version brave-browser)
+                    fi
+                    echo "Brave installed successfully! Version: $version"
+                    ;;
 
-            "Libre Wolf")
-                clear
-                figlet -f small "Installing Libre Wolf"             
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur librewolf-bin
-                    version=$(get_version librewolf-bin)
-                else
-                    $flatpak_cmd io.gitlab.librewolf-community
-                    version="(Flatpak version installed)"
-                fi
-                echo "Libre Wolf installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Firefox")
+                    clear
+                    figlet -f small "Installing Firefox"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman firefox
+                        version=$(get_version firefox)
+                    else
+                        $pkg_manager firefox
+                        version=$(get_version firefox)
+                    fi
+                    echo "Firefox installed successfully! Version: $version"
+                    ;;
 
-            "Google Chrome")
-                clear
-                figlet -f small "Installing Chrome"  
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur google-chrome
-                    version=$(get_version google-chrome)
-                else
-                    echo "Setting up Google Chrome repository..."
-                    sudo dnf install -y dnf-plugins-core
-                    sudo dnf config-manager --set-enabled google-chrome
-                    $pkg_manager google-chrome-stable
-                    version=$(get_version google-chrome-stable)
-                fi
-                echo "Google Chrome installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Libre Wolf")
+                    clear
+                    figlet -f small "Installing Libre Wolf"             
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur librewolf-bin
+                        version=$(get_version librewolf-bin)
+                    else
+                        $flatpak_cmd io.gitlab.librewolf-community
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Libre Wolf installed successfully! Version: $version"
+                    ;;
 
-            "Chromium")
-                clear
-                figlet -f small "Installing Chromium"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman chromium
-                    version=$(get_version chromium)
-                else
-                    $flatpak_cmd org.chromium.Chromium
-                    version="(Flatpak version installed)"
-                fi
-                echo "Chromium installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Google Chrome")
+                    clear
+                    figlet -f small "Installing Chrome"  
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur google-chrome
+                        version=$(get_version google-chrome)
+                    else
+                        echo "Setting up Google Chrome repository..."
+                        sudo dnf install -y dnf-plugins-core
+                        sudo dnf config-manager --set-enabled google-chrome
+                        $pkg_manager google-chrome-stable
+                        version=$(get_version google-chrome-stable)
+                    fi
+                    echo "Google Chrome installed successfully! Version: $version"
+                    ;;
 
-            "Vivaldi")
-                clear
-                figlet -f small "Installing Vivaldi"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman vivaldi
-                    version=$(get_version vivaldi)
-                else
-                    $flatpak_cmd com.vivaldi.Vivaldi
-                    version="(Flatpak version installed)"
-                fi
-                echo "Vivaldi installed successfully! Version: $version"
-                read -rp "Press enter to continue..."
-                ;;
+                "Chromium")
+                    clear
+                    figlet -f small "Installing Chromium"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman chromium
+                        version=$(get_version chromium)
+                    else
+                        $flatpak_cmd org.chromium.Chromium
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Chromium installed successfully! Version: $version"
+                    ;;
 
-            "Qute Browser")
-                clear
-                figlet -f small "Installing Qute"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman qutebrowser
-                    version=$(get_version qutebrowser)
-                else
-                    $flatpak_cmd org.qutebrowser.qutebrowser
-                    version="(Flatpak version installed)"
-                fi
-                echo "Qute Browser installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Vivaldi")
+                    clear
+                    figlet -f small "Installing Vivaldi"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman vivaldi
+                        version=$(get_version vivaldi)
+                    else
+                        $flatpak_cmd com.vivaldi.Vivaldi
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Vivaldi installed successfully! Version: $version"
+                    ;;
 
-            "Zen Browser")
-                clear
-                figlet -f small "Installing Zen"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur zen-browser-bin
-                    version=$(get_version zen-browser-bin)
-                else
-                    $flatpak_cmd app.zen_browser.zen
-                    version="(Flatpak version installed)"
-                fi
-                echo "Zen Browser installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Qute Browser")
+                    clear
+                    figlet -f small "Installing Qute"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman qutebrowser
+                        version=$(get_version qutebrowser)
+                    else
+                        $flatpak_cmd org.qutebrowser.qutebrowser
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Qute Browser installed successfully! Version: $version"
+                    ;;
 
-            "Thorium Browser")
-                clear
-                figlet -f small "Installing Thorium"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur thorium-browser-bin
-                    version=$(get_version thorium-browser-bin)
-                    echo "Thorium Browser installed successfully! Version: $version"
-                else
-                    echo "Thorium Browser is not available on Fedora repositories or Flatpak. Visit [Thorium Website](https://thorium.rocks/) for installation instructions."
-                fi
-                read -rp "Press Enter to continue..."
-                ;;
+                "Zen Browser")
+                    clear
+                    figlet -f small "Installing Zen"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur zen-browser-bin
+                        version=$(get_version zen-browser-bin)
+                    else
+                        $flatpak_cmd app.zen_browser.zen
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Zen Browser installed successfully! Version: $version"
+                    ;;
 
-            "Opera")
-                clear
-                figlet -f small "Installing Opera"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur opera
-                    version=$(get_version opera)
-                else
-                    echo "Setting up Opera repository..."
-                    sudo rpm --import https://rpm.opera.com/rpmrepo.key
-                    echo -e "[opera]\nname=Opera packages\ntype=rpm-md\nbaseurl=https://rpm.opera.com/rpm\ngpgcheck=1\ngpgkey=https://rpm.opera.com/rpmrepo.key\nenabled=1" | sudo tee /etc/yum.repos.d/opera.repo
-                    $pkg_manager opera-stable
-                    version=$(get_version opera-stable)
-                fi
-                echo "Opera installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Thorium Browser")
+                    clear
+                    figlet -f small "Installing Thorium"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur thorium-browser-bin
+                        version=$(get_version thorium-browser-bin)
+                        echo "Thorium Browser installed successfully! Version: $version"
+                    else
+                        echo "Thorium Browser is not available on Fedora repositories or Flatpak. Visit [Thorium Website](https://thorium.rocks/) for installation instructions."
+                    fi
+                    ;;
 
-            "Tor Browser")
-                clear
-                figlet -f small "Installing Opera"
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur tor-browser-bin
-                    version=$(get_version tor-browser-bin)
-                else
-                    $flatpak_cmd org.torproject.torbrowser-launcher
-                    version="(Flatpak version installed)"
-                fi
-                echo "Tor Browser installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
-                ;;
+                "Opera")
+                    clear
+                    figlet -f small "Installing Opera"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur opera
+                        version=$(get_version opera)
+                    else
+                        echo "Setting up Opera repository..."
+                        sudo rpm --import https://rpm.opera.com/rpmrepo.key
+                        echo -e "[opera]\nname=Opera packages\ntype=rpm-md\nbaseurl=https://rpm.opera.com/rpm\ngpgcheck=1\ngpgkey=https://rpm.opera.com/rpmrepo.key\nenabled=1" | sudo tee /etc/yum.repos.d/opera.repo
+                        $pkg_manager opera-stable
+                        version=$(get_version opera-stable)
+                    fi
+                    echo "Opera installed successfully! Version: $version"
+                    ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+                "Tor Browser")
+                    clear
+                    figlet -f small "Installing Tor Browser"
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur tor-browser-bin
+                        version=$(get_version tor-browser-bin)
+                    else
+                        $flatpak_cmd org.torproject.torbrowser-launcher
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Tor Browser installed successfully! Version: $version"
+                    ;;
+            esac
+        done
+        
+        echo "All selected browsers have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -391,17 +390,23 @@ install_communication() {
         clear
         figlet -f slant "Communication"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Communication App to install:"
+        echo "Select Communication Apps to install:"
 
-        options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Discord")
                 clear
                 figlet -f small "Installing Discord" 
@@ -413,7 +418,6 @@ install_communication() {
                     $pkg_manager "discord" "com.discordapp.Discord"
                     echo "Discord installed successfully!"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Better Discord")
@@ -425,7 +429,6 @@ install_communication() {
                 else
                     echo -e "${YELLOW}:: Better Discord is not available for Fedora.${RESET}"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Signal")
@@ -439,7 +442,6 @@ install_communication() {
                     $pkg_manager "signal-desktop" "org.signal.Signal"
                     echo "Signal installed successfully!"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Element (Matrix)")
@@ -453,7 +455,6 @@ install_communication() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Element installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Slack")
@@ -467,7 +468,6 @@ install_communication() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Slack installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Teams")
@@ -480,7 +480,6 @@ install_communication() {
                 else
                     echo "Microsoft Teams is not available in Fedora's repositories. Use the web version instead:** [**Teams Web**](https://teams.microsoft.com)"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Zoom")
@@ -494,7 +493,6 @@ install_communication() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Zoom installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Telegram")
@@ -508,7 +506,6 @@ install_communication() {
                     $pkg_manager "telegram-desktop" "org.telegram.desktop"
                     echo "Telegram installed successfully!"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Keybase")
@@ -522,14 +519,14 @@ install_communication() {
                     sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
                     echo "Keybase installed successfully!"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
-    done
+            esac
+        done
+        
+        echo "All selected Communication Apps have been installed."
+        read -rp "Press Enter to continue..."
+      done
 }
 
 install_development() {
@@ -555,17 +552,23 @@ install_development() {
         clear
         figlet -f slant "Development"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a development tool to install:"
+        echo "Select development tool to install:"
         
-        options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
         
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Node.js")
                 clear
                 figlet -f small "Installing Node.js"
@@ -577,7 +580,6 @@ install_development() {
                     version=$(get_version nodejs)
                 fi
                 echo "Node.js installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Python")
@@ -591,7 +593,6 @@ install_development() {
                     version=$(get_version python3)
                 fi
                 echo "Python installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Rust")
@@ -601,7 +602,6 @@ install_development() {
                 source "$HOME/.cargo/env"
                 version=$(rustc --version | awk '{print $2}')
                 echo "Rust installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Go")
@@ -615,7 +615,6 @@ install_development() {
                     version=$(get_version golang)
                 fi
                 echo "Go installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Docker")
@@ -634,7 +633,6 @@ install_development() {
                 fi
                 echo "Docker installed successfully! Version: $version"
                 echo "Note: You may need to log out and back in for group changes to take effect."
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Postman")
@@ -648,7 +646,6 @@ install_development() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Postman installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "DBeaver")
@@ -662,7 +659,6 @@ install_development() {
                     version="(Flatpak version installed)"
                 fi
                 echo "DBeaver installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Hugo")
@@ -676,13 +672,13 @@ install_development() {
                     version=$(get_version hugo)
                 fi
                 echo "Hugo installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit"|"")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Development tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -703,17 +699,24 @@ install_editing() {
         clear
         figlet -f slant "Editing"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Editing tool to install:"
+        echo "Select Editing tool to install:"
 
-        options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "GIMP (Image)")
                 clear
                 figlet -f small "Installing Gimp"
@@ -725,7 +728,6 @@ install_editing() {
                     version=$(rpm -q gimp)
                 fi
                 echo "GIMP installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Kdenlive (Videos)")
@@ -740,7 +742,6 @@ install_editing() {
                     version=$(rpm -q kdenlive)
                     echo "Kdenlive installed successfully! Version: $version"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Krita")
@@ -754,12 +755,11 @@ install_editing() {
                     version=$(get_version krita)
                 fi
                 echo "Krita installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Blender")
                 clear
-                figlet -f small "Installing Krita"
+                figlet -f small "Installing Blender"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur blender
                     version=$(get_version blender)
@@ -768,7 +768,6 @@ install_editing() {
                     version=$(get_version blender)
                 fi
                 echo "Blender installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Inkscape")
@@ -782,7 +781,6 @@ install_editing() {
                     version=$(get_version inkscape)
                 fi
                 echo "Inkscape installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Audacity")
@@ -796,7 +794,6 @@ install_editing() {
                     version=$(get_version audacity)
                 fi
                 echo "Audacity installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "DaVinci Resolve")
@@ -811,13 +808,13 @@ install_editing() {
                     version="(Manual installation required)"
                 fi
                 echo "DaVinci Resolve installation completed! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Editing tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -840,17 +837,23 @@ install_filemanagers() {
         clear
         figlet -f slant "Filemanagers"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Filemanagers Apps to install:"
+        echo "Select Filemanagers Apps to install:"
 
-        options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Nemo")
                 clear
                 figlet -f small "Installing Nemo"
@@ -861,7 +864,6 @@ install_filemanagers() {
                 fi
                 version=$(get_version nemo)
                 echo "Nemo installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Thunar")
@@ -874,12 +876,11 @@ install_filemanagers() {
                 fi
                 version=$(get_version thunar)
                 echo "Thunar installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Dolphin")
                 clear
-                figlet -f small "Installing Thunar" 
+                figlet -f small "Installing Dolphin" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager dolphin
                 else
@@ -887,7 +888,6 @@ install_filemanagers() {
                 fi
                 version=$(get_version dolphin)
                 echo "Dolphin installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "LF (Terminal File Manager)")
@@ -901,7 +901,6 @@ install_filemanagers() {
                 fi
                 version=$(get_version lf)
                 echo "LF installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Ranger")
@@ -914,7 +913,6 @@ install_filemanagers() {
                 fi
                 version=$(get_version ranger)
                 echo "Ranger installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Nautilus")
@@ -927,7 +925,6 @@ install_filemanagers() {
                 fi
                 version=$(get_version nautilus)
                 echo "Nautilus installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Yazi")
@@ -941,13 +938,13 @@ install_filemanagers() {
                 fi
                 version=$(get_version yazi)
                 echo "Yazi installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Filemanagers have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -974,17 +971,23 @@ install_gaming() {
         clear
         figlet -f slant "Gaming"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Gaming Platform to install:"
+        echo "Select Gaming Platform to install:"
 
-        options=("Steam" "Lutris" "Heroic Games Launcher" "ProtonUp-Qt" "MangoHud" "GameMode" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Steam" "Lutris" "Heroic Games Launcher" "ProtonUp-Qt" "MangoHud" "GameMode" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Steam")
                 clear
                 figlet -f small "Installing Steam"
@@ -996,7 +999,6 @@ install_gaming() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Steam installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Lutris")
@@ -1010,12 +1012,11 @@ install_gaming() {
                     version=$(get_version lutris)
                 fi
                 echo "Lutris installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Heroic Games Launcher")
                 clear
-                figlet -f small "Installing Launcher"
+                figlet -f small "Installing Heroic Games Launcher"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur heroic-games-launcher-bin
                     version=$(get_version heroic-games-launcher-bin)
@@ -1024,7 +1025,6 @@ install_gaming() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Heroic Games Launcher installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "ProtonUp-Qt")
@@ -1038,7 +1038,6 @@ install_gaming() {
                     version="(Flatpak version installed)"
                 fi
                 echo "ProtonUp-Qt installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "MangoHud")
@@ -1052,7 +1051,6 @@ install_gaming() {
                     version=$(get_version mangohud)
                 fi
                 echo "MangoHud installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "GameMode")
@@ -1066,13 +1064,13 @@ install_gaming() {
                     version=$(get_version gamemode)
                 fi
                 echo "GameMode installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Gaming Platform have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1098,17 +1096,23 @@ install_github() {
         clear
         figlet -f slant "Git Tools"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Git tool to install:"
+        echo "Select Git tool to install:"
         
-        options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Git")
                 clear
                 figlet -f small "Installing Git"
@@ -1120,7 +1124,6 @@ install_github() {
                     version=$(get_version git)
                 fi
                 echo "Git installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "GitHub Desktop")
@@ -1145,7 +1148,6 @@ install_github() {
                     fi
                 fi
                 echo "GitHub Desktop installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "GitHub CLI")
@@ -1159,7 +1161,6 @@ install_github() {
                     version=$(get_version gh)
                 fi
                 echo "GitHub CLI installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "LazyGit")
@@ -1181,13 +1182,13 @@ install_github() {
                         echo "LazyGit installation aborted."
                     fi
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Git tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1211,17 +1212,23 @@ install_multimedia() {
         clear
         figlet -f slant "Multimedia"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Multimedia Packages to install:"
+        echo "Select Multimedia Packages to install:"
 
-        options=("VLC" "Netflix [Unofficial]" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("VLC" "Netflix [Unofficial]" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "VLC")
                 clear
                 figlet -f small "Installing VLC"
@@ -1233,7 +1240,6 @@ install_multimedia() {
                     version=$(get_version vlc)
                 fi
                 echo "VLC installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Netflix [Unofficial]")
@@ -1255,13 +1261,13 @@ install_multimedia() {
                     version="(Manual installation required)"
                 fi
                 echo "Netflix [Unofficial] installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Multimedia tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1286,17 +1292,23 @@ install_music() {
         clear
         figlet -f slant "Music"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Music Packages to install:"
+        echo "Select Music Packages to install:"
 
-        options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Youtube-Music")
                 clear
                 figlet -f small "Installing Yt-Music"
@@ -1308,7 +1320,6 @@ install_music() {
                     version="Flatpak Version"
                 fi
                 echo "Youtube-Music installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Spotube")
@@ -1322,7 +1333,6 @@ install_music() {
                     version="Flatpak Version"
                 fi
                 echo "Spotube installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Spotify")
@@ -1336,7 +1346,6 @@ install_music() {
                     version="Flatpak Version"
                 fi
                 echo "Spotify installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Rhythmbox")
@@ -1349,13 +1358,13 @@ install_music() {
                 fi
                 version=$(get_version rhythmbox)
                 echo "Rhythmbox installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Music Apps have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1382,17 +1391,23 @@ install_productivity() {
         clear
         figlet -f slant "Productivity"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Productivity Packages to install:"
+        echo "Select Productivity Packages to install:"
         
-        options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "LibreOffice")
                 clear
                 figlet -f small "Installing LibreOffice"
@@ -1404,7 +1419,6 @@ install_productivity() {
                     version=$(get_version libreoffice)
                 fi
                 echo "LibreOffice installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "OnlyOffice")
@@ -1418,7 +1432,6 @@ install_productivity() {
                     version="(Flatpak version installed)"
                 fi
                 echo "OnlyOffice installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Obsidian")
@@ -1432,7 +1445,6 @@ install_productivity() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Obsidian installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Joplin")
@@ -1446,7 +1458,6 @@ install_productivity() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Joplin installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Calibre")
@@ -1460,13 +1471,13 @@ install_productivity() {
                     version=$(get_version calibre)
                 fi
                 echo "Calibre installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Productivity Apps have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1491,17 +1502,23 @@ install_streaming() {
         clear
         figlet -f slant "Streaming"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Streaming tool to install:"
+        echo "Select Streaming tool to install:"
 
-        options=("OBS Studio" "SimpleScreenRecorder [Git]" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("OBS Studio" "SimpleScreenRecorder [Git]" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "OBS Studio")
                 clear
                 figlet -f small "Installing obs-studio"
@@ -1513,7 +1530,6 @@ install_streaming() {
                     version=$(get_version obs-studio)
                 fi
                 echo "OBS Studio installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "SimpleScreenRecorder [Git]")
@@ -1532,13 +1548,13 @@ install_streaming() {
                 else
                     echo -e "${YELLOW}:: SimpleScreenRecorder [Git] is not available on Fedora.${RESET}"
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Streaming tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1564,19 +1580,25 @@ install_terminals() {
     while true; do
         clear
         figlet -f slant "Terminal"
-        echo "Select a Terminal to install:"
+        echo "Select Terminal to install:"
         echo -e "${BLUE}If you're unsure what to choose, Kitty or Alacritty are great options.${RESET}"
         echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
 
-        options=("Alacritty" "Kitty" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Alacritty" "Kitty" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Alacritty")
                 clear
                 figlet -f small "Installing Alacritty"
@@ -1587,7 +1609,6 @@ install_terminals() {
                 fi
                     version=$(get_version alacritty)
                 echo "Alacritty installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Kitty")
@@ -1600,7 +1621,6 @@ install_terminals() {
                 fi
                     version=$(get_version kitty)
                 echo "Kitty installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Terminator")
@@ -1614,7 +1634,6 @@ install_terminals() {
                     version=$(get_version terminator)
                 fi
                 echo "Terminator installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Tilix")
@@ -1628,7 +1647,6 @@ install_terminals() {
                     version=$(get_version tilix)
                 fi
                 echo "Tilix installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Hyper")
@@ -1643,7 +1661,6 @@ install_terminals() {
                     version="(Manual installation required)"
                 fi
                 echo "Hyper installation completed! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "GNOME Terminal")
@@ -1656,7 +1673,6 @@ install_terminals() {
                 fi
                     version=$(get_version gnome-terminal)
                 echo "GNOME Terminal installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Konsole")
@@ -1669,7 +1685,6 @@ install_terminals() {
                 fi
                     version=$(get_version konsole)
                 echo "Konsole installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "WezTerm")
@@ -1694,7 +1709,6 @@ install_terminals() {
                         echo "WezTerm installed successfully! Version: $version"
                     fi
                 fi
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Ghostty")
@@ -1708,13 +1722,13 @@ install_terminals() {
                 fi
                 version=$(get_version ghostty)
                 echo "Ghostty installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Terminals Package have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1740,17 +1754,23 @@ install_texteditor() {
        clear
         figlet -f slant "Text Editors"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Text Editor to install:"
+        echo "Select Text Editor to install:"
 
-        options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Cursor (AI Code Editor)")
                 clear
                 figlet -f small "Installing Cursor"
@@ -1764,7 +1784,6 @@ install_texteditor() {
                     version="(Manual installation required)"
                 fi
                 echo "Cursor installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Visual Studio Code (VSCODE)")
@@ -1778,7 +1797,6 @@ install_texteditor() {
                     version="(Flatpak version installed)"
                 fi
                 echo "VS Code installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Vscodium")
@@ -1792,7 +1810,6 @@ install_texteditor() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Vscodium installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "ZED Editor")
@@ -1806,7 +1823,6 @@ install_texteditor() {
                     version="(Flatpak version installed)"
                 fi
                 echo "ZED installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Neovim")
@@ -1820,7 +1836,6 @@ install_texteditor() {
                     version=$(get_version neovim)
                 fi
                 echo "Neovim installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Vim")
@@ -1834,7 +1849,6 @@ install_texteditor() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Vim installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Code-OSS")
@@ -1848,13 +1862,13 @@ install_texteditor() {
                     version="(Flatpak version installed)"
                 fi
                 echo "Code-OSS installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Text Editors have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1877,17 +1891,23 @@ install_thunarpreview() {
         clear
         figlet -f slant "Thunar"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Thumbnail Previewer:"
+        echo "Select Thumbnail Previewer & Trash-Cli:"
 
-        options=("Tumbler" "Trash-Cli" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("Tumbler" "Trash-Cli" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "Tumbler")
                 clear
                 figlet -f small "Installing Tumbler"
@@ -1898,7 +1918,6 @@ install_thunarpreview() {
                 fi
                 version=$(get_version tumbler)
                 echo "Tumbler installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Trash-Cli")
@@ -1911,13 +1930,13 @@ install_thunarpreview() {
                 fi
                 version=$(get_version trash-cli)
                 echo "Trash-Cli installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Thunar FM Package have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
 
@@ -1942,17 +1961,23 @@ install_virtualization() {
         clear
         figlet -f slant "Virtualization"
         echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select a Virtualization tool to install:"
+        echo "Select Virtualization tool to install:"
 
-        options=("QEMU/KVM" "VirtualBox" "Distrobox" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        options=("QEMU/KVM" "VirtualBox" "Distrobox" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-        case $selected in
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
             "QEMU/KVM")
                 clear
                 figlet -f small "Installing QEMU"
@@ -1969,7 +1994,6 @@ install_virtualization() {
                 fi
                 echo "QEMU/KVM installed successfully! Version: $version"
                 echo "Note: You may need to log out and back in for group changes to take effect."
-                read -rp "Press Enter to continue..."
                 ;;
 
             "VirtualBox")
@@ -1986,7 +2010,6 @@ install_virtualization() {
                 fi
                 echo "VirtualBox installed successfully! Version: $version"
                 echo "Note: You may need to log out and back in for group changes to take effect."
-                read -rp "Press Enter to continue..."
                 ;;
 
             "Distrobox")
@@ -2000,13 +2023,13 @@ install_virtualization() {
                     version=$(get_version distrobox)
                 fi
                 echo "Distrobox installed successfully! Version: $version"
-                read -rp "Press Enter to continue..."
                 ;;
 
-            "Exit")
-                break
-                ;;
-        esac
+            esac
+        done
+        
+        echo "All selected Android tools have been installed."
+        read -rp "Press Enter to continue..."
     done
 }
     
@@ -2015,7 +2038,7 @@ while true; do
     echo -e "${BLUE}"
     figlet -f slant "Packages"
     echo -e "${ENDCOLOR}"
-    echo "Select a Category To Install Packages:"
+    echo "Select Category To Install Packages:"
     echo -e "${YELLOW}--------------------------------------${RESET}"
 
     options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Thunar Preview" "Virtualization" "Exit")
