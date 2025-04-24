@@ -160,7 +160,7 @@ jobs:
         id: generate_changelog
         run: |
           {
-            echo "## [${{ env.NEW_VERSION }}](https://github.com/${{ github.repository }}/compare/${{ env.PREV_VERSION }}...${{ env.NEW_VERSION }}) (${{ env.RELEASE_DATE }})"
+            echo "## [${{ github.event.inputs.version }}](https://github.com/${{ github.repository }}/compare/${{ env.PREV_VERSION }}...${{ env.NEW_VERSION }}) (${{ env.RELEASE_DATE }})"
             echo ""
             
             if [ -s /tmp/changelog/changed.md ]; then
