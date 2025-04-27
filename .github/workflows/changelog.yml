@@ -309,47 +309,97 @@ jobs:
           
           # Check if CHANGELOG.md exists and if this version is already in it
           if [ -f CHANGELOG.md ]; then
+            # Check if the file already has a header
+            HAS_HEADER=0
+            if grep -q "^# Changelog" CHANGELOG.md; then
+              HAS_HEADER=1
+            fi
+            
             if grep -q "## \[${{ github.event.inputs.version }}\]" CHANGELOG.md; then
               # Version already exists in changelog, need to replace that section
               echo "Version ${{ github.event.inputs.version }} already exists in CHANGELOG.md, updating it"
               
               # Create a new CHANGELOG with the updated entry
-              {
-                echo "# Changelog"
-                echo "All notable changes to this project will be documented in this file."
-                echo ""
-                
-                awk -v version="## [${{ github.event.inputs.version }}]" -v RS="" -v ORS="\n\n" '
-                  BEGIN { printed = 0 }
-                  $0 ~ version {
-                    if (!printed) {
-                      system("cat /tmp/changelog/new_changelog_entry.md")
-                      printed = 1
+              if [ "$HAS_HEADER" -eq 1 ]; then
+                # If the header exists, preserve it
+                {
+                  # Extract header (first 2 lines)
+                  head -n 2 CHANGELOG.md
+                  echo ""
+                  
+                  # Use awk to replace the version section
+                  awk -v version="## \\[${{ github.event.inputs.version }}\\]" '
+                    BEGIN { in_version = 0; printed = 0; RS = "\n" }
+                    $0 ~ version {
+                      if (!printed) {
+                        system("cat /tmp/changelog/new_changelog_entry.md")
+                        printed = 1
+                      }
+                      in_version = 1
+                      next
                     }
-                    next
-                  }
-                  { print }
-                ' CHANGELOG.md
-              } > /tmp/changelog/NEW_CHANGELOG.md
+                    $0 ~ /^## \[/ {
+                      in_version = 0
+                    }
+                    !in_version { print }
+                  ' <(tail -n +3 CHANGELOG.md)
+                } > /tmp/changelog/NEW_CHANGELOG.md
+              else
+                # If no header, add one
+                {
+                  echo "# Changelog"
+                  echo "All notable changes to this project will be documented in this file."
+                  echo ""
+                  
+                  # Use awk to replace the version section
+                  awk -v version="## \\[${{ github.event.inputs.version }}\\]" '
+                    BEGIN { in_version = 0; printed = 0; RS = "\n" }
+                    $0 ~ version {
+                      if (!printed) {
+                        system("cat /tmp/changelog/new_changelog_entry.md")
+                        printed = 1
+                      }
+                      in_version = 1
+                      next
+                    }
+                    $0 ~ /^## \[/ {
+                      in_version = 0
+                    }
+                    !in_version { print }
+                  ' CHANGELOG.md
+                } > /tmp/changelog/NEW_CHANGELOG.md
+              fi
               
               mv /tmp/changelog/NEW_CHANGELOG.md CHANGELOG.md
             else
               # Version doesn't exist, add it after the header
               echo "Adding new version ${{ github.event.inputs.version }} to CHANGELOG.md"
               
-              # Extract existing content after header (skip first 2 lines)
-              tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md
-              
-              # Create new CHANGELOG with updated content
-              {
-                echo "# Changelog"
-                echo "All notable changes to this project will be documented in this file."
-                echo ""
-                cat /tmp/changelog/new_changelog_entry.md
-                cat /tmp/changelog/existing_changelog.md
-              } > /tmp/changelog/NEW_CHANGELOG.md
-              
-              mv /tmp/changelog/NEW_CHANGELOG.md CHANGELOG.md
+              if [ "$HAS_HEADER" -eq 1 ]; then
+                # Extract header (first 2 lines)
+                head -n 2 CHANGELOG.md > /tmp/changelog/header.md
+                # Extract existing content after header
+                tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md
+                
+                # Create new CHANGELOG with updated content
+                {
+                  cat /tmp/changelog/header.md
+                  echo ""
+                  cat /tmp/changelog/new_changelog_entry.md
+                  cat /tmp/changelog/existing_changelog.md
+                } > CHANGELOG.md
+              else
+                # Create new CHANGELOG with header and content
+                {
+                  echo "# Changelog"
+                  echo "All notable changes to this project will be documented in this file."
+                  echo ""
+                  cat /tmp/changelog/new_changelog_entry.md
+                  cat CHANGELOG.md
+                } > /tmp/changelog/NEW_CHANGELOG.md
+                
+                mv /tmp/changelog/NEW_CHANGELOG.md CHANGELOG.md
+              fi
             fi
           else
             # CHANGELOG.md doesn't exist, create it
