@@ -1,10 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+# Changelog
+All notable changes to this project will be documented in this file.
+
 ## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) (2025-04-24)
 
 ### Changed
-
 
 * chore: add gtk dependencies [`5c25cd9`](https://github.com/harilvfs/carch/commit/5c25cd9)
 * chore: add man pages dependencies [`9f1200f`](https://github.com/harilvfs/carch/commit/9f1200f)
@@ -20,7 +22,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-
 * feat: add install script by @harilvfs in https://github.com/harilvfs/carch/pull/413
 * feat: Added foot & ghostty setup script by @harilvfs in https://github.com/harilvfs/carch/pull/412
 * build(deps): bump crossterm from 0.26.1 to 0.29.0 by @dependabot in https://github.com/harilvfs/carch/pull/411
@@ -31,7 +32,6 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-
 * fix: running [`f1ff9ed`](https://github.com/harilvfs/carch/commit/f1ff9ed)
 * fix: minor fixes to script side [`d37131f`](https://github.com/harilvfs/carch/commit/d37131f)
 * fix: typos [`13ef0a1`](https://github.com/harilvfs/carch/commit/13ef0a1)
@@ -40,7 +40,6 @@ All notable changes to this project will be documented in this file.
 * fix: color code in fish script [`b14af17`](https://github.com/harilvfs/carch/commit/b14af17)
 
 ### Removed
-
 
 * remove: old command [`133ae7e`](https://github.com/harilvfs/carch/commit/133ae7e)
 * remove: cleanup old typo [`d15bcf4`](https://github.com/harilvfs/carch/commit/d15bcf4)
@@ -113,7 +112,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.2).
 
-
 ## [4.3.1](https://github.com/harilvfs/carch/compare/v4.2.7...v4.3.1) (2025-04-09)
 
 ### Changed
@@ -138,7 +136,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.1).
 
-
 ## [4.2.7](https://github.com/harilvfs/carch/compare/v4.2.6...v4.2.7) (2025-04-04)
 
 This might be the last Carch update in terms of new features. But if any user (or I) finds a bug, it will be fixed in the next release.
@@ -153,7 +150,6 @@ This might be the last Carch update in terms of new features. But if any user (o
 - Removing Version Text From Menu (https://github.com/harilvfs/carch/pull/356)
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.7).
-
 
 ## [4.2.6](https://github.com/harilvfs/carch/compare/v4.2.5...v4.2.6) (2025-04-01)
 
@@ -184,7 +180,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.6).
 
-
 ## [4.2.5](https://github.com/harilvfs/carch/compare/v4.2.4...v4.2.5) (2025-03-27)
 
 No major changes or updates, just minor bug fixes.
@@ -194,7 +189,6 @@ No major changes or updates, just minor bug fixes.
 - fix: AUR helper Swaywm (https://github.com/harilvfs/carch/pull/335)
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.5).
-
 
 ## [v4.2.4](https://github.com/harilvfs/carch/compare/v4.2.3...v4.2.4) (2025-03-22)
 
@@ -214,7 +208,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.4).
 
-
 ## [v4.2.3](https://github.com/harilvfs/carch/compare/v4.2.2...v4.2.3) (2025-03-19)
 
 ### Changed
@@ -230,7 +223,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.3).
 
-
 ## [v4.2.2](https://github.com/harilvfs/carch/compare/v4.2.1...v4.2.2) (2025-03-15)
 
 ### Changed
@@ -243,14 +235,12 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.2).
 
-
 ## [v4.2.1](https://github.com/harilvfs/carch/compare/v4.1.7...v4.2.1) (2025-03-12)
 
 - Fix Minor Bug [ SDDM ] (https://github.com/harilvfs/carch/pull/308)
 - Fixes Fastfetch Script [ New Config ] (https://github.com/harilvfs/carch/pull/309)
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.2.1).
-
 
 ## [v4.1.7](https://github.com/harilvfs/carch/compare/v4.1.6...v4.1.7) (2025-03-09)
 
@@ -264,7 +254,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 That's it for this release! Check out the [Carch Docs](https://carch-org.github.io/docs) for installation and live testing guides.  
 
 For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.1.7).  
-
 
 ## [v4.1.6](https://github.com/harilvfs/carch/compare/v4.1.5...v4.1.6) (2025-03-04)  
 
@@ -280,7 +269,6 @@ For a detailed changelog, visit the [release section](https://github.com/harilvf
 **A small update** :)
 
 **Check the release section for core changes and details:** [v4.1.6](https://github.com/harilvfs/carch/releases/tag/v4.1.6)  
-
 
 ## [v4.1.5](https://github.com/harilvfs/carch/compare/v4.1.4...v4.1.5) (2025-03-02)
 
@@ -311,7 +299,6 @@ That’s all—**a small but solid update!**
 
 For a detailed breakdown, check the release section: [🔗 v4.1.5 Release](https://github.com/harilvfs/carch/releases/tag/v4.1.5)  
 
-
 ## [v4.1.4](https://github.com/harilvfs/carch/compare/v4.1.3...v4.1.4) (2025-02-27)  
 
 This is a small update for Carch, with no new features introduced in this release.  
@@ -332,7 +319,6 @@ For a detailed list of changes in this update, check the **[release section](htt
 Thank you!  
 
 Maybe next time, we’ll add some new features… I’m not sure what yet, but we’ll see! 👾
-
 
 ## [v4.1.3](https://github.com/harilvfs/carch/compare/v4.1.2...v4.1.3) (2025-02-09)
 
@@ -374,7 +360,6 @@ Just use **Arch Linux** or a mainline distro like **Fedora**. Fedora is stable�
 > However, it will work fine on **mainline Arch and Fedora**.
 
 For more details on what's changed, I have set up a GitHub workflow to document everything properly. Unlike before, changes will no longer be listed only in the changelog—you can now find them in the release section of Carch: [here](https://github.com/harilvfs/carch/releases/tag/v4.1.3).
-
 
 ## [v4.1.2](https://github.com/harilvfs/carch/compare/v4.1.1...v4.1.2) (2025-01-07)
 
@@ -791,7 +776,6 @@ For installation instructions, refer to the [official guide](https://carch-org.g
 - Known Bugs.
 - Hyprland setup script.
 
-
 ## [v1.0](https://github.com/harilvfs/carch/commits/2024-10-08) (2024-10-08)
 
 ### Removed
@@ -801,3 +785,4 @@ For installation instructions, refer to the [official guide](https://carch-org.g
 ### Added
 
 - Hyprland setup script Added by @aayushrg7 in https://github.com/harilvfs/carch/pull/2
+
