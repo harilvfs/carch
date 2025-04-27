@@ -1,6 +1,52 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.7](https://github.com/harilvfs/carch/compare/v4.3.6...v4.3.7) (2025-04-27)
+
+### Changed
+
+
+* Bump Version 4.3.7 [`5da841e`](https://github.com/harilvfs/carch/commit/5da841e)
+* Changelog v4.3.6 by @harilvfs in https://github.com/harilvfs/carch/pull/419
+* Changelog v4.3.6 by @harilvfs in https://github.com/harilvfs/carch/pull/422
+* Changelog v4.3.6 by @harilvfs in https://github.com/harilvfs/carch/pull/425
+* Revert "Changelog v4.3.6" by @harilvfs in https://github.com/harilvfs/carch/pull/420
+* Revert "Changelog v4.3.6" by @harilvfs in https://github.com/harilvfs/carch/pull/423
+* UI/UX: change help toggle to mode [`45c8024`](https://github.com/harilvfs/carch/commit/45c8024)
+* Update changelog.yml [`ec49283`](https://github.com/harilvfs/carch/commit/ec49283)
+* Update changelog.yml [`ee72fb4`](https://github.com/harilvfs/carch/commit/ee72fb4)
+* Update changelog.yml [`f9fc2cb`](https://github.com/harilvfs/carch/commit/f9fc2cb)
+* add some text for typos failing [`039d75a`](https://github.com/harilvfs/carch/commit/039d75a)
+* changelog v4.3.6 [`c3bf8e5`](https://github.com/harilvfs/carch/commit/c3bf8e5)
+* changelog working in progress [`ec491b0`](https://github.com/harilvfs/carch/commit/ec491b0)
+* ci: cleanup [`d01bda3`](https://github.com/harilvfs/carch/commit/d01bda3)
+* ci: final touch up [`3155728`](https://github.com/harilvfs/carch/commit/3155728)
+* ci: test changelog workflow [`b57044a`](https://github.com/harilvfs/carch/commit/b57044a)
+* cleanup [`30f27c7`](https://github.com/harilvfs/carch/commit/30f27c7)
+* cleanup [`c8c7b3c`](https://github.com/harilvfs/carch/commit/c8c7b3c)
+* final one maybe [`4a5fd8d`](https://github.com/harilvfs/carch/commit/4a5fd8d)
+* fix typos [`b573d1a`](https://github.com/harilvfs/carch/commit/b573d1a)
+* kind of final [`c3ebc94`](https://github.com/harilvfs/carch/commit/c3ebc94)
+* preview: Updated preview from release v4.3.6 by @harilvfs in https://github.com/harilvfs/carch/pull/416
+* testing [`fafd8fd`](https://github.com/harilvfs/carch/commit/fafd8fd)
+* update: changelog v4.3.6 [`e5ebb61`](https://github.com/harilvfs/carch/commit/e5ebb61)
+
+### Added
+
+
+* feat: add thorium browser support for fedora [`6bc1090`](https://github.com/harilvfs/carch/commit/6bc1090)
+
+### Fixed
+
+
+
+### Removed
+
+
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.7).
+
+
 ## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) (2025-04-24)
 
 ### Changed
