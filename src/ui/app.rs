@@ -13,6 +13,7 @@ pub enum AppMode {
     Preview,
     Search,
     Confirm,
+    Help,
 }
 
 pub struct StatefulList<T> {
@@ -116,6 +117,8 @@ pub struct App {
     pub autocomplete_text: Option<String>,
     pub multi_selected_scripts: Vec<usize>,
     pub multi_select_mode: bool,
+    pub help_scroll: u16,
+    pub help_max_scroll: u16,
 }
 
 impl App {
@@ -137,6 +140,8 @@ impl App {
             autocomplete_text: None,
             multi_selected_scripts: Vec::new(),
             multi_select_mode: false,
+            help_scroll: 0,
+            help_max_scroll: 0,
         }
     }
 
@@ -354,6 +359,7 @@ impl App {
                     AppMode::Preview => AppMode::Normal,
                     AppMode::Search => AppMode::Normal,
                     AppMode::Confirm => AppMode::Normal,
+                    AppMode::Help => AppMode::Normal,
                 };
 
                 let ui_options = UiOptions::default();
@@ -375,25 +381,25 @@ impl App {
     }
 
     pub fn scroll_preview_up(&mut self) {
-        let scroll_amount = 3;
-        if self.preview_scroll > scroll_amount {
-            self.preview_scroll -= scroll_amount;
+        if self.preview_scroll > 0 {
+            self.preview_scroll -= 1;
+        }
+    }
+
+    pub fn scroll_preview_down(&mut self) {
+        self.preview_scroll += 1;
+    }
+
+    pub fn scroll_preview_page_up(&mut self) {
+        if self.preview_scroll > 10 {
+            self.preview_scroll -= 10;
         } else {
             self.preview_scroll = 0;
         }
     }
 
-    pub fn scroll_preview_down(&mut self) {
-        let line_count = self.preview_content.lines().count() as u16;
-
-        let max_scroll = if line_count > 0 { line_count } else { 0 };
-
-        let scroll_amount = 3;
-        if self.preview_scroll + scroll_amount < max_scroll {
-            self.preview_scroll += scroll_amount;
-        } else if self.preview_scroll < max_scroll {
-            self.preview_scroll = max_scroll;
-        }
+    pub fn scroll_preview_page_down(&mut self) {
+        self.preview_scroll += 10;
     }
 
     pub fn get_script_path(&self) -> Option<PathBuf> {
@@ -538,55 +544,80 @@ impl App {
 
     pub fn handle_key_normal_mode(&mut self, key: crossterm::event::KeyEvent) {
         match key.code {
-            KeyCode::Char('q') => self.quit = true,
-            KeyCode::Char('p') => self.toggle_preview_mode(),
-            KeyCode::Char('/') => self.toggle_search_mode(),
-            KeyCode::Char('m') => self.toggle_multi_select_mode(),
+            KeyCode::Char('q') => {
+                self.quit = true;
+            }
             KeyCode::Esc => {
                 if self.multi_select_mode {
                     self.toggle_multi_select_mode();
                 }
             }
-            KeyCode::Char('j') => self.next(),
-            KeyCode::Char('k') => self.previous(),
+            KeyCode::Char('j') | KeyCode::Down => {
+                self.next();
+            }
+            KeyCode::Char('k') | KeyCode::Up => {
+                self.previous();
+            }
+            KeyCode::Home => {
+                self.top();
+            }
+            KeyCode::End => {
+                self.bottom();
+            }
+            KeyCode::Char('/') => {
+                self.toggle_search_mode();
+            }
+            KeyCode::Char('p') => {
+                self.toggle_preview_mode();
+            }
+            KeyCode::Char('m') => {
+                self.toggle_multi_select_mode();
+            }
+            KeyCode::Char('?') => {
+                self.toggle_help_mode();
+            }
+            KeyCode::Enter => {
+                if let Some(idx) = self.scripts.state.selected() {
+                    if self.scripts.items[idx].is_category_header {
+                        let category = self.scripts.items[idx].category.clone();
+                        self.toggle_category(&category);
+                    } else if !(self.multi_select_mode && self.multi_selected_scripts.is_empty()) {
+                        self.mode = AppMode::Confirm;
+                    }
+                }
+            }
             KeyCode::Char(' ') => {
                 if self.multi_select_mode {
                     self.toggle_script_selection();
                 }
             }
-            KeyCode::Enter => {
-                if self.multi_select_mode && !self.multi_selected_scripts.is_empty() {
-                    self.mode = AppMode::Confirm;
-                }
-            }
-            KeyCode::Down => self.next(),
-            KeyCode::Up => self.previous(),
             _ => {}
         }
     }
 
     pub fn handle_key_preview_mode(&mut self, key: crossterm::event::KeyEvent) {
         match key.code {
-            KeyCode::Esc | KeyCode::Char('q') => self.toggle_preview_mode(),
-            KeyCode::Char('j') | KeyCode::Down => self.scroll_preview_down(),
-            KeyCode::Char('k') | KeyCode::Up => self.scroll_preview_up(),
+            KeyCode::Char('q') | KeyCode::Esc | KeyCode::Char('p') => {
+                self.mode = AppMode::Normal;
+            }
+            KeyCode::Char('j') | KeyCode::Down => {
+                self.scroll_preview_down();
+            }
+            KeyCode::Char('k') | KeyCode::Up => {
+                self.scroll_preview_up();
+            }
             KeyCode::PageDown => {
-                for _ in 0..5 {
-                    self.scroll_preview_down();
-                }
+                self.scroll_preview_page_down();
             }
             KeyCode::PageUp => {
-                for _ in 0..5 {
-                    self.scroll_preview_up();
-                }
+                self.scroll_preview_page_up();
             }
             KeyCode::Home => {
                 self.preview_scroll = 0;
             }
             KeyCode::End => {
                 let line_count = self.preview_content.lines().count() as u16;
-                let max_scroll = if line_count > 0 { line_count } else { 0 };
-                self.preview_scroll = max_scroll;
+                self.preview_scroll = if line_count > 0 { line_count } else { 0 };
             }
             _ => {}
         }
@@ -603,6 +634,9 @@ impl App {
                 }
                 AppMode::Search => {}
                 AppMode::Confirm => {}
+                AppMode::Help => {
+                    self.help_scroll = self.help_scroll.saturating_add(2);
+                }
             },
             MouseEventKind::ScrollUp => match self.mode {
                 AppMode::Normal => self.previous(),
@@ -613,6 +647,9 @@ impl App {
                 }
                 AppMode::Search => {}
                 AppMode::Confirm => {}
+                AppMode::Help => {
+                    self.help_scroll = self.help_scroll.saturating_sub(2);
+                }
             },
             _ => {}
         }
@@ -757,5 +794,60 @@ impl App {
 
     pub fn is_script_selected(&self, idx: usize) -> bool {
         self.multi_selected_scripts.contains(&idx)
+    }
+
+    pub fn toggle_help_mode(&mut self) {
+        self.mode = if self.mode == AppMode::Help {
+            AppMode::Normal
+        } else {
+            AppMode::Help
+        };
+    }
+
+    pub fn handle_key_help_mode(&mut self, key: crossterm::event::KeyEvent) {
+        match key.code {
+            KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('?') => {
+                self.mode = AppMode::Normal;
+                self.help_scroll = 0;
+            }
+            KeyCode::Char('j') | KeyCode::Down => {
+                self.help_scroll = (self.help_scroll + 1).min(self.help_max_scroll);
+            }
+            KeyCode::Char('k') | KeyCode::Up => {
+                self.help_scroll = self.help_scroll.saturating_sub(1);
+            }
+            KeyCode::Home => {
+                self.help_scroll = 0;
+            }
+            KeyCode::End => {
+                self.help_scroll = self.help_max_scroll;
+            }
+            KeyCode::PageDown => {
+                self.help_scroll = (self.help_scroll + 10).min(self.help_max_scroll);
+            }
+            KeyCode::PageUp => {
+                self.help_scroll = self.help_scroll.saturating_sub(10);
+            }
+            _ => {}
+        }
+    }
+
+    pub fn top(&mut self) {
+        if !self.visible_items.is_empty() {
+            self.scripts.state.select(Some(self.visible_items[0]));
+            self.update_preview();
+            self.ensure_selected_visible();
+        }
+    }
+
+    pub fn bottom(&mut self) {
+        if !self.visible_items.is_empty() {
+            let last_idx = self.visible_items.len() - 1;
+            self.scripts
+                .state
+                .select(Some(self.visible_items[last_idx]));
+            self.update_preview();
+            self.ensure_selected_visible();
+        }
     }
 }
