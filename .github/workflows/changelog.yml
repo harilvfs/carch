@@ -46,36 +46,45 @@ jobs:
             echo "PREV_VERSION=${{ github.event.inputs.prev_version_tag }}" >> $GITHUB_ENV
           fi
           
+          # Ensure PREV_VERSION starts with 'v' if it's not empty and doesn't already
+          if [ -n "$PREV_VERSION" ] && [[ ! "$PREV_VERSION" == v* ]]; then
+            PREV_VERSION="v$PREV_VERSION"
+            echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_ENV
+          fi
+          
+          # Ensure NEW_VERSION starts with 'v'
           echo "NEW_VERSION=v${{ github.event.inputs.version }}" >> $GITHUB_ENV
           echo "NEW_VERSION_NUMBER=${{ github.event.inputs.version }}" >> $GITHUB_ENV
           
           echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
           
           if [ "${{ github.event.inputs.create_tag }}" = "true" ]; then
-            git tag "${{ env.NEW_VERSION }}"
-            echo "Created tag: ${{ env.NEW_VERSION }}"
+            if ! git tag | grep -q "^${{ env.NEW_VERSION }}$"; then
+              git tag "${{ env.NEW_VERSION }}"
+              echo "Created tag: ${{ env.NEW_VERSION }}"
+            else
+              echo "Tag ${{ env.NEW_VERSION }} already exists, skipping tag creation"
+            fi
           fi
 
       - name: Create temp directory
         run: |
           mkdir -p /tmp/changelog
 
-      - name: Get merged PRs since last release
-        id: get_prs
+      - name: Determine date range for changelog
+        id: get_date_range
         run: |
-          echo "" > /tmp/changelog/added.md
-          echo "" > /tmp/changelog/changed.md
-          echo "" > /tmp/changelog/fixed.md
-          echo "" > /tmp/changelog/removed.md
-          
-          REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
-          
+          # Determine start date based on previous version
           if git rev-parse --verify "${{ env.PREV_VERSION }}" >/dev/null 2>&1; then
             PREV_DATE=$(git log "${{ env.PREV_VERSION }}" -1 --format=%cd --date=short 2>/dev/null || git log --reverse --format=%cd --date=short | head -1)
+            echo "Found previous version tag, using date: $PREV_DATE"
           else
+            # If no previous version, use the first commit date
             PREV_DATE=$(git log --reverse --format=%cd --date=short | head -1)
+            echo "No previous version tag found, using first commit date: $PREV_DATE"
           fi
           
+          # Determine end date based on new version (if tag exists already)
           if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
             CURRENT_DATE=$(git log "${{ env.NEW_VERSION }}" -1 --format=%cd --date=short)
             echo "Using date from existing tag: $CURRENT_DATE"
@@ -84,7 +93,22 @@ jobs:
             echo "Using current date: $CURRENT_DATE"
           fi
           
-          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:${PREV_DATE}..${CURRENT_DATE}"
+          echo "PREV_DATE=$PREV_DATE" >> $GITHUB_ENV
+          echo "CURRENT_DATE=$CURRENT_DATE" >> $GITHUB_ENV
+
+      - name: Get merged PRs since last release
+        id: get_prs
+        run: |
+          # Initialize or reset markdown files
+          echo "" > /tmp/changelog/added.md
+          echo "" > /tmp/changelog/changed.md
+          echo "" > /tmp/changelog/fixed.md
+          echo "" > /tmp/changelog/removed.md
+          echo "" > /tmp/changelog/processed_ids.txt
+          
+          REPO_NAME=$(echo "${{ github.repository }}" | sed 's/\//%2F/g')
+          
+          PR_QUERY="repo:${{ github.repository }} is:pr is:merged merged:${{ env.PREV_DATE }}..${{ env.CURRENT_DATE }}"
           echo "Searching PRs with query: $PR_QUERY"
           
           gh api graphql -f query='
@@ -122,8 +146,11 @@ jobs:
             PR_AUTHOR=$(echo "$pr" | jq -r .author.login)
             PR_LABELS=$(echo "$pr" | jq -r '.labels.nodes[].name' 2>/dev/null || echo "")
             
+            echo "PR-$PR_NUMBER" >> /tmp/changelog/processed_ids.txt
+            
             PR_ENTRY="* $PR_TITLE by @$PR_AUTHOR in $PR_URL"
             
+            # Use a more specific categorization approach
             if echo "$PR_LABELS" | grep -q "feature\|feat\|enhancement\|added\|ui\|ux"; then
               echo "$PR_ENTRY" >> /tmp/changelog/added.md
             elif echo "$PR_LABELS" | grep -q "bug\|fix"; then
@@ -141,7 +168,13 @@ jobs:
                 echo "$PR_ENTRY" >> /tmp/changelog/changed.md
               elif echo "$PR_TITLE" | grep -qE "^(remove|deprecated)(\([a-z0-9-]+\))?:"; then
                 echo "$PR_ENTRY" >> /tmp/changelog/removed.md
+              else
+                # Default to changed for other conventional commit types
+                echo "$PR_ENTRY" >> /tmp/changelog/changed.md
               fi
+            else
+              # Default for unrecognized format
+              echo "$PR_ENTRY" >> /tmp/changelog/changed.md
             fi
           done
         env:
@@ -150,20 +183,23 @@ jobs:
       - name: Get relevant commits
         id: get_commits
         run: |
+          # Determine commit range based on previous and new version
           if git rev-parse --verify "${{ env.PREV_VERSION }}" >/dev/null 2>&1; then
             if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
               # Both tags exist
               COMMIT_RANGE="${{ env.PREV_VERSION }}..${{ env.NEW_VERSION }}"
             else
-              git branch temp-changelog-branch HEAD
+              # Create a temporary branch if needed
+              git branch temp-changelog-branch HEAD 2>/dev/null || true
               COMMIT_RANGE="${{ env.PREV_VERSION }}..temp-changelog-branch"
             fi
           else
             if git rev-parse --verify "${{ env.NEW_VERSION }}" >/dev/null 2>&1; then
-              COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD)..${{ env.NEW_VERSION }}"
+              COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD 2>/dev/null | head -1)..${{ env.NEW_VERSION }}"
             else
-              git branch temp-changelog-branch HEAD
-              COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD)..temp-changelog-branch"
+              # Create a temporary branch if needed
+              git branch temp-changelog-branch HEAD 2>/dev/null || true
+              COMMIT_RANGE="$(git rev-list --max-parents=0 HEAD 2>/dev/null | head -1)..temp-changelog-branch"
             fi
           fi
           
@@ -173,15 +209,34 @@ jobs:
             COMMIT_HASH=$(echo "$commit" | cut -d' ' -f1)
             COMMIT_MSG=$(echo "$commit" | cut -d' ' -f2-)
             
+            # Check if this commit is associated with a PR we've already processed
+            PR_REFS=$(git log -1 --format=%B $COMMIT_HASH | grep -o "(#[0-9]\+)" | tr -d '(#)' || echo "")
             PR_NUM=$(git log -1 --format=%B $COMMIT_HASH | grep -o "#[0-9]\+" | head -1 | tr -d '#' || echo "")
+            
+            SKIP=0
             if [ -n "$PR_NUM" ]; then
-              if grep -q "$PR_NUM" /tmp/changelog/prs.json; then
-                continue
+              if grep -q "PR-$PR_NUM" /tmp/changelog/processed_ids.txt; then
+                SKIP=1
               fi
             fi
             
+            if [ -n "$PR_REFS" ]; then
+              for ref in $PR_REFS; do
+                if grep -q "PR-$ref" /tmp/changelog/processed_ids.txt; then
+                  SKIP=1
+                fi
+              done
+            fi
+            
+            if [ "$SKIP" -eq 1 ]; then
+              continue
+            fi
+            
+            echo "COMMIT-$COMMIT_HASH" >> /tmp/changelog/processed_ids.txt
+            
             COMMIT_ENTRY="* ${COMMIT_MSG} [\`${COMMIT_HASH}\`](https://github.com/${{ github.repository }}/commit/${COMMIT_HASH})"
             
+            # Use the same categorization logic for commits
             if [[ $COMMIT_MSG =~ ^feat(\([a-z0-9-]+\))?:.*$ ]] || [[ $COMMIT_MSG =~ ^ui(\([a-z0-9-]+\))?:.*$ ]] || [[ $COMMIT_MSG =~ ^ux(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> /tmp/changelog/added.md
             elif [[ $COMMIT_MSG =~ ^fix(\([a-z0-9-]+\))?:.*$ ]]; then
@@ -190,14 +245,27 @@ jobs:
               echo "$COMMIT_ENTRY" >> /tmp/changelog/changed.md
             elif [[ $COMMIT_MSG =~ ^(remove|deprecated)(\([a-z0-9-]+\))?:.*$ ]]; then
               echo "$COMMIT_ENTRY" >> /tmp/changelog/removed.md
+            else
+              # Default for unrecognized format
+              echo "$COMMIT_ENTRY" >> /tmp/changelog/changed.md
             fi
           done
           
+          # Clean up temporary branch if it exists
           git branch -D temp-changelog-branch 2>/dev/null || true
 
       - name: Generate changelog entry
         id: generate_changelog
         run: |
+          # Sort and deduplicate entries in each section
+          for section in added changed fixed removed; do
+            if [ -s "/tmp/changelog/${section}.md" ]; then
+              sort -u "/tmp/changelog/${section}.md" > "/tmp/changelog/${section}.sorted.md"
+              mv "/tmp/changelog/${section}.sorted.md" "/tmp/changelog/${section}.md"
+            fi
+          done
+          
+          # Generate new changelog entry
           {
             echo "## [${{ github.event.inputs.version }}](https://github.com/${{ github.repository }}/compare/${{ env.PREV_VERSION }}...${{ env.NEW_VERSION }}) (${{ env.RELEASE_DATE }})"
             echo ""
@@ -239,21 +307,61 @@ jobs:
           echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
           
-          if [ -f CHANGELOG.md ] && [ -s CHANGELOG.md ]; then
-            # Extract existing content after header (skip first 2 lines)
-            tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md
+          # Check if CHANGELOG.md exists and if this version is already in it
+          if [ -f CHANGELOG.md ]; then
+            if grep -q "## \[${{ github.event.inputs.version }}\]" CHANGELOG.md; then
+              # Version already exists in changelog, need to replace that section
+              echo "Version ${{ github.event.inputs.version }} already exists in CHANGELOG.md, updating it"
+              
+              # Create a new CHANGELOG with the updated entry
+              {
+                echo "# Changelog"
+                echo "All notable changes to this project will be documented in this file."
+                echo ""
+                
+                awk -v version="## [${{ github.event.inputs.version }}]" -v RS="" -v ORS="\n\n" '
+                  BEGIN { printed = 0 }
+                  $0 ~ version {
+                    if (!printed) {
+                      system("cat /tmp/changelog/new_changelog_entry.md")
+                      printed = 1
+                    }
+                    next
+                  }
+                  { print }
+                ' CHANGELOG.md
+              } > /tmp/changelog/NEW_CHANGELOG.md
+              
+              mv /tmp/changelog/NEW_CHANGELOG.md CHANGELOG.md
+            else
+              # Version doesn't exist, add it after the header
+              echo "Adding new version ${{ github.event.inputs.version }} to CHANGELOG.md"
+              
+              # Extract existing content after header (skip first 2 lines)
+              tail -n +3 CHANGELOG.md > /tmp/changelog/existing_changelog.md
+              
+              # Create new CHANGELOG with updated content
+              {
+                echo "# Changelog"
+                echo "All notable changes to this project will be documented in this file."
+                echo ""
+                cat /tmp/changelog/new_changelog_entry.md
+                cat /tmp/changelog/existing_changelog.md
+              } > /tmp/changelog/NEW_CHANGELOG.md
+              
+              mv /tmp/changelog/NEW_CHANGELOG.md CHANGELOG.md
+            fi
           else
-            touch /tmp/changelog/existing_changelog.md
+            # CHANGELOG.md doesn't exist, create it
+            echo "Creating new CHANGELOG.md"
+            
+            {
+              echo "# Changelog"
+              echo "All notable changes to this project will be documented in this file."
+              echo ""
+              cat /tmp/changelog/new_changelog_entry.md
+            } > CHANGELOG.md
           fi
-          
-          # create new CHANGELOG with updated content
-          {
-            echo "# Changelog"
-            echo "All notable changes to this project will be documented in this file."
-            echo ""
-            cat /tmp/changelog/new_changelog_entry.md
-            cat /tmp/changelog/existing_changelog.md
-          } > CHANGELOG.md
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
@@ -263,7 +371,7 @@ jobs:
           branch: changelog/${{ env.NEW_VERSION_NUMBER }}
           title: "Changelog v${{ env.NEW_VERSION_NUMBER }}"
           body: |
-            PR to updates the CHANGELOG.md with the latest changes for version ${{ env.NEW_VERSION }}.
+            PR to update the CHANGELOG.md with the latest changes for version ${{ env.NEW_VERSION }}.
             
             ## Summary of changes:
             
