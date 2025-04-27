@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.3.7](https://github.com/harilvfs/carch/compare/v4.3.6...v4.3.7) (2025-04-27)
+
+### Changed
+
+* UI/UX: change help toggle to mode [`45c8024`](https://github.com/harilvfs/carch/commit/45c8024)
+
+### Added
+
+* feat: add thorium browser support for fedora [`6bc1090`](https://github.com/harilvfs/carch/commit/6bc1090)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.3.7).
+
+
 ## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) (2025-04-24)
 
 ### Changed
