@@ -1,6 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
 ## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) (2025-04-24)
 
 ### Changed
