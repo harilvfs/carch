@@ -19,6 +19,7 @@ use ratatui::{
 
 use super::app::{App, AppMode, UiOptions};
 use crate::ui::popups;
+use crate::version;
 
 fn create_rounded_block() -> Block<'static> {
     Block::default()
@@ -104,18 +105,10 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     }
 
     let title = if app.multi_select_mode {
-        Line::from(vec![
-            Span::styled(
-                "Multi-select Mode ",
-                Style::default()
-                    .fg(Color::Green)
-                    .add_modifier(Modifier::BOLD),
-            ),
-            Span::styled(
-                format!("[{} selected]", app.multi_selected_scripts.len()),
-                Style::default().fg(Color::Yellow),
-            ),
-        ])
+        Line::from(vec![Span::styled(
+            format!("[{} selected]", app.multi_selected_scripts.len()),
+            Style::default().fg(Color::Yellow),
+        )])
     } else {
         Line::from(vec![Span::styled(
             "Select a script to run",
@@ -183,8 +176,10 @@ fn render_preview(f: &mut Frame, app: &App, area: Rect) {
 
     let preview_text = Text::from(app.preview_content.clone());
 
+    let title_with_scroll = title;
+
     let preview = Paragraph::new(preview_text)
-        .block(create_rounded_block().title(title))
+        .block(create_rounded_block().title(title_with_scroll))
         .scroll((app.preview_scroll, 0))
         .wrap(Wrap { trim: false });
 
@@ -268,14 +263,93 @@ fn render_fullscreen_preview(f: &mut Frame, app: &App) {
     f.render_widget(help_text, preview_area[1]);
 }
 
-fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
+fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
+    let mode_text = match app.mode {
+        AppMode::Normal => {
+            if app.multi_select_mode {
+                "MULTI-SELECT (Space to select)"
+            } else {
+                "NORMAL"
+            }
+        }
+        AppMode::Preview => "PREVIEW",
+        AppMode::Search => "SEARCH",
+        AppMode::Confirm => "CONFIRM",
+        AppMode::Help => "HELP",
+    };
+
+    let mode_color = match app.mode {
+        AppMode::Normal => {
+            if app.multi_select_mode {
+                Color::Magenta
+            } else {
+                Color::Green
+            }
+        }
+        AppMode::Preview => Color::Cyan,
+        AppMode::Search => Color::Yellow,
+        AppMode::Confirm => Color::Red,
+        AppMode::Help => Color::Blue,
+    };
+
+    let selected_count = if app.multi_select_mode {
+        format!(" {} selected ", app.multi_selected_scripts.len())
+    } else {
+        String::new()
+    };
+
+    let has_selected = !selected_count.is_empty();
+    let version = version::get_current_version();
+
+    let status = Line::from(vec![
+        Span::styled(
+            format!(" MODE: {} ", mode_text),
+            Style::default()
+                .bg(mode_color)
+                .fg(Color::Black)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::raw(" "),
+        if has_selected {
+            Span::styled(
+                selected_count,
+                Style::default()
+                    .bg(Color::Yellow)
+                    .fg(Color::Black)
+                    .add_modifier(Modifier::BOLD),
+            )
+        } else {
+            Span::raw("")
+        },
+        if has_selected {
+            Span::raw(" ")
+        } else {
+            Span::raw("")
+        },
+        Span::styled(
+            " ?: Help | q: Quit ",
+            Style::default()
+                .bg(Color::Rgb(203, 166, 247))
+                .fg(Color::Black),
+        ),
+        Span::raw(" "),
+        Span::styled(
+            format!(" {} ", version),
+            Style::default()
+                .bg(Color::Cyan)
+                .fg(Color::Black)
+                .add_modifier(Modifier::BOLD),
+        ),
+    ]);
+
+    let status_widget = Paragraph::new(status).style(Style::default().bg(Color::Reset));
+
+    f.render_widget(status_widget, area);
+}
+
+fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     if app.mode == AppMode::Preview && !options.show_preview {
         app.mode = AppMode::Normal;
-    }
-
-    if app.mode == AppMode::Preview && options.show_preview {
-        render_fullscreen_preview(f, app);
-        return;
     }
 
     let area = Layout::default()
@@ -289,6 +363,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         .constraints([
             Constraint::Length(3),
             Constraint::Min(0),
+            Constraint::Length(1),
             Constraint::Length(1),
         ])
         .split(area);
@@ -317,39 +392,34 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         f.render_widget(preview_disabled, main_chunks[1]);
     }
 
-    let help_text = if app.multi_select_mode {
-        Paragraph::new(vec![Line::from(vec![
-            Span::styled("↑/↓/j/k: Navigate  ", Style::default().fg(Color::Gray)),
-            Span::styled(
-                "Space: Toggle Selection  ",
-                Style::default().fg(Color::Gray),
-            ),
-            Span::styled("Enter: Run Selected  ", Style::default().fg(Color::Green)),
-            Span::styled(
-                "m/ESC: Exit Multi-select  ",
-                Style::default().fg(Color::Gray),
-            ),
-            Span::styled("q: Quit", Style::default().fg(Color::Gray)),
-        ])])
-        .alignment(Alignment::Center)
-    } else {
-        Paragraph::new(vec![Line::from(vec![
-            Span::styled("↑/↓/j/k: Navigate  ", Style::default().fg(Color::Gray)),
-            Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
-            Span::styled("p: Preview  ", Style::default().fg(Color::Gray)),
-            Span::styled("/: Search  ", Style::default().fg(Color::Gray)),
-            Span::styled("m: Multi-select Mode  ", Style::default().fg(Color::Gray)),
-            Span::styled("q: Quit", Style::default().fg(Color::Gray)),
-        ])])
-        .alignment(Alignment::Center)
-    };
+    let help_text =
+        Paragraph::new(vec![Line::from(vec![Span::raw("")])]).alignment(Alignment::Center);
 
     f.render_widget(help_text, chunks[2]);
+    render_status_bar(f, app, chunks[3]);
+}
 
-    if app.mode == AppMode::Search {
-        popups::render_search_popup(f, app);
-    } else if app.mode == AppMode::Confirm {
-        popups::render_confirmation_popup(f, app);
+fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
+    match app.mode {
+        AppMode::Preview => {
+            render_fullscreen_preview(f, app);
+        }
+        AppMode::Search => {
+            render_normal_ui(f, app, options);
+            popups::render_search_popup(f, app);
+        }
+        AppMode::Confirm => {
+            render_normal_ui(f, app, options);
+            popups::render_confirmation_popup(f, app);
+        }
+        AppMode::Help => {
+            render_normal_ui(f, app, options);
+            let max_scroll = popups::render_help_popup(f, app);
+            app.help_max_scroll = max_scroll;
+        }
+        AppMode::Normal => {
+            render_normal_ui(f, app, options);
+        }
     }
 }
 
@@ -573,6 +643,9 @@ where
                                         terminal.clear()?;
                                     }
                                 }
+                            }
+                            AppMode::Help => {
+                                app.handle_key_help_mode(key);
                             }
                         }
                     }
