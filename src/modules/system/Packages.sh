@@ -40,7 +40,7 @@ detect_distro() {
 }
 
 detect_aur_helper() {
-    for helper in paru yay trizen pacaur aurman; do
+    for helper in paru yay; do
         if command -v $helper &>/dev/null; then
             AUR_HELPER=$helper
             echo -e "${GREEN}:: $helper detected and will be used as AUR helper.${RESET}"
