@@ -50,7 +50,7 @@ command_exists() {
 check_dependencies() {
     info "Checking dependencies..."
     
-    local deps=("curl" "grep" "tar" "figlet" "fzf" "git" "wget" "man" "man-db")
+    local deps=("curl" "grep" "tar" "fzf" "git" "wget" "man" "man-db")
     local missing_deps=()
     
     for dep in "${deps[@]}"; do

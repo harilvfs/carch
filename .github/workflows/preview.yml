@@ -45,10 +45,10 @@ jobs:
           #!/bin/bash
           
           pacman -Syu --noconfirm
-          pacman -S --noconfirm figlet fzf
+          pacman -S --noconfirm fzf
           
           echo "Installed packages:"
-          pacman -Q figlet fzf
+          pacman -Q fzf
           EOF
           chmod +x install_arch_deps.sh
           
@@ -60,16 +60,14 @@ jobs:
           FROM archlinux:latest AS arch_deps
           
           RUN pacman -Syu --noconfirm && \
-              pacman -S --noconfirm figlet fzf
+              pacman -S --noconfirm fzf
           
           FROM ghcr.io/charmbracelet/vhs
           
-          COPY --from=arch_deps /usr/bin/figlet /usr/bin/figlet
           COPY --from=arch_deps /usr/bin/fzf /usr/bin/fzf
           
-          COPY --from=arch_deps /usr/share/figlet /usr/share/figlet
           
-          RUN figlet "test" && which fzf
+          RUN which fzf
           EOF
           
           docker build -t vhs-with-arch-deps -f Dockerfile.vhs .

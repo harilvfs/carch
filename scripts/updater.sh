@@ -11,14 +11,6 @@ BLUE='\033[0;34m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Updater"
-else
-    echo "========== Version Updater =========="
-fi
-echo -e "${RESET}"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [[ "$(basename "$SCRIPT_DIR")" == "scripts" ]]; then
     REPO_DIR="$(dirname "$SCRIPT_DIR")"
