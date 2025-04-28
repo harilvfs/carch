@@ -21,13 +21,6 @@ FZF_COMMON="--layout=reverse \
             --header-first \
             --bind change:top"
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Alacritty"
-else
-    echo "========== Alacritty Setup =========="
-fi
-
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No")

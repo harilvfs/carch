@@ -38,14 +38,6 @@ fzf_confirm() {
     esac
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "LTS Kernel"
-else
-    echo "========== LTS Kernel Setup =========="
-fi
-echo -e "${ENDCOLOR}"
-
 check_current_kernel() {
     CURRENT_KERNEL=$(uname -r)
     echo -e "${BLUE}:: Current kernel version: ${GREEN}$CURRENT_KERNEL${ENDCOLOR}"

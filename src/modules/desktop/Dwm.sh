@@ -18,14 +18,6 @@ print_message() {
     printf "%b%s%b\n" "$color" "$message" "$RC"
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Dwm"
-else
-    echo "========== Dwm Setup =========="
-fi
-echo -e "${RESET}"
-
 FZF_COMMON="--layout=reverse \
             --border=bold \
             --border=rounded \

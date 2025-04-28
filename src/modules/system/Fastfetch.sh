@@ -11,14 +11,6 @@ NC='\033[0m'
 BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Fastfetch"
-else
-    echo "========== Fastfetch Setup =========="
-fi
-echo -e "${ENDCOLOR}"
-
 FZF_COMMON="--layout=reverse \
             --border=bold \
             --border=rounded \

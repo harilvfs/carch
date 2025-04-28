@@ -75,12 +75,12 @@ First, install dependencies:
 
 > **Arch Linux**
 > ```sh
-> sudo pacman -S --noconfirm figlet fzf cargo rust
+> sudo pacman -S --noconfirm fzf cargo rust
 > ```
 
 > **Fedora Linux**
 > ```sh
-> sudo dnf install figlet fzf cargo rust -y
+> sudo dnf install fzf cargo rust -y
 > ```
 
 Then, install Carch with Cargo:

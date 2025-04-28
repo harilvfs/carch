@@ -36,14 +36,6 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Wallpapers"
-else
-    echo "========== Wallpapers Setup =========="
-fi
-echo -e "${ENDCOLOR}"
-
 PICTURES_DIR="$HOME/Pictures"
 WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
 

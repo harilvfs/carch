@@ -10,14 +10,6 @@ YELLOW="\e[33m"
 BLUE="\e[34m"
 RESET="\e[0m"
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Npm"
-else
-    echo "========== Npm Setup =========="
-fi
-echo -e "${RESET}"
-
 if ! command -v fzf &>/dev/null; then
     echo -e "${RED}Error: 'fzf' is required for this script.${RESET}"
     echo -e "${YELLOW}Please install 'fzf' before running this script.${RESET}"

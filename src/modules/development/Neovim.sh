@@ -11,14 +11,6 @@ YELLOW="\e[33m"
 RESET="\e[0m"  
 
 echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Neovim"
-else
-    echo "=============================="
-    echo "       Neovim Setup"
-    echo "=============================="
-fi
-
 cat <<"EOF"
       
 This script helps you set up Neovim or NvChad.

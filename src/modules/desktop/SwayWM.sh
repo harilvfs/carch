@@ -176,10 +176,6 @@ manage_themes_icons() {
     git clone "$repo_url" "$target_dir/$repo_name"
 }
 
-print_message $BLUE "$(figlet -f slant "SwayWM")"
-
-print_message " "
-
 print_message $BLUE "If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles"
 

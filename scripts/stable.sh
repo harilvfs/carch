@@ -16,7 +16,7 @@ check_dependency() {
     fi
 }
 
-for pkg in fzf figlet curl; do
+for pkg in fzf; do
     check_dependency "$pkg"
 done
 

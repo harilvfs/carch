@@ -36,7 +36,7 @@ fzf_confirm() {
     fi
 }
 
-dependencies=("tmux" "figlet" "fzf" "wget" "git" "curl")
+dependencies=("tmux" "fzf" "wget" "git" "curl")
 missing=()
 
 for dep in "${dependencies[@]}"; do
@@ -59,14 +59,6 @@ if [[ ${#missing[@]} -ne 0 ]]; then
 fi
 
 clear
-
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Tmux"
-else
-    echo "========== Tmux Setup =========="
-fi
-echo -e "${RESET}"
 
 if ! command -v tmux &>/dev/null; then
     echo -e "${YELLOW}Tmux is not installed. Installing...${RESET}"
