@@ -10,14 +10,6 @@ RED="\e[31m"
 CYAN="\e[36m"
 ENDCOLOR="\e[0m"
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Bluetooth"
-else
-    echo "========== Bluetooth Setup =========="
-fi
-echo -e "${ENDCOLOR}"
-
 FZF_COMMON="--layout=reverse \
             --border=bold \
             --border=rounded \

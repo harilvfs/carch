@@ -10,14 +10,6 @@ RED="\e[31m"
 MAGENTA="\e[35m"
 ENDCOLOR="\e[0m"
 
-if ! command -v figlet &>/dev/null; then
-    echo -e "${MAGENTA}figlet is not installed. Installing it now...${ENDCOLOR}"
-    sudo pacman -S --noconfirm figlet || {
-        echo -e "${RED}Failed to install figlet. Please install it manually with: sudo pacman -S figlet${ENDCOLOR}"
-        exit 1
-    }
-fi
-
 info() { echo -e "${MAGENTA}$1${ENDCOLOR}"; }
 success() { echo -e "${GREEN}$1${ENDCOLOR}"; }
 error() { echo -e "${RED}$1${ENDCOLOR}"; }
@@ -33,13 +25,6 @@ if command -v dnf &>/dev/null; then
 elif ! command -v pacman &>/dev/null; then
     error "This script is for Arch-based distros only. Exiting."
     exit 1
-fi
-
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Chaotic AUR"
-else
-    echo "========== Chaotic AUR Setup =========="
 fi
 
 if grep -q "\[chaotic-aur\]" /etc/pacman.conf; then

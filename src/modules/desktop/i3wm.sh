@@ -16,14 +16,6 @@ DOTFILES_DIR="$HOME/i3wmdotfiles"
 WALLPAPER_REPO="https://github.com/harilvfs/wallpapers"
 WALLPAPER_DIR="$HOME/Pictures/wallpapers"
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "i3wm"
-else
-    echo "========== i3wm Setup =========="
-fi
-echo -e "${RESET}"
-
 FZF_COMMON="--layout=reverse \
             --border=bold \
             --border=rounded \

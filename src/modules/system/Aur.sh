@@ -172,21 +172,6 @@ check_existing_helpers() {
     fi
 }
 
-display_header() {
-
-clear
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Aur"
-else
-    echo "========== Aur Setup =========="
-fi
-echo -e "${ENDCOLOR}"
-
-}
-
-display_header
-
 detect_distro
 
 if [ "$distro" == "fedora" ]; then
@@ -219,7 +204,7 @@ FZF_COMMON="--layout=reverse \
             --bind change:top"
 
 while true; do
-    display_header
+    clear
     echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
     echo
     

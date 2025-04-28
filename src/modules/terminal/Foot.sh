@@ -38,14 +38,6 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Foot"
-else
-    echo "========== Foot Setup =========="
-fi
-echo -e "${RESET}"
-
 echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${RESET}"
 echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${RESET}"
 echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${RESET}"

@@ -62,15 +62,6 @@ FZF_COMMON="--layout=reverse \
             --header-first \
             --bind change:top"
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Bash"
-else
-    echo "========== Bash Setup =========="
-fi
-echo -e "${RESET}"
-
-
 echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
 
 detect_distro

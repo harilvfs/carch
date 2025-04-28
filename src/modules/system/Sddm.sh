@@ -36,19 +36,10 @@ fzf_confirm() {
 }
 
 print_banner() {
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Sddm"
-else
-    echo "========== Sddm Setup =========="
-fi
-echo -e "${ENDCOLOR}"
-
 echo -e "${GREEN}"
 cat <<"EOF"
 Catppuccin SDDM Theme    
 https://github.com/catppuccin/sddm
-------------------------------------
 EOF
     echo -e "${ENDCOLOR}"
 }

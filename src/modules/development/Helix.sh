@@ -36,14 +36,6 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Helix"
-else
-    echo "========== Helix Setup =========="
-fi
-echo -e "${RESET}"
-
 if ! command -v fzf &>/dev/null; then
     echo -e "${RED}fzf is required but not installed. Please install it first.${RESET}"
     exit 1

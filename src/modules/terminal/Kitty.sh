@@ -37,14 +37,6 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Kitty"
-else
-    echo "========== Kitty Setup =========="
-fi
-echo -e "${RESET}"
-
 setup_kitty() {
     if ! command -v kitty &> /dev/null; then
         echo -e "${CYAN}Kitty is not installed. :: Installing...${NC}"

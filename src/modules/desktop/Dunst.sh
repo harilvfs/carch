@@ -41,14 +41,6 @@ print_message() {
 
 clear
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Dunst"
-else
-    echo "========== Dunst Setup =========="
-fi
-echo -e "${RESET}"
-
 if ! command -v dunst &>/dev/null; then
     print_message "$BLUE" "Dunst not found. Installing..."
     if command -v pacman &>/dev/null; then
