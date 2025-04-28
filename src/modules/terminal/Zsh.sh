@@ -107,14 +107,6 @@ install_fzf() {
 
 clear
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Zsh"
-else
-    echo "========== Zsh Setup =========="
-fi
-echo -e "${RESET}"
-
 detect_distro
 
 check_essential_dependencies

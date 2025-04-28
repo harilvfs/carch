@@ -109,13 +109,6 @@ choose_fonts() {
 
     while $return_to_menu; do
         clear
-        if command -v figlet &>/dev/null; then
-            echo -e "${BLUE}"
-            figlet -f slant "Fonts"
-            echo -e "${NC}"
-        fi
-        
-        echo -e "${GREEN}Select fonts to install (use TAB to select multiple)${NC}"
 
         FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "Exit")
 

@@ -37,14 +37,6 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Themes & Icons"
-else
-    echo "========== Theme & Icons Setup =========="
-fi
-echo -e "${RESET}"
-
 detect_distro() {
     if command -v pacman &>/dev/null; then
         distro="arch"
@@ -87,9 +79,6 @@ install_dependencies() {
     
     echo -e "${GREEN}:: Dependencies installed successfully.${RESET}"
 }
-
-echo -e "${CYAN}Theme and Icon Setup${RESET}"
-echo -e "${YELLOW}----------------------${RESET}"
 
 option=$(printf "Themes\nIcons\nBoth\nExit" | fzf ${FZF_COMMON} \
                                               --height=40% \
@@ -206,4 +195,3 @@ case "$option" in
         exit 1
         ;;
 esac
-

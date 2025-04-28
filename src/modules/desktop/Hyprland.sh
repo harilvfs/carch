@@ -9,15 +9,6 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 RESET='\033[0m'  
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Hyprland"
-else
-    echo "========== Hyprland Setup =========="
-fi
-echo -e "${RESET}"
-
-type figlet &>/dev/null || { echo "figlet is not installed. Install it first."; exit 1; }
 type fzf &>/dev/null || { echo "fzf is not installed. Install it first."; exit 1; }
 
 FZF_COMMON="--layout=reverse \

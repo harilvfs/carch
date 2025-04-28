@@ -29,14 +29,6 @@ check_fzf() {
     fi
 }
 
-echo -e "${GREEN}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Bun"
-else
-    echo "========== Bun Setup =========="
-fi
-echo -e "${RESET}"
-
 install_bun() {
     echo -e "${GREEN}Installing Bun...${RESET}"
     curl -fsSL https://bun.sh/install | bash

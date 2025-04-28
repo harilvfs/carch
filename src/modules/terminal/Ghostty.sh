@@ -38,14 +38,6 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${BLUE}"
-if command -v figlet &>/dev/null; then
-    figlet -f slant "Ghostty"
-else
-    echo "========== Ghostty Setup =========="
-fi
-echo -e "${RESET}"
-
 echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${RESET}"
 echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${RESET}"
 echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${RESET}"

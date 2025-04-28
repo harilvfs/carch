@@ -120,9 +120,6 @@ install_android() {
 
     while true; do
         clear
-        figlet -f slant "Android"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Android tools to install:"
 
         options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -141,7 +138,6 @@ install_android() {
             case $selection in
                 "Gvfs-MTP [Displays Android phones via USB]")
                     clear
-                    figlet -f small "Installing Gvfs-MTP"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur gvfs-mtp
                         version=$(get_version gvfs-mtp)
@@ -154,7 +150,6 @@ install_android() {
 
                 "ADB")
                     clear
-                    figlet -f small "Installing ADB"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur android-tools
                         version=$(get_version android-tools)
@@ -193,9 +188,6 @@ install_browsers() {
 
     while true; do
         clear
-        figlet -f slant "Browser"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select browsers to install:"
 
         options=("Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -214,7 +206,6 @@ install_browsers() {
             case $selection in
                 "Brave")
                     clear
-                    figlet -f small "Installing Brave"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur brave-bin
                         version=$(get_version brave-bin)
@@ -231,7 +222,6 @@ install_browsers() {
 
                 "Firefox")
                     clear
-                    figlet -f small "Installing Firefox"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman firefox
                         version=$(get_version firefox)
@@ -244,7 +234,6 @@ install_browsers() {
 
                 "Libre Wolf")
                     clear
-                    figlet -f small "Installing Libre Wolf"             
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur librewolf-bin
                         version=$(get_version librewolf-bin)
@@ -257,7 +246,6 @@ install_browsers() {
 
                 "Google Chrome")
                     clear
-                    figlet -f small "Installing Chrome"  
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur google-chrome
                         version=$(get_version google-chrome)
@@ -273,7 +261,6 @@ install_browsers() {
 
                 "Chromium")
                     clear
-                    figlet -f small "Installing Chromium"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman chromium
                         version=$(get_version chromium)
@@ -286,7 +273,6 @@ install_browsers() {
 
                 "Vivaldi")
                     clear
-                    figlet -f small "Installing Vivaldi"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman vivaldi
                         version=$(get_version vivaldi)
@@ -299,7 +285,6 @@ install_browsers() {
 
                 "Qute Browser")
                     clear
-                    figlet -f small "Installing Qute"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman qutebrowser
                         version=$(get_version qutebrowser)
@@ -312,7 +297,6 @@ install_browsers() {
 
                 "Zen Browser")
                     clear
-                    figlet -f small "Installing Zen"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur zen-browser-bin
                         version=$(get_version zen-browser-bin)
@@ -325,7 +309,6 @@ install_browsers() {
 
                 "Thorium Browser")
                     clear
-                    figlet -f small "Installing Thorium"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur thorium-browser-bin
                         version=$(get_version thorium-browser-bin)
@@ -368,7 +351,6 @@ install_browsers() {
 
                 "Opera")
                     clear
-                    figlet -f small "Installing Opera"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur opera
                         version=$(get_version opera)
@@ -384,7 +366,6 @@ install_browsers() {
 
                 "Tor Browser")
                     clear
-                    figlet -f small "Installing Tor Browser"
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur tor-browser-bin
                         version=$(get_version tor-browser-bin)
@@ -419,9 +400,6 @@ install_communication() {
 
     while true; do
         clear
-        figlet -f slant "Communication"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Communication Apps to install:"
 
         options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -440,7 +418,6 @@ install_communication() {
             case $selection in
             "Discord")
                 clear
-                figlet -f small "Installing Discord" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager discord
                     version=$(pacman -Qi discord | grep Version | awk '{print $3}')
@@ -453,7 +430,6 @@ install_communication() {
 
             "Better Discord")
                 clear
-                figlet -f small "Installing Better Discord"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager betterdiscord-installer-bin
                     echo "Better Discord installed successfully!"
@@ -464,7 +440,6 @@ install_communication() {
 
             "Signal")
                 clear
-                figlet -f small "Installing Signal" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager signal-desktop
                     version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}')
@@ -477,7 +452,6 @@ install_communication() {
 
             "Element (Matrix)")
                 clear
-                figlet -f small "Installing Element" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur element-desktop
                     version=$(get_version element-desktop)
@@ -490,7 +464,6 @@ install_communication() {
 
             "Slack")
                 clear
-                figlet -f small "Installing Slack" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur slack-desktop
                     version=$(get_version slack-desktop)
@@ -503,7 +476,6 @@ install_communication() {
 
             "Teams")
                 clear
-                figlet -f small "Installing Teams" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur teams
                     version=$(get_version teams)
@@ -515,7 +487,6 @@ install_communication() {
 
             "Zoom")
                 clear
-                figlet -f small "Installing Zoom" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur zoom
                     version=$(get_version zoom)
@@ -528,7 +499,6 @@ install_communication() {
 
             "Telegram")
                 clear
-                figlet -f small "Installing Telegram" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager telegram-desktop
                     version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}')
@@ -541,7 +511,6 @@ install_communication() {
 
             "Keybase")
                 clear
-                figlet -f small "Installing Keybase" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager keybase-bin
                     version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}')
@@ -581,9 +550,6 @@ install_development() {
 
     while true; do
         clear
-        figlet -f slant "Development"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select development tool to install:"
         
         options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -602,7 +568,6 @@ install_development() {
             case $selection in
             "Node.js")
                 clear
-                figlet -f small "Installing Node.js"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman nodejs npm
                     version=$(get_version nodejs)
@@ -615,7 +580,6 @@ install_development() {
 
             "Python")
                 clear
-                figlet -f small "Installing Python"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman python python-pip
                     version=$(get_version python)
@@ -628,7 +592,6 @@ install_development() {
 
             "Rust")
                 clear
-                figlet -f small "Installing Rust"
                 bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
                 source "$HOME/.cargo/env"
                 version=$(rustc --version | awk '{print $2}')
@@ -637,7 +600,6 @@ install_development() {
 
             "Go")
                 clear
-                figlet -f small "Installing Go"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman go
                     version=$(get_version go)
@@ -650,7 +612,6 @@ install_development() {
 
             "Docker")
                 clear
-                figlet -f small "Installing Docker"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman docker
                     sudo systemctl enable --now docker
@@ -668,7 +629,6 @@ install_development() {
 
             "Postman")
                 clear
-                figlet -f small "Installing Postman"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur postman-bin
                     version=$(get_version postman-bin)
@@ -681,7 +641,6 @@ install_development() {
 
             "DBeaver")
                 clear
-                figlet -f small "Installing DBeaver"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman dbeaver
                     version=$(get_version dbeaver)
@@ -694,7 +653,6 @@ install_development() {
 
             "Hugo")
                 clear
-                figlet -f small "Installing Hugo"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman hugo
                     version=$(get_version hugo)
@@ -728,9 +686,6 @@ install_editing() {
 
     while true; do
         clear
-        figlet -f slant "Editing"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Editing tool to install:"
 
         options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -750,7 +705,6 @@ install_editing() {
             case $selection in
             "GIMP (Image)")
                 clear
-                figlet -f small "Installing Gimp"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager gimp
                     version=$(pacman -Qi gimp | grep Version | awk '{print $3}')
@@ -763,7 +717,6 @@ install_editing() {
 
             "Kdenlive (Videos)")
                 clear
-                figlet -f small "Installing Kdenlive"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager kdenlive
                     version=$(pacman -Qi kdenlive | grep Version | awk '{print $3}')
@@ -777,7 +730,6 @@ install_editing() {
 
             "Krita")
                 clear
-                figlet -f small "Installing Krita"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur krita
                     version=$(get_version krita)
@@ -790,7 +742,6 @@ install_editing() {
 
             "Blender")
                 clear
-                figlet -f small "Installing Blender"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur blender
                     version=$(get_version blender)
@@ -803,7 +754,6 @@ install_editing() {
 
             "Inkscape")
                 clear
-                figlet -f small "Installing Inkscape"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur inkscape
                     version=$(get_version inkscape)
@@ -816,7 +766,6 @@ install_editing() {
 
             "Audacity")
                 clear
-                figlet -f small "Installing Audacity"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur audacity
                     version=$(get_version audacity)
@@ -829,7 +778,6 @@ install_editing() {
 
             "DaVinci Resolve")
                 clear
-                figlet -f small "Installing DaVinci Resolve"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur davinci-resolve
                     version=$(get_version davinci-resolve)
@@ -866,9 +814,6 @@ install_filemanagers() {
 
     while true; do
         clear
-        figlet -f slant "Filemanagers"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Filemanagers Apps to install:"
 
         options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -887,7 +832,6 @@ install_filemanagers() {
             case $selection in
             "Nemo")
                 clear
-                figlet -f small "Installing Nemo"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager nemo
                 else
@@ -899,7 +843,6 @@ install_filemanagers() {
 
             "Thunar")
                 clear
-                figlet -f small "Installing Thunar" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager thunar
                 else
@@ -911,7 +854,6 @@ install_filemanagers() {
 
             "Dolphin")
                 clear
-                figlet -f small "Installing Dolphin" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager dolphin
                 else
@@ -923,7 +865,6 @@ install_filemanagers() {
 
             "LF (Terminal File Manager)")
                 clear
-                figlet -f small "Installing LF" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager lf
                 else
@@ -936,7 +877,6 @@ install_filemanagers() {
 
             "Ranger")
                 clear
-                figlet -f small "Installing Ranger" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager ranger
                 else
@@ -948,7 +888,6 @@ install_filemanagers() {
 
             "Nautilus")
                 clear
-                figlet -f small "Installing Nautilus" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager nautilus
                 else
@@ -960,7 +899,6 @@ install_filemanagers() {
 
             "Yazi")
                 clear
-                figlet -f small "Installing Yazi" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager yazi
                 else
@@ -1000,9 +938,6 @@ install_gaming() {
 
     while true; do
         clear
-        figlet -f slant "Gaming"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Gaming Platform to install:"
 
         options=("Steam" "Lutris" "Heroic Games Launcher" "ProtonUp-Qt" "MangoHud" "GameMode" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1021,7 +956,6 @@ install_gaming() {
             case $selection in
             "Steam")
                 clear
-                figlet -f small "Installing Steam"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman steam
                     version=$(get_version steam)
@@ -1034,7 +968,6 @@ install_gaming() {
 
             "Lutris")
                 clear
-                figlet -f small "Installing Lutris"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman lutris
                     version=$(get_version lutris)
@@ -1047,7 +980,6 @@ install_gaming() {
 
             "Heroic Games Launcher")
                 clear
-                figlet -f small "Installing Heroic Games Launcher"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur heroic-games-launcher-bin
                     version=$(get_version heroic-games-launcher-bin)
@@ -1060,7 +992,6 @@ install_gaming() {
 
             "ProtonUp-Qt")
                 clear
-                figlet -f small "Installing ProtonUp-Qt"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur protonup-qt-bin
                     version=$(get_version protonup-qt-bin)
@@ -1073,7 +1004,6 @@ install_gaming() {
 
             "MangoHud")
                 clear
-                figlet -f small "Installing MangoHud"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman mangohud
                     version=$(get_version mangohud)
@@ -1086,7 +1016,6 @@ install_gaming() {
 
             "GameMode")
                 clear
-                figlet -f small "Installing GameMode"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman gamemode
                     version=$(get_version gamemode)
@@ -1125,9 +1054,6 @@ install_github() {
 
     while true; do
         clear
-        figlet -f slant "Git Tools"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Git tool to install:"
         
         options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1146,7 +1072,6 @@ install_github() {
             case $selection in
             "Git")
                 clear
-                figlet -f small "Installing Git"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur git
                     version=$(get_version git)
@@ -1159,7 +1084,6 @@ install_github() {
 
             "GitHub Desktop")
                 clear
-                figlet -f small "Installing Github-Desktop"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur github-desktop-bin
                     version=$(get_version github-desktop-bin)
@@ -1183,7 +1107,6 @@ install_github() {
 
             "GitHub CLI")
                 clear
-                figlet -f small "Installing Git-Cli"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman github-cli
                     version=$(get_version github-cli)
@@ -1196,7 +1119,6 @@ install_github() {
 
             "LazyGit")
                 clear
-                figlet -f small "Installing LazyGit"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman lazygit
                     version=$(get_version lazygit)
@@ -1241,9 +1163,6 @@ install_multimedia() {
 
     while true; do
         clear
-        figlet -f slant "Multimedia"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Multimedia Packages to install:"
 
         options=("VLC" "Netflix [Unofficial]" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1262,7 +1181,6 @@ install_multimedia() {
             case $selection in
             "VLC")
                 clear
-                figlet -f small "Installing VLC"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur vlc
                     version=$(get_version vlc)
@@ -1275,7 +1193,6 @@ install_multimedia() {
 
             "Netflix [Unofficial]")
                 clear
-                figlet -f small "Installing Netflix" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur netflix
                     version=$(get_version netflix)
@@ -1321,9 +1238,6 @@ install_music() {
 
     while true; do
         clear
-        figlet -f slant "Music"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Music Packages to install:"
 
         options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1342,7 +1256,6 @@ install_music() {
             case $selection in
             "Youtube-Music")
                 clear
-                figlet -f small "Installing Yt-Music"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager youtube-music-bin
                     version=$(get_version youtube-music-bin)
@@ -1355,7 +1268,6 @@ install_music() {
 
             "Spotube")
                 clear
-                figlet -f small "Installing Spotube" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager spotube
                     version=$(get_version spotube)
@@ -1368,7 +1280,6 @@ install_music() {
 
             "Spotify")
                 clear
-                figlet -f small "Installing Spotify" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager spotify
                     version=$(get_version spotify)
@@ -1381,7 +1292,6 @@ install_music() {
 
             "Rhythmbox")
                 clear
-                figlet -f small "Installing Rhythmbox" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager rhythmbox
                 else
@@ -1420,9 +1330,6 @@ install_productivity() {
 
     while true; do
         clear
-        figlet -f slant "Productivity"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Productivity Packages to install:"
         
         options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1441,7 +1348,6 @@ install_productivity() {
             case $selection in
             "LibreOffice")
                 clear
-                figlet -f small "Installing LibreOffice"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman libreoffice-fresh
                     version=$(get_version libreoffice-fresh)
@@ -1454,7 +1360,6 @@ install_productivity() {
 
             "OnlyOffice")
                 clear
-                figlet -f small "Installing OnlyOffice"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur onlyoffice-bin
                     version=$(get_version onlyoffice-bin)
@@ -1467,7 +1372,6 @@ install_productivity() {
 
             "Obsidian")
                 clear
-                figlet -f small "Installing Obsidian"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur obsidian
                     version=$(get_version obsidian)
@@ -1480,7 +1384,6 @@ install_productivity() {
 
             "Joplin")
                 clear
-                figlet -f small "Installing Joplin"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur joplin-desktop
                     version=$(get_version joplin-desktop)
@@ -1493,7 +1396,6 @@ install_productivity() {
 
             "Calibre")
                 clear
-                figlet -f small "Installing Calibre"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman calibre
                     version=$(get_version calibre)
@@ -1531,9 +1433,6 @@ install_streaming() {
 
     while true; do
         clear
-        figlet -f slant "Streaming"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Streaming tool to install:"
 
         options=("OBS Studio" "SimpleScreenRecorder [Git]" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1552,7 +1451,6 @@ install_streaming() {
             case $selection in
             "OBS Studio")
                 clear
-                figlet -f small "Installing obs-studio"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman obs-studio
                     version=$(get_version obs-studio)
@@ -1565,8 +1463,6 @@ install_streaming() {
 
             "SimpleScreenRecorder [Git]")
                 clear
-                figlet -f small "Installing SimpleScreenRecorder"
- 
                 if [[ $distro -eq 0 ]]; then
                     read -rp "The Git version builds from source and may take some time. Proceed? (y/N) " confirm
                     if [[ $confirm =~ ^[Yy]$ ]]; then
@@ -1610,14 +1506,10 @@ install_terminals() {
 
     while true; do
         clear
-        figlet -f slant "Terminal"
-        echo "Select Terminal to install:"
-        echo -e "${BLUE}If you're unsure what to choose, Kitty or Alacritty are great options.${RESET}"
-        echo -e "${YELLOW}----------------------------------------------------------------------${RESET}"
 
         options=("Alacritty" "Kitty" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
+                                                    --height=50% \
                                                     --prompt="Choose options (TAB to select multiple): " \
                                                     --header="Package Selection" \
                                                     --pointer="➤" \
@@ -1632,7 +1524,6 @@ install_terminals() {
             case $selection in
             "Alacritty")
                 clear
-                figlet -f small "Installing Alacritty"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager alacritty
                 else
@@ -1644,7 +1535,6 @@ install_terminals() {
 
             "Kitty")
                 clear
-                figlet -f small "Installing Kitty"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager kitty
                 else
@@ -1656,7 +1546,6 @@ install_terminals() {
 
             "Terminator")
                 clear
-                figlet -f small "Installing Terminator"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur terminator
                     version=$(get_version terminator)
@@ -1669,7 +1558,6 @@ install_terminals() {
 
             "Tilix")
                 clear
-                figlet -f small "Installing Tilix"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur tilix
                     version=$(get_version tilix)
@@ -1682,7 +1570,6 @@ install_terminals() {
 
             "Hyper")
                 clear
-                figlet -f small "Installing Hyper"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur hyper
                     version=$(get_version hyper)
@@ -1696,7 +1583,6 @@ install_terminals() {
 
             "GNOME Terminal")
                 clear
-                figlet -f small "Installing Gnome-Terminal"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager gnome-terminal
                 else
@@ -1708,7 +1594,6 @@ install_terminals() {
 
             "Konsole")
                 clear
-                figlet -f small "Installing Konsole"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager konsole
                 else
@@ -1720,7 +1605,6 @@ install_terminals() {
 
             "WezTerm")
                 clear
-                figlet -f small "Installing WezTerm"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager wezterm
                     version=$(get_version wezterm)
@@ -1744,7 +1628,6 @@ install_terminals() {
 
             "Ghostty")
                 clear
-                figlet -f small "Installing Ghostty"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager ghostty
                 elif [[ $distro -eq 1 ]]; then
@@ -1783,9 +1666,6 @@ install_texteditor() {
 
     while true; do
        clear
-        figlet -f slant "Text Editors"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Text Editor to install:"
 
         options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1804,7 +1684,6 @@ install_texteditor() {
             case $selection in
             "Cursor (AI Code Editor)")
                 clear
-                figlet -f small "Installing Cursor"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur cursor-bin
                     version=$(get_version cursor-bin)
@@ -1819,7 +1698,6 @@ install_texteditor() {
 
             "Visual Studio Code (VSCODE)")
                 clear
-                figlet -f small "Installing VSCODE"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur visual-studio-code-bin
                     version=$(get_version visual-studio-code-bin)
@@ -1832,7 +1710,6 @@ install_texteditor() {
 
             "Vscodium")
                 clear
-                figlet -f small "Installing Vscodium" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur vscodium-bin
                     version=$(get_version vscodium-bin)
@@ -1845,7 +1722,6 @@ install_texteditor() {
 
             "ZED Editor")
                 clear
-                figlet -f small "Installing ZED" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur zed-preview-bin
                     version=$(get_version zed-preview-bin)
@@ -1858,7 +1734,6 @@ install_texteditor() {
 
             "Neovim")
                 clear
-                figlet -f small "Installing Neovim" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur neovim
                     version=$(get_version neovim)
@@ -1871,7 +1746,6 @@ install_texteditor() {
 
             "Vim")
                 clear
-                figlet -f small "Installing Vim" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur vim
                     version=$(get_version vim)
@@ -1884,7 +1758,6 @@ install_texteditor() {
 
             "Code-OSS")
                 clear
-                figlet -f small "Installing Code-OSS" 
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_aur code-oss
                     version=$(get_version code-oss)
@@ -1920,9 +1793,6 @@ install_thunarpreview() {
 
     while true; do
         clear
-        figlet -f slant "Thunar"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Thumbnail Previewer & Trash-Cli:"
 
         options=("Tumbler" "Trash-Cli" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -1941,7 +1811,6 @@ install_thunarpreview() {
             case $selection in
             "Tumbler")
                 clear
-                figlet -f small "Installing Tumbler"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager tumbler
                 else
@@ -1953,7 +1822,6 @@ install_thunarpreview() {
 
             "Trash-Cli")
                 clear
-                figlet -f small "Installing Trash-Cli"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager trash-cli
                 else
@@ -1990,9 +1858,6 @@ install_virtualization() {
 
     while true; do
         clear
-        figlet -f slant "Virtualization"
-        echo -e "${YELLOW}--------------------------------------${RESET}"
-        echo "Select Virtualization tool to install:"
 
         options=("QEMU/KVM" "VirtualBox" "Distrobox" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
@@ -2011,7 +1876,6 @@ install_virtualization() {
             case $selection in
             "QEMU/KVM")
                 clear
-                figlet -f small "Installing QEMU"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman qemu-base virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs
                     sudo systemctl enable --now libvirtd.service
@@ -2029,7 +1893,6 @@ install_virtualization() {
 
             "VirtualBox")
                 clear
-                figlet -f small "Installing VirtualBox"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman virtualbox virtualbox-host-dkms
                     sudo usermod -aG vboxusers "$USER"
@@ -2045,7 +1908,6 @@ install_virtualization() {
 
             "Distrobox")
                 clear
-                figlet -f small "Installing DistroBox"
                 if [[ $distro -eq 0 ]]; then
                     $pkg_manager_pacman distrobox
                     version=$(get_version distrobox)
@@ -2066,11 +1928,6 @@ install_virtualization() {
     
 while true; do
     clear 
-    echo -e "${BLUE}"
-    figlet -f slant "Packages"
-    echo -e "${ENDCOLOR}"
-    echo "Select Category To Install Packages:"
-    echo -e "${YELLOW}--------------------------------------${RESET}"
 
     options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Thunar Preview" "Virtualization" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
