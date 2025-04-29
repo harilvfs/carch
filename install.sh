@@ -326,7 +326,7 @@ print_install_success_message() {
     echo ""
     echo "If you need help, run: ${BOLD}carch --help${RESET}"
     echo ""
-    echo "For more information, visit: ${BOLD}https://carch-org.github.io/docs${RESET}"
+    echo "For more information, visit: ${BOLD}https://carch.chalisehari.com.np${RESET}"
     echo ""
 }
 
@@ -338,7 +338,7 @@ print_update_success_message() {
     echo ""
     echo "If you need help, run: ${BOLD}carch --help${RESET}"
     echo ""
-    echo "For more information, visit: ${BOLD}https://carch-org.github.io/docs${RESET}"
+    echo "For more information, visit: ${BOLD}https://carch.chalisehari.com.np${RESET}"
     echo ""
 }
 
