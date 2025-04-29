@@ -246,7 +246,7 @@ fn ui(f: &mut Frame, app: &mut App) {
         ]),
         Line::from(""),
         Line::from(Span::styled(
-            "For more information, visit: https://carch-org.github.io/docs",
+            "For more information, visit: https://carch.chalisehari.com.np",
             Style::default().fg(Color::Gray),
         )),
         Line::from(""),
