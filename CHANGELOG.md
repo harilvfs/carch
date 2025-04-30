@@ -1,6 +1,37 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.1](https://github.com/harilvfs/carch/compare/v4.3.7...v4.4.1) (2025-04-30)
+
+### Changed
+
+
+* Bump Version 4.4.1 [ Pre-release ] [`e162b1e`](https://github.com/harilvfs/carch/commit/e162b1e)
+* Fix date [`3fa5a11`](https://github.com/harilvfs/carch/commit/3fa5a11)
+* Updated preview from release v4.3.7 (#430) [`d67b201`](https://github.com/harilvfs/carch/commit/d67b201)
+* chore: add dependencies ffmpeg [`04f1818`](https://github.com/harilvfs/carch/commit/04f1818)
+* docs: update docs link [`dcfaa87`](https://github.com/harilvfs/carch/commit/dcfaa87)
+* preview: Updated preview from release v4.4.1 by @harilvfs in https://github.com/harilvfs/carch/pull/433
+* remove: figlet stuff by @harilvfs in https://github.com/harilvfs/carch/pull/432
+
+### Added
+
+
+* build(deps): bump actions/setup-node from 3 to 4 by @dependabot in https://github.com/harilvfs/carch/pull/431
+
+### Fixed
+
+
+* fix: man pages [`9117bc3`](https://github.com/harilvfs/carch/commit/9117bc3)
+
+### Removed
+
+
+* remove: undeed things removed package script [`4ff618b`](https://github.com/harilvfs/carch/commit/4ff618b)
+
+For a detailed changelog, visit the [release section](https://github.com/harilvfs/carch/releases/tag/v4.4.1).
+
+
 ## [4.3.7](https://github.com/harilvfs/carch/compare/v4.3.6...v4.3.7) (2025-04-28)
 
 ### Changed
