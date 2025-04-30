@@ -207,7 +207,9 @@ fn ui(f: &mut Frame, app: &mut App) {
                 "  --log                   ",
                 Style::default().fg(Color::Yellow),
             ),
-            Span::raw("Enable logging for the current session only."),
+            Span::raw("Enable logging for the current session only "),
+
+            Span::styled("~/.config/carch/carch.log", Style::default().fg(Color::Green)),
         ]),
         Line::from(vec![
             Span::styled(
