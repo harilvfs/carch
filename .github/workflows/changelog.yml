@@ -253,34 +253,28 @@ jobs:
             
             if [ -s /tmp/changelog/changed.md ]; then
               echo "### Changed"
-              echo ""
               cat /tmp/changelog/changed.md
               echo ""
             fi
             
             if [ -s /tmp/changelog/added.md ]; then
               echo "### Added"
-              echo ""
               cat /tmp/changelog/added.md
               echo ""
             fi
             
             if [ -s /tmp/changelog/fixed.md ]; then
               echo "### Fixed"
-              echo ""
               cat /tmp/changelog/fixed.md
               echo ""
             fi
             
             if [ -s /tmp/changelog/removed.md ]; then
               echo "### Removed"
-              echo ""
               cat /tmp/changelog/removed.md
               echo ""
             fi
             
-            echo "For a detailed changelog, visit the [release section](https://github.com/${{ github.repository }}/releases/tag/${{ env.NEW_VERSION }})."
-            echo ""
           } > /tmp/changelog/new_changelog_entry.md
           
           CHANGELOG_CONTENT=$(cat /tmp/changelog/new_changelog_entry.md)
