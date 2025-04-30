@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Currently not compatible with Fedora. SwayWM is supported for Arch-based systems only.
+# This Script is Currently not compatible with Fedora. Only supported for Arch-based systems only.
 
 clear
 

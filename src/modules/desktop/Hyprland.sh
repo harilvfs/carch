@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Installs the Hyprland compositor along with my pre-configured dotfiles for a streamlined setup.
+# Installs the Hyprland compositor along with pre-configured dotfiles for a streamlined setup.
 
 clear
 
