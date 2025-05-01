@@ -255,7 +255,6 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App) {
         let scripts_list = List::new(script_items);
         f.render_widget(scripts_list, content_layout[2]);
 
-        // Yes/No options
         let options_text = Paragraph::new(Line::from(vec![
             Span::styled("(y)", Style::default().fg(Color::Green)),
             Span::styled("es", Style::default().fg(Color::Gray)),
@@ -333,7 +332,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App) -> u16 {
     )]));
     help_content.push(Line::from(""));
 
-    let nav_color = Color::Rgb(137, 180, 250); // Blue
+    let nav_color = Color::Rgb(137, 180, 250);
     help_content.push(Line::from(vec![
         Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(Color::Black)),
         Span::raw(" "),
@@ -429,7 +428,12 @@ pub fn render_help_popup(f: &mut Frame, app: &App) -> u16 {
         Span::styled(" m ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
+        Span::raw(" / "),
+        Span::styled("Esc", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Escape multi-select mode", Style::default().fg(Color::Gray)),
     ]));
+
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
