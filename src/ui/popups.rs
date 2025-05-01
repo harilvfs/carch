@@ -404,7 +404,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App) -> u16 {
             Style::default().bg(action_color).fg(Color::Black),
         ),
         Span::raw(" "),
-        Span::styled("Quit / Go back", Style::default().fg(Color::Gray)),
+        Span::styled("Quit | Go back", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
@@ -428,10 +428,10 @@ pub fn render_help_popup(f: &mut Frame, app: &App) -> u16 {
         Span::styled(" m ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
-        Span::raw(" / "),
+        Span::raw(" | "),
         Span::styled(" Esc ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Escape multi-select mode", Style::default().fg(Color::Gray)),
+        Span::styled("Exit multi-select mode", Style::default().fg(Color::Gray)),
     ]));
 
     help_content.push(Line::from(""));

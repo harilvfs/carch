@@ -267,7 +267,7 @@ fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_text = match app.mode {
         AppMode::Normal => {
             if app.multi_select_mode {
-                "MULTI-SELECT (Space to select) / (Esc To Exit)"
+                "MULTI-SELECT (Space to select) | (Esc To Exit)"
             } else {
                 "NORMAL"
             }
