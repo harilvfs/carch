@@ -60,7 +60,7 @@ detect_distro() {
 install_packages() {
     if [ "$distro" == "arch" ]; then
         print_message "$CYAN" ":: Installing required packages using pacman..."
-        sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer || {
+        sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }
@@ -73,8 +73,20 @@ install_packages() {
             exit 1
         }
         
+        print_message "$CYAN" ":: Enabling lihaohong/yazi COPR repository..."
+        sudo dnf copr enable -y lihaohong/yazi || {
+            print_message "$RED" "Failed to enable lihaohong/yazi COPR repository."
+            exit 1
+        }
+        
         sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer || {
             print_message "$RED" "Failed to install some packages."
+            exit 1
+        }
+        
+        print_message "$CYAN" ":: Installing Yazi with weak dependencies disabled..."
+        sudo dnf install -y yazi --setopt=install_weak_deps=False || {
+            print_message "$RED" "Failed to install Yazi."
             exit 1
         }
     fi
