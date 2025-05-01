@@ -152,7 +152,7 @@ jobs:
               echo "$PR_ENTRY" >> /tmp/changelog/removed.md
             elif echo "$PR_LABELS" | grep -q "changed\|refactor\|chore"; then
               echo "$PR_ENTRY" >> /tmp/changelog/changed.md
-            elif echo "$PR_TITLE" | grep -qE "^(feat|fix|chore|refactor|docs|style|perf|test|build|ci|revert)(\([a-z0-9-]+\))?:"; then
+            elif echo "$PR_TITLE" | grep -qE "^(feat|fix|chore|refactor|docs|style|perf|test|build|ci|revert|rust)(\([a-z0-9-]+\))?:"; then
               if echo "$PR_TITLE" | grep -qE "^feat(\([a-z0-9-]+\))?:"; then
                 echo "$PR_ENTRY" >> /tmp/changelog/added.md
               elif echo "$PR_TITLE" | grep -qE "^fix(\([a-z0-9-]+\))?:"; then
