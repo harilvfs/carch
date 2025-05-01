@@ -429,7 +429,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App) -> u16 {
         Span::raw(" "),
         Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
         Span::raw(" / "),
-        Span::styled("Esc", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::styled(" Esc ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Escape multi-select mode", Style::default().fg(Color::Gray)),
     ]));
