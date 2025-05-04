@@ -1,6 +1,36 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.2](https://github.com/harilvfs/carch/compare/v4.4.1...v4.4.2) (2025-05-04)
+
+### Changed
+
+* Bump Version 4.4.2 [`f113ddf`](https://github.com/harilvfs/carch/commit/f113ddf)
+* Changelog v4.4.1 (#434) [`6311a7a`](https://github.com/harilvfs/carch/commit/6311a7a)
+* add rust label [`5f158d8`](https://github.com/harilvfs/carch/commit/5f158d8)
+* cargo fmt [`c41d2ec`](https://github.com/harilvfs/carch/commit/c41d2ec)
+* chore: add yazi tui based filemanager [`25a74ac`](https://github.com/harilvfs/carch/commit/25a74ac)
+* cleanup spaces [`72312be`](https://github.com/harilvfs/carch/commit/72312be)
+* rust: add help info for multi-select [`26b0eae`](https://github.com/harilvfs/carch/commit/26b0eae)
+* rust: add log dir detail [`40e08bb`](https://github.com/harilvfs/carch/commit/40e08bb)
+* rust: update multiselect info [`f1584e2`](https://github.com/harilvfs/carch/commit/f1584e2)
+
+### Added
+
+* feat: add either with image or standard fastfetch [`4b1bb30`](https://github.com/harilvfs/carch/commit/4b1bb30)
+
+### Fixed
+
+* fix: description typos [`de3ddd3`](https://github.com/harilvfs/carch/commit/de3ddd3)
+* fix: directly include in package install [`154273c`](https://github.com/harilvfs/carch/commit/154273c)
+* fix: logging detail [`d5d6a0d`](https://github.com/harilvfs/carch/commit/d5d6a0d)
+* fix: spacing issue [`6292786`](https://github.com/harilvfs/carch/commit/6292786)
+* fix: typos [`271747c`](https://github.com/harilvfs/carch/commit/271747c)
+
+### Removed
+
+
+
 ## [4.4.1](https://github.com/harilvfs/carch/compare/v4.3.7...v4.4.1) (2025-05-01)
 
 ### Changed
