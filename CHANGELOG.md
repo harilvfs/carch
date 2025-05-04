@@ -5,8 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* Bump Version 4.4.2 [`f113ddf`](https://github.com/harilvfs/carch/commit/f113ddf)
-* Changelog v4.4.1 (#434) [`6311a7a`](https://github.com/harilvfs/carch/commit/6311a7a)
 * add rust label [`5f158d8`](https://github.com/harilvfs/carch/commit/5f158d8)
 * cargo fmt [`c41d2ec`](https://github.com/harilvfs/carch/commit/c41d2ec)
 * chore: add yazi tui based filemanager [`25a74ac`](https://github.com/harilvfs/carch/commit/25a74ac)
@@ -26,10 +24,6 @@ All notable changes to this project will be documented in this file.
 * fix: logging detail [`d5d6a0d`](https://github.com/harilvfs/carch/commit/d5d6a0d)
 * fix: spacing issue [`6292786`](https://github.com/harilvfs/carch/commit/6292786)
 * fix: typos [`271747c`](https://github.com/harilvfs/carch/commit/271747c)
-
-### Removed
-
-
 
 ## [4.4.1](https://github.com/harilvfs/carch/compare/v4.3.7...v4.4.1) (2025-05-01)
 
