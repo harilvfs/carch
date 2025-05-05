@@ -35,7 +35,7 @@ FZF_COMMON="--layout=reverse \
 
 fzf_confirm() {
     local prompt="$1"
-    local options=("Yes" "No" "Exit")
+    local options=("Yes" "No" "Back to Menu")
     local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                      --height=40% \
                                                      --prompt="$prompt " \
@@ -87,14 +87,14 @@ handle_existing_config() {
             echo -e "${YELLOW}Do you want to back up your existing Fastfetch configuration?${NC}"
             echo -e "${CYAN}1) Yes${NC}"
             echo -e "${CYAN}2) No${NC}"
-            echo -e "${CYAN}3) Exit${NC}"
+            echo -e "${CYAN}3) Back to Menu${NC}"
             echo -e "${BLUE}----------------------------------${NC}"
             read -rp "$(echo -e "${YELLOW}Enter your choice [1-3]: ${NC}")" choice_num
             
             case $choice_num in
                 1) choice="Yes" ;;
                 2) choice="No" ;;
-                3) choice="Exit" ;;
+                3) choice="Back to Menu" ;;
                 *) choice="Invalid" ;;
             esac
         fi
@@ -114,12 +114,13 @@ handle_existing_config() {
                 echo -e "${YELLOW}Proceeding without backup...${NC}"
                 return 0
                 ;;
-            "Exit"|"exit"|"E"|"e")
-                echo -e "${RED}Exiting the script.${NC}"
+            "Back to Menu"|"back to menu"|"B"|"b")
+                clear
+                main
                 exit 0
                 ;;
             *)
-                echo -e "${RED}Invalid option. Please choose 'Yes', 'No', or 'Exit'.${NC}"
+                echo -e "${RED}Invalid option. Please choose 'Yes', 'No', or 'Back to Menu'.${NC}"
                 handle_existing_config
                 ;;
         esac
@@ -142,7 +143,9 @@ setup_standard_fastfetch() {
 
 setup_png_fastfetch() {
     check_fastfetch
-    handle_existing_config
+    if ! handle_existing_config; then
+        return
+    fi
     
     echo -e "${CYAN}Setting up Fastfetch with custom PNG support...${NC}"
     echo -e "${CYAN}Cloning Fastfetch repository directly...${NC}"
@@ -170,6 +173,17 @@ main() {
     
     check_command git || { echo -e "${RED}Please install git and try again.${NC}"; exit 1; }
     
+    clear
+    
+    echo -e "${BLUE}"
+    cat <<"EOF"
+
+Standard is best for terminals that don't support image rendering
+PNG option should only be used in terminals that support image rendering
+
+EOF
+    echo -e "${NC}"
+    
     if command -v fzf &>/dev/null; then
         choice=$(fzf_select "Choose the setup option:" "Fastfetch Standard" "Fastfetch with PNG" "Exit")
     else
@@ -191,21 +205,23 @@ main() {
     case $choice in
         "Fastfetch Standard"|"fastfetch standard")
             setup_standard_fastfetch
+            echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
+            exit 0
             ;;
         "Fastfetch with PNG"|"fastfetch with png")
             setup_png_fastfetch
+            echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
+            exit 0
             ;;
         "Exit"|"exit"|"E"|"e")
             echo -e "${RED}Exiting the script.${NC}"
             exit 0
             ;;
         *)
-            echo -e "${RED}Invalid option selected! Exiting.${NC}"
-            exit 1
+            echo -e "${RED}Invalid option selected! Please try again.${NC}"
+            main
             ;;
     esac
-    
-    echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
 }
 
 main
