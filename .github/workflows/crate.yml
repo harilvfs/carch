@@ -1,4 +1,4 @@
-name: Publish Cargo Crate
+name: Cargo Crate
 
 on:
   workflow_dispatch:
