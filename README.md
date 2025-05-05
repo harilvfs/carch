@@ -1,5 +1,5 @@
 # Carch
-A Simple Script That May Help You Automate Linux System Setups.
+A Simple Script That May Help You Automate Linux System Setup.
 
 <details>
 <summary><strong>Preview 👀</strong></summary>
