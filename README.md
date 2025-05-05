@@ -12,7 +12,7 @@ Currently Supports Arch or Fedora Based Distros.
 
 [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
 
-[![github actions build status][rust]][rust-link]
+[![github actions build status][rust]][rust-link] [![github actions build status][shell]][shell-link] 
 
 ## About
 
@@ -172,3 +172,6 @@ Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so
 
 [rust]: https://github.com/harilvfs/carch/actions/workflows/rust.yml/badge.svg
 [rust-link]: https://github.com/harilvfs/carch/actions/workflows/rust.yml
+
+[shell]: https://github.com/harilvfs/carch/actions/workflows/shellcheck.yml/badge.svg
+[shell-link]: https://github.com/harilvfs/carch/actions/workflows/shellcheck.yml
