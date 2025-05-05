@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       tag_title:
-        description: 'Release title(e.g., v5.1.2@dateYMD)'
+        description: 'Release title(e.g., v5.1.2@Y-M-D)'
         required: true
         type: string
 
