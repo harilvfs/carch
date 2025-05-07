@@ -27,7 +27,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -38,7 +38,7 @@ fzf_confirm() {
 print_banner() {
 echo -e "${GREEN}"
 cat <<"EOF"
-Catppuccin SDDM Theme    
+Catppuccin SDDM Theme
 https://github.com/catppuccin/sddm
 EOF
     echo -e "${ENDCOLOR}"
@@ -57,7 +57,7 @@ detect_os() {
 
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
-    local dms=("gdm" "lightdm" "lxdm" "xdm")  
+    local dms=("gdm" "lightdm" "lxdm" "xdm")
     for dm in "${dms[@]}"; do
         if systemctl is-enabled "$dm" &>/dev/null; then
             echo -e "${RED}:: Disabling $dm...${ENDCOLOR}"
@@ -77,7 +77,7 @@ enable_sddm() {
 install_sddm() {
     if ! command -v sddm &> /dev/null; then
         echo -e "${GREEN}:: Installing SDDM...${ENDCOLOR}"
-        
+
         if [[ $DISTRO == "arch" ]]; then
             sudo pacman -S --noconfirm sddm
         elif [[ $DISTRO == "fedora" ]]; then
@@ -94,7 +94,7 @@ install_sddm() {
 install_theme() {
     local theme_dir="/usr/share/sddm/themes/"
     local theme_url="https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip"
-    
+
     if [ -d "$theme_dir/catppuccin-mocha" ]; then
         echo -e "${RED}:: Catppuccin theme already exists.${ENDCOLOR}"
         if fzf_confirm "Do you want to remove the existing theme and install a new one?"; then

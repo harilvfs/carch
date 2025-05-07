@@ -30,7 +30,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -46,7 +46,7 @@ echo
 setup_foot() {
     if ! command -v foot &> /dev/null; then
         echo -e "${CYAN}Foot is not installed. :: Installing...${NC}"
-        
+
         if command -v pacman &> /dev/null; then
             sudo pacman -S --needed foot
         elif command -v dnf &> /dev/null; then
@@ -67,7 +67,7 @@ setup_foot() {
         elif command -v dnf &> /dev/null; then
             echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
             sudo dnf install jetbrains-mono-fonts-all -y
-            
+
             echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${RESET}"
             echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
             echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
@@ -83,7 +83,7 @@ setup_foot() {
 
     if [ -d "$CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Existing Foot configuration detected.${NC}"
-        
+
         if fzf_confirm "Do you want to backup the existing configuration?"; then
             if [ -d "$BACKUP_DIR" ]; then
                 echo -e "${YELLOW}Backup already exists.${RESET}"
@@ -106,7 +106,7 @@ setup_foot() {
     fi
 
     echo -e "${CYAN}:: Downloading Foot configuration...${NC}"
-    
+
     wget -q -O "$CONFIG_DIR/foot.ini" "https://raw.githubusercontent.com/harilvfs/swaydotfiles/refs/heads/main/foot/foot.ini"
 
     if [ $? -eq 0 ]; then
@@ -127,4 +127,4 @@ setup_foot() {
     fi
 }
 
-setup_foot 
+setup_foot

@@ -32,7 +32,7 @@ check_fzf() {
 install_bun() {
     echo -e "${GREEN}Installing Bun...${RESET}"
     curl -fsSL https://bun.sh/install | bash
-    
+
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}Bun has been installed successfully!${RESET}"
     else
@@ -62,7 +62,7 @@ if ! command -v npm &>/dev/null; then
                                                        --header="Confirm" \
                                                        --pointer="➤" \
                                                        --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [ "$continue_install" != "Yes" ]; then
         echo -e "${RED}Aborting Bun installation. Please install npm first.${RESET}"
         exit 1

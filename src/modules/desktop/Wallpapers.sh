@@ -28,7 +28,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else

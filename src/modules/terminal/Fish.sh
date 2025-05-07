@@ -28,7 +28,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -55,7 +55,7 @@ detect_distro() {
 
 install_fish() {
     print_color "$CYAN" "Installing Fish shell..."
-    
+
     if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm fish noto-fonts-emoji git
     elif command -v dnf &>/dev/null; then

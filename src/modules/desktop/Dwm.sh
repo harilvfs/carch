@@ -36,7 +36,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -66,19 +66,19 @@ install_packages() {
         }
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing required packages using dnf..."
-        
+
         print_message "$CYAN" ":: Enabling solopasha/hyprland COPR repository..."
         sudo dnf copr enable -y solopasha/hyprland || {
             print_message "$RED" "Failed to enable solopasha/hyprland COPR repository."
             exit 1
         }
-        
+
         print_message "$CYAN" ":: Enabling lihaohong/yazi COPR repository..."
         sudo dnf copr enable -y lihaohong/yazi || {
             print_message "$RED" "Failed to enable lihaohong/yazi COPR repository."
             exit 1
         }
-        
+
         sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
             print_message "$RED" "Failed to install some packages."
             exit 1
@@ -96,17 +96,17 @@ check_aur_helper() {
         aur_helper="yay"
         return 0
     fi
-    
+
     print_message "$CYAN" ":: No AUR helper found. Installing yay..."
-    
+
     sudo pacman -S --needed --noconfirm git base-devel
-    
+
     local temp_dir=$(mktemp -d)
     cd "$temp_dir" || exit 1
-    
+
     if git clone https://aur.archlinux.org/yay.git; then
         cd yay || exit 1
-        makepkg -si --noconfirm || { 
+        makepkg -si --noconfirm || {
             print_message "$RED" "Failed to install yay."
             cd "$HOME" || exit
             rm -rf "$temp_dir"
@@ -134,7 +134,7 @@ install_dwm() {
             return
         fi
     fi
-    
+
     print_message "$CYAN" "Cloning DWM repository..."
     git clone https://github.com/harilvfs/dwm.git "$HOME/dwm" || exit 1
     cd "$HOME/dwm" || exit 1
@@ -157,7 +157,7 @@ install_nerd_font() {
     local FONT_DIR="$HOME/.fonts"
     local FONT_NAME="MesloLGS NF Regular"
     mkdir -p "$FONT_DIR"
-    
+
     if fc-list | grep -q "$FONT_NAME"; then
         print_message "$GREEN" "Meslo Nerd Font is already installed. Skipping..."
         return
@@ -171,7 +171,7 @@ install_nerd_font() {
     else
         sudo pacman -S --needed ttf-meslo-nerd || exit 1
     fi
-    
+
     fc-cache -vf || exit 1
     print_message "$GREEN" "Nerd Fonts installed successfully!"
 }
@@ -179,12 +179,12 @@ install_nerd_font() {
 install_picom() {
     if [ "$distro" == "arch" ]; then
         check_aur_helper
-        
+
         print_message "$CYAN" ":: Installing Picom with $aur_helper..."
-        $aur_helper -S --noconfirm picom-ftlabs-git || { 
+        $aur_helper -S --noconfirm picom-ftlabs-git || {
             print_message "$RED" "Failed to install Picom."
             print_message "$YELLOW" "Trying alternative installation method..."
-            
+
             local temp_dir=$(mktemp -d)
             cd "$temp_dir" || exit 1
             git clone https://github.com/FT-Labs/picom.git
@@ -204,7 +204,7 @@ install_picom() {
         ninja -C build
         sudo cp build/src/picom /usr/bin/
     fi
-    
+
     configure_picom
 }
 
@@ -212,7 +212,7 @@ configure_picom() {
     local CONFIG_DIR="$HOME/.config"
     local DESTINATION="$CONFIG_DIR/picom.conf"
     local URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
-    
+
     mkdir -p "$CONFIG_DIR"
     if [ -f "$DESTINATION" ]; then
         if fzf_confirm "Existing picom.conf detected. Do you want to replace it?"; then
@@ -221,7 +221,7 @@ configure_picom() {
             return
         fi
     fi
-    
+
     wget -q -O "$DESTINATION" "$URL" || exit 1
     print_message "$GREEN" "Picom configuration updated."
 }
@@ -229,7 +229,7 @@ configure_picom() {
 configure_wallpapers() {
     local BG_DIR="$HOME/Pictures/wallpapers"
     mkdir -p "$HOME/Pictures"
-    
+
     if [ -d "$BG_DIR" ]; then
         if fzf_confirm "Wallpapers directory already exists. Do you want to overwrite?"; then
             rm -rf "$BG_DIR"
@@ -237,7 +237,7 @@ configure_wallpapers() {
             return
         fi
     fi
-    
+
     if fzf_confirm "Do you want to download wallpapers? (Note: The wallpaper collection is large in size but recommended)"; then
         print_message "$CYAN" ":: Downloading wallpapers..."
         git clone https://github.com/harilvfs/wallpapers "$BG_DIR" || exit 1
@@ -249,7 +249,7 @@ configure_wallpapers() {
 
 setup_xinitrc() {
     local XINITRC="$HOME/.xinitrc"
-    
+
     if [ -f "$XINITRC" ]; then
         if fzf_confirm "Existing .xinitrc detected. Do you want to replace it?"; then
             mv "$XINITRC" "$XINITRC.bak"
@@ -257,13 +257,13 @@ setup_xinitrc() {
             return
         fi
     fi
-    
+
     print_message "$CYAN" ":: Creating .xinitrc file for DWM..."
     cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 exec dwm
 EOF
-    
+
     chmod +x "$XINITRC"
     print_message "$GREEN" ".xinitrc configured successfully!"
 }
@@ -271,19 +271,19 @@ EOF
 setup_tty_login() {
     if fzf_confirm "Do you want to use DWM from TTY using startx?"; then
         setup_xinitrc
-        
+
         if fzf_confirm "Do you want to enable automatic login to TTY? (Not recommended for security reasons)"; then
             local username=$(whoami)
             print_message "$CYAN" ":: Setting up autologin for user: $username"
-            
+
             sudo mkdir -p /etc/systemd/system/getty@tty1.service.d/
-            
+
             sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf > /dev/null << EOF
 [Service]
 ExecStart=
 ExecStart=-/sbin/agetty --autologin $username --noclear %I 38400 linux
 EOF
-            
+
             sudo systemctl daemon-reexec
             print_message "$GREEN" "Autologin configured for TTY1."
         fi
@@ -293,7 +293,7 @@ EOF
 check_display_manager() {
     local dm_found=false
     local dm_name=""
-    
+
     for dm in sddm gdm lightdm lxdm xdm slim greetd; do
         if systemctl is-enabled $dm.service &>/dev/null; then
             dm_found=true
@@ -301,7 +301,7 @@ check_display_manager() {
             break
         fi
     done
-    
+
     if $dm_found; then
         print_message "$YELLOW" "Display manager $dm_name is detected."
         if fzf_confirm "When using DWM from TTY, a display manager is not needed. Do you want to remove $dm_name?"; then

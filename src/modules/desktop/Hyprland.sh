@@ -7,7 +7,7 @@ clear
 BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
-RESET='\033[0m'  
+RESET='\033[0m'
 
 type fzf &>/dev/null || { echo "fzf is not installed. Install it first."; exit 1; }
 
@@ -29,7 +29,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else

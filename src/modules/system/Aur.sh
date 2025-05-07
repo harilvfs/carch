@@ -8,7 +8,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 CYAN='\033[0;36m'
-NC='\033[0m' 
+NC='\033[0m'
 BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 
@@ -24,36 +24,36 @@ detect_distro() {
 
 check_dependencies() {
     local missing_deps=()
-    
+
     echo -e "${CYAN}:: Checking for required dependencies...${NC}"
-    
+
     if ! command -v git &>/dev/null; then
         missing_deps+=("git")
     else
         echo -e "${GREEN}✓ Git is installed${NC}"
     fi
-    
+
     if ! command -v make &>/dev/null; then
         missing_deps+=("make")
     else
         echo -e "${GREEN}✓ Make is installed${NC}"
     fi
-    
+
     if ! command -v less &>/dev/null; then
         missing_deps+=("less")
     else
         echo -e "${GREEN}✓ Less is installed${NC}"
     fi
-    
+
     if ! command -v fzf &>/dev/null; then
         missing_deps+=("fzf")
     else
         echo -e "${GREEN}✓ Fzf is installed${NC}"
     fi
-    
+
     if [ ${#missing_deps[@]} -gt 0 ]; then
         echo -e "${YELLOW}The following dependencies need to be installed: ${missing_deps[*]}${NC}"
-        
+
         read -p "Install missing dependencies? [Y/n] " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Nn]$ ]]; then
@@ -61,10 +61,10 @@ check_dependencies() {
             read -p "Press Enter to continue..." dummy
             return 1
         fi
-        
+
         echo -e "${CYAN}:: Installing missing dependencies...${NC}"
         sudo pacman -S --needed "${missing_deps[@]}"
-        
+
         local failed=false
         for dep in "${missing_deps[@]}"; do
             if ! command -v "$dep" &>/dev/null; then
@@ -74,14 +74,14 @@ check_dependencies() {
                 echo -e "${GREEN}✓ $dep installed successfully${NC}"
             fi
         done
-        
+
         if $failed; then
             echo -e "${RED}Some dependencies failed to install. Cannot proceed.${NC}"
             read -p "Press Enter to continue..." dummy
             return 1
         fi
     fi
-    
+
     echo -e "${GREEN}All required dependencies are installed.${NC}"
     return 0
 }
@@ -93,11 +93,11 @@ install_paru() {
         read -p "Press Enter to continue..." dummy
         return
     fi
-    
+
     if ! check_dependencies; then
         return
     fi
-    
+
     echo -e "${CYAN}:: Installing Paru...${NC}"
     sudo pacman -S --needed base-devel git
     temp_dir=$(mktemp -d)
@@ -107,7 +107,7 @@ install_paru() {
     makepkg -si
     cd ..
     rm -rf "$temp_dir"
-    
+
     if command -v paru &>/dev/null; then
         echo -e "${GREEN}Paru installed successfully.${NC}"
     else
@@ -123,11 +123,11 @@ install_yay() {
         read -p "Press Enter to continue..." dummy
         return
     fi
-    
+
     if ! check_dependencies; then
         return
     fi
-    
+
     echo -e "${CYAN}:: Installing Yay...${NC}"
     sudo pacman -S --needed git base-devel
     temp_dir=$(mktemp -d)
@@ -137,7 +137,7 @@ install_yay() {
     makepkg -si
     cd ..
     rm -rf "$temp_dir"
-    
+
     if command -v yay &>/dev/null; then
         echo -e "${GREEN}Yay installed successfully.${NC}"
     else
@@ -149,19 +149,19 @@ install_yay() {
 check_existing_helpers() {
     local helpers_found=false
     local helper_list=""
-    
+
     if command -v paru &>/dev/null; then
         helpers_found=true
         paru_version=$(paru --version | head -n 1)
         helper_list="${helper_list}• Paru: ${paru_version}\n"
     fi
-    
+
     if command -v yay &>/dev/null; then
         helpers_found=true
         yay_version=$(yay --version | head -n 1)
         helper_list="${helper_list}• Yay: ${yay_version}\n"
     fi
-    
+
     if $helpers_found; then
         echo -e "${GREEN}AUR helper(s) already installed on this system:${NC}"
         echo -e "$helper_list"
@@ -185,7 +185,7 @@ if [ "$distro" == "unsupported" ]; then
     echo -e "${YELLOW}⚠️  NOTICE:${NC} Your distribution could not be detected."
     echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions.${NC}"
     echo -e "${YELLOW}Please verify that you are using an Arch-based distribution before continuing.${NC}"
-    
+
     read -p "Do you want to continue anyway? [y/N] " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -207,10 +207,10 @@ while true; do
     clear
     echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
     echo
-    
+
     check_existing_helpers
     echo
-    
+
         options=("Install Paru" "Install Yay" "Exit")
         selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=40% \
@@ -222,7 +222,7 @@ while true; do
         case $selected in
         "Install Paru") install_paru ;;
         "Install Yay") install_yay ;;
-        "Exit") 
+        "Exit")
             echo -e "${GREEN}Exiting AUR helper installation script.${NC}"
             exit ;;
         *) continue ;;

@@ -32,7 +32,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -43,16 +43,16 @@ fzf_confirm() {
 check_essential_dependencies() {
     local dependencies=("git" "wget" "curl")
     local missing=()
-    
+
     for dep in "${dependencies[@]}"; do
         if ! command -v "$dep" &>/dev/null; then
             missing+=("$dep")
         fi
     done
-    
+
     if [[ ${#missing[@]} -ne 0 ]]; then
         echo "Please wait, installing required dependencies..."
-        
+
         if command -v pacman &>/dev/null; then
             sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
         elif command -v dnf &>/dev/null; then
@@ -123,24 +123,24 @@ install_zsh_dependencies() {
         sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
     elif command -v dnf &>/dev/null; then
         sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting unzip
-        
+
         # due to eza is no longer available on fedora 42 installing manually
         print_message "$CYAN" "Installing eza manually for Fedora..."
-        
+
         if command -v eza &>/dev/null; then
             print_message "$GREEN" "eza is already installed."
         else
             local tmp_dir=$(mktemp -d)
             cd "$tmp_dir" || exit 1
-            
+
             print_message "$CYAN" "Fetching latest eza release..."
             local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
-            
+
             if [ -z "$latest_url" ]; then
                 print_message "$YELLOW" "Could not determine latest version, using fallback version..."
                 latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
             fi
-            
+
             print_message "$CYAN" "Downloading eza from: $latest_url"
             if ! curl -L -o eza.zip "$latest_url"; then
                 print_message "$RED" "Failed to download eza. Exiting..."
@@ -148,17 +148,17 @@ install_zsh_dependencies() {
                 rm -rf "$tmp_dir"
                 exit 1
             fi
-            
+
             print_message "$CYAN" "Extracting eza..."
             unzip -q eza.zip
-            
+
             print_message "$CYAN" "Installing eza to /usr/bin..."
             sudo cp eza /usr/bin/
             sudo chmod +x /usr/bin/eza
-            
+
             cd "$HOME" || exit
             rm -rf "$tmp_dir"
-            
+
             print_message "$GREEN" "eza installed successfully!"
         fi
     fi
@@ -211,7 +211,7 @@ config_zsh() {
             print_message "$GREEN" "Applied recommended .zshrc."
         fi
     fi
-    
+
     if ! grep -q '[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh' "$ZSHRC"; then
         echo '[ -f ~/.p10k.zsh ] && source ~/.p10k.zsh' >> "$ZSHRC"
     fi
@@ -226,7 +226,7 @@ install_pokemon_colorscripts() {
 
         [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
         git clone --depth=1 https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKEMON_DIR"
-        
+
         if [[ -d "$POKEMON_DIR" ]]; then
             cd "$POKEMON_DIR" || exit
             sudo ./install.sh

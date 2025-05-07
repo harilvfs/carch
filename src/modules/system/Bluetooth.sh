@@ -28,7 +28,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -52,7 +52,7 @@ detect_distro() {
 
 install_bluetooth() {
     echo -e "${BLUE}:: Installing Bluetooth packages...${ENDCOLOR}"
-    
+
     if [ "$DISTRO" = "arch" ]; then
         echo -e "${CYAN}:: Installing Bluetooth packages for Arch Linux...${ENDCOLOR}"
         sudo pacman -S --noconfirm bluez bluez-utils blueman
@@ -68,19 +68,19 @@ install_bluetooth() {
             exit 1
         fi
     fi
-    
+
     echo -e "${GREEN}:: Bluetooth packages installed successfully.${ENDCOLOR}"
 }
 
 enable_bluetooth() {
     echo -e "${BLUE}:: Enabling Bluetooth service...${ENDCOLOR}"
-    
+
     sudo systemctl enable --now bluetooth.service
     if [ $? -ne 0 ]; then
         echo -e "${RED}:: Failed to enable Bluetooth service.${ENDCOLOR}"
         exit 1
     fi
-    
+
     echo -e "${GREEN}:: Bluetooth service enabled successfully.${ENDCOLOR}"
 }
 
@@ -93,13 +93,13 @@ provide_additional_info() {
 
 main() {
     detect_distro
-    
+
     if fzf_confirm "Do you want to install Bluetooth system?"; then
         install_bluetooth
         enable_bluetooth
         echo -e "${GREEN}:: Bluetooth setup completed successfully!${ENDCOLOR}"
         provide_additional_info
-        
+
         if fzf_confirm "Do you want to restart the Bluetooth service now?"; then
             echo -e "${BLUE}:: Restarting Bluetooth service...${ENDCOLOR}"
             sudo systemctl restart bluetooth.service
@@ -110,4 +110,4 @@ main() {
     fi
 }
 
-main 
+main

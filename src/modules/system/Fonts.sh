@@ -22,8 +22,8 @@ FZF_COMMON="--layout=reverse \
             --bind change:top"
 
 get_latest_release() {
-    curl -s "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" | 
-    grep '"tag_name":' | 
+    curl -s "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" |
+    grep '"tag_name":' |
     sed -E 's/.*"v([^"]+)".*/\1/'
 }
 
@@ -36,7 +36,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -198,7 +198,7 @@ main() {
     check_dependencies
     detect_os
     choose_fonts
-    
+
 }
 
 main

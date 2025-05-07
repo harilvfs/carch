@@ -29,7 +29,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -52,7 +52,7 @@ detect_distro() {
 
 install_dependencies() {
     echo -e "${CYAN}:: Installing dependencies...${RESET}"
-    
+
     if [ "$distro" == "arch" ]; then
         sudo pacman -S --needed git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum || {
             echo -e "${RED}:: Failed to install dependencies. Exiting...${RESET}"
@@ -63,7 +63,7 @@ install_dependencies() {
             echo -e "${RED}:: Failed to install dependencies. Exiting...${RESET}"
             exit 1
         }
-        
+
         if ! command -v nwg-look &>/dev/null; then
             echo -e "${CYAN}:: Installing nwg-look for Fedora...${RESET}"
             sudo dnf copr enable -y solopasha/hyprland || {
@@ -76,7 +76,7 @@ install_dependencies() {
             }
         fi
     fi
-    
+
     echo -e "${GREEN}:: Dependencies installed successfully.${RESET}"
 }
 
@@ -130,7 +130,7 @@ setup_themes() {
     clone_repo "https://github.com/harilvfs/themes" "$tmp_dir"
 
     check_and_create_dir "$HOME/.themes"
-    
+
     cp -r "$tmp_dir"/* "$HOME/.themes/" 2>/dev/null
     cleanup_files "$HOME/.themes"
 
@@ -145,7 +145,7 @@ setup_icons() {
     clone_repo "https://github.com/harilvfs/icons" "$tmp_dir"
 
     check_and_create_dir "$HOME/.icons"
-    
+
     cp -r "$tmp_dir"/* "$HOME/.icons/" 2>/dev/null
     cleanup_files "$HOME/.icons"
 

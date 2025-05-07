@@ -32,7 +32,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -75,7 +75,7 @@ setup_rofi() {
         echo -e "${CYAN}:: Rofi configuration directory exists. Backing up the current configuration...${NC}"
         if [ -d "$BACKUP_DIR" ]; then
             echo -e "${YELLOW}:: Backup already exists. Do you want to overwrite it?${NC}"
-            
+
             if command -v fzf &>/dev/null; then
                 if fzf_confirm "Overwrite the existing backup?"; then
                     rm -rf "$BACKUP_DIR"
@@ -108,13 +108,13 @@ setup_rofi() {
 
     echo -e "${CYAN}:: Applying new Rofi configuration...${NC}"
     wget -q https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/rofi/config.rasi -O "$ROFI_CONFIG_DIR/config.rasi"
-    
+
     if [ ! -d "$ROFI_CONFIG_DIR/themes" ]; then
         mkdir -p "$ROFI_CONFIG_DIR/themes"
     fi
-    
+
     wget -q https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/rofi/themes/nord.rasi -O "$ROFI_CONFIG_DIR/themes/nord.rasi"
-    
+
     echo -e "${GREEN}:: Rofi configuration applied successfully!${NC}"
 }
 
