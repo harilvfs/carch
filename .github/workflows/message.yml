@@ -35,9 +35,10 @@ jobs:
           VERSION="v${{ github.event.inputs.version }}"
           DATE="${{ github.event.inputs.date }}"
           RELEASE_TAG="$VERSION"
-          CHANGELOG_VERSION="${{ github.event.inputs.version //.}"
+          CHANGELOG_VERSION="${{ github.event.inputs.version }}"
+          CHANGELOG_VERSION_NO_DOTS=$(echo "$CHANGELOG_VERSION" | tr -d '.')
           
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\nhttps://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION-$DATE"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\nhttps://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS-$DATE"
           
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
@@ -49,9 +50,10 @@ jobs:
           VERSION="v${{ github.event.inputs.version }}"
           DATE="${{ github.event.inputs.date }}"
           RELEASE_TAG="$VERSION"
-          CHANGELOG_VERSION="${{ github.event.inputs.version //.}"
+          CHANGELOG_VERSION="${{ github.event.inputs.version }}"
+          CHANGELOG_VERSION_NO_DOTS=$(echo "$CHANGELOG_VERSION" | tr -d '.')
           
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\nhttps://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION-$DATE"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\nhttps://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS-$DATE"
           
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
