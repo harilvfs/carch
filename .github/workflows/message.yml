@@ -1,9 +1,17 @@
 name: Send Release Notes
-
 on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      manual_tag:
+        description: 'Release tag (e.g. v4.4.2)'
+        required: false
+        type: string
+      manual_url:
+        description: 'Release URL'
+        required: false
+        type: string
 
 jobs:
   notify:
@@ -12,33 +20,100 @@ jobs:
       - name: Extract version and date
         id: extract
         run: |
-          TAG_NAME="${{ github.event.release.tag_name }}"  # e.g. v4.4.2
+          # Use inputs from workflow_dispatch if provided, otherwise use release event data
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.manual_tag }}" ]; then
+            TAG_NAME="${{ github.event.inputs.manual_tag }}"
+            RELEASE_URL="${{ github.event.inputs.manual_url || format('https://github.com/{0}/releases/tag/{1}', github.repository, github.event.inputs.manual_tag) }}"
+          else
+            TAG_NAME="${{ github.event.release.tag_name }}"
+            RELEASE_URL="${{ github.event.release.html_url }}"
+          fi
+          
           VERSION="${TAG_NAME#v}"                          # strip 'v' → 4.4.2
           SHORT_VERSION="${VERSION//./}"                   # remove dots → 442
-          DATE_RAW="${{ github.event.release.published_at }}"  # e.g. 2025-05-04T12:34:56Z
-          DATE=$(echo "$DATE_RAW" | cut -d'T' -f1)         # extract YYYY-MM-DD
+          
+          # Handle date formatting
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            DATE=$(date +%Y-%m-%d)
+          else
+            DATE_RAW="${{ github.event.release.published_at }}"
+            DATE=$(echo "$DATE_RAW" | cut -d'T' -f1)       # extract YYYY-MM-DD
+          fi
+          
           CHANGELOG_ANCHOR="${SHORT_VERSION}-${DATE}"      # e.g. 442-2025-05-04
-
+          CHANGELOG_URL="https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${CHANGELOG_ANCHOR}"
+          
+          # Set outputs
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
           echo "changelog_anchor=$CHANGELOG_ANCHOR" >> "$GITHUB_OUTPUT"
+          echo "release_url=$RELEASE_URL" >> "$GITHUB_OUTPUT"
+          echo "changelog_url=$CHANGELOG_URL" >> "$GITHUB_OUTPUT"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch release body
+        id: release_body
+        if: github.event_name == 'release'
+        run: |
+          BODY=$(jq -r '.release.body' $GITHUB_EVENT_PATH)
+          # Escape newlines for GitHub Output
+          BODY="${BODY//'%'/'%25'}"
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'\r'/'%0D'}"
+          echo "body=$BODY" >> "$GITHUB_OUTPUT"
 
       - name: Send message to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
+          # Format release notes for Discord
+          RELEASE_MESSAGE="✨ **Carch version ${{ steps.extract.outputs.tag_name }} is out!** ✨\n\nRelease: ${{ steps.extract.outputs.release_url }}\nChangelog: ${{ steps.extract.outputs.changelog_url }}"
+          
+          # Add release notes if available
+          if [ "${{ github.event_name }}" = "release" ] && [ -n "${{ steps.release_body.outputs.body }}" ]; then
+            RELEASE_MESSAGE="${RELEASE_MESSAGE}\n\n**Release Notes:**\n${{ steps.release_body.outputs.body }}"
+          fi
+          
+          # Send to Discord
           curl -H "Content-Type: application/json" \
             -X POST \
-            -d "{\"content\": \"✨ Carch version ${{ steps.extract.outputs.tag_name }} is out! Check the release section for details. ✨\n\n${{ github.event.release.html_url }}\n\nChangelog: https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${{ steps.extract.outputs.changelog_anchor }}\"}" \
+            -d "{\"content\": \"$RELEASE_MESSAGE\"}" \
             "$DISCORD_WEBHOOK_URL"
+
+      - name: Create Telegram message
+        id: telegram_message
+        run: |
+          # Base message
+          MESSAGE="✨ Carch version ${{ steps.extract.outputs.tag_name }} is out! ✨
+
+Release: ${{ steps.extract.outputs.release_url }}
+Changelog: ${{ steps.extract.outputs.changelog_url }}"
+          
+          # Add release notes conditionally
+          if [ "${{ github.event_name }}" = "release" ] && [ -n "${{ steps.release_body.outputs.body }}" ]; then
+            MESSAGE="${MESSAGE}
+
+Release Notes:
+${{ steps.release_body.outputs.body }}"
+          fi
+          
+          # Escape message for output
+          MESSAGE="${MESSAGE//'%'/'%25'}"
+          MESSAGE="${MESSAGE//$'\n'/'%0A'}"
+          MESSAGE="${MESSAGE//$'\r'/'%0D'}"
+          
+          echo "text=$MESSAGE" >> "$GITHUB_OUTPUT"
 
       - name: Send message to Telegram
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_THREAD_ID: ${{ secrets.TELEGRAM_THREAD_ID }}
         run: |
           curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage" \
             -d chat_id="$TELEGRAM_CHAT_ID" \
-            -d parse_mode="Markdown" \
-            -d text="✨ *Carch version ${{ steps.extract.outputs.tag_name }} is out!* Check the release section for details. ✨%0A%0A[Release Tag](${{ github.event.release.html_url }})%0A[Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${{ steps.extract.outputs.changelog_anchor }})"
-
+            -d message_thread_id="$TELEGRAM_THREAD_ID" \
+            -d text="${{ steps.telegram_message.outputs.text }}"
+          
+      - name: Print completion message
+        run: echo "✅ Release notifications sent successfully to Discord and Telegram!"
