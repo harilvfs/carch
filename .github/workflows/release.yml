@@ -118,6 +118,40 @@ jobs:
           
           FILTERED_NOTES=$(echo "$NOTES" | sed -E '/[Pp][Rr][Ee][Vv][Ii][Ee][Ww]/d' | sed -E '/[Cc][Hh][Aa][Nn][Gg][Ee][Ll][Oo][Gg]/d')
           
+          FILTERED_NOTES=$(echo "$FILTERED_NOTES" | awk '
+          BEGIN { in_section = ""; buffer = ""; }
+          /^### (📖 )?Documentation/ { in_section = "docs"; buffer = $0 "\n"; next; }
+          /^### (🔄 )?Other Changes/ { in_section = "other"; buffer = $0 "\n"; next; }
+          /^### / { 
+            if (in_section != "") {
+              # If buffer only contains header + newline, discard it (empty section)
+              if (buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/) {
+                buffer = "";
+              } else {
+                printf "%s", buffer;
+              }
+              in_section = "";
+              buffer = "";
+            }
+            print $0;
+            next;
+          }
+          { 
+            if (in_section != "") {
+              buffer = buffer $0 "\n";
+            } else {
+              print $0;
+            }
+          }
+          END {
+            if (in_section != "") {
+              # Only print non-empty sections
+              if (!(buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/)) {
+                printf "%s", buffer;
+              }
+            }
+          }')
+          
           echo "$FILTERED_NOTES" > release_notes.md
           
           BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
