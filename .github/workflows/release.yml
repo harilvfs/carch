@@ -37,18 +37,12 @@ jobs:
       - name: Update Cargo.toml version
         run: |
           sed -i "s/^version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$VERSION\"/" Cargo.toml
-          
-      - name: Commit version changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add ./man/carch.1 Cargo.toml
-          git commit -m "Update version to $VERSION for release"
-          git push
-          
-      - name: Install musl-tools
-        run: sudo apt-get update && sudo apt-get install musl-tools
-        
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+      
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
@@ -63,10 +57,19 @@ jobs:
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-index-
           
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-unknown-linux-musl
+      - name: Run cargo build to update Cargo.lock
+        run: cargo build --release
+          
+      - name: Commit version changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ./man/carch.1 Cargo.toml Cargo.lock
+          git commit -m "Update version to $VERSION for release"
+          git push
+          
+      - name: Install musl-tools
+        run: sudo apt-get update && sudo apt-get install musl-tools
           
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
@@ -99,17 +102,34 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
           
-      - name: Create and Upload Release
-        id: create_release
+      - name: Create Release and Generate Notes
+        id: create_release_notes
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
-          body: |
-            ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) 
-          files: |
-            ./build/x86_64-unknown-linux-musl/release/carch
-            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-          append_body: true
+          draft: true
           generate_release_notes: true
-          prerelease: true
+          
+      - name: Customize Release Notes
+        id: customize_notes
+        run: |
+          NOTES=$(gh release view ${{ github.event.inputs.tag_version }} --json body -q '.body')
+          
+          FILTERED_NOTES=$(echo "$NOTES" | sed -E '/[Pp][Rr][Ee][Vv][Ii][Ee][Ww]/d' | sed -E '/[Cc][Hh][Aa][Nn][Gg][Ee][Ll][Oo][Gg]/d')
+          
+          echo "$FILTERED_NOTES" > release_notes.md
+          
+          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
+          
+          echo -e "$BADGES$(cat release_notes.md)" > release_notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Update Release with Customized Notes
+        run: |
+          gh release edit ${{ github.event.inputs.tag_version }} --notes-file release_notes.md
+          gh release upload ${{ github.event.inputs.tag_version }} ./build/x86_64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+          gh release edit ${{ github.event.inputs.tag_version }} --draft=false --prerelease=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
