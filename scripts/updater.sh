@@ -44,18 +44,18 @@ detect_version() {
 get_new_version() {
     echo -e "${BLUE}Please enter the new version number:${RESET}"
     read -p "> " NEW_VERSION
-    
+
     if ! [[ $NEW_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         echo -e "${RED}Error: Version must follow semantic versioning (e.g., 4.2.1)${RESET}"
         get_new_version
         return
     fi
-    
+
     echo -e "\n${YELLOW}==== Update Summary ====${RESET}"
     echo -e "Current version: ${OLD_VERSION}"
     echo -e "New version:     ${BOLD}${NEW_VERSION}${RESET}"
     echo -e "${YELLOW}=========================${RESET}\n"
-    
+
     echo -e "${BLUE}Do you want to proceed with these changes? (y/n)${RESET}"
     read -p "> " confirm
     if [[ ! $confirm =~ ^[Yy]$ ]]; then
@@ -83,7 +83,7 @@ update_cargo_toml() {
     else
         echo -e "${YELLOW}Searching for Cargo.toml in repository...${RESET}"
         CARGO_FILE=$(find "$REPO_DIR" -name "Cargo.toml" -type f | head -n 1)
-        
+
         if [ -n "$CARGO_FILE" ]; then
             sed -i "s/version = \"$OLD_VERSION\"/version = \"$NEW_VERSION\"/" "$CARGO_FILE"
             echo -e "${GREEN}✓ Updated $CARGO_FILE${RESET}"
@@ -96,16 +96,16 @@ update_cargo_toml() {
 main() {
     echo -e "${BOLD}${BLUE}==== Carch Version Updater ====${RESET}"
     echo -e "${BLUE}Repository directory: ${REPO_DIR}${RESET}"
-    
+
     check_repo
     detect_version
     get_new_version
-    
+
     echo -e "${BLUE}Updating version from $OLD_VERSION to $NEW_VERSION...${RESET}"
-    
+
     update_man_page
     update_cargo_toml
-    
+
     echo -e "\n${GREEN}${BOLD}Version update complete!${RESET}"
     echo -e "${GREEN}Updated from version $OLD_VERSION to $NEW_VERSION${RESET}"
     echo -e "\n${YELLOW}Please review the changes before committing:${RESET}"

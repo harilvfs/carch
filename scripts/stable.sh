@@ -60,7 +60,7 @@ findArch
 temp_file=$(mktemp)
 check $? "Creating the temporary file"
 
-curl -fsL "$(getUrl)" -o "$temp_file" &  
+curl -fsL "$(getUrl)" -o "$temp_file" &
 spinner $!
 
 check $? "Downloading carch"

@@ -38,9 +38,9 @@ findArch() {
 }
 
 get_latest_release() {
-    latest_release=$(curl -s "https://api.github.com/repos/harilvfs/carch/releases" | 
-        grep "tag_name" | 
-        head -n 1 | 
+    latest_release=$(curl -s "https://api.github.com/repos/harilvfs/carch/releases" |
+        grep "tag_name" |
+        head -n 1 |
         sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
     if [ -z "$latest_release" ]; then
         printf "Error fetching release data\n" >&2
@@ -87,7 +87,7 @@ set_download_url
 temp_file=$(mktemp)
 check $? "Creating the temporary file"
 
-curl -fsL "$url" -o "$temp_file" &  
+curl -fsL "$url" -o "$temp_file" &
 spinner $!
 
 check $? "Downloading carch"
