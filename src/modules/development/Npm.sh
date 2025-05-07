@@ -34,7 +34,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -65,14 +65,14 @@ fi
 
 if [[ ! -d "$HOME/.nvm" ]]; then
     print_message "$YELLOW" "🔧 Installing nvm..."
-    
+
     if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
         print_message "$GREEN" "✔ nvm installed successfully."
     elif wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
         print_message "$GREEN" "✔ nvm installed successfully (via wget)."
     else
         print_message "$RED" "✖ Failed to install nvm."
-        
+
         print_message "$YELLOW" "Falling back to package manager installation..."
         if command -v pacman &>/dev/null; then
             sudo pacman -S --noconfirm npm || {
@@ -114,12 +114,12 @@ if command -v nvm &>/dev/null; then
     nvm use --lts
     print_message "$GREEN" "✔ Node.js LTS installation completed via nvm."
     print_message "$GREEN" "✔ npm is now available."
-    
+
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
     print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
     print_message "$BLUE" "npm version: ${NPM_VERSION}"
-    
+
     print_message "$YELLOW" "⚠ Note: For nvm to work in new terminal sessions, make sure your shell's config file (e.g., ~/.bashrc) has been updated correctly."
     print_message "$YELLOW" "⚠ You may need to restart your terminal or run 'source ~/.bashrc' (or equivalent) for permanent effects."
 else

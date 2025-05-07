@@ -28,7 +28,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -52,7 +52,7 @@ detect_distro() {
 
 install_pipewire() {
     echo -e "${BLUE}:: Installing PipeWire and related packages...${ENDCOLOR}"
-    
+
     if [ "$DISTRO" = "arch" ]; then
         echo -e "${CYAN}:: Installing PipeWire packages for Arch Linux...${ENDCOLOR}"
         sudo pacman -S --noconfirm lib32-pipewire pipewire pipewire-alsa pipewire-jack pipewire-pulse gst-plugin-pipewire wireplumber rtkit
@@ -68,38 +68,38 @@ install_pipewire() {
             exit 1
         fi
     fi
-    
+
     echo -e "${GREEN}:: PipeWire packages installed successfully.${ENDCOLOR}"
 }
 
 setup_user_and_services() {
     echo -e "${BLUE}:: Configuring user permissions and services...${ENDCOLOR}"
-    
+
     echo -e "${CYAN}:: Adding user to rtkit group for realtime audio processing...${ENDCOLOR}"
     sudo usermod -a -G rtkit "$USER"
     if [ $? -ne 0 ]; then
         echo -e "${RED}:: Failed to add user to rtkit group.${ENDCOLOR}"
         exit 1
     fi
-    
+
     echo -e "${CYAN}:: Enabling PipeWire services for user session...${ENDCOLOR}"
     systemctl --user enable pipewire pipewire-pulse wireplumber
     if [ $? -ne 0 ]; then
         echo -e "${RED}:: Failed to enable PipeWire services.${ENDCOLOR}"
         exit 1
     fi
-    
+
     echo -e "${GREEN}:: User settings and services configured successfully.${ENDCOLOR}"
 }
 
 main() {
     detect_distro
-    
+
     if fzf_confirm "Do you want to install PipeWire audio system?"; then
         install_pipewire
         setup_user_and_services
         echo -e "${GREEN}:: PipeWire setup completed successfully!${ENDCOLOR}"
-        
+
         if fzf_confirm "Do you want to log out to apply changes? (Recommended)"; then
             echo -e "${BLUE}:: Logging out to apply audio system changes...${ENDCOLOR}"
             sleep 2
@@ -116,4 +116,4 @@ main() {
     fi
 }
 
-main 
+main

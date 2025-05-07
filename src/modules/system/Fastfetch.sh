@@ -7,7 +7,7 @@ clear
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 CYAN='\033[0;36m'
-NC='\033[0m' 
+NC='\033[0m'
 BLUE="\e[34m"
 YELLOW="\e[33m"
 ENDCOLOR="\e[0m"
@@ -42,7 +42,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     echo "$selected"
 }
 
@@ -64,7 +64,7 @@ check_fastfetch() {
         echo -e "${GREEN}Fastfetch is already installed.${NC}"
     else
         echo -e "${CYAN}Fastfetch is not installed. Installing...${NC}"
-        
+
         if [ -x "$(command -v pacman)" ]; then
             sudo pacman -S fastfetch git --noconfirm
         elif [ -x "$(command -v dnf)" ]; then
@@ -80,7 +80,7 @@ check_fastfetch() {
 handle_existing_config() {
     if [ -d "$FASTFETCH_DIR" ]; then
         echo -e "${YELLOW}Existing Fastfetch configuration found.${NC}"
-        
+
         if command -v fzf &>/dev/null; then
             choice=$(fzf_confirm "Do you want to back up your existing Fastfetch configuration?")
         else
@@ -90,7 +90,7 @@ handle_existing_config() {
             echo -e "${CYAN}3) Back to Menu${NC}"
             echo -e "${BLUE}----------------------------------${NC}"
             read -rp "$(echo -e "${YELLOW}Enter your choice [1-3]: ${NC}")" choice_num
-            
+
             case $choice_num in
                 1) choice="Yes" ;;
                 2) choice="No" ;;
@@ -98,7 +98,7 @@ handle_existing_config() {
                 *) choice="Invalid" ;;
             esac
         fi
-        
+
         case $choice in
             "Yes"|"yes"|"Y"|"y")
                 if [ ! -d "$BACKUP_DIR" ]; then
@@ -132,12 +132,12 @@ handle_existing_config() {
 setup_standard_fastfetch() {
     check_fastfetch
     handle_existing_config
-    
+
     echo -e "${CYAN}Setting up standard Fastfetch configuration...${NC}"
-    
+
     echo -e "${CYAN}Downloading standard configuration...${NC}"
     curl -sSLo "$FASTFETCH_DIR/config.jsonc" "https://raw.githubusercontent.com/harilvfs/fastfetch/refs/heads/old-days/fastfetch/config.jsonc"
-    
+
     echo -e "${GREEN}Standard Fastfetch setup completed!${NC}"
 }
 
@@ -146,18 +146,18 @@ setup_png_fastfetch() {
     if ! handle_existing_config; then
         return
     fi
-    
+
     echo -e "${CYAN}Setting up Fastfetch with custom PNG support...${NC}"
     echo -e "${CYAN}Cloning Fastfetch repository directly...${NC}"
-    
+
     rm -rf "$FASTFETCH_DIR"/* 2>/dev/null
     mkdir -p "$FASTFETCH_DIR"
-    
+
     git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"
-    
+
     echo -e "${CYAN}Cleaning up unnecessary files...${NC}"
     rm -rf "$FASTFETCH_DIR/.git" "$FASTFETCH_DIR/LICENSE" "$FASTFETCH_DIR/README.md"
-    
+
     echo -e "${GREEN}Fastfetch with PNG support setup completed!${NC}"
 }
 
@@ -170,11 +170,11 @@ main() {
         fi
         return 0
     }
-    
+
     check_command git || { echo -e "${RED}Please install git and try again.${NC}"; exit 1; }
-    
+
     clear
-    
+
     echo -e "${BLUE}"
     cat <<"EOF"
 
@@ -183,7 +183,7 @@ PNG option should only be used in terminals that support image rendering
 
 EOF
     echo -e "${NC}"
-    
+
     if command -v fzf &>/dev/null; then
         choice=$(fzf_select "Choose the setup option:" "Fastfetch Standard" "Fastfetch with PNG" "Exit")
     else
@@ -193,7 +193,7 @@ EOF
         echo -e "${CYAN}3) Exit${NC}"
         echo -e "${BLUE}----------------------------------${NC}"
         read -rp "$(echo -e "${YELLOW}Enter your choice [1-3]: ${NC}")" choice_num
-        
+
         case $choice_num in
             1) choice="Fastfetch Standard" ;;
             2) choice="Fastfetch with PNG" ;;
@@ -201,7 +201,7 @@ EOF
             *) choice="Invalid" ;;
         esac
     fi
-    
+
     case $choice in
         "Fastfetch Standard"|"fastfetch standard")
             setup_standard_fastfetch

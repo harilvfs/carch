@@ -35,7 +35,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -70,7 +70,7 @@ detect_package_manager() {
 install_aur_helper() {
     local aur_helpers=("yay" "paru")
     local aur_helper_found=false
-    
+
     for helper in "${aur_helpers[@]}"; do
         if command -v "$helper" &>/dev/null; then
             echo -e "${GREEN}:: AUR helper '$helper' is already installed. Using it.${ENDCOLOR}"
@@ -79,7 +79,7 @@ install_aur_helper() {
             break
         fi
     done
-    
+
     if [ "$aur_helper_found" = false ]; then
         echo -e "${RED}No AUR helper found. Installing yay...${ENDCOLOR}"
         sudo pacman -S --needed --noconfirm git base-devel
@@ -134,17 +134,17 @@ install_picom_ftlabs_fedora() {
 download_config() {
     local config_url="$1"
     local config_path="$HOME/.config/picom.conf"
-    
+
     if [ -f "$config_path" ]; then
         echo -e "${YELLOW}:: picom.conf already exists in $HOME/.config. Do you want to overwrite it?${ENDCOLOR}"
-        
+
         if command -v fzf &>/dev/null; then
             choice=$(fzf_confirm "Overwrite existing picom.conf?")
         else
             echo -e "${YELLOW}Do you want to overwrite it? (Yes/No)${ENDCOLOR}"
             read -r choice
         fi
-        
+
         case "$choice" in
             "Yes"|"yes"|"Y"|"y")
                 echo -e "${GREEN}:: Overwriting picom.conf...${ENDCOLOR}"
@@ -159,7 +159,7 @@ download_config() {
                 ;;
         esac
     fi
-    
+
     mkdir -p ~/.config
     echo -e "${GREEN}:: Downloading Picom configuration...${ENDCOLOR}"
     wget -O "$config_path" "$config_url"
@@ -177,7 +177,7 @@ else
     echo "2. Picom normal"
     echo "3. Exit"
     read -r option
-    
+
     case "$option" in
         1) choice="Picom with animation (FT-Labs)" ;;
         2) choice="Picom normal" ;;

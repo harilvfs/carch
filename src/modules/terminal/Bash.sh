@@ -15,16 +15,16 @@ detect_distro() {
 check_essential_dependencies() {
     local dependencies=("git" "wget" "curl")
     local missing=()
-    
+
     for dep in "${dependencies[@]}"; do
         if ! command -v "$dep" &>/dev/null; then
             missing+=("$dep")
         fi
     done
-    
+
     if [[ ${#missing[@]} -ne 0 ]]; then
         echo "Please wait, installing required dependencies..."
-        
+
         case "$distro" in
             arch) sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
             fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
@@ -170,7 +170,7 @@ install_pokemon_colorscripts() {
         arch)
             AUR_HELPERS=("yay" "paru")
             AUR_HELPER=""
-            
+
             for helper in "${AUR_HELPERS[@]}"; do
                 if command -v "$helper" &>/dev/null; then
                     AUR_HELPER="$helper"
@@ -178,19 +178,19 @@ install_pokemon_colorscripts() {
                     break
                 fi
             done
-            
+
             if [[ -z "$AUR_HELPER" ]]; then
                 echo -e "${CYAN}No AUR helper found. Installing yay...${RESET}"
-                
+
                 echo -e "${CYAN}Installing dependencies...${RESET}"
                 sudo pacman -S --needed --noconfirm git base-devel
-                
+
                 TEMP_DIR=$(mktemp -d)
-                cd "$TEMP_DIR" || { 
+                cd "$TEMP_DIR" || {
                     echo -e "${RED}Failed to create temporary directory${RESET}"
                     exit 1
                 }
-                
+
                 echo -e "${CYAN}Cloning yay repository...${RESET}"
                 git clone https://aur.archlinux.org/yay.git || {
                     echo -e "${RED}Failed to clone yay repository${RESET}"
@@ -198,14 +198,14 @@ install_pokemon_colorscripts() {
                     rm -rf "$TEMP_DIR"
                     exit 1
                 }
-                
+
                 cd yay || {
                     echo -e "${RED}Failed to enter yay directory${RESET}"
                     cd "$HOME" || exit 1
                     rm -rf "$TEMP_DIR"
                     exit 1
                 }
-                
+
                 echo -e "${CYAN}Building yay...${RESET}"
                 makepkg -si --noconfirm || {
                     echo -e "${RED}Failed to build yay${RESET}"
@@ -213,14 +213,14 @@ install_pokemon_colorscripts() {
                     rm -rf "$TEMP_DIR"
                     exit 1
                 }
-                
+
                 cd "$HOME" || exit 1
                 rm -rf "$TEMP_DIR"
                 AUR_HELPER="yay"
-                
+
                 echo -e "${GREEN}Successfully installed yay!${RESET}"
             fi
-            
+
             echo -e "${CYAN}Installing Pokémon Color Scripts (AUR)...${RESET}"
             $AUR_HELPER -S --noconfirm pokemon-colorscripts-git || {
                 echo -e "${RED}Failed to install pokemon-colorscripts-git${RESET}"
@@ -236,19 +236,19 @@ install_pokemon_colorscripts() {
 
             echo -e "${CYAN}Installing dependencies...${RESET}"
             sudo dnf install -y git
-            
+
             echo -e "${CYAN}Cloning Pokémon Color Scripts...${RESET}"
             git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
-            
+
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
-                cd "$HOME/pokemon-colorscripts" || { 
-                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}"; 
-                    return 1; 
+                cd "$HOME/pokemon-colorscripts" || {
+                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}";
+                    return 1;
                 }
-                
+
                 echo -e "${CYAN}Installing Pokémon Color Scripts...${RESET}"
                 sudo ./install.sh
-                
+
                 cd - > /dev/null || true
             else
                 echo -e "${RED}Failed to clone pokemon-colorscripts repository!${RESET}"

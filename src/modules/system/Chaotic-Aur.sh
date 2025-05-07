@@ -36,7 +36,7 @@ if [ ! -d "/etc/pacman.d/gnupg" ]; then
     info "Initializing pacman keys..."
     sudo pacman-key --init || {
         error "Failed to initialize pacman keys. Please check your system."
-        exit 1 
+        exit 1
     }
 fi
 

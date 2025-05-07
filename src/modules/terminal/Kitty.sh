@@ -29,7 +29,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -40,7 +40,7 @@ fzf_confirm() {
 setup_kitty() {
     if ! command -v kitty &> /dev/null; then
         echo -e "${CYAN}Kitty is not installed. :: Installing...${NC}"
-        
+
         if [ -x "$(command -v pacman)" ]; then
             sudo pacman -S --needed --noconfirm kitty
         elif [ -x "$(command -v dnf)" ]; then
@@ -59,18 +59,18 @@ setup_kitty() {
 
     if [ -d "$CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Backing up existing Kitty configuration...${NC}"
-        
+
         if [ ! -d "$BACKUP_DIR" ]; then
             mkdir "$BACKUP_DIR"
         fi
         mv "$CONFIG_DIR"/* "$BACKUP_DIR/" 2>/dev/null
     else
         echo -e "${GREEN}No existing Kitty configuration found.${NC}"
-        mkdir -p "$CONFIG_DIR"  
+        mkdir -p "$CONFIG_DIR"
     fi
 
     echo -e "${CYAN}:: Downloading Kitty configuration files...${NC}"
-    
+
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/kitty.conf"
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/theme.conf"
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/userprefs.conf"

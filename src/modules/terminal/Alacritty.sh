@@ -30,7 +30,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -45,7 +45,7 @@ installAlacritty() {
     fi
 
     echo -e "${YELLOW}Alacritty is not installed. Installing now...${RESET}"
-    
+
     if [ -x "$(command -v pacman)" ]; then
         sudo pacman -S alacritty --noconfirm
     elif [ -x "$(command -v dnf)" ]; then

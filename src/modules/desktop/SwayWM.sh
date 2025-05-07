@@ -36,7 +36,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -47,19 +47,19 @@ fzf_confirm() {
 install_aur_helper() {
     if ! command -v yay >/dev/null 2>&1 && ! command -v paru >/dev/null 2>&1; then
         print_message $GREEN "Installing yay as AUR helper..."
-        
+
         sudo pacman -S --needed base-devel git --noconfirm
-        
+
         temp_dir=$(mktemp -d)
         cd "$temp_dir" || { print_message $RED "Failed to create temporary directory"; return 1; }
-        
+
         git clone https://aur.archlinux.org/yay.git
         cd yay || { print_message $RED "Failed to enter yay directory"; return 1; }
         makepkg -si --noconfirm
-        
+
         cd "$OLDPWD" || true
         rm -rf "$temp_dir"
-        
+
         if command -v yay >/dev/null 2>&1; then
             print_message $GREEN "yay installed successfully."
         else
@@ -223,7 +223,7 @@ fi
 
 is_sddm_installed() {
     if command -v sddm &> /dev/null; then
-        return 0 
+        return 0
     else
         return 1
     fi
@@ -257,20 +257,20 @@ fi
     temp_dir=$(mktemp -d)
     echo "Downloading Catppuccin Mocha theme..."
     wget https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip -O "$temp_dir/catppuccin-mocha.zip"
-    
+
     unzip "$temp_dir/catppuccin-mocha.zip" -d "$temp_dir"
-    
-    cd "$temp_dir/catppuccin-mocha" || exit 
-    
+
+    cd "$temp_dir/catppuccin-mocha" || exit
+
     echo "Copying the theme to /usr/share/sddm/themes..."
     sudo cp -r "$temp_dir/catppuccin-mocha" /usr/share/sddm/themes/
-    
+
     rm -rf "$temp_dir"
 }
 
 configure_sddm_theme() {
     echo "Configuring sddm.conf to use the Catppuccin Mocha theme..."
-    
+
     if [ ! -f /etc/sddm.conf ]; then
         sudo touch /etc/sddm.conf
     fi
@@ -278,7 +278,7 @@ configure_sddm_theme() {
     if ! grep -q "\[Theme\]" /etc/sddm.conf; then
         echo "[Theme]" | sudo tee -a /etc/sddm.conf > /dev/null
     fi
-    
+
     sudo sed -i '/\[Theme\]/a Current=catppuccin-mocha' /etc/sddm.conf
 }
 

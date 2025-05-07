@@ -30,7 +30,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -46,7 +46,7 @@ echo
 setup_ghostty() {
     if ! command -v ghostty &> /dev/null; then
         echo -e "${CYAN}Ghostty is not installed. :: Installing...${NC}"
-        
+
         if command -v pacman &> /dev/null; then
             echo -e "${CYAN}Installing Ghostty on Arch-based systems...${NC}"
             sudo pacman -S --needed ghostty
@@ -70,7 +70,7 @@ setup_ghostty() {
         elif command -v dnf &> /dev/null; then
             echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
             sudo dnf install jetbrains-mono-fonts-all -y
-            
+
             echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${RESET}"
             echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
             echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
@@ -86,7 +86,7 @@ setup_ghostty() {
 
     if [ -d "$CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Existing Ghostty configuration detected.${NC}"
-        
+
         if fzf_confirm "Do you want to backup the existing configuration?"; then
             if [ -d "$BACKUP_DIR" ]; then
                 echo -e "${YELLOW}Backup already exists.${RESET}"
@@ -109,7 +109,7 @@ setup_ghostty() {
     fi
 
     echo -e "${CYAN}:: Downloading Ghostty configuration...${NC}"
-    
+
     wget -q -O "$CONFIG_DIR/config" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/ghostty/config"
 
     if [ $? -eq 0 ]; then
@@ -131,4 +131,4 @@ setup_ghostty() {
     fi
 }
 
-setup_ghostty 
+setup_ghostty

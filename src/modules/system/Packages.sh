@@ -29,13 +29,13 @@ AUR_HELPER=""
 detect_distro() {
    if command -v pacman &>/dev/null; then
        echo -e "${GREEN}:: Arch-based system detected.${RESET}"
-       return 0  
+       return 0
    elif command -v dnf &>/dev/null; then
        echo -e "${YELLOW}:: Fedora-based system detected. Skipping AUR helper installation.${RESET}"
-       return 1  
+       return 1
    else
        echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
-       return 2  
+       return 2
    fi
 }
 
@@ -47,7 +47,7 @@ detect_aur_helper() {
             return 0
         fi
     done
-    
+
     echo -e "${YELLOW}:: No AUR helper found.${RESET}"
     return 1
 }
@@ -55,7 +55,7 @@ detect_aur_helper() {
 install_aur_helper() {
     detect_distro
     case $? in
-        1) return ;; 
+        1) return ;;
         2) echo -e "${YELLOW}:: Proceeding, but AUR installation may not work properly.${RESET}" ;;
     esac
 
@@ -66,7 +66,7 @@ install_aur_helper() {
     fi
 
     echo -e "${RED}:: No AUR helper found. Installing yay...${RESET}"
-    
+
     sudo pacman -S --needed git base-devel
 
     temp_dir=$(mktemp -d)
@@ -161,7 +161,7 @@ install_android() {
                     ;;
             esac
         done
-        
+
         echo "All selected Android tools have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -315,25 +315,25 @@ install_browsers() {
                         echo "Thorium Browser installed successfully! Version: $version"
                     else
                         echo "Downloading and installing Thorium Browser for Fedora..."
-                        
+
                         if ! command -v wget &>/dev/null; then
                             echo "Installing wget..."
                             sudo dnf install -y wget
                         fi
-                        
+
                         temp_dir=$(mktemp -d)
                         cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${RESET}"; return; }
-                        
+
                         echo "Fetching latest Thorium Browser release..."
                         wget -q --show-progress https://github.com/Alex313031/thorium/releases/latest -O latest
                         latest_url=$(grep -o 'https://github.com/Alex313031/thorium/releases/tag/[^"]*' latest | head -1)
                         latest_version=$(echo "$latest_url" | grep -o '[^/]*$')
-                        
+
                         echo "Latest version: $latest_version"
                         echo "Downloading Thorium Browser AVX package..."
                         wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_${latest_version#M}_AVX.rpm" || \
                         wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
-                        
+
                         rpm_file=$(ls thorium*AVX.rpm 2>/dev/null)
                         if [ -n "$rpm_file" ]; then
                             echo "Installing Thorium Browser..."
@@ -343,7 +343,7 @@ install_browsers() {
                         else
                             echo "Failed to download Thorium Browser. Please visit https://thorium.rocks/ for manual installation."
                         fi
-                        
+
                         cd - >/dev/null || return
                         rm -rf "$temp_dir"
                     fi
@@ -377,7 +377,7 @@ install_browsers() {
                     ;;
             esac
         done
-        
+
         echo "All selected browsers have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -386,7 +386,7 @@ install_browsers() {
 install_communication() {
     detect_distro
     distro=$?
-    
+
     if [[ $distro -eq 0 ]]; then
         install_aur_helper
         pkg_manager="$AUR_HELPER -S --noconfirm"
@@ -523,7 +523,7 @@ install_communication() {
 
             esac
         done
-        
+
         echo "All selected Communication Apps have been installed."
         read -rp "Press Enter to continue..."
       done
@@ -550,7 +550,7 @@ install_development() {
 
     while true; do
         clear
-        
+
         options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
@@ -559,7 +559,7 @@ install_development() {
                                                     --pointer="➤" \
                                                     --multi \
                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-        
+
         if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
             return
         fi
@@ -665,7 +665,7 @@ install_development() {
 
             esac
         done
-        
+
         echo "All selected Development tools have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -791,7 +791,7 @@ install_editing() {
 
             esac
         done
-        
+
         echo "All selected Editing tools have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -911,7 +911,7 @@ install_filemanagers() {
 
             esac
         done
-        
+
         echo "All selected Filemanagers have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1028,7 +1028,7 @@ install_gaming() {
 
             esac
         done
-        
+
         echo "All selected Gaming Platform have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1054,7 +1054,7 @@ install_github() {
 
     while true; do
         clear
-        
+
         options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
@@ -1139,7 +1139,7 @@ install_github() {
 
             esac
         done
-        
+
         echo "All selected Git tools have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1205,7 +1205,7 @@ install_multimedia() {
                     echo "Installing Wine Silverlight & Netflix Desktop:"
                     sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
                     sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
-                    
+
                     version="(Manual installation required)"
                 fi
                 echo "Netflix [Unofficial] installed successfully! Version: $version"
@@ -1213,7 +1213,7 @@ install_multimedia() {
 
             esac
         done
-        
+
         echo "All selected Multimedia tools have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1303,7 +1303,7 @@ install_music() {
 
             esac
         done
-        
+
         echo "All selected Music Apps have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1330,7 +1330,7 @@ install_productivity() {
 
     while true; do
         clear
-        
+
         options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
@@ -1408,7 +1408,7 @@ install_productivity() {
 
             esac
         done
-        
+
         echo "All selected Productivity Apps have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1479,7 +1479,7 @@ install_streaming() {
 
             esac
         done
-        
+
         echo "All selected Streaming tools have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1640,7 +1640,7 @@ install_terminals() {
 
             esac
         done
-        
+
         echo "All selected Terminals Package have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1770,7 +1770,7 @@ install_texteditor() {
 
             esac
         done
-        
+
         echo "All selected Text Editors have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1833,7 +1833,7 @@ install_thunarpreview() {
 
             esac
         done
-        
+
         echo "All selected Thunar FM Package have been installed."
         read -rp "Press Enter to continue..."
     done
@@ -1920,14 +1920,14 @@ install_virtualization() {
 
             esac
         done
-        
+
         echo "All selected Android tools have been installed."
         read -rp "Press Enter to continue..."
     done
 }
-    
+
 while true; do
-    clear 
+    clear
 
     options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Thunar Preview" "Virtualization" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \

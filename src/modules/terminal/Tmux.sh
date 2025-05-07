@@ -28,7 +28,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     if [[ "$selected" == "Yes" ]]; then
         return 0
     else
@@ -47,7 +47,7 @@ done
 
 if [[ ${#missing[@]} -ne 0 ]]; then
     echo "Please wait, installing required dependencies..."
-    
+
     if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
     elif command -v dnf &>/dev/null; then
@@ -62,7 +62,7 @@ clear
 
 if ! command -v tmux &>/dev/null; then
     echo -e "${YELLOW}Tmux is not installed. Installing...${RESET}"
-    
+
     if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm tmux
     elif command -v dnf &>/dev/null; then

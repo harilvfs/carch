@@ -29,7 +29,7 @@ fzf_confirm() {
                                                      --header="$kernel_info" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    
+
     case "$selected" in
         "Install LTS, remove current") return 0 ;;
         "Install LTS alongside current") return 1 ;;

@@ -8,11 +8,11 @@ GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
 YELLOW="\e[33m"
-RESET="\e[0m"  
+RESET="\e[0m"
 
 echo -e "${BLUE}"
 cat <<"EOF"
-      
+
 This script helps you set up Neovim or NvChad.
 
 :: 'Neovim' will install and configure the standard Neovim setup.
@@ -45,7 +45,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-    
+
     echo "$selected"
 }
 
@@ -79,9 +79,9 @@ detect_os() {
 
 install_dependencies() {
     local os_type=$1
-    
+
     echo -e "${GREEN}Installing required dependencies...${RESET}"
-    
+
     if [[ "$os_type" == "arch" ]]; then
         sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
             xclip wl-clipboard lua-language-server shellcheck shfmt python3 yaml-language-server meson ninja \
@@ -94,7 +94,7 @@ install_dependencies() {
         echo -e "${RED}Unsupported OS type: $os_type${RESET}"
         return 1
     fi
-    
+
     echo -e "${GREEN}Dependencies installed successfully!${RESET}"
     return 0
 }
@@ -111,22 +111,22 @@ check_command() {
 handle_existing_config() {
     local nvim_config_dir="$HOME/.config/nvim"
     local backup_dir="$HOME/.config/nvimbackup"
-    
+
     if [ ! -d "$nvim_config_dir" ]; then
         echo -e "${GREEN}:: Creating Neovim configuration directory...${RESET}"
         mkdir -p "$nvim_config_dir"
         return 0
     fi
-    
+
     echo -e "${YELLOW}Existing Neovim configuration found.${RESET}"
-    
+
     if command -v fzf &>/dev/null; then
         choice=$(fzf_confirm "Do you want to back up your existing Neovim configuration?")
     else
         echo -e "${YELLOW}Do you want to back up your existing Neovim configuration? (Yes/No/Exit)${RESET}"
         read -r choice
     fi
-    
+
     case $choice in
         "Yes"|"yes"|"Y"|"y")
             echo -e "${RED}:: Existing Neovim config found at $nvim_config_dir. Backing up...${RESET}"
@@ -155,23 +155,23 @@ handle_existing_config() {
 
 setup_neovim() {
     local nvim_config_dir="$HOME/.config/nvim"
-    
+
     handle_existing_config
-    
+
     echo -e "${GREEN}:: Cloning Neovim configuration from GitHub...${RESET}"
     if ! git clone https://github.com/harilvfs/nvim "$nvim_config_dir"; then
         echo -e "${RED}Failed to clone the Neovim configuration repository.${RESET}"
         return 1
     fi
-    
+
     echo -e "${GREEN}:: Cleaning up unnecessary files...${RESET}"
     if ! cd "$nvim_config_dir"; then
         echo -e "${RED}Failed to change directory to $nvim_config_dir.${RESET}"
         return 1
     fi
-    
+
     rm -rf .git README.md LICENSE
-    
+
     echo -e "${GREEN}Neovim setup completed successfully!${RESET}"
     return 0
 }
@@ -179,53 +179,53 @@ setup_neovim() {
 setup_nvchad() {
     local nvchad_dir="/tmp/chadnvim"
     local nvim_config_dir="$HOME/.config/nvim"
-    
+
     handle_existing_config
-    
+
     echo -e "${GREEN}:: Cloning NvChad configuration from GitHub...${RESET}"
     if ! git clone https://github.com/harilvfs/chadnvim "$nvchad_dir"; then
         echo -e "${RED}Failed to clone the NvChad repository.${RESET}"
         return 1
     fi
-    
+
     echo -e "${GREEN}:: Moving NvChad configuration...${RESET}"
     cp -r "$nvchad_dir/nvim/"* "$nvim_config_dir/"
-    
+
     echo -e "${GREEN}:: Cleaning up temporary files...${RESET}"
     rm -rf "$nvchad_dir"
-    
+
     echo -e "${GREEN}:: Cleaning up unnecessary files...${RESET}"
     if ! cd "$nvim_config_dir"; then
         echo -e "${RED}Failed to change directory to $nvim_config_dir.${RESET}"
         return 1
     fi
-    
+
     rm -rf LICENSE README.md
-    
+
     echo -e "${GREEN}NvChad setup completed successfully!${RESET}"
     return 0
 }
 
 main() {
     check_command git || { echo -e "${RED}Please install git and try again.${RESET}"; exit 1; }
-    
+
     os_info=$(detect_os 2>&1)
     if [[ $? -ne 0 ]]; then
         echo -e "${RED}OS detection failed. Exiting.${RESET}"
         exit 1
     fi
-    
+
     os_type=$(echo "$os_info" | grep "OS=" | cut -d= -f2)
-    
+
     echo -e "${YELLOW}Choose the setup option:${RESET}"
-    
+
     if command -v fzf &>/dev/null; then
         choice=$(fzf_select "Choose the setup option:" "Neovim" "NvChad" "Exit")
     else
         echo -e "${YELLOW}Choose the setup option (Neovim/NvChad/Exit):${RESET}"
         read -r choice
     fi
-    
+
     case $choice in
         "Neovim"|"neovim")
             setup_neovim || exit 1
@@ -244,7 +244,7 @@ main() {
             exit 1
             ;;
     esac
-    
+
     echo -e "${GREEN}Setup completed! You can now start using Neovim with your new configuration.${RESET}"
 }
 
