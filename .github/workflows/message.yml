@@ -53,7 +53,7 @@ jobs:
           CHANGELOG_VERSION="${{ github.event.inputs.version }}"
           CHANGELOG_VERSION_NO_DOTS=$(echo "$CHANGELOG_VERSION" | tr -d '.')
           
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\n\nRelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\n\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS-$DATE"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG%0A%0AChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS-$DATE"
           
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
