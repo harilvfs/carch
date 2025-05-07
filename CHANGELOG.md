@@ -1,6 +1,35 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.3](https://github.com/harilvfs/carch/compare/v4.4.2...v4.4.3) (2025-05-07)
+
+### Changed
+
+* add shell check status [`75c96ec`](https://github.com/harilvfs/carch/commit/75c96ec)
+* ci: add cargo crate publish [`deb28e6`](https://github.com/harilvfs/carch/commit/deb28e6)
+* ci: add man pages & cargo version update [`75ea430`](https://github.com/harilvfs/carch/commit/75ea430)
+* ci: update release to commit cargo.lock [`3385c62`](https://github.com/harilvfs/carch/commit/3385c62)
+* docs: add passing check [`bd3da9d`](https://github.com/harilvfs/carch/commit/bd3da9d)
+* fix for telegram formatting [`8e3aff3`](https://github.com/harilvfs/carch/commit/8e3aff3)
+* fix typos [`4bb531a`](https://github.com/harilvfs/carch/commit/4bb531a)
+* major fix [`288c216`](https://github.com/harilvfs/carch/commit/288c216)
+* my mindset just got broke [`76d7168`](https://github.com/harilvfs/carch/commit/76d7168)
+* refactor: add back to menu & improve [ Fastfetch ] [`210ef42`](https://github.com/harilvfs/carch/commit/210ef42)
+* some minor fixes [`2f76659`](https://github.com/harilvfs/carch/commit/2f76659)
+* style: remove spaces [`71e2f42`](https://github.com/harilvfs/carch/commit/71e2f42)
+* style: remove spaces [dev scripts] [`f7a3039`](https://github.com/harilvfs/carch/commit/f7a3039)
+* style: remove spaces [remaining one] [`95248c1`](https://github.com/harilvfs/carch/commit/95248c1)
+* style: remove spaces install script [`43c2313`](https://github.com/harilvfs/carch/commit/43c2313)
+
+### Added
+
+* build(deps): bump chrono from 0.4.40 to 0.4.41 by @dependabot in https://github.com/harilvfs/carch/pull/437
+* build(deps): bump crate-ci/typos from 1.31.1 to 1.32.0 by @dependabot in https://github.com/harilvfs/carch/pull/438
+
+### Fixed
+
+* fix: timing on vhs preview tape [`add213b`](https://github.com/harilvfs/carch/commit/add213b)
+
 ## [4.4.2](https://github.com/harilvfs/carch/compare/v4.4.1...v4.4.2) (2025-05-04)
 
 ### Changed
