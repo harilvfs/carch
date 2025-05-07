@@ -3,6 +3,7 @@ name: Send Release Notes
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   notify:
@@ -40,3 +41,4 @@ jobs:
             -d chat_id="$TELEGRAM_CHAT_ID" \
             -d parse_mode="Markdown" \
             -d text="✨ *Carch version ${{ steps.extract.outputs.tag_name }} is out!* Check the release section for details. ✨%0A%0A[Release Tag](${{ github.event.release.html_url }})%0A[Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${{ steps.extract.outputs.changelog_anchor }})"
+
