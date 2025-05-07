@@ -1,6 +1,65 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.3](https://github.com/harilvfs/carch/compare/v4.4.2...v4.4.3) (2025-05-07)
+
+### Changed
+
+* Changelog v4.4.2 by @harilvfs in https://github.com/harilvfs/carch/pull/435
+* Update Cargo.lock [`6adfa8f`](https://github.com/harilvfs/carch/commit/6adfa8f)
+* Update message.yml [`3087c4e`](https://github.com/harilvfs/carch/commit/3087c4e)
+* Update message.yml [`38a4f1d`](https://github.com/harilvfs/carch/commit/38a4f1d)
+* Update message.yml [`4f37f62`](https://github.com/harilvfs/carch/commit/4f37f62)
+* Update message.yml [`9c1c07c`](https://github.com/harilvfs/carch/commit/9c1c07c)
+* Update message.yml [`a876239`](https://github.com/harilvfs/carch/commit/a876239)
+* Update version to 4.4.3 for release [`2a88b8a`](https://github.com/harilvfs/carch/commit/2a88b8a)
+* Update version to 4.4.3 for release [`4e0354d`](https://github.com/harilvfs/carch/commit/4e0354d)
+* Update version to 4.4.3 for release [`8ecb3de`](https://github.com/harilvfs/carch/commit/8ecb3de)
+* add manual run [`f9fea9e`](https://github.com/harilvfs/carch/commit/f9fea9e)
+* add message workflow [`b154ad4`](https://github.com/harilvfs/carch/commit/b154ad4)
+* add shell check status [`75c96ec`](https://github.com/harilvfs/carch/commit/75c96ec)
+* back to old [`d86ac9d`](https://github.com/harilvfs/carch/commit/d86ac9d)
+* back to previous [ testing ] [`24e7378`](https://github.com/harilvfs/carch/commit/24e7378)
+* back to previous [`699c4f8`](https://github.com/harilvfs/carch/commit/699c4f8)
+* basically put spaces and fix token [`1df00ea`](https://github.com/harilvfs/carch/commit/1df00ea)
+* ci: add cargo crate publish [`deb28e6`](https://github.com/harilvfs/carch/commit/deb28e6)
+* ci: add man pages & cargo version update [`75ea430`](https://github.com/harilvfs/carch/commit/75ea430)
+* ci: update release to commit cargo.lock [`3385c62`](https://github.com/harilvfs/carch/commit/3385c62)
+* docs: add note [`021b390`](https://github.com/harilvfs/carch/commit/021b390)
+* docs: add passing check [`bd3da9d`](https://github.com/harilvfs/carch/commit/bd3da9d)
+* docs: fix duplication [`337fa1c`](https://github.com/harilvfs/carch/commit/337fa1c)
+* docs: fix duplication [`d93052c`](https://github.com/harilvfs/carch/commit/d93052c)
+* fix for telegram formatting [`8e3aff3`](https://github.com/harilvfs/carch/commit/8e3aff3)
+* fix typos [`4bb531a`](https://github.com/harilvfs/carch/commit/4bb531a)
+* major fix [`288c216`](https://github.com/harilvfs/carch/commit/288c216)
+* my mindset just got broke [`76d7168`](https://github.com/harilvfs/carch/commit/76d7168)
+* no need of updater [`78d4079`](https://github.com/harilvfs/carch/commit/78d4079)
+* perfect [`8ffa4cb`](https://github.com/harilvfs/carch/commit/8ffa4cb)
+* preview: Updated preview from release v4.4.2 by @harilvfs in https://github.com/harilvfs/carch/pull/436
+* refactor: add back to menu & improve [ Fastfetch ] [`210ef42`](https://github.com/harilvfs/carch/commit/210ef42)
+* some minor fixes [`2f76659`](https://github.com/harilvfs/carch/commit/2f76659)
+* style: fix date formatting [`3f8d35f`](https://github.com/harilvfs/carch/commit/3f8d35f)
+* style: fix formatting [`6e83774`](https://github.com/harilvfs/carch/commit/6e83774)
+* style: fix typos [`6e7177a`](https://github.com/harilvfs/carch/commit/6e7177a)
+* style: fix typos [`bf784bf`](https://github.com/harilvfs/carch/commit/bf784bf)
+* style: remove spaces [`71e2f42`](https://github.com/harilvfs/carch/commit/71e2f42)
+* style: remove spaces [dev scripts] [`f7a3039`](https://github.com/harilvfs/carch/commit/f7a3039)
+* style: remove spaces [remaining one] [`95248c1`](https://github.com/harilvfs/carch/commit/95248c1)
+* style: remove spaces install script [`43c2313`](https://github.com/harilvfs/carch/commit/43c2313)
+
+### Added
+
+* build(deps): bump chrono from 0.4.40 to 0.4.41 by @dependabot in https://github.com/harilvfs/carch/pull/437
+* build(deps): bump crate-ci/typos from 1.31.1 to 1.32.0 by @dependabot in https://github.com/harilvfs/carch/pull/438
+
+### Fixed
+
+* fix: timing on vhs preview tape [`add213b`](https://github.com/harilvfs/carch/commit/add213b)
+
+### Removed
+
+
+
 ## [4.4.2](https://github.com/harilvfs/carch/compare/v4.4.1...v4.4.2) (2025-05-04)
 
 ### Changed
