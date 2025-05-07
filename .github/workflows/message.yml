@@ -1,4 +1,4 @@
-name: Send Release Notifications
+name: Release Notified
 
 on:
   workflow_dispatch:
