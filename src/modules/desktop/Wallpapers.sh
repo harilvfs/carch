@@ -61,4 +61,3 @@ setup_wallpapers() {
 }
 
 setup_wallpapers
-
