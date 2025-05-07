@@ -69,25 +69,33 @@ Set TypingSpeed 100ms
 
 Sleep 1s
 
-Type "carch" Sleep 3s  Enter
+Type "carch" Sleep 2s  Enter
 
-Sleep 3s
+Sleep 2s
 
-Down Sleep 3s
+Down Sleep 2s
 
-Down Sleep 3s
+Down Sleep 2s
 
 Down Sleep 2s
 
 Type "/" Sleep 1s
 
-Type@200ms "Alacritty" Sleep 3s Enter
+Type@200ms "Packages" Sleep 3s Enter
 
 Sleep 3s
 
 Type "n"
 
 Sleep 4s
+
+Type "?"
+
+Sleep 4s
+
+Type "q"
+
+Sleep 3s
 
 Type "q"
 
