@@ -1,5 +1,4 @@
 name: Carch Release
-
 on:
   workflow_dispatch:
     inputs:
@@ -8,47 +7,70 @@ on:
         required: true
         type: string
       tag_title:
-        description: 'Release title(e.g., v5.1.2@Y-M-D)'
+        description: 'Release title (e.g., v5.1.2@Y-M-D)'
         required: true
         type: string
-
 permissions:
   contents: write
-
 jobs:
-  build_binaries:
+  update_versions_and_build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+          
+      - name: Set up version variables
+        run: |
+          VERSION=$(echo "${{ github.event.inputs.tag_version }}" | sed 's/^v//')
+          CURRENT_MONTH=$(date +'%B')
+          CURRENT_YEAR=$(date +'%Y')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
+          echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
+          
+      - name: Update man page version
+        run: |
+          sed -i "s/\.TH \"carch\" \"1\" \"[^\"]*\" \"Carch [^\"]*\" \"Carch Manual\"/.TH \"carch\" \"1\" \"$CURRENT_MONTH $CURRENT_YEAR\" \"Carch $VERSION\" \"Carch Manual\"/" ./man/carch.1
+      
+      - name: Update Cargo.toml version
+        run: |
+          sed -i "s/^version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$VERSION\"/" Cargo.toml
+          
+      - name: Commit version changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ./man/carch.1 Cargo.toml
+          git commit -m "Update version to $VERSION for release"
+          git push
+          
       - name: Install musl-tools
         run: sudo apt-get update && sudo apt-get install musl-tools
-
+        
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-registry-
-
+          
       - name: Cache Cargo index
         uses: actions/cache@v4
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-index-
-
+          
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-musl
-
+          
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
-
+        
       - name: Get Latest Release Tag
         id: get_latest
         run: |
@@ -57,19 +79,17 @@ jobs:
             latest_tag="v4.1.0"
           fi
           release_date=$(date +'%Y.%m.%d')
-          VERSION=$(echo "${{ github.event.inputs.tag_version }}" | sed 's/^v//')
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
+          
       - name: Build x86_64 binary
         run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
-
+        
       - name: Build aarch64 binary
         run: |
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-
+          
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -78,7 +98,7 @@ jobs:
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
-
+          
       - name: Create and Upload Release
         id: create_release
         uses: softprops/action-gh-release@v2
@@ -87,11 +107,9 @@ jobs:
           name: ${{ github.event.inputs.tag_title }}
           body: |
             ![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) 
-
           files: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           append_body: true
           generate_release_notes: true
           prerelease: true
-
