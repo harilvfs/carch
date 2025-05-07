@@ -327,4 +327,3 @@ echo "Sddm theme applied, service started, and configuration updated successfull
 
 print_message $BLUE "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
 print_message $GREEN "SwayWM setup complete!"
-
