@@ -47,7 +47,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7.0.8
         with:
-          token: ${{ secrets.DOCS_REPO_PAT }}
+          token: ${{ secrets.PAT_TOKEN }}
           commit-message: "docs: update version to ${{ github.event.inputs.version }}"
           branch: update-docs-version/${{ github.event.inputs.version }}
           title: "Update docs version to ${{ github.event.inputs.version }}"
