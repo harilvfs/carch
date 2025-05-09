@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: carch-org/docs
-          token: ${{ secrets.DOCS_REPO_PAT }}
+          token: ${{ secrets.PAT_TOKEN }}
           fetch-depth: 1
           
       - name: Update version in config.ts
