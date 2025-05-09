@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Script to set the brightness level to your preference using brightnessctl.
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
