@@ -2,7 +2,7 @@
 A Simple Script That May Help You Automate Linux System Setup.
 
 <details>
-<summary><strong>Preview 👀</strong></summary>
+<summary><strong>Preview</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
@@ -38,13 +38,13 @@ You can run or use Carch directly without installing it on your system.
 
 Choose one of the following version to try Carch:
 
-⭐ Stable Version [ Latest Release ]
+Stable Version [ Latest Release ]
 
 ```sh
 bash <(curl -L https://chalisehari.com.np/carch)
 ```
 
- 🧪 Dev Version [ Pre-Release ]
+Dev Version [ Pre-Release ]
  
 ```sh
 bash <(curl -L https://chalisehari.com.np/carchdev)
@@ -67,7 +67,7 @@ bash <(curl -L https://chalisehari.com.np/carchinstall) --update
 bash <(curl -L https://chalisehari.com.np/carchinstall) --uninstall
 ```
 
-### 📦 Cargo Crate
+### Cargo Crate
 
 Carch is available on [crates.io](https://crates.io/).
 
