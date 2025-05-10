@@ -14,7 +14,7 @@ clear
 check_brightnessctl() {
     if ! command -v brightnessctl &> /dev/null; then
         echo -e "${RED}brightnessctl is not installed!${NC}"
-        
+
         if command -v pacman &> /dev/null; then
             echo -e "${YELLOW}Detected Arch-based system.${NC}"
             echo -e "${GREEN}Installing brightnessctl with pacman...${NC}"
@@ -64,7 +64,7 @@ display_brightness() {
     current=$(get_current_brightness)
     max_bars=20
     bars=$(($current * $max_bars / 100))
-    
+
     progress="["
     for ((i=0; i<$max_bars; i++)); do
         if [ $i -lt $bars ]; then
@@ -74,7 +74,7 @@ display_brightness() {
         fi
     done
     progress+="]"
-    
+
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${CYAN}Current brightness: ${YELLOW}$current%${NC} $progress"
     echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -116,7 +116,7 @@ fzf_select() {
 
 increase_brightness() {
     current=$(get_current_brightness)
-    
+
     if [ $((current + 5)) -gt 100 ]; then
         brightnessctl set "100%" -q
         echo -e "${GREEN}Brightness set to maximum (100%)${NC}"
@@ -129,7 +129,7 @@ increase_brightness() {
 
 decrease_brightness() {
     current=$(get_current_brightness)
-    
+
     if [ $((current - 5)) -lt 5 ]; then
         brightnessctl set "5%" -q
         echo -e "${YELLOW}Brightness set to minimum (5%)${NC}"
@@ -146,15 +146,15 @@ set_specific_brightness() {
         display_brightness
         echo -e "${YELLOW}Enter the desired brightness level (5-100) or type 'exit' to return to menu:${NC}"
         read -p "> " input
-        
+
         if [[ "$input" == "exit" ]]; then
             echo -e "${YELLOW}Returning to main menu...${NC}"
             return
         fi
-        
+
         if [[ "$input" =~ ^[0-9]+$ ]] && [ "$input" -ge 5 ] && [ "$input" -le 100 ]; then
             response=$(fzf_confirm "Set brightness to $input%?")
-            
+
             case "$response" in
                 "Yes")
                     brightnessctl set "$input%" -q
@@ -179,13 +179,13 @@ set_specific_brightness() {
 
 main() {
     check_brightnessctl
-    
+
     while true; do
         clear
         display_brightness
-        
+
         choice=$(fzf_select "Select an option:" "Increase brightness (+5%)" "Decrease brightness (-5%)" "Set specific brightness" "Exit")
-        
+
         case "$choice" in
             "Increase brightness (+5%)")
                 increase_brightness
