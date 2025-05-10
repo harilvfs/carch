@@ -135,6 +135,14 @@ Thanks to everyone who contributed — reporting bugs, providing feedback, or su
 
 <br>
 
+## Support
+
+This project is free and open-source for personal or public use.
+
+If you'd like to support its development, you can donate via Bitcoin:
+
+> `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
+
 Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
