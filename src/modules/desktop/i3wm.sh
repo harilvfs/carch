@@ -227,7 +227,6 @@ if [[ -d "$HOME/.config/fish" ]]; then
     fi
 fi
 
-
 echo -e "${YELLOW}Choose your bar (polybar/i3status) [Polybar recommended]${ENDCOLOR}"
 echo -e "${YELLOW}Type Full Sentence Like polybar or i3status${ENDCOLOR}"
 read -rp "Choose your bar: " BAR_CHOICE
@@ -270,8 +269,6 @@ backup_and_replace "starship"
 backup_and_replace "nvim"
 
 echo -e "${GREEN}Dotfiles setup complete.${ENDCOLOR}"
-
-
 
 if [[ ! -d "$HOME/Pictures" ]]; then
     echo -e "${GREEN}Creating ~/Pictures directory...${ENDCOLOR}"

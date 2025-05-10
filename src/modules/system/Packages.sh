@@ -696,7 +696,6 @@ install_editing() {
                                                     --multi \
                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
-
         if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
             return
         fi

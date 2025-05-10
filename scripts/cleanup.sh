@@ -6,26 +6,22 @@
 remove_trailing_whitespace() {
     local file="$1"
     local show_diff="$2"
-
     if [ -r "$file" ]; then
         if grep -q '[[:space:]]\+$' "$file"; then
             echo "Found trailing spaces in: $file"
             if [ "$show_diff" = true ]; then
                 cp "$file" "${file}.bak"
             fi
-
             temp_file=$(mktemp)
             sed 's/[[:space:]]\+$//' "$file" > "$temp_file"
             cp "$temp_file" "$file"
             rm "$temp_file"
-
             if [ "$show_diff" = true ]; then
                 echo "--- Diff for trailing whitespace removal ---"
                 diff -u "${file}.bak" "$file" || true
                 rm "${file}.bak"
                 echo "--- End of diff ---"
             fi
-
             echo "✓ Trailing spaces removed from $file"
         else
             echo "✓ No trailing spaces found in $file"
@@ -39,14 +35,11 @@ remove_trailing_whitespace() {
 remove_trailing_blank_lines() {
     local file="$1"
     local show_diff="$2"
-
     if [ -r "$file" ]; then
         original_size=$(stat -c %s "$file")
-
         if [ "$show_diff" = true ]; then
             cp "$file" "${file}.bak"
         fi
-
         temp_file=$(mktemp)
         awk 'BEGIN { blank=0 }
              /^$/ { blank++; next }
@@ -55,7 +48,6 @@ remove_trailing_blank_lines() {
         cp "$temp_file" "$file"
         new_size=$(stat -c %s "$file")
         rm "$temp_file"
-
         if [ "$original_size" -ne "$new_size" ]; then
             if [ "$show_diff" = true ]; then
                 echo "--- Diff for trailing blank lines removal ---"
@@ -75,6 +67,7 @@ remove_trailing_blank_lines() {
         return 1
     fi
 }
+
 print_usage() {
     echo "Usage: $0 [OPTIONS]"
     echo "cleanup shell script whitespace & blank-lines"
@@ -128,18 +121,15 @@ if [ "$DO_WHITESPACE" = false ] && [ "$DO_BLANKLINES" = false ]; then
     DO_BLANKLINES=true
 fi
 
-find . -type f -name "*.sh" | while read -r file; do
+find . -type f -name "*.sh" -not -path "*/target/*" | while read -r file; do
     if [ -r "$file" ]; then
         echo "Processing $file..."
-
         if [ "$DO_WHITESPACE" = true ]; then
             remove_trailing_whitespace "$file" "$SHOW_DIFF"
         fi
-
         if [ "$DO_BLANKLINES" = true ]; then
             remove_trailing_blank_lines "$file" "$SHOW_DIFF"
         fi
-
         echo "---------------------------------"
     else
         echo "Cannot read file: $file"
