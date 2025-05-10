@@ -33,34 +33,3 @@ jobs:
           chmod +x ./scripts/check.sh
           
           ./scripts/check.sh
-
-      - name: Suggest fix command for local use
-        if: ${{ failure() }}
-        run: |
-          echo "::notice::To fix these issues locally, you can run the cleanup script:"
-          echo "::notice::./cleanup.sh -w -b"
-          
-          cat > instructions.md << EOL
-          ## Code Style Issues Found!
-          
-          The CI check found trailing whitespace or excessive blank lines in your shell scripts.
-          
-          ### How to fix:
-          
-          1. You can run the cleanup script locally:
-             ```bash
-             ./scripts/cleanup.sh -w -b
-             ```
-          
-          2. Or use this command to fix trailing whitespace:
-             ```bash
-             find . -name "*.sh" | xargs sed -i 's/[[:space:]]\+$//'
-             ```
-             
-          3. To check if your fix works, run:
-             ```bash
-             ./scripts/check.sh
-             ```
-          EOL
-          
-          cat instructions.md
