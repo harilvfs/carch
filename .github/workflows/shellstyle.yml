@@ -30,7 +30,7 @@ jobs:
             exit 1
           fi
           
-          chmod +x ./scriptscheck.sh
+          chmod +x ./scripts/check.sh
           
           ./scripts/check.sh
 
