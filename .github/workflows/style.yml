@@ -1,0 +1,66 @@
+name: Shell Style Check
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '!**.md'
+      - '!.github/**'
+      - '**/*.sh'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '!**.md'
+      - '!.github/**'
+      - '**/*.sh'
+  workflow_dispatch: 
+
+jobs:
+  sh-whitespace-check:
+    name: Check shell scripts for whitespace and blank lines
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run check
+        run: |
+          if [ ! -f "./scripts/check.sh" ]; then
+            echo "::error::The script file ./scripts/check.sh was not found!"
+            exit 1
+          fi
+          
+          chmod +x ./scriptscheck.sh
+          
+          ./scripts/check.sh
+
+      - name: Suggest fix command for local use
+        if: ${{ failure() }}
+        run: |
+          echo "::notice::To fix these issues locally, you can run the cleanup script:"
+          echo "::notice::./cleanup.sh -w -b"
+          
+          cat > instructions.md << EOL
+          ## Code Style Issues Found!
+          
+          The CI check found trailing whitespace or excessive blank lines in your shell scripts.
+          
+          ### How to fix:
+          
+          1. You can run the cleanup script locally:
+             ```bash
+             ./scripts/cleanup.sh -w -b
+             ```
+          
+          2. Or use this command to fix trailing whitespace:
+             ```bash
+             find . -name "*.sh" | xargs sed -i 's/[[:space:]]\+$//'
+             ```
+             
+          3. To check if your fix works, run:
+             ```bash
+             ./scripts/check.sh
+             ```
+          EOL
+          
+          cat instructions.md
