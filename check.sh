@@ -41,7 +41,7 @@ echo "=================================================="
 
 rm -f /tmp/issues_found
 
-find . -type f -name "*.sh" | while read -r file; do
+find . -type f -name "*.sh" -not -path "*/target/*" | while read -r file; do
     echo "Checking $file..."
     check_trailing_whitespace "$file"
     check_blank_lines "$file"

@@ -25,11 +25,11 @@ jobs:
 
       - name: Run check
         run: |
-          if [ ! -f "./scripts/check.sh" ]; then
-            echo "::error::The script file ./scripts/check.sh was not found!"
+          if [ ! -f "./check.sh" ]; then
+            echo "::error::The script file .check.sh was not found!"
             exit 1
           fi
           
-          chmod +x ./scripts/check.sh
+          chmod +x ./check.sh
           
-          ./scripts/check.sh
+          ./check.sh
