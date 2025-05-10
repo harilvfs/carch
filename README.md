@@ -133,8 +133,6 @@ Thanks to everyone who contributed — reporting bugs, providing feedback, or su
 >
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
-<br>
-
 ## Support
 
 This project is free and open-source for personal or public use.
@@ -142,6 +140,8 @@ This project is free and open-source for personal or public use.
 If you'd like to support its development, you can donate via Bitcoin:
 
 > `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
+
+<br>
 
 Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
 
