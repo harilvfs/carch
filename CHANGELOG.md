@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.4](https://github.com/harilvfs/carch/compare/v4.4.3...v4.4.4) (2025-05-12)
+
+### Changed
+
+* change install script dir [`f27d086`](https://github.com/harilvfs/carch/commit/f27d086)
+* ci: add ci to update release in docs site [`91fa048`](https://github.com/harilvfs/carch/commit/91fa048)
+* ci: style check shell scripts [`361f5e6`](https://github.com/harilvfs/carch/commit/361f5e6)
+* style: remove spaces [`d257304`](https://github.com/harilvfs/carch/commit/d257304)
+
+### Added
+
+* feat: add Electrum Bitcoin wallet install script [`52c954a`](https://github.com/harilvfs/carch/commit/52c954a)
+* feat: add brightness control script [`5a299ff`](https://github.com/harilvfs/carch/commit/5a299ff)
+* feat: add cleanup script [`466c029`](https://github.com/harilvfs/carch/commit/466c029)
+
 ## [4.4.3](https://github.com/harilvfs/carch/compare/v4.4.2...v4.4.3) (2025-05-08)
 
 ### Changed
