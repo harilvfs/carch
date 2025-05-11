@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # btw, this is for my personal use, but if you want, you may also use it.
-# basically, it removes white spaces and blank lines.
+# basically, it removes white spaces and blank lines in shell scripts.
 
 remove_trailing_whitespace() {
     local file="$1"
