@@ -1,6 +1,43 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.4](https://github.com/harilvfs/carch/compare/v4.4.3...v4.4.4) (2025-05-11)
+
+### Changed
+
+* Changelog v4.4.3 by @harilvfs in https://github.com/harilvfs/carch/pull/439
+* Update version to 4.4.4 for release [`825e899`](https://github.com/harilvfs/carch/commit/825e899)
+* add typos [`b8ad562`](https://github.com/harilvfs/carch/commit/b8ad562)
+* basically fix style [`8fb5f7a`](https://github.com/harilvfs/carch/commit/8fb5f7a)
+* change install script dir [`f27d086`](https://github.com/harilvfs/carch/commit/f27d086)
+* ci: add ci to update release in docs site [`91fa048`](https://github.com/harilvfs/carch/commit/91fa048)
+* ci: style check shell scripts [`361f5e6`](https://github.com/harilvfs/carch/commit/361f5e6)
+* date is wrong [`3533aff`](https://github.com/harilvfs/carch/commit/3533aff)
+* docs: add brightness detail [`db4b13b`](https://github.com/harilvfs/carch/commit/db4b13b)
+* docs: add support [`77f6b74`](https://github.com/harilvfs/carch/commit/77f6b74)
+* docs: remove emoji as andreas kling said 😆 [`0feb7d6`](https://github.com/harilvfs/carch/commit/0feb7d6)
+* fix br tag [`b93830b`](https://github.com/harilvfs/carch/commit/b93830b)
+* fix script dir [`7609ea4`](https://github.com/harilvfs/carch/commit/7609ea4)
+* minor mistake [`2fe44a8`](https://github.com/harilvfs/carch/commit/2fe44a8)
+* my mistake [`b245afc`](https://github.com/harilvfs/carch/commit/b245afc)
+* pat token [`dddb894`](https://github.com/harilvfs/carch/commit/dddb894)
+* preview: Updated preview from release v4.4.3 by @harilvfs in https://github.com/harilvfs/carch/pull/440
+* style: remove spaces [`d257304`](https://github.com/harilvfs/carch/commit/d257304)
+* testing docs [`e1ab1a9`](https://github.com/harilvfs/carch/commit/e1ab1a9)
+
+### Added
+
+* feat: add Electrum Bitcoin wallet install script [`52c954a`](https://github.com/harilvfs/carch/commit/52c954a)
+* feat: add brightness control script [`5a299ff`](https://github.com/harilvfs/carch/commit/5a299ff)
+* feat: add cleanup script [`466c029`](https://github.com/harilvfs/carch/commit/466c029)
+
+### Fixed
+
+
+### Removed
+
+
+
 ## [4.4.3](https://github.com/harilvfs/carch/compare/v4.4.2...v4.4.3) (2025-05-08)
 
 ### Changed
