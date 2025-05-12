@@ -256,4 +256,4 @@ config_zsh
 install_pokemon_colorscripts
 install_zoxide
 
-print_message "$BLUE" "Zsh setup completed successfully! 🎉"
+print_message "$BLUE" "Zsh setup completed successfully!"
