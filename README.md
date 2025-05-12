@@ -8,7 +8,7 @@ A Simple Script That May Help You Automate Linux System Setup.
   
 </details>
 
-Currently Supports Arch or Fedora Based Distros.
+Currently Supports Arch & Fedora Based Distros.
 
 [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
 
