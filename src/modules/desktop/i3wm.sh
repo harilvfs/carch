@@ -42,7 +42,7 @@ fzf_confirm() {
     fi
 }
 
-echo -e "${YELLOW}Warning: Do not re-run the script . If you encounter issues, remove the .i3wmdotfiles directory in your home directory..${ENDCOLOR}"
+echo -e "${YELLOW}Warning: If you are re-running this script, Remember to remove the .i3wmdotfiles directory in your home directory to avoid any conflicts..${ENDCOLOR}"
 
 if command -v pacman &>/dev/null; then
    OS="arch"
