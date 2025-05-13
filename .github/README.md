@@ -76,11 +76,15 @@ If you want to install Carch on your Arch or Fedora system, you can use the Carg
 First, install dependencies: 
 
 > **Arch Linux**
+> <img src="https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png" width="20" />
+>
 > ```sh
 > sudo pacman -S --noconfirm fzf cargo rust
 > ```
 
 > **Fedora Linux**
+> <img src="https://img.icons8.com/?size=48&id=ZbBhBW0N2q3D&format=png" width="20" />
+> 
 > ```sh
 > sudo dnf install fzf cargo rust -y
 > ```
