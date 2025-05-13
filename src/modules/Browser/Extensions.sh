@@ -77,7 +77,7 @@ fzf_multiselect() {
 open_extension() {
     local url="$1"
     local browser_type="$2"
-    
+
     if [ "$browser_type" == "chromium" ]; then
         if command -v google-chrome &> /dev/null; then
             echo -e "${CYAN}Opening with ${BOLD}Google Chrome${NC}"
@@ -108,7 +108,7 @@ open_extension() {
             opera "$url"
         elif command -v microsoft-edge &> /dev/null; then
             echo -e "${CYAN}Opening with ${BOLD}Microsoft Edge${NC}"
-            microsoft-edge "$url" # No offense, My beloved Linux users — some insane users still use Microsoft Edge on Linux. 
+            microsoft-edge "$url" # No offense, My beloved Linux users — some insane users still use Microsoft Edge on Linux.
         elif command -v ungoogled-chromium &> /dev/null; then
             echo -e "${CYAN}Opening with ${BOLD}Ungoogled Chromium${NC}"
             ungoogled-chromium "$url"
@@ -149,12 +149,12 @@ main() {
     clear
 
     local browser_choice=$(fzf_select "Select your browser type:" "Chromium-based" "Firefox-based" "Exit")
-    
+
     if [ "$browser_choice" == "Exit" ]; then
         echo -e "${YELLOW}Exiting...${NC}"
         exit 0
     fi
-    
+
     local browser_type=""
     if [ "$browser_choice" == "Chromium-based" ]; then
         browser_type="chromium"
@@ -164,77 +164,77 @@ main() {
         echo -e "${RED}Invalid choice. Exiting...${NC}"
         exit 1
     fi
-    
+
     echo -e "${GREEN}Selected browser type: ${BOLD}$browser_choice${NC}"
     sleep 1
-    
+
     if [ "$browser_type" == "chromium" ]; then
         local extension_names=("${!chromium_extensions[@]}" "Back to Menu")
         local selected_extensions=$(fzf_multiselect "Select Chromium extensions to install:" "${extension_names[@]}")
-        
+
         if [ -z "$selected_extensions" ]; then
             echo -e "${YELLOW}No extensions selected. Returning to main menu...${NC}"
             sleep 1
             main
             return
         fi
-        
+
         if echo "$selected_extensions" | grep -q "Back to Menu"; then
             main
             return
         fi
-        
+
         echo -e "${GREEN}Selected extensions:${NC}"
         echo "$selected_extensions" | while read -r extension; do
             echo -e "  ${CYAN}• ${BOLD}$extension${NC}"
         done
-        
+
         echo "$selected_extensions" | while read -r extension; do
             local url="${chromium_extensions[$extension]}"
             echo -e "${CYAN}Opening ${BOLD}$extension${NC} ${CYAN}in browser...${NC}"
             open_extension "$url" "$browser_type"
-            sleep 2 
+            sleep 2
         done
-        
+
         echo -e "${GREEN}${BOLD}All selected extensions have been opened in your browser.${NC}"
         echo -e "${YELLOW}Note: You still need to complete installation in the browser.${NC}"
-        
+
         echo ""
         echo -e "${CYAN}Press ENTER to return to the main menu...${NC}"
         read
         main
-        
+
     elif [ "$browser_type" == "firefox" ]; then
         local extension_names=("${!firefox_extensions[@]}" "Back to Menu")
         local selected_extensions=$(fzf_multiselect "Select Firefox extensions to install:" "${extension_names[@]}")
-        
+
         if [ -z "$selected_extensions" ]; then
             echo -e "${YELLOW}No extensions selected. Returning to main menu...${NC}"
             sleep 1
             main
             return
         fi
-        
+
         if echo "$selected_extensions" | grep -q "Back to Menu"; then
             main
             return
         fi
-        
+
         echo -e "${GREEN}Selected extensions:${NC}"
         echo "$selected_extensions" | while read -r extension; do
             echo -e "  ${CYAN}• ${BOLD}$extension${NC}"
         done
-        
+
         echo "$selected_extensions" | while read -r extension; do
             local url="${firefox_extensions[$extension]}"
             echo -e "${CYAN}Opening ${BOLD}$extension${NC} ${CYAN}in browser...${NC}"
             open_extension "$url" "$browser_type"
             sleep 2
         done
-        
+
         echo -e "${GREEN}${BOLD}All selected extensions have been opened in your browser.${NC}"
         echo -e "${YELLOW}Note: You still need to complete installation in the browser.${NC}"
-        
+
         echo ""
         echo -e "${CYAN}Press ENTER to return to the main menu...${NC}"
         read
