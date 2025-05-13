@@ -54,12 +54,12 @@ install_dependencies() {
     echo -e "${CYAN}:: Installing dependencies...${RESET}"
 
     if [ "$distro" == "arch" ]; then
-        sudo pacman -S --needed git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum || {
+        sudo pacman -S --needed git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme || {
             echo -e "${RED}:: Failed to install dependencies. Exiting...${RESET}"
             exit 1
         }
     elif [ "$distro" == "fedora" ]; then
-        sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum|| {
+        sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme || {
             echo -e "${RED}:: Failed to install dependencies. Exiting...${RESET}"
             exit 1
         }
