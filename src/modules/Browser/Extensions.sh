@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Useful Extensions for Chromium or Firefox based browsers.
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
