@@ -71,7 +71,7 @@ bash <(curl -L https://chalisehari.com.np/carchinstall) --uninstall
 
 Carch is available on [crates.io](https://crates.io/).
 
-If you want to install Carch on your Arch or Fedora system, you can use the Cargo [Crate](https://crates.io/crates/carch).
+You can install it using Cargo with the [carch](https://crates.io/crates/carch) crate.
 
 First, install dependencies: 
 
@@ -98,7 +98,7 @@ cargo install carch
 Once that's done, you can run it by typing `carch` in your terminal.
 
 > [!TIP]
-> If `carch` doesn't run, add Cargo's bin directory to your PATH:
+> If `carch` isn’t recognized, add Cargo's bin directory to your PATH:
 > 
 > ```sh
 > export PATH="$HOME/.cargo/bin:$PATH"
