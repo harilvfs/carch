@@ -184,5 +184,5 @@ Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so
 [shell]: https://github.com/harilvfs/carch/actions/workflows/shellcheck.yml/badge.svg
 [shell-link]: https://github.com/harilvfs/carch/actions/workflows/shellcheck.yml
 
-[create]: https://img.shields.io/github/created-at/harilvfs/carch?color=C6A0F6&labelColor=303446&style=for-the-badge&logo=github&logoColor=white
+[create]: https://img.shields.io/github/created-at/harilvfs/carch?color=C6A0F6&labelColor=1c1c29&style=for-the-badge&logo=github&logoColor=white
 [create-link]: https://github.com/harilvfs/carch/commit/89fd0f272b47f55e8cd3ae4f4c3f45dc716bb918
