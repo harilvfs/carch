@@ -32,6 +32,8 @@ declare -A chromium_extensions=(
     ["uBlock Origin Lite"]="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh"
     ["WakaTime"]="https://chromewebstore.google.com/detail/wakatime/jnbbnacmeggbgdjgaoojpmhdlkkpblgi"
     ["Web Highlighter"]="https://chromewebstore.google.com/detail/web-highlights-pdf-web-hi/hldjnlbobkdkghfidgoecgmklcemanhm"
+    ["Ghostery Tracker & Ad Blocker"]="https://chromewebstore.google.com/detail/ghostery-tracker-ad-block/mlomiejdfkolichcflejclcbmpeaniij"
+    ["Ghostery Private Search"]="https://chromewebstore.google.com/detail/ghostery-private-search-f/nomidcdbhopffbhbpfnnlgnfimhgdman"
 )
 
 declare -A firefox_extensions=(
@@ -47,6 +49,8 @@ declare -A firefox_extensions=(
     ["uBlock Origin"]="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
     ["WakaTime"]="https://addons.mozilla.org/en-US/firefox/addon/wakatimes/"
     ["Dark Reader"]="https://addons.mozilla.org/en-US/firefox/addon/darkreader/"
+    ["Ghostery Tracker & Ad Blocker"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery/"
+    ["Ghostery Private Search"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery-private-search/"
 )
 
 fzf_select() {
