@@ -100,15 +100,15 @@ detect_platform() {
 
 check_prerelease() {
     info "Checking for pre-releases..."
-    
+
     if command_exists "jq"; then
         PRERELEASE_INFO=$(curl -s "$GITHUB_API_URL" | jq -r '[.[] | select(.prerelease==true)] | first')
         PRERELEASE_AVAILABLE=$(echo "$PRERELEASE_INFO" | jq -r 'if . == null then "false" else "true" end')
-        
+
         if [ "$PRERELEASE_AVAILABLE" = "true" ]; then
             PRERELEASE_TAG=$(echo "$PRERELEASE_INFO" | jq -r '.tag_name')
             PRERELEASE_NAME=$(echo "$PRERELEASE_INFO" | jq -r '.name')
-            
+
             echo "${YELLOW}${BOLD}Pre-release available:${RESET} ${PRERELEASE_NAME} (${PRERELEASE_TAG})"
                 read -rp "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}" response
 
@@ -128,7 +128,7 @@ check_prerelease() {
     else
         if curl -s "$GITHUB_API_URL" | grep -q '"prerelease":true'; then
             PRERELEASE_TAG=$(curl -s "$GITHUB_API_URL" | grep -A 1 '"prerelease":true' | grep '"tag_name"' | sed -E 's/.*"tag_name":"([^"]+)".*/\1/' | head -1)
-            
+
             if [ -n "$PRERELEASE_TAG" ]; then
                 echo "${YELLOW}${BOLD}Pre-release available:${RESET} $PRERELEASE_TAG"
                 read -rp "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}" response
@@ -418,7 +418,7 @@ install() {
     detect_platform
 
     check_dependencies
-    
+
     check_prerelease
 
     install_binary
@@ -444,7 +444,7 @@ update() {
     detect_platform
 
     check_dependencies
-    
+
     check_prerelease
 
     install_binary
