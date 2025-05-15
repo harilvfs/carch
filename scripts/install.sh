@@ -9,6 +9,7 @@ CARCH_VERSION="latest"
 REPO_OWNER="harilvfs"
 REPO_NAME="carch"
 GITHUB_RELEASES_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/releases"
+GITHUB_API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases"
 BINARY_NAME="carch"
 INSTALL_DIR="/usr/local/bin"
 MAN_DIR="/usr/local/share/man/man1"
@@ -18,6 +19,7 @@ BASH_COMPLETION_DIR="/usr/share/bash-completion/completions"
 ZSH_COMPLETION_DIR="/usr/share/zsh/site-functions"
 FISH_COMPLETION_DIR="/usr/share/fish/vendor_completions.d"
 CONFIG_DIR="${HOME}/.config/carch"
+USE_PRERELEASE=false
 
 BOLD="$(tput bold 2>/dev/null || echo '')"
 RED="$(tput setaf 1 2>/dev/null || echo '')"
@@ -60,7 +62,7 @@ check_dependencies() {
     done
 
     if [ ${#missing_deps[@]} -gt 0 ]; then
-        echo "Please wait, installing required dependencies..."
+        echo "Please wait, checking & installing required dependencies..."
 
         if command_exists "pacman"; then
             sudo pacman -Sy --noconfirm "${missing_deps[@]}" > /dev/null 2>&1
@@ -96,6 +98,60 @@ detect_platform() {
     info "Platform: Linux, Architecture: $ARCH"
 }
 
+check_prerelease() {
+    info "Checking for pre-releases..."
+    
+    if command_exists "jq"; then
+        PRERELEASE_INFO=$(curl -s "$GITHUB_API_URL" | jq -r '[.[] | select(.prerelease==true)] | first')
+        PRERELEASE_AVAILABLE=$(echo "$PRERELEASE_INFO" | jq -r 'if . == null then "false" else "true" end')
+        
+        if [ "$PRERELEASE_AVAILABLE" = "true" ]; then
+            PRERELEASE_TAG=$(echo "$PRERELEASE_INFO" | jq -r '.tag_name')
+            PRERELEASE_NAME=$(echo "$PRERELEASE_INFO" | jq -r '.name')
+            
+            echo "${YELLOW}${BOLD}Pre-release available:${RESET} ${PRERELEASE_NAME} (${PRERELEASE_TAG})"
+                read -rp "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}" response
+
+                case "$response" in
+                [yY][eE][sS]|[yY])
+                    USE_PRERELEASE=true
+                    CARCH_VERSION="$PRERELEASE_TAG"
+                    info "Will install pre-release version: $PRERELEASE_TAG"
+                    ;;
+                *)
+                    info "Using latest stable release instead"
+                    ;;
+            esac
+        else
+            info "No pre-releases available, using latest stable release"
+        fi
+    else
+        if curl -s "$GITHUB_API_URL" | grep -q '"prerelease":true'; then
+            PRERELEASE_TAG=$(curl -s "$GITHUB_API_URL" | grep -A 1 '"prerelease":true' | grep '"tag_name"' | sed -E 's/.*"tag_name":"([^"]+)".*/\1/' | head -1)
+            
+            if [ -n "$PRERELEASE_TAG" ]; then
+                echo "${YELLOW}${BOLD}Pre-release available:${RESET} $PRERELEASE_TAG"
+                read -rp "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}" response
+
+                case "$response" in
+                    [yY][eE][sS]|[yY])
+                        USE_PRERELEASE=true
+                        CARCH_VERSION="$PRERELEASE_TAG"
+                        info "Will install pre-release version: $PRERELEASE_TAG"
+                        ;;
+                    *)
+                        info "Using latest stable release instead"
+                        ;;
+                esac
+            else
+                info "No pre-releases available, using latest stable release"
+            fi
+        else
+            info "No pre-releases available, using latest stable release"
+        fi
+    fi
+}
+
 install_binary() {
     info "Installing carch binary..."
 
@@ -103,7 +159,11 @@ install_binary() {
     trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
 
     if [ "$CARCH_VERSION" = "latest" ]; then
-        DOWNLOAD_URL="${GITHUB_RELEASES_URL}/latest/download"
+        if [ "$USE_PRERELEASE" = true ]; then
+            DOWNLOAD_URL="${GITHUB_RELEASES_URL}/tag/${CARCH_VERSION}/download"
+        else
+            DOWNLOAD_URL="${GITHUB_RELEASES_URL}/latest/download"
+        fi
     else
         DOWNLOAD_URL="${GITHUB_RELEASES_URL}/download/${CARCH_VERSION}"
     fi
@@ -358,6 +418,8 @@ install() {
     detect_platform
 
     check_dependencies
+    
+    check_prerelease
 
     install_binary
 
@@ -382,6 +444,8 @@ update() {
     detect_platform
 
     check_dependencies
+    
+    check_prerelease
 
     install_binary
 
