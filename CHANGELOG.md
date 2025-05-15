@@ -1,6 +1,67 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.5](https://github.com/harilvfs/carch/compare/v4.4.4...v4.4.5) (2025-05-15)
+
+### Changed
+
+* Changelog v4.4.4 by @harilvfs in https://github.com/harilvfs/carch/pull/441
+* Update README.md [`41e0651`](https://github.com/harilvfs/carch/commit/41e0651)
+* Update README.md [`4911ff3`](https://github.com/harilvfs/carch/commit/4911ff3)
+* Update README.md [`4a4df08`](https://github.com/harilvfs/carch/commit/4a4df08)
+* Update README.md [`4b02b5d`](https://github.com/harilvfs/carch/commit/4b02b5d)
+* Update README.md [`589f9f6`](https://github.com/harilvfs/carch/commit/589f9f6)
+* Update README.md [`7543812`](https://github.com/harilvfs/carch/commit/7543812)
+* Update README.md [`d0b812b`](https://github.com/harilvfs/carch/commit/d0b812b)
+* Update README.md [`d79bd93`](https://github.com/harilvfs/carch/commit/d79bd93)
+* Update README.md [`e510bf6`](https://github.com/harilvfs/carch/commit/e510bf6)
+* Update README.md [`e73b3fe`](https://github.com/harilvfs/carch/commit/e73b3fe)
+* Update README.md [`ebb7626`](https://github.com/harilvfs/carch/commit/ebb7626)
+* Update README.md [`ec8c9e1`](https://github.com/harilvfs/carch/commit/ec8c9e1)
+* Update README.md [`ef3ba83`](https://github.com/harilvfs/carch/commit/ef3ba83)
+* Update version to 4.4.5 for release [`028c6cd`](https://github.com/harilvfs/carch/commit/028c6cd)
+* chore(deps): add papirus icon theme [`f8061af`](https://github.com/harilvfs/carch/commit/f8061af)
+* chore: using theme url my dwm repo [`0d5f560`](https://github.com/harilvfs/carch/commit/0d5f560)
+* docs: add browser section [`9a3022e`](https://github.com/harilvfs/carch/commit/9a3022e)
+* docs: add carch created badge [`2b90e4d`](https://github.com/harilvfs/carch/commit/2b90e4d)
+* docs: add carch created badge [`5245a67`](https://github.com/harilvfs/carch/commit/5245a67)
+* docs: add description [`6fadbdb`](https://github.com/harilvfs/carch/commit/6fadbdb)
+* docs: add distro icon [`48888a9`](https://github.com/harilvfs/carch/commit/48888a9)
+* docs: adjust colors [`80f1209`](https://github.com/harilvfs/carch/commit/80f1209)
+* docs: change label color [`cf9f669`](https://github.com/harilvfs/carch/commit/cf9f669)
+* docs: differentiate [`5b32687`](https://github.com/harilvfs/carch/commit/5b32687)
+* docs: final color changes [`fbd207a`](https://github.com/harilvfs/carch/commit/fbd207a)
+* docs: fix typos [`de11640`](https://github.com/harilvfs/carch/commit/de11640)
+* docs: improve typos [`9e44e02`](https://github.com/harilvfs/carch/commit/9e44e02)
+* preview: Updated preview from release v4.4.4 by @harilvfs in https://github.com/harilvfs/carch/pull/442
+* refactor: minor improvement hyprland script [`306c74b`](https://github.com/harilvfs/carch/commit/306c74b)
+* refactor: simplify logic [ extension script ] [`6b675ae`](https://github.com/harilvfs/carch/commit/6b675ae)
+* style: remove typos [`ca6c0ea`](https://github.com/harilvfs/carch/commit/ca6c0ea)
+* update(test): move readme to .github [`8dbf171`](https://github.com/harilvfs/carch/commit/8dbf171)
+* update: ok now it look fine [`8041ff9`](https://github.com/harilvfs/carch/commit/8041ff9)
+* update: readme dir on cargo [`545b2d3`](https://github.com/harilvfs/carch/commit/545b2d3)
+
+### Added
+
+* build(deps): bump actions/checkout from 3 to 4 by @dependabot in https://github.com/harilvfs/carch/pull/444
+* build(deps): bump actions/github-script from 6 to 7 by @dependabot in https://github.com/harilvfs/carch/pull/443
+* build(deps): bump ctrlc from 3.4.6 to 3.4.7 by @dependabot in https://github.com/harilvfs/carch/pull/446
+* build(deps): bump tempfile from 3.19.1 to 3.20.0 by @dependabot in https://github.com/harilvfs/carch/pull/445
+* feat(audio): check if multilib is enabled [`3031e32`](https://github.com/harilvfs/carch/commit/3031e32)
+* feat: add extension script & structure changes by @harilvfs in https://github.com/harilvfs/carch/pull/447
+* feat: add ghostery extensions [ browser script ] [`c1b2e5a`](https://github.com/harilvfs/carch/commit/c1b2e5a)
+
+### Fixed
+
+* fix: note in i3wm setup script [`6b34ba5`](https://github.com/harilvfs/carch/commit/6b34ba5)
+* fix: some formatting issue [`3c4fe00`](https://github.com/harilvfs/carch/commit/3c4fe00)
+
+### Removed
+
+* remove: emojis from script [`5c7b71e`](https://github.com/harilvfs/carch/commit/5c7b71e)
+* remove: emojis from script [`958a85a`](https://github.com/harilvfs/carch/commit/958a85a)
+
+
 ## [4.4.4](https://github.com/harilvfs/carch/compare/v4.4.3...v4.4.4) (2025-05-12)
 
 ### Changed
