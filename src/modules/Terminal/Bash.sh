@@ -108,9 +108,9 @@ fi
 echo -e "${GREEN}You selected $THEME theme.${RESET}"
 
 if [[ $THEME == "Catppuccin" ]]; then
-    STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/i3wmdotfiles/refs/heads/catppuccin/starship/starship.toml"
+    STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/starship.toml"
 else
-    STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/i3wmdotfiles/refs/heads/nord/starship/starship.toml"
+    STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/nord-theme/starship.toml"
 fi
 
 if ! command -v starship &>/dev/null; then
