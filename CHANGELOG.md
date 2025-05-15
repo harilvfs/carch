@@ -1,6 +1,40 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.5](https://github.com/harilvfs/carch/compare/v4.4.4...v4.4.5) (2025-05-16)
+
+### Changed
+
+* chore(deps): add papirus icon theme [`f8061af`](https://github.com/harilvfs/carch/commit/f8061af)
+* chore: using theme url my dwm repo [`0d5f560`](https://github.com/harilvfs/carch/commit/0d5f560)
+* docs: add browser section [`9a3022e`](https://github.com/harilvfs/carch/commit/9a3022e)
+* refactor: minor improvement hyprland script [`306c74b`](https://github.com/harilvfs/carch/commit/306c74b)
+* refactor: simplify logic [ extension script ] [`6b675ae`](https://github.com/harilvfs/carch/commit/6b675ae)
+* style: remove typos [`ca6c0ea`](https://github.com/harilvfs/carch/commit/ca6c0ea)
+* update(test): move readme to .github [`8dbf171`](https://github.com/harilvfs/carch/commit/8dbf171)
+* update: readme dir on cargo [`545b2d3`](https://github.com/harilvfs/carch/commit/545b2d3)
+
+### Added
+
+* build(deps): bump actions/checkout from 3 to 4 by @dependabot in https://github.com/harilvfs/carch/pull/444
+* build(deps): bump actions/github-script from 6 to 7 by @dependabot in https://github.com/harilvfs/carch/pull/443
+* build(deps): bump ctrlc from 3.4.6 to 3.4.7 by @dependabot in https://github.com/harilvfs/carch/pull/446
+* build(deps): bump tempfile from 3.19.1 to 3.20.0 by @dependabot in https://github.com/harilvfs/carch/pull/445
+* feat(audio): check if multilib is enabled [`3031e32`](https://github.com/harilvfs/carch/commit/3031e32)
+* feat: add extension script & structure changes by @harilvfs in https://github.com/harilvfs/carch/pull/447
+* feat: add ghostery extensions [ browser script ] [`c1b2e5a`](https://github.com/harilvfs/carch/commit/c1b2e5a)
+
+### Fixed
+
+* fix: note in i3wm setup script [`6b34ba5`](https://github.com/harilvfs/carch/commit/6b34ba5)
+* fix: some formatting issue [`3c4fe00`](https://github.com/harilvfs/carch/commit/3c4fe00)
+
+### Removed
+
+* remove: emojis from script [`5c7b71e`](https://github.com/harilvfs/carch/commit/5c7b71e)
+* remove: emojis from script [`958a85a`](https://github.com/harilvfs/carch/commit/958a85a)
+
+
 ## [4.4.4](https://github.com/harilvfs/carch/compare/v4.4.3...v4.4.4) (2025-05-12)
 
 ### Changed
