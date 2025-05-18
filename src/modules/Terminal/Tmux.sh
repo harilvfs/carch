@@ -7,7 +7,6 @@ clear
 RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
-BLUE="\e[34m"
 RESET="\e[0m"
 
 FZF_COMMON="--layout=reverse \
@@ -119,19 +118,11 @@ if [[ -d "$plugin_script_dir" ]]; then
     cd "$plugin_script_dir" || exit
     chmod +x install_plugins.sh
     ./install_plugins.sh
+
+    echo -e "${GREEN}Updating tmux plugins...${RESET}"
+    chmod +x update_plugins.sh
+    ./update_plugins.sh
 else
     echo -e "${RED}TPM scripts not found. Skipping plugin installation.${RESET}"
 fi
-
-echo -e "${GREEN}Running TPM...${RESET}"
-cd "$tpm_dir" || exit
-chmod +x tpm
-./tpm
-
-if [[ $? -ne 0 ]]; then
-    echo -e "${RED}TPM encountered an error.${RESET}"
-    echo -e "${YELLOW}Try running tmux and then executing:${RESET}"
-    echo -e "${GREEN}~/.tmux/plugins/tpm/tpm${RESET}"
-fi
-
 echo -e "${GREEN}Tmux setup complete!${RESET}"
