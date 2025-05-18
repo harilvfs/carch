@@ -92,7 +92,7 @@ jobs:
           draft: true
           generate_release_notes: true
           
-      - name: Customize Release Notes
+      - name: Cleanup Release Notes
         id: customize_notes
         run: |
           NOTES=$(gh release view ${{ github.event.inputs.tag_version }} --json body -q '.body')
@@ -105,7 +105,6 @@ jobs:
           /^### (🔄 )?Other Changes/ { in_section = "other"; buffer = $0 "\n"; next; }
           /^### / { 
             if (in_section != "") {
-              # If buffer only contains header + newline, discard it (empty section)
               if (buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/) {
                 buffer = "";
               } else {
@@ -126,7 +125,6 @@ jobs:
           }
           END {
             if (in_section != "") {
-              # Only print non-empty sections
               if (!(buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/)) {
                 printf "%s", buffer;
               }
