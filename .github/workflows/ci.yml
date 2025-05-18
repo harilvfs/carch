@@ -1,4 +1,4 @@
-name: CI Status 
+name: CI Status
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
       
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Check workflow status
         id: check
@@ -73,7 +73,7 @@ jobs:
       
       - name: Upload status badge
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: status-badge
           path: status.json
