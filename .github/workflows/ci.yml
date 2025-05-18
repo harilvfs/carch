@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [ main, master ]
+
+jobs:
+  check-ci-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup directory structure
+        run: |
+          mkdir -p .github/scripts
+          
+      - name: Copy CI Status Checker
+        run: |
+          cat > .github/scripts/ci-status.sh << 'EOF'
+          $(cat .github/ci-status.sh)
+          EOF
+          chmod +x .github/scripts/ci-status.sh
+      
+      - name: Run CI Status Check
+        run: |
+          bash .github/check-ci.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_FORMAT: markdown
+          
+      - name: Upload Status Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ci-status-report
+          path: ci-status-report.md
+          
+      - name: Check for failures and notify
+        if: ${{ failure() }}
+        run: |
+          echo "::error::CI failures detected! Check the CI status report for details."
