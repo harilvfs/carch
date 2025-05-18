@@ -36,7 +36,7 @@ jobs:
           
       - name: Upload Status Report
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: ci-status-report
           path: ci-status-report.md
