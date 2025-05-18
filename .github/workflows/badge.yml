@@ -1,0 +1,49 @@
+name: Status Badge
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_run:
+    workflows: ['*']
+    types:
+      - completed
+
+jobs:
+  generate-badge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Install dependencies
+        run: npm install @octokit/rest color svg-builder
+      
+      - name: Generate status badge
+        id: generate-badge
+        run: |
+          mkdir -p badges
+          node .github/scripts/badge.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.repository }}
+      
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: badges
+          branch: gh-pages
+          target-folder: badges
+          clean: true
