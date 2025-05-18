@@ -22,10 +22,10 @@ jobs:
           
       - name: Copy CI Status Checker
         run: |
-          cat > .github/scripts/ci-status.sh << 'EOF'
+          cat > .github/ci-status.sh << 'EOF'
           $(cat .github/ci-status.sh)
           EOF
-          chmod +x .github/scripts/ci-status.sh
+          chmod +x .github/ci-status.sh
       
       - name: Run CI Status Check
         run: |
