@@ -38,8 +38,8 @@ fzf_confirm() {
 }
 
 print_message() {
-    echo -e "${BLUE}:: This bootloader setup script is from Chris Titus Tech.${ENDCOLOR}"
-    echo -e "${BLUE}:: Check out his GitHub for more: ${GREEN}https://github.com/christitustech${ENDCOLOR}"
+    echo -e "${BLUE}:: This Grub Theme Script is from Chris Titus Tech.${ENDCOLOR}"
+    echo -e "${BLUE}:: Check out the source code here: ${GREEN}https://github.com/harilvfs/Top-5-Bootloader-Themes${ENDCOLOR}"
 }
 
 check_existing_dir() {
