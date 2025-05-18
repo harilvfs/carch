@@ -30,16 +30,17 @@ jobs:
       - name: Run CI Status Check
         run: |
           bash .github/check-ci.sh
+          bash .github/check-ci.sh > ci-status-report.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OUTPUT_FORMAT: markdown
           
-      - name: Upload Status Report
+      - name: Display CI Status Report
         if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: ci-status-report
-          path: ci-status-report.md
+        run: |
+          echo "## CI Status Report"
+          echo ""
+          cat ci-status-report.md
           
       - name: Check for failures and notify
         if: ${{ failure() }}
