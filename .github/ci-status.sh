@@ -3,6 +3,7 @@
 GITHUB_REPO="${GITHUB_REPOSITORY:-$(git config --get remote.origin.url | sed 's/.*github.com[:/]\(.*\)\.git/\1/')}"
 GITHUB_TOKEN="${GITHUB_TOKEN:-}"
 OUTPUT_FORMAT="${OUTPUT_FORMAT:-text}"
+REPORT_FILE="${REPORT_FILE:-}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
