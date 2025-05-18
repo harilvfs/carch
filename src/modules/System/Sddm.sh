@@ -57,7 +57,7 @@ detect_os() {
 
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
-    local dms=("gdm" "lightdm" "lxdm" "xdm")
+    local dms=("gdm" "lightdm" "lxdm" "xdm" "greetd")
     for dm in "${dms[@]}"; do
         if systemctl is-enabled "$dm" &>/dev/null; then
             echo -e "${RED}:: Disabling $dm...${ENDCOLOR}"
