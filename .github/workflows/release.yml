@@ -111,7 +111,7 @@ jobs:
           draft: true
           generate_release_notes: true
           
-      - name: Customize Release Notes
+      - name: Cleanup Release Notes
         id: customize_notes
         run: |
           NOTES=$(gh release view ${{ github.event.inputs.tag_version }} --json body -q '.body')
