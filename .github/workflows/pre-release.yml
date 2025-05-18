@@ -13,7 +13,7 @@ on:
 permissions:
   contents: write
 jobs:
-  update_versions_and_build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
