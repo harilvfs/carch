@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
-      contents: read
+      contents: write
+      pages: write
       
     steps:
       - name: Checkout repository
@@ -79,7 +80,7 @@ jobs:
           path: status.json
           
       - name: Deploy badge to GitHub Pages
-        if: always() && github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: .
@@ -87,4 +88,3 @@ jobs:
           clean: false
           clean-exclude: |
             badges/status.json
-          files: status.json
