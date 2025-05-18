@@ -8,7 +8,6 @@ GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
 CYAN="\e[36m"
-NC="\e[0m"
 ENDCOLOR="\e[0m"
 
 FZF_COMMON="--layout=reverse \
@@ -22,18 +21,17 @@ FZF_COMMON="--layout=reverse \
 
 fzf_confirm() {
     local kernel_info="The system is currently running kernel: $(uname -r)"
-    local options=("Install LTS, remove current" "Install LTS alongside current" "Cancel installation")
+    local options=("Yes, install LTS kernel" "No, cancel installation")
     local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                      --height=40% \
-                                                     --prompt="Choose an option: " \
+                                                     --prompt="Do you want to continue with LTS kernel installation? " \
                                                      --header="$kernel_info" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
     case "$selected" in
-        "Install LTS, remove current") return 0 ;;
-        "Install LTS alongside current") return 1 ;;
-        "Cancel installation") echo "Exiting..."; exit 0 ;;
+        "Yes, install LTS kernel") return 0 ;;
+        "No, cancel installation") echo "Exiting..."; exit 0 ;;
         *) echo "Invalid selection"; exit 1 ;;
     esac
 }
@@ -64,14 +62,11 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
-echo -e "${RED}If you don't know about kernel changes, it's recommended to Cancel.${ENDCOLOR}"
-echo -e "\n${BLUE}Choose an option:${ENDCOLOR}"
-echo -e "${GREEN}Install LTS, remove current:${NC} Removes the current kernel and installs the LTS kernel."
-echo -e "${GREEN}Install LTS alongside current:${NC} Installs the LTS kernel without removing the current kernel."
-echo -e "${GREEN}Cancel installation:${NC} Cancels the installation.\n"
+check_current_kernel
 
-echo "Do you want to continue with the kernel installation?"
+echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
+echo -e "${BLUE}This script will install the LTS kernel alongside your current kernel.${ENDCOLOR}"
+echo -e "${BLUE}Your current kernel will NOT be removed.${ENDCOLOR}"
 
 if fzf_confirm; then
     if [ -x "$(command -v pacman)" ]; then
@@ -82,26 +77,9 @@ if fzf_confirm; then
         echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
         exit 1
     fi
-    echo -e "${GREEN}:: Removing the current kernel...${ENDCOLOR}"
-    CURRENT_KERNEL_NAME=$(uname -r | sed 's/-[^-]*$//')
-    if [[ "$CURRENT_KERNEL_NAME" != "linux" ]]; then
-        echo -e "${RED}:: Current kernel name does not match expected 'linux'. Cannot remove kernel.${ENDCOLOR}"
-        exit 1
-    fi
-    sudo pacman -Rns --noconfirm "$CURRENT_KERNEL_NAME"
-    echo -e "${GREEN}:: Removed the current kernel.${ENDCOLOR}"
     configure_grub
+    echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"
 else
-    echo ":: Installing the LTS kernel alongside the current kernel..."
-    if [ -x "$(command -v pacman)" ]; then
-        install_lts_kernel_arch
-    elif [ -x "$(command -v dnf)" ]; then
-        install_lts_kernel_fedora
-    else
-        echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
-        exit 1
-    fi
-    configure_grub
+    echo -e "${CYAN}Installation canceled.${ENDCOLOR}"
+    exit 0
 fi
-
-echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"
