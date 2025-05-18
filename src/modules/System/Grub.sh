@@ -71,9 +71,3 @@ print_message
 check_existing_dir
 clone_repo
 install_theme
-echo -e "${GREEN}:: GRUB setup completed.${ENDCOLOR}"
-
-if fzf_confirm "Do you want to reboot now?"; then
-    echo -e "${BLUE}:: Rebooting system...${ENDCOLOR}"
-    sudo reboot
-fi
