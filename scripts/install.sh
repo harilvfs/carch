@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#
+
 # carch installation script
 # installs, updates, or uninstall.
 
