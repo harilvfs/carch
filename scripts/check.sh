@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ "$(basename "$(pwd)")" == "scripts" ]]; then
+    PROJECT_ROOT="$(cd .. && pwd)"
+else
+    PROJECT_ROOT="$(pwd)"
+fi
+
 check_trailing_whitespace() {
     local file="$1"
     if [ -r "$file" ]; then
@@ -22,14 +28,12 @@ check_blank_lines() {
             /^$/ { blank++; next }
             { if (blank>0) { print ""; blank=0 } print }
             END { }' "$file" > "$temp_file"
-
         if ! cmp -s "$file" "$temp_file"; then
             echo "::error file=$file::Found excessive blank lines in $file"
             echo "true" > /tmp/issues_found
         else
             echo "✓ No excessive blank lines found in $file"
         fi
-
         rm "$temp_file"
     else
         echo "::warning file=$file::Cannot read file: $file"
@@ -38,10 +42,9 @@ check_blank_lines() {
 
 echo "Checking code style issues..."
 echo "=================================================="
-
 rm -f /tmp/issues_found
 
-find . -type f -name "*.sh" -not -path "*/target/*" | while read -r file; do
+find "$PROJECT_ROOT" -type f -name "*.sh" -not -path "*/target/*" | while read -r file; do
     echo "Checking $file..."
     check_trailing_whitespace "$file"
     check_blank_lines "$file"

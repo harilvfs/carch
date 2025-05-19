@@ -3,6 +3,12 @@
 # btw, this is for my personal use, but if you want, you may also use it.
 # basically, it removes white spaces and blank lines in shell scripts.
 
+if [[ "$(basename "$(pwd)")" == "scripts" ]]; then
+    PROJECT_ROOT="$(cd .. && pwd)"
+else
+    PROJECT_ROOT="$(pwd)"
+fi
+
 remove_trailing_whitespace() {
     local file="$1"
     local show_diff="$2"
@@ -121,7 +127,7 @@ if [ "$DO_WHITESPACE" = false ] && [ "$DO_BLANKLINES" = false ]; then
     DO_BLANKLINES=true
 fi
 
-find . -type f -name "*.sh" -not -path "*/target/*" | while read -r file; do
+find "$PROJECT_ROOT" -type f -name "*.sh" -not -path "*/target/*" | while read -r file; do
     if [ -r "$file" ]; then
         echo "Processing $file..."
         if [ "$DO_WHITESPACE" = true ]; then
