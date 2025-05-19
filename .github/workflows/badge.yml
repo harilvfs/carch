@@ -1,0 +1,202 @@
+name: Generate Unified Repository Status Badge
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' 
+
+jobs:
+  generate-unified-badge:
+    name: Generate Unified Status Badge
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Make badges directory
+        run: mkdir -p .github/badges
+        
+      - name: Get repository stats
+        id: repo-stats
+        run: |
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          echo "commit_count=$COMMIT_COUNT" >> $GITHUB_ENV
+          
+          FILE_COUNT=$(find . -type f -not -path "*/\.*" | wc -l)
+          echo "file_count=$FILE_COUNT" >> $GITHUB_ENV
+          
+          REPO_SIZE=$(du -sh . | cut -f1)
+          echo "repo_size=$REPO_SIZE" >> $GITHUB_ENV
+          
+          LAST_UPDATED=$(git log -1 --format=%cd --date=relative)
+          echo "last_updated=$LAST_UPDATED" >> $GITHUB_ENV
+          
+          SHELL_COUNT=$(find . -name "*.sh" | wc -l)
+          echo "shell_count=$SHELL_COUNT" >> $GITHUB_ENV
+          
+          BRANCH_COUNT=$(git branch -r | wc -l)
+          echo "branch_count=$BRANCH_COUNT" >> $GITHUB_ENV
+          
+          CONTRIBUTOR_COUNT=$(git log --format='%aN' | sort -u | wc -l)
+          echo "contributor_count=$CONTRIBUTOR_COUNT" >> $GITHUB_ENV
+          
+      - name: Get workflow statuses
+        id: workflow-status
+        run: |
+          WORKFLOWS=$(gh api repos/${{ github.repository }}/actions/workflows \
+            --jq '.workflows[] | select(.state=="active") | .name' \
+            -H "Accept: application/vnd.github+json")
+          
+          SUCCESS_COUNT=0
+          PENDING_COUNT=0
+          FAILURE_COUNT=0
+          
+          echo "$WORKFLOWS" | while read -r workflow_name; do
+            LATEST_RUN=$(gh api repos/${{ github.repository }}/actions/workflows/$(echo "$workflow_name" | tr ' ' '%20')/runs \
+              --jq '.workflow_runs | map(select(.head_branch=="main")) | first | {conclusion: .conclusion}' \
+              -H "Accept: application/vnd.github+json")
+              
+            CONCLUSION=$(echo "$LATEST_RUN" | jq -r '.conclusion')
+            
+            if [ "$CONCLUSION" == "success" ]; then
+              SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+            elif [ "$CONCLUSION" == "null" ] || [ "$CONCLUSION" == "pending" ] || [ "$CONCLUSION" == "in_progress" ]; then
+              PENDING_COUNT=$((PENDING_COUNT + 1))
+            else
+              FAILURE_COUNT=$((FAILURE_COUNT + 1))
+            fi
+          done
+          
+          echo "success_count=$SUCCESS_COUNT" >> $GITHUB_ENV
+          echo "pending_count=$PENDING_COUNT" >> $GITHUB_ENV
+          echo "failure_count=$FAILURE_COUNT" >> $GITHUB_ENV
+          
+          if [ "$FAILURE_COUNT" -gt 0 ]; then
+            echo "overall_status=failing" >> $GITHUB_ENV
+            echo "status_color=#e05d44" >> $GITHUB_ENV
+          elif [ "$PENDING_COUNT" -gt 0 ]; then
+            echo "overall_status=pending" >> $GITHUB_ENV
+            echo "status_color=#dfb317" >> $GITHUB_ENV
+          else
+            echo "overall_status=healthy" >> $GITHUB_ENV
+            echo "status_color=#4c1" >> $GITHUB_ENV
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          
+      - name: Generate unified SVG badge
+        run: |
+          cat > .github/badges/repo-status.svg << EOF
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="180">
+            <style>
+              .badge { font-family: 'DejaVu Sans', Verdana, Geneva, sans-serif; font-size: 11px; }
+              .bg { fill: #555; }
+              .stat-name { fill: white; }
+              .stat-value { fill: white; }
+              .divider { stroke: #ffffff33; stroke-width: 1; }
+              .status-bg { fill: ${status_color}; }
+              .heading { font-weight: bold; font-size: 14px; }
+              .section-title { font-weight: bold; font-size: 12px; }
+            </style>
+            
+            <rect width="500" height="180" rx="5" fill="#333" />
+            
+            <text x="15" y="25" class="badge heading" fill="white">Repository Status: ${{ github.repository }}</text>
+            <line x1="15" y1="33" x2="485" y2="33" class="divider" />
+            
+            <rect x="15" y="45" width="120" height="25" rx="3" class="bg" />
+            <rect x="135" y="45" width="80" height="25" rx="3" class="status-bg" />
+            <text x="25" y="62" class="badge stat-name">Status</text>
+            <text x="145" y="62" class="badge stat-value">${overall_status}</text>
+            
+            <text x="15" y="85" class="badge section-title" fill="white">Repository Stats</text>
+            
+            <rect x="15" y="95" width="120" height="20" rx="3" class="bg" />
+            <rect x="135" y="95" width="60" height="20" rx="3" fill="#007ec6" />
+            <text x="25" y="110" class="badge stat-name">Commits</text>
+            <text x="145" y="110" class="badge stat-value">${commit_count}</text>
+            
+            <rect x="205" y="95" width="120" height="20" rx="3" class="bg" />
+            <rect x="325" y="95" width="60" height="20" rx="3" fill="#007ec6" />
+            <text x="215" y="110" class="badge stat-name">Files</text>
+            <text x="335" y="110" class="badge stat-value">${file_count}</text>
+            
+            <rect x="15" y="120" width="120" height="20" rx="3" class="bg" />
+            <rect x="135" y="120" width="60" height="20" rx="3" fill="#007ec6" />
+            <text x="25" y="135" class="badge stat-name">Size</text>
+            <text x="145" y="135" class="badge stat-value">${repo_size}</text>
+            
+            <rect x="205" y="120" width="120" height="20" rx="3" class="bg" />
+            <rect x="325" y="120" width="160" height="20" rx="3" fill="#007ec6" />
+            <text x="215" y="135" class="badge stat-name">Last Updated</text>
+            <text x="335" y="135" class="badge stat-value">${last_updated}</text>
+            
+            <text x="15" y="160" class="badge section-title" fill="white">Workflow Stats</text>
+            
+            <rect x="15" y="170" width="40" height="20" rx="3" class="bg" />
+            <rect x="55" y="170" width="30" height="20" rx="3" fill="#4c1" />
+            <text x="25" y="185" class="badge stat-name">✓</text>
+            <text x="65" y="185" class="badge stat-value">${success_count}</text>
+            
+            <rect x="95" y="170" width="40" height="20" rx="3" class="bg" />
+            <rect x="135" y="170" width="30" height="20" rx="3" fill="#dfb317" />
+            <text x="105" y="185" class="badge stat-name">⟳</text>
+            <text x="145" y="185" class="badge stat-value">${pending_count}</text>
+            
+            <rect x="175" y="170" width="40" height="20" rx="3" class="bg" />
+            <rect x="215" y="170" width="30" height="20" rx="3" fill="#e05d44" />
+            <text x="185" y="185" class="badge stat-name">✗</text>
+            <text x="225" y="185" class="badge stat-value">${failure_count}</text>
+            
+            <rect x="255" y="170" width="120" height="20" rx="3" class="bg" />
+            <rect x="375" y="170" width="30" height="20" rx="3" fill="#fe7d37" />
+            <text x="265" y="185" class="badge stat-name">Shell Scripts</text>
+            <text x="385" y="185" class="badge stat-value">${shell_count}</text>
+          </svg>
+          EOF
+          
+          cat > .github/badges/repo-status-small.svg << EOF
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="20">
+            <style>
+              .badge { font-family: 'DejaVu Sans', Verdana, Geneva, sans-serif; font-size: 11px; }
+              .bg { fill: #555; }
+              .status-bg { fill: ${status_color}; }
+            </style>
+            <linearGradient id="b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+              <stop offset="1" stop-opacity=".1"/>
+            </linearGradient>
+            <clipPath id="a">
+              <rect width="180" height="20" rx="3" fill="#fff"/>
+            </clipPath>
+            <g clip-path="url(#a)">
+              <path fill="#555" d="M0 0h123v20H0z"/>
+              <path fill="${status_color}" d="M123 0h57v20H123z"/>
+              <path fill="url(#b)" d="M0 0h180v20H0z"/>
+            </g>
+            <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+              <text x="61.5" y="15" fill="#010101" fill-opacity=".3">repository status</text>
+              <text x="61.5" y="14">repository status</text>
+              <text x="150.5" y="15" fill="#010101" fill-opacity=".3">${overall_status}</text>
+              <text x="150.5" y="14">${overall_status}</text>
+            </g>
+          </svg>
+          EOF
+      
+      - name: Commit and push badges
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .github/badges/*.svg
+          git commit -m "chore(badges): update unified status badge" || echo "No changes to commit"
+          git push
