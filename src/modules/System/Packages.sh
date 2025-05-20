@@ -1864,7 +1864,6 @@ install_texteditor() {
     done
 }
 
-
 install_virtualization() {
     detect_distro
     distro=$?
