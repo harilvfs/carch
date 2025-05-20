@@ -10,7 +10,6 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 BLUE="\e[34m"
 YELLOW="\e[33m"
-ENDCOLOR="\e[0m"
 
 echo -e "${BLUE}"
 cat <<"EOF"

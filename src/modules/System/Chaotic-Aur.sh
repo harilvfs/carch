@@ -4,7 +4,6 @@
 
 clear
 
-BLUE="\e[34m"
 GREEN="\e[32m"
 RED="\e[31m"
 MAGENTA="\e[35m"

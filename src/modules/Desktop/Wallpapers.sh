@@ -6,8 +6,6 @@ clear
 
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
-BLUE="\e[34m"
-ENDCOLOR="\e[0m"
 NC='\033[0m'
 
 FZF_COMMON="--layout=reverse \

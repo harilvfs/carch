@@ -41,7 +41,7 @@ cat <<"EOF"
 Catppuccin SDDM Theme
 https://github.com/catppuccin/sddm
 EOF
-    echo -e "${ENDCOLOR}"
+echo -e "${ENDCOLOR}"
 }
 
 detect_os() {

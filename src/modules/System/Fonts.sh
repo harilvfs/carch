@@ -7,7 +7,6 @@ clear
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 RED='\033[0;31m'
-BLUE="\e[34m"
 NC='\033[0m'
 
 FONTS_DIR="$HOME/.fonts"

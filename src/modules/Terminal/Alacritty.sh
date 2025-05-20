@@ -8,8 +8,6 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 CYAN='\033[0;36m'
-BLUE="\e[34m"
-ENDCOLOR="\e[0m"
 RESET='\033[0m'
 
 FZF_COMMON="--layout=reverse \
