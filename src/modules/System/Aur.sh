@@ -9,8 +9,6 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
-BLUE="\e[34m"
-ENDCOLOR="\e[0m"
 
 detect_distro() {
     if command -v pacman &> /dev/null; then

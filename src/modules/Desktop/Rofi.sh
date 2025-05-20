@@ -7,7 +7,6 @@ clear
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 NC='\033[0m'
-BLUE="\e[34m"
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
 ENDCOLOR="\e[0m"

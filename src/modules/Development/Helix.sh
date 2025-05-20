@@ -7,7 +7,6 @@ clear
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 CYAN="\033[1;36m"
-BLUE="\033[1;34m"
 RESET="\033[0m"
 
 FZF_COMMON="--layout=reverse \
