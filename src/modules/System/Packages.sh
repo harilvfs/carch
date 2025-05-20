@@ -189,7 +189,7 @@ install_browsers() {
     while true; do
         clear
 
-        options=("Brave" "Firefox" "Libre Wolf" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
+        options=("Brave" "Firefox" "Libre Wolf" "Floorp" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=60% \
                                                     --prompt="Choose options (TAB to select multiple): " \
@@ -242,6 +242,20 @@ install_browsers() {
                         version="(Flatpak version installed)"
                     fi
                     echo "Libre Wolf installed successfully! Version: $version"
+                    ;;
+
+                "Floorp")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                      $pkg_manager_aur floorp-bin
+                      version=$(get_version floorp-bin)
+                    else
+                      echo "Setting sneexy/floorp repository"
+                      sudo dnf copr enable sneexy/floorp
+                      $pkg_manager floorp
+                      version=$(get_version floorp)
+                    fi
+                    echo "Floorp browser installed successfully! Version: $version"
                     ;;
 
                 "Google Chrome")
