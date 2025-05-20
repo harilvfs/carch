@@ -24,7 +24,6 @@ All notable changes to this project will be documented in this file.
 ### Removed
 
 * remove: no needed prompts [ grub script ] [`208f8be`](https://github.com/harilvfs/carch/commit/208f8be)
-* remove: typos [`ecbbe95`](https://github.com/harilvfs/carch/commit/ecbbe95)
 
 ## [4.4.5](https://github.com/harilvfs/carch/compare/v4.4.4...v4.4.5) (2025-05-16)
 
