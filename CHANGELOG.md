@@ -5,29 +5,9 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* . [`09f3de9`](https://github.com/harilvfs/carch/commit/09f3de9)
-* Changelog v4.4.5 by @harilvfs in https://github.com/harilvfs/carch/pull/448
-* Create badge.yml [`9d02410`](https://github.com/harilvfs/carch/commit/9d02410)
-* Delete badge.yml [`08660d2`](https://github.com/harilvfs/carch/commit/08660d2)
-* Delete ci.yml [`2335a62`](https://github.com/harilvfs/carch/commit/2335a62)
-* Update ci.yml [`80c832f`](https://github.com/harilvfs/carch/commit/80c832f)
-* Update status.yml [`5586ff5`](https://github.com/harilvfs/carch/commit/5586ff5)
-* Update version to 4.4.6 for release [`fd94567`](https://github.com/harilvfs/carch/commit/fd94567)
-* ci(release): seprate for pre-release [`0902022`](https://github.com/harilvfs/carch/commit/0902022)
-* ci: add ci monitor & check [`e5d8438`](https://github.com/harilvfs/carch/commit/e5d8438)
-* ci: add status [`90ed3df`](https://github.com/harilvfs/carch/commit/90ed3df)
-* cleanup [`cb4c4d0`](https://github.com/harilvfs/carch/commit/cb4c4d0)
-* docs: cleanup [`e15e321`](https://github.com/harilvfs/carch/commit/e15e321)
-* let's see [`965f46a`](https://github.com/harilvfs/carch/commit/965f46a)
-* minor changes [`16f8202`](https://github.com/harilvfs/carch/commit/16f8202)
-* my mistake [`3d95586`](https://github.com/harilvfs/carch/commit/3d95586)
-* preview: Updated preview from release v4.4.5 by @harilvfs in https://github.com/harilvfs/carch/pull/449
+* ci(release): separate for pre-release [`0902022`](https://github.com/harilvfs/carch/commit/0902022)
 * refactor(scripts): relocate shell scripts [`ae45f34`](https://github.com/harilvfs/carch/commit/ae45f34)
 * refactor: redoing the lts kernel script [`41a59ef`](https://github.com/harilvfs/carch/commit/41a59ef)
-* should fix the fu*king ci [`3c4403c`](https://github.com/harilvfs/carch/commit/3c4403c)
-* style(script): fix with shell style check [`48de5fc`](https://github.com/harilvfs/carch/commit/48de5fc)
-* testing ci [`ff86717`](https://github.com/harilvfs/carch/commit/ff86717)
-* the fu*king workflow is grabbing old info [`94665a7`](https://github.com/harilvfs/carch/commit/94665a7)
 
 ### Added
 
@@ -37,19 +17,14 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * fix(script): add removing greetd [ sddm script ] [`b567bf3`](https://github.com/harilvfs/carch/commit/b567bf3)
-* fix: artifact versioning [`0e57533`](https://github.com/harilvfs/carch/commit/0e57533)
-* fix: ci dir [`155b645`](https://github.com/harilvfs/carch/commit/155b645)
 * fix: typos [ grub theme script ] [`ff7bcba`](https://github.com/harilvfs/carch/commit/ff7bcba)
 * fix: typos [ pre-release ] build [`ed339f2`](https://github.com/harilvfs/carch/commit/ed339f2)
 * fix: typos [ release notes ] [`98630b0`](https://github.com/harilvfs/carch/commit/98630b0)
 
 ### Removed
 
-* remove: artifact upload [`5794add`](https://github.com/harilvfs/carch/commit/5794add)
 * remove: no needed prompts [ grub script ] [`208f8be`](https://github.com/harilvfs/carch/commit/208f8be)
-* remove: shenanigans [`4c2971e`](https://github.com/harilvfs/carch/commit/4c2971e)
 * remove: typos [`ecbbe95`](https://github.com/harilvfs/carch/commit/ecbbe95)
-
 
 ## [4.4.5](https://github.com/harilvfs/carch/compare/v4.4.4...v4.4.5) (2025-05-16)
 
