@@ -930,6 +930,69 @@ install_filemanagers() {
     done
 }
 
+install_fm_tools() {
+    detect_distro
+    distro=$?
+
+    if [[ $distro -eq 0 ]]; then
+        pkg_manager="sudo pacman -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+    elif [[ $distro -eq 1 ]]; then
+        pkg_manager="sudo dnf install -y"
+        get_version() { rpm -q "$1"; }
+    else
+        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        return
+    fi
+
+    while true; do
+        clear
+
+        options=("Tumbler [Thumbnail Viewer]" "Trash-Cli" "Back to Main Menu")
+        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                                    --height=40% \
+                                                    --prompt="Choose options (TAB to select multiple): " \
+                                                    --header="Package Selection" \
+                                                    --pointer="➤" \
+                                                    --multi \
+                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+
+        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
+            return
+        fi
+
+        for selection in "${selected[@]}"; do
+            case $selection in
+            "Tumbler [Thumbnail Viewer]")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager tumbler
+                else
+                    $pkg_manager tumbler
+                fi
+                version=$(get_version tumbler)
+                echo "Tumbler installed successfully! Version: $version"
+                ;;
+
+            "Trash-Cli")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager trash-cli
+                else
+                    $pkg_manager trash-cli
+                fi
+                version=$(get_version trash-cli)
+                echo "Trash-Cli installed successfully! Version: $version"
+                ;;
+
+            esac
+        done
+
+        echo "All selected FM tools have been installed."
+        read -rp "Press Enter to continue..."
+    done
+}
+
 install_gaming() {
     detect_distro
     distro=$?
@@ -1801,68 +1864,6 @@ install_texteditor() {
     done
 }
 
-install_thunarpreview() {
-    detect_distro
-    distro=$?
-
-    if [[ $distro -eq 0 ]]; then
-        pkg_manager="sudo pacman -S --noconfirm"
-        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
-    elif [[ $distro -eq 1 ]]; then
-        pkg_manager="sudo dnf install -y"
-        get_version() { rpm -q "$1"; }
-    else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
-        return
-    fi
-
-    while true; do
-        clear
-
-        options=("Tumbler" "Trash-Cli" "Back to Main Menu")
-        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-
-        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
-            return
-        fi
-
-        for selection in "${selected[@]}"; do
-            case $selection in
-            "Tumbler")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager tumbler
-                else
-                    $pkg_manager tumbler
-                fi
-                version=$(get_version tumbler)
-                echo "Tumbler installed successfully! Version: $version"
-                ;;
-
-            "Trash-Cli")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager trash-cli
-                else
-                    $pkg_manager trash-cli
-                fi
-                version=$(get_version trash-cli)
-                echo "Trash-Cli installed successfully! Version: $version"
-                ;;
-
-            esac
-        done
-
-        echo "All selected Thunar FM Package have been installed."
-        read -rp "Press Enter to continue..."
-    done
-}
 
 install_virtualization() {
     detect_distro
@@ -2008,7 +2009,7 @@ install_crypto_tools() {
 while true; do
     clear
 
-    options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Thunar Preview" "Virtualization" "Crypto Tools" "Exit")
+    options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Crypto Tools" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=70% \
                                                         --prompt="Choose an option: " \
@@ -2023,6 +2024,7 @@ while true; do
         "Development Tools") install_development ;;
         "Editing Tools") install_editing ;;
         "File Managers") install_filemanagers ;;
+        "FM Tools") install_fm_tools ;;
         "Gaming") install_gaming ;;
         "GitHub") install_github ;;
         "Multimedia") install_multimedia ;;
@@ -2031,7 +2033,6 @@ while true; do
         "Streaming Tools") install_streaming ;;
         "Terminals") install_terminals ;;
         "Text Editors") install_texteditor ;;
-        "Thunar Preview") install_thunarpreview ;;
         "Virtualization") install_virtualization ;;
         "Crypto Tools") install_crypto_tools ;;
         "Exit") exit ;;
