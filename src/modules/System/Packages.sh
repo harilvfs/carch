@@ -1520,7 +1520,7 @@ install_terminals() {
     while true; do
         clear
 
-        options=("Alacritty" "Kitty" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Back to Main Menu")
+        options=("Alacritty" "Kitty" "St" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=50% \
                                                     --prompt="Choose options (TAB to select multiple): " \
@@ -1555,6 +1555,18 @@ install_terminals() {
                 fi
                     version=$(get_version kitty)
                 echo "Kitty installed successfully! Version: $version"
+                ;;
+
+            "St")
+                clear
+                if [[ distro -eq 0 ]]; then
+                   $pkg_manager_aur st
+                   version=$(get_version st)
+                else
+                   $pkg_manager st
+                   version=$(get_version st)
+                fi
+                echo "St Terminal installed successfully! Version: $version"
                 ;;
 
             "Terminator")
