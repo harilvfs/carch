@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.6](https://github.com/harilvfs/carch/compare/v4.4.5...v4.4.6) (2025-05-20)
+
+### Changed
+
+* ci(release): separate for pre-release [`0902022`](https://github.com/harilvfs/carch/commit/0902022)
+* refactor(scripts): relocate shell scripts [`ae45f34`](https://github.com/harilvfs/carch/commit/ae45f34)
+* refactor: redoing the lts kernel script [`41a59ef`](https://github.com/harilvfs/carch/commit/41a59ef)
+
+### Added
+
+* feat(script): add pre-release install option [`337954b`](https://github.com/harilvfs/carch/commit/337954b)
+* feat: add script to update tmux plugin [`ebf96fc`](https://github.com/harilvfs/carch/commit/ebf96fc)
+
+### Fixed
+
+* fix(script): add removing greetd [ sddm script ] [`b567bf3`](https://github.com/harilvfs/carch/commit/b567bf3)
+* fix: typos [ grub theme script ] [`ff7bcba`](https://github.com/harilvfs/carch/commit/ff7bcba)
+* fix: typos [ pre-release ] build [`ed339f2`](https://github.com/harilvfs/carch/commit/ed339f2)
+* fix: typos [ release notes ] [`98630b0`](https://github.com/harilvfs/carch/commit/98630b0)
+
+### Removed
+
+* remove: no needed prompts [ grub script ] [`208f8be`](https://github.com/harilvfs/carch/commit/208f8be)
+* remove: typos [`ecbbe95`](https://github.com/harilvfs/carch/commit/ecbbe95)
+
 ## [4.4.5](https://github.com/harilvfs/carch/compare/v4.4.4...v4.4.5) (2025-05-16)
 
 ### Changed
