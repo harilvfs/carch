@@ -30,8 +30,6 @@ Good question! It's just a bunch of simple bash scripts anyone can run by pickin
 Yeah, most scripts work fine, but if you find any bugs, drop a [bug report](https://github.com/harilvfs/carch/issues).  
 Got ideas or features to add? Open a [feature request](https://github.com/harilvfs/carch/issues) anytime!
 
-> **Btw, I highly recommend checking out the Carch [docs](https://carch.chalisehari.com.np) for more details.**
-
 ## How to use?
 
 You can run or use Carch directly without installing it on your system.
