@@ -59,7 +59,6 @@ curl -fsSL https://chalisehari.com.np/carch | sh
 You can also use these options:
 ```sh
 # Update existing installation
-
 curl -fsSL https://chalisehari.com.np/carch | sh -s -- --update
 
 # Uninstall Carch
