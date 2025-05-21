@@ -39,13 +39,13 @@ Choose one of the following version to try Carch:
 Stable Version [ Latest Release ]
 
 ```sh
-bash <(curl -L https://chalisehari.com.np/carch)
+bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
 ```
 
 Dev Version [ Pre-Release ]
  
 ```sh
-bash <(curl -L https://chalisehari.com.np/carchdev)
+bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
 ```
 
 ### Install Script
