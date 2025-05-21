@@ -12,7 +12,7 @@ Currently Supports Arch & Fedora Based Distros.
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
 
-### [Read the carch docs →](https://carch.chalisehari.com.np)
+### [Checkout carch docs →](https://carch.chalisehari.com.np)
 
 ## About
 
