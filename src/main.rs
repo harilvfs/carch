@@ -260,12 +260,10 @@ fn run_tui(settings: Settings) -> Result<(), Box<dyn std::error::Error>> {
                 );
             }
 
-            let result = Command::new("bash").arg(script_path).status().map_err(|e| {
-                io::Error::new(
-                    io::ErrorKind::Other,
-                    format!("Failed to execute script: {}", e),
-                )
-            });
+            let result = Command::new("bash")
+                .arg(script_path)
+                .status()
+                .map_err(|e| io::Error::other(format!("Failed to execute script: {}", e)));
 
             if settings.log_mode {
                 match &result {

@@ -76,7 +76,7 @@ pub fn check_for_updates() -> io::Result<()> {
         }
         Err(e) => {
             eprintln!("Error checking for updates: {}", e);
-            return Err(io::Error::new(io::ErrorKind::Other, e.to_string()));
+            return Err(io::Error::other(e.to_string()));
         }
     }
 
