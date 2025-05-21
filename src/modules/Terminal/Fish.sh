@@ -102,6 +102,20 @@ else
     exit 1
 fi
 
+
+CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
+FISH_PATH=$(command -v fish)
+
+if [[ "$CURRENT_SHELL" == "$FISH_PATH" ]]; then
+    print_color "$GREEN" "Fish is already your default shell."
+else
+    fzf_confirm "Fish is not your default shell. Set it as default?" && {
+        print_color "$CYAN" "Setting Fish as your default shell..."
+        chsh -s "$FISH_PATH"
+        print_color "$GREEN" "Fish is now set as your default shell!"
+    }
+fi
+
 install_zoxide
 print_color "$GREEN" "Zoxide initialized in Fish!"
 print_color "$CYAN" "Fish setup complete! Restart your shell to apply changes."
