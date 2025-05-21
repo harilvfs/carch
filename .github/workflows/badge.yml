@@ -266,7 +266,7 @@ jobs:
           // File extensions info
           infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 105)
+            .attr('y', 95)
             .attr('font-size', 14)
             .text(`Files: ${shCount} .sh / ${rsCount} .rs`);
 
@@ -279,21 +279,27 @@ jobs:
 
           infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 130)
+            .attr('y', 118)
             .attr('font-size', 14)
             .text(`Top extensions: ${topLangs}`);
 
-          // Activity info
+          // Activity info (split into two lines if needed)
           infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 155)
+            .attr('y', 141)
             .attr('font-size', 14)
-            .text(`Activity: ${totalCommits} commits, ${contributors} contributors`);
+            .text(`Activity: ${totalCommits} commits`);
+            
+          infoGroup.append('text')
+            .attr('x', 30)
+            .attr('y', 164)
+            .attr('font-size', 14)
+            .text(`Contributors: ${contributors}`);
 
           // Last active
           infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 180 - 25)
+            .attr('y', 180 - 10)
             .attr('font-size', 14)
             .text(`Last active: ${lastActive}`);
 
