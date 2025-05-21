@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master ]
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight
+    - cron: '0 0 * * *'
 
 jobs:
   generate-badges:
@@ -27,20 +27,19 @@ jobs:
         run: |
           npm init -y
           npm install d3 jsdom
+          npm pkg set type=module
       
       - name: Generate badges
         id: badges
         run: |
           mkdir -p .github/badges
           
-          # Create the badge generation script
           cat > generate-badges.js << 'EOF'
-          const fs = require('fs');
-          const { execSync } = require('child_process');
-          const { JSDOM } = require('jsdom');
-          const d3 = require('d3');
+          import fs from 'fs';
+          import { execSync } from 'child_process';
+          import { JSDOM } from 'jsdom';
+          import * as d3 from 'd3';
           
-          // Helper function to run shell commands
           function runCommand(command) {
             try {
               return execSync(command).toString().trim();
@@ -49,10 +48,8 @@ jobs:
             }
           }
           
-          // Get workflow status (based on current workflow success)
           const workflowStatus = process.env.GITHUB_ACTIONS ? "success" : "unknown";
           
-          // Get language composition
           const languageData = {};
           const files = runCommand('git ls-files').split('\n');
           const extensions = {};
@@ -64,16 +61,13 @@ jobs:
             }
           });
           
-          // Get counts of specific file types
           const shCount = extensions.sh || 0;
           const rsCount = extensions.rs || 0;
           
-          // Get activity metrics
           const totalCommits = runCommand('git rev-list --count HEAD');
           const contributors = runCommand('git log --format=\'%ae\' | sort -u | wc -l');
           const lastActive = runCommand('git log -1 --format=%cr');
           
-          // Create SVG with d3
           const { window } = new JSDOM('<!DOCTYPE html><html><body></body></html>');
           const body = d3.select(window.document.body);
           
@@ -85,10 +79,8 @@ jobs:
             .attr('height', height)
             .attr('viewBox', `0 0 ${width} ${height}`);
           
-          // Add glass effect background
           const defs = svg.append('defs');
           
-          // Glass effect gradient
           const gradient = defs.append('linearGradient')
             .attr('id', 'glassGradient')
             .attr('x1', '0%')
@@ -104,7 +96,6 @@ jobs:
             .attr('offset', '100%')
             .attr('stop-color', 'rgba(255, 255, 255, 0.1)');
           
-          // Create blur filter for shadow
           const filter = defs.append('filter')
             .attr('id', 'shadow')
             .attr('x', '-20%')
@@ -137,7 +128,6 @@ jobs:
           feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
           
-          // Glass background
           svg.append('rect')
             .attr('x', 10)
             .attr('y', 10)
@@ -151,7 +141,6 @@ jobs:
             .attr('filter', 'url(#shadow)')
             .attr('opacity', 0.9);
           
-          // Add highlight edge to the glass effect
           svg.append('path')
             .attr('d', `M 25 10 
                        Q 15 10, 15 25 
@@ -165,11 +154,9 @@ jobs:
             .attr('fill', 'rgba(255, 255, 255, 0.4)')
             .attr('stroke', 'none');
           
-          // Add badge content
           const g = svg.append('g')
             .attr('font-family', 'Arial, sans-serif');
           
-          // Status badge
           const statusColor = workflowStatus === "success" ? "#4CAF50" : "#F44336";
           g.append('circle')
             .attr('cx', 30)
@@ -184,7 +171,6 @@ jobs:
             .attr('font-size', 14)
             .text(`Status: ${workflowStatus}`);
           
-          // File counts
           g.append('text')
             .attr('x', 30)
             .attr('y', 74)
@@ -192,7 +178,6 @@ jobs:
             .attr('font-size', 14)
             .text(`Files: ${shCount} .sh / ${rsCount} .rs`);
           
-          // Top languages (simplified)
           const topLangs = Object.entries(extensions)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 3)
@@ -206,7 +191,6 @@ jobs:
             .attr('font-size', 14)
             .text(`Top extensions: ${topLangs}`);
           
-          // Activity metrics
           g.append('text')
             .attr('x', 30)
             .attr('y', 134)
@@ -221,14 +205,11 @@ jobs:
             .attr('font-size', 14)
             .text(`Last active: ${lastActive}`);
           
-          // Output to file
           fs.writeFileSync('.github/badges/repo-status.svg', window.document.body.innerHTML);
           EOF
           
-          # Execute the badge generation script
           node generate-badges.js
           
-          # Set outputs
           echo "Badges generated successfully"
       
       - name: Deploy badges to badges branch
@@ -236,12 +217,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           
-          # Create and switch to badges branch
           git checkout -b badges || git checkout badges
           
-          # Add and commit the badges
           git add .github/badges/
           git commit -m "Update repository badges" || echo "No changes to commit"
           
-          # Push to the badges branch
           git push -f origin badges
