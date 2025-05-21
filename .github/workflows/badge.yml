@@ -49,27 +49,12 @@ jobs:
           }
 
           const ciStatus = process.env.GITHUB_ACTIONS ? "passing" : "unknown";
-          const files = runCommand('git ls-files').split('\n');
-          const extensions = {};
-
-          files.forEach(file => {
-            const ext = file.split('.').pop();
-            if (ext) {
-              extensions[ext] = (extensions[ext] || 0) + 1;
-            }
-          });
-
-          const shCount = extensions.sh || 0;
-          const rsCount = extensions.rs || 0;
-          const totalCommits = runCommand('git rev-list --count HEAD');
-          const contributors = runCommand('git log --format=\'%ae\' | sort -u | wc -l');
-          const lastActive = runCommand('git log -1 --format=%cr');
 
           const { window } = new JSDOM('<!DOCTYPE html><html><body></body></html>');
           const body = d3.select(window.document.body);
 
-          const width = 400;
-          const height = 180;
+          const width = 150;
+          const height = 40;
 
           const svg = body.append('svg')
             .attr('xmlns', 'http://www.w3.org/2000/svg')
@@ -84,30 +69,15 @@ jobs:
             .attr('x1', '0%')
             .attr('y1', '0%')
             .attr('x2', '100%')
-            .attr('y2', '100%');
-
-          bgGradient.append('stop')
-            .attr('offset', '0%')
-            .attr('stop-color', '#2c3e50');
-
-          bgGradient.append('stop')
-            .attr('offset', '100%')
-            .attr('stop-color', '#1a2533');
-
-          const headerGradient = defs.append('linearGradient')
-            .attr('id', 'headerGradient')
-            .attr('x1', '0%')
-            .attr('y1', '0%')
-            .attr('x2', '100%')
             .attr('y2', '0%');
 
-          headerGradient.append('stop')
+          bgGradient.append('stop')
             .attr('offset', '0%')
-            .attr('stop-color', '#3498db');
+            .attr('stop-color', '#24292e');
 
-          headerGradient.append('stop')
+          bgGradient.append('stop')
             .attr('offset', '100%')
-            .attr('stop-color', '#2980b9');
+            .attr('stop-color', '#1a1e22');
 
           const passingGradient = defs.append('linearGradient')
             .attr('id', 'passingGradient')
@@ -118,11 +88,11 @@ jobs:
 
           passingGradient.append('stop')
             .attr('offset', '0%')
-            .attr('stop-color', '#27ae60');
+            .attr('stop-color', '#2ecc71');
 
           passingGradient.append('stop')
             .attr('offset', '100%')
-            .attr('stop-color', '#2ecc71');
+            .attr('stop-color', '#27ae60');
 
           const unknownGradient = defs.append('linearGradient')
             .attr('id', 'unknownGradient')
@@ -148,13 +118,13 @@ jobs:
 
           filter.append('feGaussianBlur')
             .attr('in', 'SourceAlpha')
-            .attr('stdDeviation', '3')
+            .attr('stdDeviation', '1.5')
             .attr('result', 'blur');
 
           filter.append('feOffset')
             .attr('in', 'blur')
             .attr('dx', '0')
-            .attr('dy', '2')
+            .attr('dy', '1')
             .attr('result', 'offsetBlur');
 
           const feComponentTransfer = filter.append('feComponentTransfer')
@@ -163,7 +133,7 @@ jobs:
 
           feComponentTransfer.append('feFuncA')
             .attr('type', 'linear')
-            .attr('slope', '0.3');
+            .attr('slope', '0.2');
 
           const feMerge = filter.append('feMerge');
           feMerge.append('feMergeNode')
@@ -172,123 +142,69 @@ jobs:
             .attr('in', 'SourceGraphic');
 
           svg.append('rect')
-            .attr('x', 10)
-            .attr('y', 10)
-            .attr('width', width - 20)
-            .attr('height', height - 20)
-            .attr('rx', 8)
-            .attr('ry', 8)
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', width)
+            .attr('height', height)
+            .attr('rx', 6)
+            .attr('ry', 6)
             .attr('fill', 'url(#backgroundGradient)')
             .attr('filter', 'url(#dropShadow)');
 
           svg.append('rect')
-            .attr('x', 10)
-            .attr('y', 10)
-            .attr('width', width - 20)
-            .attr('height', 40)
-            .attr('rx', 8)
-            .attr('ry', 8)
-            .attr('fill', 'url(#headerGradient)');
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 80)
+            .attr('height', height)
+            .attr('rx', 6)
+            .attr('ry', 6)
+            .attr('fill', '#555');
 
           svg.append('rect')
-            .attr('x', 10)
-            .attr('y', 30)
-            .attr('width', width - 20)
-            .attr('height', 20)
-            .attr('fill', 'url(#headerGradient)');
+            .attr('x', 80)
+            .attr('y', 0)
+            .attr('width', width - 80)
+            .attr('height', height)
+            .attr('rx', 0)
+            .attr('ry', 0)
+            .attr('fill', ciStatus === "passing" ? 'url(#passingGradient)' : 'url(#unknownGradient)');
+
+          svg.append('rect')
+            .attr('x', width - 6)
+            .attr('y', 0)
+            .attr('width', 6)
+            .attr('height', height)
+            .attr('rx', 0)
+            .attr('ry', 0)
+            .attr('fill', ciStatus === "passing" ? 'url(#passingGradient)' : 'url(#unknownGradient)');
 
           svg.append('text')
-            .attr('x', width / 2)
-            .attr('y', 34)
+            .attr('x', 40)
+            .attr('y', height/2 + 5)
             .attr('text-anchor', 'middle')
             .attr('font-family', 'Arial, sans-serif')
             .attr('font-weight', 'bold')
-            .attr('font-size', 18)
+            .attr('font-size', 16)
             .attr('fill', 'white')
-            .text('Repository Status');
-
-          const statusBadgeWidth = 90;
-          const statusBadgeHeight = 26;
-          const statusBadgeX = width - statusBadgeWidth - 20;
-          const statusBadgeY = 64;
-
-          svg.append('rect')
-            .attr('x', statusBadgeX)
-            .attr('y', statusBadgeY)
-            .attr('width', statusBadgeWidth)
-            .attr('height', statusBadgeHeight)
-            .attr('rx', 13)
-            .attr('ry', 13)
-            .attr('fill', ciStatus === "passing" ? 'url(#passingGradient)' : 'url(#unknownGradient)')
-            .attr('filter', 'url(#dropShadow)');
+            .text('CI');
 
           svg.append('text')
-            .attr('x', statusBadgeX + statusBadgeWidth / 2)
-            .attr('y', statusBadgeY + statusBadgeHeight / 2 + 5)
+            .attr('x', 115)
+            .attr('y', height/2 + 5)
             .attr('text-anchor', 'middle')
             .attr('font-family', 'Arial, sans-serif')
             .attr('font-weight', 'bold')
-            .attr('font-size', 14)
+            .attr('font-size', 16)
             .attr('fill', 'white')
             .text(ciStatus);
 
-          svg.append('text')
-            .attr('x', statusBadgeX - 10)
-            .attr('y', statusBadgeY + statusBadgeHeight / 2 + 5)
-            .attr('text-anchor', 'end')
-            .attr('font-family', 'Arial, sans-serif')
-            .attr('font-size', 14)
-            .attr('font-weight', 'bold')
-            .attr('fill', 'white')
-            .text('CI Status:');
-
-          const infoGroup = svg.append('g')
-            .attr('font-family', 'Arial, sans-serif')
-            .attr('fill', 'white');
-
-          infoGroup.append('text')
-            .attr('x', 30)
-            .attr('y', 95)
-            .attr('font-size', 14)
-            .text(`Files: ${shCount} .sh / ${rsCount} .rs`);
-
-          const topLangs = Object.entries(extensions)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 3)
-            .map(([ext, count]) => `${ext}: ${count}`)
-            .join(", ");
-
-          infoGroup.append('text')
-            .attr('x', 30)
-            .attr('y', 118)
-            .attr('font-size', 14)
-            .text(`Top extensions: ${topLangs}`);
-
-          infoGroup.append('text')
-            .attr('x', 30)
-            .attr('y', 141)
-            .attr('font-size', 14)
-            .text(`Activity: ${totalCommits} commits`);
-            
-          infoGroup.append('text')
-            .attr('x', 30)
-            .attr('y', 164)
-            .attr('font-size', 14)
-            .text(`Contributors: ${contributors}`);
-
-          infoGroup.append('text')
-            .attr('x', 30)
-            .attr('y', 164 + 23)
-            .attr('font-size', 14)
-            .text(`Last active: ${lastActive}`);
-
-          fs.writeFileSync('.github/badges/repo-status.svg', window.document.body.innerHTML);
-          console.log("repository badge generated successfully");
+          fs.writeFileSync('.github/badges/ci-status.svg', window.document.body.innerHTML);
+          console.log("status badge generated successfully");
           EOF
           
           node generate-badges.js
           
-          echo "Badges generated successfully"
+          echo "Badge generated successfully"
       
       - name: Deploy badges to badges branch
         run: |
@@ -298,6 +214,6 @@ jobs:
           git checkout -b badges || git checkout badges
           
           git add .github/badges/
-          git commit -m "Update repository badges" || echo "No changes to commit"
+          git commit -m "Update CI status badge" || echo "No changes to commit"
           
           git push -f origin badges
