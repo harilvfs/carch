@@ -53,16 +53,17 @@ bash <(curl -L https://chalisehari.com.np/carchdev)
 You can install Carch permanently on your system using our install script:
 
 ```sh
-bash <(curl -L https://chalisehari.com.np/carchinstall)
+curl -fsSL https://chalisehari.com.np/carch | sh
 ```
 
 You can also use these options:
 ```sh
 # Update existing installation
-bash <(curl -L https://chalisehari.com.np/carchinstall) --update
+
+curl -fsSL https://chalisehari.com.np/carch | sh -s -- --update
 
 # Uninstall Carch
-bash <(curl -L https://chalisehari.com.np/carchinstall) --uninstall
+curl -fsSL https://chalisehari.com.np/carch | sh -s -- --uninstall
 ```
 
 ### Cargo Crate
