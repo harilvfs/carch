@@ -39,7 +39,7 @@ jobs:
           import { execSync } from 'child_process';
           import { JSDOM } from 'jsdom';
           import * as d3 from 'd3';
-          
+
           function runCommand(command) {
             try {
               return execSync(command).toString().trim();
@@ -47,165 +47,259 @@ jobs:
               return null;
             }
           }
-          
-          const workflowStatus = process.env.GITHUB_ACTIONS ? "success" : "unknown";
-          
-          const languageData = {};
+
+          // Get repository information
+          const ciStatus = process.env.GITHUB_ACTIONS ? "passing" : "unknown";
           const files = runCommand('git ls-files').split('\n');
           const extensions = {};
-          
+
           files.forEach(file => {
             const ext = file.split('.').pop();
             if (ext) {
               extensions[ext] = (extensions[ext] || 0) + 1;
             }
           });
-          
+
           const shCount = extensions.sh || 0;
           const rsCount = extensions.rs || 0;
-          
           const totalCommits = runCommand('git rev-list --count HEAD');
           const contributors = runCommand('git log --format=\'%ae\' | sort -u | wc -l');
           const lastActive = runCommand('git log -1 --format=%cr');
-          
+
+          // Setup SVG with JSDOM
           const { window } = new JSDOM('<!DOCTYPE html><html><body></body></html>');
           const body = d3.select(window.document.body);
-          
+
+          // SVG dimensions
           const width = 400;
           const height = 180;
+
+          // Create SVG
           const svg = body.append('svg')
             .attr('xmlns', 'http://www.w3.org/2000/svg')
             .attr('width', width)
             .attr('height', height)
             .attr('viewBox', `0 0 ${width} ${height}`);
-          
+
+          // Define gradients and filters
           const defs = svg.append('defs');
-          
-          const gradient = defs.append('linearGradient')
-            .attr('id', 'glassGradient')
+
+          // Main background gradient
+          const bgGradient = defs.append('linearGradient')
+            .attr('id', 'backgroundGradient')
+            .attr('x1', '0%')
+            .attr('y1', '0%')
+            .attr('x2', '100%')
+            .attr('y2', '100%');
+
+          bgGradient.append('stop')
+            .attr('offset', '0%')
+            .attr('stop-color', '#2c3e50');
+
+          bgGradient.append('stop')
+            .attr('offset', '100%')
+            .attr('stop-color', '#1a2533');
+
+          // Header gradient
+          const headerGradient = defs.append('linearGradient')
+            .attr('id', 'headerGradient')
+            .attr('x1', '0%')
+            .attr('y1', '0%')
+            .attr('x2', '100%')
+            .attr('y2', '0%');
+
+          headerGradient.append('stop')
+            .attr('offset', '0%')
+            .attr('stop-color', '#3498db');
+
+          headerGradient.append('stop')
+            .attr('offset', '100%')
+            .attr('stop-color', '#2980b9');
+
+          // Status badge gradients
+          const passingGradient = defs.append('linearGradient')
+            .attr('id', 'passingGradient')
             .attr('x1', '0%')
             .attr('y1', '0%')
             .attr('x2', '0%')
             .attr('y2', '100%');
-          
-          gradient.append('stop')
+
+          passingGradient.append('stop')
             .attr('offset', '0%')
-            .attr('stop-color', 'rgba(255, 255, 255, 0.5)');
-          
-          gradient.append('stop')
+            .attr('stop-color', '#27ae60');
+
+          passingGradient.append('stop')
             .attr('offset', '100%')
-            .attr('stop-color', 'rgba(255, 255, 255, 0.1)');
-          
+            .attr('stop-color', '#2ecc71');
+
+          const unknownGradient = defs.append('linearGradient')
+            .attr('id', 'unknownGradient')
+            .attr('x1', '0%')
+            .attr('y1', '0%')
+            .attr('x2', '0%')
+            .attr('y2', '100%');
+
+          unknownGradient.append('stop')
+            .attr('offset', '0%')
+            .attr('stop-color', '#f39c12');
+
+          unknownGradient.append('stop')
+            .attr('offset', '100%')
+            .attr('stop-color', '#e67e22');
+
+          // Drop shadow filter
           const filter = defs.append('filter')
-            .attr('id', 'shadow')
+            .attr('id', 'dropShadow')
             .attr('x', '-20%')
             .attr('y', '-20%')
             .attr('width', '140%')
             .attr('height', '140%');
-          
+
           filter.append('feGaussianBlur')
             .attr('in', 'SourceAlpha')
             .attr('stdDeviation', '3')
             .attr('result', 'blur');
-          
+
           filter.append('feOffset')
             .attr('in', 'blur')
             .attr('dx', '0')
-            .attr('dy', '3')
+            .attr('dy', '2')
             .attr('result', 'offsetBlur');
-          
+
           const feComponentTransfer = filter.append('feComponentTransfer')
             .attr('in', 'offsetBlur')
             .attr('result', 'lightenedBlur');
-          
+
           feComponentTransfer.append('feFuncA')
             .attr('type', 'linear')
             .attr('slope', '0.3');
-          
+
           const feMerge = filter.append('feMerge');
           feMerge.append('feMergeNode')
             .attr('in', 'lightenedBlur');
           feMerge.append('feMergeNode')
             .attr('in', 'SourceGraphic');
-          
+
+          // Main card background
           svg.append('rect')
             .attr('x', 10)
             .attr('y', 10)
             .attr('width', width - 20)
             .attr('height', height - 20)
-            .attr('rx', 15)
-            .attr('ry', 15)
-            .attr('fill', 'url(#glassGradient)')
-            .attr('stroke', '#ffffff')
-            .attr('stroke-width', 1)
-            .attr('filter', 'url(#shadow)')
-            .attr('opacity', 0.9);
-          
-          svg.append('path')
-            .attr('d', `M 25 10 
-                       Q 15 10, 15 25 
-                       L 15 50 
-                       Q 40 65, 100 60 
-                       L 350 60 
-                       Q 375 58, 380 40 
-                       L 380 25 
-                       Q 380 10, 365 10 
-                       Z`)
-            .attr('fill', 'rgba(255, 255, 255, 0.4)')
-            .attr('stroke', 'none');
-          
-          const g = svg.append('g')
-            .attr('font-family', 'Arial, sans-serif');
-          
-          const statusColor = workflowStatus === "success" ? "#4CAF50" : "#F44336";
-          g.append('circle')
-            .attr('cx', 30)
-            .attr('cy', 40)
-            .attr('r', 8)
-            .attr('fill', statusColor);
-          
-          g.append('text')
-            .attr('x', 45)
-            .attr('y', 44)
-            .attr('fill', '#333')
+            .attr('rx', 8)
+            .attr('ry', 8)
+            .attr('fill', 'url(#backgroundGradient)')
+            .attr('filter', 'url(#dropShadow)');
+
+          // Header section
+          svg.append('rect')
+            .attr('x', 10)
+            .attr('y', 10)
+            .attr('width', width - 20)
+            .attr('height', 40)
+            .attr('rx', 8)
+            .attr('ry', 8)
+            .attr('fill', 'url(#headerGradient)');
+
+          // Make the bottom corners of the header square
+          svg.append('rect')
+            .attr('x', 10)
+            .attr('y', 30)
+            .attr('width', width - 20)
+            .attr('height', 20)
+            .attr('fill', 'url(#headerGradient)');
+
+          // Header text
+          svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', 34)
+            .attr('text-anchor', 'middle')
+            .attr('font-family', 'Arial, sans-serif')
+            .attr('font-weight', 'bold')
+            .attr('font-size', 18)
+            .attr('fill', 'white')
+            .text('Repository Status');
+
+          // Status badge
+          const statusBadgeWidth = 90;
+          const statusBadgeHeight = 26;
+          const statusBadgeX = width - statusBadgeWidth - 20;
+          const statusBadgeY = 64;
+
+          svg.append('rect')
+            .attr('x', statusBadgeX)
+            .attr('y', statusBadgeY)
+            .attr('width', statusBadgeWidth)
+            .attr('height', statusBadgeHeight)
+            .attr('rx', 13)
+            .attr('ry', 13)
+            .attr('fill', ciStatus === "passing" ? 'url(#passingGradient)' : 'url(#unknownGradient)')
+            .attr('filter', 'url(#dropShadow)');
+
+          // Status text
+          svg.append('text')
+            .attr('x', statusBadgeX + statusBadgeWidth / 2)
+            .attr('y', statusBadgeY + statusBadgeHeight / 2 + 5)
+            .attr('text-anchor', 'middle')
+            .attr('font-family', 'Arial, sans-serif')
+            .attr('font-weight', 'bold')
             .attr('font-size', 14)
-            .text(`Status: ${workflowStatus}`);
-          
-          g.append('text')
+            .attr('fill', 'white')
+            .text(ciStatus);
+
+          // CI Status label
+          svg.append('text')
+            .attr('x', statusBadgeX - 10)
+            .attr('y', statusBadgeY + statusBadgeHeight / 2 + 5)
+            .attr('text-anchor', 'end')
+            .attr('font-family', 'Arial, sans-serif')
+            .attr('font-size', 14)
+            .attr('font-weight', 'bold')
+            .attr('fill', 'white')
+            .text('CI Status:');
+
+          // Information section
+          const infoGroup = svg.append('g')
+            .attr('font-family', 'Arial, sans-serif')
+            .attr('fill', 'white');
+
+          // File extensions info
+          infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 74)
-            .attr('fill', '#333')
+            .attr('y', 105)
             .attr('font-size', 14)
             .text(`Files: ${shCount} .sh / ${rsCount} .rs`);
-          
+
+          // Top extensions
           const topLangs = Object.entries(extensions)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 3)
             .map(([ext, count]) => `${ext}: ${count}`)
             .join(", ");
-          
-          g.append('text')
+
+          infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 104)
-            .attr('fill', '#333')
+            .attr('y', 130)
             .attr('font-size', 14)
             .text(`Top extensions: ${topLangs}`);
-          
-          g.append('text')
+
+          // Activity info
+          infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 134)
-            .attr('fill', '#333')
+            .attr('y', 155)
             .attr('font-size', 14)
             .text(`Activity: ${totalCommits} commits, ${contributors} contributors`);
-          
-          g.append('text')
+
+          // Last active
+          infoGroup.append('text')
             .attr('x', 30)
-            .attr('y', 164)
-            .attr('fill', '#333')
+            .attr('y', 180 - 25)
             .attr('font-size', 14)
             .text(`Last active: ${lastActive}`);
-          
+
+          // Output the SVG
           fs.writeFileSync('.github/badges/repo-status.svg', window.document.body.innerHTML);
+          console.log("Enhanced repository badge generated successfully");
           EOF
           
           node generate-badges.js
