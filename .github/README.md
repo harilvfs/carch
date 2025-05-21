@@ -12,8 +12,6 @@ Currently Supports Arch & Fedora Based Distros.
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Carch Docs][carch-docs]][carch-docs-link]
 
-![Repository Status](https://raw.githubusercontent.com/harilvfs/carch/badges/.github/badges/repo-status.svg)
-
 ## About
 
 What the hell is this script?
