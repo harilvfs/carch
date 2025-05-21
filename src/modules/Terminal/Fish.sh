@@ -102,7 +102,6 @@ else
     exit 1
 fi
 
-
 CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
 FISH_PATH=$(command -v fish)
 
