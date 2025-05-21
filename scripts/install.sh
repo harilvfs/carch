@@ -110,9 +110,10 @@ check_prerelease() {
             PRERELEASE_NAME=$(echo "$PRERELEASE_INFO" | jq -r '.name')
 
             echo "${YELLOW}${BOLD}Pre-release available:${RESET} ${PRERELEASE_NAME} (${PRERELEASE_TAG})"
-                read -rp "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}" response
 
-                case "$response" in
+            printf "%s" "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}"
+            read response
+            case "$response" in
                 [yY][eE][sS]|[yY])
                     USE_PRERELEASE=true
                     CARCH_VERSION="$PRERELEASE_TAG"
@@ -131,8 +132,8 @@ check_prerelease() {
 
             if [ -n "$PRERELEASE_TAG" ]; then
                 echo "${YELLOW}${BOLD}Pre-release available:${RESET} $PRERELEASE_TAG"
-                read -rp "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}" response
-
+                printf "%s" "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}"
+                read response
                 case "$response" in
                     [yY][eE][sS]|[yY])
                         USE_PRERELEASE=true
