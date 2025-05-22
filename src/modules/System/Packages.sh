@@ -1931,7 +1931,7 @@ install_virtualization() {
             "Distrobox")
                 clear
                 if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman distrobox
+                    $pkg_manager_pacman distrobox podman
                     version=$(get_version distrobox)
                 else
                     $pkg_manager distrobox
