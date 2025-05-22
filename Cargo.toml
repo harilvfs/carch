@@ -6,7 +6,7 @@ description = "A Simple Script to Make Linux System Setup Easier 🧩"
 documentation = "https://carch.chalisehari.com.np"
 homepage = "https://github.com/harilvfs/carch"
 readme = "./.github/README.md"
-repository = "https://github.com/harilvfs/carch/tree/main/src"
+repository = "https://github.com/harilvfs/carch"
 license-file = "LICENSE"
 
 categories = [
