@@ -135,7 +135,7 @@ setup_standard_fastfetch() {
     echo -e "${CYAN}Setting up standard Fastfetch configuration...${NC}"
 
     echo -e "${CYAN}Downloading standard configuration...${NC}"
-    curl -sSLo "$FASTFETCH_DIR/config.jsonc" "https://raw.githubusercontent.com/harilvfs/fastfetch/refs/heads/old-days/fastfetch/config.jsonc"
+    curl -sSLo "$FASTFETCH_DIR/config.jsonc" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/fastfetch/config.jsonc"
 
     echo -e "${GREEN}Standard Fastfetch setup completed!${NC}"
 }
