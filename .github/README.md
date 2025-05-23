@@ -1,5 +1,5 @@
-[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?style=for-the-badge&logoColor=179299&labelColor=1c1c29)](./README.hi.md)
-[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?style=for-the-badge&logoColor=179299&labelColor=1c1c29)](./README.np.md)
+[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](./README.hi.md)
+[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](./README.np.md)
 
 # Carch
 
