@@ -110,15 +110,19 @@ carch --help
 ```
 
 ## Roadmap
+
 Check the full roadmap in the [docs](https://carch.chalisehari.com.np/project/roadmap.html).
 
 ## Contributing
+
 PRs & contributions are welcome! Read the [contributing guide](https://carch.chalisehari.com.np/project/contributing.html) first.
 
 ## Code of Conduct
+
 We want a welcoming environment for everyone. Please follow our [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html).
 
 ## Contributors
+
 Thanks to everyone who contributed — reporting bugs, providing feedback, or submitting PRs.
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
@@ -130,6 +134,7 @@ Thanks to everyone who contributed — reporting bugs, providing feedback, or su
 - Ideas from many other people along the way.
 
 ## Reach Me  
+
 > Got a question or feedback? Hit me up via:  
 >
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
