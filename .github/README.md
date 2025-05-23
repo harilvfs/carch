@@ -1,4 +1,4 @@
-lang [🇮🇳 हिन्दी (Hindi)](./github/README.hi.md) • [🇳🇵 नेपाली (Nepali)](./github/README.np.md)
+lang [🇮🇳 हिन्दी (Hindi)](./README.hi.md) • [🇳🇵 नेपाली (Nepali)](./README.np.md)
 
 # Carch
 
