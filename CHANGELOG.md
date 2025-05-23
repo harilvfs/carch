@@ -1,6 +1,38 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.4.7](https://github.com/harilvfs/carch/compare/v4.4.6...v4.4.7) (2025-05-24)
+
+### Changed
+
+* chore(deps): add missing azote pkg [swaywm script] [`6ef43a6`](https://github.com/harilvfs/carch/commit/6ef43a6)
+* chore(deps): add podman [ distrobox missing deps ] [`3f9b93e`](https://github.com/harilvfs/carch/commit/3f9b93e)
+* chore(deps): add xwayland dependencies [ swaywm ] [`385eb17`](https://github.com/harilvfs/carch/commit/385eb17)
+* docs: add support qr [`ec32fe5`](https://github.com/harilvfs/carch/commit/ec32fe5)
+* docs: add translation of README for nepali & hindi lang by @aayushrg7 in https://github.com/harilvfs/carch/pull/452
+* docs: bec of cargo readme [`fc260e5`](https://github.com/harilvfs/carch/commit/fc260e5)
+* docs: change direct links [`74ad7e7`](https://github.com/harilvfs/carch/commit/74ad7e7)
+* docs: change install url [ fish compatible [`44d54b0`](https://github.com/harilvfs/carch/commit/44d54b0)
+* refactor(script): fix category for filemanager tools [`8018917`](https://github.com/harilvfs/carch/commit/8018917)
+* refactor: change fastfetch config url [harilvfs/dwm] [`aff5e87`](https://github.com/harilvfs/carch/commit/aff5e87)
+* refactor: make fish shell compatible [`bcd571e`](https://github.com/harilvfs/carch/commit/bcd571e)
+* rust: adapt with links url changes [`63c51e0`](https://github.com/harilvfs/carch/commit/63c51e0)
+* rust: fix repository url [`65ee22a`](https://github.com/harilvfs/carch/commit/65ee22a)
+* style: arrow at frontend [`2721fea`](https://github.com/harilvfs/carch/commit/2721fea)
+
+### Added
+
+* feat(script): add st terminal [ package script ] [`b1c0124`](https://github.com/harilvfs/carch/commit/b1c0124)
+* feat: add floorp browser [ package script ] [`e5ad8e8`](https://github.com/harilvfs/carch/commit/e5ad8e8)
+* feat: add option for defaulting fish shell [`4ea98f2`](https://github.com/harilvfs/carch/commit/4ea98f2)
+* feat: adding translation on nepali lang [`da6cfe4`](https://github.com/harilvfs/carch/commit/da6cfe4)
+
+### Removed
+
+* remove: emojis [ scripts ] [`8a100f4`](https://github.com/harilvfs/carch/commit/8a100f4)
+* remove: unused color [ package script ] [`5df2c40`](https://github.com/harilvfs/carch/commit/5df2c40)
+* remove: unused colors [ all scripts ] [`02fb96f`](https://github.com/harilvfs/carch/commit/02fb96f)
+
 ## [4.4.6](https://github.com/harilvfs/carch/compare/v4.4.5...v4.4.6) (2025-05-20)
 
 ### Changed
