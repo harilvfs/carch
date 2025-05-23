@@ -1,77 +1,73 @@
-
 # Carch
 
-A Simple Script That May Help You Automate Linux System Setup.
+एक सरल स्क्रिप्ट जो आपके लिए लिनक्स सिस्टम सेटअप को ऑटोमेट करने में मदद कर सकती है।
 
 <details>
-<summary><strong>Preview</strong></summary>
+<summary><strong>पूर्वावलोकन</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
 </details>
 
-Currently Supports Arch & Fedora Based Distros.
+वर्तमान में केवल Arch और Fedora आधारित डिस्ट्रो को सपोर्ट करता है।
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] 
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
-## About
+## परिचय
 
-What the fuck is this script?
+यह स्क्रिप्ट क्या है?
 
-Good question! It's just a bunch of simple bash scripts anyone can run by picking options. You'll see categories like `system`, `terminal`, `desktop`, `development`, `browser` etc. Inside each, there are script names — like in `terminal`, you'll find `Kitty`, `alacritty`, and more. When you run one, it installs the package and sets up my minimal and clean config. That's it. Just pick, run, and it does the rest for you — all through a nice TUI built with [`ratatui`](https://github.com/ratatui-org/ratatui).
+अच्छा सवाल! यह सिर्फ कुछ सिंपल bash स्क्रिप्ट्स हैं जिन्हें कोई भी उपयोगकर्ता विकल्प चुनकर चला सकता है। इसमें `system`, `terminal`, `desktop`, `development`, `browser` जैसे कैटेगरी मिलेंगी। हर एक में स्क्रिप्ट के नाम होते हैं — जैसे `terminal`, you'll find `Kitty`, `alacritty`, आदि। जब आप कोई स्क्रिप्ट चलाते हैं, यह पैकेज इंस्टॉल करता है और मेरी मिनिमल व क्लीन कॉन्फिग को सेट कर देता है। बस चुनिए, चलाइए और बाकी यह खुद करता है — सबकुछ एक सुंदर TUI के माध्यम से, जो [`ratatui`](https://github.com/ratatui-org/ratatui) से बना है। .
 
 > [!NOTE]  
-> Yeah, the script does everything by itself, but it might not work on every system.  
-> If your setup is a bit different, some stuff might break.  
-> Just check the preview in the menu to see what the script actually does.
+> यह स्क्रिप्ट खुद ही सब कुछ करती है, लेकिन हर सिस्टम पर ठीक से काम करे इसकी गारंटी नहीं है।
+> अगर आपका सिस्टम अलग है, तो कुछ चीजें बिगड़ सकती हैं।
+> 
+> मेनू में प्रीव्यू देखकर देख लें कि स्क्रिप्ट क्या करती है।
 
-Yeah, most scripts work fine, but if you find any bugs, drop a [bug report](https://github.com/harilvfs/carch/issues).  
-Got ideas or features to add? Open a [feature request](https://github.com/harilvfs/carch/issues) anytime!
+अगर कोई बग मिले, तो [bug रिपोर्ट करें](https://github.com/harilvfs/carch/issues)।
+अगर कोई आइडिया है या नया फीचर चाहिए, तो [feature रिक्वेस्ट](https://github.com/harilvfs/carch/issues) खोलें।
 
-## How to use?
+## उपयोग कैसे करें?
 
-You can run or use Carch directly without installing it on your system.
+आप Carch को बिना इंस्टॉल किए भी डायरेक्ट चला सकते हैं।
 
-Choose one of the following version to try Carch:
+नीचे दिए गए विकल्पों में से एक चुनें:
 
-Stable Version [ Latest Release ]
+स्थिर संस्करण [ Latest Release ]
 
 ```sh
 bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
 ```
 
-Dev Version [ Pre-Release ]
+डेव वर्जन [ Pre-Release ]
  
 ```sh
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
 ```
 
-### Install Script
+### इंस्टॉलेशन स्क्रिप्ट
 
-You can install Carch permanently on your system using our install script:
+आप Carch को स्थायी रूप से अपने सिस्टम में इंस्टॉल कर सकते हैं:
 
 ```sh
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)"
 ```
 
-You can also use these options:
+विकल्प:
 ```sh
-# Update existing installation
+# अपडेट करें
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --update
 
-# Uninstall Carch
+# अनइंस्टॉल करें
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --uninstall
 ```
 
 ### Cargo Crate
 
-Carch is available on [crates.io](https://crates.io/).
-
-You can install it using Cargo with the [carch](https://crates.io/crates/carch) crate.
-
-First, install dependencies: 
+[Carch crates.io पर उपलब्ध है](https://crates.io/crates/carch)। इसे Cargo से इंस्टॉल कर सकते हैं:
 
 #### Arch Linux
 > <img src="https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png" width="20" />
@@ -87,59 +83,64 @@ sudo pacman -S --noconfirm fzf cargo rust
  sudo dnf install fzf cargo rust -y
 ```
 
-Then, install Carch with Cargo:
+फिर इसे इंस्टॉल करें:
 
 ```sh
 cargo install carch
 ```
 
-Once that's done, you can run it by typing `carch` in your terminal.
+फिर `carch` टाइप करके इसे चला सकते हैं।
 
 > [!TIP]
-> If `carch` isn’t recognized, add Cargo's bin directory to your PATH:
+> अगर `carch` कमांड नहीं चलता, तो PATH में Cargo की bin डायरेक्टरी जोड़ें:
 > 
 > ```sh
 > export PATH="$HOME/.cargo/bin:$PATH"
 > ```
 
-## Commands
+## कमांड्स
 
-Carch supports some commands too. You can view them by running:
+सभी कमांड देखने के लिए चलाएं:
 
 ```sh
 carch --help
 ```
 
-## Roadmap
-Check the full roadmap in the [docs](https://carch.chalisehari.com.np/project/roadmap.html).
+## रोडमैप
 
-## Contributing
-PRs & contributions are welcome! Read the [contributing guide](https://carch.chalisehari.com.np/project/contributing.html) first.
+[डॉक्यूमेंटेशन](https://carch.chalisehari.com.np/project/roadmap.html) में पूरा रोडमैप देखें।
 
-## Code of Conduct
-We want a welcoming environment for everyone. Please follow our [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html).
+## योगदान
 
-## Contributors
-Thanks to everyone who contributed — reporting bugs, providing feedback, or submitting PRs.
+PR और योगदान का स्वागत है! पहले [contributing गाइड](https://carch.chalisehari.com.np/project/contributing.html) पढ़ें।
+
+## आचार संहिता
+
+हम सभी के लिए स्वागत योग्य माहौल चाहते हैं। कृपया हमारी [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html) का पालन करें।
+
+## योगदानकर्ता
+
+धन्यवाद उन सभी को जिन्होंने बग्स रिपोर्ट किए, फीडबैक दिया, या PR सबमिट किया।
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-## Inspiration
+## प्रेरणा
 
 - **[ChrisTitusTech linutil](https://github.com/ChrisTitusTech/linutil/)**
-- **[ml4w](https://github.com/mylinuxforwork)** — his scripting logic is awesome.
-- Ideas from many other people along the way.
+- **[ml4w](https://github.com/mylinuxforwork)** — इनका स्क्रिप्टिंग लॉजिक कमाल है।
+- और बहुत सारे लोगों से आइडिया लिया।
 
-## Reach Me  
-> Got a question or feedback? Hit me up via:  
+## संपर्क करें
+
+> कोई सवाल या सुझाव है? संपर्क करें:
 >
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
-## Support
+## सहयोग करें
 
-This project is free and open-source for personal or public use.
+यह प्रोजेक्ट व्यक्तिगत या सार्वजनिक उपयोग के लिए मुफ़्त और ओपन-सोर्स है।
 
-If you'd like to support its development, you can donate crypto via Bitcoin:
+अगर आप इसके डेवलपमेंट में सहयोग करना चाहते हैं, तो बिटकॉइन डोनेशन कर सकते हैं:
 
 > `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
@@ -147,7 +148,7 @@ If you'd like to support its development, you can donate crypto via Bitcoin:
 
 <br>
 
-Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
+Carch एक [MIT लाइसेंस](https://github.com/harilvfs/carch/blob/main/LICENSE) के तहत उपलब्ध है — आप इसे फोर्क कर सकते हैं और अपने हिसाब से उपयोग कर सकते हैं। धन्यवाद!
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
