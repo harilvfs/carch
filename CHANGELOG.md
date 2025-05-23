@@ -1,80 +1,37 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.4.7](https://github.com/harilvfs/carch/compare/v4.4.6...v4.4.7) (2025-05-23)
+## [4.4.7](https://github.com/harilvfs/carch/compare/v4.4.6...v4.4.7) (2025-05-24)
 
 ### Changed
 
-* Changelog v4.4.6 [`e650f9d`](https://github.com/harilvfs/carch/commit/e650f9d)
-* Changelog v4.4.6 by @harilvfs in https://github.com/harilvfs/carch/pull/450
-* Update README.hi.md [`ee6c6e8`](https://github.com/harilvfs/carch/commit/ee6c6e8)
-* Update README.md [`189d7c7`](https://github.com/harilvfs/carch/commit/189d7c7)
-* Update README.md [`2ebb5bc`](https://github.com/harilvfs/carch/commit/2ebb5bc)
-* Update README.np.md [`467e6a8`](https://github.com/harilvfs/carch/commit/467e6a8)
-* Update version to 4.4.7 for release [`f4b2ed6`](https://github.com/harilvfs/carch/commit/f4b2ed6)
-* a [`177d0fd`](https://github.com/harilvfs/carch/commit/177d0fd)
 * chore(deps): add missing azote pkg [swaywm script] [`6ef43a6`](https://github.com/harilvfs/carch/commit/6ef43a6)
 * chore(deps): add podman [ distrobox missing deps ] [`3f9b93e`](https://github.com/harilvfs/carch/commit/3f9b93e)
 * chore(deps): add xwayland dependencies [ swaywm ] [`385eb17`](https://github.com/harilvfs/carch/commit/385eb17)
-* ci testing badge [ not ready btw ] [`d79e262`](https://github.com/harilvfs/carch/commit/d79e262)
-* ci: maybe final [`2d7fc22`](https://github.com/harilvfs/carch/commit/2d7fc22)
-* cleaning up [`2216ce9`](https://github.com/harilvfs/carch/commit/2216ce9)
-* docs: add docs link [`0abf2e9`](https://github.com/harilvfs/carch/commit/0abf2e9)
-* docs: add repo status testing [`226ef92`](https://github.com/harilvfs/carch/commit/226ef92)
 * docs: add support qr [`ec32fe5`](https://github.com/harilvfs/carch/commit/ec32fe5)
 * docs: add translation of README for nepali & hindi lang by @aayushrg7 in https://github.com/harilvfs/carch/pull/452
 * docs: bec of cargo readme [`fc260e5`](https://github.com/harilvfs/carch/commit/fc260e5)
 * docs: change direct links [`74ad7e7`](https://github.com/harilvfs/carch/commit/74ad7e7)
 * docs: change install url [ fish compatible [`44d54b0`](https://github.com/harilvfs/carch/commit/44d54b0)
-* docs: cleanup [`699a75c`](https://github.com/harilvfs/carch/commit/699a75c)
-* docs: cleanup [`989607f`](https://github.com/harilvfs/carch/commit/989607f)
-* docs: cleanup not needed badges [`e681996`](https://github.com/harilvfs/carch/commit/e681996)
-* docs: cleanup spaces [`e32a28b`](https://github.com/harilvfs/carch/commit/e32a28b)
-* docs: final output [`7b1f7ab`](https://github.com/harilvfs/carch/commit/7b1f7ab)
-* docs: finalizing readme on nepali lang [`5b2cb33`](https://github.com/harilvfs/carch/commit/5b2cb33)
-* docs: fix direct link [`e498b1f`](https://github.com/harilvfs/carch/commit/e498b1f)
-* docs: fix install link [`4e8f387`](https://github.com/harilvfs/carch/commit/4e8f387)
-* docs: fix install with fish shell [`722c625`](https://github.com/harilvfs/carch/commit/722c625)
-* docs: fix typos [`022deac`](https://github.com/harilvfs/carch/commit/022deac)
-* docs: fix typos [`09b5303`](https://github.com/harilvfs/carch/commit/09b5303)
-* docs: improve typos' [`f50c6cf`](https://github.com/harilvfs/carch/commit/f50c6cf)
-* doing readme on diff lang [`d60ab09`](https://github.com/harilvfs/carch/commit/d60ab09)
-* either [`be066c0`](https://github.com/harilvfs/carch/commit/be066c0)
-* fix layout [`c571dc1`](https://github.com/harilvfs/carch/commit/c571dc1)
-* fix overlapping [`2b21c48`](https://github.com/harilvfs/carch/commit/2b21c48)
-* i am still not sure [`ad51d8d`](https://github.com/harilvfs/carch/commit/ad51d8d)
-* kinda better [`c35b164`](https://github.com/harilvfs/carch/commit/c35b164)
-* ok not gonna try [`d7373b9`](https://github.com/harilvfs/carch/commit/d7373b9)
-* preview: Updated preview from release v4.4.6 by @harilvfs in https://github.com/harilvfs/carch/pull/451
 * refactor(script): fix category for filemanager tools [`8018917`](https://github.com/harilvfs/carch/commit/8018917)
 * refactor: change fastfetch config url [harilvfs/dwm] [`aff5e87`](https://github.com/harilvfs/carch/commit/aff5e87)
 * refactor: make fish shell compatible [`bcd571e`](https://github.com/harilvfs/carch/commit/bcd571e)
 * rust: adapt with links url changes [`63c51e0`](https://github.com/harilvfs/carch/commit/63c51e0)
 * rust: fix repository url [`65ee22a`](https://github.com/harilvfs/carch/commit/65ee22a)
-* rust: i forget to update [fixes] [`27343f0`](https://github.com/harilvfs/carch/commit/27343f0)
 * style: arrow at frontend [`2721fea`](https://github.com/harilvfs/carch/commit/2721fea)
-* style: fix shell style formatting [`f03637e`](https://github.com/harilvfs/carch/commit/f03637e)
-* style: remove blank spaces [`9410647`](https://github.com/harilvfs/carch/commit/9410647)
-* test [`d83e3a8`](https://github.com/harilvfs/carch/commit/d83e3a8)
-* testing [`fcfe6ea`](https://github.com/harilvfs/carch/commit/fcfe6ea)
-* testing sync mirror [ codeberg ] [`017b5a4`](https://github.com/harilvfs/carch/commit/017b5a4)
 
 ### Added
 
 * feat(script): add st terminal [ package script ] [`b1c0124`](https://github.com/harilvfs/carch/commit/b1c0124)
 * feat: add floorp browser [ package script ] [`e5ad8e8`](https://github.com/harilvfs/carch/commit/e5ad8e8)
 * feat: add option for defaulting fish shell [`4ea98f2`](https://github.com/harilvfs/carch/commit/4ea98f2)
-* feat: adding traslation on nepali lang [`da6cfe4`](https://github.com/harilvfs/carch/commit/da6cfe4)
-
-### Fixed
-
+* feat: adding translation on nepali lang [`da6cfe4`](https://github.com/harilvfs/carch/commit/da6cfe4)
 
 ### Removed
 
 * remove: emojis [ scripts ] [`8a100f4`](https://github.com/harilvfs/carch/commit/8a100f4)
 * remove: unused color [ package script ] [`5df2c40`](https://github.com/harilvfs/carch/commit/5df2c40)
 * remove: unused colors [ all scripts ] [`02fb96f`](https://github.com/harilvfs/carch/commit/02fb96f)
-
 
 ## [4.4.6](https://github.com/harilvfs/carch/compare/v4.4.5...v4.4.6) (2025-05-20)
 
