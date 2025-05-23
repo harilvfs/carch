@@ -173,14 +173,14 @@ check_existing_helpers() {
 detect_distro
 
 if [ "$distro" == "fedora" ]; then
-    echo -e "${YELLOW}⚠️  NOTICE:${NC} This system is detected as ${RED}Fedora${NC}."
+    echo -e "${YELLOW}NOTICE:${NC} This system is detected as ${RED}Fedora${NC}."
     echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with Fedora.${NC}"
     echo -e "${YELLOW}These tools will not work on your system.${NC}"
     exit 1
 fi
 
 if [ "$distro" == "unsupported" ]; then
-    echo -e "${YELLOW}⚠️  NOTICE:${NC} Your distribution could not be detected."
+    echo -e "${YELLOW}NOTICE:${NC} Your distribution could not be detected."
     echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions.${NC}"
     echo -e "${YELLOW}Please verify that you are using an Arch-based distribution before continuing.${NC}"
 
