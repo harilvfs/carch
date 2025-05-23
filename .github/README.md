@@ -138,7 +138,7 @@ Thanks to everyone who contributed — reporting bugs, providing feedback, or su
 
 This project is free and open-source for personal or public use.
 
-If you'd like to support its development, you can donate via Bitcoin:
+If you'd like to support its development, you can donate crypto via Bitcoin:
 
 > `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
