@@ -25,7 +25,6 @@ All notable changes to this project will be documented in this file.
 * feat(script): add st terminal [ package script ] [`b1c0124`](https://github.com/harilvfs/carch/commit/b1c0124)
 * feat: add floorp browser [ package script ] [`e5ad8e8`](https://github.com/harilvfs/carch/commit/e5ad8e8)
 * feat: add option for defaulting fish shell [`4ea98f2`](https://github.com/harilvfs/carch/commit/4ea98f2)
-* feat: adding translation on nepali lang [`da6cfe4`](https://github.com/harilvfs/carch/commit/da6cfe4)
 
 ### Removed
 
