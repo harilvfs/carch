@@ -1,79 +1,74 @@
-[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](./README.np.md)
-[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](./README.hi.md)
-
 # Carch
 
-A Simple Script That May Help You Automate Linux System Setup.
+लिनक्स सिस्टम सेटअपलाई स्वचालित गर्न सहयोग पुर्‍याउने एक सरल स्क्रिप्ट।
 
 <details>
-<summary><strong>Preview</strong></summary>
+<summary><strong>पूर्वावलोकन</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
 </details>
 
-Currently Supports Arch & Fedora Based Distros.
+हाललाई यो स्क्रिप्ट Arch र Fedora आधारित वितरण (distro) हरूमा मात्र काम गर्छ।
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] 
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
-## About
+## परिचय
 
-What the fuck is this script?
+यो स्क्रिप्ट के हो?
 
-Good question! It's just a bunch of simple bash scripts anyone can run by picking options. You'll see categories like `system`, `terminal`, `desktop`, `development`, `browser` etc. Inside each, there are script names — like in `terminal`, you'll find `Kitty`, `alacritty`, and more. When you run one, it installs the package and sets up my minimal and clean config. That's it. Just pick, run, and it does the rest for you — all through a nice TUI built with [`ratatui`](https://github.com/ratatui-org/ratatui).
+राम्रो प्रश्न! यो केवल केहि साधारण bash स्क्रिप्टहरू हुन् जुन प्रयोगकर्ताले विभिन्न विकल्पहरू रोजेर चलाउन सक्छ। स्क्रिप्टमा तपाईंले `system`, `terminal`, `desktop`, `development`, `browser` आदि category पाउनुहुन्छ। प्रत्येकमा स्क्रिप्टहरूको नाम हुन्छ — जस्तै `terminal`, मा `Kitty`, `alacritty`, आदि। तपाईंले स्क्रिप्ट रोज्नुहुन्छ, चलाउनुहुन्छ, अनि त्यो स्क्रिप्टले सम्बन्धित प्याकेज इन्स्टल गर्छ र मेरो न्यूनतम र सफा कन्फिगरेसन पनि सेटअप गर्छ।
+तपाईंले बस रोज्नुहोस् र चलाउनुहोस् — बाँकी सबै कुरा यो स्क्रिप्टले आफैं गर्छ, आकर्षक TUI (Text User Interface) मार्फत, जुन [`ratatui`](https://github.com/ratatui-org/ratatui) लाई प्रयोग गरेर बनाइएको हो।
 
 > [!NOTE]  
-> Yeah, the script does everything by itself, but it might not work on every system.  
-> If your setup is a bit different, some stuff might break.  
-> Just check the preview in the menu to see what the script actually does.
+> स्क्रिप्टले धेरै कुरा स्वचालित रूपमा गर्छ, तर हरेक सिस्टममा १००% ठीक चल्छ भन्ने ग्यारेन्टी छैन।  
+> तपाईंको सिस्टम भिन्न छ भने, केही कुराहरू बिग्रिन सक्छ। 
+>
+> स्क्रिप्ट चलाउनु अघि मेनुमा दिइएको पूर्वावलोकन (preview) हेरेर थाहा पाउन सकिन्छ कि स्क्रिप्टले के गर्छ।
 
-Yeah, most scripts work fine, but if you find any bugs, drop a [bug report](https://github.com/harilvfs/carch/issues).  
-Got ideas or features to add? Open a [feature request](https://github.com/harilvfs/carch/issues) anytime!
+कुनै बग देख्नुभयो भने [bug रिपोर्ट गर्नुहोस्।](https://github.com/harilvfs/carch/issues)
+नयाँ आइडिया वा सुविधा चाहनुहुन्छ भने [feature अनुरोध गर्नुहोस्।](https://github.com/harilvfs/carch/issues)
 
-## How to use?
+## प्रयोग कसरी गर्ने?
 
-You can run or use Carch directly without installing it on your system.
+Carch स्क्रिप्टलाई तपाईंले बिना इन्स्टल पनि चलाउन सक्नुहुन्छ।
 
-Choose one of the following version to try Carch:
+तल दिइएका मध्ये कुनै एक विधि प्रयोग गर्नुहोस्:
 
-Stable Version [ Latest Release ]
+स्थिर संस्करण [ Latest Release ]
 
 ```sh
 bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
 ```
 
-Dev Version [ Pre-Release ]
+विकास संस्करण [ Pre-Release ]
  
 ```sh
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
 ```
 
-### Install Script
+### स्थायी रूपमा इन्स्टल गर्ने तरिका
 
-You can install Carch permanently on your system using our install script:
+तपाईं Carch लाई स्थायी रूपमा तपाईंको सिस्टममा इन्स्टल गर्न सक्नुहुन्छ:
 
 ```sh
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)"
 ```
 
-You can also use these options:
+विकल्पहरू:
 ```sh
-# Update existing installation
+# अपडेट गर्न
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --update
 
-# Uninstall Carch
+# अनइन्स्टल गर्न
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --uninstall
 ```
 
-### Cargo Crate
+### Cargo बाट इन्स्टल गर्नुहोस्
 
-Carch is available on [crates.io](https://crates.io/).
-
-You can install it using Cargo with the [carch](https://crates.io/crates/carch) crate.
-
-First, install dependencies: 
+[Carch अब crates.io मा उपलब्ध छ।](https://crates.io/crates/carch) तपाईं यसलाई Cargo बाट इन्स्टल गर्न सक्नुहुन्छ:
 
 #### Arch Linux
 > <img src="https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png" width="20" />
@@ -89,64 +84,65 @@ sudo pacman -S --noconfirm fzf cargo rust
  sudo dnf install fzf cargo rust -y
 ```
 
-Then, install Carch with Cargo:
+पछि:
 
 ```sh
 cargo install carch
 ```
 
-Once that's done, you can run it by typing `carch` in your terminal.
+अनि `carch` टाइप गरेर चलाउनुहोस्।
 
 > [!TIP]
-> If `carch` isn’t recognized, add Cargo's bin directory to your PATH:
+> यदि `carch` कमाण्ड चल्दैन भने, आफ्नो PATH मा Cargo को bin directory जोड्नुहोस्:
 > 
 > ```sh
 > export PATH="$HOME/.cargo/bin:$PATH"
 > ```
 
-## Commands
+## कमाण्डहरू
 
-Carch supports some commands too. You can view them by running:
+सबै उपलब्ध कमाण्डहरू हेर्न:
 
 ```sh
 carch --help
 ```
 
-## Roadmap
+## भविष्यको योजना (Roadmap)
 
-Check the full roadmap in the [docs](https://carch.chalisehari.com.np/project/roadmap.html).
+[डकुमेन्टेसन](https://carch.chalisehari.com.np/project/roadmap.html) मा Roadmap हेर्नुहोस्।
 
-## Contributing
+## योगदान
 
-PRs & contributions are welcome! Read the [contributing guide](https://carch.chalisehari.com.np/project/contributing.html) first.
+Pull Request (PR) र योगदानको स्वागत छ!
+तर [contributing गाइड](https://carch.chalisehari.com.np/project/contributing.html) पहिले पढ्नुहोस्।
 
-## Code of Conduct
 
-We want a welcoming environment for everyone. Please follow our [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html).
+## आचारसंहिता
 
-## Contributors
+हामी सबैका लागि स्वागतयोग्य वातावरण बनाउन चाहन्छौं। कृपया [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html) पालना गर्नुहोस्।
 
-Thanks to everyone who contributed — reporting bugs, providing feedback, or submitting PRs.
+## योगदानकर्ता
+
+बग रिपोर्ट, फिडब्याक, वा PR पठाउने सबैलाई धन्यवाद।
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-## Inspiration
+## प्रेरणा स्रोतहरू
 
 - **[ChrisTitusTech linutil](https://github.com/ChrisTitusTech/linutil/)**
-- **[ml4w](https://github.com/mylinuxforwork)** — his scripting logic is awesome.
-- Ideas from many other people along the way.
+- **[ml4w](https://github.com/mylinuxforwork)** — यी स्क्रिप्टिंगमा निकै सक्षम छन्।
+- साथै अरू थुप्रै स्रोतहरूबाट आइडिया लिइएको हो।
 
-## Reach Me  
-
-> Got a question or feedback? Hit me up via:  
+## सम्पर्क
+> यदि तपाईंलाई केही सोध्नुछ वा सुझाव दिनुछ भने:  
 >
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
-## Support
+## सहयोग गर्न चाहनुहुन्छ?
 
-This project is free and open-source for personal or public use.
+Carch पूर्ण रूपमा निशुल्क र खुला स्रोत (Open Source) प्रोजेक्ट हो।
 
-If you'd like to support its development, you can donate crypto via Bitcoin:
+यदि तपाईं यस विकासमा सघाउन चाहनुहुन्छ भने, Bitcoin मार्फत डोनेसन गर्न सक्नुहुन्छ:
 
 > `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
@@ -154,7 +150,7 @@ If you'd like to support its development, you can donate crypto via Bitcoin:
 
 <br>
 
-Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
+Carch [MIT लाइसेन्स](https://github.com/harilvfs/carch/blob/main/LICENSE) अन्तर्गत उपलब्ध छ — तपाईंले यो स्क्रिप्टलाई फोर्क गर्न सक्नुहुन्छ, र आफ्ना कामको लागि प्रयोग गर्न सक्नुहुन्छ।
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
@@ -197,3 +193,4 @@ Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so
 
 [create]: https://img.shields.io/github/created-at/harilvfs/carch?color=C6A0F6&labelColor=1c1c29&style=for-the-badge&logo=github&logoColor=C6A0F6
 [create-link]: https://github.com/harilvfs/carch/commit/89fd0f272b47f55e8cd3ae4f4c3f45dc716bb918
+
