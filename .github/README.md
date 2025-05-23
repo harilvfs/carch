@@ -1,3 +1,5 @@
+lang [🇮🇳 हिन्दी (Hindi)](./github/README.hi.md) • [🇳🇵 नेपाली (Nepali)](./github/README.np.md)
+
 # Carch
 
 A Simple Script That May Help You Automate Linux System Setup.
