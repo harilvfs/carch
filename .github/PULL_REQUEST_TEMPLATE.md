@@ -8,13 +8,14 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] Remove <!-- Bad Script/Code or others-->
 - [ ] Fixed issue #[issue number].
 - [ ] Improved <!-- optimized existing functionality -->
-- [ ] Fixes. <!-- Fixes Scripts/Other -->
+- [ ] Fixes <!-- Fixes Scripts/Other -->
 - [ ] Feature <!-- Added -->
 - [ ] UI/UX <!-- Enhancement -->
 - [ ] Rust Code Update <!-- Updated or improved Rust-related code -->
 - [ ] Rust Bug Fix <!-- Fixed Rust-related issues -->
 - [ ] Rust Feature <!-- Added a new Rust-based feature -->
 - [ ] CI/CD <!-- Changes related to GitHub Actions, workflows, or automation -->
+- [ ] Documentation <!-- changes related to the readme.md or any other markdown files -->
 
 ### Context
 
@@ -25,7 +26,7 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 
 <!-- Describe the steps you followed to test the changes. If applicable, mention the specific environment where the testing took place. -->
 - [ ] Tested on Arch Linux/Based Distro.
-- [ ] Tested on Fedora Linux.
+- [ ] Tested on Fedora Linux/Based Distro.
 
 ### Checklist
 
