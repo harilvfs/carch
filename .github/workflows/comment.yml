@@ -1,18 +1,12 @@
 name: Comment
-
 on:
   issues:
     types: [opened]
   pull_request:
     types: [opened]
-  discussion:
-    types: [created]
-
 permissions:
   issues: write
   pull-requests: write
-  discussions: write
-
 jobs:
   auto-comment:
     runs-on: ubuntu-latest
@@ -22,25 +16,31 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issue_number = context.payload.issue ? context.payload.issue.number : context.payload.pull_request ? context.payload.pull_request.number : context.payload.discussion.number;
-            const repo = context.repo.repo;
-            const owner = context.repo.owner;
-
             const comment = `
             👋 **Hello!**  
-
             Thank you for your support and feedback! We will get back to you **within 24 hours**.  
-
             If your review is delayed, feel free to **email us at** [harilvfs@chalisehari.com.np](mailto:harilvfs@chalisehari.com.np)  
             or **contact us on Discord:** [Join Here](https://discord.com/invite/8NJWstnUHd)  
-
-            🚀 _Your patience is appreciated!_
+            🚀 *Your patience is appreciated!*
             `;
-
-            github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number,
-              body: comment
-            });
-
+            
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            
+            if (context.payload.issue && !context.payload.issue.pull_request) {
+              console.log('Commenting on issue...');
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: context.payload.issue.number,
+                body: comment
+              });
+            } else if (context.payload.pull_request) {
+              console.log('Commenting on pull request...');
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: context.payload.pull_request.number,
+                body: comment
+              });
+            }
