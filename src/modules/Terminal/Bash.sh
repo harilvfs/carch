@@ -44,6 +44,55 @@ check_fzf() {
     fi
 }
 
+install_eza() {
+    if command -v eza &>/dev/null; then
+        echo -e "${GREEN}eza is already installed.${RESET}"
+        return 0
+    fi
+
+    echo -e "${CYAN}Installing eza...${RESET}"
+    case "$distro" in
+        arch)
+            sudo pacman -S --noconfirm eza
+            ;;
+        fedora)
+            echo -e "${CYAN}Installing eza manually for Fedora...${RESET}"
+            local tmp_dir=$(mktemp -d)
+            cd "$tmp_dir" || exit 1
+            echo -e "${CYAN}Fetching latest eza release...${RESET}"
+            local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
+            if [ -z "$latest_url" ]; then
+                echo -e "${YELLOW}Could not determine latest version, using fallback version...${RESET}"
+                latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
+            fi
+            echo -e "${CYAN}Downloading eza from: $latest_url${RESET}"
+            if ! curl -L -o eza.zip "$latest_url"; then
+                echo -e "${RED}Failed to download eza. Continuing without it...${RESET}"
+                cd "$HOME" || exit
+                rm -rf "$tmp_dir"
+                return 1
+            fi
+            echo -e "${CYAN}Extracting eza...${RESET}"
+            if ! unzip -q eza.zip; then
+                echo -e "${RED}Failed to extract eza. Continuing without it...${RESET}"
+                cd "$HOME" || exit
+                rm -rf "$tmp_dir"
+                return 1
+            fi
+            echo -e "${CYAN}Installing eza to /usr/bin...${RESET}"
+            sudo cp eza /usr/bin/
+            sudo chmod +x /usr/bin/eza
+            cd "$HOME" || exit
+            rm -rf "$tmp_dir"
+            echo -e "${GREEN}eza installed successfully!${RESET}"
+            ;;
+        *)
+            echo -e "${RED}Unsupported distribution for eza installation.${RESET}"
+            return 1
+            ;;
+    esac
+}
+
 clear
 
 RED="\033[1;31m"
@@ -91,6 +140,8 @@ case "$distro" in
     fedora) install_fedora ;;
     *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
 esac
+
+install_eza
 
 options=("Catppuccin" "Nord" "Exit")
 THEME=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
