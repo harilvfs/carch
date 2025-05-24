@@ -54,11 +54,39 @@ detect_distro() {
 
 install_fish() {
     print_color "$CYAN" "Installing Fish shell..."
-
     if command -v pacman &>/dev/null; then
-        sudo pacman -S --noconfirm fish noto-fonts-emoji git
+        sudo pacman -S --noconfirm fish noto-fonts-emoji git eza
     elif command -v dnf &>/dev/null; then
         sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git
+
+        print_color "$CYAN" "Installing eza manually for Fedora..."
+        if command -v eza &>/dev/null; then
+            print_color "$GREEN" "eza is already installed."
+        else
+            local tmp_dir=$(mktemp -d)
+            cd "$tmp_dir" || exit 1
+            print_color "$CYAN" "Fetching latest eza release..."
+            local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
+            if [ -z "$latest_url" ]; then
+                print_color "$YELLOW" "Could not determine latest version, using fallback version..."
+                latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
+            fi
+            print_color "$CYAN" "Downloading eza from: $latest_url"
+            if ! curl -L -o eza.zip "$latest_url"; then
+                print_color "$RED" "Failed to download eza. Exiting..."
+                cd "$HOME" || exit
+                rm -rf "$tmp_dir"
+                exit 1
+            fi
+            print_color "$CYAN" "Extracting eza..."
+            unzip -q eza.zip
+            print_color "$CYAN" "Installing eza to /usr/bin..."
+            sudo cp eza /usr/bin/
+            sudo chmod +x /usr/bin/eza
+            cd "$HOME" || exit
+            rm -rf "$tmp_dir"
+            print_color "$GREEN" "eza installed successfully!"
+        fi
     else
         print_color "$RED" "Unsupported distro: $DISTRO"
         exit 1
