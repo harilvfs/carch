@@ -6,6 +6,7 @@ RED="\033[1;31m"
 GREEN="\033[1;32m"
 CYAN="\033[1;36m"
 BLUE="\033[1;34m"
+YELLOW="\033[1;33m"
 RESET="\033[0m"
 
 FZF_COMMON="--layout=reverse \
@@ -102,6 +103,32 @@ install_fzf() {
         elif command -v dnf &>/dev/null; then
             sudo dnf install -y fzf
         fi
+    fi
+}
+
+check_default_shell() {
+    local current_shell=$(basename "$SHELL")
+
+    if [[ "$current_shell" != "zsh" ]]; then
+        print_message "$YELLOW" "Current default shell: $current_shell"
+
+        local shell_options=("Yes" "No")
+        local change_shell=$(printf "%s\n" "${shell_options[@]}" | fzf ${FZF_COMMON} \
+                                                                --height=40% \
+                                                                --prompt="Zsh is not your default shell. Do you want to change it to zsh? " \
+                                                                --header="Default Shell Check" \
+                                                                --pointer="➤" \
+                                                                --color='fg:white,fg+:yellow,bg+:black,pointer:yellow')
+
+        if [[ "$change_shell" == "Yes" ]]; then
+            print_message "$CYAN" "Changing default shell to zsh..."
+            chsh -s /bin/zsh
+            print_message "$GREEN" "Default shell changed to zsh. Please log out and log back in for the change to take effect."
+        else
+            print_message "$BLUE" "Keeping current shell: $current_shell"
+        fi
+    else
+        print_message "$GREEN" "Zsh is already your default shell."
     fi
 }
 
@@ -255,5 +282,7 @@ install_ohmyzsh_plugins
 config_zsh
 install_pokemon_colorscripts
 install_zoxide
+
+check_default_shell
 
 print_message "$BLUE" "Zsh setup completed successfully!"

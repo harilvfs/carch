@@ -93,6 +93,32 @@ install_eza() {
     esac
 }
 
+check_default_shell() {
+    local current_shell=$(basename "$SHELL")
+
+    if [[ "$current_shell" != "bash" ]]; then
+        echo -e "${YELLOW}Current default shell: $current_shell${RESET}"
+
+        shell_options=("Yes" "No")
+        change_shell=$(printf "%s\n" "${shell_options[@]}" | fzf ${FZF_COMMON} \
+                                                            --height=40% \
+                                                            --prompt="Bash is not your default shell. Do you want to change it to bash? " \
+                                                            --header="Default Shell Check" \
+                                                            --pointer="➤" \
+                                                            --color='fg:white,fg+:yellow,bg+:black,pointer:yellow')
+
+        if [[ "$change_shell" == "Yes" ]]; then
+            echo -e "${CYAN}Changing default shell to bash...${RESET}"
+            chsh -s /bin/bash
+            echo -e "${GREEN}Default shell changed to bash. Please log out and log back in for the change to take effect.${RESET}"
+        else
+            echo -e "${BLUE}Keeping current shell: $current_shell${RESET}"
+        fi
+    else
+        echo -e "${GREEN}Bash is already your default shell.${RESET}"
+    fi
+}
+
 clear
 
 RED="\033[1;31m"
@@ -310,5 +336,7 @@ install_pokemon_colorscripts() {
 }
 
 install_pokemon_colorscripts
+
+check_default_shell
 
 echo -e "${BLUE}Setup completed successfully!${RESET}"
