@@ -56,7 +56,6 @@ install_eza() {
             sudo pacman -S --noconfirm eza
             ;;
         fedora)
-            # due to eza is no longer available on fedora 42 installing manually
             echo -e "${CYAN}Installing eza manually for Fedora...${RESET}"
             local tmp_dir=$(mktemp -d)
             cd "$tmp_dir" || exit 1
