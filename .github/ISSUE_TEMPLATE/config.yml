@@ -1,9 +1,11 @@
-blank_issues_enabled: false 
+blank_issues_enabled: false
 contact_links:
   - name: Join our Discord server
     url: https://discord.com/invite/8NJWstnUHd
-    about: Chat with the us.  
-  - name: Read the Carch Documentation
+    about: Chat with us.
+  - name: Read the Carch documentation
     url: https://carch.chalisehari.com.np
     about: Find guides on installing, using, and configuring Carch.
-
+  - name: Join our Telegram channel
+    url: https://t.me/carchx
+    about: Stay updated and connect with the community on Telegram.
