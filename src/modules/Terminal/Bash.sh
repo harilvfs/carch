@@ -312,4 +312,3 @@ install_pokemon_colorscripts() {
 install_pokemon_colorscripts
 
 echo -e "${BLUE}Setup completed successfully!${RESET}"
-
