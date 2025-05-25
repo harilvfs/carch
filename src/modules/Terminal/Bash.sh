@@ -169,7 +169,7 @@ esac
 
 install_eza
 
-options=("Catppuccin" "Nord" "Exit")
+options=("Catppuccin" "Nord" "Tokyo Night" "Exit")
 THEME=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                              --height=40% \
                                              --prompt="Select a theme: " \
@@ -184,11 +184,21 @@ fi
 
 echo -e "${GREEN}You selected $THEME theme.${RESET}"
 
-if [[ $THEME == "Catppuccin" ]]; then
-    STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/starship.toml"
-else
-    STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/nord-theme/starship.toml"
-fi
+case "$THEME" in
+    "Catppuccin")
+        STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/starship.toml"
+        ;;
+    "Nord")
+        STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/nord-theme/starship.toml"
+        ;;
+    "Tokyo Night")
+        STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/tokyo-preset/starship.toml"
+        ;;
+    *)
+        echo -e "${RED}Invalid theme selection. Exiting...${RESET}"
+        exit 1
+        ;;
+esac
 
 if ! command -v starship &>/dev/null; then
     echo -e "${CYAN}Starship not found. Installing...${RESET}"
