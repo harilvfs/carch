@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+      - '.github/**'
+
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+      - '.github/**'
+
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo clippy
+
+      - name: Run clippy with warnings denied
+        run: cargo clippy -- -Dwarnings
+
+      - name: Cargo check (default)
+        run: cargo check --workspace --locked
+
+      - name: Cargo check (no default features)
+        run: cargo check --workspace --locked --no-default-features
+
+      - name: Cargo check (all features)
+        run: cargo check --workspace --locked --all-features
