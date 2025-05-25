@@ -15,6 +15,8 @@
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
+[![github actions build status][check]][check-link]
+
 ## परिचय
 
 यो स्क्रिप्ट के हो?
@@ -152,8 +154,8 @@ Carch पूर्ण रूपमा निशुल्क र खुला स
 
 Carch [MIT लाइसेन्स](https://github.com/harilvfs/carch/blob/main/LICENSE) अन्तर्गत उपलब्ध छ — तपाईंले यो स्क्रिप्टलाई फोर्क गर्न सक्नुहुन्छ, र आफ्ना कामको लागि प्रयोग गर्न सक्नुहुन्छ।
 
-[check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
-[check-link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
+[check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
+[check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [preview]: https://github.com/harilvfs/carch/actions/workflows/preview.yml/badge.svg
 [preview-link]: https://github.com/harilvfs/carch/actions/workflows/preview.yml
