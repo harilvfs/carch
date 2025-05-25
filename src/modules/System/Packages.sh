@@ -186,7 +186,7 @@ install_browsers() {
     while true; do
         clear
 
-        options=("Brave" "Firefox" "Libre Wolf" "Floorp" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
+        options=("Lynx" "Brave" "Firefox" "Libre Wolf" "Floorp" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=60% \
                                                     --prompt="Choose options (TAB to select multiple): " \
@@ -201,6 +201,18 @@ install_browsers() {
 
         for selection in "${selected[@]}"; do
             case $selection in
+                "Lynx")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                      $pkg_manager_pacman lynx
+                      version=$(get_version lynx)
+                    else
+                      $pkg_manager lynx
+                      version=$(get_version lynx)
+                    fi
+                    echo "Lynx installed successfully! Version: $version"
+                    ;;
+
                 "Brave")
                     clear
                     if [[ $distro -eq 0 ]]; then
