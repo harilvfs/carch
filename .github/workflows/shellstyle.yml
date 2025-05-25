@@ -2,16 +2,14 @@ name: Shell Style Check
 on:
   push:
     branches: [ main ]
-    paths:
-      - '!**.md'
-      - '!.github/**'
-      - '**/*.sh'
+    paths-ignore:
+      - '**/*.md'
+      - '.github/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - '!**.md'
-      - '!.github/**'
-      - '**/*.sh'
+    paths-ignore:
+      - '**/*.md'
+      - '.github/**'
   workflow_dispatch: 
 jobs:
   sh-whitespace-check:
