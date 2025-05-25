@@ -15,6 +15,8 @@
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
+[![github actions build status][check]][check-link]
+
 ## परिचय
 
 यह स्क्रिप्ट क्या है?
@@ -150,8 +152,8 @@ PR और योगदान का स्वागत है! पहले [con
 
 Carch एक [MIT लाइसेंस](https://github.com/harilvfs/carch/blob/main/LICENSE) के तहत उपलब्ध है — आप इसे फोर्क कर सकते हैं और अपने हिसाब से उपयोग कर सकते हैं। धन्यवाद!
 
-[check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
-[check-link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
+[check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
+[check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [preview]: https://github.com/harilvfs/carch/actions/workflows/preview.yml/badge.svg
 [preview-link]: https://github.com/harilvfs/carch/actions/workflows/preview.yml
