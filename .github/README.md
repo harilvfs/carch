@@ -18,6 +18,8 @@ Currently Supports Arch & Fedora Based Distros.
 
 [![Carch Docs][carch-docs]][carch-docs-link]
 
+[![github actions build status][check]][check-link]
+
 ## About
 
 What the hell is this script?
@@ -156,8 +158,8 @@ If you'd like to support its development, you can donate crypto via Bitcoin:
 
 Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
 
-[check]: https://github.com/harilvfs/carch/actions/workflows/release.yml/badge.svg
-[check-link]: https://github.com/harilvfs/carch/actions/workflows/release.yml
+[check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
+[check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [preview]: https://github.com/harilvfs/carch/actions/workflows/preview.yml/badge.svg
 [preview-link]: https://github.com/harilvfs/carch/actions/workflows/preview.yml
