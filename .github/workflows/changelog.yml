@@ -3,10 +3,10 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'New version number (e.g., 4.3.7)'
+        description: 'Version number (e.g., 1.1.1)'
         required: true
       prev_version_tag:
-        description: 'Previous version tag (default: latest release)'
+        description: 'Previous version tag (default: latest release eg., v1.1.1)'
         required: false
       target_branch:
         description: 'Target branch for the PR'
