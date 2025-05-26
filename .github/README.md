@@ -1,5 +1,5 @@
-[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.np.md)
-[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.hi.md)
+[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://carch.chalisehari.com.np/np/)
+[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](https://carch.chalisehari.com.np/hi/)
 
 # Carch
 
@@ -12,7 +12,9 @@ A Simple Script That May Help You Automate Linux System Setup.
   
 </details>
 
-Currently Supports Arch & Fedora Based Distros.
+> ✅ **Currently supports Arch & Fedora based distros.**
+
+[![Docs](https://img.shields.io/badge/📚%20Official%20Docs-Click%20Here-blueviolet?style=for-the-badge)](https://carch.chalisehari.com.np/)
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] 
 
@@ -20,143 +22,64 @@ Currently Supports Arch & Fedora Based Distros.
 
 [![github actions build status][check]][check-link]
 
-## About
+---
 
-What the hell is this script?
+## 📖 Documentation
 
-Good question! It's just a bunch of simple bash scripts anyone can run by picking options. You'll see categories like `system`, `terminal`, `desktop`, `development`, `browser` etc. Inside each, there are script names — like in `terminal`, you'll find `Kitty`, `alacritty`, and more. When you run one, it installs the package and sets up my minimal and clean config. That's it. Just pick, run, and it does the rest for you — all through a nice TUI built with [`ratatui`](https://github.com/ratatui-org/ratatui).
+Looking for installation instructions, usage, commands, or troubleshooting?
 
-> [!NOTE]  
-> Yeah, the script does everything by itself, but it might not work on every system.  
-> If your setup is a bit different, some stuff might break.  
-> Just check the preview in the menu to see what the script actually does.
+👉 **All details are now available on the [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
 
-Yeah, most scripts work fine, but if you find any bugs, drop a [bug report](https://github.com/harilvfs/carch/issues).  
-Got ideas or features to add? Open a [feature request](https://github.com/harilvfs/carch/issues) anytime!
+- 🌐 English
+- 🇳🇵 Nepali
+- 🇮🇳 Hindi
 
-## How to use?
+> This README is a brief overview.  
+> For complete guides, installation methods, and customization, visit the **docs**.
 
-You can run or use Carch directly without installing it on your system.
+---
 
-Choose one of the following version to try Carch:
+## 🧠 About
 
-Stable Version [ Latest Release ]
+Carch is a collection of modular Bash scripts with a beautiful TUI (built with [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.  
+It’s especially useful if you want to quickly start using your favorite apps with a clean and ready-to-use setup.
 
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
-```
+## 🛣️ Roadmap & Contributions
 
-Dev Version [ Pre-Release ]
- 
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
-```
+- [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html)
+- [Contributing Guide](https://carch.chalisehari.com.np/project/contributing.html)
+- [Code of Conduct](https://carch.chalisehari.com.np/project/codeofconduct.html)
 
-### Install Script
+## 🙏 Contributors
 
-You can install Carch permanently on your system using our install script:
-
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)"
-```
-
-You can also use these options:
-```sh
-# Update existing installation
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --update
-
-# Uninstall Carch
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --uninstall
-```
-
-### Cargo Crate
-
-Carch is available on [crates.io](https://crates.io/).
-
-You can install it using Cargo with the [carch](https://crates.io/crates/carch) crate.
-
-First, install dependencies: 
-
-#### Arch Linux
-> <img src="https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png" width="20" />
-
-```sh
-sudo pacman -S --noconfirm fzf cargo rust
-```
-
-#### Fedora Linux
-> <img src="https://img.icons8.com/?size=48&id=ZbBhBW0N2q3D&format=png" width="20" />
- 
-```sh
- sudo dnf install fzf cargo rust -y
-```
-
-Then, install Carch with Cargo:
-
-```sh
-cargo install carch
-```
-
-Once that's done, you can run it by typing `carch` in your terminal.
-
-> [!TIP]
-> If `carch` isn’t recognized, add Cargo's bin directory to your PATH:
-> 
-> ```sh
-> export PATH="$HOME/.cargo/bin:$PATH"
-> ```
-
-## Commands
-
-Carch supports some commands too. You can view them by running:
-
-```sh
-carch --help
-```
-
-## Roadmap
-
-Check the full roadmap in the [docs](https://carch.chalisehari.com.np/project/roadmap.html).
-
-## Contributing
-
-PRs & contributions are welcome! Read the [contributing guide](https://carch.chalisehari.com.np/project/contributing.html) first.
-
-## Code of Conduct
-
-We want a welcoming environment for everyone. Please follow our [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html).
-
-## Contributors
-
-Thanks to everyone who contributed — reporting bugs, providing feedback, or submitting PRs.
+Thanks to all contributors!
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-## Inspiration
+## 💡 Inspiration
 
-- **[ChrisTitusTech linutil](https://github.com/ChrisTitusTech/linutil/)**
-- **[ml4w](https://github.com/mylinuxforwork)** — his scripting logic is awesome.
-- Ideas from many other people along the way.
+- [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
+- [ml4w](https://github.com/mylinuxforwork)
+- And the broader Linux scripting community.
 
-## Reach Me  
+## 📬 Reach Me
 
-> Got a question or feedback? Hit me up via:  
->
 > [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
 
-## Support
+## ❤️ Support
 
-This project is free and open-source for personal or public use.
+Carch is free and open-source.  
+If you'd like to support its development:
 
-If you'd like to support its development, you can donate crypto via Bitcoin:
-
-> `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
+**Bitcoin Address**  
+`bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-<br>
+---
 
-Carch is [MIT licensed](https://github.com/harilvfs/carch/blob/main/LICENSE), so you're free to fork and use it as you like. Thank you!
+**Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**  
+Fork it, improve it, and make it yours.
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
