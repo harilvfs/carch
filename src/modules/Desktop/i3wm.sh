@@ -194,7 +194,7 @@ install_pokemon_colorscripts() {
             ;;
         fedora)
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
-                echo -e "${YELLOW}⚠ Found existing Pokémon Color Scripts directory. Removing...${RESET}"
+                echo -e "${YELLOW}Found existing Pokémon Color Scripts directory. Removing...${RESET}"
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
             echo -e "${CYAN}Installing dependencies...${RESET}"
@@ -224,19 +224,22 @@ if [[ "$OS" == "arch" ]]; then
     sudo pacman -S --noconfirm \
         i3 rofi maim git \
         imwheel nitrogen polkit-gnome xclip flameshot thunar \
-        xorg-server xorg-xinit xorg-xrandr xorg-xsetroot xorg-xset gtk3 \
+        xorg-server xorg-xinit xorg-xrandr xorg-xsetroot xorg-xset gtk3 gtk4 \
         gnome-settings-daemon gnome-keyring neovim \
         ttf-meslo-nerd noto-fonts-emoji ttf-jetbrains-mono \
         starship network-manager-applet blueman pasystray wget unzip \
-        curl zoxide polybar i3status
+        curl zoxide polybar i3status nwg-look qt5ct qt6ct
 elif [[ "$OS" == "fedora" ]]; then
+    sudo dnf copr enable -y solopasha/hyprland || echo -e "${YELLOW}Failed to enable Hyprland COPR repository${ENDCOLOR}"
+    
     sudo dnf install -y \
         i3 polybar rofi maim \
         imwheel xclip flameshot lxappearance thunar xorg-x11-server-Xorg \
-        xorg-x11-xinit xrandr gtk3 gnome-settings-daemon gnome-keyring \
+        xorg-x11-xinit xrandr gtk3 gtk4 gnome-settings-daemon gnome-keyring \
         neovim network-manager-applet blueman pasystray git \
         jetbrains-mono-fonts-all google-noto-color-emoji-fonts \
-        google-noto-emoji-fonts wget unzip curl zoxide polybar i3status
+        google-noto-emoji-fonts wget unzip curl zoxide polybar i3status \
+        nwg-look qt5ct qt6ct
 
     install_starship
 fi
@@ -501,7 +504,7 @@ clone_themes_icons() {
 }
 
 check_remove_dir() {
-    for dir in "$1" "$2"; do
+    for dir in "$@"; do
         if [ -d "$dir" ]; then
             echo -e "${YELLOW}$dir already exists.${ENDCOLOR}"
             if fzf_confirm "Do you want to remove $dir?"; then
@@ -515,17 +518,45 @@ check_remove_dir() {
 }
 
 move_themes_icons() {
-    check_remove_dir ~/.icons
-    check_remove_dir ~/.themes
+    if [ -d ~/.themes ]; then
+        echo -e "${CYAN}Existing ~/.themes directory found. Preserving it...${ENDCOLOR}"
+    else
+        echo -e "${GREEN}Creating ~/.themes directory...${ENDCOLOR}"
+        mkdir -p ~/.themes
+    fi
 
-    echo -e "${GREEN}Creating ~/.themes and ~/.icons directories...${ENDCOLOR}"
-    mkdir -p ~/.themes ~/.icons
+    if [ -d ~/.icons ]; then
+        echo -e "${CYAN}Existing ~/.icons directory found. Preserving it...${ENDCOLOR}"
+    else
+        echo -e "${GREEN}Creating ~/.icons directory...${ENDCOLOR}"
+        mkdir -p ~/.icons
+    fi
 
-    echo -e "${GREEN}Moving themes to ~/.themes...${ENDCOLOR}"
-    mv ~/themes/* ~/.themes/
+    if [ -d ~/themes ]; then
+        echo -e "${GREEN}Moving themes to ~/.themes...${ENDCOLOR}"
+        for theme in ~/themes/*/; do
+            theme_name=$(basename "$theme")
+            if [ -d ~/.themes/"$theme_name" ]; then
+                echo -e "${YELLOW}Theme $theme_name already exists, skipping...${ENDCOLOR}"
+            else
+                mv "$theme" ~/.themes/
+            fi
+        done
+        rm -rf ~/themes
+    fi
 
-    echo -e "${GREEN}Moving icons to ~/.icons...${ENDCOLOR}"
-    mv ~/icons/* ~/.icons/
+    if [ -d ~/icons ]; then
+        echo -e "${GREEN}Moving icons to ~/.icons...${ENDCOLOR}"
+        for icon in ~/icons/*/; do
+            icon_name=$(basename "$icon")
+            if [ -d ~/.icons/"$icon_name" ]; then
+                echo -e "${YELLOW}Icon pack $icon_name already exists, skipping...${ENDCOLOR}"
+            else
+                mv "$icon" ~/.icons/
+            fi
+        done
+        rm -rf ~/icons
+    fi
 }
 
 install_lxappearance
