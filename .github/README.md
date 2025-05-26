@@ -13,6 +13,7 @@
   
 </details>
 
+
 ✅ **Currently supports Arch & Fedora based distros.**
 
 [![Carch Docs][carch-docs]][carch-docs-link]
