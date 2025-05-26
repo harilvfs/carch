@@ -124,7 +124,7 @@ install_aur_packages() {
 
 install_pokemon_colorscripts() {
     print_message $BLUE "Installing Pokémon Color Scripts..."
-    
+
     if command -v pokemon-colorscripts >/dev/null 2>&1; then
         print_message $YELLOW "Pokémon Color Scripts already installed."
         return 0
