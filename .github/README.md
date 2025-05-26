@@ -33,7 +33,7 @@ It’s especially useful if you want to quickly start using your favorite apps w
 
 ## 🛣️ Roadmap & Contributions
 
-<kbd> [`Roadmap`](https://carch.chalisehari.com.np/project/roadmap.html) </kbd>
+<kbd> [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html) </kbd>
 
 > [`Roadmap`](https://carch.chalisehari.com.np/project/roadmap.html)
 
