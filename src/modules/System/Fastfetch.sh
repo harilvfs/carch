@@ -58,6 +58,15 @@ fzf_select() {
     echo "$selected"
 }
 
+check_command() {
+    local cmd=$1
+    if ! command -v "$cmd" &>/dev/null; then
+        echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${NC}"
+        return 1
+    fi
+    return 0
+}
+
 check_fastfetch() {
     if command -v fastfetch &>/dev/null; then
         echo -e "${GREEN}Fastfetch is already installed.${NC}"
@@ -80,26 +89,10 @@ handle_existing_config() {
     if [ -d "$FASTFETCH_DIR" ]; then
         echo -e "${YELLOW}Existing Fastfetch configuration found.${NC}"
 
-        if command -v fzf &>/dev/null; then
-            choice=$(fzf_confirm "Do you want to back up your existing Fastfetch configuration?")
-        else
-            echo -e "${YELLOW}Do you want to back up your existing Fastfetch configuration?${NC}"
-            echo -e "${CYAN}1) Yes${NC}"
-            echo -e "${CYAN}2) No${NC}"
-            echo -e "${CYAN}3) Back to Menu${NC}"
-            echo -e "${BLUE}----------------------------------${NC}"
-            read -rp "$(echo -e "${YELLOW}Enter your choice [1-3]: ${NC}")" choice_num
-
-            case $choice_num in
-                1) choice="Yes" ;;
-                2) choice="No" ;;
-                3) choice="Back to Menu" ;;
-                *) choice="Invalid" ;;
-            esac
-        fi
+        choice=$(fzf_confirm "Do you want to back up your existing Fastfetch configuration?")
 
         case $choice in
-            "Yes"|"yes"|"Y"|"y")
+            "Yes")
                 if [ ! -d "$BACKUP_DIR" ]; then
                     echo -e "${CYAN}Creating backup directory...${NC}"
                     mkdir -p "$BACKUP_DIR"
@@ -109,18 +102,20 @@ handle_existing_config() {
                 echo -e "${GREEN}Backup completed to $BACKUP_DIR${NC}"
                 return 0
                 ;;
-            "No"|"no"|"N"|"n")
+            "No")
                 echo -e "${YELLOW}Proceeding without backup...${NC}"
                 return 0
                 ;;
-            "Back to Menu"|"back to menu"|"B"|"b")
+            "Back to Menu")
                 clear
                 main
                 exit 0
                 ;;
             *)
-                echo -e "${RED}Invalid option. Please choose 'Yes', 'No', or 'Back to Menu'.${NC}"
-                handle_existing_config
+                echo -e "${RED}Invalid option. Returning to menu...${NC}"
+                clear
+                main
+                exit 0
                 ;;
         esac
     else
@@ -161,16 +156,8 @@ setup_png_fastfetch() {
 }
 
 main() {
-    check_command() {
-        local cmd=$1
-        if ! command -v "$cmd" &>/dev/null; then
-            echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${NC}"
-            return 1
-        fi
-        return 0
-    }
-
     check_command git || { echo -e "${RED}Please install git and try again.${NC}"; exit 1; }
+    check_command fzf || { echo -e "${RED}Please install fzf and try again.${NC}"; exit 1; }
 
     clear
 
@@ -183,36 +170,20 @@ PNG option should only be used in terminals that support image rendering
 EOF
     echo -e "${NC}"
 
-    if command -v fzf &>/dev/null; then
-        choice=$(fzf_select "Choose the setup option:" "Fastfetch Standard" "Fastfetch with PNG" "Exit")
-    else
-        echo -e "${YELLOW}Choose the setup option:${NC}"
-        echo -e "${CYAN}1) Fastfetch Standard${NC} - Use this if your terminal doesn't support image rendering"
-        echo -e "${CYAN}2) Fastfetch with PNG${NC} - Don't use in terminals that don't support image rendering"
-        echo -e "${CYAN}3) Exit${NC}"
-        echo -e "${BLUE}----------------------------------${NC}"
-        read -rp "$(echo -e "${YELLOW}Enter your choice [1-3]: ${NC}")" choice_num
-
-        case $choice_num in
-            1) choice="Fastfetch Standard" ;;
-            2) choice="Fastfetch with PNG" ;;
-            3) choice="Exit" ;;
-            *) choice="Invalid" ;;
-        esac
-    fi
+    choice=$(fzf_select "Choose the setup option:" "Fastfetch Standard" "Fastfetch with PNG" "Exit")
 
     case $choice in
-        "Fastfetch Standard"|"fastfetch standard")
+        "Fastfetch Standard")
             setup_standard_fastfetch
             echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
             exit 0
             ;;
-        "Fastfetch with PNG"|"fastfetch with png")
+        "Fastfetch with PNG")
             setup_png_fastfetch
             echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
             exit 0
             ;;
-        "Exit"|"exit"|"E"|"e")
+        "Exit")
             echo -e "${RED}Exiting the script.${NC}"
             exit 0
             ;;
