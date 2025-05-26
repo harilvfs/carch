@@ -33,9 +33,9 @@ It’s especially useful if you want to quickly start using your favorite apps w
 
 ## 🛣️ Roadmap & Contributions
 
-- [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html)
-- [Contributing Guide](https://carch.chalisehari.com.np/project/contributing.html)
-- [Code of Conduct](https://carch.chalisehari.com.np/project/codeofconduct.html)
+> [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html)
+> [Contributing Guide](https://carch.chalisehari.com.np/project/contributing.html)
+> [Code of Conduct](https://carch.chalisehari.com.np/project/codeofconduct.html)
 
 ## 🙏 Contributors
 
