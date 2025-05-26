@@ -47,9 +47,11 @@ Thanks to all contributors!
 
 ## 💡 Inspiration
 
-- [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
-- [ml4w](https://github.com/mylinuxforwork)
-- And the broader Linux scripting community.
+> [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
+
+> [ml4w](https://github.com/mylinuxforwork)
+
+> And the broader Linux scripting community.
 
 ## 📬 Reach Me
 
