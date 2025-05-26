@@ -1,4 +1,4 @@
-[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/edit/main/.github/README.np.md)
+[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.np.md)
 
 # Carch
 
