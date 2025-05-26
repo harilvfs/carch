@@ -45,16 +45,14 @@ Thanks to all contributors!
 
 ## ❤️ Support
 
-Carch is free and open-source.  
-If you'd like to support its development:
+Carch is free and open-source. If you'd like to support its development:
 
 **Bitcoin Address**  
 `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-**Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**  
-Fork it, improve it, and make it yours.
+**Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)** Fork it, improve it, and make it yours.
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
