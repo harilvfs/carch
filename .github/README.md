@@ -18,8 +18,6 @@ A Simple Script That May Help You Automate Linux System Setup.
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] 
 
-[![Carch Docs][carch-docs]][carch-docs-link]
-
 [![github actions build status][check]][check-link]
 
 ## 📖 Documentation
@@ -28,9 +26,9 @@ Looking for installation instructions, usage, commands, or troubleshooting?
 
 👉 **All details are now available on the [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
 
-- [🌐 English](https://carch.chalisehari.com.np)
-- [🇳🇵 Nepali](https://carch.chalisehari.com.np/np/)
-- [🇮🇳 Hindi](https://carch.chalisehari.com.np/hi/
+- 🌐 [English](https://carch.chalisehari.com.np)
+- 🇳🇵[Nepali](https://carch.chalisehari.com.np/np/)
+- 🇮🇳 [Hindi](https://carch.chalisehari.com.np/hi/)
 
 > This README is a brief overview.  
 > For complete guides, installation methods, and customization, visit the **docs**.
