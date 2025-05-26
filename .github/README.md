@@ -38,7 +38,7 @@ It’s especially useful if you want to quickly start using your favorite apps w
   <a href="https://carch.chalisehari.com.np/project/codeofconduct.html"><kbd> <br> **Code of Conduct** <br> </kbd></a>
   
 
-<kbd> [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html) </kbd>
+<kbd> [**Roadmap**](https://carch.chalisehari.com.np/project/roadmap.html) </kbd>
 
 > [`Roadmap`](https://carch.chalisehari.com.np/project/roadmap.html)
 
