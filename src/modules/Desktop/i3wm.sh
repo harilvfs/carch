@@ -231,7 +231,7 @@ if [[ "$OS" == "arch" ]]; then
         curl zoxide polybar i3status nwg-look qt5ct qt6ct
 elif [[ "$OS" == "fedora" ]]; then
     sudo dnf copr enable -y solopasha/hyprland || echo -e "${YELLOW}Failed to enable Hyprland COPR repository${ENDCOLOR}"
-    
+
     sudo dnf install -y \
         i3 polybar rofi maim \
         imwheel xclip flameshot lxappearance thunar xorg-x11-server-Xorg \
