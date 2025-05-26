@@ -33,13 +33,10 @@ It’s especially useful if you want to quickly start using your favorite apps w
 
 ## 🛣️ Roadmap & Contributions
 
-<div align="center">
-
   <a href="https://carch.chalisehari.com.np/project/roadmap.html"><kbd> <br> Roadmap <br> </kbd></a>&ensp;&ensp;
   <a href="https://carch.chalisehari.com.np/project/contributing.html"><kbd> <br> Contributing Guide <br> </kbd></a>&ensp;&ensp;
   <a href="https://carch.chalisehari.com.np/project/codeofconduct.html"><kbd> <br> Code of Conduct <br> </kbd></a>
   
-</div><br><br>
 
 <kbd> [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html) </kbd>
 
