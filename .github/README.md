@@ -23,7 +23,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 ## 📖 Documentation
 
-For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) — available in: 🇺🇸 🇳🇵 🇮🇳
+For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) — available in:  [🇺🇸](https://carch.chalisehari.com.np) [🇳🇵](https://carch.chalisehari.com.np/np/) [🇮🇳](https://carch.chalisehari.com.np/hi/)
 
 ## 🙏 Contributors
 
