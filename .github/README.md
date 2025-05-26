@@ -24,14 +24,11 @@ A Simple Script That May Help You Automate Linux System Setup.
 
 Looking for installation instructions, usage, commands, or troubleshooting?
 
-👉 **All details are now available on the [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
+**All details are now available on the [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
 
 - 🌐 [English](https://carch.chalisehari.com.np)
 - 🇳🇵[Nepali](https://carch.chalisehari.com.np/np/)
 - 🇮🇳 [Hindi](https://carch.chalisehari.com.np/hi/)
-
-> This README is a brief overview.  
-> For complete guides, installation methods, and customization, visit the **docs**.
 
 ## 🧠 About
 
