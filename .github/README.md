@@ -22,9 +22,7 @@ A Simple Script That May Help You Automate Linux System Setup.
 
 ## 📖 Documentation
 
-Looking for installation instructions, usage, commands, or troubleshooting?
-
-**All details are now available on the [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
+For installation instructions,usage, commands and more check out [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
 
 - 🌐 [English](https://carch.chalisehari.com.np)
 - 🇳🇵[Nepali](https://carch.chalisehari.com.np/np/)
