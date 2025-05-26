@@ -52,7 +52,7 @@ Carch is free and open-source. If you'd like to support its development:
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-**Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**. Fork it, improve it, and make it yours.
+**Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
