@@ -8,6 +8,7 @@ GREEN="\033[1;32m"
 RED="\033[1;31m"
 YELLOW="\033[1;33m"
 BLUE="\033[1;34m"
+CYAN="\033[1;36m"
 NC="\033[0m"
 
 print_message() {
@@ -121,6 +122,40 @@ install_aur_packages() {
     fi
 }
 
+install_pokemon_colorscripts() {
+    print_message $BLUE "Installing Pokémon Color Scripts..."
+    
+    if command -v pokemon-colorscripts >/dev/null 2>&1; then
+        print_message $YELLOW "Pokémon Color Scripts already installed."
+        return 0
+    fi
+
+    local aur_helper=""
+    if command -v yay >/dev/null 2>&1; then
+        aur_helper="yay"
+    elif command -v paru >/dev/null 2>&1; then
+        aur_helper="paru"
+    else
+        print_message $RED "No AUR helper found. Installing yay first..."
+        install_aur_helper
+        if command -v yay >/dev/null 2>&1; then
+            aur_helper="yay"
+        else
+            print_message $RED "Failed to install AUR helper."
+            return 1
+        fi
+    fi
+
+    print_message $CYAN "Installing Pokémon Color Scripts from AUR..."
+    if $aur_helper -S --noconfirm pokemon-colorscripts-git; then
+        print_message $GREEN "Pokémon Color Scripts installed successfully!"
+        print_message $BLUE "You can now use 'pokemon-colorscripts -r' to display a random Pokémon!"
+    else
+        print_message $RED "Failed to install Pokémon Color Scripts."
+        return 1
+    fi
+}
+
 manage_dotfiles() {
     local repo_url="$1"
     local repo_dir="$2"
@@ -202,6 +237,10 @@ install_packages "${PACMAN_PKGS[@]}"
 AUR_PKGS=(swayfx waybar-module-pacman-updates-git wlroots-git)
 install_aur_packages "${AUR_PKGS[@]}"
 
+if fzf_confirm "Do you want to install Pokémon Color Scripts? [Fun terminal colors]"; then
+    install_pokemon_colorscripts
+fi
+
 DOTFILES_REPO="https://github.com/harilvfs/swaydotfiles"
 DOTFILES_DIR="$HOME/swaydotfiles"
 BACKUP_DIR="$HOME/.swaydotfiles/backup"
@@ -230,14 +269,8 @@ is_sddm_installed() {
 }
 
 install_sddm() {
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm sddm
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y sddm
-    else
-        echo "Unsupported distribution."
-        exit 1
-    fi
+    print_message $GREEN "Installing SDDM..."
+    sudo pacman -S --noconfirm sddm
 }
 
 apply_sddm_theme() {
@@ -283,47 +316,55 @@ configure_sddm_theme() {
 }
 
 enable_start_sddm() {
-    echo "Checking for existing display managers..."
+    print_message $GREEN "Checking for existing display managers..."
 
     if command -v gdm &> /dev/null; then
-        echo "GDM detected. Removing GDM..."
+        print_message $YELLOW "GDM detected. Removing GDM..."
         sudo systemctl stop gdm
         sudo systemctl disable gdm --now
-        if command -v pacman &> /dev/null; then
-            sudo pacman -Rns --noconfirm gdm
-        elif command -v dnf &> /dev/null; then
-            sudo dnf remove -y gdm
-        fi
+        sudo pacman -Rns --noconfirm gdm
     fi
 
     if command -v lightdm &> /dev/null; then
-        echo "LightDM detected. Removing LightDM..."
+        print_message $YELLOW "LightDM detected. Removing LightDM..."
         sudo systemctl stop lightdm
         sudo systemctl disable lightdm --now
-        if command -v pacman &> /dev/null; then
-            sudo pacman -Rns --noconfirm lightdm
-        elif command -v dnf &> /dev/null; then
-            sudo dnf remove -y lightdm
+        sudo pacman -Rns --noconfirm lightdm
+    fi
+
+    if systemctl is-enabled greetd &> /dev/null; then
+        print_message $YELLOW "Greetd detected. Stopping and disabling Greetd..."
+        sudo systemctl stop greetd
+        sudo systemctl disable greetd --now
+        if pacman -Qq greetd &> /dev/null; then
+            print_message $CYAN "Removing Greetd package..."
+            sudo pacman -Rns --noconfirm greetd
         fi
     fi
 
-    echo "Enabling and starting the sddm service..."
+    print_message $GREEN "Enabling and starting the SDDM service..."
     sudo systemctl enable sddm --now
 }
 
-if ! is_sddm_installed; then
-    install_sddm
+if fzf_confirm "Do you want to install and configure SDDM display manager? [Recommended for login screen]"; then
+    if ! is_sddm_installed; then
+        install_sddm
+    else
+        print_message $YELLOW "SDDM is already installed."
+    fi
+
+    apply_sddm_theme
+    configure_sddm_theme
+    enable_start_sddm
+
+    print_message $GREEN "SDDM theme applied, service started, and configuration updated successfully!"
 else
-    echo "Sddm is already installed, skipping installation."
+    print_message $YELLOW "Skipping SDDM installation and configuration."
 fi
 
-apply_sddm_theme
-
-configure_sddm_theme
-
-enable_start_sddm
-
-echo "Sddm theme applied, service started, and configuration updated successfully!"
-
 print_message $BLUE "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
+if command -v pokemon-colorscripts >/dev/null 2>&1; then
+    print_message $BLUE "Try 'pokemon-colorscripts -r' for random Pokémon colors!"
+fi
+
 print_message $GREEN "SwayWM setup complete!"
