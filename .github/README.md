@@ -31,10 +31,6 @@ For installation instructions, usage, commands, and more, check out the **[offic
 Carch is a collection of modular Bash scripts with a beautiful TUI (built with [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.  
 It’s especially useful if you want to quickly start using your favorite apps with a clean and ready-to-use setup.
 
-## 🛣️ Roadmap & Contributions
-
-> [Roadmap](https://carch.chalisehari.com.np/project/roadmap.html) • [Contributing Guide](https://carch.chalisehari.com.np/project/contributing.html) • [Code of Conduct](https://carch.chalisehari.com.np/project/codeofconduct.html)
-
 ## 🙏 Contributors
 
 Thanks to all contributors!
@@ -43,7 +39,9 @@ Thanks to all contributors!
 
 ## 💡 Inspiration
 
-> [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil) • [ml4w](https://github.com/mylinuxforwork) • And the broader Linux scripting community.
+- [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
+- [ml4w](https://github.com/mylinuxforwork)
+- And the broader Linux scripting community.
 
 ## 📬 Reach Me
 
