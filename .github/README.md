@@ -14,7 +14,7 @@ A Simple Script That May Help You Automate Linux System Setup.
 
 > ✅ **Currently supports Arch & Fedora based distros.**
 
-[![Docs](https://img.shields.io/badge/📚%20Official%20Docs-Click%20Here-blueviolet?style=for-the-badge)](https://carch.chalisehari.com.np/)
+[![Docs](https://img.shields.io/badge/📚%20Official%20Docs-Click%20Here-eba0ac?style=for-the-badge&labelColor=1c1c29)](https://carch.chalisehari.com.np/)
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] 
 
@@ -22,22 +22,18 @@ A Simple Script That May Help You Automate Linux System Setup.
 
 [![github actions build status][check]][check-link]
 
----
-
 ## 📖 Documentation
 
 Looking for installation instructions, usage, commands, or troubleshooting?
 
 👉 **All details are now available on the [official Carch documentation site](https://carch.chalisehari.com.np/)** — available in:
 
-- 🌐 English
-- 🇳🇵 Nepali
-- 🇮🇳 Hindi
+- [🌐 English](https://carch.chalisehari.com.np)
+- [🇳🇵 Nepali](https://carch.chalisehari.com.np/np/)
+- [🇮🇳 Hindi](https://carch.chalisehari.com.np/hi/
 
 > This README is a brief overview.  
 > For complete guides, installation methods, and customization, visit the **docs**.
-
----
 
 ## 🧠 About
 
@@ -75,8 +71,6 @@ If you'd like to support its development:
 `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
-
----
 
 **Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**  
 Fork it, improve it, and make it yours.
