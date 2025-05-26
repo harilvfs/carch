@@ -317,7 +317,7 @@ install_pokemon_colorscripts() {
 
         fedora)
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
-                echo -e "${YELLOW}⚠ Found existing Pokémon Color Scripts directory. Removing...${RESET}"
+                echo -e "${YELLOW}Found existing Pokémon Color Scripts directory. Removing...${RESET}"
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
 
