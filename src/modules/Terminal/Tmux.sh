@@ -125,4 +125,5 @@ if [[ -d "$plugin_script_dir" ]]; then
 else
     echo -e "${RED}TPM scripts not found. Skipping plugin installation.${RESET}"
 fi
+
 echo -e "${GREEN}Tmux setup complete!${RESET}"
