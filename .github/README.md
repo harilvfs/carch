@@ -20,8 +20,8 @@ A Simple Script That May Help You Automate Linux System Setup.
 
 [![github actions build status][check]][check-link]
 
-Carch is a collection of modular Bash scripts with a beautiful TUI (built with [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.  
-It’s especially useful if you want to quickly start using your favorite apps with a clean and ready-to-use setup.
+**Carch** is a collection of modular Bash scripts with a beautiful TUI (built with [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.  
+It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup.
 
 ## 📖 Documentation
 
