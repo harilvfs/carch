@@ -1,158 +1,55 @@
+[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.np.md)
+
 # Carch
 
-लिनक्स सिस्टम सेटअपलाई स्वचालित गर्न सहयोग पुर्‍याउने एक सरल स्क्रिप्ट।
+Carch एक सुन्दर TUI (*[`ratatui`](https://github.com/ratatui-org/ratatui) मा आधारित*) प्रयोग गरेर बनाइएको modular Bash script को संग्रह हो, जसले Linux प्रयोगकर्ताहरूको लागि post-installation सेटअप स्वचालित बनाउँछ।  
+यो तपाईँका *मनपर्ने एपहरू* चाँडै चलाउन चाहने प्रयोगकर्ताहरूको लागि उपयोगी हुन्छ, जुन तयार सेटअपसहित सफा सुरूवात प्रदान गर्छ।
+
+*हाल Arch र Fedora आधारित वितरणहरूलाई समर्थन गर्दछ।*
 
 <details>
 <summary><strong>पूर्वावलोकन</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
-  
+
 </details>
 
-हाललाई यो स्क्रिप्ट Arch र Fedora आधारित वितरण (distro) हरूमा मात्र काम गर्छ।
-
-[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] 
-
-[![Carch Docs][carch-docs]][carch-docs-link]
+[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
 [![github actions build status][check]][check-link]
 
-## परिचय
+## 📖 दस्तावेज
 
-यो स्क्रिप्ट के हो?
+इन्स्टलेसन, प्रयोग विधि, कमाण्डहरू आदि हेर्नको लागि [**Carch को आधिकारिक वेबसाइट**](https://carch.chalisehari.com.np/) हेर्नुहोस् — उपलब्ध भाषाहरू: [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/np/) • [🇮🇳](https://carch.chalisehari.com.np/hi/)
 
-राम्रो प्रश्न! यो केवल केहि साधारण bash स्क्रिप्टहरू हुन् जुन प्रयोगकर्ताले विभिन्न विकल्पहरू रोजेर चलाउन सक्छ। स्क्रिप्टमा तपाईंले `system`, `terminal`, `desktop`, `development`, `browser` आदि category पाउनुहुन्छ। प्रत्येकमा स्क्रिप्टहरूको नाम हुन्छ — जस्तै `terminal`, मा `Kitty`, `alacritty`, आदि। तपाईंले स्क्रिप्ट रोज्नुहुन्छ, चलाउनुहुन्छ, अनि त्यो स्क्रिप्टले सम्बन्धित प्याकेज इन्स्टल गर्छ र मेरो न्यूनतम र सफा कन्फिगरेसन पनि सेटअप गर्छ।
-तपाईंले बस रोज्नुहोस् र चलाउनुहोस् — बाँकी सबै कुरा यो स्क्रिप्टले आफैं गर्छ, आकर्षक TUI (Text User Interface) मार्फत, जुन [`ratatui`](https://github.com/ratatui-org/ratatui) लाई प्रयोग गरेर बनाइएको हो।
+## 🙏 योगदानकर्ताहरू
 
-> [!NOTE]  
-> स्क्रिप्टले धेरै कुरा स्वचालित रूपमा गर्छ, तर हरेक सिस्टममा १००% ठीक चल्छ भन्ने ग्यारेन्टी छैन।  
-> तपाईंको सिस्टम भिन्न छ भने, केही कुराहरू बिग्रिन सक्छ। 
->
-> स्क्रिप्ट चलाउनु अघि मेनुमा दिइएको पूर्वावलोकन (preview) हेरेर थाहा पाउन सकिन्छ कि स्क्रिप्टले के गर्छ।
-
-कुनै बग देख्नुभयो भने [bug रिपोर्ट गर्नुहोस्।](https://github.com/harilvfs/carch/issues)
-नयाँ आइडिया वा सुविधा चाहनुहुन्छ भने [feature अनुरोध गर्नुहोस्।](https://github.com/harilvfs/carch/issues)
-
-## प्रयोग कसरी गर्ने?
-
-Carch स्क्रिप्टलाई तपाईंले बिना इन्स्टल पनि चलाउन सक्नुहुन्छ।
-
-तल दिइएका मध्ये कुनै एक विधि प्रयोग गर्नुहोस्:
-
-स्थिर संस्करण [ Latest Release ]
-
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
-```
-
-विकास संस्करण [ Pre-Release ]
- 
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
-```
-
-### स्थायी रूपमा इन्स्टल गर्ने तरिका
-
-तपाईं Carch लाई स्थायी रूपमा तपाईंको सिस्टममा इन्स्टल गर्न सक्नुहुन्छ:
-
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)"
-```
-
-विकल्पहरू:
-```sh
-# अपडेट गर्न
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --update
-
-# अनइन्स्टल गर्न
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchinstall)" -- --uninstall
-```
-
-### Cargo बाट इन्स्टल गर्नुहोस्
-
-[Carch अब crates.io मा उपलब्ध छ।](https://crates.io/crates/carch) तपाईं यसलाई Cargo बाट इन्स्टल गर्न सक्नुहुन्छ:
-
-#### Arch Linux
-> <img src="https://img.icons8.com/?size=48&id=uIXgLv5iSlLJ&format=png" width="20" />
-
-```sh
-sudo pacman -S --noconfirm fzf cargo rust
-```
-
-#### Fedora Linux
-> <img src="https://img.icons8.com/?size=48&id=ZbBhBW0N2q3D&format=png" width="20" />
- 
-```sh
- sudo dnf install fzf cargo rust -y
-```
-
-पछि:
-
-```sh
-cargo install carch
-```
-
-अनि `carch` टाइप गरेर चलाउनुहोस्।
-
-> [!TIP]
-> यदि `carch` कमाण्ड चल्दैन भने, आफ्नो PATH मा Cargo को bin directory जोड्नुहोस्:
-> 
-> ```sh
-> export PATH="$HOME/.cargo/bin:$PATH"
-> ```
-
-## कमाण्डहरू
-
-सबै उपलब्ध कमाण्डहरू हेर्न:
-
-```sh
-carch --help
-```
-
-## भविष्यको योजना (Roadmap)
-
-[डकुमेन्टेसन](https://carch.chalisehari.com.np/project/roadmap.html) मा Roadmap हेर्नुहोस्।
-
-## योगदान
-
-Pull Request (PR) र योगदानको स्वागत छ!
-तर [contributing गाइड](https://carch.chalisehari.com.np/project/contributing.html) पहिले पढ्नुहोस्।
-
-
-## आचारसंहिता
-
-हामी सबैका लागि स्वागतयोग्य वातावरण बनाउन चाहन्छौं। कृपया [code of conduct](https://carch.chalisehari.com.np/project/codeofconduct.html) पालना गर्नुहोस्।
-
-## योगदानकर्ता
-
-बग रिपोर्ट, फिडब्याक, वा PR पठाउने सबैलाई धन्यवाद।
+सबै योगदानकर्ताहरूलाई धन्यवाद!
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-## प्रेरणा स्रोतहरू
+## 💡 प्रेरणा
 
-- **[ChrisTitusTech linutil](https://github.com/ChrisTitusTech/linutil/)**
-- **[ml4w](https://github.com/mylinuxforwork)** — यी स्क्रिप्टिंगमा निकै सक्षम छन्।
-- साथै अरू थुप्रै स्रोतहरूबाट आइडिया लिइएको हो।
+- [ChrisTitusTech को linutil](https://github.com/ChrisTitusTech/linutil)
+- [ml4w](https://github.com/mylinuxforwork)
+- र सम्पूर्ण Linux scripting समुदाय।
 
-## सम्पर्क
-> यदि तपाईंलाई केही सोध्नुछ वा सुझाव दिनुछ भने:  
->
-> [Telegram](https://t.me/carchx) • [Discord](https://discord.com/invite/8NJWstnUHd) • [Email](mailto:harilvfs@chalisehari.com.np)
+## 📬 सम्पर्क
 
-## सहयोग गर्न चाहनुहुन्छ?
+<a href="https://t.me/carchx" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
+<a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
+<a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail" width="45px" /></a>
 
-Carch पूर्ण रूपमा निशुल्क र खुला स्रोत (Open Source) प्रोजेक्ट हो।
+## ❤️ समर्थन
 
-यदि तपाईं यस विकासमा सघाउन चाहनुहुन्छ भने, Bitcoin मार्फत डोनेसन गर्न सक्नुहुन्छ:
+Carch निःशुल्क र खुला-स्रोत परियोजना हो। यदि तपाईं यसको विकासमा समर्थन गर्न चाहनुहुन्छ भने:
 
-> `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
+**Bitcoin ठेगाना**  
+`bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-<br>
-
-Carch [MIT लाइसेन्स](https://github.com/harilvfs/carch/blob/main/LICENSE) अन्तर्गत उपलब्ध छ — तपाईंले यो स्क्रिप्टलाई फोर्क गर्न सक्नुहुन्छ, र आफ्ना कामको लागि प्रयोग गर्न सक्नुहुन्छ।
+**[MIT लाइसेन्स](https://github.com/harilvfs/carch/blob/main/LICENSE)** अन्तर्गत लाइसेन्स गरिएको।
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
@@ -184,9 +81,6 @@ Carch [MIT लाइसेन्स](https://github.com/harilvfs/carch/blob/main
 [built-with-ratatui]: https://img.shields.io/badge/BUILT%20WITH-RATATUI-94e2d5?style=for-the-badge&logo=rust&logoColor=89dceb&labelColor=171b22
 [ratatui-link]: https://github.com/ratatui/ratatui
 
-[carch-docs]: https://img.shields.io/badge/%E2%86%92%20Checkout%20carch%20docs-eba0ac?style=for-the-badge&labelColor=1c1c29&logo=data:image/png;base64,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
-[carch-docs-link]: https://carch.chalisehari.com.np
-
 [rust]: https://github.com/harilvfs/carch/actions/workflows/rust.yml/badge.svg
 [rust-link]: https://github.com/harilvfs/carch/actions/workflows/rust.yml
 
@@ -196,3 +90,5 @@ Carch [MIT लाइसेन्स](https://github.com/harilvfs/carch/blob/main
 [create]: https://img.shields.io/github/created-at/harilvfs/carch?color=C6A0F6&labelColor=1c1c29&style=for-the-badge&logo=github&logoColor=C6A0F6
 [create-link]: https://github.com/harilvfs/carch/commit/89fd0f272b47f55e8cd3ae4f4c3f45dc716bb918
 
+[discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29
+[discord-link]: https://discord.com/invite/8NJWstnUHd
