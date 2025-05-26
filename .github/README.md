@@ -26,6 +26,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) — available in:
 
 > 🌐 • 🇳🇵 • 🇮🇳
+
 > [English](https://carch.chalisehari.com.np) • [Nepali](https://carch.chalisehari.com.np/np/) • [Hindi](https://carch.chalisehari.com.np/hi/) 
 
 ## 🙏 Contributors
