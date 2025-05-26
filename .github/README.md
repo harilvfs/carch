@@ -3,8 +3,8 @@
 
 # Carch
 
-> **A collection of modular Bash scripts with a beautiful TUI (built with [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.**
-> **It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup.**
+- **A collection of modular Bash scripts with a beautiful TUI (built with [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.**
+- **It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup.**
 
 <details>
 <summary><strong>Preview</strong></summary>
