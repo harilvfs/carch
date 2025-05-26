@@ -39,42 +39,39 @@ FZF_COMMON="--layout=reverse \
 fzf_confirm() {
     local prompt="$1"
     local options=("Yes" "No" "Exit")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    echo "$selected"
+    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+        --height=40% \
+        --prompt="$prompt " \
+        --header="Confirm" \
+        --pointer="➤" \
+        --color='fg:white,fg+:green,bg+:black,pointer:green'
 }
 
 fzf_select() {
     local prompt="$1"
     shift
     local options=("$@")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Select Option" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    echo "$selected"
+    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+        --height=40% \
+        --prompt="$prompt " \
+        --header="Select Option" \
+        --pointer="➤" \
+        --color='fg:white,fg+:blue,bg+:black,pointer:blue'
 }
 
 detect_os() {
-   if command -v pacman &>/dev/null; then
-       echo -e "${BLUE}Detected Arch-based distribution.${RESET}"
-       echo "OS=arch" >&2
-       return 0
-   elif command -v dnf &>/dev/null; then
-       echo -e "${BLUE}Detected Fedora-based distribution.${RESET}"
-       echo "OS=fedora" >&2
-       return 0
-   else
-       echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${RESET}"
-       return 1
-   fi
+    if command -v pacman &>/dev/null; then
+        echo -e "${BLUE}Detected Arch-based distribution.${RESET}"
+        echo "OS=arch" >&2
+        return 0
+    elif command -v dnf &>/dev/null; then
+        echo -e "${BLUE}Detected Fedora-based distribution.${RESET}"
+        echo "OS=fedora" >&2
+        return 0
+    else
+        echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${RESET}"
+        return 1
+    fi
 }
 
 install_dependencies() {
@@ -120,35 +117,24 @@ handle_existing_config() {
 
     echo -e "${YELLOW}Existing Neovim configuration found.${RESET}"
 
-    if command -v fzf &>/dev/null; then
-        choice=$(fzf_confirm "Do you want to back up your existing Neovim configuration?")
-    else
-        echo -e "${YELLOW}Do you want to back up your existing Neovim configuration? (Yes/No/Exit)${RESET}"
-        read -r choice
-    fi
+    choice=$(fzf_confirm "Backup existing config?")
 
     case $choice in
-        "Yes"|"yes"|"Y"|"y")
-            echo -e "${RED}:: Existing Neovim config found at $nvim_config_dir. Backing up...${RESET}"
+        "Yes")
+            echo -e "${RED}:: Backing up existing config...${RESET}"
             mkdir -p "$backup_dir"
             mv "$nvim_config_dir" "$backup_dir/nvim_$(date +%Y%m%d_%H%M%S)"
             mkdir -p "$nvim_config_dir"
             echo -e "${GREEN}:: Backup created at $backup_dir.${RESET}"
-            return 0
             ;;
-        "No"|"no"|"N"|"n")
+        "No")
             echo -e "${YELLOW}:: Removing existing Neovim configuration...${RESET}"
             rm -rf "$nvim_config_dir"
             mkdir -p "$nvim_config_dir"
-            return 0
             ;;
-        "Exit"|"exit"|"E"|"e")
+        "Exit")
             echo -e "${RED}Exiting the script.${RESET}"
             exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid option. Please choose 'Yes', 'No', or 'Exit'.${RESET}"
-            handle_existing_config
             ;;
     esac
 }
@@ -165,11 +151,7 @@ setup_neovim() {
     fi
 
     echo -e "${GREEN}:: Cleaning up unnecessary files...${RESET}"
-    if ! cd "$nvim_config_dir"; then
-        echo -e "${RED}Failed to change directory to $nvim_config_dir.${RESET}"
-        return 1
-    fi
-
+    cd "$nvim_config_dir" || return 1
     rm -rf .git README.md LICENSE
 
     echo -e "${GREEN}Neovim setup completed successfully!${RESET}"
@@ -195,11 +177,7 @@ setup_nvchad() {
     rm -rf "$nvchad_dir"
 
     echo -e "${GREEN}:: Cleaning up unnecessary files...${RESET}"
-    if ! cd "$nvim_config_dir"; then
-        echo -e "${RED}Failed to change directory to $nvim_config_dir.${RESET}"
-        return 1
-    fi
-
+    cd "$nvim_config_dir" || return 1
     rm -rf LICENSE README.md
 
     echo -e "${GREEN}NvChad setup completed successfully!${RESET}"
@@ -217,25 +195,18 @@ main() {
 
     os_type=$(echo "$os_info" | grep "OS=" | cut -d= -f2)
 
-    echo -e "${YELLOW}Choose the setup option:${RESET}"
-
-    if command -v fzf &>/dev/null; then
-        choice=$(fzf_select "Choose the setup option:" "Neovim" "NvChad" "Exit")
-    else
-        echo -e "${YELLOW}Choose the setup option (Neovim/NvChad/Exit):${RESET}"
-        read -r choice
-    fi
+    choice=$(fzf_select "Choose the setup option:" "Neovim" "NvChad" "Exit")
 
     case $choice in
-        "Neovim"|"neovim")
+        "Neovim")
             setup_neovim || exit 1
             install_dependencies "$os_type" || exit 1
             ;;
-        "NvChad"|"nvchad")
+        "NvChad")
             setup_nvchad || exit 1
             install_dependencies "$os_type" || exit 1
             ;;
-        "Exit"|"exit"|"E"|"e")
+        "Exit")
             echo -e "${RED}Exiting the script.${RESET}"
             exit 0
             ;;
@@ -245,7 +216,7 @@ main() {
             ;;
     esac
 
-    echo -e "${GREEN}Setup completed! You can now start using Neovim with your new configuration.${RESET}"
+    echo -e "${GREEN}Setup completed!${RESET}"
 }
 
 main

@@ -56,7 +56,7 @@ check_dependencies() {
         echo
         if [[ $REPLY =~ ^[Nn]$ ]]; then
             echo -e "${RED}Cannot proceed without required dependencies. Exiting...${NC}"
-            read -p "Press Enter to continue..." dummy
+            read -p "Press Enter to continue..."
             return 1
         fi
 
@@ -75,7 +75,7 @@ check_dependencies() {
 
         if $failed; then
             echo -e "${RED}Some dependencies failed to install. Cannot proceed.${NC}"
-            read -p "Press Enter to continue..." dummy
+            read -p "Press Enter to continue..."
             return 1
         fi
     fi
@@ -88,7 +88,7 @@ install_paru() {
     if command -v paru &>/dev/null; then
         echo -e "${GREEN}Paru is already installed on this system.${NC}"
         echo -e "$(paru --version | head -n 1)"
-        read -p "Press Enter to continue..." dummy
+        read -p "Press Enter to continue..."
         return
     fi
 
@@ -111,14 +111,14 @@ install_paru() {
     else
         echo -e "${RED}Paru installation failed.${NC}"
     fi
-    read -p "Press Enter to continue..." dummy
+    read -p "Press Enter to continue..."
 }
 
 install_yay() {
     if command -v yay &>/dev/null; then
         echo -e "${GREEN}Yay is already installed on this system.${NC}"
         echo -e "$(yay --version | head -n 1)"
-        read -p "Press Enter to continue..." dummy
+        read -p "Press Enter to continue..."
         return
     fi
 
@@ -141,7 +141,7 @@ install_yay() {
     else
         echo -e "${RED}Yay installation failed.${NC}"
     fi
-    read -p "Press Enter to continue..." dummy
+    read -p "Press Enter to continue..."
 }
 
 check_existing_helpers() {
@@ -221,7 +221,7 @@ while true; do
         "Install Paru") install_paru ;;
         "Install Yay") install_yay ;;
         "Exit")
-            echo -e "${GREEN}Exiting AUR helper installation script.${NC}"
+            echo -e "${GREEN}Exiting...${NC}"
             exit ;;
         *) continue ;;
     esac

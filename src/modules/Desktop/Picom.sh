@@ -35,25 +35,19 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ "$selected" == "Yes" ]]
 }
 
 fzf_select() {
     local prompt="$1"
     shift
     local options=("$@")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Select Option" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    echo "$selected"
+    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
+                                      --height=40% \
+                                      --prompt="$prompt " \
+                                      --header="Select Option" \
+                                      --pointer="➤" \
+                                      --color='fg:white,fg+:blue,bg+:black,pointer:blue'
 }
 
 detect_package_manager() {
@@ -69,29 +63,24 @@ detect_package_manager() {
 
 install_aur_helper() {
     local aur_helpers=("yay" "paru")
-    local aur_helper_found=false
-
     for helper in "${aur_helpers[@]}"; do
         if command -v "$helper" &>/dev/null; then
             echo -e "${GREEN}:: AUR helper '$helper' is already installed. Using it.${ENDCOLOR}"
             aur_helper="$helper"
-            aur_helper_found=true
-            break
+            return
         fi
     done
 
-    if [ "$aur_helper_found" = false ]; then
-        echo -e "${RED}No AUR helper found. Installing yay...${ENDCOLOR}"
-        sudo pacman -S --needed --noconfirm git base-devel
-        temp_dir=$(mktemp -d)
-        git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
-        cd "$temp_dir/yay" || { echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"; exit 1; }
-        makepkg -si --noconfirm
-        cd .. || exit 1
-        rm -rf "$temp_dir"
-        echo -e "${GREEN}yay installed successfully.${ENDCOLOR}"
-        aur_helper="yay"
-    fi
+    echo -e "${RED}No AUR helper found. Installing yay...${ENDCOLOR}"
+    sudo pacman -S --needed --noconfirm git base-devel
+    temp_dir=$(mktemp -d)
+    git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
+    cd "$temp_dir/yay" || { echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"; exit 1; }
+    makepkg -si --noconfirm
+    cd ~ || exit 1
+    rm -rf "$temp_dir"
+    echo -e "${GREEN}yay installed successfully.${ENDCOLOR}"
+    aur_helper="yay"
 }
 
 print_source_message() {
@@ -136,28 +125,12 @@ download_config() {
     local config_path="$HOME/.config/picom.conf"
 
     if [ -f "$config_path" ]; then
-        echo -e "${YELLOW}:: picom.conf already exists in $HOME/.config. Do you want to overwrite it?${ENDCOLOR}"
-
-        if command -v fzf &>/dev/null; then
-            choice=$(fzf_confirm "Overwrite existing picom.conf?")
+        if fzf_confirm "Overwrite existing picom.conf?"; then
+            echo -e "${GREEN}:: Overwriting picom.conf...${ENDCOLOR}"
         else
-            echo -e "${YELLOW}Do you want to overwrite it? (Yes/No)${ENDCOLOR}"
-            read -r choice
+            echo -e "${RED}:: Skipping picom.conf download...${ENDCOLOR}"
+            return
         fi
-
-        case "$choice" in
-            "Yes"|"yes"|"Y"|"y")
-                echo -e "${GREEN}:: Overwriting picom.conf...${ENDCOLOR}"
-                ;;
-            "No"|"no"|"N"|"n")
-                echo -e "${RED}:: Skipping picom.conf download...${ENDCOLOR}"
-                return 0
-                ;;
-            *)
-                echo -e "${RED}Invalid option. Exiting...${ENDCOLOR}"
-                exit 1
-                ;;
-        esac
     fi
 
     mkdir -p ~/.config
@@ -165,26 +138,11 @@ download_config() {
     wget -O "$config_path" "$config_url"
 }
 
+# Start
 detect_package_manager
-
 print_source_message
 
-if command -v fzf &>/dev/null; then
-    choice=$(fzf_select "Choose Picom version:" "Picom with animation (FT-Labs)" "Picom normal" "Exit")
-else
-    echo -e "${YELLOW}Choose Picom version:${ENDCOLOR}"
-    echo "1. Picom with animation (FT-Labs)"
-    echo "2. Picom normal"
-    echo "3. Exit"
-    read -r option
-
-    case "$option" in
-        1) choice="Picom with animation (FT-Labs)" ;;
-        2) choice="Picom normal" ;;
-        3) choice="Exit" ;;
-        *) echo -e "${RED}Invalid option. Exiting...${ENDCOLOR}"; exit 1 ;;
-    esac
-fi
+choice=$(fzf_select "Choose Picom version:" "Picom with animation (FT-Labs)" "Picom normal" "Exit")
 
 case "$choice" in
     "Picom with animation (FT-Labs)")

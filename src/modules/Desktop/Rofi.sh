@@ -31,12 +31,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ "$selected" == "Yes" ]]
 }
 
 install_rofi_arch() {
@@ -72,29 +67,16 @@ setup_rofi() {
 
     if [ -d "$ROFI_CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Rofi configuration directory exists. Backing up the current configuration...${NC}"
-        if [ -d "$BACKUP_DIR" ]; then
-            echo -e "${YELLOW}:: Backup already exists. Do you want to overwrite it?${NC}"
 
-            if command -v fzf &>/dev/null; then
-                if fzf_confirm "Overwrite the existing backup?"; then
-                    rm -rf "$BACKUP_DIR"
-                    mkdir -p "$BACKUP_DIR"
-                    mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
-                    echo -e "${GREEN}:: Existing Rofi configuration has been backed up to ~/.config/rofi_backup.${NC}"
-                else
-                    echo -e "${GREEN}:: Keeping the existing backup. Skipping backup process.${NC}"
-                fi
+        if [ -d "$BACKUP_DIR" ]; then
+            echo -e "${YELLOW}:: Backup already exists.${NC}"
+            if fzf_confirm "Overwrite the existing backup?"; then
+                rm -rf "$BACKUP_DIR"
+                mkdir -p "$BACKUP_DIR"
+                mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
+                echo -e "${GREEN}:: Existing Rofi configuration has been backed up to ~/.config/rofi_backup.${NC}"
             else
-                echo -e "${YELLOW}Overwrite the existing backup? (y/n)${ENDCOLOR}"
-                read -r response
-                if [[ "$response" =~ ^[Yy]$ ]]; then
-                    rm -rf "$BACKUP_DIR"
-                    mkdir -p "$BACKUP_DIR"
-                    mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
-                    echo -e "${GREEN}:: Existing Rofi configuration has been backed up to ~/.config/rofi_backup.${NC}"
-                else
-                    echo -e "${GREEN}:: Keeping the existing backup. Skipping backup process.${NC}"
-                fi
+                echo -e "${GREEN}:: Keeping the existing backup. Skipping backup process.${NC}"
             fi
         else
             mkdir -p "$BACKUP_DIR"
@@ -108,10 +90,7 @@ setup_rofi() {
     echo -e "${CYAN}:: Applying new Rofi configuration...${NC}"
     wget -q https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/rofi/config.rasi -O "$ROFI_CONFIG_DIR/config.rasi"
 
-    if [ ! -d "$ROFI_CONFIG_DIR/themes" ]; then
-        mkdir -p "$ROFI_CONFIG_DIR/themes"
-    fi
-
+    mkdir -p "$ROFI_CONFIG_DIR/themes"
     wget -q https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/rofi/themes/nord.rasi -O "$ROFI_CONFIG_DIR/themes/nord.rasi"
 
     echo -e "${GREEN}:: Rofi configuration applied successfully!${NC}"

@@ -197,7 +197,6 @@ main() {
     check_dependencies
     detect_os
     choose_fonts
-
 }
 
 main
