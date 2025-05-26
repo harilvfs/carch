@@ -1,3 +1,5 @@
+[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://carch.chalisehari.com.np/np/)
+
 # Carch
 
 Carch एक सुन्दर TUI (*[`ratatui`](https://github.com/ratatui-org/ratatui) मा आधारित*) प्रयोग गरेर बनाइएको modular Bash script को संग्रह हो, जसले Linux प्रयोगकर्ताहरूको लागि post-installation सेटअप स्वचालित बनाउँछ।  
