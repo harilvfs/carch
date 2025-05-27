@@ -1,54 +1,58 @@
-[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20中文-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
+[![lang: 🇰🇷 한국어](https://img.shields.io/badge/lang-%F0%9F%87%B0%F0%9F%87%B7%20한국어-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ko.md)
 
 # Carch
 
-一个由模块化 Bash 脚本组成的集合，配有漂亮的 TUI（*基于* [`ratatui`](https://github.com/ratatui-org/ratatui) 构建），用于自动化 Linux 用户的安装后设置。  
-如果你想快速在一个干净且可用的系统中使用你*最喜欢的应用程序*，它会特别有用。
+모듈식 Bash 스크립트 모음으로, 아름다운 TUI(*[`ratatui`](https://github.com/ratatui-org/ratatui)*로 제작됨)를 통해 Linux 사용자의 설치 후 설정을 자동화합니다.  
+특히 깨끗하고 즉시 사용할 수 있는 설정으로 *좋아하는 앱*을 빠르게 시작하고 싶을 때 유용합니다.
 
-*目前支持 Arch 和 Fedora 系的发行版。*
+*현재 Arch 및 Fedora 기반 배포판을 지원합니다.*
 
 <details>
-<summary><strong>预览</strong></summary>
+<summary><strong>미리보기</strong></summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
+  
 </details>
 
-[![GitHub 创建时间][create]][create-link] [![GitHub 问题][issues]][issues-link] [![GitHub PR][prs]][pr-links] [![最后提交][last-commit]][last-commit-link] [![GitHub Star][star]][star-link] [![GitHub Fork][fork]][fork-link] [![下载][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
+[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
-[![GitHub Actions 状态][check]][check-link]
+[![github actions build status][check]][check-link]
 
-## 📖 文档
+<h4>
 
-安装、使用方法、命令等请查看[*官方 Carch 文档网站*](https://carch.chalisehari.com.np/)，支持语言： [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/) • [🇦🇪](https://carch.chalisehari.com.np/ar/) • [🇫🇷](https://carch.chalisehari.com.np/fr/) • [🇰🇷](https://carch.chalisehari.com.np/ko/)
+설치 방법, 사용법, 명령어 등 자세한 내용은 [*공식 Carch 문서 사이트*](https://carch.chalisehari.com.np/)에서 확인하세요. 다음 언어로 제공됩니다:  
+[🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/) • [🇦🇪](https://carch.chalisehari.com.np/ar/) • [🇫🇷](https://carch.chalisehari.com.np/fr/) • [🇰🇷](https://carch.chalisehari.com.np/ko/)
 
-## 🙏 贡献者
+</h4>
 
-感谢所有贡献者！
+## 🙏 기여자
+
+모든 기여자분들께 감사드립니다!
 
 [![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-## 💡 灵感来源
+## 💡 영감
 
-- [ChrisTitusTech 的 linutil](https://github.com/ChrisTitusTech/linutil)
+- [ChrisTitusTech의 linutil](https://github.com/ChrisTitusTech/linutil)
 - [ml4w](https://github.com/mylinuxforwork)
-- 以及更广泛的 Linux 脚本社区。
+- 그리고 더 넓은 Linux 스크립팅 커뮤니티
 
-## 📬 联系我
+## 📬 연락처
 
 <a href="https://t.me/carchx" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
 <a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
 <a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail" width="45px" /></a>
 
-## ❤️ 支持
+## ❤️ 후원
 
-Carch 是免费且开源的。如果你愿意支持它的发展：
+Carch는 무료이자 오픈 소스 프로젝트입니다. 개발을 지원하고 싶으시다면:
 
-**比特币地址**  
+**비트코인 주소**  
 `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-**基于 [MIT 许可证](https://github.com/harilvfs/carch/blob/main/LICENSE)**
+**[MIT 라이선스](https://github.com/harilvfs/carch/blob/main/LICENSE) 하에 배포됨**
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
