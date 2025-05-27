@@ -7,6 +7,7 @@ clear
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
+CYAN='\033[36m'
 RESET='\033[0m'
 
 FZF_COMMON="--layout=reverse \
@@ -19,14 +20,13 @@ FZF_COMMON="--layout=reverse \
             --bind change:top"
 
 check_fzf() {
-    if ! command -v fzf &>/dev/null; then
-        echo -e "${YELLOW}Installing fzf...${RESET}"
-        if command -v pacman &>/dev/null; then
-            sudo pacman -S --noconfirm fzf
-        elif command -v dnf &>/dev/null; then
-            sudo dnf install -y fzf
-        fi
-    fi
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 }
 
 install_bun() {

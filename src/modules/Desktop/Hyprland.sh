@@ -6,8 +6,16 @@ BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
 RESET='\033[0m'
+YELLOW='\033[33m'
+CYAN='\033[36m'
 
-type fzf &>/dev/null || { echo "fzf is not installed. Install it first."; exit 1; }
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 FZF_COMMON="--layout=reverse \
             --border=bold \

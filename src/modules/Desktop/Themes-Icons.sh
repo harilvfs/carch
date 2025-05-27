@@ -80,6 +80,14 @@ install_dependencies() {
     echo -e "${GREEN}:: Dependencies installed successfully.${RESET}"
 }
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 option=$(printf "Themes\nIcons\nBoth\nExit" | fzf ${FZF_COMMON} \
                                               --height=40% \
                                               --prompt="Choose an option: " \

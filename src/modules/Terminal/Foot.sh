@@ -37,6 +37,14 @@ fzf_confirm() {
     fi
 }
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${RESET}"
 echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${RESET}"
 echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${RESET}"

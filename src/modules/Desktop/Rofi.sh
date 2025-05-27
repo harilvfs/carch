@@ -11,6 +11,14 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 ENDCOLOR="\e[0m"
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 echo -e "${YELLOW}:: Note: JetBrains Mono Nerd Font is required for proper Rofi display. Please install it before continuing.${ENDCOLOR}"
 
 FZF_COMMON="--layout=reverse \

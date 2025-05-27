@@ -95,14 +95,13 @@ detect_distro() {
     print_message "$CYAN" "Detected distribution: $DISTRO"
 }
 
-install_fzf() {
-    if ! command -v fzf &>/dev/null; then
-        print_message "$CYAN" "Installing fzf..."
-        if command -v pacman &>/dev/null; then
-            sudo pacman -S --noconfirm fzf
-        elif command -v dnf &>/dev/null; then
-            sudo dnf install -y fzf
-        fi
+check_fzf() {
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        exit 1
     fi
 }
 
@@ -134,11 +133,11 @@ check_default_shell() {
 
 clear
 
+check_fzf
+
 detect_distro
 
 check_essential_dependencies
-
-install_fzf
 
 if command -v pacman &> /dev/null; then
     check_aur_helper

@@ -5,6 +5,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
+CYAN='\033[36m'
 RESET='\033[0m'
 
 FZF_COMMON="--layout=reverse \
@@ -2016,7 +2017,16 @@ install_crypto_tools() {
 }
 
 while true; do
+
     clear
+
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        exit 1
+    fi
 
     options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Crypto Tools" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \

@@ -5,6 +5,8 @@
 clear
 
 GREEN='\033[0;32m'
+RED="\e[31m"
+YELLOW='\033[33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
@@ -36,6 +38,14 @@ fzf_confirm() {
 
 PICTURES_DIR="$HOME/Pictures"
 WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 echo -e "${CYAN}:: Wallpapers will be set up in the Pictures directory (${PICTURES_DIR}).${NC}"
 

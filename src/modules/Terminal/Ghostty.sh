@@ -37,6 +37,14 @@ fzf_confirm() {
     fi
 }
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${RESET}"
 echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${RESET}"
 echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${RESET}"

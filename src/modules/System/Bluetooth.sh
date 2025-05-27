@@ -5,6 +5,7 @@
 clear
 
 GREEN="\e[32m"
+YELLOW='\033[33m'
 BLUE="\e[34m"
 RED="\e[31m"
 CYAN="\e[36m"
@@ -92,6 +93,15 @@ provide_additional_info() {
 }
 
 main() {
+
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        exit 1
+    fi
+
     detect_distro
 
     if fzf_confirm "Do you want to install Bluetooth system?"; then
