@@ -18,9 +18,11 @@ C’est particulièrement utile si vous souhaitez démarrer rapidement avec vos 
 
 [![Statut du build GitHub Actions][check]][check-link]
 
-## 📖 Documentation
+<h4>
 
 Pour les instructions d’installation, l’utilisation, les commandes et plus, consultez le [*site officiel de la documentation Carch*](https://carch.chalisehari.com.np/) disponible en :  [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/) • [🇦🇪](https://carch.chalisehari.com.np/ar/) • [🇫🇷](https://carch.chalisehari.com.np/fr/) • [🇰🇷](https://carch.chalisehari.com.np/ko/)
+
+</h4>
 
 ## 🙏 Contributeurs
 
