@@ -2,6 +2,10 @@
 
 # Sets up a custom Bash prompt with useful information such as the current working directory, Git status, and system details, enhancing the command line experience.
 
+clear
+
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+
 detect_distro() {
     if command -v pacman &> /dev/null; then
         distro="arch"
@@ -117,15 +121,6 @@ check_default_shell() {
         echo -e "${GREEN}Bash is already your default shell.${RESET}"
     fi
 }
-
-clear
-
-RED="\033[1;31m"
-GREEN="\033[1;32m"
-BLUE="\033[1;34m"
-CYAN="\033[1;36m"
-YELLOW="\033[1;33m"
-RESET="\033[0m"
 
 FZF_COMMON="--layout=reverse \
             --border=bold \

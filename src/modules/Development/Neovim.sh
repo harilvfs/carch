@@ -4,12 +4,7 @@
 
 clear
 
-GREEN="\e[32m"
-RED="\e[31m"
-BLUE="\e[34m"
-YELLOW="\e[33m"
-CYAN='\033[36m'
-RESET="\e[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"

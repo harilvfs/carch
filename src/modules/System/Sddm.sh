@@ -4,12 +4,7 @@
 
 clear
 
-export RED="\e[31m"
-export GREEN="\e[32m"
-export YELLOW="\033[33m"
-export BLUE="\e[34m"
-export CYAN="\033[36m"
-export ENDCOLOR="\e[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \

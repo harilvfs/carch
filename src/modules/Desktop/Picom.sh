@@ -4,13 +4,9 @@
 
 clear
 
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+
 aur_helper=""
-GREEN="\e[32m"
-RED="\e[31m"
-BLUE="\e[34m"
-YELLOW="\e[33m"
-CYAN='\033[36m'
-ENDCOLOR="\e[0m"
 
 FZF_COMMON="--layout=reverse \
             --border=bold \

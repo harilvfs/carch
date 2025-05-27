@@ -4,13 +4,7 @@
 
 clear
 
-GREEN="\e[32m"
-RED="\e[31m"
-YELLOW="\e[33m"
-BLUE="\e[34m"
-CYAN="\e[36m"
-ENDCOLOR="\e[0m"
-RESET="\e[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 BACKUP_DIR="$HOME/.i3wmdotfiles/backup"
 DOTFILES_REPO="https://github.com/harilvfs/i3wmdotfiles"

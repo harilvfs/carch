@@ -4,10 +4,7 @@
 
 clear
 
-GREEN="\e[32m"
-RED="\e[31m"
-MAGENTA="\e[35m"
-ENDCOLOR="\e[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 info() { echo -e "${MAGENTA}$1${ENDCOLOR}"; }
 success() { echo -e "${GREEN}$1${ENDCOLOR}"; }
