@@ -1,17 +1,17 @@
-[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.hi.md)
+[![lang: 🇷🇺 Русский](https://img.shields.io/badge/lang-%F0%9F%87%B7%F0%9F%87%BA%20Русский-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ru.md)
 
 # Carch
 
-Carch एक सुंदर TUI (*[`ratatui`](https://github.com/ratatui-org/ratatui) पर आधारित*) के साथ बना modular Bash scripts का संग्रह है, जो Linux उपयोगकर्ताओं के लिए post-installation सेटअप को स्वचालित बनाता है।  
-यह उन लोगों के लिए खास है जो *अपने पसंदीदा ऐप्स* के साथ एक साफ और तैयार सिस्टम को तुरंत उपयोग करना चाहते हैं।
+Коллекция модульных Bash-скриптов с красивым TUI (*создано с помощью* [`ratatui`](https://github.com/ratatui-org/ratatui)) для автоматизации постустановочной настройки для пользователей Linux.
+Особенно полезно, если вы хотите быстро начать использовать свои *любимые приложения* с чистой и готовой к использованию системой.
 
-*वर्तमान में Arch और Fedora आधारित डिस्ट्रो को सपोर्ट करता है।*
+*В настоящее время поддерживаются дистрибутивы на базе Arch и Fedora.*
 
 <details>
-<summary><strong>पूर्वावलोकन</strong></summary>
+<summary><strong>Предварительный просмотр</strong></summary>
 
-![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
-
+![Предварительный просмотр](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
+  
 </details>
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
@@ -20,38 +20,38 @@ Carch एक सुंदर TUI (*[`ratatui`](https://github.com/ratatui-org/ra
 
 <h4>
 
-इंस्टॉलेशन, उपयोग, कमांड्स आदि के लिए देखें [**Carch की आधिकारिक वेबसाइट**](https://carch.chalisehari.com.np/) — उपलब्ध भाषाएं: [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵 ](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/) • [ 🇩🇪 ](https://carch.chalisehari.com.np/de/) • [ 🇷🇺 ](https://carch.chalisehari.com.np/ru/)
+Для инструкций по установке, использованию, командам и другим сведениям посетите [*официальный сайт документации Carch*](https://carch.chalisehari.com.np/) доступный на:  [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵 ](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/) • [ 🇩🇪 ](https://carch.chalisehari.com.np/de/) • [ 🇷🇺 ](https://carch.chalisehari.com.np/ru/)
 
 </h4>
 
-## 🙏 योगदानकर्ता
+## 🙏 Участники
 
-सभी योगदानकर्ताओं का धन्यवाद!
+Спасибо всем участникам!
 
-[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
+[![Участники](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
-## 💡 प्रेरणा
+## 💡 Вдохновение
 
-- [ChrisTitusTech का linutil](https://github.com/ChrisTitusTech/linutil)
+- [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
 - [ml4w](https://github.com/mylinuxforwork)
-- और सम्पूर्ण Linux scripting समुदाय।
+- И более широкое сообщество скриптов Linux.
 
-## 📬 संपर्क करें
+## 📬 Связаться со мной
 
 <a href="https://t.me/carchx" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
 <a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
 <a href="mailto:harilvfs@chalisehari.com.np" target="_blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_gmail.png?raw=true" alt="Mail" width="45px" /></a>
 
-## ❤️ समर्थन करें
+## ❤️ Поддержка
 
-Carch एक मुफ्त और ओपन-सोर्स प्रोजेक्ट है। यदि आप इसके विकास में मदद करना चाहते हैं:
+Carch — бесплатный и с открытым исходным кодом. Если вы хотите поддержать его разработку:
 
-**Bitcoin पता**  
+**Bitcoin адрес**  
 `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-**[MIT लाइसेंस](https://github.com/harilvfs/carch/blob/main/LICENSE)** के अंतर्गत लाइसेंस प्राप्त।
+**Лицензия [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
