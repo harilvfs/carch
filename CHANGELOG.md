@@ -1,68 +1,25 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [5.0.0](https://github.com/harilvfs/carch/compare/v4.4.7...v5.0.0) (2025-05-27)
+## [5.0.0](https://github.com/harilvfs/carch/compare/v4.4.7...v5.0.0) (2025-05-28)
 
 ### Changed
 
-* Changelog v4.4.7 [`772f3ed`](https://github.com/harilvfs/carch/commit/772f3ed)
-* Changelog v4.4.7 by @harilvfs in https://github.com/harilvfs/carch/pull/453
-* Update README.md [`8552f82`](https://github.com/harilvfs/carch/commit/8552f82)
-* Update README.md [`9835599`](https://github.com/harilvfs/carch/commit/9835599)
-* Update README.md [`e25a261`](https://github.com/harilvfs/carch/commit/e25a261)
-* Update label.yml [`c5ecef2`](https://github.com/harilvfs/carch/commit/c5ecef2)
-* Update version to 5.0.0 for release [`d2edfca`](https://github.com/harilvfs/carch/commit/d2edfca)
 * chore: add eza for terminal scripts by @nissxnix in https://github.com/harilvfs/carch/pull/455
 * chore: fix dependencies issue [ i3wm script ] [`8388758`](https://github.com/harilvfs/carch/commit/8388758)
-* ci: fix assign failing [`3a57900`](https://github.com/harilvfs/carch/commit/3a57900)
-* ci: fix cli formatting [`db227e4`](https://github.com/harilvfs/carch/commit/db227e4)
-* ci: fix comment [`4a60dde`](https://github.com/harilvfs/carch/commit/4a60dde)
-* ci: fix typos [`9272090`](https://github.com/harilvfs/carch/commit/9272090)
-* ci: testing [`11e4c1d`](https://github.com/harilvfs/carch/commit/11e4c1d)
-* cleanup ci [`dcef90d`](https://github.com/harilvfs/carch/commit/dcef90d)
-* docs: adapt color change from readme [`02da42e`](https://github.com/harilvfs/carch/commit/02da42e)
-* docs: adapt color change from readme [`5ee59b9`](https://github.com/harilvfs/carch/commit/5ee59b9)
 * docs: add korean lang [`e6d0d7b`](https://github.com/harilvfs/carch/commit/e6d0d7b)
 * docs: add translation for arabic & french [`ad4aa6c`](https://github.com/harilvfs/carch/commit/ad4aa6c)
 * docs: add translation for russ & german [`9fe97be`](https://github.com/harilvfs/carch/commit/9fe97be)
 * docs: add translation of README for nepali & hindi lang by @aayushrg7 in https://github.com/harilvfs/carch/pull/452
-* docs: add traslation [ chinese & spanish ] [`fd75881`](https://github.com/harilvfs/carch/commit/fd75881)
-* docs: add workflow status [`134547f`](https://github.com/harilvfs/carch/commit/134547f)
-* docs: add workflow status [`a45c3d2`](https://github.com/harilvfs/carch/commit/a45c3d2)
-* docs: add workflow status [`b365004`](https://github.com/harilvfs/carch/commit/b365004)
-* docs: badges [`159789c`](https://github.com/harilvfs/carch/commit/159789c)
-* docs: badges [`47cf56d`](https://github.com/harilvfs/carch/commit/47cf56d)
-* docs: change color [`e1b0d76`](https://github.com/harilvfs/carch/commit/e1b0d76)
-* docs: change color to flamingo [`ede1783`](https://github.com/harilvfs/carch/commit/ede1783)
-* docs: cleanup [`43abc35`](https://github.com/harilvfs/carch/commit/43abc35)
-* docs: cleanup [`7c92576`](https://github.com/harilvfs/carch/commit/7c92576)
+* docs: add translation [ chinese & spanish ] [`fd75881`](https://github.com/harilvfs/carch/commit/fd75881)
 * docs: fix coc mail [`6830783`](https://github.com/harilvfs/carch/commit/6830783)
-* docs: fix lang [`1e240f0`](https://github.com/harilvfs/carch/commit/1e240f0)
-* docs: fix missing heading [`66bdec1`](https://github.com/harilvfs/carch/commit/66bdec1)
-* docs: fix nepali & spanish lang [`0f5922d`](https://github.com/harilvfs/carch/commit/0f5922d)
-* docs: fix original lang [ language code ] [`923d328`](https://github.com/harilvfs/carch/commit/923d328)
-* docs: fix spacing issue [`6a6f347`](https://github.com/harilvfs/carch/commit/6a6f347)
-* docs: match color with docs style [`06a1630`](https://github.com/harilvfs/carch/commit/06a1630)
 * docs: minor improvement to markdown side by @nissxnix in https://github.com/harilvfs/carch/pull/457
-* docs: no more this typos [`5f30263`](https://github.com/harilvfs/carch/commit/5f30263)
 * docs: redoing the readme part by @aayushrg7 in https://github.com/harilvfs/carch/pull/459
-* docs: using h tag [`461790a`](https://github.com/harilvfs/carch/commit/461790a)
-* docs: using space [ flags ] [`fcfedb5`](https://github.com/harilvfs/carch/commit/fcfedb5)
-* done [`e6dabeb`](https://github.com/harilvfs/carch/commit/e6dabeb)
-* preview: Updated preview from release v4.4.7 by @harilvfs in https://github.com/harilvfs/carch/pull/454
 * refactor: add pokemon color script [ swaywm ] [`cd5d9fe`](https://github.com/harilvfs/carch/commit/cd5d9fe)
 * refactor: fix alphabet layout [`d7b3810`](https://github.com/harilvfs/carch/commit/d7b3810)
 * refactor: redoing the i3wm setup script [`d05aedf`](https://github.com/harilvfs/carch/commit/d05aedf)
 * refactor: removing normal prompt [ only using fzf ui ] by @harilvfs in https://github.com/harilvfs/carch/pull/458
 * rust: use default fmt [`b150c8d`](https://github.com/harilvfs/carch/commit/b150c8d)
-* style: remove blank spaces [`84af54e`](https://github.com/harilvfs/carch/commit/84af54e)
-* style: remove emoji [ bash ] [`87b529f`](https://github.com/harilvfs/carch/commit/87b529f)
-* style: remove spaces [`69d4627`](https://github.com/harilvfs/carch/commit/69d4627)
-* test [`13ed2d7`](https://github.com/harilvfs/carch/commit/13ed2d7)
-* test [`506e325`](https://github.com/harilvfs/carch/commit/506e325)
-* test [`d5f125f`](https://github.com/harilvfs/carch/commit/d5f125f)
-* testing color [`51a1bb2`](https://github.com/harilvfs/carch/commit/51a1bb2)
-* update: typo [`d050b20`](https://github.com/harilvfs/carch/commit/d050b20)
 
 ### Added
 
@@ -70,12 +27,8 @@ All notable changes to this project will be documented in this file.
 * feat: add lynx browser [ package script ] [`6b031b1`](https://github.com/harilvfs/carch/commit/6b031b1)
 * feat: add tokyo night theme preset [ bash prompt ] [`63a0d69`](https://github.com/harilvfs/carch/commit/63a0d69)
 
-### Fixed
-
-
-### Removed
-
-
+I have shared a full comparison, improvements, and much more in the release. Check the release section:  
+🔗 v5.0.0 Release — https://github.com/harilvfs/carch/releases/tag/v5.0.0
 
 ## [4.4.7](https://github.com/harilvfs/carch/compare/v4.4.6...v4.4.7) (2025-05-24)
 
