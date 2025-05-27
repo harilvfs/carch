@@ -1,47 +1,40 @@
-[![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ne.md)
-[![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.hi.md)
-[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20Chinese-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
-[![lang: 🇪🇸 Español](https://img.shields.io/badge/lang-%F0%9F%87%AA%F0%9F%87%B8%20Spanish-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.es.md)
-[![lang: 🇦🇪 العربية](https://img.shields.io/badge/lang-%F0%9F%87%A6%F0%9F%87%AA%20Arabic-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ar.md)
 [![lang: 🇫🇷 Français](https://img.shields.io/badge/lang-%F0%9F%87%AB%F0%9F%87%B7%20French-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.fr.md)
 
 # Carch
 
-A collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
-It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup.
+Une collection de scripts Bash modulaires avec une belle interface utilisateur textuelle (*construite avec* [`ratatui`](https://github.com/ratatui-org/ratatui)) pour automatiser la configuration post-installation pour les utilisateurs Linux.  
+C’est particulièrement utile si vous souhaitez démarrer rapidement avec vos *applications préférées* dans une configuration propre et prête à l’emploi.
 
-*Currently supports Arch & Fedora based distros.*
+*Prend actuellement en charge les distributions basées sur Arch et Fedora.*
 
 <details>
-<summary><strong>Preview</strong></summary>
+<summary><strong>Aperçu</strong></summary>
 
-![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
+![Aperçu](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
 </details>
 
-[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
+[![Créé sur GitHub][create]][create-link] [![Problèmes GitHub][issues]][issues-link] [![PR GitHub][prs]][pr-links] [![Dernier commit][last-commit]][last-commit-link] [![Étoile GitHub][star]][star-link] [![Fork GitHub][fork]][fork-link] [![Téléchargements Carch][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
-[![github actions build status][check]][check-link]
+[![Statut du build GitHub Actions][check]][check-link]
 
-<h4>
+## 📖 Documentation
 
-For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/) • [🇦🇪](https://carch.chalisehari.com.np/ar/) • [🇫🇷](https://carch.chalisehari.com.np/fr/)
+Pour les instructions d’installation, l’utilisation, les commandes et plus, consultez le [*site officiel de la documentation Carch*](https://carch.chalisehari.com.np/) disponible en :  [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/) • [🇦🇪](https://carch.chalisehari.com.np/ar/) • [🇫🇷](https://carch.chalisehari.com.np/fr/)
 
-</h4>
+## 🙏 Contributeurs
 
-## 🙏 Contributors
+Merci à tous les contributeurs !
 
-Thanks to all contributors!
-
-[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
+[![Contributeurs](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
 
 ## 💡 Inspiration
 
-- [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
+- [linutil de ChrisTitusTech](https://github.com/ChrisTitusTech/linutil)
 - [ml4w](https://github.com/mylinuxforwork)
-- And the broader Linux scripting community.
+- Et la communauté plus large des scripts Linux.
 
-## 📬 Reach Me
+## 📬 Contactez-moi
 
 <a href="https://t.me/carchx" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_telegram.png?raw=true" width="45px"/></a>
 <a href="https://discord.com/invite/8NJWstnUHd" target="blank"><img src="https://github.com/harilvfs/DevIcons/blob/main/badges/badges_discord.png?raw=true" width="45px"/></a>
@@ -49,14 +42,14 @@ Thanks to all contributors!
 
 ## ❤️ Support
 
-Carch is free and open-source. If you'd like to support its development:
+Carch est gratuit et open-source. Si vous souhaitez soutenir son développement :
 
-**Bitcoin Address**  
+**Adresse Bitcoin**  
 `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-**Licensed under [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**
+**Sous licence [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)**
 
 [check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
