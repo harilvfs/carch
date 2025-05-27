@@ -1,5 +1,7 @@
 [![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.np.md)
 [![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.hi.md)
+[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20Chinese-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
+[![lang: 🇪🇸 Español](https://img.shields.io/badge/lang-%F0%9F%87%AA%F0%9F%87%B8%20Spanish-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.es.md)
 
 # Carch
 
@@ -21,7 +23,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 ## 📖 Documentation
 
-For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/np/) • [🇮🇳](https://carch.chalisehari.com.np/hi/)
+For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/np/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np)
 
 ## 🙏 Contributors
 
