@@ -5,6 +5,8 @@
 [![lang: 🇦🇪 العربية](https://img.shields.io/badge/lang-%F0%9F%87%A6%F0%9F%87%AA%20العربية-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ar.md)
 [![lang: 🇫🇷 Français](https://img.shields.io/badge/lang-%F0%9F%87%AB%F0%9F%87%B7%20Français-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.fr.md)
 [![lang: 🇰🇷 한국어](https://img.shields.io/badge/lang-%F0%9F%87%B0%F0%9F%87%B7%20한국어-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ko.md)
+[![lang: 🇷🇺 Русский](https://img.shields.io/badge/lang-%F0%9F%87%B7%F0%9F%87%BA%20Русский-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ru.md)
+[![lang: 🇩🇪 Deutsch](https://img.shields.io/badge/lang-%F0%9F%87%A9%F0%9F%87%AA%20Deutsch-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.de.md)
 
 # Carch
 
@@ -26,8 +28,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <h4>
 
-For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵 ](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/)
-
+For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵 ](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/) • [ 🇩🇪 ](https://carch.chalisehari.com.np/de/) • [ 🇷🇺 ](https://carch.chalisehari.com.np/ru/)
 </h4>
 
 ## 🙏 Contributors
