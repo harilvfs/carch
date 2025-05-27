@@ -21,9 +21,11 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 [![github actions build status][check]][check-link]
 
-## 📖 Documentation
+<h4>
 
 For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/)
+
+</h4>
 
 ## 🙏 Contributors
 
