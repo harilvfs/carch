@@ -21,67 +21,36 @@ detect_distro() {
 }
 
 check_dependencies() {
-    local missing_deps=()
+if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -v make &> /dev/null || ! command -v less &> /dev/null; then
 
-    echo -e "${CYAN}:: Checking for required dependencies...${NC}"
+    echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
 
-    if ! command -v git &>/dev/null; then
-        missing_deps+=("git")
-    else
-        echo -e "${GREEN}✓ Git is installed${NC}"
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${YELLOW}- fzf is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
     fi
 
-    if ! command -v make &>/dev/null; then
-        missing_deps+=("make")
-    else
-        echo -e "${GREEN}✓ Make is installed${NC}"
+    if ! command -v git &> /dev/null; then
+        echo -e "${YELLOW}- git is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S git"
     fi
 
-    if ! command -v less &>/dev/null; then
-        missing_deps+=("less")
-    else
-        echo -e "${GREEN}✓ Less is installed${NC}"
+    if ! command -v make &> /dev/null; then
+        echo -e "${YELLOW}- make is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install make"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S base-devel"
     fi
 
-    if ! command -v fzf &>/dev/null; then
-        missing_deps+=("fzf")
-    else
-        echo -e "${GREEN}✓ Fzf is installed${NC}"
+    if ! command -v less &> /dev/null; then
+        echo -e "${YELLOW}- less is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install less"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S less"
     fi
 
-    if [ ${#missing_deps[@]} -gt 0 ]; then
-        echo -e "${YELLOW}The following dependencies need to be installed: ${missing_deps[*]}${NC}"
-
-        read -p "Install missing dependencies? [Y/n] " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Nn]$ ]]; then
-            echo -e "${RED}Cannot proceed without required dependencies. Exiting...${NC}"
-            read -p "Press Enter to continue..."
-            return 1
-        fi
-
-        echo -e "${CYAN}:: Installing missing dependencies...${NC}"
-        sudo pacman -S --needed "${missing_deps[@]}"
-
-        local failed=false
-        for dep in "${missing_deps[@]}"; do
-            if ! command -v "$dep" &>/dev/null; then
-                echo -e "${RED}Failed to install $dep${NC}"
-                failed=true
-            else
-                echo -e "${GREEN}✓ $dep installed successfully${NC}"
-            fi
-        done
-
-        if $failed; then
-            echo -e "${RED}Some dependencies failed to install. Cannot proceed.${NC}"
-            read -p "Press Enter to continue..."
-            return 1
-        fi
-    fi
-
-    echo -e "${GREEN}All required dependencies are installed.${NC}"
-    return 0
+    exit 1
+  fi
 }
 
 install_paru() {
@@ -203,6 +172,7 @@ FZF_COMMON="--layout=reverse \
 
 while true; do
     clear
+    check_dependencies
     echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
     echo
 

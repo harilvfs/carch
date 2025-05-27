@@ -211,6 +211,14 @@ manage_themes_icons() {
     git clone "$repo_url" "$target_dir/$repo_name"
 }
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 print_message $BLUE "If the setup fails, please manually use the dotfiles from:
 https://github.com/harilvfs/swaydotfiles"
 

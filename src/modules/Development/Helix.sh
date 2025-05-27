@@ -5,6 +5,7 @@
 clear
 
 RED="\033[1;31m"
+YELLOW='\033[33m'
 GREEN="\033[1;32m"
 CYAN="\033[1;36m"
 RESET="\033[0m"
@@ -35,8 +36,11 @@ fzf_confirm() {
     fi
 }
 
-if ! command -v fzf &>/dev/null; then
-    echo -e "${RED}fzf is required but not installed. Please install it first.${RESET}"
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
     exit 1
 fi
 

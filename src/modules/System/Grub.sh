@@ -6,6 +6,8 @@ clear
 
 GREEN="\e[32m"
 BLUE="\e[34m"
+YELLOW='\033[33m'
+CYAN='\033[36m'
 RED="\e[31m"
 ENDCOLOR="\e[0m"
 
@@ -65,6 +67,14 @@ install_theme() {
     cd "$GRUB_THEME_DIR" || exit
     sudo ./install.sh
 }
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 print_message
 

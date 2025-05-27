@@ -5,6 +5,7 @@
 clear
 
 GREEN="\e[32m"
+YELLOW='\033[33m'
 RED="\e[31m"
 BLUE="\e[34m"
 CYAN="\e[36m"
@@ -61,6 +62,14 @@ configure_grub() {
     echo -e "${GREEN}:: Updating GRUB configuration...${ENDCOLOR}"
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 check_current_kernel
 

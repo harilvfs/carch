@@ -11,6 +11,14 @@ NC='\033[0m'
 BLUE="\e[34m"
 YELLOW="\e[33m"
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 echo -e "${BLUE}"
 cat <<"EOF"
 
@@ -157,7 +165,6 @@ setup_png_fastfetch() {
 
 main() {
     check_command git || { echo -e "${RED}Please install git and try again.${NC}"; exit 1; }
-    check_command fzf || { echo -e "${RED}Please install fzf and try again.${NC}"; exit 1; }
 
     clear
 

@@ -34,13 +34,12 @@ check_essential_dependencies() {
 }
 
 check_fzf() {
-    if ! command -v fzf &>/dev/null; then
-        echo -e "${CYAN}Installing fzf...${RESET}"
-        case "$distro" in
-            arch) sudo pacman -S --noconfirm fzf ;;
-            fedora) sudo dnf install -y fzf ;;
-            *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
-        esac
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        exit 1
     fi
 }
 
@@ -137,11 +136,11 @@ FZF_COMMON="--layout=reverse \
             --header-first \
             --bind change:top"
 
-echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
-
 detect_distro
 check_essential_dependencies
 check_fzf
+
+echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
 
 echo -e "${CYAN}Detected distribution: $distro${RESET}"
 

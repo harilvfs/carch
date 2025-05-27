@@ -5,6 +5,7 @@
 clear
 
 GREEN='\033[0;32m'
+YELLOW='\033[33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 RED='\033[0;31m'
@@ -93,6 +94,14 @@ install_font() {
         echo -e "${CYAN}Skipping font installation.${NC}"
     fi
 }
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 setup_kitty
 install_font
