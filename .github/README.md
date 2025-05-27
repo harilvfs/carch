@@ -26,7 +26,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <h4>
 
-For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/)
+For installation instructions, usage, commands, and more, check out the [*official Carch documentation site*](https://carch.chalisehari.com.np/) available in:  [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵 ](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/)
 
 </h4>
 
