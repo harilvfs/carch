@@ -4,12 +4,7 @@
 
 clear
 
-GREEN="\e[32m"
-BLUE="\e[34m"
-YELLOW='\033[33m'
-CYAN='\033[36m'
-RED="\e[31m"
-ENDCOLOR="\e[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 GRUB_THEME_DIR="$HOME/.local/share/Top-5-Bootloader-Themes"
 

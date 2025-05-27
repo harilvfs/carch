@@ -4,11 +4,7 @@
 
 clear
 
-RC='\033[0m'
-RED='\033[31m'
-YELLOW='\033[33m'
-CYAN='\033[36m'
-GREEN='\033[32m'
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 print_message() {
     local color="$1"

@@ -4,11 +4,7 @@
 
 clear
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-YELLOW="\e[33m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FONTS_DIR="$HOME/.fonts"
 

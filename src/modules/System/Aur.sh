@@ -4,11 +4,7 @@
 
 clear
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-CYAN='\033[0;36m'
-NC='\033[0m'
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
@@ -40,7 +36,7 @@ if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -
     if ! command -v make &> /dev/null; then
         echo -e "${YELLOW}- make is not installed.${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install make"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S base-devel"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S base-devel make"
     fi
 
     if ! command -v less &> /dev/null; then
