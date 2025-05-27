@@ -1,6 +1,35 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [5.0.0](https://github.com/harilvfs/carch/compare/v4.4.7...v5.0.0) (2025-05-28)
+
+### Changed
+
+* chore: add eza for terminal scripts by @nissxnix in https://github.com/harilvfs/carch/pull/455
+* chore: fix dependencies issue [ i3wm script ] [`8388758`](https://github.com/harilvfs/carch/commit/8388758)
+* docs: add korean lang [`e6d0d7b`](https://github.com/harilvfs/carch/commit/e6d0d7b)
+* docs: add translation for arabic & french [`ad4aa6c`](https://github.com/harilvfs/carch/commit/ad4aa6c)
+* docs: add translation for russ & german [`9fe97be`](https://github.com/harilvfs/carch/commit/9fe97be)
+* docs: add translation of README for nepali & hindi lang by @aayushrg7 in https://github.com/harilvfs/carch/pull/452
+* docs: add translation [ chinese & spanish ] [`fd75881`](https://github.com/harilvfs/carch/commit/fd75881)
+* docs: fix coc mail [`6830783`](https://github.com/harilvfs/carch/commit/6830783)
+* docs: minor improvement to markdown side by @nissxnix in https://github.com/harilvfs/carch/pull/457
+* docs: redoing the readme part by @aayushrg7 in https://github.com/harilvfs/carch/pull/459
+* refactor: add pokemon color script [ swaywm ] [`cd5d9fe`](https://github.com/harilvfs/carch/commit/cd5d9fe)
+* refactor: fix alphabet layout [`d7b3810`](https://github.com/harilvfs/carch/commit/d7b3810)
+* refactor: redoing the i3wm setup script [`d05aedf`](https://github.com/harilvfs/carch/commit/d05aedf)
+* refactor: removing normal prompt [ only using fzf ui ] by @harilvfs in https://github.com/harilvfs/carch/pull/458
+* rust: use default fmt [`b150c8d`](https://github.com/harilvfs/carch/commit/b150c8d)
+
+### Added
+
+* feat: add defaulting option to [ zsh bash ] scripts by @nissxnix in https://github.com/harilvfs/carch/pull/456
+* feat: add lynx browser [ package script ] [`6b031b1`](https://github.com/harilvfs/carch/commit/6b031b1)
+* feat: add tokyo night theme preset [ bash prompt ] [`63a0d69`](https://github.com/harilvfs/carch/commit/63a0d69)
+
+I have shared a full comparison, improvements, and much more in the release. Check the release section:  
+🔗 v5.0.0 Release — https://github.com/harilvfs/carch/releases/tag/v5.0.0
+
 ## [4.4.7](https://github.com/harilvfs/carch/compare/v4.4.6...v4.4.7) (2025-05-24)
 
 ### Changed
