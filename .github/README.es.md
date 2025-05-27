@@ -19,7 +19,7 @@ Es especialmente útil si deseas empezar rápidamente con tus *aplicaciones favo
 
 ## 📖 Documentación
 
-Para instrucciones de instalación, uso, comandos y más, visita el [*sitio oficial de documentación de Carch*](https://carch.chalisehari.com.np/) disponible en: [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/np/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np)
+Para instrucciones de instalación, uso, comandos y más, visita el [*sitio oficial de documentación de Carch*](https://carch.chalisehari.com.np/) disponible en: [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/)
 
 ## 🙏 Contribuidores
 

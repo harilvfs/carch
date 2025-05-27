@@ -19,7 +19,7 @@
 
 ## 📖 文档
 
-安装、使用方法、命令等请查看[*官方 Carch 文档网站*](https://carch.chalisehari.com.np/)，支持语言： [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/np/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np)
+安装、使用方法、命令等请查看[*官方 Carch 文档网站*](https://carch.chalisehari.com.np/)，支持语言： [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/)
 
 ## 🙏 贡献者
 
