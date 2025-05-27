@@ -1,9 +1,9 @@
 [![lang: 🇳🇵 Nepali](https://img.shields.io/badge/lang-%F0%9F%87%B3%F0%9F%87%B5%20Nepali-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ne.md)
 [![lang: 🇮🇳 Hindi](https://img.shields.io/badge/lang-%F0%9F%87%AE%F0%9F%87%B3%20Hindi-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.hi.md)
-[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20Chinese-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
-[![lang: 🇪🇸 Español](https://img.shields.io/badge/lang-%F0%9F%87%AA%F0%9F%87%B8%20Spanish-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.es.md)
-[![lang: 🇦🇪 العربية](https://img.shields.io/badge/lang-%F0%9F%87%A6%F0%9F%87%AA%20Arabic-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ar.md)
-[![lang: 🇫🇷 Français](https://img.shields.io/badge/lang-%F0%9F%87%AB%F0%9F%87%B7%20French-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.fr.md)
+[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20中文-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
+[![lang: 🇪🇸 Español](https://img.shields.io/badge/lang-%F0%9F%87%AA%F0%9F%87%B8%20Español-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.es.md)
+[![lang: 🇦🇪 العربية](https://img.shields.io/badge/lang-%F0%9F%87%A6%F0%9F%87%AA%20العربية-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ar.md)
+[![lang: 🇫🇷 Français](https://img.shields.io/badge/lang-%F0%9F%87%AB%F0%9F%87%B7%20Français-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.fr.md)
 
 # Carch
 
