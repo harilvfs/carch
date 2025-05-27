@@ -1,4 +1,4 @@
-[![lang: 🇦🇪 العربية](https://img.shields.io/badge/lang-%F0%9F%87%A6%F0%9F%87%AA%20Arabic-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ar.md)
+[![lang: 🇦🇪 العربية](https://img.shields.io/badge/lang-%F0%9F%87%A6%F0%9F%87%AA%20العربية-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ar.md)
 
 # كارتش
 

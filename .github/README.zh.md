@@ -1,4 +1,4 @@
-[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20Chinese-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
+[![lang: 🇨🇳 中文](https://img.shields.io/badge/lang-%F0%9F%87%A8%F0%9F%87%B3%20中文-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.zh.md)
 
 # Carch
 
