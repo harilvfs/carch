@@ -4,11 +4,7 @@
 
 clear
 
-RED="\033[1;31m"
-YELLOW='\033[33m'
-GREEN="\033[1;32m"
-CYAN="\033[1;36m"
-RESET="\033[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \

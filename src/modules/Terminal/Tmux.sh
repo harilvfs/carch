@@ -4,10 +4,7 @@
 
 clear
 
-RED="\e[31m"
-GREEN="\e[32m"
-YELLOW="\e[33m"
-RESET="\e[0m"
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -35,27 +32,36 @@ fzf_confirm() {
     fi
 }
 
-dependencies=("tmux" "fzf" "wget" "git" "curl")
-missing=()
+if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -v curl &> /dev/null || ! command -v wget &> /dev/null; then
 
-for dep in "${dependencies[@]}"; do
-    if ! command -v "$dep" &>/dev/null; then
-        missing+=("$dep")
+    echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
+
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${YELLOW}- fzf is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
     fi
-done
 
-if [[ ${#missing[@]} -ne 0 ]]; then
-    echo "Please wait, installing required dependencies..."
-
-    if command -v pacman &>/dev/null; then
-        sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
-    elif command -v dnf &>/dev/null; then
-        sudo dnf install -y "${missing[@]}" > /dev/null 2>&1
-    else
-        echo -e "${RED}Unsupported package manager. Install dependencies manually.${RESET}"
-        exit 1
+    if ! command -v git &> /dev/null; then
+        echo -e "${YELLOW}- git is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S git"
     fi
-fi
+
+    if ! command -v curl &> /dev/null; then
+        echo -e "${YELLOW}- curl is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install curl"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S curl"
+    fi
+
+    if ! command -v wget &> /dev/null; then
+        echo -e "${YELLOW}- less is not installed.${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install wget"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S wget"
+    fi
+
+    exit 1
+  fi
 
 clear
 

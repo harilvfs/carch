@@ -2,12 +2,9 @@
 
 # Installs the Hyprland compositor along with pre-configured dotfiles for a streamlined setup.
 
-BLUE='\033[0;34m'
-YELLOW='\033[0;33m'
-RED='\033[0;31m'
-RESET='\033[0m'
-YELLOW='\033[33m'
-CYAN='\033[36m'
+clear
+
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"

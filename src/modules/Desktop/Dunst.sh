@@ -2,12 +2,7 @@
 
 # Configures Dunst, a lightweight and customizable notification daemon, with optimized settings for a sleek and unobtrusive experience.
 
-BLUE="\e[34m"
-RESET="\e[0m"
-RED="\e[31m"
-GREEN="\e[32m"
-YELLOW='\033[33m'
-CYAN='\033[36m'
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \

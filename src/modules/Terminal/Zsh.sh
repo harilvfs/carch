@@ -2,12 +2,9 @@
 
 # Configures a stylish Zsh prompt with added functionalities like syntax highlighting, auto-completion, and custom themes for a more efficient shell experience.
 
-RED="\033[1;31m"
-GREEN="\033[1;32m"
-CYAN="\033[1;36m"
-BLUE="\033[1;34m"
-YELLOW="\033[1;33m"
-RESET="\033[0m"
+clear
+
+source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -130,8 +127,6 @@ check_default_shell() {
         print_message "$GREEN" "Zsh is already your default shell."
     fi
 }
-
-clear
 
 check_fzf
 
