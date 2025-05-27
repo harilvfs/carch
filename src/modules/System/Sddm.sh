@@ -6,7 +6,9 @@ clear
 
 export RED="\e[31m"
 export GREEN="\e[32m"
+export YELLOW="\033[33m"
 export BLUE="\e[34m"
+export CYAN="\033[36m"
 export ENDCOLOR="\e[0m"
 
 FZF_COMMON="--layout=reverse \
@@ -130,6 +132,14 @@ Current=catppuccin-mocha
 #
 EOF'
 }
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 print_banner
 detect_os

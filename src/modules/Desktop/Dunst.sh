@@ -6,6 +6,8 @@ BLUE="\e[34m"
 RESET="\e[0m"
 RED="\e[31m"
 GREEN="\e[32m"
+YELLOW='\033[33m'
+CYAN='\033[36m'
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -40,6 +42,14 @@ print_message() {
 }
 
 clear
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 if ! command -v dunst &>/dev/null; then
     print_message "$BLUE" "Dunst not found. Installing..."

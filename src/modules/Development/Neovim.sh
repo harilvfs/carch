@@ -8,7 +8,16 @@ GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
 YELLOW="\e[33m"
+CYAN='\033[36m'
 RESET="\e[0m"
+
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
 
 echo -e "${BLUE}"
 cat <<"EOF"

@@ -9,13 +9,8 @@ GREEN="\e[32m"
 RED="\e[31m"
 BLUE="\e[34m"
 YELLOW="\e[33m"
+CYAN='\033[36m'
 ENDCOLOR="\e[0m"
-
-echo -e "${GREEN}"
-cat << "EOF"
-Picom is a standalone compositor for Xorg.
-EOF
-echo -e "${ENDCOLOR}"
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -138,7 +133,14 @@ download_config() {
     wget -O "$config_path" "$config_url"
 }
 
-# Start
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 detect_package_manager
 print_source_message
 

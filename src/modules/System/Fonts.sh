@@ -5,9 +5,10 @@
 clear
 
 GREEN='\033[0;32m'
-CYAN='\033[0;36m'
 RED='\033[0;31m'
+CYAN='\033[0;36m'
 NC='\033[0m'
+YELLOW="\e[33m"
 
 FONTS_DIR="$HOME/.fonts"
 
@@ -194,6 +195,13 @@ detect_os() {
 }
 
 main() {
+    if ! command -v fzf &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        exit 1
+    fi
     check_dependencies
     detect_os
     choose_fonts

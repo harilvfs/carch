@@ -319,6 +319,14 @@ check_display_manager() {
     fi
 }
 
+if ! command -v fzf &> /dev/null; then
+    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    exit 1
+fi
+
 detect_distro
 install_packages
 install_dwm
