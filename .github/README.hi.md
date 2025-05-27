@@ -20,7 +20,7 @@ Carch एक सुंदर TUI (*[`ratatui`](https://github.com/ratatui-org/ra
 
 <h4>
 
-इंस्टॉलेशन, उपयोग, कमांड्स आदि के लिए देखें [**Carch की आधिकारिक वेबसाइट**](https://carch.chalisehari.com.np/) — उपलब्ध भाषाएं: [🇺🇸](https://carch.chalisehari.com.np) • [🇳🇵](https://carch.chalisehari.com.np/ne/) • [🇮🇳](https://carch.chalisehari.com.np/hi/) • [🇨🇳](https://carch.chalisehari.com.np/zh/) • [🇪🇸](https://carch.chalisehari.com.np/es/) • [🇦🇪](https://carch.chalisehari.com.np/ar/) • [🇫🇷](https://carch.chalisehari.com.np/fr/) • [🇰🇷](https://carch.chalisehari.com.np/ko/)
+इंस्टॉलेशन, उपयोग, कमांड्स आदि के लिए देखें [**Carch की आधिकारिक वेबसाइट**](https://carch.chalisehari.com.np/) — उपलब्ध भाषाएं: [ 🇺🇸 ](https://carch.chalisehari.com.np) • [ 🇳🇵](https://carch.chalisehari.com.np/ne/) • [ 🇮🇳 ](https://carch.chalisehari.com.np/hi/) • [ 🇨🇳 ](https://carch.chalisehari.com.np/zh/) • [ 🇪🇸 ](https://carch.chalisehari.com.np/es/) • [ 🇦🇪 ](https://carch.chalisehari.com.np/ar/) • [ 🇫🇷 ](https://carch.chalisehari.com.np/fr/) • [ 🇰🇷 ](https://carch.chalisehari.com.np/ko/)
 
 </h4>
 
