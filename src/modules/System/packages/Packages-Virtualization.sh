@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_virtualization() {
     detect_distro
     distro=$?

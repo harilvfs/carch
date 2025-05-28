@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_terminals() {
     detect_distro
     distro=$?

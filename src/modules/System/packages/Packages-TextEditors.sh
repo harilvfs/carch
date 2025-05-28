@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_texteditor() {
     detect_distro
     distro=$?

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_filemanagers() {
     detect_distro
     distro=$?

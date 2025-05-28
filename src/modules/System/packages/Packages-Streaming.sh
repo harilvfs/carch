@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_streaming() {
     detect_distro
     distro=$?

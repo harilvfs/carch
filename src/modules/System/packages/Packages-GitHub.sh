@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_github() {
     detect_distro
     distro=$?

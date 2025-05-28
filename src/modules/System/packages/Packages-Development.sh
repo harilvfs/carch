@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_development() {
     detect_distro
     distro=$?

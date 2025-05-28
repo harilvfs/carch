@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_communication() {
     detect_distro
     distro=$?

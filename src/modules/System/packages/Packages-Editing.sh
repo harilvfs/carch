@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_editing() {
     detect_distro
     distro=$?

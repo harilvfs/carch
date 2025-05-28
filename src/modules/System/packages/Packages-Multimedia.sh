@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_multimedia() {
     detect_distro
     distro=$?

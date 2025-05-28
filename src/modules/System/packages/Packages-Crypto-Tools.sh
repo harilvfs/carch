@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_crypto_tools() {
     detect_distro
     distro=$?

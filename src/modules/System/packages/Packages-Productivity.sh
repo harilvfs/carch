@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_productivity() {
     detect_distro
     distro=$?

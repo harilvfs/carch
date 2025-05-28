@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_music() {
     detect_distro
     distro=$?

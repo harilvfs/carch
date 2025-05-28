@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_android() {
     detect_distro
     distro=$?

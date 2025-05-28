@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_fm_tools() {
     detect_distro
     distro=$?

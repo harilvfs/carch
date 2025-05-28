@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_gaming() {
     detect_distro
     distro=$?

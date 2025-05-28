@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 install_browsers() {
     detect_distro
     distro=$?
