@@ -16,7 +16,7 @@ check_dependency() {
     fi
 }
 
-for pkg in fzf grep; do
+for pkg in fzf git grep; do
     check_dependency "$pkg"
 done
 
