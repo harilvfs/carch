@@ -12,7 +12,7 @@ use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
     text::{Line, Span},
-    widgets::{Block, Borders, Clear, Paragraph, Wrap},
+    widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap},
 };
 
 struct App {
@@ -156,7 +156,8 @@ fn ui(f: &mut Frame, app: &mut App) {
                 .add_modifier(Modifier::BOLD),
         ))
         .borders(Borders::ALL)
-        .border_style(Style::default().fg(Color::Cyan));
+        .border_style(Style::default().fg(Color::Cyan))
+        .border_type(BorderType::Rounded);
 
     let inner_height = help_area.height.saturating_sub(2);
 
