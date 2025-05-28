@@ -100,13 +100,52 @@ install_fedora_system_fonts() {
     echo -e "${GREEN}$font_pkg installed successfully!${NC}"
 }
 
+check_aur_helper() {
+    if command -v paru &>/dev/null; then
+        echo -e "$GREEN" "AUR helper paru is already installed."
+        aur_helper="paru"
+        return 0
+    elif command -v yay &>/dev/null; then
+        echo -e "$GREEN" "AUR helper yay is already installed."
+        aur_helper="yay"
+        return 0
+    fi
+
+    echo -e "$CYAN" ":: No AUR helper found. Installing yay..."
+
+    sudo pacman -S --needed --noconfirm git base-devel
+
+    local temp_dir=$(mktemp -d)
+    cd "$temp_dir" || exit 1
+
+    if git clone https://aur.archlinux.org/yay.git; then
+        cd yay || exit 1
+        makepkg -si --noconfirm || {
+            echo -e "$RED" "Failed to install yay."
+            cd "$HOME" || exit
+            rm -rf "$temp_dir"
+            exit 1
+        }
+        cd "$HOME" || exit
+        rm -rf "$temp_dir"
+        aur_helper="yay"
+        echo-e "$GREEN" "Successfully installed yay as AUR helper."
+        return 0
+    else
+        echo-e "$RED" "Failed to clone yay repository."
+        cd "$HOME" || exit
+        rm -rf "$temp_dir"
+        exit 1
+    fi
+}
+
 choose_fonts() {
     local return_to_menu=true
 
     while $return_to_menu; do
         clear
 
-        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "Exit")
+        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "JoyPixels" "Exit")
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
             echo -e "${GREEN}Exiting font installation.${NC}"
@@ -171,6 +210,21 @@ choose_fonts() {
                         install_fedora_system_fonts dejavu-sans-fonts
                     fi
                     ;;
+                "JoyPixels")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        check_aur_helper
+                        echo -e "${CYAN}:: Installing JoyPixels (ttf-joypixels) via $aur_helper...${NC}"
+                        $aur_helper -S --noconfirm ttf-joypixels
+                        echo -e "${GREEN}JoyPixels installed successfully!${NC}"
+                    else
+                        echo -e "${CYAN}:: Downloading JoyPixels font...${NC}"
+                        mkdir -p "$HOME/.fonts"
+                        curl -L "https://cdn.joypixels.com/arch-linux/font/8.0.0/joypixels-android.ttf" -o "$HOME/.fonts/joypixels-android.ttf"
+                        echo -e "${CYAN}:: Refreshing font cache...${NC}"
+                        fc-cache -vf "$HOME/.fonts"
+                        echo -e "${GREEN}JoyPixels installed successfully to ~/.fonts!${NC}"
+                    fi
+                    ;;
             esac
         done
 
@@ -198,6 +252,15 @@ main() {
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
         exit 1
     fi
+
+    if ! command -v curl &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: curl is not installed${NC}"
+        echo -e "${YELLOW}Please install curl before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install curl"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S curl"
+        exit 1
+    fi
+
     check_dependencies
     detect_os
     choose_fonts
