@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and configures Tmux for a more efficient terminal multiplexing experience.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and configures the Fish shell, offering an interactive and user-friendly command-line environment with advanced features such as auto-suggestions and a clean syntax.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Install & Sets up PipeWire audio system.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

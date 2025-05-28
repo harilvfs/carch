@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs the Hyprland compositor along with pre-configured dotfiles for a streamlined setup.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

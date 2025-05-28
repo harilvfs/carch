@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs a curated selection of essential packages to establish a fully functional environment.
-
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 source "$(dirname "$0")/packages/Packages-Android.sh"

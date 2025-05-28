@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Install and configure Pacman to add the Chaotic AUR on Arch
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

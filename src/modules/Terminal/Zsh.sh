@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Configures a stylish Zsh prompt with added functionalities like syntax highlighting, auto-completion, and custom themes for a more efficient shell experience.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

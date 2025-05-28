@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and configures i3, providing a lightweight and efficient window management experience.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

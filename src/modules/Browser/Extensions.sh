@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Useful Extensions for Chromium or Firefox based browsers.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

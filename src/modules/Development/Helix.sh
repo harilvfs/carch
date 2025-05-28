@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and configures the Helix text editor, providing a modern and feature-rich code editing environment optimized for both performance and ease of use.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

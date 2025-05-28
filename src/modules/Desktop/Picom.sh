@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and configures the Picom compositor to enable window transparency, shadows, and other visual effects.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

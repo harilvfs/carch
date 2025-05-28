@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Quickly sets up the Dwm window manager with a single-click script, using my customized configuration.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

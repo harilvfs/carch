@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

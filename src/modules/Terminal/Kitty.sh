@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Sets up the Kitty terminal emulator with advanced features and custom configurations.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
