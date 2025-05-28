@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs Bun, a JavaScript runtime, bundler, transpiler, and package manager optimized for performance.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

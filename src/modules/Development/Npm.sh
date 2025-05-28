@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Ensures npm is installed correctly, offering an alternative setup if needed.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

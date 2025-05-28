@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs a selection of wallpapers for a personalized desktop aesthetic.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

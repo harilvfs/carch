@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Sets up a custom Bash prompt with useful information such as the current working directory, Git status, and system details, enhancing the command line experience.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

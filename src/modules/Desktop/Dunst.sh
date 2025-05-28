@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Configures Dunst, a lightweight and customizable notification daemon, with optimized settings for a sleek and unobtrusive experience.
-
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Configures the Alacritty terminal emulator using my preferred settings for optimal performance.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

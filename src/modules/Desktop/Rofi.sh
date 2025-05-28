@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Configures Rofi as a powerful application launcher and window switcher, improving workflow efficiency.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Install Bluetooth Needed Packages & Sets up Bluetooth.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

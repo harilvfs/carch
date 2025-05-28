@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Configures Fastfetch to display detailed system information quickly and attractively in the terminal.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Sets up the Foot terminal emulator with wayland support and custom configurations.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

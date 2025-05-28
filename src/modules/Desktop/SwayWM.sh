@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# This Script is Currently not compatible with Fedora. Only supported for Arch-based systems only.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

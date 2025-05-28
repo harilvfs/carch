@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs AUR (Arch User Repository) helpers, like Paru or Yay, to simplify package management.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Script to set the brightness level to your preference using brightnessctl.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

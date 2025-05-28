@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Configures the SDDM (Simple Desktop Display Manager) for a streamlined and visually appealing login experience.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

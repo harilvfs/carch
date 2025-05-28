@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs the Long-Term Support (LTS) kernel for enhanced stability and extended support.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

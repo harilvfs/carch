@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and applies a set of themes and icons to enhance the look and feel of your desktop.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

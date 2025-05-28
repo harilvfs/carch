@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Installs and configures Neovim for an enhanced, efficient code editing environment.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1

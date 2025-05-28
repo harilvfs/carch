@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Customizes the GRUB bootloader with improved aesthetics and settings for a more polished boot experience.
-
 clear
 
 source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
