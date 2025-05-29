@@ -313,6 +313,36 @@ check_display_manager() {
     fi
 }
 
+setup_numlock() {
+    echo -e "${GREEN}Setting up NumLock on login...${ENDCOLOR}"
+
+    sudo tee "/usr/local/bin/numlock" > /dev/null <<'EOF'
+#!/bin/bash
+for tty in /dev/tty{1..6}; do
+    /usr/bin/setleds -D +num < "$tty"
+done
+EOF
+    sudo chmod +x /usr/local/bin/numlock
+
+    sudo tee "/etc/systemd/system/numlock.service" > /dev/null <<'EOF'
+[Unit]
+Description=Enable NumLock on startup
+[Service]
+ExecStart=/usr/local/bin/numlock
+StandardInput=tty
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    if fzf_confirm "Enable NumLock on boot?"; then
+        sudo systemctl enable numlock.service
+        echo -e "${GREEN}NumLock will be enabled on boot.${ENDCOLOR}"
+    else
+        echo -e "${GREEN}NumLock setup skipped.${ENDCOLOR}"
+    fi
+}
+
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
@@ -331,6 +361,7 @@ configure_wallpapers
 setup_xinitrc
 setup_tty_login
 check_display_manager
+setup_numlock
 print_message "$GREEN" "DWM setup completed successfully!"
 print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
 print_message "$CYAN" "https://github.com/harilvfs/dwm/blob/main/config"
