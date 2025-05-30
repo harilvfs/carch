@@ -6,6 +6,5 @@
 ratatui = "ratatui"
 ba = "ba"
 
-# File-specific exclusions (uncomment if needed)
-# [files]
-# exclude = ["*.md", "CHANGELOG.md"]
+[files]
+exclude = ["CHANGELOG.md"]
