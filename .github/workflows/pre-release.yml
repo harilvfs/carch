@@ -1,5 +1,4 @@
-name: Carch Release
-name: Carch Release
+name: Carch Pre-Release
 on:
   workflow_dispatch:
     inputs:
