@@ -101,7 +101,8 @@ jobs:
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
-          
+          prerelease: true
+
       - name: Create Release and Generate Notes
         id: create_release_notes
         uses: softprops/action-gh-release@v2
