@@ -1,9 +1,5 @@
 # git-cliff ~ default configuration file
 # https://git-cliff.org/docs/configuration
-#
-# Lines starting with "#" are comments.
-# Configuration options are organized into tables and keys.
-# See documentation for more information on available options.
 
 [remote.github]
 owner = "harilvfs"
@@ -14,6 +10,7 @@ header = """
 # Changelog\n
 All notable changes to this project will be documented in this file.\n
 """
+
 body = """
 {% if version and previous.version -%}
 ## [{{ version | trim_start_matches(pat="v") }}](https://github.com/harilvfs/carch/compare/{{ previous.version }}...{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
@@ -27,11 +24,11 @@ body = """
 ### {{ group | striptags | trim | upper_first }}
 
 {% for commit in commits %}
-- {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
-  {{ commit.message | upper_first | trim }} \
-  [{{ commit.id | truncate(length=7) }}](https://github.com/harilvfs/carch/commit/{{ commit.id }})\
-  {%- if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}](https://github.com/harilvfs/carch/pull/{{ commit.remote.pr_number }}){% endif %}\
-  {%- if commit.remote.username %} by @{{ commit.remote.username }}{% endif %}\
+- [{{ commit.id | truncate(length=7, end="") }}](https://github.com/harilvfs/carch/commit/{{ commit.id }})
+  {%- if commit.scope %} *({{ commit.scope | lower }})* {% endif -%} \
+  {{ commit.message | upper_first | trim }}\
+  {%- if commit.remote.username %} by @{{ commit.remote.username }}{% endif -%}\
+  {%- if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}](https://github.com/harilvfs/carch/pull/{{ commit.remote.pr_number }}){% endif -%}\
   {%- if commit.breaking %} [**breaking**]{% endif %}
 {% endfor %}
 
@@ -43,30 +40,27 @@ footer = """
 """
 
 trim = true
+
 postprocessors = [
   { pattern = '<!-- Please read CONTRIBUTING.md before submitting any pull request. -->', replace = "" },
-  { pattern = '>---+\n', replace = '' },
+  { pattern = '>---+\n', replace = "" },
   { pattern = ' +\n', replace = "\n" },
 ]
 
 [git]
-# parse the commits based on https://www.conventionalcommits.org
 conventional_commits = true
-# filter out the commits that are not conventional
 filter_unconventional = true
-# process each line of a commit as an individual commit
 split_commits = false
-# regex for preprocessing the commit messages
+
 commit_preprocessors = [
   { pattern = '\\((\\w+\\s)?#([0-9]+)\\)', replace = "" },
-
   { pattern = '(Add setup script)', replace = "feat(setup): ${1}" },
   { pattern = '(Fix install command)', replace = "fix(install): ${1}" },
   { pattern = '(Improve logging)', replace = "chore(logging): ${1}" },
   { pattern = '(Update config defaults)', replace = "refactor(config): ${1}" },
-
   { pattern = '\\<[d]eatil\\>', replace = "detail" }
 ]
+
 commit_parsers = [
   { message = "^feat", group = "<!-- 0 -->🚀 Features" },
   { message = "^fix", group = "<!-- 1 -->🐛 Bug Fixes" },
@@ -91,5 +85,6 @@ filter_commits = false
 tag_pattern = "v[0-9]*"
 topo_order = false
 sort_commits = "oldest"
-skip_tags = "v0.1.0-pre"
-ignore_tags = "pre"
+skip_tags = ""
+ignore_tags = ""
+
