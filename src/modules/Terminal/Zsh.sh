@@ -139,9 +139,9 @@ fi
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
     if command -v pacman &>/dev/null; then
-        sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting
+        sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting trash-cli
     elif command -v dnf &>/dev/null; then
-        sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting unzip
+        sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting unzip trash-cli
 
         # due to eza is no longer available on fedora 42 installing manually
         print_message "$CYAN" "Installing eza manually for Fedora..."

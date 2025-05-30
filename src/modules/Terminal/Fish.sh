@@ -48,11 +48,11 @@ detect_distro() {
 }
 
 install_fish() {
-    print_color "$CYAN" "Installing Fish shell..."
+    print_color "$CYAN" "Installing dependencies..."
     if command -v pacman &>/dev/null; then
-        sudo pacman -S --noconfirm fish noto-fonts-emoji git eza
+        sudo pacman -S --noconfirm fish noto-fonts-emoji git eza trash-cli
     elif command -v dnf &>/dev/null; then
-        sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git
+        sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git trash-cli
 
         print_color "$CYAN" "Installing eza manually for Fedora..."
         if command -v eza &>/dev/null; then
