@@ -1,4 +1,5 @@
-name: Carch Pre-Release
+name: Carch Release
+name: Carch Release
 on:
   workflow_dispatch:
     inputs:
@@ -48,13 +49,13 @@ jobs:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-index-
-          
+
       - name: Install musl-tools
         run: sudo apt-get update && sudo apt-get install musl-tools
-          
+
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
-        
+
       - name: Get Latest Release Tag
         id: get_latest
         run: |
@@ -65,15 +66,15 @@ jobs:
           release_date=$(date +'%Y.%m.%d')
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
           echo "release_date=$release_date" >> $GITHUB_ENV
-          
+
       - name: Build x86_64 binary
         run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
-        
+
       - name: Build aarch64 binary
         run: |
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-          
+
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -82,67 +83,30 @@ jobs:
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
-          
-      - name: Create Release and Generate Notes
-        id: create_release_notes
+
+      - name: Install git-cliff
+        run: |
+          curl -sSfL https://github.com/orhun/git-cliff/releases/latest/download/git-cliff-linux-amd64.tar.gz | tar -xz -C /usr/local/bin git-cliff
+          chmod +x /usr/local/bin/git-cliff
+          git-cliff --version
+
+      - name: Generate changelog with git-cliff
+        id: generate_changelog
+        run: |
+          git-cliff --config git-cliff.toml --tag ${{ github.event.inputs.tag_version }} > changelog.md
+          cat changelog.md
+
+      - name: Create Release with git-cliff notes
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
-          draft: true
-          generate_release_notes: true
-          
-      - name: Cleanup Release Notes
-        id: customize_notes
+          draft: false
+          generate_release_notes: false
+          body_path: changelog.md
+
+      - name: Upload binaries to Release
         run: |
-          NOTES=$(gh release view ${{ github.event.inputs.tag_version }} --json body -q '.body')
-          
-          FILTERED_NOTES=$(echo "$NOTES" | sed -E '/[Pp][Rr][Ee][Vv][Ii][Ee][Ww]/d' | sed -E '/[Cc][Hh][Aa][Nn][Gg][Ee][Ll][Oo][Gg]/d')
-          
-          FILTERED_NOTES=$(echo "$FILTERED_NOTES" | awk '
-          BEGIN { in_section = ""; buffer = ""; }
-          /^### (📖 )?Documentation/ { in_section = "docs"; buffer = $0 "\n"; next; }
-          /^### (🔄 )?Other Changes/ { in_section = "other"; buffer = $0 "\n"; next; }
-          /^### / { 
-            if (in_section != "") {
-              if (buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/) {
-                buffer = "";
-              } else {
-                printf "%s", buffer;
-              }
-              in_section = "";
-              buffer = "";
-            }
-            print $0;
-            next;
-          }
-          { 
-            if (in_section != "") {
-              buffer = buffer $0 "\n";
-            } else {
-              print $0;
-            }
-          }
-          END {
-            if (in_section != "") {
-              if (!(buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/)) {
-                printf "%s", buffer;
-              }
-            }
-          }')
-          
-          echo "$FILTERED_NOTES" > release_notes.md
-          
-          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
-          
-          echo -e "$BADGES$(cat release_notes.md)" > release_notes.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Update Release with Customized Notes
-        run: |
-          gh release edit ${{ github.event.inputs.tag_version }} --notes-file release_notes.md
           gh release upload ${{ github.event.inputs.tag_version }} ./build/x86_64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-          gh release edit ${{ github.event.inputs.tag_version }} --draft=false --prerelease=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
