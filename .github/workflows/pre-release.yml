@@ -76,7 +76,6 @@ jobs:
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
-          prerelease: true
 
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v4
@@ -86,12 +85,18 @@ jobs:
         env:
           OUTPUT: BODY.md
 
+      - name: Prepend download badges to changelog
+        run: |
+          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
+          echo -e "${BADGES}$(cat BODY.md)" > BODY.md
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
-          draft: true 
+          draft: false 
+          prerelease: true
           generate_release_notes: false
           body_path: BODY.md
 
