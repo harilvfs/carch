@@ -229,7 +229,7 @@ install_icons() {
 
         sudo mkdir -p "${ICON_DIR}/${size}x${size}/apps"
 
-        curl -sSL "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/assets/icons/product_logo_${size}.png" \
+        curl -sSL "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/assets/icons/carch_logo_${size}.png" \
             -o "${TMP_DIR}/carch_${size}.png"
 
         sudo mv "${TMP_DIR}/carch_${size}.png" "${ICON_DIR}/${size}x${size}/apps/carch.png"
