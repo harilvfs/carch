@@ -30,14 +30,6 @@ jobs:
           echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
           
-      - name: Update man page version
-        run: |
-          sed -i "s/\.TH \"carch\" \"1\" \"[^\"]*\" \"Carch [^\"]*\" \"Carch Manual\"/.TH \"carch\" \"1\" \"$CURRENT_MONTH $CURRENT_YEAR\" \"Carch $VERSION\" \"Carch Manual\"/" ./man/carch.1
-      
-      - name: Update Cargo.toml version
-        run: |
-          sed -i "s/^version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$VERSION\"/" Cargo.toml
-      
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -56,17 +48,6 @@ jobs:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-index-
-          
-      - name: Run cargo build to update Cargo.lock
-        run: cargo build --release
-          
-      - name: Commit version changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add ./man/carch.1 Cargo.toml Cargo.lock
-          git commit -m "Update version to $VERSION for release"
-          git push
           
       - name: Install musl-tools
         run: sudo apt-get update && sudo apt-get install -y musl-tools
