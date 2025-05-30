@@ -7,4 +7,4 @@ ratatui = "ratatui"
 ba = "ba"
 
 [files]
-exclude = ["CHANGELOG.md"]
+ignore-files = ["CHANGELOG.md"]
