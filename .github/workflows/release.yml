@@ -72,11 +72,14 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
 
+      - name: Find previous tag
+        run: echo "PREV_TAG=$(git describe --tags --abbrev=0 ${{ github.event.inputs.tag_version }}^)" >> $GITHUB_ENV
+
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --tag ${{ github.event.inputs.tag_version }} --strip header
+          args: --from ${{ env.PREV_TAG }} --to ${{ github.event.inputs.tag_version }} --strip header
         env:
           OUTPUT: BODY.md
 
