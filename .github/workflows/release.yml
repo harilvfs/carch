@@ -69,30 +69,19 @@ jobs:
           git push
           
       - name: Install musl-tools
-        run: sudo apt-get update && sudo apt-get install musl-tools
-          
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
-        
-      - name: Get Latest Release Tag
-        id: get_latest
-        run: |
-          latest_tag=$(curl -s https://api.github.com/repos/harilvfs/carch/releases/latest | jq -r '.tag_name')
-          if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
-            latest_tag="v4.1.0"
-          fi
-          release_date=$(date +'%Y.%m.%d')
-          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
-          echo "release_date=$release_date" >> $GITHUB_ENV
-          
+
       - name: Build x86_64 binary
         run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
-        
+
       - name: Build aarch64 binary
         run: |
           cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-          
+
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -101,68 +90,34 @@ jobs:
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
-          prerelease: true
 
-      - name: Create Release and Generate Notes
-        id: create_release_notes
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: BODY.md
+
+      - name: Prepend download badges to changelog
+        run: |
+          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
+          echo -e "${BADGES}$(cat BODY.md)" > BODY.md
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
-          draft: true
-          generate_release_notes: true
-          
-      - name: Cleanup Release Notes
-        id: customize_notes
+          draft: false 
+          prerelease: false
+          generate_release_notes: false
+          body_path: BODY.md
+
+      - name: Upload binaries to release
         run: |
-          NOTES=$(gh release view ${{ github.event.inputs.tag_version }} --json body -q '.body')
-          
-          FILTERED_NOTES=$(echo "$NOTES" | sed -E '/[Pp][Rr][Ee][Vv][Ii][Ee][Ww]/d' | sed -E '/[Cc][Hh][Aa][Nn][Gg][Ee][Ll][Oo][Gg]/d')
-          
-          FILTERED_NOTES=$(echo "$FILTERED_NOTES" | awk '
-          BEGIN { in_section = ""; buffer = ""; }
-          /^### (📖 )?Documentation/ { in_section = "docs"; buffer = $0 "\n"; next; }
-          /^### (🔄 )?Other Changes/ { in_section = "other"; buffer = $0 "\n"; next; }
-          /^### / { 
-            if (in_section != "") {
-              if (buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/) {
-                buffer = "";
-              } else {
-                printf "%s", buffer;
-              }
-              in_section = "";
-              buffer = "";
-            }
-            print $0;
-            next;
-          }
-          { 
-            if (in_section != "") {
-              buffer = buffer $0 "\n";
-            } else {
-              print $0;
-            }
-          }
-          END {
-            if (in_section != "") {
-              if (!(buffer ~ /^### (📖 )?Documentation\n$/ || buffer ~ /^### (🔄 )?Other Changes\n$/)) {
-                printf "%s", buffer;
-              }
-            }
-          }')
-          
-          echo "$FILTERED_NOTES" > release_notes.md
-          
-          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
-          
-          echo -e "$BADGES$(cat release_notes.md)" > release_notes.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Update Release with Customized Notes
-        run: |
-          gh release edit ${{ github.event.inputs.tag_version }} --notes-file release_notes.md
-          gh release upload ${{ github.event.inputs.tag_version }} ./build/x86_64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-          gh release edit ${{ github.event.inputs.tag_version }} --draft=false --prerelease=true
+          gh release upload ${{ github.event.inputs.tag_version }} \
+            ./build/x86_64-unknown-linux-musl/release/carch \
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
