@@ -82,6 +82,7 @@ jobs:
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
+          prerelease: true
 
       - name: Install git-cliff
         run: |
@@ -96,7 +97,7 @@ jobs:
       - name: Generate changelog with git-cliff
         id: generate_changelog
         run: |
-          git-cliff --config git-cliff.toml --tag ${{ github.event.inputs.tag_version }} > changelog.md
+          git-cliff --config git-cliff.toml --from $latest_tag --to ${{ github.event.inputs.tag_version }} > changelog.md
           cat changelog.md
 
       - name: Create Release with git-cliff notes
