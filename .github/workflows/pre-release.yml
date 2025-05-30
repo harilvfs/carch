@@ -10,8 +10,10 @@ on:
         description: 'Release title (e.g., v1.1.1@Y-M-D)'
         required: true
         type: string
+
 permissions:
   contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Set up version variables
         run: |
           VERSION=$(echo "${{ github.event.inputs.tag_version }}" | sed 's/^v//')
@@ -29,19 +31,19 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
-          
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-musl
-      
+
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-registry-
-          
+
       - name: Cache Cargo index
         uses: actions/cache@v4
         with:
@@ -60,19 +62,32 @@ jobs:
         run: |
           latest_tag=$(curl -s https://api.github.com/repos/harilvfs/carch/releases/latest | jq -r '.tag_name')
           if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
-            latest_tag="v4.1.0"
+            echo "No latest release tag found, changelog will be generated from start"
+            latest_tag=""
           fi
-          release_date=$(date +'%Y.%m.%d')
           echo "latest_tag=$latest_tag" >> $GITHUB_ENV
-          echo "release_date=$release_date" >> $GITHUB_ENV
 
-      - name: Build x86_64 binary
-        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          # --unreleased to include commits not yet tagged?
+          # We add --tag with the new tag; add --from only if latest_tag exists
+          args: ${{ env.latest_tag && format('--from {}', env.latest_tag) }} --tag ${{ github.event.inputs.tag_version }} --strip header
+        env:
+          OUTPUT: changelog.md
 
-      - name: Build aarch64 binary
-        run: |
-          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
-          mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+      - name: Show generated changelog
+        run: cat changelog.md
+
+      - name: Create Release with git-cliff notes
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_version }}
+          name: ${{ github.event.inputs.tag_title }}
+          draft: false
+          generate_release_notes: false
+          body_path: changelog.md
 
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
@@ -84,30 +99,13 @@ jobs:
           retention-days: 1
           prerelease: true
 
-      - name: Install git-cliff
-        run: |
-          sudo apt-get update && sudo apt-get install -y jq
-          LATEST_TAG=$(curl -s https://api.github.com/repos/orhun/git-cliff/releases/latest | jq -r '.tag_name')
-          FILE="git-cliff-${LATEST_TAG#v}-x86_64-unknown-linux-gnu.tar.gz"
-          curl -sL "https://github.com/orhun/git-cliff/releases/download/${LATEST_TAG}/${FILE}" | tar -xz
-          mv git-cliff-*/git-cliff /usr/local/bin/git-cliff
-          chmod +x /usr/local/bin/git-cliff
-          git-cliff --version
+      - name: Build x86_64 binary
+        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
 
-      - name: Generate changelog with git-cliff
-        id: generate_changelog
+      - name: Build aarch64 binary
         run: |
-          git-cliff --config git-cliff.toml --from $latest_tag --to ${{ github.event.inputs.tag_version }} > changelog.md
-          cat changelog.md
-
-      - name: Create Release with git-cliff notes
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.inputs.tag_version }}
-          name: ${{ github.event.inputs.tag_title }}
-          draft: false
-          generate_release_notes: false
-          body_path: changelog.md
+          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
+          mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
 
       - name: Upload binaries to Release
         run: |
