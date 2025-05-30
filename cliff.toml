@@ -24,15 +24,11 @@ body = """
 ### {{ group | striptags | trim | upper_first }}
 
 {% for commit in commits %}
-- [{{ commit.id | truncate(length=7, end="") }}](https://github.com/harilvfs/carch/commit/{{ commit.id }})
-  {%- if commit.scope %} *({{ commit.scope | lower }})* {% endif -%} \
-  {{ commit.message | upper_first | trim }}\
-  {%- if commit.remote.username %} by @{{ commit.remote.username }}{% endif -%}\
-  {%- if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}](https://github.com/harilvfs/carch/pull/{{ commit.remote.pr_number }}){% endif -%}\
-  {%- if commit.breaking %} [**breaking**]{% endif %}
+- [{{ commit.id | truncate(length=7, end="") }}](https://github.com/harilvfs/carch/commit/{{ commit.id }}) {% if commit.scope %} *({{ commit.scope | lower }})* {% endif %}{{ commit.message | upper_first | trim }}{%- if commit.remote.username %} by @{{ commit.remote.username }}{% endif %}{%- if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}](https://github.com/harilvfs/carch/pull/{{ commit.remote.pr_number }}){% endif %}{%- if commit.breaking %} [**breaking**]{% endif %}
 {% endfor %}
 
 {% endfor %}
+
 """
 
 footer = """
