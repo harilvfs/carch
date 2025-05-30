@@ -5,6 +5,3 @@
 [default.extend-words]
 ratatui = "ratatui"
 ba = "ba"
-
-[files]
-ignore-files = ["CHANGELOG.md"]
