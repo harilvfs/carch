@@ -15,7 +15,7 @@ detect_distro() {
 }
 
 check_essential_dependencies() {
-    local dependencies=("git" "wget" "curl")
+    local dependencies=("git" "wget" "curl" "trash-cli")
     local missing=()
 
     for dep in "${dependencies[@]}"; do
