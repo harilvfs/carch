@@ -13,5 +13,3 @@ jobs:
 
       - name: Run spellcheck
         uses: crate-ci/typos@v1.32.0
-        with:
-          args: --ignore CHANGELOG.md .

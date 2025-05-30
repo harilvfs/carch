@@ -5,3 +5,6 @@
 [default.extend-words]
 ratatui = "ratatui"
 ba = "ba"
+
+[files]
+extend-exclude = ["CHANGELOG.md"]
