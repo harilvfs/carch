@@ -10,24 +10,21 @@ on:
         description: 'Release title (e.g., v1.1.1@Y-M-D)'
         required: true
         type: string
-      previous_release:
-        description: 'Previous release tag (e.g., v1.1.0)'
-        required: true
-        type: string
 
 permissions:
   contents: write
 
 jobs:
-  update_versions_and_build:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up version variables
+      - name: Set version variables
         run: |
           VERSION=$(echo "${{ github.event.inputs.tag_version }}" | sed 's/^v//')
           CURRENT_MONTH=$(date +'%B')
