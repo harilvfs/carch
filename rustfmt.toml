@@ -1,3 +1,7 @@
+# configuration for https://rust-lang.github.io/rustfmt/
+
+# need rust nightly due to some fmt options are not on stable
+
 max_width = 100
 hard_tabs = false
 tab_spaces = 4
