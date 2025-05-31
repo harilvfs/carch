@@ -90,7 +90,7 @@ jobs:
       - name: Create Pull Request for changelog
         uses: peter-evans/create-pull-request@v7.0.8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           commit-message: "update CHANGELOG for v${{ github.event.inputs.version }}"
           branch: changelog/${{ github.event.inputs.version }}
           title: "changelog for v${{ github.event.inputs.version }}"
@@ -98,3 +98,4 @@ jobs:
             This PR includes the changelog for version v${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
           delete-branch: false
+
