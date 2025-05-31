@@ -55,7 +55,7 @@ jobs:
           branch: update-docs-version/${{ github.event.inputs.version }}
           title: "Update docs version to ${{ github.event.inputs.version }}"
           body: |
-            PR to update the version number in the documentation site config to ${{ github.event.inputs.version }}.
+           update the version number in site config to ${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
           delete-branch: true
 
