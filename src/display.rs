@@ -78,41 +78,41 @@ fn display_help_tui() -> Result<(), Box<dyn std::error::Error,>,> {
         let timeout =
             tick_rate.checked_sub(last_tick.elapsed(),).unwrap_or_else(|| Duration::from_secs(0,),);
 
-        if crossterm::event::poll(timeout,)? {
-            if let Event::Key(key,) = event::read()? {
-                match key.code {
-                    KeyCode::Char('q',) | KeyCode::Esc => break,
-                    KeyCode::Up | KeyCode::Char('k',) => {
-                        if app.needs_scrolling() {
+        if crossterm::event::poll(timeout,)?
+            && let Event::Key(key,) = event::read()?
+        {
+            match key.code {
+                KeyCode::Char('q',) | KeyCode::Esc => break,
+                KeyCode::Up | KeyCode::Char('k',) => {
+                    if app.needs_scrolling() {
+                        app.scroll_up();
+                    }
+                },
+                KeyCode::Down | KeyCode::Char('j',) => {
+                    if app.needs_scrolling() {
+                        app.scroll_down();
+                    }
+                },
+                KeyCode::PageUp => {
+                    if app.needs_scrolling() {
+                        for _ in 0..10 {
                             app.scroll_up();
                         }
-                    },
-                    KeyCode::Down | KeyCode::Char('j',) => {
-                        if app.needs_scrolling() {
+                    }
+                },
+                KeyCode::PageDown => {
+                    if app.needs_scrolling() {
+                        for _ in 0..10 {
                             app.scroll_down();
                         }
-                    },
-                    KeyCode::PageUp => {
-                        if app.needs_scrolling() {
-                            for _ in 0..10 {
-                                app.scroll_up();
-                            }
-                        }
-                    },
-                    KeyCode::PageDown => {
-                        if app.needs_scrolling() {
-                            for _ in 0..10 {
-                                app.scroll_down();
-                            }
-                        }
-                    },
-                    KeyCode::Home => {
-                        if app.needs_scrolling() {
-                            app.scroll = 0;
-                        }
-                    },
-                    _ => {},
-                }
+                    }
+                },
+                KeyCode::Home => {
+                    if app.needs_scrolling() {
+                        app.scroll = 0;
+                    }
+                },
+                _ => {},
             }
         }
 

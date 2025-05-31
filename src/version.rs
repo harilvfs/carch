@@ -4,7 +4,7 @@ use std::process::Command;
 
 pub fn get_current_version() -> String {
     let version = env!("CARGO_PKG_VERSION");
-    format!("Carch version {}", version)
+    format!("Carch version {version}")
 }
 
 pub fn get_latest_version() -> Result<String, Box<dyn Error,>,> {
@@ -58,8 +58,8 @@ pub fn check_for_updates() -> io::Result<(),> {
                 .trim_matches('"',)
                 .trim_matches('\'',);
 
-            println!("Current version: {}", current_version);
-            println!("Latest version: {}", latest);
+            println!("Current version: {current_version}");
+            println!("Latest version: {latest}");
 
             if latest != current_version {
                 println!("\nA new version of Carch is available!");
@@ -74,7 +74,7 @@ pub fn check_for_updates() -> io::Result<(),> {
             }
         },
         Err(e,) => {
-            eprintln!("Error checking for updates: {}", e);
+            eprintln!("Error checking for updates: {e}");
             return Err(io::Error::other(e.to_string(),),);
         },
     }

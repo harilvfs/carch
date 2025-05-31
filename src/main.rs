@@ -62,8 +62,8 @@ fn main() -> Result<(), Box<dyn std::error::Error,>,> {
                 if settings.log_mode {
                     let _ = commands::log_message("INFO", "Listing available scripts",);
                 }
-                let temp_dir = TempDir::new()
-                    .map_err(|e| format!("Failed to create temp directory: {}", e),)?;
+                let temp_dir =
+                    TempDir::new().map_err(|e| format!("Failed to create temp directory: {e}"),)?;
                 let temp_path = temp_dir.path();
                 extract_scripts(temp_path,)?;
                 let modules_dir = temp_path.join("modules",);
@@ -82,10 +82,10 @@ fn main() -> Result<(), Box<dyn std::error::Error,>,> {
 
                 if settings.log_mode {
                     let _ =
-                        commands::log_message("INFO", &format!("Version query: {}", version_str),);
+                        commands::log_message("INFO", &format!("Version query: {version_str}"),);
                 }
 
-                println!("{}", version_str);
+                println!("{version_str}");
                 Ok((),)
             },
             "--check-update" => {
@@ -141,7 +141,7 @@ fn main() -> Result<(), Box<dyn std::error::Error,>,> {
                 if settings.log_mode {
                     let _ = commands::log_message("ERROR", &error_msg,);
                 }
-                eprintln!("{}", error_msg);
+                eprintln!("{error_msg}");
                 Ok((),)
             },
         }
@@ -169,10 +169,10 @@ fn process_args(
             let version_str = version::get_current_version();
 
             if settings.log_mode {
-                let _ = commands::log_message("INFO", &format!("Version query: {}", version_str),);
+                let _ = commands::log_message("INFO", &format!("Version query: {version_str}"),);
             }
 
-            println!("{}", version_str);
+            println!("{version_str}");
             Ok((),)
         },
         "--check-update" => {
@@ -198,7 +198,7 @@ fn process_args(
             if settings.log_mode {
                 let _ = commands::log_message("ERROR", &error_msg,);
             }
-            eprintln!("{}", error_msg);
+            eprintln!("{error_msg}");
             Ok((),)
         },
     }
@@ -259,7 +259,7 @@ fn run_tui(settings: Settings,) -> Result<(), Box<dyn std::error::Error,>,> {
             let result = Command::new("bash",)
                 .arg(script_path,)
                 .status()
-                .map_err(|e| io::Error::other(format!("Failed to execute script: {}", e),),);
+                .map_err(|e| io::Error::other(format!("Failed to execute script: {e}"),),);
 
             if settings.log_mode {
                 match &result {
@@ -313,7 +313,7 @@ fn get_scripts_path(log_mode: bool,) -> Result<PathBuf, Box<dyn std::error::Erro
                 );
             }
             fs::create_dir_all(&carch_cache,)
-                .map_err(|e| format!("Failed to create cache directory: {}", e),)?;
+                .map_err(|e| format!("Failed to create cache directory: {e}"),)?;
         }
 
         let should_extract = !modules_dir.exists() || scripts_need_update(&modules_dir,);
@@ -338,7 +338,7 @@ fn get_scripts_path(log_mode: bool,) -> Result<PathBuf, Box<dyn std::error::Erro
     }
 
     let temp_dir = TempDir::new().map_err(|e| {
-        let error_msg = format!("Failed to create temp directory: {}", e);
+        let error_msg = format!("Failed to create temp directory: {e}");
         if log_mode {
             let _ = commands::log_message("ERROR", &error_msg,);
         }
@@ -383,13 +383,13 @@ fn scripts_need_update(modules_dir: &Path,) -> bool {
 
     let current_version = version::get_current_version();
 
-    format!("{}", stored_version) != current_version
+    format!("{stored_version}") != current_version
 }
 
 fn extract_scripts(temp_path: &Path,) -> Result<(), Box<dyn std::error::Error,>,> {
     let modules_dir = temp_path.join("modules",);
     fs::create_dir_all(&modules_dir,)
-        .map_err(|e| format!("Failed to create modules directory: {}", e),)?;
+        .map_err(|e| format!("Failed to create modules directory: {e}"),)?;
 
     extract_dir_recursive(&EMBEDDED_DIR, &modules_dir,)?;
 
@@ -399,12 +399,12 @@ fn extract_scripts(temp_path: &Path,) -> Result<(), Box<dyn std::error::Error,>,
     }
 
     std::os::unix::fs::symlink(&modules_dir, &preview_link,)
-        .map_err(|e| format!("Failed to create preview symlink: {}", e),)?;
+        .map_err(|e| format!("Failed to create preview symlink: {e}"),)?;
 
     let version_file = modules_dir.join(".version",);
     let current_version = version::get_current_version();
     fs::write(&version_file, current_version,)
-        .map_err(|e| format!("Failed to write version file: {}", e),)?;
+        .map_err(|e| format!("Failed to write version file: {e}"),)?;
 
     Ok((),)
 }
@@ -463,10 +463,10 @@ fn cleanup_cache_dir(log_mode: bool,) {
                 if log_mode {
                     let _ = commands::log_message(
                         "ERROR",
-                        &format!("Failed to clean up cache directory: {}", e),
+                        &format!("Failed to clean up cache directory: {e}"),
                     );
                 }
-                eprintln!("Warning: Failed to clean up cache directory: {}", e);
+                eprintln!("Warning: Failed to clean up cache directory: {e}");
             } else if log_mode {
                 let _ = commands::log_message("INFO", "Cache directory cleaned up successfully",);
             }
@@ -485,9 +485,8 @@ fn setup_cleanup_handlers(log_mode: bool,) {
     },)
     {
         if log_mode {
-            let _ =
-                commands::log_message("ERROR", &format!("Failed to set cleanup handler: {}", e),);
+            let _ = commands::log_message("ERROR", &format!("Failed to set cleanup handler: {e}"),);
         }
-        eprintln!("Warning: Failed to set up cleanup handler: {}", e);
+        eprintln!("Warning: Failed to set up cleanup handler: {e}");
     }
 }

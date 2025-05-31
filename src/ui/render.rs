@@ -112,12 +112,13 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
         )
         .highlight_symbol("",);
 
-    if let Some(selected,) = app.scripts.state.selected() {
-        if selected < app.scripts.items.len() && app.scripts.items[selected].is_category_header {
-            script_list = script_list.highlight_style(
-                Style::default().bg(Color::Yellow,).fg(Color::Black,).add_modifier(Modifier::BOLD,),
-            );
-        }
+    if let Some(selected,) = app.scripts.state.selected()
+        && selected < app.scripts.items.len()
+        && app.scripts.items[selected].is_category_header
+    {
+        script_list = script_list.highlight_style(
+            Style::default().bg(Color::Yellow,).fg(Color::Black,).add_modifier(Modifier::BOLD,),
+        );
     }
 
     if let Some(selected,) = app.scripts.state.selected() {
@@ -146,7 +147,7 @@ fn render_preview(f: &mut Frame, app: &App, area: Rect,) {
                 if app.scripts.items[selected].is_category_header {
                     String::from("Preview: Select a script to see preview",)
                 } else {
-                    format!("Preview: {} (Press 'p' for full screen)", name)
+                    format!("Preview: {name} (Press 'p' for full screen)")
                 }
             } else {
                 String::from("Preview",)
@@ -202,12 +203,12 @@ fn render_fullscreen_preview(f: &mut Frame, app: &App,) {
     let line_count = app.preview_content.lines().count() as u16;
     let percentage = if line_count > 0 {
         let scroll_percentage = (app.preview_scroll as f32 / line_count as f32 * 100.0).min(100.0,);
-        format!(" [{:.0}%] ", scroll_percentage)
+        format!(" [{scroll_percentage:.0}%] ")
     } else {
         " [0%] ".to_string()
     };
 
-    let formatted_title = format!("{}{}", title, percentage);
+    let formatted_title = format!("{title}{percentage}");
 
     let block = create_rounded_block()
         .title(Span::styled(formatted_title, Style::default().fg(Color::Cyan,),),)
@@ -271,7 +272,7 @@ fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
 
     let status = Line::from(vec![
         Span::styled(
-            format!(" MODE: {} ", mode_text),
+            format!(" MODE: {mode_text} "),
             Style::default().bg(mode_color,).fg(Color::Black,).add_modifier(Modifier::BOLD,),
         ),
         Span::raw(" ",),
@@ -290,7 +291,7 @@ fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
         ),
         Span::raw(" ",),
         Span::styled(
-            format!(" {} ", version),
+            format!(" {version} "),
             Style::default().bg(Color::Cyan,).fg(Color::Black,).add_modifier(Modifier::BOLD,),
         ),
     ],);
@@ -444,168 +445,162 @@ where
 
         terminal.draw(|f| ui(f, &mut app, &options,),)?;
 
-        if let Ok(true,) = event::poll(Duration::from_millis(100,),) {
-            if let Ok(event,) = event::read() {
-                match event {
-                    Event::Key(key,) => {
-                        if options.log_mode {
-                            let key_name = match key.code {
-                                KeyCode::Char(c,) => format!("Char('{}')", c),
-                                KeyCode::Enter => "Enter".to_string(),
-                                KeyCode::Esc => "Escape".to_string(),
-                                KeyCode::Up => "Up".to_string(),
-                                KeyCode::Down => "Down".to_string(),
-                                KeyCode::Left => "Left".to_string(),
-                                KeyCode::Right => "Right".to_string(),
-                                _ => format!("{:?}", key.code),
-                            };
-                            let _ = crate::commands::log_message(
-                                "DEBUG",
-                                &format!("Key pressed: {} in mode: {:?}", key_name, app.mode),
-                            );
-                        }
+        if let Ok(true,) = event::poll(Duration::from_millis(100,),)
+            && let Ok(event,) = event::read()
+        {
+            match event {
+                Event::Key(key,) => {
+                    if options.log_mode {
+                        let key_name = match key.code {
+                            KeyCode::Char(c,) => format!("Char('{c}')"),
+                            KeyCode::Enter => "Enter".to_string(),
+                            KeyCode::Esc => "Escape".to_string(),
+                            KeyCode::Up => "Up".to_string(),
+                            KeyCode::Down => "Down".to_string(),
+                            KeyCode::Left => "Left".to_string(),
+                            KeyCode::Right => "Right".to_string(),
+                            _ => format!("{:?}", key.code),
+                        };
+                        let _ = crate::commands::log_message(
+                            "DEBUG",
+                            &format!("Key pressed: {} in mode: {:?}", key_name, app.mode),
+                        );
+                    }
 
-                        match app.mode {
-                            AppMode::Normal => {
-                                if key.code == KeyCode::Char('p',) && !options.show_preview {
-                                    if options.log_mode {
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            "Preview toggle attempted but previews are disabled",
-                                        );
-                                    }
-                                } else if key.code == KeyCode::Enter {
-                                    if let Some(selected,) = app.scripts.state.selected() {
-                                        if selected < app.scripts.items.len() {
-                                            let is_category =
-                                                app.scripts.items[selected].is_category_header;
-
-                                            if is_category {
-                                                let category =
-                                                    app.scripts.items[selected].category.clone();
-                                                app.toggle_category(&category,);
-                                            } else if app.multi_select_mode {
-                                                if !app.multi_selected_scripts.is_empty() {
-                                                    app.mode = AppMode::Confirm;
-                                                }
-                                            } else {
-                                                app.mode = AppMode::Confirm;
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    app.handle_key_normal_mode(key,);
+                    match app.mode {
+                        AppMode::Normal => {
+                            if key.code == KeyCode::Char('p',) && !options.show_preview {
+                                if options.log_mode {
+                                    let _ = crate::commands::log_message(
+                                        "INFO",
+                                        "Preview toggle attempted but previews are disabled",
+                                    );
                                 }
-                            },
-                            AppMode::Preview => {
-                                if !options.show_preview {
-                                    app.mode = AppMode::Normal;
-                                    if options.log_mode {
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            "Exiting preview mode because previews are disabled",
-                                        );
-                                    }
-                                } else {
-                                    app.handle_key_preview_mode(key,);
-                                }
-                            },
-                            AppMode::Search => app.handle_search_input(key,),
-                            AppMode::Confirm => {
-                                app.handle_key_confirmation_mode(key,);
-                                if key.code == KeyCode::Char('y',)
-                                    || key.code == KeyCode::Char('Y',)
+                            } else if key.code == KeyCode::Enter {
+                                if let Some(selected,) = app.scripts.state.selected()
+                                    && selected < app.scripts.items.len()
                                 {
-                                    if app.multi_select_mode
-                                        && !app.multi_selected_scripts.is_empty()
-                                    {
-                                        cleanup_terminal(&mut terminal,)?;
+                                    let is_category =
+                                        app.scripts.items[selected].is_category_header;
 
-                                        if options.log_mode {
-                                            let _ = crate::commands::log_message(
-                                                "INFO",
-                                                &format!(
-                                                    "Exiting UI to run {} selected scripts",
-                                                    app.multi_selected_scripts.len()
-                                                ),
-                                            );
+                                    if is_category {
+                                        let category = app.scripts.items[selected].category.clone();
+                                        app.toggle_category(&category,);
+                                    } else if app.multi_select_mode {
+                                        if !app.multi_selected_scripts.is_empty() {
+                                            app.mode = AppMode::Confirm;
                                         }
-
-                                        app.run_selected_scripts(&run_script_callback,)?;
-
-                                        if options.log_mode {
-                                            let _ = crate::commands::log_message(
-                                                "INFO",
-                                                "Multiple script execution completed, returning to UI",
-                                            );
-                                        }
-
-                                        enable_raw_mode()?;
-                                        let mut stdout = io::stdout();
-                                        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-
-                                        let backend = CrosstermBackend::new(stdout,);
-                                        terminal = Terminal::new(backend,)?;
-                                        terminal.clear()?;
-                                    } else if let Some(script_path,) = app.get_script_path() {
-                                        if options.log_mode {
-                                            let script_name = script_path
-                                                .file_name()
-                                                .unwrap_or_default()
-                                                .to_string_lossy();
-                                            let _ = crate::commands::log_message(
-                                                "INFO",
-                                                &format!(
-                                                    "Selected script for execution: {}",
-                                                    script_name
-                                                ),
-                                            );
-                                        }
-
-                                        cleanup_terminal(&mut terminal,)?;
-
-                                        if options.log_mode {
-                                            let _ = crate::commands::log_message(
-                                                "INFO",
-                                                "Exiting UI to run script",
-                                            );
-                                        }
-
-                                        run_script_callback(&script_path,)?;
-
-                                        if options.log_mode {
-                                            let _ = crate::commands::log_message(
-                                                "INFO",
-                                                "Script execution completed, returning to UI",
-                                            );
-                                        }
-
-                                        enable_raw_mode()?;
-                                        let mut stdout = io::stdout();
-                                        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-
-                                        let backend = CrosstermBackend::new(stdout,);
-                                        terminal = Terminal::new(backend,)?;
-                                        terminal.clear()?;
+                                    } else {
+                                        app.mode = AppMode::Confirm;
                                     }
                                 }
-                            },
-                            AppMode::Help => {
-                                app.handle_key_help_mode(key,);
-                            },
-                        }
-                    },
-                    Event::Mouse(mouse_event,) => {
-                        if options.log_mode {
-                            let _ = crate::commands::log_message(
-                                "DEBUG",
-                                &format!("Mouse event: {:?}", mouse_event),
-                            );
-                        }
-                        app.handle_mouse(mouse_event,);
-                    },
-                    _ => {},
-                }
+                            } else {
+                                app.handle_key_normal_mode(key,);
+                            }
+                        },
+                        AppMode::Preview => {
+                            if !options.show_preview {
+                                app.mode = AppMode::Normal;
+                                if options.log_mode {
+                                    let _ = crate::commands::log_message(
+                                        "INFO",
+                                        "Exiting preview mode because previews are disabled",
+                                    );
+                                }
+                            } else {
+                                app.handle_key_preview_mode(key,);
+                            }
+                        },
+                        AppMode::Search => app.handle_search_input(key,),
+                        AppMode::Confirm => {
+                            app.handle_key_confirmation_mode(key,);
+                            if key.code == KeyCode::Char('y',) || key.code == KeyCode::Char('Y',) {
+                                if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+                                    cleanup_terminal(&mut terminal,)?;
+
+                                    if options.log_mode {
+                                        let _ = crate::commands::log_message(
+                                            "INFO",
+                                            &format!(
+                                                "Exiting UI to run {} selected scripts",
+                                                app.multi_selected_scripts.len()
+                                            ),
+                                        );
+                                    }
+
+                                    app.run_selected_scripts(&run_script_callback,)?;
+
+                                    if options.log_mode {
+                                        let _ = crate::commands::log_message(
+                                            "INFO",
+                                            "Multiple script execution completed, returning to UI",
+                                        );
+                                    }
+
+                                    enable_raw_mode()?;
+                                    let mut stdout = io::stdout();
+                                    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+
+                                    let backend = CrosstermBackend::new(stdout,);
+                                    terminal = Terminal::new(backend,)?;
+                                    terminal.clear()?;
+                                } else if let Some(script_path,) = app.get_script_path() {
+                                    if options.log_mode {
+                                        let script_name = script_path
+                                            .file_name()
+                                            .unwrap_or_default()
+                                            .to_string_lossy();
+                                        let _ = crate::commands::log_message(
+                                            "INFO",
+                                            &format!(
+                                                "Selected script for execution: {script_name}"
+                                            ),
+                                        );
+                                    }
+
+                                    cleanup_terminal(&mut terminal,)?;
+
+                                    if options.log_mode {
+                                        let _ = crate::commands::log_message(
+                                            "INFO",
+                                            "Exiting UI to run script",
+                                        );
+                                    }
+
+                                    run_script_callback(&script_path,)?;
+
+                                    if options.log_mode {
+                                        let _ = crate::commands::log_message(
+                                            "INFO",
+                                            "Script execution completed, returning to UI",
+                                        );
+                                    }
+
+                                    enable_raw_mode()?;
+                                    let mut stdout = io::stdout();
+                                    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
+
+                                    let backend = CrosstermBackend::new(stdout,);
+                                    terminal = Terminal::new(backend,)?;
+                                    terminal.clear()?;
+                                }
+                            }
+                        },
+                        AppMode::Help => {
+                            app.handle_key_help_mode(key,);
+                        },
+                    }
+                },
+                Event::Mouse(mouse_event,) => {
+                    if options.log_mode {
+                        let _ = crate::commands::log_message(
+                            "DEBUG",
+                            &format!("Mouse event: {mouse_event:?}"),
+                        );
+                    }
+                    app.handle_mouse(mouse_event,);
+                },
+                _ => {},
             }
         }
     }

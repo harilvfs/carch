@@ -236,7 +236,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App,) {
         if app.multi_selected_scripts.len() > max_display {
             let more_count = app.multi_selected_scripts.len() - max_display;
             script_items.push(ListItem::new(Line::from(vec![Span::styled(
-                format!("   ... and {} more", more_count),
+                format!("   ... and {more_count} more"),
                 Style::default().fg(Color::DarkGray,),
             )],),),);
         }
