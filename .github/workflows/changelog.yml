@@ -106,4 +106,4 @@ jobs:
           body: |
             This PR includes the changelog for version v${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
-          delete-branch: true
+          delete-branch: false
