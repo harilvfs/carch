@@ -7,27 +7,56 @@ repo = "carch"
 
 [changelog]
 header = """
-# Changelog\n
-All notable changes to this project will be documented in this file.\n
+[![preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)](https://carch.chalisehari.com.np)\n
 """
 
 body = """
-{% if version and previous.version -%}
-## [{{ version | trim_start_matches(pat="v") }}](https://github.com/harilvfs/carch/compare/{{ previous.version }}...{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
-{%- elif version -%}
-## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
-{%- else -%}
-## [unreleased]
-{%- endif %}
+{%- macro remote_url() -%}
+  https://github.com/{{ remote.github.owner }}/{{ remote.github.repo }}
+{%- endmacro -%}
+
+{% macro print_commit(commit) -%}
+    - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
+        {% if commit.breaking %}[**breaking**] {% endif %}\
+        {{ commit.message | upper_first }} - \
+        ([{{ commit.id | truncate(length=7, end="") }}]({{ self::remote_url() }}/commit/{{ commit.id }}))\
+{% endmacro -%}
+
+{% if version %}\
+    {% if previous.version %}\
+        ## [{{ version | trim_start_matches(pat="v") }}]\
+          ({{ self::remote_url() }}/compare/{{ previous.version }}..{{ version }}) - {{ timestamp | date(format="%Y-%m-%d") }}
+    {% else %}\
+        ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+    {% endif %}\
+{% else %}\
+    ## [unreleased]
+{% endif %}\
 
 {% for group, commits in commits | group_by(attribute="group") %}
-### {{ group | striptags | trim | upper_first }}
-
-{% for commit in commits %}
-- [{{ commit.id | truncate(length=7, end="") }}](https://github.com/harilvfs/carch/commit/{{ commit.id }}) {% if commit.scope %} *({{ commit.scope | lower }})* {% endif %}{{ commit.message | upper_first | trim }}{%- if commit.remote.username %} by @{{ commit.remote.username }}{% endif %}{%- if commit.remote.pr_number %} in [#{{ commit.remote.pr_number }}](https://github.com/harilvfs/carch/pull/{{ commit.remote.pr_number }}){% endif %}{%- if commit.breaking %} [**breaking**]{% endif %}
-{% endfor %}
-
-{% endfor %}
+    ### {{ group | striptags | trim | upper_first }}
+    {% for commit in commits
+    | filter(attribute="scope")
+    | sort(attribute="scope") %}
+        {{ self::print_commit(commit=commit) }}
+    {%- endfor %}
+    {% for commit in commits %}
+        {%- if not commit.scope -%}
+            {{ self::print_commit(commit=commit) }}
+        {% endif -%}
+    {% endfor -%}
+{% endfor -%}
+{%- if github -%}
+{% if github.contributors | filter(attribute="is_first_time", value=true) | length != 0 %}
+  ## New Contributors ❤️
+{% endif %}\
+{% for contributor in github.contributors | filter(attribute="is_first_time", value=true) %}
+  * @{{ contributor.username }} made their first contribution
+    {%- if contributor.pr_number %} in \
+      [#{{ contributor.pr_number }}]({{ self::remote_url() }}/pull/{{ contributor.pr_number }}) \
+    {%- endif %}
+{%- endfor -%}
+{%- endif %}
 
 """
 
@@ -63,10 +92,9 @@ commit_parsers = [
   { message = "^test", group = "<!-- 6 -->🧪 Testing" },
   { message = "^(rust|cargo)", group = "<!-- 11 -->🦀 Rust" },
   { message = "^(ui|ux)", group = "<!-- 12 -->🖥️ UI/UX" },
-  { message = "^chore\\(release\\): prepare for", skip = true },
-  { message = "^chore\\(release\\): update changelog", skip = true },
-  { message = "^chore\\(release\\): update to", skip = true },
-  { message = "^chore\\(release\\): updated preview from release", skip = true },
+  { message = "^chore\\(release\\)", skip = true },
+  { message = "^chore: update CHANGELOG for v[0-9]+\\.[0-9]+\\.[0-9]+", skip = true },
+  { message = "^chore: release", skip = true },
   { message = "^chore\\(deps.*\\)", skip = true },
   { message = "^chore\\(pr\\)", skip = true },
   { message = "^chore\\(pull\\)", skip = true },
@@ -82,4 +110,3 @@ sort_commits = "oldest"
 skip_tags = ""
 ignore_tags = ""
 tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+"
-unreleased = ""
