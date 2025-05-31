@@ -34,9 +34,7 @@ body = """
 trim = true
 
 postprocessors = [
-  { pattern = '<!-- Please read CONTRIBUTING.md before submitting any pull request. -->', replace = "" },
-  { pattern = '>---+\n', replace = "" },
-  { pattern = ' +\n', replace = "\n" },
+  { pattern = '<REPO>', replace = "https://github.com/harilvfs/carch" },
 ]
 
 [git]
