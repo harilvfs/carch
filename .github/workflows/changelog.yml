@@ -87,20 +87,11 @@ jobs:
       - name: Cleanup git-cliff installation files
         run: rm -rf git-cliff-*
 
-      - name: Commit and push changelog
-        run: |
-          BRANCH_NAME=changelog/${{ github.event.inputs.version }}
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH_NAME"
-          git add CHANGELOG.md
-          git commit -m "update CHANGELOG for v${{ github.event.inputs.version }}"
-          git push origin "$BRANCH_NAME"
-
       - name: Create Pull Request for changelog
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "update CHANGELOG for v${{ github.event.inputs.version }}"
           branch: changelog/${{ github.event.inputs.version }}
           title: "changelog for v${{ github.event.inputs.version }}"
           body: |
