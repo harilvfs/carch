@@ -84,20 +84,18 @@ jobs:
         env:
           OUTPUT: BODY.md
 
-      - name: Remove '## [unreleased]' line from BODY.md
-        run: sed -i '/^## \[unreleased\]/d' BODY.md
-
-      - name: download badges to changelog
+      - name: badges & header
         run: |
-          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
-          echo -e "${BADGES}$(cat BODY.md)" > BODY.md
+          sed -i '/^## \[unreleased\]/d' BODY.md
+          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)"
+          printf "%s\n\n## What's Changed\n\n%s\n" "$BADGES" "$(cat BODY.md)" > BODY.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
-          draft: false 
+          draft: false
           prerelease: true
           generate_release_notes: false
           body_path: BODY.md
