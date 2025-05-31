@@ -21,7 +21,7 @@ install_github() {
     while true; do
         clear
 
-        options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Back to Main Menu")
+        options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Git-Cliff" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
                                                     --prompt="Choose options (TAB to select multiple): " \
@@ -99,6 +99,57 @@ install_github() {
                         echo "LazyGit installed successfully! Version: $version"
                     else
                         echo "LazyGit installation aborted."
+                    fi
+                fi
+                ;;
+
+            "Git-Cliff")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman git-cliff
+                    version=$(get_version git-cliff)
+                    echo "Git-Cliff installed successfully! Version: $version"
+                else
+                    echo "Installing Git-Cliff from GitHub releases..."
+
+                    if ! command -v tar &> /dev/null; then
+                        echo "Installing tar..."
+                        $pkg_manager tar
+                    fi
+
+                    if ! command -v wget &> /dev/null; then
+                        echo "Installing wget..."
+                        $pkg_manager wget
+                    fi
+
+                    latest_version=$(curl -s https://api.github.com/repos/orhun/git-cliff/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
+
+                    if [[ -z "$latest_version" ]]; then
+                        echo -e "${RED}:: Failed to fetch latest version. Exiting.${RESET}"
+                        continue
+                    fi
+
+                    echo "Latest version: $latest_version"
+
+                    tmp_dir=$(mktemp -d)
+                    cd "$tmp_dir" || exit 1
+
+                    echo "Downloading git-cliff binary..."
+                    if wget "https://github.com/orhun/git-cliff/releases/download/v${latest_version}/git-cliff-${latest_version}-x86_64-unknown-linux-gnu.tar.gz"; then
+                        tar -xvzf git-cliff-*.tar.gz
+
+                        cd "git-cliff-${latest_version}" || exit 1
+
+                        sudo mv git-cliff /usr/local/bin/
+                        sudo chmod +x /usr/local/bin/git-cliff
+
+                        cd /
+                        rm -rf "$tmp_dir"
+
+                        echo "Git-Cliff installed successfully! Version: $latest_version"
+                    else
+                        echo -e "${RED}:: Failed to download git-cliff.${RESET}"
+                        rm -rf "$tmp_dir"
                     fi
                 fi
                 ;;
