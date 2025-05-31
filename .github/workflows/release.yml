@@ -35,6 +35,7 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
+          echo "NEXT_TAG=${{ github.event.inputs.tag_version }}" >> $GITHUB_ENV
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -78,38 +79,33 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
 
-      - name: Create Draft GitHub Release (empty body)
-        run: |
-          gh release create ${{ github.event.inputs.tag_version }} \
-            --title "${{ github.event.inputs.tag_title }}" \
-            --draft=false --notes ""
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: ${{ github.event.inputs.previous_release }}..${{ env.NEXT_TAG }} --strip header
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT: BODY.md
+
+      - name: Prepend download badges to changelog
+        run: |
+          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
+          echo -e "${BADGES}$(cat BODY.md)" > BODY.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_version }}
+          name: ${{ github.event.inputs.tag_title }}
+          draft: false 
+          prerelease: true
+          generate_release_notes: false
+          body_path: BODY.md
 
       - name: Upload binaries to release
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
             ./build/x86_64-unknown-linux-musl/release/carch \
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate changelog
-        uses: orhun/git-cliff-action@v4
-        with:
-          config: cliff.toml
-          args: ${{ github.event.inputs.previous_release }}..${{ github.event.inputs.tag_version }} --strip header
-        env:
-          OUTPUT: BODY.md
-
-      - name: Prepend badges to changelog
-        run: |
-          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
-          echo -e "${BADGES}$(cat BODY.md)" > BODY.md
-
-      - name: Update release body with changelog + badges
-        run: |
-          gh release edit ${{ github.event.inputs.tag_version }} \
-            --notes-file BODY.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
