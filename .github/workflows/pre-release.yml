@@ -33,7 +33,6 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
-          echo "NEXT_TAG=${{ github.event.inputs.tag_version }}" >> $GITHUB_ENV
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -81,9 +80,12 @@ jobs:
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --unreleased --tag ${{ env.NEXT_TAG }} --strip header
+          args: --unreleased --strip header
         env:
           OUTPUT: BODY.md
+
+      - name: Remove '## [unreleased]' line from BODY.md
+        run: sed -i '/^## \[unreleased\]/d' BODY.md
 
       - name: Prepend download badges to changelog
         run: |
