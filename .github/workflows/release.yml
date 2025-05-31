@@ -84,6 +84,9 @@ jobs:
         env:
           OUTPUT: BODY.md
 
+      - name: Remove '## [unreleased]' line from BODY.md
+        run: sed -i '/^## \[unreleased\]/d' BODY.md
+
       - name: Prepend download badges to changelog
         run: |
           BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)\n\n"
