@@ -2,10 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-
-
-testin
-
 ## [5.0.0](https://github.com/harilvfs/carch/compare/v4.4.7...v5.0.0) - 2025-05-27
 
 
@@ -246,57 +242,7 @@ testin
 
 
 
-## [4.4.6](https://github.com/harilvfs/carch/compare/v4.4.6-pre...v4.4.6) - 2025-05-20
-
-
-### 🐛 Bug Fixes
-
-
-- [ed339f2](https://github.com/harilvfs/carch/commit/ed339f2aa4916bd56f5abf8c8d6bf119c2f84987) Typos [ pre-release ] build by @harilvfs
-
-- [98630b0](https://github.com/harilvfs/carch/commit/98630b00f812376bf25e9f61b022d57d0f02b3c0) Typos [ release notes ] by @harilvfs
-
-- [0e57533](https://github.com/harilvfs/carch/commit/0e57533acf07d3a76ef67f82809fef2c4fc83d53) Artifact versioning by @harilvfs
-
-- [155b645](https://github.com/harilvfs/carch/commit/155b645c835715e074443f4f4f159184204f4f3d) Ci dir by @harilvfs
-
-
-
-### 💼 Other
-
-
-- [208f8be](https://github.com/harilvfs/carch/commit/208f8bee12919e346adcbb11c335a0c1e515fd43) No needed prompts [ grub script ] by @harilvfs
-
-- [5794add](https://github.com/harilvfs/carch/commit/5794add59821a650e7dc72407a5c2bc7bd28b849) Artifact upload by @harilvfs
-
-- [4c2971e](https://github.com/harilvfs/carch/commit/4c2971e92c3e354b4e835e1b5d297a0b1c1ee5ea) Shenanigans by @harilvfs
-
-
-
-### 🚜 Refactor
-
-
-- [ae45f34](https://github.com/harilvfs/carch/commit/ae45f34c84b32607b5994534313ace98ed970926)  *(scripts)* Relocate shell scripts by @harilvfs
-
-
-
-### 📚 Documentation
-
-
-- [e15e321](https://github.com/harilvfs/carch/commit/e15e321af0710a30779b214b8be2bce58bbf150e) Cleanup by @harilvfs
-
-
-
-### ⚙️ Miscellaneous Tasks
-
-
-- [e5d8438](https://github.com/harilvfs/carch/commit/e5d8438fed5598ef536904803be77713e1a25978) Add ci monitor & check by @harilvfs
-
-- [90ed3df](https://github.com/harilvfs/carch/commit/90ed3dfc51f98b5e6dd73be9aa9b6e7e2b457207) Add status by @harilvfs
-
-
-
-## [4.4.6-pre](https://github.com/harilvfs/carch/compare/v4.4.5...v4.4.6-pre) - 2025-05-18
+## [4.4.6](https://github.com/harilvfs/carch/compare/v4.4.5...v4.4.6) - 2025-05-20
 
 
 ### 🚀 Features
@@ -315,6 +261,14 @@ testin
 
 - [ff7bcba](https://github.com/harilvfs/carch/commit/ff7bcbaea39dfcacf7f95b5c059d3f4b87227cfe) Typos [ grub theme script ] by @harilvfs
 
+- [ed339f2](https://github.com/harilvfs/carch/commit/ed339f2aa4916bd56f5abf8c8d6bf119c2f84987) Typos [ pre-release ] build by @harilvfs
+
+- [98630b0](https://github.com/harilvfs/carch/commit/98630b00f812376bf25e9f61b022d57d0f02b3c0) Typos [ release notes ] by @harilvfs
+
+- [0e57533](https://github.com/harilvfs/carch/commit/0e57533acf07d3a76ef67f82809fef2c4fc83d53) Artifact versioning by @harilvfs
+
+- [155b645](https://github.com/harilvfs/carch/commit/155b645c835715e074443f4f4f159184204f4f3d) Ci dir by @harilvfs
+
 
 
 ### 💼 Other
@@ -322,12 +276,27 @@ testin
 
 - [ecbbe95](https://github.com/harilvfs/carch/commit/ecbbe95a77b6693998133419727968e97e65d5ec) Typos by @harilvfs
 
+- [208f8be](https://github.com/harilvfs/carch/commit/208f8bee12919e346adcbb11c335a0c1e515fd43) No needed prompts [ grub script ] by @harilvfs
+
+- [5794add](https://github.com/harilvfs/carch/commit/5794add59821a650e7dc72407a5c2bc7bd28b849) Artifact upload by @harilvfs
+
+- [4c2971e](https://github.com/harilvfs/carch/commit/4c2971e92c3e354b4e835e1b5d297a0b1c1ee5ea) Shenanigans by @harilvfs
+
 
 
 ### 🚜 Refactor
 
 
 - [41a59ef](https://github.com/harilvfs/carch/commit/41a59ef6ca36fd8a5aff83faa030ef9db537c8c0) Redoing the lts kernel script by @harilvfs
+
+- [ae45f34](https://github.com/harilvfs/carch/commit/ae45f34c84b32607b5994534313ace98ed970926)  *(scripts)* Relocate shell scripts by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [e15e321](https://github.com/harilvfs/carch/commit/e15e321af0710a30779b214b8be2bce58bbf150e) Cleanup by @harilvfs
 
 
 
@@ -342,6 +311,10 @@ testin
 
 
 - [0902022](https://github.com/harilvfs/carch/commit/0902022d4e4c8eb2e02ad62c2c2b5ac0ca3c7338)  *(release)* Seprate for pre-release by @harilvfs
+
+- [e5d8438](https://github.com/harilvfs/carch/commit/e5d8438fed5598ef536904803be77713e1a25978) Add ci monitor & check by @harilvfs
+
+- [90ed3df](https://github.com/harilvfs/carch/commit/90ed3dfc51f98b5e6dd73be9aa9b6e7e2b457207) Add status by @harilvfs
 
 
 
@@ -476,8 +449,6 @@ testin
 ### ⚙️ Miscellaneous Tasks
 
 
-- [3385c62](https://github.com/harilvfs/carch/commit/3385c628e9cdf24c9bc16dd4adca4c813e6427ba) Update release to commit cargo.lock by @harilvfs
-
 - [91fa048](https://github.com/harilvfs/carch/commit/91fa048e2e62b568f1778675d4e8b23ab101af10) Add ci to update release in docs site by @harilvfs
 
 - [361f5e6](https://github.com/harilvfs/carch/commit/361f5e65989faf8aece99c4eb05757a060e91446) Style check shell scripts by @harilvfs
@@ -551,6 +522,8 @@ testin
 
 - [75ea430](https://github.com/harilvfs/carch/commit/75ea43059b6f70e8e15fa833c83c7db1fbb6ec77) Add man pages & cargo version update by @harilvfs
 
+- [3385c62](https://github.com/harilvfs/carch/commit/3385c628e9cdf24c9bc16dd4adca4c813e6427ba) Update release to commit cargo.lock by @harilvfs
+
 
 
 ## [4.4.2](https://github.com/harilvfs/carch/compare/v4.4.1...v4.4.2) - 2025-05-04
@@ -589,13 +562,6 @@ testin
 
 
 
-### 📚 Documentation
-
-
-- [dcfaa87](https://github.com/harilvfs/carch/commit/dcfaa87a98bf4bd8df9bd4d57d65a09461edc897) Update docs link by @harilvfs
-
-
-
 ### ⚙️ Miscellaneous Tasks
 
 
@@ -603,7 +569,7 @@ testin
 
 
 
-## [4.4.1](https://github.com/harilvfs/carch/compare/v4.3.7...v4.4.1) - 2025-04-28
+## [4.4.1](https://github.com/harilvfs/carch/compare/v4.3.7...v4.4.1) - 2025-04-30
 
 
 ### 🐛 Bug Fixes
@@ -624,6 +590,13 @@ testin
 
 
 
+### 📚 Documentation
+
+
+- [dcfaa87](https://github.com/harilvfs/carch/commit/dcfaa87a98bf4bd8df9bd4d57d65a09461edc897) Update docs link by @harilvfs
+
+
+
 ### ⚙️ Miscellaneous Tasks
 
 
@@ -637,52 +610,16 @@ testin
 ### 🚀 Features
 
 
-- [8c6fe1e](https://github.com/harilvfs/carch/commit/8c6fe1ed5f306e14cb640af31a7cd7b105110912) Add audio setup script by @harilvfs
-
-- [4079a3f](https://github.com/harilvfs/carch/commit/4079a3f8c0245e693791ffbe8d24a3f6001e7381) Add bluetooth setup script by @harilvfs
-
-- [829ff41](https://github.com/harilvfs/carch/commit/829ff417653fd1e2acb0a66964d6a937c1279aa1) Add noto & dejavu fonts by @harilvfs
-
-- [c547439](https://github.com/harilvfs/carch/commit/c5474399bcdd234e478ebd6b3e30abfc4341c476) Add multi select in package script by @harilvfs
-
 - [6bc1090](https://github.com/harilvfs/carch/commit/6bc1090b3a9a6912ef5b3ce944e899bc46770896) Add thorium browser support for fedora by @harilvfs
-
-
-
-### 🐛 Bug Fixes
-
-
-- [30ff7da](https://github.com/harilvfs/carch/commit/30ff7da64f4bf69219494746dab7e3d7f5ddfda4) Chaotic aur failing by @harilvfs
-
-- [13ef0a1](https://github.com/harilvfs/carch/commit/13ef0a1a8b3924ca88fd4becb5f19aa977158e8d) Typos by @harilvfs
-
-- [d37131f](https://github.com/harilvfs/carch/commit/d37131fc2ae018fc16c56c236be8dfb547cefedf) Minor fixes to script side by @harilvfs
-
-- [f1ff9ed](https://github.com/harilvfs/carch/commit/f1ff9edb4744409528617406f75ac339058f22da) Tui in runnin tty env by @harilvfs
 
 
 
 ### 💼 Other
 
 
-- [a63fdca](https://github.com/harilvfs/carch/commit/a63fdca80878db03178b6c62aef643ddca4b8a6e) Eza manual install fedora side by @harilvfs
-
-- [2352485](https://github.com/harilvfs/carch/commit/2352485e50f3f0e1d460afa0c60b40607da35ebb) Change title style & colors by @harilvfs
-
-- [fda96e6](https://github.com/harilvfs/carch/commit/fda96e65154fe99fffa4ca6dc97b22cee9a3b9e2) Bump version 4.3.6 [ stable ] by @harilvfs
-
-- [853f107](https://github.com/harilvfs/carch/commit/853f107240ba6d493301574223a96fea00cc4b4d) Add some use case dependencies by @harilvfs
-
 - [e5ebb61](https://github.com/harilvfs/carch/commit/e5ebb61b68e2625468f4e88c23137772623f9efd) Changelog v4.3.6 by @harilvfs
 
 - [45c8024](https://github.com/harilvfs/carch/commit/45c8024ed528b1877b5b79c85ec371595686fc54) Change help toggle to mode by @harilvfs
-
-
-
-### 🚜 Refactor
-
-
-- [632547b](https://github.com/harilvfs/carch/commit/632547b8503255bccdbf76f375f4b8d07e0becf6) Cleanup & fix fall back npm by @harilvfs
 
 
 
@@ -698,24 +635,6 @@ testin
 ### ⚙️ Miscellaneous Tasks
 
 
-- [7c0d541](https://github.com/harilvfs/carch/commit/7c0d5419761c414fb82accf3b291496e9fa114a7) Finally added gnome-keyring by @harilvfs
-
-- [be4c8f0](https://github.com/harilvfs/carch/commit/be4c8f0257db0f107627e08a22d6a2deb1a8d9ae) Minor left over pacman by @harilvfs
-
-- [fd5c699](https://github.com/harilvfs/carch/commit/fd5c699ef2c44e9b9761584b5588e29e3b26a050) Add wayland dependencies needed by @harilvfs
-
-- [40affb7](https://github.com/harilvfs/carch/commit/40affb7fe8fe6e04d795ea0c6bc5f5291c804041) Add papirus icon theme by @harilvfs
-
-- [72f36af](https://github.com/harilvfs/carch/commit/72f36afd6c79f23b8c5d34a8fc4ba3d236a30107) Wayland dependencies by @harilvfs
-
-- [f1d2a59](https://github.com/harilvfs/carch/commit/f1d2a59e29b2264a2e68b853fe8185861e29e0c7) Add some missing dependenceis by @harilvfs
-
-- [adc6fe8](https://github.com/harilvfs/carch/commit/adc6fe82e9e80710640180f690a12b9d1e373ea3) Lefted dependencies by @harilvfs
-
-- [9f1200f](https://github.com/harilvfs/carch/commit/9f1200fafff404fb5ebf45fd8b8c49bb1830f6a3) Add man pages dependencies by @harilvfs
-
-- [5c25cd9](https://github.com/harilvfs/carch/commit/5c25cd9ecac816a59445df335eb38c88e4d20e14) Add gtk dependencies by @harilvfs
-
 - [b57044a](https://github.com/harilvfs/carch/commit/b57044a391e3d75c62b432431f33ac3547609e1a) Test changelog workflow by @harilvfs
 
 - [d01bda3](https://github.com/harilvfs/carch/commit/d01bda33fe0484e00a4c9d34c23d3e3f8ecd04ff) Cleanup by @harilvfs
@@ -724,7 +643,7 @@ testin
 
 
 
-## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) - 2025-04-22
+## [4.3.6](https://github.com/harilvfs/carch/compare/v4.3.5...v4.3.6) - 2025-04-24
 
 
 ### 🚀 Features
@@ -734,6 +653,14 @@ testin
 
 - [f2346c9](https://github.com/harilvfs/carch/commit/f2346c97722fe45e3864e944115f0ef6d03d7e8d) Add install script (#413) by @harilvfs in [#413](https://github.com/harilvfs/carch/pull/413)
 
+- [8c6fe1e](https://github.com/harilvfs/carch/commit/8c6fe1ed5f306e14cb640af31a7cd7b105110912) Add audio setup script by @harilvfs
+
+- [4079a3f](https://github.com/harilvfs/carch/commit/4079a3f8c0245e693791ffbe8d24a3f6001e7381) Add bluetooth setup script by @harilvfs
+
+- [829ff41](https://github.com/harilvfs/carch/commit/829ff417653fd1e2acb0a66964d6a937c1279aa1) Add noto & dejavu fonts by @harilvfs
+
+- [c547439](https://github.com/harilvfs/carch/commit/c5474399bcdd234e478ebd6b3e30abfc4341c476) Add multi select in package script by @harilvfs
+
 
 
 ### 🐛 Bug Fixes
@@ -742,6 +669,14 @@ testin
 - [b14af17](https://github.com/harilvfs/carch/commit/b14af17547a538438877951d63178d88d6ac0497) Color code in fish script by @harilvfs
 
 - [ce46c37](https://github.com/harilvfs/carch/commit/ce46c3742efbd0977f272727b81ac261983cb7fd) Xinitrc calling & promt by @harilvfs
+
+- [30ff7da](https://github.com/harilvfs/carch/commit/30ff7da64f4bf69219494746dab7e3d7f5ddfda4) Chaotic aur failing by @harilvfs
+
+- [13ef0a1](https://github.com/harilvfs/carch/commit/13ef0a1a8b3924ca88fd4becb5f19aa977158e8d) Typos by @harilvfs
+
+- [d37131f](https://github.com/harilvfs/carch/commit/d37131fc2ae018fc16c56c236be8dfb547cefedf) Minor fixes to script side by @harilvfs
+
+- [f1ff9ed](https://github.com/harilvfs/carch/commit/f1ff9edb4744409528617406f75ac339058f22da) Tui in runnin tty env by @harilvfs
 
 
 
@@ -762,6 +697,14 @@ testin
 
 - [bc1d4da](https://github.com/harilvfs/carch/commit/bc1d4dacdf3bd7af4317b86096037f58514560bf) Cleanup script & commands by @harilvfs
 
+- [a63fdca](https://github.com/harilvfs/carch/commit/a63fdca80878db03178b6c62aef643ddca4b8a6e) Eza manual install fedora side by @harilvfs
+
+- [2352485](https://github.com/harilvfs/carch/commit/2352485e50f3f0e1d460afa0c60b40607da35ebb) Change title style & colors by @harilvfs
+
+- [fda96e6](https://github.com/harilvfs/carch/commit/fda96e65154fe99fffa4ca6dc97b22cee9a3b9e2) Bump version 4.3.6 [ stable ] by @harilvfs
+
+- [853f107](https://github.com/harilvfs/carch/commit/853f107240ba6d493301574223a96fea00cc4b4d) Add some use case dependencies by @harilvfs
+
 
 
 ### 🦀 Rust
@@ -774,6 +717,13 @@ testin
 - [138bcb0](https://github.com/harilvfs/carch/commit/138bcb0661cc49b5cb7c97017890f93e60c84c83) Changes adapt from ratatui v29 (#414) by @harilvfs in [#414](https://github.com/harilvfs/carch/pull/414)
 
 - [af778a9](https://github.com/harilvfs/carch/commit/af778a9f8cb6472d7a7dd553b9876916fce4024c) Structure changed ui (#415) by @harilvfs in [#415](https://github.com/harilvfs/carch/pull/415)
+
+
+
+### 🚜 Refactor
+
+
+- [632547b](https://github.com/harilvfs/carch/commit/632547b8503255bccdbf76f375f4b8d07e0becf6) Cleanup & fix fall back npm by @harilvfs
 
 
 
@@ -800,6 +750,24 @@ testin
 
 
 - [61c5cd8](https://github.com/harilvfs/carch/commit/61c5cd8580adb5a5e15e2944ac78ebdc5090f7e1) Add slock dependencies by @harilvfs
+
+- [7c0d541](https://github.com/harilvfs/carch/commit/7c0d5419761c414fb82accf3b291496e9fa114a7) Finally added gnome-keyring by @harilvfs
+
+- [be4c8f0](https://github.com/harilvfs/carch/commit/be4c8f0257db0f107627e08a22d6a2deb1a8d9ae) Minor left over pacman by @harilvfs
+
+- [fd5c699](https://github.com/harilvfs/carch/commit/fd5c699ef2c44e9b9761584b5588e29e3b26a050) Add wayland dependencies needed by @harilvfs
+
+- [40affb7](https://github.com/harilvfs/carch/commit/40affb7fe8fe6e04d795ea0c6bc5f5291c804041) Add papirus icon theme by @harilvfs
+
+- [72f36af](https://github.com/harilvfs/carch/commit/72f36afd6c79f23b8c5d34a8fc4ba3d236a30107) Wayland dependencies by @harilvfs
+
+- [f1d2a59](https://github.com/harilvfs/carch/commit/f1d2a59e29b2264a2e68b853fe8185861e29e0c7) Add some missing dependenceis by @harilvfs
+
+- [adc6fe8](https://github.com/harilvfs/carch/commit/adc6fe82e9e80710640180f690a12b9d1e373ea3) Lefted dependencies by @harilvfs
+
+- [9f1200f](https://github.com/harilvfs/carch/commit/9f1200fafff404fb5ebf45fd8b8c49bb1830f6a3) Add man pages dependencies by @harilvfs
+
+- [5c25cd9](https://github.com/harilvfs/carch/commit/5c25cd9ecac816a59445df335eb38c88e4d20e14) Add gtk dependencies by @harilvfs
 
 
 
