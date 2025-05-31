@@ -1,7 +1,6 @@
 # typos.toml - Configuration file for typos spellchecker
 
 [default]
-# Define custom word mappings to ignore specific cases
 [default.extend-words]
 ratatui = "ratatui"
 ba = "ba"
