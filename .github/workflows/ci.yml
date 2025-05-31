@@ -26,23 +26,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust
+      - name: Install nightly Rust
         uses: dtolnay/rust-toolchain@nightly
 
+      - name: Add rustfmt component
+        run: rustup component add rustfmt --toolchain nightly
+
       - name: Check formatting
-        run: cargo fmt --all --check
+        run: cargo +nightly fmt --all --check
+
+  clippy:
+    name: Lints
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install nightly Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Add clippy component
+        run: rustup component add clippy --toolchain nightly
 
       - name: Run clippy
-        run: cargo clippy
+        run: cargo +nightly clippy
 
       - name: Run clippy with warnings denied
-        run: cargo clippy -- -Dwarnings
+        run: cargo +nightly clippy -- -D warnings
 
       - name: Cargo check (default)
-        run: cargo check --workspace --locked
+        run: cargo +nightly check --workspace --locked
 
       - name: Cargo check (no default features)
-        run: cargo check --workspace --locked --no-default-features
+        run: cargo +nightly check --workspace --locked --no-default-features
 
       - name: Cargo check (all features)
-        run: cargo check --workspace --locked --all-features
+        run: cargo +nightly check --workspace --locked --all-features
