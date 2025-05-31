@@ -82,7 +82,7 @@ jobs:
           git-cliff --version
 
       - name: Generate changelog with git-cliff
-        run: git cliff -o CHANGELOG.md
+        run: git-cliff -o CHANGELOG.md
 
       - name: Cleanup git-cliff installation files
         run: rm -rf git-cliff-*
