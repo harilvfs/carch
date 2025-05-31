@@ -14,13 +14,13 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-      
+
       - name: Get latest release tag if not specified
         id: get_tag
         run: |
           if [ "${{ github.event.inputs.tag_name }}" = "latest" ]; then
             LATEST_PRERELEASE=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases?per_page=10" | jq -r '[.[] | select(.prerelease==true)] | first | .tag_name')
-            
+
             if [ -z "$LATEST_PRERELEASE" ] || [ "$LATEST_PRERELEASE" = "null" ]; then
               LATEST_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
               echo "No prereleases found, using latest release: $LATEST_TAG"
@@ -32,46 +32,46 @@ jobs:
           else
             echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
           fi
-      
+
       - name: Download Carch binary
         run: |
           curl -L "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/carch" -o carch
           chmod +x carch
           sudo mv carch /usr/local/bin/
-      
+
       - name: Arch-based Dependencies
         run: |
           cat > install_arch_deps.sh << 'EOF'
           #!/bin/bash
-          
+
           pacman -Syu --noconfirm
           pacman -S --noconfirm fzf
-          
+
           echo "Installed packages:"
           pacman -Q fzf
           EOF
           chmod +x install_arch_deps.sh
-          
+
           docker run --rm -v $PWD:/work archlinux:latest bash -c "cd /work && ./install_arch_deps.sh"
-      
-      - name: VHS Docker Image 
+
+      - name: VHS Docker Image
         run: |
           cat > Dockerfile.vhs << 'EOF'
           FROM archlinux:latest AS arch_deps
-          
+
           RUN pacman -Syu --noconfirm && \
               pacman -S --noconfirm fzf
-          
+
           FROM ghcr.io/charmbracelet/vhs
-          
+
           COPY --from=arch_deps /usr/bin/fzf /usr/bin/fzf
-          
-          
+
+
           RUN which fzf
           EOF
-          
+
           docker build -t vhs-with-arch-deps -f Dockerfile.vhs .
-      
+
       - name: Generate preview with VHS
         run: |
           docker run --rm \
@@ -79,10 +79,10 @@ jobs:
             -v /usr/local/bin/carch:/usr/local/bin/carch \
             vhs-with-arch-deps \
             /vhs/.github/preview.tape
-      
+
       - name: Create .github directory if it doesn't exist
         run: mkdir -p .github
-      
+
       - name: Move preview.gif
         run: |
           if [ -f "preview.gif" ]; then
@@ -100,16 +100,16 @@ jobs:
               exit 1
             fi
           fi
-      
+
       - name: Clean
         run: |
           rm -f Dockerfile.vhs install_arch_deps.sh
-      
+
       - name: Create PR
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          commit-message: "Updated preview from release ${{ env.TAG_NAME }}"
+          commit-message: "chore(release): updated preview from release ${{ env.TAG_NAME }}"
           branch: feature/preview-update
           title: "preview: Updated preview from release ${{ env.TAG_NAME }}"
           body: |

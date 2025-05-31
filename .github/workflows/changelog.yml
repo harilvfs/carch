@@ -29,7 +29,7 @@ jobs:
           repository: carch-org/docs
           token: ${{ secrets.PAT_TOKEN }}
           fetch-depth: 1
-          
+
       - name: Update version in config.ts
         run: |
           CONFIG_FILE="docs/.vitepress/config.ts"
@@ -91,7 +91,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          commit-message: "chore: update CHANGELOG for v${{ github.event.inputs.version }}"
+          commit-message: "chore(release): update changelog for v${{ github.event.inputs.version }}"
           branch: changelog/${{ github.event.inputs.version }}
           title: "changelog for v${{ github.event.inputs.version }}"
           body: |
