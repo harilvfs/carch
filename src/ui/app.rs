@@ -226,10 +226,10 @@ impl App {
 
             if item.is_category_header {
                 self.visible_items.push(i,);
-            } else if let Some(expanded,) = self.expanded_categories.get(&item.category,) {
-                if *expanded {
-                    self.visible_items.push(i,);
-                }
+            } else if let Some(expanded,) = self.expanded_categories.get(&item.category,)
+                && *expanded
+            {
+                self.visible_items.push(i,);
             }
         }
 
@@ -258,35 +258,35 @@ impl App {
             self.scripts.state.select(Some(self.visible_items[0],),);
         }
 
-        if let Some(selected,) = self.scripts.state.selected() {
-            if let Some(pos,) = self.visible_items.iter().position(|&i| i == selected,) {
-                self.list_state.select(Some(pos,),);
-            }
+        if let Some(selected,) = self.scripts.state.selected()
+            && let Some(pos,) = self.visible_items.iter().position(|&i| i == selected,)
+        {
+            self.list_state.select(Some(pos,),);
         }
     }
 
     pub fn update_preview(&mut self,) {
-        if let Some(selected,) = self.scripts.state.selected() {
-            if selected < self.scripts.items.len() {
-                if self.scripts.items[selected].is_category_header {
-                    self.preview_content = format!(
-                        "No preview available for category: {}\n\nPlease select a script to see its content.",
-                        self.scripts.items[selected].category
-                    );
-                    self.preview_scroll = 0;
-                    return;
-                }
+        if let Some(selected,) = self.scripts.state.selected()
+            && selected < self.scripts.items.len()
+        {
+            if self.scripts.items[selected].is_category_header {
+                self.preview_content = format!(
+                    "No preview available for category: {}\n\nPlease select a script to see its content.",
+                    self.scripts.items[selected].category
+                );
+                self.preview_scroll = 0;
+                return;
+            }
 
-                let script_path = &self.scripts.items[selected].path;
-                match fs::read_to_string(script_path,) {
-                    Ok(content,) => {
-                        self.preview_content = content;
-                        self.preview_scroll = 0;
-                    },
-                    Err(_,) => {
-                        self.preview_content = "Error loading script content".to_string();
-                    },
-                }
+            let script_path = &self.scripts.items[selected].path;
+            match fs::read_to_string(script_path,) {
+                Ok(content,) => {
+                    self.preview_content = content;
+                    self.preview_scroll = 0;
+                },
+                Err(_,) => {
+                    self.preview_content = "Error loading script content".to_string();
+                },
             }
         }
     }
@@ -311,30 +311,28 @@ impl App {
 
             self.update_visible_items();
 
-            if let Some(selected_idx,) = currently_selected {
-                if selected_idx < self.scripts.items.len() {
-                    let selected_item = &self.scripts.items[selected_idx];
+            if let Some(selected_idx,) = currently_selected
+                && selected_idx < self.scripts.items.len()
+            {
+                let selected_item = &self.scripts.items[selected_idx];
 
-                    if !self.visible_items.contains(&selected_idx,)
-                        && selected_item.category == category
-                        && !selected_item.is_category_header
-                    {
-                        if let Some(&header_idx,) = self.visible_items.iter().find(|&&idx| {
-                            idx < self.scripts.items.len()
-                                && self.scripts.items[idx].is_category_header
-                                && self.scripts.items[idx].category == category
-                        },)
-                        {
-                            self.scripts.state.select(Some(header_idx,),);
-                        }
-                    }
+                if !self.visible_items.contains(&selected_idx,)
+                    && selected_item.category == category
+                    && !selected_item.is_category_header
+                    && let Some(&header_idx,) = self.visible_items.iter().find(|&&idx| {
+                        idx < self.scripts.items.len()
+                            && self.scripts.items[idx].is_category_header
+                            && self.scripts.items[idx].category == category
+                    },)
+                {
+                    self.scripts.state.select(Some(header_idx,),);
                 }
             }
 
-            if let Some(selected,) = self.scripts.state.selected() {
-                if let Some(pos,) = self.visible_items.iter().position(|&i| i == selected,) {
-                    self.list_state.select(Some(pos,),);
-                }
+            if let Some(selected,) = self.scripts.state.selected()
+                && let Some(pos,) = self.visible_items.iter().position(|&i| i == selected,)
+            {
+                self.list_state.select(Some(pos,),);
             }
 
             self.update_preview();
@@ -342,34 +340,30 @@ impl App {
     }
 
     pub fn toggle_preview_mode(&mut self,) {
-        if let Some(selected,) = self.scripts.state.selected() {
-            if selected < self.scripts.items.len() {
-                let prev_mode = self.mode;
-                self.mode = match self.mode {
-                    AppMode::Normal => AppMode::Preview,
-                    AppMode::Preview => AppMode::Normal,
-                    AppMode::Search => AppMode::Normal,
-                    AppMode::Confirm => AppMode::Normal,
-                    AppMode::Help => AppMode::Normal,
-                };
+        if let Some(selected,) = self.scripts.state.selected()
+            && selected < self.scripts.items.len()
+        {
+            let prev_mode = self.mode;
+            self.mode = match self.mode {
+                AppMode::Normal => AppMode::Preview,
+                AppMode::Preview => AppMode::Normal,
+                AppMode::Search => AppMode::Normal,
+                AppMode::Confirm => AppMode::Normal,
+                AppMode::Help => AppMode::Normal,
+            };
 
-                let ui_options = UiOptions::default();
-                if ui_options.log_mode {
-                    if prev_mode == AppMode::Normal && self.mode == AppMode::Preview {
-                        let _ = crate::commands::log_message(
-                            "INFO",
-                            "Entered full-screen preview mode",
-                        );
-                    } else if prev_mode == AppMode::Preview && self.mode == AppMode::Normal {
-                        let _ = crate::commands::log_message(
-                            "INFO",
-                            "Exited full-screen preview mode",
-                        );
-                    }
+            let ui_options = UiOptions::default();
+            if ui_options.log_mode {
+                if prev_mode == AppMode::Normal && self.mode == AppMode::Preview {
+                    let _ =
+                        crate::commands::log_message("INFO", "Entered full-screen preview mode",);
+                } else if prev_mode == AppMode::Preview && self.mode == AppMode::Normal {
+                    let _ =
+                        crate::commands::log_message("INFO", "Exited full-screen preview mode",);
                 }
-
-                self.update_preview();
             }
+
+            self.update_preview();
         }
     }
 
@@ -740,15 +734,14 @@ impl App {
     }
 
     pub fn toggle_script_selection(&mut self,) {
-        if let Some(selected,) = self.scripts.state.selected() {
-            if selected < self.scripts.items.len()
-                && !self.scripts.items[selected].is_category_header
-            {
-                if self.multi_selected_scripts.contains(&selected,) {
-                    self.multi_selected_scripts.retain(|&x| x != selected,);
-                } else {
-                    self.multi_selected_scripts.push(selected,);
-                }
+        if let Some(selected,) = self.scripts.state.selected()
+            && selected < self.scripts.items.len()
+            && !self.scripts.items[selected].is_category_header
+        {
+            if self.multi_selected_scripts.contains(&selected,) {
+                self.multi_selected_scripts.retain(|&x| x != selected,);
+            } else {
+                self.multi_selected_scripts.push(selected,);
             }
         }
     }

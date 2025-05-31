@@ -18,7 +18,7 @@ pub fn log_message(log_type: &str, message: &str,) -> io::Result<(),> {
     let mut file = fs::OpenOptions::new().create(true,).append(true,).open(log_file,)?;
 
     let timestamp = chrono::Local::now().format("%Y-%m-%d %H:%M:%S",).to_string();
-    let log_entry = format!("{} [{}] {}\n", timestamp, log_type, message);
+    let log_entry = format!("{timestamp} [{log_type}] {message}\n");
 
     file.write_all(log_entry.as_bytes(),)?;
 

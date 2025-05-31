@@ -43,30 +43,28 @@ impl ScriptListApp {
         if let Ok(entries,) = fs::read_dir(script_dir,) {
             for entry in entries.flatten() {
                 let path = entry.path();
-                if path.is_dir() {
-                    if let Some(category_name,) = path.file_name().and_then(|n| n.to_str(),) {
-                        self.categories.push(category_name.to_string(),);
+                if path.is_dir()
+                    && let Some(category_name,) = path.file_name().and_then(|n| n.to_str(),)
+                {
+                    self.categories.push(category_name.to_string(),);
 
-                        let mut category_scripts = Vec::new();
-                        if let Ok(script_entries,) = fs::read_dir(&path,) {
-                            for script_entry in script_entries.flatten() {
-                                let script_path = script_entry.path();
-                                if script_path.is_file()
-                                    && script_path.extension().and_then(|ext| ext.to_str(),)
-                                        == Some("sh",)
-                                {
-                                    if let Some(script_name,) =
-                                        script_path.file_stem().and_then(|n| n.to_str(),)
-                                    {
-                                        category_scripts.push(script_name.to_string(),);
-                                    }
-                                }
+                    let mut category_scripts = Vec::new();
+                    if let Ok(script_entries,) = fs::read_dir(&path,) {
+                        for script_entry in script_entries.flatten() {
+                            let script_path = script_entry.path();
+                            if script_path.is_file()
+                                && script_path.extension().and_then(|ext| ext.to_str(),)
+                                    == Some("sh",)
+                                && let Some(script_name,) =
+                                    script_path.file_stem().and_then(|n| n.to_str(),)
+                            {
+                                category_scripts.push(script_name.to_string(),);
                             }
                         }
-
-                        category_scripts.sort();
-                        self.scripts.push(category_scripts,);
                     }
+
+                    category_scripts.sort();
+                    self.scripts.push(category_scripts,);
                 }
             }
         }
@@ -139,31 +137,31 @@ fn display_script_list_tui(script_dir: &Path,) -> Result<(), Box<dyn std::error:
         let timeout =
             tick_rate.checked_sub(last_tick.elapsed(),).unwrap_or_else(|| Duration::from_secs(0,),);
 
-        if crossterm::event::poll(timeout,)? {
-            if let Event::Key(key,) = event::read()? {
-                match key.code {
-                    KeyCode::Char('q',) | KeyCode::Esc => break,
-                    KeyCode::Up | KeyCode::Char('k',) => app.move_cursor_up(),
-                    KeyCode::Down | KeyCode::Char('j',) => app.move_cursor_down(),
-                    KeyCode::PageUp => {
-                        for _ in 0..10 {
-                            app.move_cursor_up();
-                        }
-                    },
-                    KeyCode::PageDown => {
-                        for _ in 0..10 {
-                            app.move_cursor_down();
-                        }
-                    },
-                    KeyCode::Home => {
-                        app.scroll = 0;
-                        app.cursor_position = 0;
-                    },
-                    KeyCode::Enter => {
-                        app.toggle_current_category();
-                    },
-                    _ => {},
-                }
+        if crossterm::event::poll(timeout,)?
+            && let Event::Key(key,) = event::read()?
+        {
+            match key.code {
+                KeyCode::Char('q',) | KeyCode::Esc => break,
+                KeyCode::Up | KeyCode::Char('k',) => app.move_cursor_up(),
+                KeyCode::Down | KeyCode::Char('j',) => app.move_cursor_down(),
+                KeyCode::PageUp => {
+                    for _ in 0..10 {
+                        app.move_cursor_up();
+                    }
+                },
+                KeyCode::PageDown => {
+                    for _ in 0..10 {
+                        app.move_cursor_down();
+                    }
+                },
+                KeyCode::Home => {
+                    app.scroll = 0;
+                    app.cursor_position = 0;
+                },
+                KeyCode::Enter => {
+                    app.toggle_current_category();
+                },
+                _ => {},
             }
         }
 
@@ -221,7 +219,7 @@ fn ui(f: &mut Frame, app: &ScriptListApp,) {
 
         content.push(Line::from(vec![
             Span::styled(cursor_indicator, Style::default().fg(Color::Yellow,),),
-            Span::styled(format!("{}:", category), category_style,),
+            Span::styled(format!("{category}:"), category_style,),
         ],),);
 
         if is_selected {
@@ -233,7 +231,7 @@ fn ui(f: &mut Frame, app: &ScriptListApp,) {
             } else {
                 for script in &app.scripts[i] {
                     content.push(Line::from(Span::styled(
-                        format!("    - {}", script),
+                        format!("    - {script}"),
                         Style::default().fg(Color::Yellow,),
                     ),),);
                 }
@@ -296,10 +294,10 @@ pub fn display_script_list_text(script_dir: &Path,) -> Result<(), Box<dyn std::e
     if let Ok(entries,) = fs::read_dir(script_dir,) {
         for entry in entries.flatten() {
             let path = entry.path();
-            if path.is_dir() {
-                if let Some(name,) = path.file_name().and_then(|n| n.to_str(),) {
-                    categories.push((name.to_string(), path,),);
-                }
+            if path.is_dir()
+                && let Some(name,) = path.file_name().and_then(|n| n.to_str(),)
+            {
+                categories.push((name.to_string(), path,),);
             }
         }
     }
@@ -307,7 +305,7 @@ pub fn display_script_list_text(script_dir: &Path,) -> Result<(), Box<dyn std::e
     categories.sort_by(|a, b| a.0.cmp(&b.0,),);
 
     for (category, path,) in categories {
-        println!("\x1b[36m{}:\x1b[0m", category);
+        println!("\x1b[36m{category}:\x1b[0m");
 
         let mut script_files = Vec::new();
         if let Ok(script_entries,) = fs::read_dir(&path,) {
@@ -315,10 +313,9 @@ pub fn display_script_list_text(script_dir: &Path,) -> Result<(), Box<dyn std::e
                 let script_path = script_entry.path();
                 if script_path.is_file()
                     && script_path.extension().and_then(|ext| ext.to_str(),) == Some("sh",)
+                    && let Some(script_name,) = script_path.file_stem().and_then(|n| n.to_str(),)
                 {
-                    if let Some(script_name,) = script_path.file_stem().and_then(|n| n.to_str(),) {
-                        script_files.push(script_name.to_string(),);
-                    }
+                    script_files.push(script_name.to_string(),);
                 }
             }
         }
@@ -326,10 +323,10 @@ pub fn display_script_list_text(script_dir: &Path,) -> Result<(), Box<dyn std::e
         script_files.sort();
 
         if script_files.is_empty() {
-            println!("  No scripts found in {}", category);
+            println!("  No scripts found in {category}");
         } else {
             for script in script_files {
-                println!("  - {}", script);
+                println!("  - {script}");
             }
         }
         println!();
