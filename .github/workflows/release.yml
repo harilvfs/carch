@@ -10,8 +10,14 @@ on:
         description: 'Release title (e.g., v1.1.1@Y-M-D)'
         required: true
         type: string
+      previous_release:
+        description: 'Previous release tag (e.g., v1.1.0)'
+        required: true
+        type: string
+
 permissions:
   contents: write
+
 jobs:
   update_versions_and_build:
     runs-on: ubuntu-latest
@@ -72,20 +78,11 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
 
-      - name: Get Latest Release Tag
-        id: get_latest
-        run: |
-          latest_tag=$(curl -s https://api.github.com/repos/harilvfs/carch/releases/latest | jq -r '.tag_name')
-          if [[ "$latest_tag" == "null" || -z "$latest_tag" ]]; then
-            latest_tag="v4.1.0"
-          fi
-          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
-
-      - name: Generate changelog from previous tag to current tag
+      - name: Generate a changelog
         uses: orhun/git-cliff-action@v4
         with:
           config: cliff.toml
-          args: --strip header ${{ env.latest_tag }}..${{ github.event.inputs.tag_version }}
+          args: ${{ github.event.inputs.previous_release }}..${{ github.event.inputs.tag_version }} --strip header
         env:
           OUTPUT: BODY.md
 
