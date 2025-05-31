@@ -64,10 +64,11 @@ jobs:
 
       - name: Commit version changes
         run: |
+
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add ./man/carch.1 Cargo.toml Cargo.lock
-          git commit -m "chore: release"
+          git commit -m "chore(release): update to ${{ github.event.inputs.version }}"
           git push
 
       - name: Install musl-tools
