@@ -14,9 +14,10 @@
   
 </details>
 
-[![تاريخ الإنشاء على GitHub][create]][create-link] [![قضايا GitHub][issues]][issues-link] [![طلبات السحب][prs]][pr-links] [![آخر تعديل][last-commit]][last-commit-link] [![نجمة GitHub][star]][star-link] [![تفرع GitHub][fork]][fork-link] [![تحميلات كارتش][downloads]][downloads-link] [![Crates][crates]][crates-link] [![ديسكورد][discord]][discord-link]
+[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
-[![حالة بناء GitHub Actions][check]][check-link]
+[![github actions build status][check]][check-link]
+[![deps status][deps-badge]][deps]
 
 <h4>
 
@@ -94,3 +95,6 @@
 
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29
 [discord-link]: https://discord.com/invite/8NJWstnUHd
+
+[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat
+[deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F

@@ -13,9 +13,10 @@
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
 </details>
 
-[![GitHub 创建时间][create]][create-link] [![GitHub 问题][issues]][issues-link] [![GitHub PR][prs]][pr-links] [![最后提交][last-commit]][last-commit-link] [![GitHub Star][star]][star-link] [![GitHub Fork][fork]][fork-link] [![下载][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
+[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
-[![GitHub Actions 状态][check]][check-link]
+[![github actions build status][check]][check-link]
+[![deps status][deps-badge]][deps]
 
 <h4>
 
@@ -93,3 +94,6 @@ Carch 是免费且开源的。如果你愿意支持它的发展：
 
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29
 [discord-link]: https://discord.com/invite/8NJWstnUHd
+
+[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat
+[deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F
