@@ -73,8 +73,8 @@ install_aur_helper() {
 }
 
 print_source_message() {
-    echo -e "${BLUE}:: This Picom build is from FT-Labs.${ENDCOLOR}"
-    echo -e "${BLUE}:: Check out here: ${GREEN}https://github.com/FT-Labs/picom${ENDCOLOR}"
+    echo -e "${TEAL}:: This Picom build is from FT-Labs.${ENDCOLOR}"
+    echo -e "${TEAL}:: Check out here: ${GREEN}https://github.com/FT-Labs/picom${ENDCOLOR}"
 }
 
 install_dependencies_normal() {

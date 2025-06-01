@@ -33,15 +33,15 @@ fzf_confirm() {
 }
 
 print_message() {
-    echo -e "${BLUE}:: This Grub Theme Script is from Chris Titus Tech.${ENDCOLOR}"
-    echo -e "${BLUE}:: Check out the source code here: ${GREEN}https://github.com/harilvfs/Top-5-Bootloader-Themes${ENDCOLOR}"
+    echo -e "${TEAL}:: This Grub Theme Script is from Chris Titus Tech.${ENDCOLOR}"
+    echo -e "${TEAL}:: Check out the source code here: ${GREEN}https://github.com/harilvfs/Top-5-Bootloader-Themes${ENDCOLOR}"
 }
 
 check_existing_dir() {
     if [[ -d "$GRUB_THEME_DIR" ]]; then
         echo -e "${RED}:: Directory $GRUB_THEME_DIR already exists.${ENDCOLOR}"
         if fzf_confirm "Do you want to overwrite it?"; then
-            echo -e "${BLUE}:: Removing existing directory...${ENDCOLOR}"
+            echo -e "${TEAL}:: Removing existing directory...${ENDCOLOR}"
             rm -rf "$GRUB_THEME_DIR"
         else
             echo -e "${RED}:: Aborting installation.${ENDCOLOR}"
@@ -51,12 +51,12 @@ check_existing_dir() {
 }
 
 clone_repo() {
-    echo -e "${BLUE}:: Cloning GRUB themes repository...${ENDCOLOR}"
+    echo -e "${TEAL}:: Cloning GRUB themes repository...${ENDCOLOR}"
     git clone https://github.com/harilvfs/Top-5-Bootloader-Themes "$GRUB_THEME_DIR"
 }
 
 install_theme() {
-    echo -e "${BLUE}:: Running the installation script...${ENDCOLOR}"
+    echo -e "${TEAL}:: Running the installation script...${ENDCOLOR}"
     cd "$GRUB_THEME_DIR" || exit
     sudo ./install.sh
 }

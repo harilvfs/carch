@@ -12,7 +12,7 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-echo -e "${BLUE}"
+echo -e "${TEAL}"
 cat <<"EOF"
 
 This script helps you set up Neovim or NvChad.
@@ -63,11 +63,11 @@ fzf_select() {
 
 detect_os() {
     if command -v pacman &>/dev/null; then
-        echo -e "${BLUE}Detected Arch-based distribution.${RESET}"
+        echo -e "${TEAL}Detected Arch-based distribution.${RESET}"
         echo "OS=arch" >&2
         return 0
     elif command -v dnf &>/dev/null; then
-        echo -e "${BLUE}Detected Fedora-based distribution.${RESET}"
+        echo -e "${TEAL}Detected Fedora-based distribution.${RESET}"
         echo "OS=fedora" >&2
         return 0
     else

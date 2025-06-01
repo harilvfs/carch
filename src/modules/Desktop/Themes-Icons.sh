@@ -91,7 +91,7 @@ option=$(printf "Themes\nIcons\nBoth\nExit" | fzf ${FZF_COMMON} \
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
         mkdir -p "$1"
-        echo -e "${BLUE}:: Created directory: $1${RESET}"
+        echo -e "${TEAL}:: Created directory: $1${RESET}"
     fi
 }
 
@@ -170,14 +170,14 @@ case "$option" in
         install_dependencies
         confirm_and_proceed
         setup_themes
-        echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme.${RESET}"
+        echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme.${RESET}"
         ;;
     "Icons")
         detect_distro
         install_dependencies
         confirm_and_proceed
         setup_icons
-        echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the icons.${RESET}"
+        echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the icons.${RESET}"
         ;;
     "Both")
         detect_distro
@@ -185,7 +185,7 @@ case "$option" in
         confirm_and_proceed
         setup_themes
         setup_icons
-        echo -e "${BLUE}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons.${RESET}"
+        echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons.${RESET}"
         ;;
     "Exit")
         echo -e "${YELLOW}:: Exiting...${RESET}"

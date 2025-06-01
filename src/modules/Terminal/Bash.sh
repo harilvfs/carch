@@ -113,7 +113,7 @@ check_default_shell() {
             chsh -s /bin/bash
             echo -e "${GREEN}Default shell changed to bash. Please log out and log back in for the change to take effect.${RESET}"
         else
-            echo -e "${BLUE}Keeping current shell: $current_shell${RESET}"
+            echo -e "${TEAL}Keeping current shell: $current_shell${RESET}"
         fi
     else
         echo -e "${GREEN}Bash is already your default shell.${RESET}"
@@ -133,7 +133,7 @@ detect_distro
 check_essential_dependencies
 check_fzf
 
-echo -e "${BLUE}Nerd Font Are Recommended${RESET}"
+echo -e "${TEAL}Nerd Font Are Recommended${RESET}"
 
 echo -e "${CYAN}Detected distribution: $distro${RESET}"
 
@@ -341,4 +341,4 @@ install_pokemon_colorscripts
 
 check_default_shell
 
-echo -e "${BLUE}Setup completed successfully!${RESET}"
+echo -e "${TEAL}Setup completed successfully!${RESET}"

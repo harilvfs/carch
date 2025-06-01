@@ -31,7 +31,7 @@ fzf_confirm() {
 }
 
 detect_distro() {
-    echo -e "${BLUE}:: Detecting distribution...${ENDCOLOR}"
+    echo -e "${TEAL}:: Detecting distribution...${ENDCOLOR}"
     if command -v pacman &>/dev/null; then
         echo -e "${GREEN}:: Arch Linux detected.${ENDCOLOR}"
         DISTRO="arch"
@@ -45,7 +45,7 @@ detect_distro() {
 }
 
 check_multilib() {
-    echo -e "${BLUE}:: Checking multilib repository status...${ENDCOLOR}"
+    echo -e "${TEAL}:: Checking multilib repository status...${ENDCOLOR}"
 
     if grep -q '^\[multilib\]' /etc/pacman.conf; then
         echo -e "${GREEN}:: 32-bit multilib repository is already enabled.${ENDCOLOR}"
@@ -74,7 +74,7 @@ check_multilib() {
 }
 
 install_pipewire() {
-    echo -e "${BLUE}:: Installing PipeWire and related packages...${ENDCOLOR}"
+    echo -e "${TEAL}:: Installing PipeWire and related packages...${ENDCOLOR}"
     if [ "$DISTRO" = "arch" ]; then
         echo -e "${CYAN}:: Installing PipeWire packages for Arch Linux...${ENDCOLOR}"
 
@@ -107,7 +107,7 @@ install_pipewire() {
 }
 
 setup_user_and_services() {
-    echo -e "${BLUE}:: Configuring user permissions and services...${ENDCOLOR}"
+    echo -e "${TEAL}:: Configuring user permissions and services...${ENDCOLOR}"
     echo -e "${CYAN}:: Adding user to rtkit group for realtime audio processing...${ENDCOLOR}"
     sudo usermod -a -G rtkit "$USER"
     if [ $? -ne 0 ]; then
@@ -139,7 +139,7 @@ main() {
         setup_user_and_services
         echo -e "${GREEN}:: PipeWire setup completed successfully!${ENDCOLOR}"
         if fzf_confirm "Do you want to log out to apply changes? (Recommended)"; then
-            echo -e "${BLUE}:: Logging out to apply audio system changes...${ENDCOLOR}"
+            echo -e "${TEAL}:: Logging out to apply audio system changes...${ENDCOLOR}"
             sleep 2
             if command -v loginctl &>/dev/null; then
                 loginctl terminate-user "$USER"
@@ -150,7 +150,7 @@ main() {
             echo -e "${CYAN}:: Please log out or reboot your system later to apply changes.${ENDCOLOR}"
         fi
     else
-        echo -e "${BLUE}:: PipeWire installation cancelled.${ENDCOLOR}"
+        echo -e "${TEAL}:: PipeWire installation cancelled.${ENDCOLOR}"
     fi
 }
 
