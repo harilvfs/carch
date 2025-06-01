@@ -627,7 +627,7 @@ enable_start_sddm() {
 
     for dm in gdm lightdm greetd; do
         if command -v $dm &>/dev/null; then
-            echo -e "${BLUE}Removing $dm...${ENDCOLOR}"
+            echo -e "${TEAL}Removing $dm...${ENDCOLOR}"
             sudo systemctl stop $dm
             sudo systemctl disable $dm --now
             [[ "$OS" == "arch" ]] && sudo pacman -Rns --noconfirm $dm
@@ -670,9 +670,9 @@ EOF
 }
 
 display_message() {
-    echo -e "${BLUE}╔════════════════════════════════════════════╗${ENDCOLOR}"
-    echo -e "${BLUE}║              i3wm setup completed          ║${ENDCOLOR}"
-    echo -e "${BLUE}╚════════════════════════════════════════════╝${ENDCOLOR}"
+    echo -e "${TEAL}╔════════════════════════════════════════════╗${ENDCOLOR}"
+    echo -e "${TEAL}║              i3wm setup completed          ║${ENDCOLOR}"
+    echo -e "${TEAL}╚════════════════════════════════════════════╝${ENDCOLOR}"
 }
 
 prompt_reboot() {

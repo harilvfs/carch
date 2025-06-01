@@ -31,7 +31,7 @@ fzf_confirm() {
 }
 
 detect_distro() {
-    echo -e "${BLUE}:: Detecting distribution...${ENDCOLOR}"
+    echo -e "${TEAL}:: Detecting distribution...${ENDCOLOR}"
     if command -v pacman &>/dev/null; then
         echo -e "${GREEN}:: Arch Linux detected.${ENDCOLOR}"
         DISTRO="arch"
@@ -45,7 +45,7 @@ detect_distro() {
 }
 
 install_bluetooth() {
-    echo -e "${BLUE}:: Installing Bluetooth packages...${ENDCOLOR}"
+    echo -e "${TEAL}:: Installing Bluetooth packages...${ENDCOLOR}"
 
     if [ "$DISTRO" = "arch" ]; then
         echo -e "${CYAN}:: Installing Bluetooth packages for Arch Linux...${ENDCOLOR}"
@@ -67,7 +67,7 @@ install_bluetooth() {
 }
 
 enable_bluetooth() {
-    echo -e "${BLUE}:: Enabling Bluetooth service...${ENDCOLOR}"
+    echo -e "${TEAL}:: Enabling Bluetooth service...${ENDCOLOR}"
 
     sudo systemctl enable --now bluetooth.service
     if [ $? -ne 0 ]; then
@@ -79,7 +79,7 @@ enable_bluetooth() {
 }
 
 provide_additional_info() {
-    echo -e "${BLUE}:: Additional Information:${ENDCOLOR}"
+    echo -e "${TEAL}:: Additional Information:${ENDCOLOR}"
     echo -e "${CYAN}:: • To pair a device: Use the Blueman applet or 'bluetoothctl' in terminal${ENDCOLOR}"
     echo -e "${CYAN}:: • To access Bluetooth settings: Use the Blueman application${ENDCOLOR}"
     echo -e "${CYAN}:: • To pair via terminal: Run 'bluetoothctl', then 'power on', 'scan on', 'pair MAC_ADDRESS'${ENDCOLOR}"
@@ -104,12 +104,12 @@ main() {
         provide_additional_info
 
         if fzf_confirm "Do you want to restart the Bluetooth service now?"; then
-            echo -e "${BLUE}:: Restarting Bluetooth service...${ENDCOLOR}"
+            echo -e "${TEAL}:: Restarting Bluetooth service...${ENDCOLOR}"
             sudo systemctl restart bluetooth.service
             echo -e "${GREEN}:: Bluetooth service restarted.${ENDCOLOR}"
         fi
     else
-        echo -e "${BLUE}:: Bluetooth installation cancelled.${ENDCOLOR}"
+        echo -e "${TEAL}:: Bluetooth installation cancelled.${ENDCOLOR}"
     fi
 }
 

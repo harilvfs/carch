@@ -59,7 +59,7 @@ main_menu() {
        echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
        exit 1
     fi
-    echo -e "${BLUE}Distro: ${distro^} Linux${RESET}"
+    echo -e "${TEAL}Distro: ${distro^} Linux${RESET}"
 
     if [[ "$distro" == "arch" ]]; then
         options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")

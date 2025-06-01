@@ -12,7 +12,7 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-echo -e "${BLUE}"
+echo -e "${TEAL}"
 cat <<"EOF"
 
 Standard is best for terminals that don't support image rendering
@@ -161,7 +161,7 @@ main() {
 
     clear
 
-    echo -e "${BLUE}"
+    echo -e "${TEAL}"
     cat <<"EOF"
 
 Standard is best for terminals that don't support image rendering

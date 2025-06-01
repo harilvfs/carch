@@ -32,7 +32,7 @@ fzf_confirm() {
 
 check_current_kernel() {
     CURRENT_KERNEL=$(uname -r)
-    echo -e "${BLUE}:: Current kernel version: ${GREEN}$CURRENT_KERNEL${ENDCOLOR}"
+    echo -e "${TEAL}:: Current kernel version: ${GREEN}$CURRENT_KERNEL${ENDCOLOR}"
     if [[ "$CURRENT_KERNEL" == *"lts"* ]]; then
         echo -e "${GREEN}You are already using the LTS kernel. Skipping the installation.${ENDCOLOR}"
         exit 0
@@ -67,8 +67,8 @@ fi
 check_current_kernel
 
 echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
-echo -e "${BLUE}This script will install the LTS kernel alongside your current kernel.${ENDCOLOR}"
-echo -e "${BLUE}Your current kernel will NOT be removed.${ENDCOLOR}"
+echo -e "${TEAL}This script will install the LTS kernel alongside your current kernel.${ENDCOLOR}"
+echo -e "${TEAL}Your current kernel will NOT be removed.${ENDCOLOR}"
 
 if fzf_confirm; then
     if [ -x "$(command -v pacman)" ]; then
