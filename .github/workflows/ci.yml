@@ -46,10 +46,10 @@ jobs:
       - name: Add clippy component
         run: rustup component add clippy --toolchain nightly
 
-      - name: Run clippy
+      - name: Check clippy
         run: cargo +nightly clippy
 
-      - name: Run clippy with warnings denied
+      - name: Check clippy with warnings denied
         run: cargo +nightly clippy -- -D warnings
 
       - name: Cargo check (default)
@@ -71,5 +71,5 @@ jobs:
       - name: Install Taplo CLI
         run: cargo install taplo-cli --locked
 
-      - name: Run Taplo check
-        run: taplo check
+      - name: Check TOML formatting
+        run: taplo fmt --check
