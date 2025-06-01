@@ -8,6 +8,7 @@
 [![lang: 🇷🇺 Русский](https://img.shields.io/badge/lang-%F0%9F%87%B7%F0%9F%87%BA%20Русский-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.ru.md)
 [![lang: 🇩🇪 Deutsch](https://img.shields.io/badge/lang-%F0%9F%87%A9%F0%9F%87%AA%20Deutsch-ccd0da?logoColor=179299&labelColor=1c1c29)](https://github.com/harilvfs/carch/blob/main/.github/README.de.md)
 
+
 # Carch
 
 A collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
