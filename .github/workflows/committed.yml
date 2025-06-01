@@ -24,7 +24,9 @@ jobs:
       - name: Checkout Actions Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # important to fetch full history so the range works
 
       - name: Lint Commits
         uses: crate-ci/committed@master
+        with:
+          args: origin/main..
