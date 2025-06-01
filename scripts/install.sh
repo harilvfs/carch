@@ -26,23 +26,29 @@ RED="$(tput setaf 1 2>/dev/null || echo '')"
 GREEN="$(tput setaf 2 2>/dev/null || echo '')"
 YELLOW="$(tput setaf 3 2>/dev/null || echo '')"
 BLUE="$(tput setaf 4 2>/dev/null || echo '')"
+
+FLAMINGO="\e[38;2;238;190;190m"
+ROSEWATER="\e[38;2;242;213;207m"
 RESET="$(tput sgr0 2>/dev/null || echo '')"
 
-error() {
-    echo "${RED}${BOLD}ERROR:${RESET} $1" >&2
-    exit 1
+arrow() {
+    echo "=>" "$@"
 }
 
-info() {
-    echo "${BLUE}${BOLD}INFO:${RESET} $1"
+arrow_red() {
+    echo -e "${RED}=>${RESET} $@"
 }
 
-success() {
-    echo "${GREEN}${BOLD}SUCCESS:${RESET} $1"
+arrow_green() {
+    echo -e "${GREEN}=>${RESET} $@"
 }
 
-warning() {
-    echo "${YELLOW}${BOLD}WARNING:${RESET} $1"
+arrow_yellow() {
+    echo -e "${YELLOW}=>${RESET} $@"
+}
+
+arrow_blue() {
+    echo -e "${BLUE}=>${RESET} $@"
 }
 
 command_exists() {
@@ -50,7 +56,7 @@ command_exists() {
 }
 
 check_dependencies() {
-    info "Checking dependencies..."
+    arrow_blue "Checking dependencies..."
 
     local deps=("curl" "grep" "tar" "fzf" "git" "wget" "man" "man-db")
     local missing_deps=()
@@ -62,24 +68,24 @@ check_dependencies() {
     done
 
     if [ ${#missing_deps[@]} -gt 0 ]; then
-        echo "Please wait, checking & installing required dependencies..."
+        arrow_blue "Please wait, checking & installing required dependencies..."
 
         if command_exists "pacman"; then
             sudo pacman -Sy --noconfirm "${missing_deps[@]}" > /dev/null 2>&1
         elif command_exists "dnf"; then
             sudo dnf install -y "${missing_deps[@]}" > /dev/null 2>&1
         else
-            error "Unsupported package manager. Please install the following dependencies manually: ${missing_deps[*]}"
+            arrow_red "Unsupported package manager. Please install the following dependencies manually: ${missing_deps[*]}"
         fi
     fi
 }
 
 detect_platform() {
-    info "Detecting platform..."
+    arrow_blue "Detecting platform..."
 
     PLATFORM="$(uname -s)"
     if [ "$PLATFORM" != "Linux" ]; then
-        error "Carch only supports Linux platforms. Detected: $PLATFORM"
+        arrow_red "Carch only supports Linux platforms. Detected: $PLATFORM"
     fi
 
     ARCH="$(uname -m)"
@@ -91,15 +97,15 @@ detect_platform() {
             ARCH="aarch64"
             ;;
         *)
-            error "Unsupported architecture: $ARCH"
+            arrow_red "Unsupported architecture: $ARCH"
             ;;
     esac
 
-    info "Platform: Linux, Architecture: $ARCH"
+    arrow_blue "Platform: Linux, Architecture: $ARCH"
 }
 
 check_prerelease() {
-    info "Checking for pre-releases..."
+    arrow_blue "Checking for pre-releases..."
 
     if command_exists "jq"; then
         PRERELEASE_INFO=$(curl -s "$GITHUB_API_URL" | jq -r '[.[] | select(.prerelease==true)] | first')
@@ -109,7 +115,7 @@ check_prerelease() {
             PRERELEASE_TAG=$(echo "$PRERELEASE_INFO" | jq -r '.tag_name')
             PRERELEASE_NAME=$(echo "$PRERELEASE_INFO" | jq -r '.name')
 
-            echo "${YELLOW}${BOLD}Pre-release available:${RESET} ${PRERELEASE_NAME} (${PRERELEASE_TAG})"
+            arrow_green "${YELLOW}${BOLD}Pre-release available:${RESET} ${PRERELEASE_NAME} (${PRERELEASE_TAG})"
 
             printf "%s" "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}"
             read response
@@ -117,44 +123,44 @@ check_prerelease() {
                 [yY][eE][sS]|[yY])
                     USE_PRERELEASE=true
                     CARCH_VERSION="$PRERELEASE_TAG"
-                    info "Will install pre-release version: $PRERELEASE_TAG"
+                    arrow_blue "Will install pre-release version: $PRERELEASE_TAG"
                     ;;
                 *)
-                    info "Using latest stable release instead"
+                    arrow_blue "Using latest stable release instead"
                     ;;
             esac
         else
-            info "No pre-releases available, using latest stable release"
+            arrow_blue "No pre-releases available, using latest stable release"
         fi
     else
         if curl -s "$GITHUB_API_URL" | grep -q '"prerelease":true'; then
             PRERELEASE_TAG=$(curl -s "$GITHUB_API_URL" | grep -A 1 '"prerelease":true' | grep '"tag_name"' | sed -E 's/.*"tag_name":"([^"]+)".*/\1/' | head -1)
 
             if [ -n "$PRERELEASE_TAG" ]; then
-                echo "${YELLOW}${BOLD}Pre-release available:${RESET} $PRERELEASE_TAG"
+                arrow_green "${YELLOW}${BOLD}Pre-release available:${RESET} $PRERELEASE_TAG"
                 printf "%s" "${BOLD}Do you want to install this pre-release? [y/N]: ${RESET}"
                 read response
                 case "$response" in
                     [yY][eE][sS]|[yY])
                         USE_PRERELEASE=true
                         CARCH_VERSION="$PRERELEASE_TAG"
-                        info "Will install pre-release version: $PRERELEASE_TAG"
+                        arrow_blue "Will install pre-release version: $PRERELEASE_TAG"
                         ;;
                     *)
-                        info "Using latest stable release instead"
+                        arrow_blue "Using latest stable release instead"
                         ;;
                 esac
             else
-                info "No pre-releases available, using latest stable release"
+                arrow_blue "No pre-releases available, using latest stable release"
             fi
         else
-            info "No pre-releases available, using latest stable release"
+            arrow_blue "No pre-releases available, using latest stable release"
         fi
     fi
 }
 
 install_binary() {
-    info "Installing carch binary..."
+    arrow_blue "Installing carch binary..."
 
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
@@ -175,57 +181,57 @@ install_binary() {
         BINARY_URL="${DOWNLOAD_URL}/carch-${ARCH}"
     fi
 
-    info "Downloading from: $BINARY_URL"
+    arrow_blue "Downloading from: $BINARY_URL"
 
     if ! curl -sSL "$BINARY_URL" -o "${TMP_DIR}/${BINARY_NAME}"; then
-        error "Failed to download carch binary"
+        arrow_red "Failed to download carch binary"
     fi
 
     chmod +x "${TMP_DIR}/${BINARY_NAME}"
 
-    info "Moving binary to $INSTALL_DIR"
+    arrow_blue "Moving binary to $INSTALL_DIR"
     sudo mkdir -p "$INSTALL_DIR"
     sudo mv "${TMP_DIR}/${BINARY_NAME}" "${INSTALL_DIR}/${BINARY_NAME}"
 
     if [ -f "${INSTALL_DIR}/${BINARY_NAME}" ]; then
-        success "Carch binary installed successfully to ${INSTALL_DIR}/${BINARY_NAME}"
+        arrow_green "Carch binary installed to ${INSTALL_DIR}/${BINARY_NAME}"
     else
-        error "Failed to install carch binary"
+        arrow_red "Failed to install carch binary"
     fi
 }
 
 install_completions() {
-    info "Installing shell completions..."
+    arrow_blue "Installing shell completions..."
 
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
 
-    info "Installing Bash completion..."
+    arrow_blue "Installing Bash completion..."
     sudo mkdir -p "$BASH_COMPLETION_DIR"
     curl -sSL "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/completions/bash/carch" -o "${TMP_DIR}/carch"
     sudo mv "${TMP_DIR}/carch" "${BASH_COMPLETION_DIR}/carch"
 
-    info "Installing Zsh completion..."
+    arrow_blue "Installing Zsh completion..."
     sudo mkdir -p "$ZSH_COMPLETION_DIR"
     curl -sSL "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/completions/zsh/_carch" -o "${TMP_DIR}/_carch"
     sudo mv "${TMP_DIR}/_carch" "${ZSH_COMPLETION_DIR}/_carch"
 
-    info "Installing Fish completion..."
+    arrow_blue "Installing Fish completion..."
     sudo mkdir -p "$FISH_COMPLETION_DIR"
     curl -sSL "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/completions/fish/carch.fish" -o "${TMP_DIR}/carch.fish"
     sudo mv "${TMP_DIR}/carch.fish" "${FISH_COMPLETION_DIR}/carch.fish"
 
-    success "Shell completions installed successfully"
+    arrow_green "Shell completions installed successfully"
 }
 
 install_icons() {
-    info "Installing icons..."
+    arrow_blue "Installing icons..."
 
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
 
     for size in 16 24 32 48 64 128 256; do
-        info "Installing ${size}x${size} icon..."
+        arrow_blue "Installing ${size}x${size} icon..."
 
         sudo mkdir -p "${ICON_DIR}/${size}x${size}/apps"
 
@@ -236,15 +242,15 @@ install_icons() {
     done
 
     if command_exists "gtk-update-icon-cache"; then
-        info "Updating icon cache..."
-        sudo gtk-update-icon-cache -f -t "$ICON_DIR" || warning "Failed to update icon cache"
+        arrow_blue "Updating icon cache..."
+        sudo gtk-update-icon-cache -f -t "$ICON_DIR" || arrow_yellow "Failed to update icon cache"
     fi
 
-    success "Icons installed successfully"
+    arrow_green "Icons installed successfully"
 }
 
 install_man_page() {
-    info "Installing man page..."
+    arrow_blue "Installing man page..."
 
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
@@ -255,15 +261,15 @@ install_man_page() {
     sudo mv "${TMP_DIR}/carch.1" "${MAN_DIR}/carch.1"
 
     if command_exists "mandb"; then
-        info "Updating man database..."
-        sudo mandb -q || warning "Failed to update man database"
+        arrow_blue "Updating man database..."
+        sudo mandb -q || arrow_yellow "Failed to update man database"
     fi
 
-    success "Man page installed successfully"
+    arrow_green "Man page installed successfully"
 }
 
 install_desktop_file() {
-    info "Installing desktop file..."
+    arrow_blue "Installing desktop file..."
 
     TMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TMP_DIR"' EXIT INT TERM
@@ -275,113 +281,113 @@ install_desktop_file() {
     sudo mv "${TMP_DIR}/carch.desktop" "$DESKTOP_FILE_PATH"
 
     if command_exists "update-desktop-database"; then
-        info "Updating desktop database..."
-        sudo update-desktop-database || warning "Failed to update desktop database"
+        arrow_blue "Updating desktop database..."
+        sudo update-desktop-database || arrow_yellow "Failed to update desktop database"
     fi
 
-    success "Desktop file installed successfully"
+    arrow_green "Desktop file installed successfully"
 }
 
 uninstall_binary() {
-    info "Uninstalling carch binary..."
+    arrow_blue "Uninstalling carch binary..."
 
     if [ -f "${INSTALL_DIR}/${BINARY_NAME}" ]; then
         sudo rm -f "${INSTALL_DIR}/${BINARY_NAME}"
-        success "Carch binary uninstalled successfully"
+        arrow_green "Carch binary uninstalled successfully"
     else
-        warning "Carch binary not found at ${INSTALL_DIR}/${BINARY_NAME}"
+        arrow_yellow "Carch binary not found at ${INSTALL_DIR}/${BINARY_NAME}"
     fi
 }
 
 uninstall_completions() {
-    info "Uninstalling shell completions..."
+    arrow_blue "Uninstalling shell completions..."
 
     if [ -f "${BASH_COMPLETION_DIR}/carch" ]; then
         sudo rm -f "${BASH_COMPLETION_DIR}/carch"
-        success "Bash completion removed"
+        arrow_green "Bash completion removed"
     else
-        warning "Bash completion not found"
+        arrow_yellow "Bash completion not found"
     fi
 
     if [ -f "${ZSH_COMPLETION_DIR}/_carch" ]; then
         sudo rm -f "${ZSH_COMPLETION_DIR}/_carch"
-        success "Zsh completion removed"
+        arrow_green "Zsh completion removed"
     else
-        warning "Zsh completion not found"
+        arrow_yellow "Zsh completion not found"
     fi
 
     if [ -f "${FISH_COMPLETION_DIR}/carch.fish" ]; then
         sudo rm -f "${FISH_COMPLETION_DIR}/carch.fish"
-        success "Fish completion removed"
+        arrow_green "Fish completion removed"
     else
-        warning "Fish completion not found"
+        arrow_yellow "Fish completion not found"
     fi
 }
 
 uninstall_icons() {
-    info "Uninstalling icons..."
+    arrow_blue "Uninstalling icons..."
 
     for size in 16 24 32 48 64 128 256; do
         if [ -f "${ICON_DIR}/${size}x${size}/apps/carch.png" ]; then
             sudo rm -f "${ICON_DIR}/${size}x${size}/apps/carch.png"
-            success "${size}x${size} icon removed"
+            arrow_green "${size}x${size} icon removed"
         else
-            warning "${size}x${size} icon not found"
+            arrow_yellow "${size}x${size} icon not found"
         fi
     done
 
     if command_exists "gtk-update-icon-cache"; then
-        info "Updating icon cache..."
-        sudo gtk-update-icon-cache -f -t "$ICON_DIR" || warning "Failed to update icon cache"
+        arrow_blue "Updating icon cache..."
+        sudo gtk-update-icon-cache -f -t "$ICON_DIR" || arrow_yellow "Failed to update icon cache"
     fi
 }
 
 uninstall_man_page() {
-    info "Uninstalling man page..."
+    arrow_blue "Uninstalling man page..."
 
     if [ -f "${MAN_DIR}/carch.1" ]; then
         sudo rm -f "${MAN_DIR}/carch.1"
-        success "Man page removed"
+        arrow_green "Man page removed"
 
         if command_exists "mandb"; then
-            info "Updating man database..."
-            sudo mandb -q || warning "Failed to update man database"
+            arrow_blue "Updating man database..."
+            sudo mandb -q || arrow_yellow "Failed to update man database"
         fi
     else
-        warning "Man page not found"
+        arrow_yellow "Man page not found"
     fi
 }
 
 uninstall_desktop_file() {
-    info "Uninstalling desktop file..."
+    arrow_blue "Uninstalling desktop file..."
 
     if [ -f "$DESKTOP_FILE_PATH" ]; then
         sudo rm -f "$DESKTOP_FILE_PATH"
-        success "Desktop file removed"
+        arrow_green "Desktop file removed"
 
         if command_exists "update-desktop-database"; then
-            info "Updating desktop database..."
-            sudo update-desktop-database || warning "Failed to update desktop database"
+            arrow_blue "Updating desktop database..."
+            sudo update-desktop-database || arrow_yellow "Failed to update desktop database"
         fi
     else
-        warning "Desktop file not found"
+        arrow_yellow "Desktop file not found"
     fi
 }
 
 uninstall_config() {
-    info "Removing configuration directory..."
+    arrow_blue "Removing configuration directory..."
 
     if [ -d "$CONFIG_DIR" ]; then
         rm -rf "$CONFIG_DIR"
-        success "Configuration directory removed"
+        arrow_green "Configuration directory removed"
     else
-        warning "Configuration directory not found"
+        arrow_yellow "Configuration directory not found"
     fi
 }
 
 print_install_success_message() {
     echo ""
-    echo "${GREEN}${BOLD}  Carch installed successfully!${RESET}"
+    echo "${GREEN}${BOLD}Carch installed successfully!${RESET}"
     echo ""
     echo "You can now run carch from your terminal by typing: ${BOLD}carch${RESET}"
     echo ""
@@ -393,7 +399,7 @@ print_install_success_message() {
 
 print_update_success_message() {
     echo ""
-    echo "${GREEN}${BOLD}  Carch updated successfully!${RESET}"
+    echo "${GREEN}${BOLD}Carch updated successfully!${RESET}"
     echo ""
     echo "You can now run the updated carch from your terminal by typing: ${BOLD}carch${RESET}"
     echo ""
@@ -405,16 +411,49 @@ print_update_success_message() {
 
 print_uninstall_success_message() {
     echo ""
-    echo "${GREEN}${BOLD} Carch uninstalled successfully!${RESET}"
+    echo "${GREEN}${BOLD}Carch uninstalled!${RESET}"
     echo ""
     echo "All Carch components have been removed from your system."
     echo ""
+    echo "Thank you for your time using Carch."
 }
 
 install() {
+
     if [ "$(id -u)" -eq 0 ]; then
-        warning "This script is running as root. Consider running without sudo and let the script call sudo when needed."
+        arrow_yellow "This script is running as root. Consider running without sudo and let the script call sudo when needed."
     fi
+
+    clear
+
+echo -e "${FLAMINGO}${BOLD}"
+cat <<'EOF'
+  _____             __
+ / ___/__ _________/ /
+/ /__/ _ `/ __/ __/ _ \
+\___/\_,_/_/  \__/_//_/
+
+https://github.com/harilvfs/carch
+EOF
+echo "${RESET}"
+
+while true; do
+    printf "%b" "${ROSEWATER}${BOLD}Do you want to continue with the installation? [y/N]: ${RESET}"
+    read -r confirm
+    case "$confirm" in
+        [Yy]*)
+           echo ""
+           break
+           ;;
+
+        [Nn]*)
+           exit 0
+           ;;
+        *)
+           echo "Invalid please answer y or n."
+           ;;
+    esac
+done
 
     detect_platform
 
@@ -436,11 +475,28 @@ install() {
 }
 
 update() {
-    info "Updating Carch..."
 
     if [ "$(id -u)" -eq 0 ]; then
-        warning "This script is running as root. Consider running without sudo and let the script call sudo when needed."
+        arrow_yellow "This script is running as root. Consider running without sudo and let the script call sudo when needed."
     fi
+
+while true; do
+    printf "%b" "${ROSEWATER}${BOLD}Do you want to continue with the carch update? [y/N]: ${RESET}"
+    read -r confirm
+    case "$confirm" in
+        [Yy]*)
+           echo ""
+           break
+           ;;
+
+        [Nn]*)
+           exit 0
+           ;;
+        *)
+           echo "Invalid please answer y or n."
+           ;;
+    esac
+done
 
     detect_platform
 
@@ -462,11 +518,30 @@ update() {
 }
 
 uninstall() {
-    info "Uninstalling Carch..."
 
     if [ "$(id -u)" -eq 0 ]; then
-        warning "This script is running as root. Consider running without sudo and let the script call sudo when needed."
+        arrow_yellow "This script is running as root. Consider running without sudo and let the script call sudo when needed."
     fi
+
+while true; do
+    printf "%b" "${ROSEWATER}${BOLD}Do you want to continue with the carch uninstallation? [y/N]: ${RESET}"
+    read -r confirm
+    case "$confirm" in
+        [Yy]*)
+           echo ""
+           break
+           ;;
+
+        [Nn]*)
+           exit 0
+           ;;
+        *)
+           echo "Invalid please answer y or n."
+           ;;
+    esac
+done
+
+    arrow_blue "Uninstalling Carch..."
 
     uninstall_binary
 
@@ -494,6 +569,7 @@ print_usage() {
 }
 
 main() {
+
     if [ $# -eq 0 ]; then
         install
     else
@@ -511,7 +587,7 @@ main() {
                 print_usage
                 ;;
             *)
-                error "Unknown option: $1. Use --help to see available options."
+                arrow_red "Unknown option: $1. Use --help to see available options."
                 ;;
         esac
     fi
