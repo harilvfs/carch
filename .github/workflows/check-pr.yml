@@ -1,0 +1,51 @@
+name: Comment Pr
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - labeled
+      - unlabeled
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue_number = context.payload.issue ? context.payload.issue.number : context.payload.pull_request ? context.payload.pull_request.number : context.payload.discussion.number;
+            const repo = context.repo.repo;
+            const owner = context.repo.owner;
+
+            const comment = `
+            Thanks for opening the PR! 🙌
+
+            Please make sure the PR title follows the [Conventional Commits](https://www.conventionalcommits.org/) guidelines.
+
+            Also, prefer following this extended guide: https://gist.github.com/harilvfs/53cc86aa79ea4642356540aadc6bd87d
+
+            ✅ Don't forget to check the CI workflow status! If it fails, review your changes and try to fix the issues.
+
+            💬 Connect with us:
+            - Discord: https://discord.com/invite/8NJWstnUHd
+            - Telegram: https://t.me/carchx
+
+            🕐 If your PR review is delayed, feel free to reach out via email: [harilvfs@chalisehari.com.np](mailto:harilvfs@chalisehari.com.np)
+
+            Thank you! 💖
+            `;
+
+            github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: comment
+            });
