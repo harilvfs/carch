@@ -1,0 +1,34 @@
+name: Comment on PR
+
+on:
+  pull_request:
+    types: [opened]
+
+name: Comment on PR
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on new PR
+        uses: actions/github-script@v7
+        with:
+          script: >
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "Thanks for opening the PR! 🙌\n\n" +
+                    "Please make sure the PR title follows the [Conventional Commits](https://www.conventionalcommits.org/) guidelines.\n\n" +
+                    "Also, prefer following this extended guide: https://gist.github.com/harilvfs/53cc86aa79ea4642356540aadc6bd87d\n\n" +
+                    "✅ Don't forget to check the CI workflow status! If it fails, review your changes and try to fix the issues.\n\n" +
+                    "💬 Connect with us:\n" +
+                    "- Discord: https://discord.com/invite/8NJWstnUHd\n" +
+                    "- Telegram: https://t.me/carchx\n\n" +
+                    "🕐 If your PR review is delayed, feel free to reach out via email: harilvfs@chalisehari.com.np\n\n" +
+                    "Thank you! 💖"
+            })
