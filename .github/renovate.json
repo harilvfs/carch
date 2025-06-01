@@ -1,0 +1,63 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "schedule": [
+    "before 5am on the first day of the month"
+  ],
+  "semanticCommits": "enabled",
+  "commitMessageLowerCase": "never",
+  "configMigration": true,
+  "dependencyDashboard": true,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^rust-toolchain\\.toml$",
+        "^taplo\\.toml$",
+        "^deny\\.toml$",
+        "^rustfmt\\.toml$",
+        "^typos\\.toml$",
+        "^clippy\\.toml$",
+        "^\\.clippy\\.toml$",
+        "^\\.github/workflows/.*\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "STABLE.*?(?<currentValue>\\d+\\.\\d+(\\.\\d+)?)",
+        "(?<currentValue>\\d+\\.\\d+(\\.\\d+)?).*?STABLE"
+      ],
+      "depNameTemplate": "STABLE",
+      "packageNameTemplate": "rust-lang/rust",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+  "packageRules": [
+    {
+      "commitMessageTopic": "Rust Stable",
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["STABLE"],
+      "extractVersion": "^(?<version>\\d+\\.\\d+)",
+      "schedule": ["* * * * *"],
+      "automerge": true
+    },
+    {
+      "description": "Patch upgrades for all cargo dependencies",
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "groupName": "cargo:patch"
+    },
+    {
+      "description": "Minor upgrades for stable cargo dependencies",
+      "matchManagers": ["cargo"],
+      "matchCurrentVersion": ">=1.0.0",
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "groupName": "cargo:minor+patch"
+    },
+    {
+      "description": "Updates to GitHub Actions versions",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "automerge": true
+    }
+  ]
+}
