@@ -13,9 +13,10 @@ Es especialmente útil si deseas empezar rápidamente con tus *aplicaciones favo
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
 </details>
 
-[![Creado en GitHub][create]][create-link] [![Problemas][issues]][issues-link] [![Pull Requests][prs]][pr-links] [![Último commit][last-commit]][last-commit-link] [![Estrellas][star]][star-link] [![Forks][fork]][fork-link] [![Descargas][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
+[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
-[![Estado de Actions][check]][check-link]
+[![github actions build status][check]][check-link]
+[![deps status][deps-badge]][deps]
 
 <h4>
 
@@ -93,3 +94,6 @@ Carch es gratuito y de código abierto. Si deseas apoyar su desarrollo:
 
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29
 [discord-link]: https://discord.com/invite/8NJWstnUHd
+
+[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat
+[deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F

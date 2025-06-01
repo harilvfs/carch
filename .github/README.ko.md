@@ -17,6 +17,7 @@
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Discord][discord]][discord-link]
 
 [![github actions build status][check]][check-link]
+[![deps status][deps-badge]][deps]
 
 <h4>
 
@@ -95,3 +96,6 @@ Carch는 무료이자 오픈 소스 프로젝트입니다. 개발을 지원하�
 
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=for-the-badge&color=8bd5ca&logoColor=e78284&labelColor=1c1c29
 [discord-link]: https://discord.com/invite/8NJWstnUHd
+
+[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat
+[deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F
