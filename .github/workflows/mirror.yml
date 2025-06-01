@@ -1,0 +1,23 @@
+name: Mirror to carch-org
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Git
+        run: |
+          git config --global user.email "harilvfs@chalisehari.com.np"
+          git config --global user.name "harilvfs"
+
+      - name: Clone and Mirror
+        run: |
+          git clone --mirror https://github.com/harilvfs/carch.git
+          cd carch.git
+          git remote set-url --push origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/carch-org/carch.git
+          git push --mirror
