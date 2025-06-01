@@ -2,16 +2,14 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
     paths-ignore:
       - '**/*.md'
       - '.github/**'
       - 'scripts/**'
 
   pull_request:
-    branches:
-      - main
+    branches: [main]
     paths-ignore:
       - '**/*.md'
       - '.github/**'
@@ -62,3 +60,16 @@ jobs:
 
       - name: Cargo check (all features)
         run: cargo +nightly check --workspace --locked --all-features
+
+  taplo:
+    name: Lint TOML files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Taplo CLI
+        run: cargo install taplo-cli --locked
+
+      - name: Run Taplo check
+        run: taplo check

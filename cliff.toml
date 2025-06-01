@@ -48,7 +48,7 @@ commit_preprocessors = [
   { pattern = '(Fix install command)', replace = "fix(install): ${1}" },
   { pattern = '(Improve logging)', replace = "chore(logging): ${1}" },
   { pattern = '(Update config defaults)', replace = "refactor(config): ${1}" },
-  { pattern = '\\<[d]eatil\\>', replace = "detail" }
+  { pattern = '\\<[d]eatil\\>', replace = "detail" },
 ]
 
 commit_parsers = [

@@ -9,22 +9,11 @@ readme = "./.github/README.md"
 repository = "https://github.com/harilvfs/carch"
 license-file = "LICENSE"
 
-categories = [
-    "command-line-utilities"
-]
+categories = ["command-line-utilities"]
 
-keywords = [
-    "system",
-    "cli",
-    "rust",
-    "bash"
-]
+keywords = ["system", "cli", "rust", "bash"]
 
-include = [
-    "src/**",
-    "Cargo.toml",
-    "man/carch.1"
-]
+include = ["src/**", "Cargo.toml", "man/carch.1"]
 
 [dependencies]
 tempfile = "3.20.0"
@@ -46,4 +35,3 @@ incremental = false
 [[bin]]
 name = "carch"
 path = "src/main.rs"
-
