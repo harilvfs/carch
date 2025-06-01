@@ -31,24 +31,20 @@ FLAMINGO="\e[38;2;238;190;190m"
 ROSEWATER="\e[38;2;242;213;207m"
 RESET="$(tput sgr0 2>/dev/null || echo '')"
 
-arrow() {
-    echo "=>" "$@"
-}
-
 arrow_red() {
-    echo -e "${RED}=>${RESET} $@"
+    echo -e "${RED}=>" "${RESET}" "$@"
 }
 
 arrow_green() {
-    echo -e "${GREEN}=>${RESET} $@"
+    echo -e "${GREEN}=>" "${RESET}" "$@"
 }
 
 arrow_yellow() {
-    echo -e "${YELLOW}=>${RESET} $@"
+    echo -e "${YELLOW}=>" "${RESET}" "$@"
 }
 
 arrow_blue() {
-    echo -e "${BLUE}=>${RESET} $@"
+    echo -e "${BLUE}=>" "${RESET}" "$@"
 }
 
 command_exists() {
