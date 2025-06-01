@@ -73,3 +73,16 @@ jobs:
 
       - name: Check TOML formatting
         run: taplo fmt --check
+
+  deny:
+    name: Check for crate advisories and bans
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install cargo-deny
+        run: cargo install cargo-deny --locked
+
+      - name: Run cargo deny check
+        run: cargo deny check
