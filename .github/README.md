@@ -24,6 +24,11 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 *Currently supports Arch & Fedora based distros.*
 
+### Prerequisites
+
+- `fzf` is required for the TUI interface in the Carch script.  
+  Make sure `fzf` is installed before using Carch.
+
 <details>
 
 <summary><strong>For whom it may be useful</strong></summary>
