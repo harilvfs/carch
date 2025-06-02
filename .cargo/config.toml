@@ -1,7 +1,7 @@
 # .cargo/config.toml
 
 [build]
-rustflags = ["-C", "target-cpu=native"]
+# rustflags = ["-C", "target-cpu=native"]
 target-dir = "build"
 
 [profile.release]
