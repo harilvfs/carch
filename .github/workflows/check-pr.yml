@@ -23,6 +23,7 @@ jobs:
 
             const comment = `
             <!-- carch-bot-comment -->
+
             Thanks for opening the PR! 🙌
 
             Please make sure the PR title follows the [Conventional Commits](https://www.conventionalcommits.org/) guidelines.
