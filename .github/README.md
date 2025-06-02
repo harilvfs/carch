@@ -51,14 +51,14 @@ It’s especially useful if you want to quickly start using your *favorite apps*
   
 </details>
 
+<details>
+  
+<summary><strong>How to use?</strong></summary>
+
 ### Prerequisites
 
 - `fzf` is required for the TUI interface in the Carch script.  
   Make sure `fzf` is installed before using Carch.
-
-<details>
-  
-<summary><strong>How to use?</strong></summary>
 
 You can run or use Carch directly without installing it on your system.
 
