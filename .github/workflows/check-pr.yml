@@ -4,10 +4,6 @@ on:
   pull_request_target:
     types:
       - opened
-      - edited
-      - synchronize
-      - labeled
-      - unlabeled
 
 permissions:
   pull-requests: write
@@ -26,6 +22,8 @@ jobs:
             const owner = context.repo.owner;
 
             const comment = `
+            <!-- carch-bot-comment -->
+
             Thanks for opening the PR! 🙌
 
             Please make sure the PR title follows the [Conventional Commits](https://www.conventionalcommits.org/) guidelines.
@@ -43,9 +41,22 @@ jobs:
             Thank you! 💖
             `;
 
-            github.rest.issues.createComment({
+            const comments = await github.rest.issues.listComments({
               owner,
               repo,
-              issue_number,
-              body: comment
+              issue_number: prNumber,
             });
+
+            const botAlreadyCommented = comments.data.some(comment =>
+              comment.user.type === "Bot" &&
+              comment.body.includes("<!-- carch-bot-comment -->")
+            );
+
+            if (!botAlreadyCommented) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: commentBody,
+              });
+            }
