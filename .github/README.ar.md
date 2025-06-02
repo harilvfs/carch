@@ -43,7 +43,7 @@
 
 ## 🛠️ المساهمة
 
-[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] 
+[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
 
 لا تتردد في الانضمام إلى قنوات [Discord][discord-link] أو [Telegram][telegram-link] للمناقشة وطرح الأسئلة.
 
@@ -128,7 +128,7 @@
 [carch-docs-link]: https://carch.chalisehari.com.np
 -->
 
-<!-- [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE -->
+[telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
 [prs]:https://github.com/harilvfs/carch/compare"

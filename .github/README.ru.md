@@ -43,7 +43,7 @@
 
 ## 🛠️ Вклад
 
-[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] 
+[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
 
 Не стесняйтесь присоединяться к каналам [Discord][discord-link] или [Telegram][telegram-link], чтобы обсуждать и задавать вопросы.
 
@@ -128,7 +128,7 @@ Carch — бесплатный и с открытым исходным кодо�
 [carch-docs-link]: https://carch.chalisehari.com.np
 -->
 
-<!-- [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE -->
+[telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
 [prs]:https://github.com/harilvfs/carch/compare"

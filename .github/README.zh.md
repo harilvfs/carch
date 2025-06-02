@@ -42,7 +42,7 @@
 
 ## 🛠️ 贡献
 
-[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] 
+[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
 
 欢迎加入 [Discord][discord-link] 或 [Telegram][telegram-link] 频道进行讨论和提问。
 
@@ -127,7 +127,7 @@ Carch 是免费且开源的。如果你愿意支持它的发展：
 [carch-docs-link]: https://carch.chalisehari.com.np
 -->
 
-<!-- [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE -->
+[telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
 [prs]:https://github.com/harilvfs/carch/compare"
