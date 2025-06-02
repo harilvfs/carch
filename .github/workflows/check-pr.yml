@@ -39,9 +39,21 @@ jobs:
             Thank you! 💖
             `;
 
-            github.rest.issues.createComment({
+            const comments = await github.rest.issues.listComments({
               owner,
               repo,
-              issue_number,
-              body: comment
+              issue_number: prNumber,
             });
+
+            const alreadyCommented = comments.data.some(comment =>
+              comment.body.includes("Thanks for opening the PR! 🙌")
+            );
+
+            if (!alreadyCommented) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: commentBody,
+              });
+            }
