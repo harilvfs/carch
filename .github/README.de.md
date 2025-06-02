@@ -24,7 +24,7 @@ Es ist besonders nützlich, wenn du schnell mit deinen *Lieblings-Apps* starten 
 <td>
 
 <h4>
-Für Installationsanleitungen, Nutzung, Befehle und mehr, besuche die <a href="https://carch.chalisehari.com.np/"><em>offizielle Carch Dokumentationsseite</em></a> verfügbar in:
+Für Installationsanleitungen, Nutzung, Befehle und mehr, besuche die <a href="https://carch.chalisehari.com.np/de/"><em>offizielle Carch Dokumentationsseite</em></a> verfügbar in:
 <a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> •
 <a href="https://carch.chalisehari.com.np/ne/"> 🇳🇵 </a> •
 <a href="https://carch.chalisehari.com.np/hi/"> 🇮🇳 </a> •

@@ -24,7 +24,7 @@
 <td>
 
 <h4>
-설치 방법, 사용법, 명령어 등 자세한 내용은 <a href="https://carch.chalisehari.com.np/"><em>공식 Carch 문서 사이트</em></a>에서 확인하세요. 다음 언어로 제공됩니다:
+설치 방법, 사용법, 명령어 등 자세한 내용은 <a href="https://carch.chalisehari.com.np/ko/"><em>공식 Carch 문서 사이트</em></a>에서 확인하세요. 다음 언어로 제공됩니다:
 <a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> •
 <a href="https://carch.chalisehari.com.np/ne/"> 🇳🇵 </a> •
 <a href="https://carch.chalisehari.com.np/hi/"> 🇮🇳 </a> •

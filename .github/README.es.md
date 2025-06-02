@@ -23,7 +23,7 @@ Es especialmente útil si deseas empezar rápidamente con tus *aplicaciones favo
 <td>
 
 <h4>
-Para instrucciones de instalación, uso, comandos y más, visita el <a href="https://carch.chalisehari.com.np/"><em>sitio oficial de documentación de Carch</em></a> disponible en:
+Para instrucciones de instalación, uso, comandos y más, visita el <a href="https://carch.chalisehari.com.np/es/"><em>sitio oficial de documentación de Carch</em></a> disponible en:
 <a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> •
 <a href="https://carch.chalisehari.com.np/ne/"> 🇳🇵 </a> •
 <a href="https://carch.chalisehari.com.np/hi/"> 🇮🇳 </a> •

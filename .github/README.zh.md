@@ -23,7 +23,7 @@
 <td>
 
 <h4>
-安装、使用方法、命令等请查看 <a href="https://carch.chalisehari.com.np/"><em>官方 Carch 文档网站</em></a>，支持语言：
+安装、使用方法、命令等请查看 <a href="https://carch.chalisehari.com.np/zh/"><em>官方 Carch 文档网站</em></a>，支持语言：
 <a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> •
 <a href="https://carch.chalisehari.com.np/ne/"> 🇳🇵 </a> •
 <a href="https://carch.chalisehari.com.np/hi/"> 🇮🇳 </a> •
