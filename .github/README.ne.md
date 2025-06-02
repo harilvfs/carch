@@ -43,7 +43,7 @@ Carch एक सुन्दर TUI (*[`ratatui`](https://github.com/ratatui-org
 
 ## 🛠️ योगदान गर्ने
 
-[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] 
+[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
 
 चर्चा गर्न र प्रश्नहरू सोध्न स्वतन्त्र रूपमा [Discord][discord-link] वा [Telegram][telegram-link] च्यानलहरूमा सहभागी हुनुहोस्।
 
@@ -128,7 +128,7 @@ Carch निःशुल्क र खुला-स्रोत परियो�
 [carch-docs-link]: https://carch.chalisehari.com.np
 -->
 
-<!-- [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE -->
+[telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
 [prs]:https://github.com/harilvfs/carch/compare"

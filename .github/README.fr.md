@@ -43,7 +43,7 @@ Pour les instructions d’installation, l’utilisation, les commandes et plus, 
 
 ## 🛠️ Contribution
 
-[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] 
+[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
 
 N’hésitez pas à rejoindre les canaux [Discord][discord-link] ou [Telegram][telegram-link] pour discuter et poser des questions.
 
@@ -128,7 +128,7 @@ Carch est gratuit et open-source. Si vous souhaitez soutenir son développement 
 [carch-docs-link]: https://carch.chalisehari.com.np
 -->
 
-<!-- [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE -->
+[telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
 [prs]:https://github.com/harilvfs/carch/compare"

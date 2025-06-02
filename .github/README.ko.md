@@ -43,7 +43,7 @@
 
 ## 🛠️ 기여하기
 
-[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] 
+[![PRs Welcome][prs-badge]][prs] [![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
 
 토론하고 질문하기 위해 [Discord][discord-link] 또는 [Telegram][telegram-link] 채널에 자유롭게 참여하세요.
 
@@ -128,7 +128,7 @@ Carch는 무료이자 오픈 소스 프로젝트입니다. 개발을 지원하�
 [carch-docs-link]: https://carch.chalisehari.com.np
 -->
 
-<!-- [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE -->
+[telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=for-the-badge&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
 [prs]:https://github.com/harilvfs/carch/compare"
