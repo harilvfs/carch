@@ -47,7 +47,7 @@
 
 토론하고 질문하기 위해 [Discord][discord-link] 또는 [Telegram][telegram-link] 채널에 자유롭게 참여하세요.
 
-풀 리퀘스트를 열기 전에 반드시 [기여 가이드라인](https://carch.chalisehari.com.np/project/contributing)을 읽어주세요.
+풀 리퀘스트를 열기 전에 반드시 [기여 가이드라인](https://carch.chalisehari.com.np/ko/project/contributing)을 읽어주세요.
 
 ## 🙏 기여자
 
