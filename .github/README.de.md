@@ -47,7 +47,7 @@ Für Installationsanleitungen, Nutzung, Befehle und mehr, besuche die <a href="h
 
 Tritt gerne den [Discord][discord-link] oder [Telegram][telegram-link] Kanälen bei, um zu diskutieren und Fragen zu stellen.
 
-Bitte lies unsere [Beitragsrichtlinien](https://carch.chalisehari.com.np/project/contributing), bevor du eine Pull-Anfrage eröffnest.
+Bitte lies unsere [Beitragsrichtlinien](https://carch.chalisehari.com.np/de/project/contributing), bevor du eine Pull-Anfrage eröffnest.
 
 ## 🙏 Mitwirkende
 

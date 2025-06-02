@@ -46,7 +46,7 @@
 
 欢迎加入 [Discord][discord-link] 或 [Telegram][telegram-link] 频道进行讨论和提问。
 
-在提交拉取请求之前，请务必阅读我们的[贡献指南](https://carch.chalisehari.com.np/project/contributing)。
+在提交拉取请求之前，请务必阅读我们的[贡献指南](https://carch.chalisehari.com.np/zh/project/contributing)。
 
 ## 🙏 贡献者
 

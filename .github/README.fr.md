@@ -47,7 +47,7 @@ Pour les instructions d’installation, l’utilisation, les commandes et plus, 
 
 N’hésitez pas à rejoindre les canaux [Discord][discord-link] ou [Telegram][telegram-link] pour discuter et poser des questions.
 
-Assurez-vous de lire nos [directives de contribution](https://carch.chalisehari.com.np/project/contributing) avant d’ouvrir une pull request.
+Assurez-vous de lire nos [directives de contribution](https://carch.chalisehari.com.np/fr/project/contributing) avant d’ouvrir une pull request.
 
 ## 🙏 Contributeurs
 

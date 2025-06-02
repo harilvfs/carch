@@ -46,7 +46,7 @@ Para instrucciones de instalación, uso, comandos y más, visita el <a href="htt
 
 No dudes en unirte a los canales de [Discord][discord-link] o [Telegram][telegram-link] para discutir y hacer preguntas.
 
-Asegúrate de leer nuestras [pautas de contribución](https://carch.chalisehari.com.np/project/contributing) antes de abrir una solicitud de extracción.
+Asegúrate de leer nuestras [pautas de contribución](https://carch.chalisehari.com.np/es/project/contributing) antes de abrir una solicitud de extracción.
 
 ## 🙏 Contribuidores
 
