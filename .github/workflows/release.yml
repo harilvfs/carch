@@ -14,9 +14,11 @@ on:
 
 permissions:
   contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -40,10 +42,13 @@ jobs:
         run: |
           sed -i "s/^version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$VERSION\"/" Cargo.toml
 
-      - name: Install Rust
+      - name: Install Rust (stable) with MUSL targets
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: x86_64-unknown-linux-musl
+          targets: x86_64-unknown-linux-musl,aarch64-unknown-linux-musl
+
+      - name: Install rust-src
+        run: rustup component add rust-src --toolchain stable
 
       - name: Cache Cargo registry
         uses: actions/cache@v4
@@ -64,25 +69,37 @@ jobs:
 
       - name: Commit version changes
         run: |
-
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add ./man/carch.1 Cargo.toml Cargo.lock
-          git commit -m "chore(release): update to ${{ github.event.inputs.version }}"
+          git commit -m "chore(release): update to ${{ github.event.inputs.tag_version }}"
           git push
 
       - name: Install musl-tools
-        run: sudo apt-get update && sudo apt-get install musl-tools
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
 
       - name: Install cross-rs for cross-compilation
         run: cargo install cross
 
-      - name: Build x86_64 binary
-        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
-
-      - name: Build aarch64 binary
+      - name: Build x86_64 binary (with build-std)
         run: |
-          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
+          cargo build \
+            --release \
+            --verbose \
+            --target-dir=build \
+            --target=x86_64-unknown-linux-musl \
+            --all-features \
+            -Z build-std=std,panic_abort \
+            -Z build-std-features=panic_immediate_abort
+
+      - name: Build aarch64 binary (with cross)
+        run: |
+          cross build \
+            --release \
+            --verbose \
+            --target-dir=build \
+            --target=aarch64-unknown-linux-musl \
+            --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
 
       - name: Upload binaries as artifacts
@@ -102,7 +119,7 @@ jobs:
         env:
           OUTPUT: BODY.md
 
-      - name: badges & header
+      - name: Add badges & release header
         run: |
           sed -i '/^## \[unreleased\]/d' BODY.md
           BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)"
