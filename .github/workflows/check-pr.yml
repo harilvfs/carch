@@ -22,6 +22,7 @@ jobs:
             const owner = context.repo.owner;
 
             const comment = `
+            <!-- carch-bot-comment -->
             Thanks for opening the PR! 🙌
 
             Please make sure the PR title follows the [Conventional Commits](https://www.conventionalcommits.org/) guidelines.
@@ -45,11 +46,12 @@ jobs:
               issue_number: prNumber,
             });
 
-            const alreadyCommented = comments.data.some(comment =>
-              comment.body.includes("Thanks for opening the PR! 🙌")
+            const botAlreadyCommented = comments.data.some(comment =>
+              comment.user.type === "Bot" &&
+              comment.body.includes("<!-- carch-bot-comment -->")
             );
 
-            if (!alreadyCommented) {
+            if (!botAlreadyCommented) {
               await github.rest.issues.createComment({
                 owner,
                 repo,
