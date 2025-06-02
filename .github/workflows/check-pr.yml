@@ -1,4 +1,4 @@
-name: Check Prs
+name: Check PRs
 
 on:
   pull_request_target:
@@ -12,12 +12,12 @@ jobs:
   auto-comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Comment once on PR open
+      - name: Comment on open PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const issue_number = context.payload.pull_request.number;
+            const prNumber = context.payload.pull_request.number;
             const { owner, repo } = context.repo;
 
             const commentBody = `
@@ -41,20 +41,22 @@ jobs:
             const { data: comments } = await github.rest.issues.listComments({
               owner,
               repo,
-              issue_number
+              issue_number: prNumber
             });
 
             const botCommentExists = comments.some(comment =>
-              comment.body.includes("Thanks for opening the PR! 🙌") && comment.user.login === context.actor
+              comment.body.includes("Thanks for opening the PR! 🙌") &&
+              comment.user.login === context.actor
             );
 
             if (!botCommentExists) {
               await github.rest.issues.createComment({
                 owner,
                 repo,
-                issue_number,
+                issue_number: prNumber,
                 body: commentBody
               });
+              console.log("Comment posted successfully.");
             } else {
               console.log("Comment already exists, skipping.");
             }
