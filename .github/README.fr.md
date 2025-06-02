@@ -24,7 +24,7 @@ C’est particulièrement utile si vous souhaitez démarrer rapidement avec vos 
 <td>
 
 <h4>
-Pour les instructions d’installation, l’utilisation, les commandes et plus, consultez le <a href="https://carch.chalisehari.com.np/"><em>site officiel de la documentation Carch</em></a> disponible en :
+Pour les instructions d’installation, l’utilisation, les commandes et plus, consultez le <a href="https://carch.chalisehari.com.np/fr/"><em>site officiel de la documentation Carch</em></a> disponible en :
 <a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> •
 <a href="https://carch.chalisehari.com.np/ne/"> 🇳🇵 </a> •
 <a href="https://carch.chalisehari.com.np/hi/"> 🇮🇳 </a> •
