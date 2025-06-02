@@ -247,7 +247,7 @@ fn run_tui(settings: Settings,) -> Result<(), Box<dyn std::error::Error,>,> {
     let result = ui::run_ui_with_options(
         &modules_dir,
         |script_path| {
-            println!("\nRunning script: {}", script_path.display());
+            // println!("\nRunning script: {}", script_path.display());
 
             if settings.log_mode {
                 let _ = commands::log_message(
