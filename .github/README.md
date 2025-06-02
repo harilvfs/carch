@@ -115,7 +115,7 @@ Thanks to all contributors!
 
 ## 💬 Contact
 
-- Telegram: [@carchx](https://t.me/carchx)
+- Telegram: [carchx](https://t.me/carchx)
 - Discord: [Aayush Server](https://discord.com/invite/8NJWstnUHd)
 - Email: [harilvfs@chalisehari.com.np](mailto:harilvfs@chalisehari.com.np)
 
