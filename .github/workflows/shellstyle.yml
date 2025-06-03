@@ -15,7 +15,7 @@ on:
       - '**/*.toml'
   workflow_dispatch:
 
-obs:
+jobs:
   sh-whitespace-check:
     name: Check shell scripts for whitespace and blank lines
     runs-on: ubuntu-latest
