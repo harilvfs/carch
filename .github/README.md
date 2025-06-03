@@ -10,16 +10,16 @@
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![License][license]][license-link] [![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
 
-**[Installation](https://carch.chalisehari.com.np/getting-started/installation)** • 
-**[Contributing](https://carch.chalisehari.com.np/project/contributing)** • 
-**[Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md)** • 
-**[Docs](https://carch.chalisehari.com.np)**
+[Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
+[Contributing](https://carch.chalisehari.com.np/project/contributing) • 
+[Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) • 
+[Docs](https://carch.chalisehari.com.np)
 
 </div>
 
 <br>
 
-***[Carch](https://carch.chalisehari.com.np)*** is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
+*[Carch](https://carch.chalisehari.com.np)* is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
 It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup.
 
 *Currently supports Arch & Fedora based distros.*
@@ -31,7 +31,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <details>
 
-<summary><strong>For whom it may be useful</strong></summary>
+<summary>For whom it may be useful</summary>
 
 - For those who are new to Linux, especially using Arch or Fedora-based distros  
 - For those who don't want to go back and forth setting up their config  
@@ -42,7 +42,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <details>
 
-<summary><strong>For whom it is not useful or needed</strong></summary>
+<summary>For whom it is not useful or needed</summary>
 
 - For those who already have a preconfigured system  
 - For those who know how and where to use configs properly  
@@ -50,7 +50,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 </details>
 
 <details>
-<summary><strong>Preview</strong></summary>
+<summary>Preview</summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
@@ -58,7 +58,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <details>
   
-<summary><strong>How to use?</strong></summary>
+<summary>How to use?</summary>
 
 You can run or use Carch directly without installing it on your system.
 
@@ -128,12 +128,12 @@ Thanks to all contributors!
 
 Carch is free and open-source. If you'd like to support its development:
 
-**Bitcoin Address**  
+Bitcoin Address  
 `bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
 
 ![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
 
-**License**: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
+License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
 [check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?style=flat-square
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
