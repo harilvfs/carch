@@ -1,6 +1,144 @@
-# Changelog
+[![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
-All notable changes to this project will be documented in this file.
+## [5.1.1](https://github.com/harilvfs/carch/compare/v5.1.0...v5.1.1) - 2025-06-03
+
+
+### 🚀 Features
+
+
+- [1249cb1](https://github.com/harilvfs/carch/commit/1249cb154c100c1f82ff1e0a1a7d1dc78a76fb37)  *(package)* Add git-cliff by @harilvfs
+
+- [54825bb](https://github.com/harilvfs/carch/commit/54825bb44df02b4ea90354b3695147d5af916961)  *(config)* Add committed for lint by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [e8e73d9](https://github.com/harilvfs/carch/commit/e8e73d9baefaaba36bdf8d8cb8db6696b2625505)  *(lint)* Shell check error by @harilvfs
+
+
+
+### 💼 Other
+
+
+- [8323503](https://github.com/harilvfs/carch/commit/8323503bc5d9b076027a79693aef4b43575d8847)  *(command)* Fix update link by @harilvfs
+
+- [e74899d](https://github.com/harilvfs/carch/commit/e74899d8cd936d2a952ebc762d03439a4e3b01be)  *(lint)* Cargo fmt by @harilvfs
+
+- [5ac2ab8](https://github.com/harilvfs/carch/commit/5ac2ab86f829c154daa56163a716cbd0943e6203)  *(lint)* Cargo fmt by @harilvfs
+
+- [7a4e7df](https://github.com/harilvfs/carch/commit/7a4e7df48919ae44a7c8f1252b6e8cde869bf165)  *(lint)* Fix linting issues by @harilvfs
+
+- [6a2a73d](https://github.com/harilvfs/carch/commit/6a2a73d4a6e78e7697652667bf09bdc684149866) Update note & config link by @harilvfs
+
+- [af79965](https://github.com/harilvfs/carch/commit/af79965cc2230c8586fce513fca5009bd1fd4a1f)  *(lint)* Add taplo for toml fmt by @harilvfs
+
+- [b92ab63](https://github.com/harilvfs/carch/commit/b92ab63e863bb5eb1446447a94a42cb4649ec4c6)  *(config)* Comment out target cpu by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [1fa5620](https://github.com/harilvfs/carch/commit/1fa5620dc148870c4293628328f91034f4370aca) Using body from git-cliff by @harilvfs
+
+- [aae1197](https://github.com/harilvfs/carch/commit/aae1197a5891bf6ff631a2dda993c46fa63ba14b)  *(script)* Redoing the install script by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [752625d](https://github.com/harilvfs/carch/commit/752625d5a2f4ecd6513e6e576bb3f4f28a4ec0e0)  *(badge)* Add deps status by @harilvfs
+
+- [2792baa](https://github.com/harilvfs/carch/commit/2792baa47df6994132f6e93e73b829bceb9eb17b)  *(lang)* Add deps badges by @harilvfs
+
+- [04cceda](https://github.com/harilvfs/carch/commit/04ccedacb8e7a8bd470342d45ca6f2efc147ffb4)  *(readme)* Add contributing & badges by @harilvfs
+
+- [4ccad99](https://github.com/harilvfs/carch/commit/4ccad99bcec10ea9710da965228f693267d6f7f3)  *(update)* Adapt link with diff lang by @harilvfs
+
+- [5ab5366](https://github.com/harilvfs/carch/commit/5ab53667d5934991d723c06171f6991b11f8ff25)  *(link)* Add telegram badge by @harilvfs
+
+- [d63d00b](https://github.com/harilvfs/carch/commit/d63d00b53b6e4a4e52e8bd91ff3df8d3b3377715)  *(clenup)* Remove duplicate badge by @harilvfs
+
+- [4756157](https://github.com/harilvfs/carch/commit/4756157c04c98bce7595cfeb71e95d3d831fe4b3) Update docs redirect url by @harilvfs
+
+- [3c3c785](https://github.com/harilvfs/carch/commit/3c3c785fac3909d659ba07f99721efa665118157)  *(update)* Redoing whole readme (#471) by @harilvfs in [#471](https://github.com/harilvfs/carch/pull/471)
+
+- [cd56944](https://github.com/harilvfs/carch/commit/cd56944c1d1fe2cbaadcf7881121a9d5fbe94596) Fix image size in readme (#472) by @aayushrg7 in [#472](https://github.com/harilvfs/carch/pull/472)
+
+- [43dca43](https://github.com/harilvfs/carch/commit/43dca4354fd4ad72a27fe6f84a6dda529689da83)  *(readme)* Fix dev version url by @harilvfs
+
+- [e187b63](https://github.com/harilvfs/carch/commit/e187b63aa5ca81bcfd58d462552afde89605bf4f) Add Prerequisites note (#473) by @aayushrg7 in [#473](https://github.com/harilvfs/carch/pull/473)
+
+- [c192f3a](https://github.com/harilvfs/carch/commit/c192f3a9c1cd528d589f3d44ac0428c03aafa74f)  *(badge)* Add license (#474) by @aayushrg7 in [#474](https://github.com/harilvfs/carch/pull/474)
+
+
+
+### 🎨 Styling
+
+
+- [d526e64](https://github.com/harilvfs/carch/commit/d526e6493eed810e7f8a2ef6ed4167e95522b267)  *(colors)* Add catppuccin colors palette by @harilvfs
+
+- [2eb8743](https://github.com/harilvfs/carch/commit/2eb87433cd3421e5297818ef0c72be28d4205fd4)  *(script)* Changing color to catppuccin teal by @harilvfs
+
+- [b35515f](https://github.com/harilvfs/carch/commit/b35515fe305053122cb761eeb7b41dc9cc3503f8)  *(config)* Fix deny with taplo fmt by @harilvfs
+
+- [d2a821c](https://github.com/harilvfs/carch/commit/d2a821c2cce6612ae4403502d5cae39c30996683)  *(config)* Fix formatting & toml lint by @harilvfs
+
+- [28b2679](https://github.com/harilvfs/carch/commit/28b2679ee4064d59831c01c70a59b12187b3ca72)  *(config)* Remove unused headings & cleanup by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [c5de686](https://github.com/harilvfs/carch/commit/c5de68642ccc102cf80f262f24a425c07c898c20)  *(rust)* Using nightly for lint by @harilvfs
+
+- [b3ace32](https://github.com/harilvfs/carch/commit/b3ace3205c595c74f2d2e5f9b8611a7bccaec42c)  *(rust)* Using nightly for linting by @harilvfs
+
+- [eebc6be](https://github.com/harilvfs/carch/commit/eebc6bebcc1e3edb459ecf5a407f961d6f29041f)  *(deny)* Add cargo-deny configuration by @harilvfs
+
+- [d689a9b](https://github.com/harilvfs/carch/commit/d689a9be8102eaaf78aa866d2b5ace39c01561b3) Fix typos and taplo fmt check by @harilvfs
+
+- [72c4cb5](https://github.com/harilvfs/carch/commit/72c4cb5acbcb2d1cd9049ae6318315b568f2a580) Remove dependabot in favor of renovate by @harilvfs
+
+- [c13ea74](https://github.com/harilvfs/carch/commit/c13ea74f358702bb1f860e9f0679259d2162e60b)  *(config)* Support multiple versions in deny by @harilvfs
+
+- [5995af2](https://github.com/harilvfs/carch/commit/5995af21857e920c28107b6c5088c836f4f3cd72)  *(rust)* Add cargo deny check by @harilvfs
+
+- [b364a8c](https://github.com/harilvfs/carch/commit/b364a8c0b841e2b3706562c1542ffbbf0023d383)  *(config)* Add .cargo/config.toml by @harilvfs
+
+- [3fb4548](https://github.com/harilvfs/carch/commit/3fb454876e4d29692d67d2dae2949252adeb9249) Add ci to auto-comment on prs by @harilvfs
+
+- [79a1483](https://github.com/harilvfs/carch/commit/79a148370cd26cea3f565a7c7051080d9eb07779) Cleanup by @harilvfs
+
+- [a4df341](https://github.com/harilvfs/carch/commit/a4df341f3d7151ea794a6cb8fe84b1bf0754d301)  *(pre-release)* Add verbose at build by @harilvfs
+
+- [522fcda](https://github.com/harilvfs/carch/commit/522fcda023bb6799e3986f5be70d7b04f74ce377)  *(release)* Fix binary build by @harilvfs
+
+- [572a71a](https://github.com/harilvfs/carch/commit/572a71a2aaaa2360d966c77612193f12c8cb2505)  *(rust)* Add bacon.toml by @harilvfs
+
+- [e34351e](https://github.com/harilvfs/carch/commit/e34351eacd846c20754f817ddfa25498e3fbe980)  *(rust)* Comment out debug log for script execution by @harilvfs
+
+- [89ae78f](https://github.com/harilvfs/carch/commit/89ae78f1bdc20d03d484475bb268d8b86544f3c8)  *(config)* Add carch banner cliff by @harilvfs
+
+- [0e943e5](https://github.com/harilvfs/carch/commit/0e943e542eff142269e62fe01f2775d7902b5d2c)  *(lint)* Ignore toml files by @harilvfs
+
+- [601df25](https://github.com/harilvfs/carch/commit/601df252dd8875246920e4d280c7ad16aba1fae9)  *(typos)* Fix job in ci by @harilvfs
+
+- [2bb21e1](https://github.com/harilvfs/carch/commit/2bb21e13d35072893bf064eb1965464973caa644)  *(config)* Fix carch banner cliff by @harilvfs
+
+- [c6be45d](https://github.com/harilvfs/carch/commit/c6be45d46db01db05743a52d74aee45853963b96)  *(release)* Adding strip header by @harilvfs
+
+- [94ad6be](https://github.com/harilvfs/carch/commit/94ad6bec678c9e585cbeb27b7401443f4ce5dede)  *(release)* Add carch banner by @harilvfs
+
+- [0ca82aa](https://github.com/harilvfs/carch/commit/0ca82aaaf081093714d5191d68793cd2a9344c97)  *(script)* Fix some unheld logic & cleanup by @harilvfs
+
+- [abe4184](https://github.com/harilvfs/carch/commit/abe4184174534979682e24dbe2ecaaa5531ad1aa)  *(lint)* Using only the subpath to trigger ci by @harilvfs
+
+
 
 ## [5.1.0](https://github.com/harilvfs/carch/compare/v5.0.0...v5.1.0) - 2025-05-31
 
@@ -19,16 +157,13 @@ All notable changes to this project will be documented in this file.
 ### 💼 Other
 
 
+- [910a9b6](https://github.com/harilvfs/carch/commit/910a9b62b4f12e0133840c67114ab5ad4725f968) Rounded script list & help [ ui ] (#464) by @harilvfs in [#464](https://github.com/harilvfs/carch/pull/464)
+
 - [3457148](https://github.com/harilvfs/carch/commit/34571483438c9a34b0234be65301d371ca67ae95) Change the fastfetch config url by @harilvfs
 
 - [a2df537](https://github.com/harilvfs/carch/commit/a2df537e8b945a774f9728c3adeb69f546cd7485) Replace product name with carch by @harilvfs
 
-
-
-### 🦀 Rust
-
-
-- [910a9b6](https://github.com/harilvfs/carch/commit/910a9b62b4f12e0133840c67114ab5ad4725f968) Rounded script list & help [ ui ] (#464) by @harilvfs in [#464](https://github.com/harilvfs/carch/pull/464)
+- [2be2497](https://github.com/harilvfs/carch/commit/2be24976aba0609c7963f471488751d9c9741c67) Gitattributes [ not needed ] by @harilvfs
 
 
 
@@ -55,6 +190,8 @@ All notable changes to this project will be documented in this file.
 
 - [6ca03e8](https://github.com/harilvfs/carch/commit/6ca03e860509db4547879406c8cd5eee94cb7e67)  *(desktop)* Add Keywords field to improve discoverability by @harilvfs
 
+- [a998984](https://github.com/harilvfs/carch/commit/a998984ebb754b1bf55dc364168fbdd3443478c8) Add .editorconfig by @harilvfs
+
 
 
 ## [5.0.0](https://github.com/harilvfs/carch/compare/v4.4.7...v5.0.0) - 2025-05-27
@@ -75,11 +212,6 @@ All notable changes to this project will be documented in this file.
 
 
 - [d050b20](https://github.com/harilvfs/carch/commit/d050b2092712e728d22dc0313e0a7559e72de7ca) Typo by @harilvfs
-
-
-
-### 🦀 Rust
-
 
 - [b150c8d](https://github.com/harilvfs/carch/commit/b150c8d6bbad3d58eb8a66ed61506345134d06be) Use default fmt by @harilvfs
 
@@ -210,18 +342,13 @@ All notable changes to this project will be documented in this file.
 
 - [02fb96f](https://github.com/harilvfs/carch/commit/02fb96f1faf0be2b40d8c7b14e1337391f7570f8) Unused colors [ all scripts ] by @harilvfs
 
-- [8a100f4](https://github.com/harilvfs/carch/commit/8a100f44784d95d915c4ed78db3980ea6e7261a7) Emojis [ scripts ] by @harilvfs
-
-
-
-### 🦀 Rust
-
-
 - [63c51e0](https://github.com/harilvfs/carch/commit/63c51e0df3e95861651a78aebe85663782b80bb9) Adapt with links url changes by @harilvfs
 
 - [27343f0](https://github.com/harilvfs/carch/commit/27343f0149babf96db004aaba05e86239cf651bc) I forget to update [fixes] by @harilvfs
 
 - [65ee22a](https://github.com/harilvfs/carch/commit/65ee22a90663d895a5c7a1d0c08d5cd064faa3d4) Fix repository url by @harilvfs
+
+- [8a100f4](https://github.com/harilvfs/carch/commit/8a100f44784d95d915c4ed78db3980ea6e7261a7) Emojis [ scripts ] by @harilvfs
 
 
 
@@ -606,7 +733,7 @@ All notable changes to this project will be documented in this file.
 
 
 
-### 🦀 Rust
+### 💼 Other
 
 
 - [40e08bb](https://github.com/harilvfs/carch/commit/40e08bb792982e3621cd50f5c83e6eaa286c81a1) Add log dir detail by @harilvfs
@@ -752,19 +879,6 @@ All notable changes to this project will be documented in this file.
 
 - [bc1d4da](https://github.com/harilvfs/carch/commit/bc1d4dacdf3bd7af4317b86096037f58514560bf) Cleanup script & commands by @harilvfs
 
-- [a63fdca](https://github.com/harilvfs/carch/commit/a63fdca80878db03178b6c62aef643ddca4b8a6e) Eza manual install fedora side by @harilvfs
-
-- [2352485](https://github.com/harilvfs/carch/commit/2352485e50f3f0e1d460afa0c60b40607da35ebb) Change title style & colors by @harilvfs
-
-- [fda96e6](https://github.com/harilvfs/carch/commit/fda96e65154fe99fffa4ca6dc97b22cee9a3b9e2) Bump version 4.3.6 [ stable ] by @harilvfs
-
-- [853f107](https://github.com/harilvfs/carch/commit/853f107240ba6d493301574223a96fea00cc4b4d) Add some use case dependencies by @harilvfs
-
-
-
-### 🦀 Rust
-
-
 - [34746ba](https://github.com/harilvfs/carch/commit/34746ba27f730e9479c85acdc84017e6adc19f11) Cleanup cache file by @harilvfs
 
 - [9360b4d](https://github.com/harilvfs/carch/commit/9360b4db4bc029e03a836db3fde2506609cabcaf) Cargo fmt by @harilvfs
@@ -772,6 +886,14 @@ All notable changes to this project will be documented in this file.
 - [138bcb0](https://github.com/harilvfs/carch/commit/138bcb0661cc49b5cb7c97017890f93e60c84c83) Changes adapt from ratatui v29 (#414) by @harilvfs in [#414](https://github.com/harilvfs/carch/pull/414)
 
 - [af778a9](https://github.com/harilvfs/carch/commit/af778a9f8cb6472d7a7dd553b9876916fce4024c) Structure changed ui (#415) by @harilvfs in [#415](https://github.com/harilvfs/carch/pull/415)
+
+- [a63fdca](https://github.com/harilvfs/carch/commit/a63fdca80878db03178b6c62aef643ddca4b8a6e) Eza manual install fedora side by @harilvfs
+
+- [2352485](https://github.com/harilvfs/carch/commit/2352485e50f3f0e1d460afa0c60b40607da35ebb) Change title style & colors by @harilvfs
+
+- [fda96e6](https://github.com/harilvfs/carch/commit/fda96e65154fe99fffa4ca6dc97b22cee9a3b9e2) Bump version 4.3.6 [ stable ] by @harilvfs
+
+- [853f107](https://github.com/harilvfs/carch/commit/853f107240ba6d493301574223a96fea00cc4b4d) Add some use case dependencies by @harilvfs
 
 
 
@@ -954,22 +1076,17 @@ All notable changes to this project will be documented in this file.
 
 - [ad0c1d7](https://github.com/harilvfs/carch/commit/ad0c1d72fb9134c887187849c83cf1fc74a5b787) Minimize timing by @harilvfs
 
-- [fe5b2a2](https://github.com/harilvfs/carch/commit/fe5b2a24891a6d48acf1db8a0d355746e8c47974) Clean up by @harilvfs
-
-- [212ef21](https://github.com/harilvfs/carch/commit/212ef21a5ae51b512e213cd0f2e34b4d88cb2cb4) Minor Typos Fixxed by @harilvfs
-
-- [f95ce55](https://github.com/harilvfs/carch/commit/f95ce554005c7cf1f0dd3bb4d32e97b2d9869eaa) Bump Version 4.3.3 by @harilvfs
-
-
-
-### 🦀 Rust
-
-
 - [6f5ccef](https://github.com/harilvfs/carch/commit/6f5ccef7d4a452fa0260169e4686659362354c9d) Cargo fmt by @harilvfs
 
 - [adf16fe](https://github.com/harilvfs/carch/commit/adf16fefe25252fa69a39711e7861d6b8a3e43a7) Testing by @harilvfs
 
 - [7b6bd5c](https://github.com/harilvfs/carch/commit/7b6bd5c9cb0659af44c6f29055479d4c5911b3f4) Cleanup some text's by @harilvfs
+
+- [fe5b2a2](https://github.com/harilvfs/carch/commit/fe5b2a24891a6d48acf1db8a0d355746e8c47974) Clean up by @harilvfs
+
+- [212ef21](https://github.com/harilvfs/carch/commit/212ef21a5ae51b512e213cd0f2e34b4d88cb2cb4) Minor Typos Fixxed by @harilvfs
+
+- [f95ce55](https://github.com/harilvfs/carch/commit/f95ce554005c7cf1f0dd3bb4d32e97b2d9869eaa) Bump Version 4.3.3 by @harilvfs
 
 
 
@@ -1064,7 +1181,7 @@ All notable changes to this project will be documented in this file.
 
 
 
-### 🖥️ UI/UX
+### 🧩 UI/UX
 
 
 - [81a520d](https://github.com/harilvfs/carch/commit/81a520d71048c07af82a9467856df6bc968bf7df) Improve Heading & Add Help Info (#386) by @harilvfs in [#386](https://github.com/harilvfs/carch/pull/386)
@@ -1162,24 +1279,19 @@ All notable changes to this project will be documented in this file.
 
 - [4cba69a](https://github.com/harilvfs/carch/commit/4cba69af68fcf8ee2f8326ddde7345ed480a0f76) Migrate --help info in Rust (#376) by @harilvfs in [#376](https://github.com/harilvfs/carch/pull/376)
 
+- [dcf1581](https://github.com/harilvfs/carch/commit/dcf1581904cd752fefc62827d0e67c3e8370f904) Creating a TUI to Display Help Info (#377) by @harilvfs in [#377](https://github.com/harilvfs/carch/pull/377)
+
 - [1062b6b](https://github.com/harilvfs/carch/commit/1062b6bbbc7d90608a171b2fea66b2b230f4e143) Preview tape by @harilvfs
+
+- [82be956](https://github.com/harilvfs/carch/commit/82be956dc94e4a30f6282971f3d4b74454e40807) Separate Script to Avoid Conflicts (#378) by @harilvfs in [#378](https://github.com/harilvfs/carch/pull/378)
+
+- [c97a46d](https://github.com/harilvfs/carch/commit/c97a46d0c49038ed6659f2229339ce5af410e19c) Tui For List Scripts Command (#379) by @harilvfs in [#379](https://github.com/harilvfs/carch/pull/379)
 
 - [feb9f11](https://github.com/harilvfs/carch/commit/feb9f116ad4a9b365f5428ea2539d3d0f556d912) Clean Up After Running Script (#380) by @harilvfs in [#380](https://github.com/harilvfs/carch/pull/380)
 
 - [53eaf3d](https://github.com/harilvfs/carch/commit/53eaf3d47031549b86c527e72e9e5a33f1f74abb) No Dependencies Checkup In Main Script by @harilvfs
 
 - [fc27ca7](https://github.com/harilvfs/carch/commit/fc27ca763e6e07598c7253851b14c4d31fd75f1d) No Dependencies Checkup In Main Script by @harilvfs
-
-
-
-### 🦀 Rust
-
-
-- [dcf1581](https://github.com/harilvfs/carch/commit/dcf1581904cd752fefc62827d0e67c3e8370f904) Creating a TUI to Display Help Info (#377) by @harilvfs in [#377](https://github.com/harilvfs/carch/pull/377)
-
-- [82be956](https://github.com/harilvfs/carch/commit/82be956dc94e4a30f6282971f3d4b74454e40807) Separate Script to Avoid Conflicts (#378) by @harilvfs in [#378](https://github.com/harilvfs/carch/pull/378)
-
-- [c97a46d](https://github.com/harilvfs/carch/commit/c97a46d0c49038ed6659f2229339ce5af410e19c) Tui For List Scripts Command (#379) by @harilvfs in [#379](https://github.com/harilvfs/carch/pull/379)
 
 
 
@@ -1441,3 +1553,7 @@ All notable changes to this project will be documented in this file.
 
 
 
+## [3.0.1] - 2024-10-10
+
+
+<!-- generated by git-cliff -->
