@@ -91,4 +91,4 @@ jobs:
           body: |
             changelog for version v${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
-          delete-branch: false
+          delete-branch: true
