@@ -43,6 +43,7 @@ jobs:
           }
 
       - name: Create Pull Request for docs
+        id: create_docs_pr
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
@@ -50,9 +51,16 @@ jobs:
           branch: update-docs-version/${{ github.event.inputs.version }}
           title: "Update docs version to ${{ github.event.inputs.version }}"
           body: |
-           update the version in config to ${{ github.event.inputs.version }}.
+            update the version in config to ${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
-          delete-branch: true
+          delete-branch: false
+
+      - name: Merge
+        if: steps.create_docs_pr.outputs.pull-request-number != ''
+        run: |
+          gh pr merge update-docs-version/${{ github.event.inputs.version }} --squash --delete-branch --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 
   generate_changelog:
     runs-on: ubuntu-latest
@@ -82,6 +90,7 @@ jobs:
         run: rm -rf git-cliff-*
 
       - name: Create Pull Request for changelog
+        id: create_changelog_pr
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
@@ -91,4 +100,11 @@ jobs:
           body: |
             changelog for version v${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
-          delete-branch: true
+          delete-branch: false
+
+      - name: Merge
+        if: steps.create_changelog_pr.outputs.pull-request-number != ''
+        run: |
+          gh pr merge changelog/${{ github.event.inputs.version }} --squash --delete-branch --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
