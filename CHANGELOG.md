@@ -1,5 +1,17 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [unreleased]
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [4658199](https://github.com/harilvfs/carch/commit/465819901de24bcc58aac0cc767b13766103c37b)  *(crate)* Add rust nightly by @harilvfs
+
+- [fcf7ef9](https://github.com/harilvfs/carch/commit/fcf7ef901ad3752a4520099252e1e1c9207948ec) Auto merge changelog by @harilvfs
+
+
+
 ## [5.1.1](https://github.com/harilvfs/carch/compare/v5.1.0...v5.1.1) - 2025-06-03
 
 
