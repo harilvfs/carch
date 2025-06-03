@@ -3,17 +3,17 @@ name: CI
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - '**/*.md'
-      - '.github/**'
-      - 'scripts/**'
+    paths:
+      - '**/*.rs'
+      - '**/*.toml'
+      - 'Cargo.lock'
 
   pull_request:
     branches: [main]
-    paths-ignore:
-      - '**/*.md'
-      - '.github/**'
-      - 'scripts/**'
+    paths:
+      - '**/*.rs'
+      - '**/*.toml'
+      - 'Cargo.lock'
 
   workflow_dispatch:
 
