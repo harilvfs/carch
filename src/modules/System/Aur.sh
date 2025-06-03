@@ -15,36 +15,36 @@ detect_distro() {
 }
 
 check_dependencies() {
-if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -v make &> /dev/null || ! command -v less &> /dev/null; then
-
-    echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
-
     if ! command -v fzf &> /dev/null; then
-        echo -e "${YELLOW}- fzf is not installed.${NC}"
+        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
+        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        exit 1
     fi
 
     if ! command -v git &> /dev/null; then
-        echo -e "${YELLOW}- git is not installed.${NC}"
+        echo -e "${RED}${BOLD}Error: git is not installed.${NC}"
+        echo -e "${YELLOW}Please install git before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S git"
     fi
 
     if ! command -v make &> /dev/null; then
-        echo -e "${YELLOW}- make is not installed.${NC}"
+        echo -e "${RED}${BOLD} make is not installed.${NC}"
+        echo -e "${YELLOW}Please install make before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install make"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S base-devel make"
     fi
 
     if ! command -v less &> /dev/null; then
-        echo -e "${YELLOW}- less is not installed.${NC}"
+        echo -e "${RED}${BOLD} less is not installed.${NC}"
+        echo -e "${YELLOW}Please install less before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install less"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S less"
     fi
 
     exit 1
-  fi
 }
 
 install_paru() {
