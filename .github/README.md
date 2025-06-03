@@ -13,7 +13,7 @@
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
 [Contributing](https://carch.chalisehari.com.np/project/contributing) • 
 [Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) • 
-[Docs](https://carch.chalisehari.com.np)**
+[Docs](https://carch.chalisehari.com.np)
 
 </div>
 
