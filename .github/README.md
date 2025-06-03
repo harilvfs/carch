@@ -8,7 +8,7 @@
 
 <div align="center">
 
-[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![License][license]][license-badge] [![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
+[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![License][license-badge]][license] [![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
 
 **[Installation](https://carch.chalisehari.com.np/getting-started/installation)** • 
 **[Contributing](https://carch.chalisehari.com.np/project/contributing)** • 
