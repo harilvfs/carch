@@ -42,13 +42,13 @@ jobs:
         run: |
           sed -i "s/^version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$VERSION\"/" Cargo.toml
 
-      - name: Install Rust (stable) with MUSL targets
-        uses: dtolnay/rust-toolchain@stable
+      - name: Install Rust (nightly) with MUSL targets
+        uses: dtolnay/rust-toolchain@nightly
         with:
           targets: x86_64-unknown-linux-musl,aarch64-unknown-linux-musl
 
       - name: Install rust-src
-        run: rustup component add rust-src --toolchain stable
+        run: rustup component add rust-src --toolchain nightly
 
       - name: Cache Cargo registry
         uses: actions/cache@v4
