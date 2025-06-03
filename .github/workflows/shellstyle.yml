@@ -1,17 +1,21 @@
 name: Shell Style Check
+
 on:
   push:
     branches: [ main ]
     paths-ignore:
       - '**/*.md'
       - '.github/**'
+      - '**/.toml'
   pull_request:
     branches: [ main ]
     paths-ignore:
       - '**/*.md'
       - '.github/**'
-  workflow_dispatch: 
-jobs:
+      - '**/*.toml'
+  workflow_dispatch:
+
+obs:
   sh-whitespace-check:
     name: Check shell scripts for whitespace and blank lines
     runs-on: ubuntu-latest
@@ -28,7 +32,7 @@ jobs:
             echo "::error::The script file check.sh was not found in either ./ or ./scripts/!"
             exit 1
           fi
-          
+
           chmod +x "$SCRIPT_PATH"
-          
+
           "$SCRIPT_PATH"
