@@ -31,7 +31,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <details>
 
-<summary><strong>For whom it may be useful</strong></summary>
+<summary>For whom it may be useful</summary>
 
 - For those who are new to Linux, especially using Arch or Fedora-based distros  
 - For those who don't want to go back and forth setting up their config  
@@ -42,7 +42,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <details>
 
-<summary><strong>For whom it is not useful or needed</strong></summary>
+<summary>For whom it is not useful or needed</summary>
 
 - For those who already have a preconfigured system  
 - For those who know how and where to use configs properly  
@@ -50,7 +50,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 </details>
 
 <details>
-<summary><strong>Preview</strong></summary>
+<summary>Preview</summary>
 
 ![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
   
@@ -58,7 +58,7 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 
 <details>
   
-<summary><strong>How to use?</strong></summary>
+<summary>How to use?</summary>
 
 You can run or use Carch directly without installing it on your system.
 
