@@ -6,6 +6,10 @@ on:
       version:
         description: 'Version number (e.g., 1.1.1)'
         required: true
+      target_branch:
+        description: 'Target branch for the PR'
+        required: false
+        default: 'main'
 
 jobs:
   generate_changelog:
@@ -17,6 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.PAT_TOKEN }}
           fetch-depth: 0
 
       - name: Install git-cliff
@@ -47,6 +52,11 @@ jobs:
             changelog for version v${{ github.event.inputs.version }}.
           base: ${{ github.event.inputs.target_branch }}
           delete-branch: false
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
 
       - name: Merge PR
         if: steps.create_changelog_pr.outputs.pull-request-number != ''
