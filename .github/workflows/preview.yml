@@ -119,9 +119,9 @@ jobs:
             ![preview](https://raw.githubusercontent.com/${{ github.repository }}/feature/preview-update/.github/preview.gif)
           delete-branch: false
 
-      - name: Auto-merge PR and delete branch
+      - name: Auto-merge
         if: steps.cpr.outputs.pull-request-url != ''
         run: |
-          gh pr merge feature/preview-update --merge --delete-branch --repo ${{ github.repository }}
+          gh pr merge feature/preview-update --squash --delete-branch --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
