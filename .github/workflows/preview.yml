@@ -115,4 +115,5 @@ jobs:
           body: |
             PR to update preview ${{ env.TAG_NAME }}
             ![preview](https://raw.githubusercontent.com/${{ github.repository }}/feature/preview-update/.github/preview.gif)
-        if: success()
+          if: success()
+          delete-branch: true
