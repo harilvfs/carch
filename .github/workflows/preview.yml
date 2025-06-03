@@ -1,4 +1,5 @@
 name: Preview
+
 on:
   workflow_dispatch:
     inputs:
@@ -6,11 +7,14 @@ on:
         description: 'Release tag to use for Carch binary'
         required: true
         default: 'latest'
+
 jobs:
   generate_preview:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -43,10 +47,8 @@ jobs:
         run: |
           cat > install_arch_deps.sh << 'EOF'
           #!/bin/bash
-
           pacman -Syu --noconfirm
           pacman -S --noconfirm fzf
-
           echo "Installed packages:"
           pacman -Q fzf
           EOF
@@ -65,7 +67,6 @@ jobs:
           FROM ghcr.io/charmbracelet/vhs
 
           COPY --from=arch_deps /usr/bin/fzf /usr/bin/fzf
-
 
           RUN which fzf
           EOF
@@ -101,11 +102,12 @@ jobs:
             fi
           fi
 
-      - name: Clean
+      - name: Clean up
         run: |
           rm -f Dockerfile.vhs install_arch_deps.sh
 
       - name: Create PR
+        id: cpr
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           token: ${{ secrets.PAT_TOKEN }}
@@ -115,5 +117,11 @@ jobs:
           body: |
             PR to update preview ${{ env.TAG_NAME }}
             ![preview](https://raw.githubusercontent.com/${{ github.repository }}/feature/preview-update/.github/preview.gif)
-          if: success()
-          delete-branch: true
+          delete-branch: false
+
+      - name: Auto-merge PR and delete branch
+        if: steps.cpr.outputs.pull-request-url != ''
+        run: |
+          gh pr merge feature/preview-update --merge --delete-branch --repo ${{ github.repository }}
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
