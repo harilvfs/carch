@@ -1,4 +1,4 @@
-name: Changelog & Docs
+name: Changelog
 
 on:
   workflow_dispatch:
@@ -6,62 +6,8 @@ on:
       version:
         description: 'Version number (e.g., 1.1.1)'
         required: true
-      target_branch:
-        description: 'Target branch for the PR'
-        required: false
-        default: 'main'
-      update_docs:
-        description: 'Update version in docs repo'
-        required: false
-        default: 'true'
 
 jobs:
-  update_docs_version:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.update_docs == 'true' }}
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - name: Checkout docs repository
-        uses: actions/checkout@v4
-        with:
-          repository: carch-org/docs
-          token: ${{ secrets.PAT_TOKEN }}
-          fetch-depth: 1
-
-      - name: Update version in config.ts
-        run: |
-          CONFIG_FILE="docs/.vitepress/config.ts"
-          VERSION="${{ github.event.inputs.version }}"
-
-          sed -i "s/text: \"[0-9]\+\.[0-9]\+\.[0-9]\+\",/text: \"${VERSION}\",/" "$CONFIG_FILE"
-
-          grep -q "text: \"${VERSION}\"," "$CONFIG_FILE" || {
-            echo "failed to update version in $CONFIG_FILE"
-            exit 1
-          }
-
-      - name: Create Pull Request for docs
-        id: create_docs_pr
-        uses: peter-evans/create-pull-request@v7.0.8
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          commit-message: "chore(release): update version to ${{ github.event.inputs.version }}"
-          branch: update-docs-version/${{ github.event.inputs.version }}
-          title: "Update docs version to ${{ github.event.inputs.version }}"
-          body: |
-            update the version in config to ${{ github.event.inputs.version }}.
-          base: ${{ github.event.inputs.target_branch }}
-          delete-branch: false
-
-      - name: Merge
-        if: steps.create_docs_pr.outputs.pull-request-number != ''
-        run: |
-          gh pr merge update-docs-version/${{ github.event.inputs.version }} --squash --delete-branch --repo ${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-
   generate_changelog:
     runs-on: ubuntu-latest
     permissions:
@@ -89,7 +35,7 @@ jobs:
       - name: Cleanup git-cliff installation files
         run: rm -rf git-cliff-*
 
-      - name: Create Pull Request for changelog
+      - name: Create Pull Request
         id: create_changelog_pr
         uses: peter-evans/create-pull-request@v7.0.8
         with:
@@ -102,9 +48,9 @@ jobs:
           base: ${{ github.event.inputs.target_branch }}
           delete-branch: false
 
-      - name: Merge
+      - name: Merge PR
         if: steps.create_changelog_pr.outputs.pull-request-number != ''
         run: |
-          gh pr merge changelog/${{ github.event.inputs.version }} --squash --delete-branch --repo ${{ github.repository }}
+          gh pr merge changelog/${{ github.event.inputs.version }} --squash --delete-branch
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
