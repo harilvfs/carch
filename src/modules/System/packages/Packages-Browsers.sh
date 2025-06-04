@@ -22,9 +22,9 @@ install_browsers() {
     while true; do
         clear
 
-        options=("Brave" "Firefox" "Lynx" "Libre Wolf" "Floorp" "Google Chrome" "Chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
+        options=("Brave" "Firefox" "Lynx" "Libre Wolf" "Floorp" "Google Chrome" "Chromium" "Ungoogled-chromium" "Vivaldi" "Qute Browser" "Zen Browser" "Thorium Browser" "Opera" "Tor Browser" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=60% \
+                                                    --height=65% \
                                                     --prompt="Choose options (TAB to select multiple): " \
                                                     --header="Package Selection" \
                                                     --pointer="➤" \
@@ -129,6 +129,20 @@ install_browsers() {
                         version="(Flatpak version installed)"
                     fi
                     echo "Chromium installed successfully! Version: $version"
+                    ;;
+
+                "Ungoogled-chromium")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur ungoogled-chromium-bin
+                        version=$(get_version ungoogled-chromium-bin)
+                    else
+                        echo "Enabling COPR repository..."
+                        sudo dnf copr enable -y wojnilowicz/ungoogled-chromium
+                        $pkg_manager ungoogled-chromium
+                        version=$(get_version ungoogled-chromium)
+                    fi
+                    echo "Ungoogled Chromium installed successfully! Version: $version"
                     ;;
 
                 "Vivaldi")
