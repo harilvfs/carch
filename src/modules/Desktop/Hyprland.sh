@@ -108,12 +108,12 @@ install_config() {
         ./install.sh
     elif [[ "$choice" == "mylinuxforwork/dotfiles" ]]; then
         if [[ "$distro" == "arch" ]]; then
-            bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-arch.sh)
+            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-arch.sh)"
         else
-            bash <(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-fedora.sh)
+            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-fedora.sh)"
         fi
     elif [[ "$choice" == "end-4/dots-hyprland" ]]; then
-        bash <(curl -s "https://end-4.github.io/dots-hyprland-wiki/setup.sh")
+        bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
     elif [[ "$choice" == "jakoolit/Arch-Hyprland" ]]; then
         git clone --depth=1 https://github.com/JaKooLit/Arch-Hyprland.git ~/Arch-Hyprland
         cd ~/Arch-Hyprland || exit
