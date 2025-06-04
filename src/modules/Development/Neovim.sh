@@ -135,7 +135,7 @@ handle_existing_config() {
             mkdir -p "$nvim_config_dir"
             ;;
         "Exit")
-            echo -e "${RED}Exiting the script.${RESET}"
+            echo -e "${RED}Exiting...${RESET}"
             exit 0
             ;;
     esac
@@ -209,7 +209,7 @@ main() {
             install_dependencies "$os_type" || exit 1
             ;;
         "Exit")
-            echo -e "${RED}Exiting the script.${RESET}"
+            echo -e "${RED}Exiting...${RESET}"
             exit 0
             ;;
         *)

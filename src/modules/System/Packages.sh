@@ -146,6 +146,8 @@ while true; do
         "Text Editors") install_texteditor ;;
         "Virtualization") install_virtualization ;;
         "Crypto Tools") install_crypto_tools ;;
-        "Exit") exit ;;
+        "Exit")
+        echo -e "${GREEN}Exiting...${NC}"
+        exit
     esac
 done
