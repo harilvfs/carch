@@ -49,23 +49,6 @@ fzf_select_fonts() {
                                      --color='fg:white,fg+:blue,bg+:black,pointer:blue'
 }
 
-check_dependencies() {
-    if ! command -v unzip &>/dev/null; then
-        echo -e "${RED}Error: 'unzip' is not installed. Please install it first.${NC}"
-        exit 1
-    fi
-
-    if ! command -v fzf &>/dev/null; then
-        echo -e "${RED}Error: 'fzf' is not installed. Please install it first.${NC}"
-        exit 1
-    fi
-
-    if ! command -v curl &>/dev/null; then
-        echo -e "${RED}Error: 'curl' is not installed. Please install it first.${NC}"
-        exit 1
-    fi
-}
-
 install_font_arch() {
     local font_pkg="$@"
     echo -e "${CYAN}:: Installing $font_pkg via pacman...${NC}"
@@ -143,7 +126,7 @@ choose_fonts() {
     while $return_to_menu; do
         clear
 
-        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "JoyPixels" "Exit")
+        FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "JoyPixels" "FontAwesome" "Exit")
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
             echo -e "${GREEN}Exiting font installation.${NC}"
@@ -159,6 +142,7 @@ choose_fonts() {
                         install_font_fedora "FiraCode"
                     fi
                     ;;
+
                 "Meslo")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "ttf-meslo-nerd"
@@ -166,6 +150,7 @@ choose_fonts() {
                         install_font_fedora "Meslo"
                     fi
                     ;;
+
                 "JetBrainsMono")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono
@@ -173,6 +158,7 @@ choose_fonts() {
                         install_font_fedora "JetBrainsMono"
                     fi
                     ;;
+
                 "Hack")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "ttf-hack-nerd"
@@ -180,6 +166,7 @@ choose_fonts() {
                         install_font_fedora "Hack"
                     fi
                     ;;
+
                 "CascadiaMono")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch ttf-cascadia-mono-nerd ttf-cascadia-code-nerd
@@ -187,13 +174,34 @@ choose_fonts() {
                         install_font_fedora "CascadiaMono"
                     fi
                     ;;
+
                 "Terminus")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "terminus-font"
                     else
-                        echo -e "${RED}Terminus font is not available as a Nerd Font.${NC}"
+                        echo -e "${CYAN}:: Installing Terminus Nerd Font manually...${NC}"
+                        latest_version=$(get_latest_release)
+                        font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/Terminus.zip"
+                        temp_dir="/tmp/terminus-font"
+
+                        echo -e "${CYAN}:: Downloading Terminus.zip...${NC}"
+                        mkdir -p "$temp_dir"
+                        curl -L "$font_url" -o "$temp_dir/Terminus.zip"
+
+                        echo -e "${CYAN}:: Extracting to $temp_dir...${NC}"
+                        unzip -q "$temp_dir/Terminus.zip" -d "$temp_dir"
+
+                        echo -e "${CYAN}:: Moving fonts to $FONTS_DIR...${NC}"
+                        mkdir -p "$FONTS_DIR"
+                        find "$temp_dir" -type f -name "*.ttf" -exec mv {} "$FONTS_DIR/" \;
+
+                        echo -e "${CYAN}:: Refreshing font cache...${NC}"
+                        fc-cache -vf "$FONTS_DIR"
+
+                        echo -e "${GREEN}Terminus Nerd Font installed successfully in $FONTS_DIR!${NC}"
                     fi
                     ;;
+
                 "Noto")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra
@@ -201,6 +209,7 @@ choose_fonts() {
                         install_fedora_system_fonts google-noto-fonts google-noto-emoji-fonts
                     fi
                     ;;
+
                 "DejaVu")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch ttf-dejavu
@@ -208,6 +217,7 @@ choose_fonts() {
                         install_fedora_system_fonts dejavu-sans-fonts
                     fi
                     ;;
+
                 "JoyPixels")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         check_aur_helper
@@ -221,6 +231,17 @@ choose_fonts() {
                         echo -e "${CYAN}:: Refreshing font cache...${NC}"
                         fc-cache -vf "$HOME/.fonts"
                         echo -e "${GREEN}JoyPixels installed successfully to ~/.fonts!${NC}"
+                    fi
+                    ;;
+
+                "FontAwesome")
+                    if [[ "$OS_TYPE" == "arch" ]]; then
+                        check_aur_helper
+                        echo -e "${CYAN}:: Installing Font Awesome (ttf-font-awesome) via $aur_helper...${NC}"
+                        $aur_helper -S --noconfirm ttf-font-awesome
+                        echo -e "${GREEN}Font Awesome installed successfully!${NC}"
+                    else
+                        install_fedora_system_fonts fontawesome-fonts-all
                     fi
                     ;;
             esac
@@ -259,7 +280,14 @@ main() {
         exit 1
     fi
 
-    check_dependencies
+    if ! command -v unzip &> /dev/null; then
+        echo -e "${RED}${BOLD}Error: unzip is not installed${NC}"
+        echo -e "${YELLOW}Please install unzip before running this script:${NC}"
+        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install unzip"
+        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S unzip"
+        exit 1
+    fi
+
     detect_os
     choose_fonts
 }
