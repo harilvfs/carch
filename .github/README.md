@@ -80,9 +80,7 @@ bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
 
 ## 📚 Documentation
 
-Full guides, usage tips, and more are available in the docs:
-
-➡️ [carch.chalisehari.com.np](https://carch.chalisehari.com.np) 
+Full guides, usage tips, and more are available in the [docs](https://carch.chalisehari.com.np)
 
 View in your language (if available):
 <a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> &nbsp;
