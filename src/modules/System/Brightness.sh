@@ -200,7 +200,7 @@ main() {
                 ;;
             "Exit")
                 clear
-                echo -e "${GREEN}Exiting brightness control script. Goodbye!${NC}"
+                echo -e "${GREEN}Exiting...${NC}"
                 exit 0
                 ;;
             *)
