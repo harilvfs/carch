@@ -18,6 +18,7 @@
         "^typos\\.toml$",
         "^clippy\\.toml$",
         "^\\.clippy\\.toml$",
+        "^bacon\\.toml$",
         "^\\.github/workflows/.*\\.ya?ml$"
       ],
       "matchStrings": [
