@@ -190,18 +190,38 @@ manage_dotfiles() {
 manage_themes_icons() {
     local repo_url="$1"
     local target_dir="$2"
-    local repo_name=$(basename "$repo_url" .git)
+    local temp_dir
+    local repo_name
 
-    if [ -d "$target_dir/$repo_name" ]; then
-        if fzf_confirm "Existing $repo_name detected. Overwrite?"; then
-            rm -rf "$target_dir/$repo_name"
-        else
-            print_message $YELLOW "Skipping $repo_name cloning."
-            return
+    temp_dir=$(mktemp -d)
+    repo_name=$(basename "$repo_url" .git)
+
+    print_message $CYAN "Cloning $repo_name into temporary directory..."
+    git clone "$repo_url" "$temp_dir/$repo_name" || {
+        print_message $RED "Failed to clone $repo_name"
+        return 1
+    }
+
+    mkdir -p "$target_dir"
+
+    print_message $GREEN "Copying contents to $target_dir..."
+    for item in "$temp_dir/$repo_name"/*; do
+        if [ -d "$item" ]; then
+            local name=$(basename "$item")
+            if [ -d "$target_dir/$name" ]; then
+                if fzf_confirm "Existing $name detected in $target_dir. Overwrite?"; then
+                    rm -rf "$target_dir/$name"
+                else
+                    print_message $YELLOW "Skipping $name"
+                    continue
+                fi
+            fi
+            cp -r "$item" "$target_dir/"
         fi
-    fi
+    done
 
-    git clone "$repo_url" "$target_dir/$repo_name"
+    rm -rf "$temp_dir"
+    print_message $GREEN "$repo_name installed to $target_dir"
 }
 
 if ! command -v fzf &> /dev/null; then
@@ -212,8 +232,8 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-print_message $BLUE "If the setup fails, please manually use the dotfiles from:
-https://github.com/harilvfs/swaydotfiles"
+print_message $TEAL "If the setup fails, please manually use the dotfiles from:
+https://github.com/harilvfs/swaydotfiles" $NC
 
 print_message $YELLOW"----------------------------------------"
 
