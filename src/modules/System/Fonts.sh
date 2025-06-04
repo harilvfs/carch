@@ -129,7 +129,7 @@ choose_fonts() {
         FONT_SELECTION=$(fzf_select_fonts "FiraCode" "Meslo" "JetBrainsMono" "Hack" "CascadiaMono" "Terminus" "Noto" "DejaVu" "JoyPixels" "FontAwesome" "Exit")
 
         if [[ "$FONT_SELECTION" == *"Exit"* ]]; then
-            echo -e "${GREEN}Exiting font installation.${NC}"
+            echo -e "${GREEN}Exiting...${NC}"
             return
         fi
 

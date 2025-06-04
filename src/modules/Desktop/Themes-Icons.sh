@@ -188,7 +188,7 @@ case "$option" in
         echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons.${RESET}"
         ;;
     "Exit")
-        echo -e "${YELLOW}:: Exiting...${RESET}"
+        echo -e "${YELLOW}Exiting...${RESET}"
         exit 0
         ;;
     *)
