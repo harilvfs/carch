@@ -15,36 +15,45 @@ detect_distro() {
 }
 
 check_dependencies() {
-    if ! command -v fzf &> /dev/null; then
+    local failed=0
+
+    if ! command -v fzf &>/dev/null; then
         echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-        exit 1
+        failed=1
     fi
 
-    if ! command -v git &> /dev/null; then
+    if ! command -v git &>/dev/null; then
         echo -e "${RED}${BOLD}Error: git is not installed.${NC}"
         echo -e "${YELLOW}Please install git before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S git"
+        failed=1
     fi
 
-    if ! command -v make &> /dev/null; then
-        echo -e "${RED}${BOLD} make is not installed.${NC}"
+    if ! command -v make &>/dev/null; then
+        echo -e "${RED}${BOLD}Error: make is not installed.${NC}"
         echo -e "${YELLOW}Please install make before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install make"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S base-devel make"
+        failed=1
     fi
 
-    if ! command -v less &> /dev/null; then
-        echo -e "${RED}${BOLD} less is not installed.${NC}"
+    if ! command -v less &>/dev/null; then
+        echo -e "${RED}${BOLD}Error: less is not installed.${NC}"
         echo -e "${YELLOW}Please install less before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install less"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S less"
+        failed=1
     fi
 
-    exit 1
+    if [ "$failed" -eq 1 ]; then
+        exit 1
+    else
+        return 0
+    fi
 }
 
 install_paru() {
