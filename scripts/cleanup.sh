@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# btw, this is for my personal use, but if you want, you may also use it.
-# basically, it removes white spaces and blank lines in shell scripts.
-
 if [[ "$(basename "$(pwd)")" == "scripts" ]]; then
     PROJECT_ROOT="$(cd .. && pwd)"
 else
