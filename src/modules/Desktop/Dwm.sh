@@ -52,16 +52,22 @@ detect_distro() {
 install_packages() {
     if [ "$distro" == "arch" ]; then
         print_message "$CYAN" ":: Installing required packages using pacman..."
-        sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
+        sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd \
+        ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
+        feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
+        thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum \
+        gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }
+
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing required packages using dnf..."
 
-        print_message "$CYAN" ":: Enabling solopasha/hyprland COPR repository..."
-        sudo dnf copr enable -y solopasha/hyprland || {
-            print_message "$RED" "Failed to enable solopasha/hyprland COPR repository."
+        print_message "$CYAN" ":: Enabling RPM Fusion repositories..."
+        sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
+                            https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm || {
+            print_message "$RED" "Failed to enable RPM Fusion repositories."
             exit 1
         }
 
@@ -71,7 +77,11 @@ install_packages() {
             exit 1
         }
 
-        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
+        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
+        gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all \
+        google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
+        trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
+        pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi || {
             print_message "$RED" "Failed to install some packages."
             exit 1
         }
