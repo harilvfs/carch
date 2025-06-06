@@ -434,7 +434,7 @@ EOF
 echo "${RESET}"
 
 while true; do
-    printf "%b" "${ROSEWATER}${BOLD}Do you want to continue with the installation? [y/N]: ${RESET}"
+    printf "%b" "${BLUE}${BOLD}:: ${ROSEWATER}${BOLD}Do you want to continue with the installation? [y/N]: ${RESET}"
     read -r confirm
     case "$confirm" in
         [Yy]*)
@@ -477,7 +477,7 @@ update() {
     fi
 
 while true; do
-    printf "%b" "${ROSEWATER}${BOLD}Do you want to continue with the carch update? [y/N]: ${RESET}"
+    printf "%b" "${BLUE}${BOLD}:: ${ROSEWATER}${BOLD}Do you want to continue with the carch update? [y/N]: ${RESET}"
     read -r confirm
     case "$confirm" in
         [Yy]*)
@@ -520,7 +520,7 @@ uninstall() {
     fi
 
 while true; do
-    printf "%b" "${ROSEWATER}${BOLD}Do you want to continue with the carch uninstallation? [y/N]: ${RESET}"
+    printf "%b" "${BLUE}${BOLD}:: ${ROSEWATER}${BOLD}Do you want to continue with the carch uninstallation? [y/N]: ${RESET}"
     read -r confirm
     case "$confirm" in
         [Yy]*)
