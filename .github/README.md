@@ -76,6 +76,8 @@ bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
 bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
 ```
 
+If you want to install Carch, you can prefer the [docs](https://carch.chalisehari.com.np/getting-started/installation)
+
 </details>
 
 ## 📚 Documentation
