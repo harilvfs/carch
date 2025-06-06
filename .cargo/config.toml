@@ -29,13 +29,5 @@ color = "always"
 RUST_BACKTRACE = "1"
 RUSTFLAGS = "-D warnings"
 
-[alias]
-b = "build"
-r = "run"
-t = "test"
-c = "check"
-clippy = "clippy --all-targets --all-features -- -D warnings"
-fmt = "fmt --all"
-
 [net]
 git-fetch-with-cli = true
