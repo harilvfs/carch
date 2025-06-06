@@ -1,13 +1,21 @@
 # .cargo/config.toml
 
+[target.x86_64-unknown-linux-gnu]
+rustflags = ["-C", "target-cpu=x86-64"]
+
+[target.x86_64-unknown-linux-musl]
+rustflags = ["-C", "target-cpu=x86-64"]
+
+[target.aarch64-unknown-linux-gnu]
+rustflags = ["-C", "target-cpu=generic"]
+
 [build]
-# rustflags = ["-C", "target-cpu=native"]
 target-dir = "build"
 
 [profile.release]
 opt-level = "z"
 debug = false
-lto = true
+lto = "fat"
 codegen-units = 1
 panic = "abort"
 strip = true
@@ -19,3 +27,15 @@ color = "always"
 
 [env]
 RUST_BACKTRACE = "1"
+RUSTFLAGS = "-D warnings"
+
+[alias]
+b = "build"
+r = "run"
+t = "test"
+c = "check"
+clippy = "clippy --all-targets --all-features -- -D warnings"
+fmt = "fmt --all"
+
+[net]
+git-fetch-with-cli = true
