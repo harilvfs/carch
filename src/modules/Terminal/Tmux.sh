@@ -35,27 +35,27 @@ if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -
     echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
 
     if ! command -v fzf &> /dev/null; then
-        echo -e "${YELLOW}- fzf is not installed.${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${YELLOW} fzf is not installed.${NC}"
+        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install fzf"
+        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S fzf"
     fi
 
     if ! command -v git &> /dev/null; then
-        echo -e "${YELLOW}- git is not installed.${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S git"
+        echo -e "${YELLOW} git is not installed.${NC}"
+        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install git"
+        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S git"
     fi
 
     if ! command -v curl &> /dev/null; then
-        echo -e "${YELLOW}- curl is not installed.${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install curl"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S curl"
+        echo -e "${YELLOW} curl is not installed.${NC}"
+        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install curl"
+        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S curl"
     fi
 
     if ! command -v wget &> /dev/null; then
-        echo -e "${YELLOW}- less is not installed.${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install wget"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S wget"
+        echo -e "${YELLOW} wget is not installed.${NC}"
+        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install wget"
+        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S wget"
     fi
 
     exit 1

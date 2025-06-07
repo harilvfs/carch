@@ -60,7 +60,7 @@ if ! fzf_confirm "Do you want to install npm using nvm? (Recommended)"; then
 fi
 
 if [[ ! -d "$HOME/.nvm" ]]; then
-    print_message "$YELLOW" "🔧 Installing nvm..."
+    print_message "$YELLOW" "Installing nvm..."
 
     if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
         print_message "$GREEN" "✔ nvm installed successfully."
@@ -105,7 +105,7 @@ else
 fi
 
 if command -v nvm &>/dev/null; then
-    print_message "$BLUE" "📦 Installing Node.js LTS via nvm..."
+    print_message "$BLUE" "Installing Node.js LTS via nvm..."
     nvm install --lts
     nvm use --lts
     print_message "$GREEN" "✔ Node.js LTS installation completed via nvm."
