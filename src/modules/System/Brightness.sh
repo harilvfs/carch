@@ -19,7 +19,7 @@ check_brightnessctl() {
                 exit 1
             fi
         elif command -v dnf &> /dev/null; then
-            echo -e "${YELLOW}Detected Fedora/RHEL-based system.${NC}"
+            echo -e "${YELLOW}Detected Fedora-based system.${NC}"
             echo -e "${GREEN}Installing brightnessctl with dnf...${NC}"
             if sudo dnf install -y brightnessctl; then
                 echo -e "${GREEN}Installation successful!${NC}"
@@ -28,21 +28,10 @@ check_brightnessctl() {
                 echo -e "${RED}Installation failed. Please install manually: sudo dnf install brightnessctl${NC}"
                 exit 1
             fi
-        elif command -v apt &> /dev/null; then
-            echo -e "${YELLOW}This script is not designed for Debian/Ubuntu systems.${NC}"
-            echo -e "${GREEN}Install brightnessctl manually with: sudo apt install brightnessctl${NC}"
-            exit 1
-        elif command -v zypper &> /dev/null; then
-            echo -e "${YELLOW}This script is not designed for openSUSE systems.${NC}"
-            echo -e "${GREEN}Install brightnessctl manually with: sudo zypper install brightnessctl${NC}"
-            exit 1
-        elif command -v xbps-install &> /dev/null; then
-            echo -e "${YELLOW}This script is not designed for Void Linux systems.${NC}"
-            echo -e "${GREEN}Install brightnessctl manually with: sudo xbps-install -S brightnessctl${NC}"
-            exit 1
         else
-            echo -e "${YELLOW}Could not detect your distribution's package manager.${NC}"
-            echo -e "${GREEN}Please install brightnessctl using your package manager.${NC}"
+            echo -e "${RED}Unsupported distribution.${NC}"
+            echo -e "${YELLOW}This script only supports Arch and Fedora-based systems.${NC}"
+            echo -e "${GREEN}Please install brightnessctl manually using your package manager.${NC}"
             exit 1
         fi
     fi
