@@ -1,5 +1,89 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.1.2](https://github.com/harilvfs/carch/compare/v5.1.1...v5.1.2) - 2025-06-07
+
+
+### 🚀 Features
+
+
+- [c61b643](https://github.com/harilvfs/carch/commit/c61b643567cafbe3aca0d429b40aa29c0316390e)  *(package)* Add ungoogled-chromium browser by @harilvfs
+
+- [249d8c8](https://github.com/harilvfs/carch/commit/249d8c83fe2e48dbe5d8897813e6a903c0211119)  *(font)* Add font awesome & terminus font by @harilvfs
+
+- [1ba41a7](https://github.com/harilvfs/carch/commit/1ba41a76e21119997d758c7b027ca61a71258b48)  *(fedora)* Add manual ffmpeg installation by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [e5e2206](https://github.com/harilvfs/carch/commit/e5e2206e1e9ea0974aa8b87232a4025e0bae515a)  *(script)* Exit only on missing dependencies (#483) by @aayushrg7 in [#483](https://github.com/harilvfs/carch/pull/483)
+
+- [b59cc1c](https://github.com/harilvfs/carch/commit/b59cc1c061fa3437f83dbbe0525105d025b868e2)  *(script)* Correct theme and icon paths by @harilvfs
+
+
+
+### 💼 Other
+
+
+- [d0fd55c](https://github.com/harilvfs/carch/commit/d0fd55c0bd639bb361cb218e6ae88ee9db4e488e)  *(config)* Set portable rustflags for targets by @harilvfs
+
+- [f2991d1](https://github.com/harilvfs/carch/commit/f2991d140d85162881cba1c4c28474fe83d772d1)  *(config)* Remove alias by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [acd8a84](https://github.com/harilvfs/carch/commit/acd8a84a08b6f375fd760894e1ca003ddd07dc3f) Manual SSR build for Arch and Fedora (#487) by @harilvfs in [#487](https://github.com/harilvfs/carch/pull/487)
+
+
+
+### 📚 Documentation
+
+
+- [888a2fa](https://github.com/harilvfs/carch/commit/888a2fae04717fc0296a757650fb91bc5d21d080)  *(style)* Remove using of bold text's (#482) by @aayushrg7 in [#482](https://github.com/harilvfs/carch/pull/482)
+
+- [02d997c](https://github.com/harilvfs/carch/commit/02d997c0a1bd1f0485947536121318d0450202f1) Add install note (#488) by @aayushrg7 in [#488](https://github.com/harilvfs/carch/pull/488)
+
+
+
+### 🎨 Styling
+
+
+- [4e4c08e](https://github.com/harilvfs/carch/commit/4e4c08ee382d2ac2ac16c8ae896edf6bf0edafa4)  *(script)* Cleanup by @harilvfs
+
+- [80a7641](https://github.com/harilvfs/carch/commit/80a7641adccd040f1ab55f385b82511598e748a0) Use docs link in text format (#486) by @aayushrg7 in [#486](https://github.com/harilvfs/carch/pull/486)
+
+- [bf6c0c0](https://github.com/harilvfs/carch/commit/bf6c0c04f63f780d14d149b0f6723333890acc96)  *(script)* Using same exit style by @harilvfs
+
+- [42cc218](https://github.com/harilvfs/carch/commit/42cc218ed9bdba0bfafc1b13b172bf752b912c0f) Add some spices install script by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [4658199](https://github.com/harilvfs/carch/commit/465819901de24bcc58aac0cc767b13766103c37b)  *(crate)* Add rust nightly by @harilvfs
+
+- [fcf7ef9](https://github.com/harilvfs/carch/commit/fcf7ef901ad3752a4520099252e1e1c9207948ec) Auto merge changelog by @harilvfs
+
+- [2d1e2a0](https://github.com/harilvfs/carch/commit/2d1e2a0ad9a2e1b9e9a7e72ea5c5653ba0c573b3) Seprating docs & changelog ci by @harilvfs
+
+- [ba1992a](https://github.com/harilvfs/carch/commit/ba1992aad115e2e6b863f9bd7d060c72c0501d8e)  *(script)* Remove comments (#485) by @aayushrg7 in [#485](https://github.com/harilvfs/carch/pull/485)
+
+- [bb8137a](https://github.com/harilvfs/carch/commit/bb8137ae16ace85accf564a49fe4e75dc00c4c6d)  *(config)* Add bacon.toml by @harilvfs
+
+- [1a5e6ad](https://github.com/harilvfs/carch/commit/1a5e6ad6a9bcecf2c575ea9531df4e8e748bd7a5)  *(script)* Update hyprland setup script url by @harilvfs
+
+- [00bf049](https://github.com/harilvfs/carch/commit/00bf049c5c25ede5b7f1dab7919ded9d9cc1b658) Update project description (#489) by @harilvfs in [#489](https://github.com/harilvfs/carch/pull/489)
+
+- [7721128](https://github.com/harilvfs/carch/commit/77211289eb53eae4f5fcaf6756748f61caf21683) Cleanup non needed logic by @harilvfs
+
+- [3460c94](https://github.com/harilvfs/carch/commit/3460c94c68ec9ac8840806e9ed4e75b61a3f83a3) Cleanup by @harilvfs
+
+
+
 ## [5.1.1](https://github.com/harilvfs/carch/compare/v5.1.0...v5.1.1) - 2025-06-03
 
 
