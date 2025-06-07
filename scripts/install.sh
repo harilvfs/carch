@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# carch installation script
-# installs, updates, or uninstall.
-
 set -e
 
 CARCH_VERSION="latest"
@@ -558,7 +555,7 @@ print_usage() {
     echo "Usage: $0 [--install|--update|--uninstall]"
     echo ""
     echo "Options:"
-    echo "  --install     Install Carch (default action)"
+    echo "  --install     Install Carch (default)"
     echo "  --update      Update an existing Carch installation"
     echo "  --uninstall   Uninstall Carch completely"
     echo ""
