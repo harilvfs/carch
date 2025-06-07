@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number without v prefix (e.g. 4.4.2)'
+        description: 'Version number without v prefix (e.g. 1.1.1)'
         required: true
       date:
         description: 'Release date (YYYY-MM-DD)'
