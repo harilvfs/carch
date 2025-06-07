@@ -1,6 +1,6 @@
 [package]
 name = "carch"
-version = "5.1.1"
+version = "5.1.2"
 edition = "2024"
 description = "A simple CLI tool to automate Linux system setup 🧩"
 documentation = "https://carch.chalisehari.com.np"
