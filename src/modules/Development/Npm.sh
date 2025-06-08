@@ -48,8 +48,8 @@ if command -v npm &>/dev/null; then
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
     print_message "$GREEN" "✔ npm is already installed."
-    print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
-    print_message "$BLUE" "npm version: ${NPM_VERSION}"
+    print_message "${TEAL}" "Node.js version: ${NODE_VERSION}"
+    print_message "${TEAL}" "npm version: ${NPM_VERSION}"
     exit 0
 fi
 
@@ -87,8 +87,8 @@ if [[ ! -d "$HOME/.nvm" ]]; then
         print_message "$GREEN" "✔ npm installed via package manager."
         NODE_VERSION=$(node -v)
         NPM_VERSION=$(npm -v)
-        print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
-        print_message "$BLUE" "npm version: ${NPM_VERSION}"
+        print_message "${TEAL}" "Node.js version: ${NODE_VERSION}"
+        print_message "${TEAL}" "npm version: ${NPM_VERSION}"
         exit 0
     fi
 else
@@ -105,7 +105,7 @@ else
 fi
 
 if command -v nvm &>/dev/null; then
-    print_message "$BLUE" "Installing Node.js LTS via nvm..."
+    print_message "${TEAL}" "Installing Node.js LTS via nvm..."
     nvm install --lts
     nvm use --lts
     print_message "$GREEN" "✔ Node.js LTS installation completed via nvm."
@@ -113,8 +113,8 @@ if command -v nvm &>/dev/null; then
 
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
-    print_message "$BLUE" "Node.js version: ${NODE_VERSION}"
-    print_message "$BLUE" "npm version: ${NPM_VERSION}"
+    print_message "${TEAL}" "Node.js version: ${NODE_VERSION}"
+    print_message "${TEAL}" "npm version: ${NPM_VERSION}"
 
     print_message "$YELLOW" "⚠ Note: For nvm to work in new terminal sessions, make sure your shell's config file (e.g., ~/.bashrc) has been updated correctly."
     print_message "$YELLOW" "⚠ You may need to restart your terminal or run 'source ~/.bashrc' (or equivalent) for permanent effects."

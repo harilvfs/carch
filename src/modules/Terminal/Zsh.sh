@@ -119,7 +119,7 @@ check_default_shell() {
             chsh -s /bin/zsh
             print_message "$GREEN" "Default shell changed to zsh. Please log out and log back in for the change to take effect."
         else
-            print_message "$BLUE" "Keeping current shell: $current_shell"
+            print_message "${TEAL}" "Keeping current shell: $current_shell"
         fi
     else
         print_message "$GREEN" "Zsh is already your default shell."
@@ -277,4 +277,4 @@ install_zoxide
 
 check_default_shell
 
-print_message "$BLUE" "Zsh setup completed successfully!"
+print_message "${TEAL}" "Zsh setup completed successfully!"
