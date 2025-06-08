@@ -17,7 +17,7 @@
 
 <details>
 
-<summary><strong><kbd> Preview </kbd></strong></summary>
+<summary><kbd><strong> Preview </strong></kbd></summary>
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" />
 
 </details>
