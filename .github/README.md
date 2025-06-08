@@ -29,119 +29,12 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 - `fzf` is required for the TUI interface in the Carch scripts.  
   Make sure `fzf` is installed before using Carch.
 
-<details>
-
-<summary>For whom it may be useful</summary>
-
-- For those who are new to Linux, especially using Arch or Fedora-based distros  
-- For those who don't want to go back and forth setting up their config  
-- For those who just want a ready-to-go setup  
-- For those who don't have time to configure their system  
-
-</details>
-
-<details>
-
-<summary>For whom it is not useful or needed</summary>
-
-- For those who already have a preconfigured system  
-- For those who know how and where to use configs properly  
-
-</details>
-
-<details>
-<summary>Preview</summary>
-
-![Preview](https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif)
-  
-</details>
-
-<details>
-  
-<summary>How to use?</summary>
-
-You can run or use Carch directly without installing it on your system.
-
-Choose one of the following version to try Carch:
-
-### ⭐ Stable Version
-
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carch)"
-```
-
-### 🧪 Dev Version
-
-```sh
-bash -c "$(curl -fsSL https://chalisehari.com.np/carchdev)"
-```
-
-If you want to install Carch, you can prefer the [docs](https://carch.chalisehari.com.np/getting-started/installation)
-
-</details>
-
-## 📚 Documentation
-
-Full guides, usage tips, and more are available in the [docs](https://carch.chalisehari.com.np)
-
-View in your language (if available):
-<a href="https://carch.chalisehari.com.np"> 🇺🇸 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/ne/"> 🇳🇵 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/hi/"> 🇮🇳 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/zh/"> 🇨🇳 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/es/"> 🇪🇸 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/ar/"> 🇦🇪 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/fr/"> 🇫🇷 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/ko/"> 🇰🇷 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/de/"> 🇩🇪 </a> &nbsp;
-<a href="https://carch.chalisehari.com.np/ru/"> 🇷🇺 </a>
-
-## 🛠️ Contributing
-
-[![PRs Welcome][prs-badge]][prs]
-
-If you want to contribute to [Carch](https://github.com/harilvfs/carch/compare), please read the [contribution guide](https://carch.chalisehari.com.np/project/contributing) before getting started.
-
-You can also chat or ask questions via:
-
-[![Discord][discord]][discord-link] [![Telegram][telegram]][telegram-link]
-
-## 🙏 Contributors
-
-Thanks to all contributors!
-
-[![Contributors](https://contrib.rocks/image?repo=harilvfs/carch)](https://github.com/harilvfs/carch/graphs/contributors)
-
-## 💡 Inspiration
-
-- [ChrisTitusTech's linutil](https://github.com/ChrisTitusTech/linutil)
-- [ml4w](https://github.com/mylinuxforwork)
-- And the broader Linux community.
-
-## 💬 Contact
-
-- Telegram: [carchx](https://t.me/carchx)
-- Discord: [Aayush Server](https://discord.com/invite/8NJWstnUHd)
-- Email: [harilvfs@chalisehari.com.np](mailto:harilvfs@chalisehari.com.np)
-
-## ❤️ Support
-
-Carch is free and open-source. If you'd like to support its development:
-
-Bitcoin Address  
-`bc1qaqpf4ptl9cwnhpmm4m8qs5vp3gffm8dtpxnqhc2tq3r59hsz08vsxpjg2p`
-
-![qr](https://github.com/user-attachments/assets/9ec7ef93-d51a-4eed-b59a-f150abfd41f0)
+For more check out [docs](https://carch.chalisehari.com.np)
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
 [check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?style=flat-square
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
-
-<!--
-[preview]: https://github.com/harilvfs/carch/actions/workflows/preview.yml/badge.svg
-[preview-link]: https://github.com/harilvfs/carch/actions/workflows/preview.yml
--->
 
 [issues]: https://img.shields.io/github/issues/harilvfs/carch?style=flat-square&color=dbb6ed&logoColor=85e185&labelColor=1c1c29&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIABAMAAAAGVsnJAAAAHlBMVEVHcEwbw241vWwDfWEAzHaQ42oHSF4CmVkDIy4LeZ0mYMxMAAAABHRSTlMAkEd6QWifigAACDFJREFUeNrt3cFqG0kQgOHWDBL4JpmIsLeJgwS5aVdg8E0SG/IEexcR9D2nsDchQ5jrHudtN2QTNrJjzfSMpqum+i/sWzCqT1XV1ZKtOCcW2dt1VVXe+/W6cOnF24fqW/j/4o/E0l9XP8L/iHVC6edV9RzA+1Uq+T9UvwbwhyTSz87yPwPwhwSmYVZVLwN4X6SW/1MA64Mgr+oAjNdAVQ9gWuChCcAhqfx/AWBX4KZqBuD3qQzAlwCMHgUPzQEOyTTACwAWmyCrQgAMnoUPYQDmmiCvwgDMzcGHUACfxAS8BGBrDlbhAD6NArgAsE9hAlwCMFQCedUKYJVCAVwCOKRQAJcAzJTAu7YAH82fgTUARsbgTXuAvfkRWANgYgxmVXsAE7fimy4Ae/MdUANwMN8BNQAGeuCmG8DeegfUAQy/B6puAIPfhfKuACvjI6AWYG98BNQCHIyPgFoAb3wE1AOsbI+AeoC97RFQD3CwPQLqAQY9BLJrABSmZ2ADgJXpGdgAYG96BjYAOABg+RBoAOBNz8AmACsADB8CTQD2ABg+BJoAHAAwfAo2AfAA2L0LNgMY6n0wvxbACoDEAYa6CNwAAAAASQO8uxbARwAAAMDqbbgRwCH1CjhQAVQAFQDAIFugQXJlbXwZKEC2bvLkNgD4GkP8hKl7768H8JVgYOm/9f66AGW5svj0hwCUj8Pp/oD8AwDKLwOZBJn3/QAMpA3C8g8DGIJAYP6BAGXvXfDqPHqdf20AvoQ/ok+fX//8VfOv/zyP3vMPBWhxFnw+j34Blr5vgPKkGSD3/QMED8KYAD4GQKkX4D4OwKNWgBYN0AogsAniAfhYAKVOgEk8gKNGgMzHAwhaCGMBTGICnPQBtCyAlgAhJRAJYBkX4KQNoG0BtAUotQFMYgMclQH42AClLoBJfIC9KoD7+ACPmgByHx+g8Y0gBsBSAuCoCMBLAJR6AHIZgJUagKUMwEkNgJcBKLUA5FIAKyUASymAkxIALwVQ6gDI5QAKFQATOYCjCoB7OYBHFQBeDqDUAJBLAqwUAEwkAY4KAJaSACcFAF4SoARAHCCXBViJA0xkAY7iAEtZgJM4wL0swKM4gJcFKKUBMmmAQhgglwZYCQNMpAGOAMgC3EsDPAIgC+ClAUoAAJAEyOUBVgAAIAgwkQc4AgAAAACIASzlAU6pA1ABAAAAAAAAAAAAAAAA0APArCZef+4af3eNT08e0u9PoxPAs3j/15XjzyvHhzpxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICvUfd28Fw7wHZdE65bLLQD7Fy/AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2gHehMVcO0DtH009/RuqwJ//XjvAh8DPNAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAZiFhf53h5//j4sXg98PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMACwF1YzLUDbAMT4hMkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgCQB6j5d/pV2gE//fH+kv73wXQNQ9276SDvAtC6DjgCZdoACAAB6BXDaARwAaQNseweYA5A4wEI3wA6AvgHGugE2APQNMNINMAWgb4BMN0DRO4DTDeAA6B1grhlgC0D/AAvNALsIAGPNAJvUAaYRAEapA2SaAYoIAE4zgEscYBsFYJ46wEIvwC4KwFgvwCYKwEgvwDQKQKYXoIgC4PQCuDgAc60A20gAC60Au0gAY60Am0gAI60A00gAmVaAIhKA0wrgYgHMdQJsowEsdALsogGMdQJsogGMdAJMowE4nQBF4gDNZuB1ABYaAXYRAcYaATYRAUYaAaYRAZxGABcTYK4PYBsVYKEPYBcVYKwPYBoVINMHUEQFcPoAXFyAhTaAXWSAsTaATWSATBtAERnAaQNwsQEWugB20QHGugA20QEyXQBFdACnC8DFB1hoAtgJAIw0AUwFAJwmACcBMNcDsBUBGOsB2IgAZHoAChEApwYgpAOuCTDWArATAhhpAZgKATgtAE4KYKEDYCcGMNIBMBUDcDoAnBzAQgPAThBgpAFgKgjgFABsnSTAWB5gJwqQyQMUogDd78SxO+DaAGNpgI0wQCYNUAgDdF4FIo/A5wBPPjQ1+OeNZAGmwQ94fR6uc4gCbJ18jCUBNgoAMkmAQgFAxzEYeQT2ESM5gKkKgG7b4NBHYOcSMFAA3U7CeC8FKT0JB34Gdi8BCwXQqQRMFECXZWjgS1D3ZWjgS1D3ErBRAB1KwEYBdCgBIwXQ/iAwUgDtd4Hh7wAdS2D4O0DHEhj0NfAal8JhXwOv8LqAnQJoeRQaKoB225CNI7BDCVjYgTrNQUMN0G4OmpmAbZvAUgO02gdN7IBdmsBUA7RpAlsN0OIkMHQCtFuHjDVAeBMM/VWAzgLmGiB0DFjMP2gMWBsAwduAzfwDxoClDaCVgNH8mw9CewMwUMBs/s69uR7ArXNmBQzn30zAcv6NBEzn32QS2s6/gYDJ+R+yEVnbf4LvBZf3fwv519wNL+U/c0Zi1A7g1tmJeTiAkfKv3QhSePovEhjv/rMDcd4UwFj1XyZIKP1vBLM6gJnl9L/F3exlgO2tSyJ+Nvg/+dmdSynu3sxm3wG229ntnVTl/wvKq5yxv0G1bwAAAABJRU5ErkJggg==
 [issues-link]: https://github.com/harilvfs/carch/issues
@@ -186,8 +79,10 @@ License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 [telegram]: https://img.shields.io/badge/Telegram-carchx-babbf1?style=flat-square&labelColor=1E1E2E&logo=telegram&logoColor=24A1DE
 [telegram-link]: https://t.me/carchx
 
+<!--
 [prs]: https://github.com/harilvfs/carch/compare
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-a6e3a1?style=flat-square&labelColor=1c1c29&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIGlkPSJzdmcyIiB3aWR0aD0iNjQ1IiBoZWlnaHQ9IjU4NSIgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPiA8ZyBpZD0ibGF5ZXIxIj4gIDxwYXRoIGlkPSJwYXRoMjQxNyIgZD0ibTI5Ny4zIDU1MC44N2MtMTMuNzc1LTE1LjQzNi00OC4xNzEtNDUuNTMtNzYuNDM1LTY2Ljg3NC04My43NDQtNjMuMjQyLTk1LjE0Mi03Mi4zOTQtMTI5LjE0LTEwMy43LTYyLjY4NS01Ny43Mi04OS4zMDYtMTE1LjcxLTg5LjIxNC0xOTQuMzQgMC4wNDQ1MTItMzguMzg0IDIuNjYwOC01My4xNzIgMTMuNDEtNzUuNzk3IDE4LjIzNy0zOC4zODYgNDUuMS02Ni45MDkgNzkuNDQ1LTg0LjM1NSAyNC4zMjUtMTIuMzU2IDM2LjMyMy0xNy44NDUgNzYuOTQ0LTE4LjA3IDQyLjQ5My0wLjIzNDgzIDUxLjQzOSA0LjcxOTcgNzYuNDM1IDE4LjQ1MiAzMC40MjUgMTYuNzE0IDYxLjc0IDUyLjQzNiA2OC4yMTMgNzcuODExbDMuOTk4MSAxNS42NzIgOS44NTk2LTIxLjU4NWM1NS43MTYtMTIxLjk3IDIzMy42LTEyMC4xNSAyOTUuNSAzLjAzMTYgMTkuNjM4IDM5LjA3NiAyMS43OTQgMTIyLjUxIDQuMzgwMSAxNjkuNTEtMjIuNzE1IDYxLjMwOS02NS4zOCAxMDguMDUtMTY0LjAxIDE3OS42OC02NC42ODEgNDYuOTc0LTEzNy44OCAxMTguMDUtMTQyLjk4IDEyOC4wMy01LjkxNTUgMTEuNTg4LTAuMjgyMTYgMS44MTU5LTI2LjQwOC0yNy40NjF6IiBmaWxsPSIjZGQ1MDRmIi8%2BIDwvZz48L3N2Zz4%3D
+-->
 
 [license]: https://img.shields.io/github/license/harilvfs/carch?color=babbf1&labelColor=1c1c29&style=flat-square&logo=github&logoColor=babbf1
 [license-link]: https://github.com/harilvfs/carch/blob/main/LICENSE 
