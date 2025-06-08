@@ -15,14 +15,14 @@
 [Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) • 
 [Docs](https://carch.chalisehari.com.np)
 
-</div>
-
 <details>
 
 <summary>Preview</summary>
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" />
 
 </details>
+
+</div>
 
 <br>
 
