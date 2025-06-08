@@ -45,7 +45,7 @@ if ! command -v fzf &> /dev/null; then
 fi
 
 if ! command -v dunst &>/dev/null; then
-    print_message "$BLUE" "Dunst not found. Installing..."
+    print_message "${TEAL}" "Dunst not found. Installing..."
     if command -v pacman &>/dev/null; then
         sudo pacman -Sy --noconfirm dunst || { print_message "$RED" "Failed to install Dunst. Exiting..."; exit 1; }
     elif command -v dnf &>/dev/null; then
@@ -58,7 +58,7 @@ else
     print_message "$GREEN" "Dunst is already installed."
 fi
 
-print_message "$BLUE" "Installing papirus-icon-theme..."
+print_message "${TEAL}" "Installing papirus-icon-theme..."
 if command -v pacman &>/dev/null; then
     pacman -Qi papirus-icon-theme &>/dev/null || sudo pacman -Sy --noconfirm papirus-icon-theme
 elif command -v dnf &>/dev/null; then
@@ -69,7 +69,7 @@ DUNST_DIR="$HOME/.config/dunst"
 DUNST_FILE="$DUNST_DIR/dunstrc"
 
 if [[ -d "$DUNST_DIR" ]]; then
-    print_message "$BLUE" "Backing up existing Dunst directory..."
+    print_message "${TEAL}" "Backing up existing Dunst directory..."
     mv "$DUNST_DIR" "${DUNST_DIR}.bak" || { print_message "$RED" "Failed to backup Dunst directory."; exit 1; }
     print_message "$GREEN" "Backup created: ${DUNST_DIR}.bak"
 fi
@@ -80,7 +80,7 @@ print_message "$GREEN" "Created ~/.config/dunst directory."
 DUNST_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/dunst/dunstrc"
 DUNST_PATH="$DUNST_FILE"
 
-print_message "$BLUE" "Downloading Dunstrc..."
+print_message "${TEAL}" "Downloading Dunstrc..."
 
 spin='-\|/'
 i=0

@@ -116,7 +116,7 @@ install_aur_packages() {
 }
 
 install_pokemon_colorscripts() {
-    print_message $BLUE "Installing Pokémon Color Scripts..."
+    print_message ${TEAL} "Installing Pokémon Color Scripts..."
 
     if command -v pokemon-colorscripts >/dev/null 2>&1; then
         print_message $YELLOW "Pokémon Color Scripts already installed."
@@ -142,7 +142,7 @@ install_pokemon_colorscripts() {
     print_message $CYAN "Installing Pokémon Color Scripts from AUR..."
     if $aur_helper -S --noconfirm pokemon-colorscripts-git; then
         print_message $GREEN "Pokémon Color Scripts installed successfully!"
-        print_message $BLUE "You can now use 'pokemon-colorscripts -r' to display a random Pokémon!"
+        print_message ${TEAL} "You can now use 'pokemon-colorscripts -r' to display a random Pokémon!"
     else
         print_message $RED "Failed to install Pokémon Color Scripts."
         return 1
@@ -383,9 +383,9 @@ else
     print_message $YELLOW "Skipping SDDM installation and configuration."
 fi
 
-print_message $BLUE "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
+print_message ${TEAL} "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
 if command -v pokemon-colorscripts >/dev/null 2>&1; then
-    print_message $BLUE "Try 'pokemon-colorscripts -r' for random Pokémon colors!"
+    print_message ${TEAL} "Try 'pokemon-colorscripts -r' for random Pokémon colors!"
 fi
 
 print_message $GREEN "SwayWM setup complete!"
