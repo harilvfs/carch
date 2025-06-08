@@ -17,6 +17,13 @@
 
 </div>
 
+<details>
+
+<summary>Preview</summary>
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" />
+
+</details>
+
 <br>
 
 *[Carch](https://carch.chalisehari.com.np)* is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
