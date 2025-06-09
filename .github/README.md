@@ -8,7 +8,7 @@
 
 <div align="center">
 
-[![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![License][license]][license-link] \
+[![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![License][license]][license-link] \
 [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Built with ratatui][built-with-ratatui]][ratatui-link] \
 [![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
 
@@ -64,8 +64,10 @@ License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 [built-with-ratatui]: https://img.shields.io/badge/Built%20With-Ratatui-94e2d5?style=flat&logo=rust&logoColor=89dceb&labelColor=171b22
 [ratatui-link]: https://github.com/ratatui/ratatui
 
+<!--
 [create]: https://img.shields.io/github/created-at/harilvfs/carch?color=C6A0F6&labelColor=1c1c29&style=flat&logo=github&logoColor=C6A0F6
 [create-link]: https://github.com/harilvfs/carch/commit/89fd0f272b47f55e8cd3ae4f4c3f45dc716bb918
+-->
 
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=flat&color=8bd5ca&logoColor=e78284&labelColor=1c1c29
 [discord-link]: https://discord.com/invite/8NJWstnUHd
