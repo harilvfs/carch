@@ -67,7 +67,7 @@ License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 [crates]: https://img.shields.io/crates/v/carch?style=flat&logo=rust&color=f5a97f&logoColor=fe640b&labelColor=171b22
 [crates-link]: https://crates.io/crates/carch
 
-[built-with-ratatui]: https://img.shields.io/badge/BUILT%20WITH-RATATUI-94e2d5?style=flat&logo=rust&logoColor=89dceb&labelColor=171b22
+[built-with-ratatui]: https://img.shields.io/badge/Built%20With-Ratatui-94e2d5?style=flat&logo=rust&logoColor=89dceb&labelColor=171b22
 [ratatui-link]: https://github.com/ratatui/ratatui
 
 [create]: https://img.shields.io/github/created-at/harilvfs/carch?color=C6A0F6&labelColor=1c1c29&style=flat&logo=github&logoColor=C6A0F6
