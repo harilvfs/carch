@@ -6,7 +6,7 @@
 
 <br>
 
-![CI](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&label=CI&style=flat&color=blue)
+![CI](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=blue)
 
 
 <div align="center">
