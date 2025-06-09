@@ -15,7 +15,7 @@ target-dir = "build"
 [profile.release]
 opt-level = "z"
 debug = false
-lto = "fat"
+lto = true
 codegen-units = 1
 panic = "abort"
 strip = true
