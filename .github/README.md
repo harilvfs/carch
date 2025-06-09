@@ -1,3 +1,5 @@
+[![deps status][deps-badge]][deps] 
+
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg"/>
@@ -6,17 +8,12 @@
 
 <br>
 
-![CI](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white)
-
-[![deps status](https://img.shields.io/endpoint?url=https://deps.rs/repo/github/harilvfs/carch&style=flat-square&color=blue)](https://deps.rs/repo/github/harilvfs/carch)
-
-
 <div align="center">
 
 [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![License][license]][license-link] \
 [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Built with ratatui][built-with-ratatui]][ratatui-link] \
 [![discord][discord]][discord-link] [![telegram]][telegram-link] \
-[![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
+[![github actions build status][check]][check-link] 
 
 [Testing](https://carch.chalisehari.com.np/#how-to-use) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
@@ -38,7 +35,7 @@ For more check out [docs](https://carch.chalisehari.com.np)
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
-[check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
+[check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [issues]: https://img.shields.io/github/issues/harilvfs/carch?style=flat&color=1c1c29&logoColor=white&labelColor=black&logo=github
