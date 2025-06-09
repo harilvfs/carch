@@ -12,7 +12,6 @@
 
 [![github actions build status][check]][check-link] [![Crates][crates]][crates-link] [![Carch Downloads][downloads]][downloads-link] [![License][license]][license-link] \
 [![deps status][deps-badge]][deps] /
-
 [![Built with ratatui][built-with-ratatui]][ratatui-link] 
 
 [Testing](https://carch.chalisehari.com.np/#how-to-use) •
