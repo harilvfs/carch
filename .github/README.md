@@ -10,6 +10,7 @@
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![License][license]][license-link] [![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
 
+[Testing](https://carch.chalisehari.com.np/#how-to-use) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
 [Contributing](https://carch.chalisehari.com.np/project/contributing) • 
 [Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) • 
