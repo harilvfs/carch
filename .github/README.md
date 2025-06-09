@@ -68,7 +68,7 @@ License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=flat&color=1c1c29&logoColor=white&labelColor=black
 [discord-link]: https://discord.com/invite/8NJWstnUHd
 
-[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat&color=1c1c29
+[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat&labelColor=black
 [deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F
 
 [telegram]: https://img.shields.io/badge/Telegram-carchx-1c1c29?style=flat&labelColor=black&logo=telegram&logoColor=white
