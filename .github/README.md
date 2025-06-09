@@ -8,7 +8,7 @@
 
 ![CI](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white)
 
-[![deps status](https://img.shields.io/endpoint?url=https://deps.rs/repo/github/harilvfs/carch/status.json&style=flat-square&color=blue)](https://deps.rs/repo/github/harilvfs/carch)
+[![deps status](https://img.shields.io/endpoint?url=https://deps.rs/repo/github/harilvfs/carch&style=flat-square&color=blue)](https://deps.rs/repo/github/harilvfs/carch)
 
 
 <div align="center">
