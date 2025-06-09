@@ -33,7 +33,7 @@ For more check out [docs](https://carch.chalisehari.com.np)
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
-[check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?style=flat
+[check]: https://github.com/harilvfs/carch/actions/workflows/ci.yml/badge.svg
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [issues]: https://img.shields.io/github/issues/harilvfs/carch?style=flat&color=1c1c29&logoColor=white&labelColor=black&logo=github
@@ -68,7 +68,7 @@ License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 [discord]: https://img.shields.io/discord/757266205408100413.svg?label=Discord&logo=Discord&style=flat&color=1c1c29&logoColor=white&labelColor=black
 [discord-link]: https://discord.com/invite/8NJWstnUHd
 
-[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat
+[deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat&color=1c1c29
 [deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F
 
 [telegram]: https://img.shields.io/badge/Telegram-carchx-1c1c29?style=flat&labelColor=black&logo=telegram&logoColor=white
