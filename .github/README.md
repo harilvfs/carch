@@ -1,9 +1,5 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg" alt="Carch logo" width="400"/>
-
-<br>
-
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" alt="Carch preview" width="600"/>
 
 </div>
