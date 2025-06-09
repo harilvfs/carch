@@ -25,7 +25,7 @@
 <br>
 
 *[Carch](https://carch.chalisehari.com.np)* is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
-It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup. (*Currently supports Arch & Fedora based distros.*)
+It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup. (*Currently supports Arch & Fedora based distros*)
 
 **Prerequisite:** `fzf` is required for the TUI interface in the Carch scripts. Make sure it’s installed before using Carch.
 
