@@ -11,7 +11,6 @@
 [![github actions build status][check]][check-link] [![Crates][crates]][crates-link] [![Carch Downloads][downloads]][downloads-link] [![License][license]][license-link] \
 [![deps status][deps-badge]][deps]
 
-[Testing](https://carch.chalisehari.com.np/#how-to-use) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
 [Contributing](https://carch.chalisehari.com.np/project/contributing) • 
 [Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) • 
