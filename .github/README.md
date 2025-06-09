@@ -9,7 +9,7 @@
 <div align="center">
 
 [![GitHub Created At][create]][create-link] [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![License][license]][license-link] \
-[![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] \
+[![Carch Downloads][downloads]][downloads-link] [![Crates][crates]][crates-link] [![Built with ratatui][built-with-ratatui]][ratatui-link] \
 [![github actions build status][check]][check-link] [![deps status][deps-badge]][deps] 
 
 [Testing](https://carch.chalisehari.com.np/#how-to-use) •
