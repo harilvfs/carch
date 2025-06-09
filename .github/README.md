@@ -6,6 +6,9 @@
 
 <br>
 
+![CI](https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&label=CI&style=flat&color=blue)
+
+
 <div align="center">
 
 [![GitHub Issues][issues]][issues-link] [![Github Prs][prs]][pr-links] [![Github Commit][last-commit]][last-commit-link] [![Github Star][star]][star-link] [![Github Fork][fork]][fork-link] [![License][license]][license-link] \
