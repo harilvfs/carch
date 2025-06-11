@@ -19,7 +19,7 @@
         "^clippy\\.toml$",
         "^\\.clippy\\.toml$",
         "^bacon\\.toml$",
-        "^\\.github/workflows/.*\\.ya?ml$"
+        "^\\.github/workflows/.*\\.yml$"
       ],
       "matchStrings": [
         "STABLE.*?(?<currentValue>\\d+\\.\\d+(\\.\\d+)?)",
