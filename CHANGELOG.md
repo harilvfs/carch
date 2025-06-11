@@ -1,5 +1,50 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.1.3](https://github.com/harilvfs/carch/compare/v5.1.2...v5.1.3) - 2025-06-11
+
+
+### 🚀 Features
+
+
+- [f86fba5](https://github.com/harilvfs/carch/commit/f86fba5e0e826e18fec0a07d614ad76d83d6a9b9)  *(dwm)* Add xautolock for slock by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [3c0b8e5](https://github.com/harilvfs/carch/commit/3c0b8e524bad898f33739dfe02b6bd0a8944077d) Making readme more minimal (#492) by @aayushrg7 in [#492](https://github.com/harilvfs/carch/pull/492)
+
+- [d792ce7](https://github.com/harilvfs/carch/commit/d792ce733b8fe8d493ac0a6ac609dd8845cb5ae9)  *(readme)* Add preview (#493) by @aayushrg7 in [#493](https://github.com/harilvfs/carch/pull/493)
+
+- [5c3f4da](https://github.com/harilvfs/carch/commit/5c3f4da68b2eb8a22593e19bcaf9997986578c51)  *(readme)* Add arrow by @harilvfs
+
+- [2a203a0](https://github.com/harilvfs/carch/commit/2a203a0f8503ae66fa5a614b17a7b15e13df8008)  *(readme)* Some improvement (#494) by @aayushrg7 in [#494](https://github.com/harilvfs/carch/pull/494)
+
+- [dd41048](https://github.com/harilvfs/carch/commit/dd4104815084fc8c5872abe90af137218d98124d) Add base64 logo as for ratatui by @harilvfs
+
+- [ec50326](https://github.com/harilvfs/carch/commit/ec503269b31db1f65e29e40e9bc31c8ea849c7e4)  *(readme)* Final one (#495) by @aayushrg7 in [#495](https://github.com/harilvfs/carch/pull/495)
+
+
+
+### 🎨 Styling
+
+
+- [95607fc](https://github.com/harilvfs/carch/commit/95607fcc4eb704236e173e30aa5ee362dae41727)  *(script)* Change color to `TEAL` by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [0783b84](https://github.com/harilvfs/carch/commit/0783b84e2380b2477d3bf55e7dcb347fe6830692) Change lto from "fat" to true by @harilvfs
+
+- [b2c6a07](https://github.com/harilvfs/carch/commit/b2c6a07067ca847c981370409236618fe1281722)  *(xinitrc)* Xautolock with slock by @harilvfs
+
+- [063d884](https://github.com/harilvfs/carch/commit/063d884794427d4a6ff081c4802f3d99035d465b)  *(xinitrc)* Change time to 10 min by @harilvfs
+
+
+
 ## [5.1.2](https://github.com/harilvfs/carch/compare/v5.1.1...v5.1.2) - 2025-06-07
 
 
