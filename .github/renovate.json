@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "schedule": [
-    "before 5am on the first day of the month"
+    "before 5am"
   ],
   "semanticCommits": "enabled",
   "commitMessageLowerCase": "never",
@@ -36,7 +36,6 @@
       "matchManagers": ["custom.regex"],
       "matchDepNames": ["STABLE"],
       "extractVersion": "^(?<version>\\d+\\.\\d+)",
-      "schedule": ["* * * * *"],
       "automerge": true
     },
     {
