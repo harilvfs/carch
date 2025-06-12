@@ -10,7 +10,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
+      "managerFilePatterns": [
         "^rust-toolchain\\.toml$",
         "^taplo\\.toml$",
         "^deny\\.toml$",
