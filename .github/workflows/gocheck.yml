@@ -40,5 +40,4 @@ jobs:
           version: latest
 
       - name: Run golangci-lint
-        working-directory: ./scripts/install
-        run: golangci-lint run ./...
+        run: golangci-lint run --path-prefix scripts/install ./scripts/install/...
