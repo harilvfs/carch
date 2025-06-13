@@ -107,7 +107,7 @@ func detectPlatform() error {
 
 	time.Sleep(500 * time.Millisecond)
 	s.Stop()
-	green.Printf("✓ Platform: Linux, Architecture: %s\n", arch)
+	_, _ = green.Printf("✓ Platform: Linux, Architecture: %s\n", arch)
 	return nil
 }
 
@@ -128,7 +128,7 @@ func checkDependencies() error {
 
 	if len(missing) > 0 {
 		s.Stop()
-		blue.Printf("→ Installing missing dependencies: %s\n", strings.Join(missing, ", "))
+		_, _ = blue.Printf("→ Installing missing dependencies: %s\n", strings.Join(missing, ", "))
 
 		if err := installDependencies(missing); err != nil {
 			return fmt.Errorf("failed to install dependencies: %v", err)
@@ -137,7 +137,7 @@ func checkDependencies() error {
 
 	time.Sleep(300 * time.Millisecond)
 	s.Stop()
-	green.Println("✓ All dependencies satisfied")
+	_, _ = green.Println("✓ All dependencies satisfied")
 	return nil
 }
 
@@ -149,15 +149,17 @@ func checkPrerelease(config *InstallConfig) error {
 	resp, err := http.Get(config.getGitHubAPIURL())
 	if err != nil {
 		s.Stop()
-		yellow.Println("⚠ Could not check for pre-releases, using latest stable")
+		_, _ = yellow.Println("⚠ Could not check for pre-releases, using latest stable")
 		return nil
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	var releases []Release
 	if err := json.NewDecoder(resp.Body).Decode(&releases); err != nil {
 		s.Stop()
-		yellow.Println("⚠ Could not parse release information, using latest stable")
+		_, _ = yellow.Println("⚠ Could not parse release information, using latest stable")
 		return nil
 	}
 
@@ -165,25 +167,25 @@ func checkPrerelease(config *InstallConfig) error {
 
 	for _, release := range releases {
 		if release.Prerelease {
-			yellow.Printf("🚀 Pre-release available: %s (%s)\n", release.Name, release.TagName)
-			blue.Print(":: ")
-			rosewater.Print("Do you want to install this pre-release? [y/N]: ")
+			_, _ = yellow.Printf("🚀 Pre-release available: %s (%s)\n", release.Name, release.TagName)
+			_, _ = blue.Print(":: ")
+			_, _ = rosewater.Print("Do you want to install this pre-release? [y/N]: ")
 
 			var response string
-			fmt.Scanln(&response)
+			_, _ = fmt.Scanln(&response)
 			response = strings.ToLower(strings.TrimSpace(response))
 
 			if response == "y" || response == "yes" {
 				config.UsePrerelease = true
 				config.Version = release.TagName
-				blue.Printf("→ Will install pre-release version: %s\n", release.TagName)
+				_, _ = blue.Printf("→ Will install pre-release version: %s\n", release.TagName)
 				return nil
 			}
 			break
 		}
 	}
 
-	blue.Println("→ Using latest stable release")
+	_, _ = blue.Println("→ Using latest stable release")
 	return nil
 }
 
@@ -199,7 +201,9 @@ func installBinary(config *InstallConfig) error {
 		s.Stop()
 		return fmt.Errorf("failed to download binary: %v", err)
 	}
-	defer os.Remove(tmpFile)
+	defer func() {
+		_ = os.Remove(tmpFile)
+	}()
 
 	s.Stop()
 	s.Suffix = " Installing binary..."
@@ -222,7 +226,7 @@ func installBinary(config *InstallConfig) error {
 	}
 
 	s.Stop()
-	green.Printf("✓ Binary installed to %s\n", destPath)
+	_, _ = green.Printf("✓ Binary installed to %s\n", destPath)
 	return nil
 }
 
@@ -253,13 +257,12 @@ func installCompletions(config *InstallConfig) error {
 			continue
 		}
 
-		destPath := filepath.Join(dir, filenames[dir])
-		sudoMoveFile(tmpFile, destPath)
-		os.Remove(tmpFile)
+		_ = sudoMoveFile(tmpFile, filepath.Join(dir, filenames[dir]))
+		_ = os.Remove(tmpFile)
 	}
 
 	s.Stop()
-	green.Println("✓ Shell completions installed")
+	_, _ = green.Println("✓ Shell completions installed")
 	return nil
 }
 
@@ -284,17 +287,16 @@ func installIcons(config *InstallConfig) error {
 			continue
 		}
 
-		destPath := filepath.Join(iconDir, "carch.png")
-		sudoMoveFile(tmpFile, destPath)
-		os.Remove(tmpFile)
+		_ = sudoMoveFile(tmpFile, filepath.Join(iconDir, "carch.png"))
+		_ = os.Remove(tmpFile)
 	}
 
 	if commandExists("gtk-update-icon-cache") {
-		runCommand("sudo", "gtk-update-icon-cache", "-f", "-t", config.IconDir)
+		_ = runCommand("sudo", "gtk-update-icon-cache", "-f", "-t", config.IconDir)
 	}
 
 	s.Stop()
-	green.Println("✓ Icons installed")
+	_, _ = green.Println("✓ Icons installed")
 	return nil
 }
 
@@ -314,7 +316,9 @@ func installManPage(config *InstallConfig) error {
 		s.Stop()
 		return fmt.Errorf("failed to download man page: %v", err)
 	}
-	defer os.Remove(tmpFile)
+	defer func() {
+		_ = os.Remove(tmpFile)
+	}()
 
 	destPath := filepath.Join(config.ManDir, "carch.1")
 	if err := sudoMoveFile(tmpFile, destPath); err != nil {
@@ -323,11 +327,11 @@ func installManPage(config *InstallConfig) error {
 	}
 
 	if commandExists("mandb") {
-		runCommand("sudo", "mandb", "-q")
+		_ = runCommand("sudo", "mandb", "-q")
 	}
 
 	s.Stop()
-	green.Println("✓ Man page installed")
+	_, _ = green.Println("✓ Man page installed")
 	return nil
 }
 
@@ -342,7 +346,9 @@ func installDesktopFile(config *InstallConfig) error {
 		s.Stop()
 		return fmt.Errorf("failed to download desktop file: %v", err)
 	}
-	defer os.Remove(tmpFile)
+	defer func() {
+		_ = os.Remove(tmpFile)
+	}()
 
 	content, err := os.ReadFile(tmpFile)
 	if err != nil {
@@ -364,17 +370,17 @@ func installDesktopFile(config *InstallConfig) error {
 	}
 
 	if commandExists("update-desktop-database") {
-		runCommand("sudo", "update-desktop-database")
+		_ = runCommand("sudo", "update-desktop-database")
 	}
 
 	s.Stop()
-	green.Println("✓ Desktop file installed")
+	_, _ = green.Println("✓ Desktop file installed")
 	return nil
 }
 
 func printInstallSuccess() {
 	fmt.Println()
-	green.Println("Carch installed successfully!")
+	_, _ = green.Println("Carch installed successfully!")
 	fmt.Println()
 	fmt.Printf("You can now run carch from your terminal by typing: %s\n", color.New(color.Bold).Sprint("carch"))
 	fmt.Println()
@@ -404,19 +410,19 @@ func Install() error {
 	}
 
 	if err := installCompletions(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := installIcons(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := installManPage(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := installDesktopFile(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	printInstallSuccess()

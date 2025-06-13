@@ -31,7 +31,7 @@ var (
 )
 
 func printBanner() {
-	flamingo.Print(banner)
+	_, _ = flamingo.Print(banner)
 	fmt.Println()
 }
 
@@ -49,11 +49,11 @@ func printUsage() {
 
 func confirmAction(message string) bool {
 	for {
-		blue.Print(":: ")
-		rosewater.Printf("%s [y/N]: ", message)
+		_, _ = blue.Print(":: ")
+		_, _ = rosewater.Printf("%s [y/N]: ", message)
 
 		var response string
-		fmt.Scanln(&response)
+		_, _ = fmt.Scanln(&response)
 		response = strings.ToLower(strings.TrimSpace(response))
 
 		switch response {
@@ -63,14 +63,14 @@ func confirmAction(message string) bool {
 		case "n", "no", "":
 			return false
 		default:
-			red.Println("Invalid input. Please answer y or n.")
+			_, _ = red.Println("Invalid input. Please answer y or n.")
 		}
 	}
 }
 
 func checkRoot() {
 	if os.Geteuid() == 0 {
-		yellow.Println("⚠ This script is running as root. Consider running without sudo and let the script call sudo when needed.")
+		_, _ = yellow.Println("⚠ This script is running as root. Consider running without sudo and let the script call sudo when needed.")
 		fmt.Println()
 	}
 }
@@ -98,7 +98,7 @@ func main() {
 		printBanner()
 		if confirmAction("Do you want to continue with the installation?") {
 			if err := Install(); err != nil {
-				red.Printf("Installation failed: %v\n", err)
+				_, _ = red.Printf("Installation failed: %v\n", err)
 				os.Exit(1)
 			}
 		}
@@ -106,7 +106,7 @@ func main() {
 		checkRoot()
 		if confirmAction("Do you want to continue with the carch update?") {
 			if err := Update(); err != nil {
-				red.Printf("Update failed: %v\n", err)
+				_, _ = red.Printf("Update failed: %v\n", err)
 				os.Exit(1)
 			}
 		}
@@ -114,14 +114,14 @@ func main() {
 		checkRoot()
 		if confirmAction("Do you want to continue with the carch uninstallation?") {
 			if err := Uninstall(); err != nil {
-				red.Printf("Uninstallation failed: %v\n", err)
+				_, _ = red.Printf("Uninstallation failed: %v\n", err)
 				os.Exit(1)
 			}
 		}
 	case "help", "--help", "-h":
 		printUsage()
 	default:
-		red.Printf("Unknown command: %s. Use 'help' to see available commands.\n", command)
+		_, _ = red.Printf("Unknown command: %s. Use 'help' to see available commands.\n", command)
 		os.Exit(1)
 	}
 }

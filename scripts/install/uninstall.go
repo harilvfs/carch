@@ -21,10 +21,10 @@ func uninstallBinary(config *InstallConfig) error {
 			return fmt.Errorf("failed to remove binary: %v", err)
 		}
 		s.Stop()
-		green.Println("✓ Binary removed")
+		_, _ = green.Println("✓ Binary removed")
 	} else {
 		s.Stop()
-		yellow.Println("⚠ Binary not found")
+		_, _ = yellow.Println("⚠ Binary not found")
 	}
 	return nil
 }
@@ -44,16 +44,16 @@ func uninstallCompletions(config *InstallConfig) error {
 	for dir, filename := range completions {
 		filePath := filepath.Join(dir, filename)
 		if fileExists(filePath) {
-			runCommand("sudo", "rm", "-f", filePath)
+			_ = runCommand("sudo", "rm", "-f", filePath)
 			removed++
 		}
 	}
 
 	s.Stop()
 	if removed > 0 {
-		green.Printf("✓ %d shell completions removed\n", removed)
+		_, _ = green.Printf("✓ %d shell completions removed\n", removed)
 	} else {
-		yellow.Println("⚠ No shell completions found")
+		_, _ = yellow.Println("⚠ No shell completions found")
 	}
 	return nil
 }
@@ -69,20 +69,20 @@ func uninstallIcons(config *InstallConfig) error {
 	for _, size := range sizes {
 		iconPath := filepath.Join(config.IconDir, fmt.Sprintf("%sx%s", size, size), "apps", "carch.png")
 		if fileExists(iconPath) {
-			runCommand("sudo", "rm", "-f", iconPath)
+			_ = runCommand("sudo", "rm", "-f", iconPath)
 			removed++
 		}
 	}
 
 	if commandExists("gtk-update-icon-cache") {
-		runCommand("sudo", "gtk-update-icon-cache", "-f", "-t", config.IconDir)
+		_ = runCommand("sudo", "gtk-update-icon-cache", "-f", "-t", config.IconDir)
 	}
 
 	s.Stop()
 	if removed > 0 {
-		green.Printf("✓ %d icons removed\n", removed)
+		_, _ = green.Printf("✓ %d icons removed\n", removed)
 	} else {
-		yellow.Println("⚠ No icons found")
+		_, _ = yellow.Println("⚠ No icons found")
 	}
 	return nil
 }
@@ -100,14 +100,14 @@ func uninstallManPage(config *InstallConfig) error {
 		}
 
 		if commandExists("mandb") {
-			runCommand("sudo", "mandb", "-q")
+			_ = runCommand("sudo", "mandb", "-q")
 		}
 
 		s.Stop()
-		green.Println("✓ Man page removed")
+		_, _ = green.Println("✓ Man page removed")
 	} else {
 		s.Stop()
-		yellow.Println("⚠ Man page not found")
+		_, _ = yellow.Println("⚠ Man page not found")
 	}
 	return nil
 }
@@ -124,14 +124,14 @@ func uninstallDesktopFile(config *InstallConfig) error {
 		}
 
 		if commandExists("update-desktop-database") {
-			runCommand("sudo", "update-desktop-database")
+			_ = runCommand("sudo", "update-desktop-database")
 		}
 
 		s.Stop()
-		green.Println("✓ Desktop file removed")
+		_, _ = green.Println("✓ Desktop file removed")
 	} else {
 		s.Stop()
-		yellow.Println("⚠ Desktop file not found")
+		_, _ = yellow.Println("⚠ Desktop file not found")
 	}
 	return nil
 }
@@ -147,17 +147,17 @@ func uninstallConfig(config *InstallConfig) error {
 			return fmt.Errorf("failed to remove config directory: %v", err)
 		}
 		s.Stop()
-		green.Println("✓ Configuration directory removed")
+		_, _ = green.Println("✓ Configuration directory removed")
 	} else {
 		s.Stop()
-		yellow.Println("⚠ Configuration directory not found")
+		_, _ = yellow.Println("⚠ Configuration directory not found")
 	}
 	return nil
 }
 
 func printUninstallSuccess() {
 	fmt.Println()
-	green.Println("👋 Carch uninstalled successfully!")
+	_, _ = green.Println("👋 Carch uninstalled successfully!")
 	fmt.Println()
 	fmt.Println("All Carch components have been removed from your system.")
 	fmt.Println()
@@ -166,7 +166,7 @@ func printUninstallSuccess() {
 }
 
 func Uninstall() error {
-	blue.Println("Uninstalling Carch...")
+	_, _ = blue.Println("Uninstalling Carch...")
 	fmt.Println()
 
 	config := NewInstallConfig()
@@ -176,23 +176,23 @@ func Uninstall() error {
 	}
 
 	if err := uninstallCompletions(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := uninstallIcons(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := uninstallManPage(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := uninstallDesktopFile(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := uninstallConfig(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	printUninstallSuccess()

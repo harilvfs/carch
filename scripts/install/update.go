@@ -8,7 +8,7 @@ import (
 
 func printUpdateSuccess() {
 	fmt.Println()
-	green.Println("Carch updated successfully!")
+	_, _ = green.Println("Carch updated successfully!")
 	fmt.Println()
 	fmt.Printf("You can now run the updated carch from your terminal by typing: %s\n", color.New(color.Bold).Sprint("carch"))
 	fmt.Println()
@@ -19,7 +19,7 @@ func printUpdateSuccess() {
 }
 
 func Update() error {
-	blue.Println("Updating Carch...")
+	_, _ = blue.Println("Updating Carch...")
 	fmt.Println()
 
 	config := NewInstallConfig()
@@ -41,19 +41,19 @@ func Update() error {
 	}
 
 	if err := installCompletions(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := installIcons(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := installManPage(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	if err := installDesktopFile(config); err != nil {
-		yellow.Printf("⚠ Warning: %v\n", err)
+		_, _ = yellow.Printf("⚠ Warning: %v\n", err)
 	}
 
 	printUpdateSuccess()

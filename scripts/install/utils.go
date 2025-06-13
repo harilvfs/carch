@@ -44,41 +44,38 @@ func runCommand(name string, args ...string) error {
 	return cmd.Run()
 }
 
-func runCommandWithOutput(name string, args ...string) (string, error) {
-	cmd := exec.Command(name, args...)
-	output, err := cmd.Output()
-	return strings.TrimSpace(string(output)), err
-}
-
 func downloadFile(url string) (string, error) {
 	tmpFile, err := os.CreateTemp("", "carch-download-*")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp file: %v", err)
 	}
-	defer tmpFile.Close()
+	defer func() {
+		_ = tmpFile.Close()
+	}()
 
 	resp, err := http.Get(url)
 	if err != nil {
-		os.Remove(tmpFile.Name())
+		_ = os.Remove(tmpFile.Name())
 		return "", fmt.Errorf("failed to download file: %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	if resp.StatusCode != http.StatusOK {
-		os.Remove(tmpFile.Name())
+		_ = os.Remove(tmpFile.Name())
 		return "", fmt.Errorf("download failed with status: %s", resp.Status)
 	}
 
 	_, err = io.Copy(tmpFile, resp.Body)
 	if err != nil {
-		os.Remove(tmpFile.Name())
+		_ = os.Remove(tmpFile.Name())
 		return "", fmt.Errorf("failed to save file: %v", err)
 	}
 
 	return tmpFile.Name(), nil
 }
 
-// Dependency management
 func installDependencies(deps []string) error {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	s.Suffix = fmt.Sprintf(" Installing dependencies: %s", strings.Join(deps, ", "))
