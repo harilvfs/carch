@@ -8,7 +8,7 @@ import (
 
 func printUpdateSuccess() {
 	fmt.Println()
-	green.Println("🚀 Carch updated successfully!")
+	green.Println("Carch updated successfully!")
 	fmt.Println()
 	fmt.Printf("You can now run the updated carch from your terminal by typing: %s\n", color.New(color.Bold).Sprint("carch"))
 	fmt.Println()
@@ -19,7 +19,7 @@ func printUpdateSuccess() {
 }
 
 func Update() error {
-	blue.Println("🔄 Updating Carch...")
+	blue.Println("Updating Carch...")
 	fmt.Println()
 
 	config := NewInstallConfig()
