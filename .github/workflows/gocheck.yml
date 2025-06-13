@@ -40,4 +40,4 @@ jobs:
           version: latest
 
       - name: Run golangci-lint
-        run: golangci-lint run ./scripts/install/
+        run: golangci-lint run ./scripts/install/...
