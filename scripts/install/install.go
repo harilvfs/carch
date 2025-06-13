@@ -143,7 +143,7 @@ func checkDependencies() error {
 
 func checkPrerelease(config *InstallConfig) error {
 	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-	s.Suffix = "Checking for pre-releases..."
+	s.Suffix = " Checking for pre-releases..."
 	s.Start()
 
 	resp, err := http.Get(config.getGitHubAPIURL())
