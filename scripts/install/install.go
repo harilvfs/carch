@@ -422,3 +422,4 @@ func Install() error {
 	printInstallSuccess()
 	return nil
 }
+
