@@ -1,18 +1,15 @@
 version: "2"
-linters:
-  default: all
-  enable:
-    - gofmt
-    - govet
-    - errcheck
-    - staticcheck
-    - gosimple
-    - unused
-    - deadcode
-    - structcheck
-    - varcheck
-    - ineffassign
-    - gocyclo
 
-run:
-  timeout: 2m
+linters:
+  enable:
+    - govet
+    - gofmt
+    - goimports
+    - staticcheck
+    - errcheck
+    - deadcode
+    - unused
+
+formatters:
+  enable:
+    - goimports
