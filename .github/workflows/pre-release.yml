@@ -1,4 +1,4 @@
-name: Pre-Release
+name: Carch Pre-Release
 
 on:
   workflow_dispatch:
@@ -42,11 +42,6 @@ jobs:
       - name: Install rust-src
         run: rustup component add rust-src --toolchain nightly
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-
       - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
@@ -60,26 +55,6 @@ jobs:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-index-
-
-      - name: Cache Go modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: ${{ runner.os }}-go-
-
-      - name: Install Go dependencies
-        working-directory: ./scripts/install
-        run: |
-          go get github.com/briandowns/spinner
-          go get github.com/fatih/color
-          go mod tidy
-
-      - name: Build Go installer binaries for all architectures
-        working-directory: ./scripts/install
-        run: make build-all
 
       - name: Install musl-tools
         run: sudo apt-get update && sudo apt-get install -y musl-tools
@@ -108,12 +83,6 @@ jobs:
             --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
 
-      - name: Copy binaries to build directory
-        run: |
-          mkdir -p ./build/go-installer
-          cp ./scripts/install/build/carch-installer-linux-amd64 ./build/go-installer/
-          cp ./scripts/install/build/carch-installer-linux-arm64 ./build/go-installer/
-
       - name: Upload binaries as artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -121,8 +90,6 @@ jobs:
           path: |
             ./build/x86_64-unknown-linux-musl/release/carch
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
-            ./build/go-installer/carch-installer-linux-amd64
-            ./build/go-installer/carch-installer-linux-arm64
           retention-days: 1
 
       - name: Generate a changelog
@@ -137,7 +104,7 @@ jobs:
         run: |
           sed -i '/^## \[unreleased\]/d' BODY.md
           BANNER="![Carch Banner](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)"
-          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads installer amd64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-installer-linux-amd64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads installer arm64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-installer-linux-arm64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)"
+          BADGES="![Downloads x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29) ![Downloads aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&logoColor=85e185&labelColor=1c1c29)"
           printf "%s\n\n%s\n\n## What's Changed\n\n%s\n" "$BANNER" "$BADGES" "$(cat BODY.md)" > BODY.md
 
       - name: Create GitHub Release
@@ -150,12 +117,10 @@ jobs:
           generate_release_notes: false
           body_path: BODY.md
 
-      - name: Upload binaries
+      - name: Upload binaries to release
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
             ./build/x86_64-unknown-linux-musl/release/carch \
-            ./build/aarch64-unknown-linux-musl/release/carch-aarch64 \
-            ./build/go-installer/carch-installer-linux-amd64 \
-            ./build/go-installer/carch-installer-linux-arm64
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
