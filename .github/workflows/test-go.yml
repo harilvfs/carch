@@ -1,0 +1,88 @@
+name: Test Go Binary Build
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/install/**'
+  pull_request:
+    paths:
+      - 'scripts/install/**'
+
+permissions:
+  contents: write
+
+jobs:
+  test-go-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: Install Go dependencies
+        working-directory: ./scripts/install
+        run: |
+          go get github.com/briandowns/spinner
+          go get github.com/fatih/color
+          go mod tidy
+
+      - name: Build Go installer binaries for all architectures
+        working-directory: ./scripts/install
+        run: make build-all
+
+      - name: Verify binaries exist
+        run: |
+          if [ -f "./scripts/install/build/carch-installer-linux-amd64" ] && [ -f "./scripts/install/build/carch-installer-linux-arm64" ]; then
+            echo "✅ Go binaries built successfully!"
+            ls -la ./scripts/install/build/carch-installer-linux-*
+            file ./scripts/install/build/carch-installer-linux-*
+          else
+            echo "❌ Go binaries not found!"
+            ls -la ./scripts/install/build/ || echo "Build directory doesn't exist"
+            exit 1
+          fi
+
+      - name: Test binary execution (basic check)
+        run: |
+          chmod +x ./scripts/install/build/carch-installer-linux-amd64
+          chmod +x ./scripts/install/build/carch-installer-linux-arm64
+          ./scripts/install/build/carch-installer-linux-amd64 --help || echo "AMD64 binary executed (exit code: $?)"
+
+      - name: Upload test binaries to latest release
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          echo "Latest release tag: $LATEST_TAG"
+
+          gh release upload $LATEST_TAG \
+            ./scripts/install/build/carch-installer-linux-amd64 \
+            ./scripts/install/build/carch-installer-linux-arm64 \
+            --clobber
+
+          echo "✅ Binaries uploaded to latest release: $LATEST_TAG"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload binaries as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-carch-installer
+          path: |
+            ./scripts/install/build/carch-installer-linux-amd64
+            ./scripts/install/build/carch-installer-linux-arm64
+          retention-days: 7
