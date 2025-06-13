@@ -41,43 +41,48 @@ jobs:
           go get github.com/fatih/color
           go mod tidy
 
-      - name: Build Go installer binary
+      - name: Build Go installer binaries for all architectures
         working-directory: ./scripts/install
-        run: make build
+        run: make build-all
 
-      - name: Verify binary exists
+      - name: Verify binaries exist
         run: |
-          if [ -f "./scripts/install/build/carch-installer" ]; then
-            echo "✅ Go binary built successfully!"
-            ls -la ./scripts/install/build/carch-installer
-            file ./scripts/install/build/carch-installer
+          if [ -f "./scripts/install/build/carch-installer-linux-amd64" ] && [ -f "./scripts/install/build/carch-installer-linux-arm64" ]; then
+            echo "✅ Go binaries built successfully!"
+            ls -la ./scripts/install/build/carch-installer-linux-*
+            file ./scripts/install/build/carch-installer-linux-*
           else
-            echo "❌ Go binary not found!"
+            echo "❌ Go binaries not found!"
+            ls -la ./scripts/install/build/ || echo "Build directory doesn't exist"
             exit 1
           fi
 
       - name: Test binary execution (basic check)
         run: |
-          chmod +x ./scripts/install/build/carch-installer
-          ./scripts/install/build/carch-installer --help || echo "Binary executed (exit code: $?)"
+          chmod +x ./scripts/install/build/carch-installer-linux-amd64
+          chmod +x ./scripts/install/build/carch-installer-linux-arm64
+          ./scripts/install/build/carch-installer-linux-amd64 --help || echo "AMD64 binary executed (exit code: $?)"
 
-      - name: Upload test binary to latest release
+      - name: Upload test binaries to latest release
         if: github.event_name == 'workflow_dispatch'
         run: |
           LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
           echo "Latest release tag: $LATEST_TAG"
 
           gh release upload $LATEST_TAG \
-            ./scripts/install/build/carch-installer \
+            ./scripts/install/build/carch-installer-linux-amd64 \
+            ./scripts/install/build/carch-installer-linux-arm64 \
             --clobber
 
-          echo "✅ Binary uploaded to latest release: $LATEST_TAG"
+          echo "✅ Binaries uploaded to latest release: $LATEST_TAG"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload binary as artifact
+      - name: Upload binaries as artifact
         uses: actions/upload-artifact@v4
         with:
           name: test-carch-installer
-          path: ./scripts/install/build/carch-installer
+          path: |
+            ./scripts/install/build/carch-installer-linux-amd64
+            ./scripts/install/build/carch-installer-linux-arm64
           retention-days: 7
