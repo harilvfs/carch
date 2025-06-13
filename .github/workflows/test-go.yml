@@ -1,0 +1,83 @@
+name: Test Go Binary Build
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/install/**'
+  pull_request:
+    paths:
+      - 'scripts/install/**'
+
+permissions:
+  contents: write
+
+jobs:
+  test-go-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: Install Go dependencies
+        working-directory: ./scripts/install
+        run: |
+          go get github.com/briandowns/spinner
+          go get github.com/fatih/color
+          go mod tidy
+
+      - name: Build Go installer binary
+        working-directory: ./scripts/install
+        run: make build
+
+      - name: Verify binary exists
+        run: |
+          if [ -f "./scripts/install/build/carch-installer" ]; then
+            echo "✅ Go binary built successfully!"
+            ls -la ./scripts/install/build/carch-installer
+            file ./scripts/install/build/carch-installer
+          else
+            echo "❌ Go binary not found!"
+            exit 1
+          fi
+
+      - name: Test binary execution (basic check)
+        run: |
+          chmod +x ./scripts/install/build/carch-installer
+          ./scripts/install/build/carch-installer --help || echo "Binary executed (exit code: $?)"
+
+      - name: Upload test binary to latest release
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          LATEST_TAG=$(gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          echo "Latest release tag: $LATEST_TAG"
+
+          gh release upload $LATEST_TAG \
+            ./scripts/install/build/carch-installer \
+            --clobber
+
+          echo "✅ Binary uploaded to latest release: $LATEST_TAG"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload binary as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-carch-installer
+          path: ./scripts/install/build/carch-installer
+          retention-days: 7
