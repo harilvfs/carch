@@ -166,7 +166,7 @@ func printUninstallSuccess() {
 }
 
 func Uninstall() error {
-	blue.Println("🗑️  Uninstalling Carch...")
+	blue.Println("Uninstalling Carch...")
 	fmt.Println()
 
 	config := NewInstallConfig()
