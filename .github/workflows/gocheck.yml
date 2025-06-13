@@ -38,6 +38,4 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
-
-      - name: Run golangci-lint
-        run: golangci-lint run --path-prefix ./scripts/install
+          args: --path-prefix=./scripts/install ./scripts/install/...
