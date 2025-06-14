@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Carch
-Comment=A simple CLI tool to automate Linux system setup 🧩.
+Comment=A simple CLI tool to automate Linux system setup 🧩
 Exec=/usr/local/bin/carch
 Icon=carch
 Type=Application
