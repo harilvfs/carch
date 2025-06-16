@@ -38,7 +38,7 @@ fn render_title(f: &mut Frame, area: Rect,) {
             Style::default().fg(Color::Cyan,).add_modifier(Modifier::BOLD,),
         )],),
         Line::from(vec![Span::styled(
-            "Automate Your Linux Setup",
+            "Automate Your Linux System Setup",
             Style::default().fg(Color::Rgb(235, 235, 210,),).add_modifier(Modifier::ITALIC,),
         )],),
         Line::from(vec![Span::styled(
