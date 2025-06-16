@@ -6,6 +6,7 @@
 
 <div align="center">
 
+[![Built Wit Ratatui][ratatui]][ratatui-link] \
 [![github actions build status][check]][check-link] [![Crates][crates]][crates-link] [![Carch Downloads][downloads]][downloads-link] [![License][license]][license-link] \
 [![deps status][deps-badge]][deps]
 
@@ -27,6 +28,9 @@ It’s especially useful if you want to quickly start using your *favorite apps*
 For more check out [docs](https://carch.chalisehari.com.np)
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
+
+[ratatui]: https://ratatui.rs/built-with-ratatui/badge.svg
+[ratatui-link]: https://ratatui.rs/
 
 [check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
