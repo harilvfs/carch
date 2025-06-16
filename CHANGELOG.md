@@ -1,5 +1,66 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.1.4](https://github.com/harilvfs/carch/compare/v5.1.3...v5.1.4) - 2025-06-16
+
+
+### 🚀 Features
+
+
+- [5a7a0ba](https://github.com/harilvfs/carch/commit/5a7a0bae496cc7e058a685c3df838631ccacfd2c)  *(installer)* Rewrite install script in Go (#499) by @harilvfs in [#499](https://github.com/harilvfs/carch/pull/499)
+
+- [34833a7](https://github.com/harilvfs/carch/commit/34833a7669eef5eef661ad338d60114f509750a5)  *(installer)* Rewrite install script in Go (#500) by @harilvfs in [#500](https://github.com/harilvfs/carch/pull/500)
+
+
+
+### 🐛 Bug Fixes
+
+
+- [f923191](https://github.com/harilvfs/carch/commit/f9231910baf4767e2cdb51685160e3831b821283) Use #!/usr/bin/env bash for better portability by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [f1814d4](https://github.com/harilvfs/carch/commit/f1814d4d1c5dc53ca2a2b4c2a2f9f026f0fefc30) Update CLI heading by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [08e4e1d](https://github.com/harilvfs/carch/commit/08e4e1d077a60429611b32e8867bdff3b8768209)  *(readme)* Add built with ratatui badge by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [d74a126](https://github.com/harilvfs/carch/commit/d74a12690605f0f2b8da9c4722fed1162df81fa3) Spacing issue by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [bb2ea23](https://github.com/harilvfs/carch/commit/bb2ea2358529749926005814f71082baf0423bd3) Fix renovate schedule by @harilvfs
+
+- [5539dec](https://github.com/harilvfs/carch/commit/5539dece3a1d941ff97f6baa7fd15193ba68afa5) Adding dependabot by @harilvfs
+
+- [9cd0f9b](https://github.com/harilvfs/carch/commit/9cd0f9b114cd034d7d9d50a1f9feccb0b33b1264) Update project description by @harilvfs
+
+- [0c502b8](https://github.com/harilvfs/carch/commit/0c502b84d05b8039693cbb7dcdb0f0fce3dc5775)  *(release)* Add carch installer binary build by @harilvfs
+
+- [1413260](https://github.com/harilvfs/carch/commit/1413260ce7f0629bcad5ce52e8f861fc6c72375e)  *(lint)* Add go lang lint & check by @harilvfs
+
+- [f8f97c5](https://github.com/harilvfs/carch/commit/f8f97c52dae3571cc85c838247a9150a428d74fb) Add Dependabot configuration for Go module by @harilvfs
+
+- [56331ef](https://github.com/harilvfs/carch/commit/56331ef399397a4be7385a66d203cd8f61cded80) Add editorconfig settings for Go files by @harilvfs
+
+- [7989038](https://github.com/harilvfs/carch/commit/7989038e6b2593932a06819d157679f1c1eebf33)  *(config)* Remove . from desktop file by @harilvfs
+
+
+
 ## [5.1.3](https://github.com/harilvfs/carch/compare/v5.1.2...v5.1.3) - 2025-06-11
 
 
