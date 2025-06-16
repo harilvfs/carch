@@ -65,7 +65,7 @@ pub fn check_for_updates() -> io::Result<(),> {
                 println!("\nA new version of Carch is available!");
                 println!("\nTo update via installation script:");
                 println!(
-                    "  bash -c \"$(curl -fsSL https://chalisehari.com.np/carchinstall)\" -- --update"
+                    "  bash -c \"$(curl -fsSL chalisehari.com.np/carchinstall)\" -- update"
                 );
                 println!("\nOr if you installed via Cargo:");
                 println!("  cargo install carch --force");

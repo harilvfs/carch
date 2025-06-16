@@ -28,7 +28,7 @@ pub fn log_message(log_type: &str, message: &str,) -> io::Result<(),> {
 pub fn update() -> io::Result<(),> {
     println!("To update Carch, please use one of the following methods:");
     println!("\nIf you installed via installation script:");
-    println!("  bash -c \"$(curl -fsSL https://chalisehari.com.np/carchinstall)\" -- --update");
+    println!("  bash -c \"$(curl -fsSL chalisehari.com.np/carchinstall)\" -- update");
     println!("\nIf you installed via Cargo:");
     println!("  cargo install carch --force");
     Ok((),)
@@ -37,7 +37,7 @@ pub fn update() -> io::Result<(),> {
 pub fn uninstall() -> io::Result<(),> {
     println!("To uninstall Carch, please use one of the following methods:");
     println!("\nIf you installed via installation script:");
-    println!("  bash -c \"$(curl -fsSL https://chalisehari.com.np/carchinstall)\" -- --uninstall");
+    println!("  bash -c \"$(curl -fsSL chalisehari.com.np/carchinstall)\" -- uninstall");
     println!("\nIf you installed via Cargo:");
     println!("  cargo uninstall carch");
     Ok((),)
