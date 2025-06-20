@@ -1,5 +1,22 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.1.5](https://github.com/harilvfs/carch/compare/v5.1.4...v5.1.5) - 2025-06-20
+
+
+### 🚜 Refactor
+
+
+- [128e100](https://github.com/harilvfs/carch/commit/128e10036fc0e124847c54cdb481b86d2efb9ed6) Remove https strip from running commands by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [e28d5a5](https://github.com/harilvfs/carch/commit/e28d5a529d0626397ae4681a61b45fcc3d5f34c3)  *(lint)* Fix fmt by @harilvfs
+
+
+
 ## [5.1.4](https://github.com/harilvfs/carch/compare/v5.1.3...v5.1.4) - 2025-06-16
 
 
