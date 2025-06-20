@@ -1,5 +1,9 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+maybe this will be the last release of carch. had a great time learning about foss, creating different tools, and contributing it really was a wonderful journey. time flies, and at some point, we all have to face reality work, earn, and move forward. as we can't always stay in the same place.
+
+learned so much developing carch over the past 1.5 years. it was an awesome time, and i’ll definitely miss it. hopefully, i’ll be back someday (i guess). thank you all ;)
+
 ## [5.1.5](https://github.com/harilvfs/carch/compare/v5.1.4...v5.1.5) - 2025-06-20
 
 
