@@ -11,6 +11,7 @@ install_music() {
     elif [[ $distro -eq 1 ]]; then
         install_flatpak
         pkg_manager="sudo dnf install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
@@ -41,7 +42,7 @@ install_music() {
                     $pkg_manager youtube-music-bin
                     version=$(get_version youtube-music-bin)
                 else
-                    flatpak install -y flathub app.ytmdesktop.ytmdesktop
+                    $flatpak_cmd app.ytmdesktop.ytmdesktop
                     version="Flatpak Version"
                 fi
                 echo "Youtube-Music installed successfully! Version: $version"
@@ -53,7 +54,7 @@ install_music() {
                     $pkg_manager spotube
                     version=$(get_version spotube)
                 else
-                    flatpak install -y flathub com.github.KRTirtho.Spotube
+                    $flatpak_cmd com.github.KRTirtho.Spotube
                     version="Flatpak Version"
                 fi
                 echo "Spotube installed successfully! Version: $version"
@@ -65,7 +66,7 @@ install_music() {
                     $pkg_manager spotify
                     version=$(get_version spotify)
                 else
-                    flatpak install -y flathub com.spotify.Client
+                    $flatpak_cmd com.spotify.Client
                     version="Flatpak Version"
                 fi
                 echo "Spotify installed successfully! Version: $version"
