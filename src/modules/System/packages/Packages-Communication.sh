@@ -9,6 +9,7 @@ install_communication() {
         pkg_manager="$AUR_HELPER -S --noconfirm"
     elif [[ $distro -eq 1 ]]; then
         install_flatpak
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
         pkg_manager="install_fedora_package"
     else
         echo -e "${RED}:: Unsupported system. Exiting.${RESET}"
@@ -18,9 +19,9 @@ install_communication() {
     while true; do
         clear
 
-        options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Back to Main Menu")
+        options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Zulip" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
+                                                    --height=50% \
                                                     --prompt="Choose options (TAB to select multiple): " \
                                                     --header="Package Selection" \
                                                     --pointer="➤" \
@@ -98,7 +99,7 @@ install_communication() {
                     version=$(get_version teams)
                     echo "Teams installed successfully! Version: $version"
                 else
-                    echo "Microsoft Teams is not available in Fedora's repositories. Use the web version instead:** [**Teams Web**](https://teams.microsoft.com)"
+                    echo "Microsoft Teams is not available in Fedora's repositories. Use the web version instead: https://teams.microsoft.com"
                 fi
                 ;;
 
@@ -138,10 +139,23 @@ install_communication() {
                 fi
                 ;;
 
+            "Zulip")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager zulip-desktop-bin
+                    version=$(pacman -Qi zulip-desktop-bin | grep Version | awk '{print $3}')
+                    echo "Zulip installed successfully! Version: $version"
+                else
+                    $flatpak_cmd org.zulip.Zulip
+                    version="(Flatpak version installed)"
+                    echo "Zulip installed successfully! Version: $version"
+                fi
+                ;;
+
             esac
         done
 
         echo "All selected Communication Apps have been installed."
         read -rp "Press Enter to continue..."
-      done
+    done
 }
