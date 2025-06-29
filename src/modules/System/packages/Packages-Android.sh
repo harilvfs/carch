@@ -23,6 +23,7 @@ install_android() {
             "Gvfs-MTP [Displays Android phones via USB]"
             "ADB"
             "JDK (OpenJDK)"
+            "Universal Android Debloater (UAD-NG)"
             "Back to Main Menu"
         )
 
@@ -74,6 +75,37 @@ install_android() {
                         version=$(get_version java-latest-openjdk)
                     fi
                     echo "OpenJDK installed successfully! Version: $version"
+                    ;;
+
+                "Universal Android Debloater (UAD-NG)")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur uad-ng-bin
+                        version=$(get_version uad-ng-bin)
+                        echo "UAD installed successfully. Version: $version"
+                    else
+                        echo ":: Downloading UAD binary..."
+                        tmp_path="/tmp/uad-ng"
+                        bin_url=$(curl -s https://api.github.com/repos/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/latest | \
+            jq -r '.assets[] | select(.name | test("uad-ng-linux$")) | .browser_download_url')
+
+                        # incase latest binary download fail fallback to v1.1.2
+                        if [[ -z "$bin_url" ]]; then
+                            echo ":: Failed to get latest, falling back to v1.1.2"
+                            bin_url="https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/download/v1.1.2/uad-ng-linux"
+                        fi
+
+                        curl -Lo "$tmp_path" "$bin_url" && \
+                        chmod +x "$tmp_path" && \
+                        sudo mv "$tmp_path" /usr/local/bin/uad-ng
+
+                        if [[ $? -eq 0 ]]; then
+                            echo "UAD has been installed to /usr/local/bin/uad-ng"
+                            echo "⟹ Run it by typing: uad-ng"
+                        else
+                            echo "Failed to install UAD."
+                        fi
+                    fi
                     ;;
             esac
         done
