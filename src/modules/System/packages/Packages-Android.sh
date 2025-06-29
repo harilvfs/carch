@@ -19,14 +19,20 @@ install_android() {
     while true; do
         clear
 
-        options=("Gvfs-MTP [Displays Android phones via USB]" "ADB" "Back to Main Menu")
+        options=(
+            "Gvfs-MTP [Displays Android phones via USB]"
+            "ADB"
+            "JDK (OpenJDK)"
+            "Back to Main Menu"
+        )
+
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+                                                        --height=40% \
+                                                        --prompt="Choose options (TAB to select multiple): " \
+                                                        --header="Package Selection" \
+                                                        --pointer="➤" \
+                                                        --multi \
+                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
         if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
             return
@@ -56,6 +62,18 @@ install_android() {
                         version=$(get_version android-tools)
                     fi
                     echo "ADB installed successfully! Version: $version"
+                    ;;
+
+                "JDK (OpenJDK)")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur jdk-openjdk
+                        version=$(get_version jdk-openjdk)
+                    else
+                        $pkg_manager java-latest-openjdk.x86_64
+                        version=$(get_version java-latest-openjdk)
+                    fi
+                    echo "OpenJDK installed successfully! Version: $version"
                     ;;
             esac
         done
