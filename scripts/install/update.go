@@ -2,19 +2,11 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/fatih/color"
 )
 
 func printUpdateSuccess() {
 	fmt.Println()
 	_, _ = green.Println("Carch updated successfully!")
-	fmt.Println()
-	fmt.Printf("You can now run the updated carch from your terminal by typing: %s\n", color.New(color.Bold).Sprint("carch"))
-	fmt.Println()
-	fmt.Printf("If you need help, run: %s\n", color.New(color.Bold).Sprint("carch --help"))
-	fmt.Println()
-	fmt.Printf("For more information, visit: %s\n", color.New(color.Bold).Sprint("https://carch.chalisehari.com.np"))
 	fmt.Println()
 }
 
