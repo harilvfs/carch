@@ -63,7 +63,7 @@ setupAlacrittyConfig() {
     mkdir -p "$alacritty_config"
 
     base_url="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/alacritty"
-    for file in alacritty.toml keybinds.toml nordic.toml; do
+    for file in alacritty.toml keybinds.toml nordic.toml catppuccin-mocha.toml; do
         curl -sSLo "$alacritty_config/$file" "$base_url/$file"
     done
 
