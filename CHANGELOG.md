@@ -1,5 +1,33 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.1.6](https://github.com/harilvfs/carch/compare/v5.1.5...v5.1.6) - 2025-06-30
+
+
+### 🚀 Features
+
+
+- [0f4e864](https://github.com/harilvfs/carch/commit/0f4e8646fad111b5b1a1ec2ea6544502886822d9)  *(package)* Add zulip desktop by @harilvfs
+
+- [0982fb5](https://github.com/harilvfs/carch/commit/0982fb5f73b036beac36102650b6da385d98b570)  *(package)* Add java development kit (openjdk) by @harilvfs
+
+- [be8849f](https://github.com/harilvfs/carch/commit/be8849f852f4a4698f7af577949f36a66dbf116e)  *(package)* Add uad (universal android debloater) by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [6d14dc0](https://github.com/harilvfs/carch/commit/6d14dc01b66cf7474e7429625317d38f92e62988) Simplifying flatpak command by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [cbbeb15](https://github.com/harilvfs/carch/commit/cbbeb156b34523395055327b6d91a2723968b094)  *(theme)* Add catppuccin color scheme alacritty by @harilvfs
+
+
+
 ## [5.1.5](https://github.com/harilvfs/carch/compare/v5.1.4...v5.1.5) - 2025-06-20
 
 
