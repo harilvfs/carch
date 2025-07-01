@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -59,16 +59,16 @@ if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -
     fi
 
     exit 1
-  fi
+fi
 
 clear
 
-if ! command -v tmux &>/dev/null; then
+if ! command -v tmux &> /dev/null; then
     echo -e "${YELLOW}Tmux is not installed. Installing...${RESET}"
 
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm tmux
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux
     fi
 fi

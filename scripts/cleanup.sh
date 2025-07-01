@@ -95,19 +95,19 @@ fi
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        -w|--whitespace)
+        -w | --whitespace)
             DO_WHITESPACE=true
             shift
             ;;
-        -b|--blank-lines)
+        -b | --blank-lines)
             DO_BLANKLINES=true
             shift
             ;;
-        -d|--diff)
+        -d | --diff)
             SHOW_DIFF=true
             shift
             ;;
-        -h|--help)
+        -h | --help)
             print_usage
             exit 0
             ;;

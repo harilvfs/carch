@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -25,8 +25,14 @@ fzf_confirm() {
 
     case "$selected" in
         "Yes, install LTS kernel") return 0 ;;
-        "No, cancel installation") echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid selection"; exit 1 ;;
+        "No, cancel installation")
+                                   echo "Exiting..."
+                                                      exit 0
+                                                             ;;
+        *)
+            echo "Invalid selection"
+                                     exit 1
+                                            ;;
     esac
 }
 

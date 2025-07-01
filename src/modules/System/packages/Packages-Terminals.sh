@@ -37,133 +37,133 @@ install_terminals() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "Alacritty")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager alacritty
-                else
-                    $pkg_manager alacritty
-                fi
-                    version=$(get_version alacritty)
-                echo "Alacritty installed successfully! Version: $version"
-                ;;
-
-            "Kitty")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager kitty
-                else
-                    $pkg_manager kitty
-                fi
-                    version=$(get_version kitty)
-                echo "Kitty installed successfully! Version: $version"
-                ;;
-
-            "St")
-                clear
-                if [[ distro -eq 0 ]]; then
-                   $pkg_manager_aur st
-                   version=$(get_version st)
-                else
-                   $pkg_manager st
-                   version=$(get_version st)
-                fi
-                echo "St Terminal installed successfully! Version: $version"
-                ;;
-
-            "Terminator")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur terminator
-                    version=$(get_version terminator)
-                else
-                    $pkg_manager terminator
-                    version=$(get_version terminator)
-                fi
-                echo "Terminator installed successfully! Version: $version"
-                ;;
-
-            "Tilix")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur tilix
-                    version=$(get_version tilix)
-                else
-                    $pkg_manager tilix
-                    version=$(get_version tilix)
-                fi
-                echo "Tilix installed successfully! Version: $version"
-                ;;
-
-            "Hyper")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur hyper
-                    version=$(get_version hyper)
-                else
-                    echo "Hyper is not directly available in Fedora repositories."
-                    echo "Download from: [Hyper Website](https://hyper.is/)"
-                    version="(Manual installation required)"
-                fi
-                echo "Hyper installation completed! Version: $version"
-                ;;
-
-            "GNOME Terminal")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager gnome-terminal
-                else
-                    $pkg_manager gnome-terminal
-                fi
-                    version=$(get_version gnome-terminal)
-                echo "GNOME Terminal installed successfully! Version: $version"
-                ;;
-
-            "Konsole")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager konsole
-                else
-                    $pkg_manager konsole
-                fi
-                    version=$(get_version konsole)
-                echo "Konsole installed successfully! Version: $version"
-                ;;
-
-            "WezTerm")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager wezterm
-                    version=$(get_version wezterm)
-                    echo "WezTerm installed successfully! Version: $version"
-                elif [[ $distro -eq 1 ]]; then
-                    if sudo dnf list --installed wezterm &>/dev/null; then
-                        version=$(get_version wezterm)
-                        echo "WezTerm is already installed! Version: $version"
+                "Alacritty")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager alacritty
                     else
-                        sudo dnf install -y wezterm
-                        if [[ $? -ne 0 ]]; then
-                            $flatpak_cmd org.wezfurlong.wezterm
-                            version="(Flatpak version installed)"
-                        else
-                            version=$(get_version wezterm)
-                        fi
-                        echo "WezTerm installed successfully! Version: $version"
+                        $pkg_manager alacritty
                     fi
-                fi
-                ;;
+                    version=$(get_version alacritty)
+                    echo "Alacritty installed successfully! Version: $version"
+                    ;;
 
-            "Ghostty")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager ghostty
-                elif [[ $distro -eq 1 ]]; then
-                    sudo dnf copr enable pgdev/ghostty -y
-                    sudo dnf install -y ghostty
-                fi
-                version=$(get_version ghostty)
-                echo "Ghostty installed successfully! Version: $version"
-                ;;
+                "Kitty")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager kitty
+                    else
+                        $pkg_manager kitty
+                    fi
+                    version=$(get_version kitty)
+                    echo "Kitty installed successfully! Version: $version"
+                    ;;
+
+                "St")
+                    clear
+                    if [[ distro -eq 0 ]]; then
+                        $pkg_manager_aur st
+                        version=$(get_version st)
+                    else
+                        $pkg_manager st
+                        version=$(get_version st)
+                    fi
+                    echo "St Terminal installed successfully! Version: $version"
+                    ;;
+
+                "Terminator")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur terminator
+                        version=$(get_version terminator)
+                    else
+                        $pkg_manager terminator
+                        version=$(get_version terminator)
+                    fi
+                    echo "Terminator installed successfully! Version: $version"
+                    ;;
+
+                "Tilix")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur tilix
+                        version=$(get_version tilix)
+                    else
+                        $pkg_manager tilix
+                        version=$(get_version tilix)
+                    fi
+                    echo "Tilix installed successfully! Version: $version"
+                    ;;
+
+                "Hyper")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur hyper
+                        version=$(get_version hyper)
+                    else
+                        echo "Hyper is not directly available in Fedora repositories."
+                        echo "Download from: [Hyper Website](https://hyper.is/)"
+                        version="(Manual installation required)"
+                    fi
+                    echo "Hyper installation completed! Version: $version"
+                    ;;
+
+                "GNOME Terminal")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager gnome-terminal
+                    else
+                        $pkg_manager gnome-terminal
+                    fi
+                    version=$(get_version gnome-terminal)
+                    echo "GNOME Terminal installed successfully! Version: $version"
+                    ;;
+
+                "Konsole")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager konsole
+                    else
+                        $pkg_manager konsole
+                    fi
+                    version=$(get_version konsole)
+                    echo "Konsole installed successfully! Version: $version"
+                    ;;
+
+                "WezTerm")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager wezterm
+                        version=$(get_version wezterm)
+                        echo "WezTerm installed successfully! Version: $version"
+                    elif [[ $distro -eq 1 ]]; then
+                        if sudo dnf list --installed wezterm &> /dev/null; then
+                            version=$(get_version wezterm)
+                            echo "WezTerm is already installed! Version: $version"
+                        else
+                            sudo dnf install -y wezterm
+                            if [[ $? -ne 0 ]]; then
+                                $flatpak_cmd org.wezfurlong.wezterm
+                                version="(Flatpak version installed)"
+                            else
+                                version=$(get_version wezterm)
+                            fi
+                            echo "WezTerm installed successfully! Version: $version"
+                        fi
+                    fi
+                    ;;
+
+                "Ghostty")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager ghostty
+                    elif [[ $distro -eq 1 ]]; then
+                        sudo dnf copr enable pgdev/ghostty -y
+                        sudo dnf install -y ghostty
+                    fi
+                    version=$(get_version ghostty)
+                    echo "Ghostty installed successfully! Version: $version"
+                    ;;
 
             esac
         done

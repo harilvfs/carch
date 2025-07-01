@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
@@ -13,7 +13,7 @@ if ! command -v fzf &> /dev/null; then
 fi
 
 echo -e "${TEAL}"
-cat <<"EOF"
+cat << "EOF"
 
 This script helps you set up Neovim or NvChad.
 
@@ -62,11 +62,11 @@ fzf_select() {
 }
 
 detect_os() {
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         echo -e "${TEAL}Detected Arch-based distribution.${RESET}"
         echo "OS=arch" >&2
         return 0
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         echo -e "${TEAL}Detected Fedora-based distribution.${RESET}"
         echo "OS=fedora" >&2
         return 0
@@ -100,7 +100,7 @@ install_dependencies() {
 
 check_command() {
     local cmd=$1
-    if ! command -v "$cmd" &>/dev/null; then
+    if ! command -v "$cmd" &> /dev/null; then
         echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${RESET}"
         return 1
     fi
@@ -187,7 +187,10 @@ setup_nvchad() {
 }
 
 main() {
-    check_command git || { echo -e "${RED}Please install git and try again.${RESET}"; exit 1; }
+    check_command git || {
+                           echo -e "${RED}Please install git and try again.${RESET}"
+                                                                                      exit 1
+    }
 
     os_info=$(detect_os 2>&1)
     if [[ $? -ne 0 ]]; then

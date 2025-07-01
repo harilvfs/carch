@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -14,38 +14,38 @@ FZF_COMMON="--layout=reverse \
             --bind change:top"
 
 declare -A chromium_extensions=(
-    ["Improve Tube"]="https://chromewebstore.google.com/detail/improve-youtube-%F0%9F%8E%A7-for-yo/bnomihfieiccainjcjblhegjgglakjdd"
-    ["Enhancer for YouTube"]="https://chromewebstore.google.com/detail/enhancer-for-youtube/ponfpcnoihfmfllpaingbgckeeldkhle"
-    ["Adblock Plus"]="https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb"
-    ["ClearURLs"]="https://chromewebstore.google.com/detail/clearurls/lckanjgmijmafbedllaakclkaicjfmnk"
-    ["JoyPixels"]="https://chromewebstore.google.com/detail/emoji-keyboard-by-joypixe/ipdjnhgkpapgippgcgkfcbpdpcgifncb"
-    ["Material Icons for GitHub"]="https://chromewebstore.google.com/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"
-    ["Sapling Grammar Checker"]="https://chromewebstore.google.com/detail/sapling-grammar-checker-a/pjpgohokimaldkikgejifibjdpbopfdc"
-    ["SponsorBlock for YouTube"]="https://chromewebstore.google.com/detail/sponsorblock-for-youtube/mnjggcdmjocbbbhaepdhchncahnbgone"
-    ["Tabliss"]="https://chromewebstore.google.com/detail/tabliss-a-beautiful-new-t/hipekcciheckooncpjeljhnekcoolahp"
-    ["uBlock Origin"]="https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm"
-    ["uBlock Origin Lite"]="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh"
-    ["WakaTime"]="https://chromewebstore.google.com/detail/wakatime/jnbbnacmeggbgdjgaoojpmhdlkkpblgi"
-    ["Web Highlighter"]="https://chromewebstore.google.com/detail/web-highlights-pdf-web-hi/hldjnlbobkdkghfidgoecgmklcemanhm"
-    ["Ghostery Tracker & Ad Blocker"]="https://chromewebstore.google.com/detail/ghostery-tracker-ad-block/mlomiejdfkolichcflejclcbmpeaniij"
-    ["Ghostery Private Search"]="https://chromewebstore.google.com/detail/ghostery-private-search-f/nomidcdbhopffbhbpfnnlgnfimhgdman"
+     ["Improve Tube"]="https://chromewebstore.google.com/detail/improve-youtube-%F0%9F%8E%A7-for-yo/bnomihfieiccainjcjblhegjgglakjdd"
+     ["Enhancer for YouTube"]="https://chromewebstore.google.com/detail/enhancer-for-youtube/ponfpcnoihfmfllpaingbgckeeldkhle"
+     ["Adblock Plus"]="https://chromewebstore.google.com/detail/adblock-plus-free-ad-bloc/cfhdojbkjhnklbpkdaibdccddilifddb"
+     ["ClearURLs"]="https://chromewebstore.google.com/detail/clearurls/lckanjgmijmafbedllaakclkaicjfmnk"
+     ["JoyPixels"]="https://chromewebstore.google.com/detail/emoji-keyboard-by-joypixe/ipdjnhgkpapgippgcgkfcbpdpcgifncb"
+     ["Material Icons for GitHub"]="https://chromewebstore.google.com/detail/material-icons-for-github/bggfcpfjbdkhfhfmkjpbhnkhnpjjeomc"
+     ["Sapling Grammar Checker"]="https://chromewebstore.google.com/detail/sapling-grammar-checker-a/pjpgohokimaldkikgejifibjdpbopfdc"
+     ["SponsorBlock for YouTube"]="https://chromewebstore.google.com/detail/sponsorblock-for-youtube/mnjggcdmjocbbbhaepdhchncahnbgone"
+     ["Tabliss"]="https://chromewebstore.google.com/detail/tabliss-a-beautiful-new-t/hipekcciheckooncpjeljhnekcoolahp"
+     ["uBlock Origin"]="https://chromewebstore.google.com/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm"
+     ["uBlock Origin Lite"]="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh"
+     ["WakaTime"]="https://chromewebstore.google.com/detail/wakatime/jnbbnacmeggbgdjgaoojpmhdlkkpblgi"
+     ["Web Highlighter"]="https://chromewebstore.google.com/detail/web-highlights-pdf-web-hi/hldjnlbobkdkghfidgoecgmklcemanhm"
+     ["Ghostery Tracker & Ad Blocker"]="https://chromewebstore.google.com/detail/ghostery-tracker-ad-block/mlomiejdfkolichcflejclcbmpeaniij"
+     ["Ghostery Private Search"]="https://chromewebstore.google.com/detail/ghostery-private-search-f/nomidcdbhopffbhbpfnnlgnfimhgdman"
 )
 
 declare -A firefox_extensions=(
-    ["Tabliss"]="https://addons.mozilla.org/en-US/firefox/addon/tabliss/"
-    ["Enhancer for YouTube"]="https://addons.mozilla.org/en-US/firefox/addon/enhancer-for-youtube/"
-    ["Improve YouTube"]="https://addons.mozilla.org/en-US/firefox/addon/youtube-addon/"
-    ["Adblock Plus"]="https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/"
-    ["ClearURLs"]="https://addons.mozilla.org/en-US/firefox/addon/clearurls/"
-    ["Emoji"]="https://addons.mozilla.org/en-US/firefox/addon/emoji-sav/"
-    ["Material Icon for GitHub"]="https://addons.mozilla.org/en-US/firefox/addon/material-icon-for-github/"
-    ["LanguageTool"]="https://addons.mozilla.org/en-US/firefox/addon/languagetool/"
-    ["SponsorBlock"]="https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/"
-    ["uBlock Origin"]="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
-    ["WakaTime"]="https://addons.mozilla.org/en-US/firefox/addon/wakatimes/"
-    ["Dark Reader"]="https://addons.mozilla.org/en-US/firefox/addon/darkreader/"
-    ["Ghostery Tracker & Ad Blocker"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery/"
-    ["Ghostery Private Search"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery-private-search/"
+     ["Tabliss"]="https://addons.mozilla.org/en-US/firefox/addon/tabliss/"
+     ["Enhancer for YouTube"]="https://addons.mozilla.org/en-US/firefox/addon/enhancer-for-youtube/"
+     ["Improve YouTube"]="https://addons.mozilla.org/en-US/firefox/addon/youtube-addon/"
+     ["Adblock Plus"]="https://addons.mozilla.org/en-US/firefox/addon/adblock-plus/"
+     ["ClearURLs"]="https://addons.mozilla.org/en-US/firefox/addon/clearurls/"
+     ["Emoji"]="https://addons.mozilla.org/en-US/firefox/addon/emoji-sav/"
+     ["Material Icon for GitHub"]="https://addons.mozilla.org/en-US/firefox/addon/material-icon-for-github/"
+     ["LanguageTool"]="https://addons.mozilla.org/en-US/firefox/addon/languagetool/"
+     ["SponsorBlock"]="https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/"
+     ["uBlock Origin"]="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/"
+     ["WakaTime"]="https://addons.mozilla.org/en-US/firefox/addon/wakatimes/"
+     ["Dark Reader"]="https://addons.mozilla.org/en-US/firefox/addon/darkreader/"
+     ["Ghostery Tracker & Ad Blocker"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery/"
+     ["Ghostery Private Search"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery-private-search/"
 )
 
 fzf_select() {
@@ -81,7 +81,7 @@ detect_default_browser() {
     local default_browser
 
     if command -v xdg-settings &> /dev/null; then
-        default_browser=$(xdg-settings get default-web-browser 2>/dev/null | sed 's/\.desktop//')
+        default_browser=$(xdg-settings get default-web-browser 2> /dev/null | sed 's/\.desktop//')
     fi
 
     if [ -z "$default_browser" ] && [ -f ~/.config/mimeapps.list ]; then

@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FONTS_DIR="$HOME/.fonts"
 
@@ -17,8 +17,8 @@ FZF_COMMON="--layout=reverse \
 
 get_latest_release() {
     curl -s "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" |
-    grep '"tag_name":' |
-    sed -E 's/.*"v([^"]+)".*/\1/'
+        grep '"tag_name":' |
+        sed -E 's/.*"v([^"]+)".*/\1/'
 }
 
 fzf_confirm() {
@@ -82,11 +82,11 @@ install_fedora_system_fonts() {
 }
 
 check_aur_helper() {
-    if command -v paru &>/dev/null; then
+    if command -v paru &> /dev/null; then
         echo -e "$GREEN" "AUR helper paru is already installed."
         aur_helper="paru"
         return 0
-    elif command -v yay &>/dev/null; then
+    elif command -v yay &> /dev/null; then
         echo -e "$GREEN" "AUR helper yay is already installed."
         aur_helper="yay"
         return 0
@@ -253,9 +253,9 @@ choose_fonts() {
 }
 
 detect_os() {
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         OS_TYPE="arch"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         OS_TYPE="fedora"
     else
         echo -e "${RED}Unsupported OS. Please install fonts manually.${NC}"

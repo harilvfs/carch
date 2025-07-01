@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
@@ -13,7 +13,7 @@ if ! command -v fzf &> /dev/null; then
 fi
 
 echo -e "${TEAL}"
-cat <<"EOF"
+cat << "EOF"
 
 Standard is best for terminals that don't support image rendering
 PNG option should only be used in terminals that support image rendering
@@ -61,7 +61,7 @@ fzf_select() {
 
 check_command() {
     local cmd=$1
-    if ! command -v "$cmd" &>/dev/null; then
+    if ! command -v "$cmd" &> /dev/null; then
         echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${NC}"
         return 1
     fi
@@ -69,7 +69,7 @@ check_command() {
 }
 
 check_fastfetch() {
-    if command -v fastfetch &>/dev/null; then
+    if command -v fastfetch &> /dev/null; then
         echo -e "${GREEN}Fastfetch is already installed.${NC}"
     else
         echo -e "${CYAN}Fastfetch is not installed. Installing...${NC}"
@@ -99,7 +99,7 @@ handle_existing_config() {
                     mkdir -p "$BACKUP_DIR"
                 fi
                 echo -e "${CYAN}Backing up existing Fastfetch configuration...${NC}"
-                cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2>/dev/null
+                cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2> /dev/null
                 echo -e "${GREEN}Backup completed to $BACKUP_DIR${NC}"
                 return 0
                 ;;
@@ -145,7 +145,7 @@ setup_png_fastfetch() {
     echo -e "${CYAN}Setting up Fastfetch with custom PNG support...${NC}"
     echo -e "${CYAN}Cloning Fastfetch repository directly...${NC}"
 
-    rm -rf "$FASTFETCH_DIR"/* 2>/dev/null
+    rm -rf "$FASTFETCH_DIR"/* 2> /dev/null
     mkdir -p "$FASTFETCH_DIR"
 
     git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"
@@ -157,12 +157,15 @@ setup_png_fastfetch() {
 }
 
 main() {
-    check_command git || { echo -e "${RED}Please install git and try again.${NC}"; exit 1; }
+    check_command git || {
+                           echo -e "${RED}Please install git and try again.${NC}"
+                                                                                   exit 1
+    }
 
     clear
 
     echo -e "${TEAL}"
-    cat <<"EOF"
+    cat << "EOF"
 
 Standard is best for terminals that don't support image rendering
 PNG option should only be used in terminals that support image rendering

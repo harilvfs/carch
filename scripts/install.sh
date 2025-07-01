@@ -14,15 +14,15 @@ error_exit() {
 check_requirements() {
     local missing=()
     for tool in curl jq; do
-        command -v "$tool" >/dev/null || missing+=("$tool")
+        command -v "$tool" > /dev/null || missing+=("$tool")
     done
     [[ ${#missing[@]} -eq 0 ]] || error_exit "Missing required tools: ${missing[*]}"
 }
 
 detect_architecture() {
     case "$(uname -m)" in
-        x86_64|amd64) echo "amd64" ;;
-        aarch64|arm64) echo "arm64" ;;
+        x86_64 | amd64) echo "amd64" ;;
+        aarch64 | arm64) echo "arm64" ;;
         *) error_exit "Unsupported architecture: $(uname -m)" ;;
     esac
 }

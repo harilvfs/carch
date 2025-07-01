@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 check_brightnessctl() {
     if ! command -v brightnessctl &> /dev/null; then
@@ -48,7 +48,7 @@ display_brightness() {
     bars=$(($current * $max_bars / 100))
 
     progress="["
-    for ((i=0; i<$max_bars; i++)); do
+    for ((i = 0; i < $max_bars; i++)); do
         if [ $i -lt $bars ]; then
             progress+="■"
         else
@@ -147,7 +147,7 @@ set_specific_brightness() {
                     echo -e "${YELLOW}Operation cancelled${NC}"
                     sleep 1
                     ;;
-                "Back to Menu"|*)
+                "Back to Menu" | *)
                     echo -e "${YELLOW}Returning to main menu...${NC}"
                     return
                     ;;

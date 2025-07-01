@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 aur_helper=""
 
@@ -40,9 +40,9 @@ fzf_select() {
 }
 
 detect_package_manager() {
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         pkg_manager="pacman"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         pkg_manager="dnf"
     else
         echo -e "${RED}Unsupported package manager. Please install Picom manually.${ENDCOLOR}"
@@ -53,7 +53,7 @@ detect_package_manager() {
 install_aur_helper() {
     local aur_helpers=("yay" "paru")
     for helper in "${aur_helpers[@]}"; do
-        if command -v "$helper" &>/dev/null; then
+        if command -v "$helper" &> /dev/null; then
             echo -e "${GREEN}:: AUR helper '$helper' is already installed. Using it.${ENDCOLOR}"
             aur_helper="$helper"
             return
@@ -64,7 +64,10 @@ install_aur_helper() {
     sudo pacman -S --needed --noconfirm git base-devel
     temp_dir=$(mktemp -d)
     git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
-    cd "$temp_dir/yay" || { echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"; exit 1; }
+    cd "$temp_dir/yay" || {
+                            echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"
+                                                                                      exit 1
+    }
     makepkg -si --noconfirm
     cd ~ || exit 1
     rm -rf "$temp_dir"
@@ -96,7 +99,10 @@ install_picom_ftlabs_fedora() {
 
     echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
-    cd ~/.cache/picom || { echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"; exit 1; }
+    cd ~/.cache/picom || {
+                           echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
+                                                                                   exit 1
+    }
 
     echo -e "${GREEN}:: Building Picom with meson and ninja...${ENDCOLOR}"
     meson setup --buildtype=release build

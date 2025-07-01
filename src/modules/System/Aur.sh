@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
@@ -17,7 +17,7 @@ detect_distro() {
 check_dependencies() {
     local failed=0
 
-    if ! command -v fzf &>/dev/null; then
+    if ! command -v fzf &> /dev/null; then
         echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
@@ -25,7 +25,7 @@ check_dependencies() {
         failed=1
     fi
 
-    if ! command -v git &>/dev/null; then
+    if ! command -v git &> /dev/null; then
         echo -e "${RED}${BOLD}Error: git is not installed.${NC}"
         echo -e "${YELLOW}Please install git before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
@@ -33,7 +33,7 @@ check_dependencies() {
         failed=1
     fi
 
-    if ! command -v make &>/dev/null; then
+    if ! command -v make &> /dev/null; then
         echo -e "${RED}${BOLD}Error: make is not installed.${NC}"
         echo -e "${YELLOW}Please install make before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install make"
@@ -41,7 +41,7 @@ check_dependencies() {
         failed=1
     fi
 
-    if ! command -v less &>/dev/null; then
+    if ! command -v less &> /dev/null; then
         echo -e "${RED}${BOLD}Error: less is not installed.${NC}"
         echo -e "${YELLOW}Please install less before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install less"
@@ -57,7 +57,7 @@ check_dependencies() {
 }
 
 install_paru() {
-    if command -v paru &>/dev/null; then
+    if command -v paru &> /dev/null; then
         echo -e "${GREEN}Paru is already installed on this system.${NC}"
         echo -e "$(paru --version | head -n 1)"
         read -p "Press Enter to continue..."
@@ -71,14 +71,20 @@ install_paru() {
     echo -e "${CYAN}:: Installing Paru...${NC}"
     sudo pacman -S --needed base-devel git
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${NC}"; exit 1; }
+    cd "$temp_dir" || {
+                        echo -e "${RED}Failed to create temp directory${NC}"
+                                                                              exit 1
+    }
     git clone https://aur.archlinux.org/paru.git
-    cd paru || { echo -e "${RED}Failed to enter paru directory${NC}"; exit 1; }
+    cd paru || {
+                 echo -e "${RED}Failed to enter paru directory${NC}"
+                                                                      exit 1
+    }
     makepkg -si
     cd ..
     rm -rf "$temp_dir"
 
-    if command -v paru &>/dev/null; then
+    if command -v paru &> /dev/null; then
         echo -e "${GREEN}Paru installed successfully.${NC}"
     else
         echo -e "${RED}Paru installation failed.${NC}"
@@ -87,7 +93,7 @@ install_paru() {
 }
 
 install_yay() {
-    if command -v yay &>/dev/null; then
+    if command -v yay &> /dev/null; then
         echo -e "${GREEN}Yay is already installed on this system.${NC}"
         echo -e "$(yay --version | head -n 1)"
         read -p "Press Enter to continue..."
@@ -101,14 +107,20 @@ install_yay() {
     echo -e "${CYAN}:: Installing Yay...${NC}"
     sudo pacman -S --needed git base-devel
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${NC}"; exit 1; }
+    cd "$temp_dir" || {
+                        echo -e "${RED}Failed to create temp directory${NC}"
+                                                                              exit 1
+    }
     git clone https://aur.archlinux.org/yay.git
-    cd yay || { echo -e "${RED}Failed to enter yay directory${NC}"; exit 1; }
+    cd yay || {
+                echo -e "${RED}Failed to enter yay directory${NC}"
+                                                                    exit 1
+    }
     makepkg -si
     cd ..
     rm -rf "$temp_dir"
 
-    if command -v yay &>/dev/null; then
+    if command -v yay &> /dev/null; then
         echo -e "${GREEN}Yay installed successfully.${NC}"
     else
         echo -e "${RED}Yay installation failed.${NC}"
@@ -120,13 +132,13 @@ check_existing_helpers() {
     local helpers_found=false
     local helper_list=""
 
-    if command -v paru &>/dev/null; then
+    if command -v paru &> /dev/null; then
         helpers_found=true
         paru_version=$(paru --version | head -n 1)
         helper_list="${helper_list}• Paru: ${paru_version}\n"
     fi
 
-    if command -v yay &>/dev/null; then
+    if command -v yay &> /dev/null; then
         helpers_found=true
         yay_version=$(yay --version | head -n 1)
         helper_list="${helper_list}• Yay: ${yay_version}\n"
@@ -195,7 +207,8 @@ while true; do
         "Install Yay") install_yay ;;
         "Exit")
             echo -e "${GREEN}Exiting...${NC}"
-            exit ;;
+            exit
+                 ;;
         *) continue ;;
     esac
 done

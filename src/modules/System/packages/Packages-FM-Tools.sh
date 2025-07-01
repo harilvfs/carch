@@ -33,27 +33,27 @@ install_fm_tools() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "Tumbler [Thumbnail Viewer]")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager tumbler
-                else
-                    $pkg_manager tumbler
-                fi
-                version=$(get_version tumbler)
-                echo "Tumbler installed successfully! Version: $version"
-                ;;
+                "Tumbler [Thumbnail Viewer]")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager tumbler
+                    else
+                        $pkg_manager tumbler
+                    fi
+                    version=$(get_version tumbler)
+                    echo "Tumbler installed successfully! Version: $version"
+                    ;;
 
-            "Trash-Cli")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager trash-cli
-                else
-                    $pkg_manager trash-cli
-                fi
-                version=$(get_version trash-cli)
-                echo "Trash-Cli installed successfully! Version: $version"
-                ;;
+                "Trash-Cli")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager trash-cli
+                    else
+                        $pkg_manager trash-cli
+                    fi
+                    version=$(get_version trash-cli)
+                    echo "Trash-Cli installed successfully! Version: $version"
+                    ;;
 
             esac
         done

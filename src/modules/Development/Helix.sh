@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -38,9 +38,9 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-if command -v pacman &>/dev/null; then
+if command -v pacman &> /dev/null; then
     DISTRO="arch"
-elif command -v dnf &>/dev/null; then
+elif command -v dnf &> /dev/null; then
     DISTRO="fedora"
 else
     echo -e "${RED}Unsupported distribution!${RESET}"

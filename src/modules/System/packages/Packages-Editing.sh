@@ -31,91 +31,91 @@ install_editing() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "GIMP (Image)")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager gimp
-                    version=$(pacman -Qi gimp | grep Version | awk '{print $3}')
-                else
-                    $pkg_manager gimp
-                    version=$(rpm -q gimp)
-                fi
-                echo "GIMP installed successfully! Version: $version"
-                ;;
+                "GIMP (Image)")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager gimp
+                        version=$(pacman -Qi gimp | grep Version | awk '{print $3}')
+                    else
+                        $pkg_manager gimp
+                        version=$(rpm -q gimp)
+                    fi
+                    echo "GIMP installed successfully! Version: $version"
+                    ;;
 
-            "Kdenlive (Videos)")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager kdenlive
-                    version=$(pacman -Qi kdenlive | grep Version | awk '{print $3}')
-                    echo "Kdenlive installed successfully! Version: $version"
-                else
-                    $pkg_manager kdenlive
-                    version=$(rpm -q kdenlive)
-                    echo "Kdenlive installed successfully! Version: $version"
-                fi
-                ;;
+                "Kdenlive (Videos)")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager kdenlive
+                        version=$(pacman -Qi kdenlive | grep Version | awk '{print $3}')
+                        echo "Kdenlive installed successfully! Version: $version"
+                    else
+                        $pkg_manager kdenlive
+                        version=$(rpm -q kdenlive)
+                        echo "Kdenlive installed successfully! Version: $version"
+                    fi
+                    ;;
 
-            "Krita")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur krita
-                    version=$(get_version krita)
-                else
-                    $pkg_manager krita
-                    version=$(get_version krita)
-                fi
-                echo "Krita installed successfully! Version: $version"
-                ;;
+                "Krita")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur krita
+                        version=$(get_version krita)
+                    else
+                        $pkg_manager krita
+                        version=$(get_version krita)
+                    fi
+                    echo "Krita installed successfully! Version: $version"
+                    ;;
 
-            "Blender")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur blender
-                    version=$(get_version blender)
-                else
-                    $pkg_manager blender
-                    version=$(get_version blender)
-                fi
-                echo "Blender installed successfully! Version: $version"
-                ;;
+                "Blender")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur blender
+                        version=$(get_version blender)
+                    else
+                        $pkg_manager blender
+                        version=$(get_version blender)
+                    fi
+                    echo "Blender installed successfully! Version: $version"
+                    ;;
 
-            "Inkscape")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur inkscape
-                    version=$(get_version inkscape)
-                else
-                    $pkg_manager inkscape
-                    version=$(get_version inkscape)
-                fi
-                echo "Inkscape installed successfully! Version: $version"
-                ;;
+                "Inkscape")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur inkscape
+                        version=$(get_version inkscape)
+                    else
+                        $pkg_manager inkscape
+                        version=$(get_version inkscape)
+                    fi
+                    echo "Inkscape installed successfully! Version: $version"
+                    ;;
 
-            "Audacity")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur audacity
-                    version=$(get_version audacity)
-                else
-                    $pkg_manager audacity
-                    version=$(get_version audacity)
-                fi
-                echo "Audacity installed successfully! Version: $version"
-                ;;
+                "Audacity")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur audacity
+                        version=$(get_version audacity)
+                    else
+                        $pkg_manager audacity
+                        version=$(get_version audacity)
+                    fi
+                    echo "Audacity installed successfully! Version: $version"
+                    ;;
 
-            "DaVinci Resolve")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur davinci-resolve
-                    version=$(get_version davinci-resolve)
-                else
-                    echo "DaVinci Resolve is not directly available in Fedora repositories."
-                    echo "Download from: [Blackmagic Design Website](https://www.blackmagicdesign.com/products/davinciresolve/)"
-                    version="(Manual installation required)"
-                fi
-                echo "DaVinci Resolve installation completed! Version: $version"
-                ;;
+                "DaVinci Resolve")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur davinci-resolve
+                        version=$(get_version davinci-resolve)
+                    else
+                        echo "DaVinci Resolve is not directly available in Fedora repositories."
+                        echo "Download from: [Blackmagic Design Website](https://www.blackmagicdesign.com/products/davinciresolve/)"
+                        version="(Manual installation required)"
+                    fi
+                    echo "DaVinci Resolve installation completed! Version: $version"
+                    ;;
 
             esac
         done

@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 GRUB_THEME_DIR="$HOME/.local/share/Top-5-Bootloader-Themes"
 

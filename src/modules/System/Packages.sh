@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 source "$(dirname "$0")/packages/Packages-Android.sh"
 source "$(dirname "$0")/packages/Packages-Browsers.sh"
@@ -37,19 +37,19 @@ fi
 AUR_HELPER=""
 
 detect_distro() {
-   if command -v pacman &>/dev/null; then
-       return 0
-   elif command -v dnf &>/dev/null; then
-       return 1
-   else
-       echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
-       return 2
-   fi
+    if command -v pacman &> /dev/null; then
+        return 0
+    elif command -v dnf &> /dev/null; then
+        return 1
+    else
+        echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
+        return 2
+    fi
 }
 
 detect_aur_helper() {
     for helper in paru yay; do
-        if command -v $helper &>/dev/null; then
+        if command -v $helper &> /dev/null; then
             AUR_HELPER=$helper
             return 0
         fi
@@ -76,10 +76,16 @@ install_aur_helper() {
     sudo pacman -S --needed git base-devel
 
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${RESET}"; exit 1; }
+    cd "$temp_dir" || {
+                        echo -e "${RED}Failed to create temp directory${RESET}"
+                                                                                 exit 1
+    }
 
     git clone https://aur.archlinux.org/yay.git
-    cd yay || { echo -e "${RED}Failed to enter yay directory${RESET}"; exit 1; }
+    cd yay || {
+                echo -e "${RED}Failed to enter yay directory${RESET}"
+                                                                       exit 1
+    }
     makepkg -si
 
     cd ..
@@ -89,7 +95,7 @@ install_aur_helper() {
 }
 
 install_flatpak() {
-    if ! command -v flatpak &>/dev/null; then
+    if ! command -v flatpak &> /dev/null; then
         echo -e "${YELLOW}:: Flatpak not found. Installing...${RESET}"
         sudo dnf install -y flatpak
     fi
@@ -101,7 +107,7 @@ install_fedora_package() {
     flatpak_id="$2"
 
     if sudo dnf list --available | grep -q "^$package_name"; then
-       sudo dnf install -y "$package_name"
+        sudo dnf install -y "$package_name"
     else
         echo -e "${YELLOW}:: $package_name not found in DNF. Falling back to Flatpak.${RESET}"
         flatpak install -y flathub "$flatpak_id"
@@ -147,7 +153,8 @@ while true; do
         "Virtualization") install_virtualization ;;
         "Crypto Tools") install_crypto_tools ;;
         "Exit")
-        echo -e "${GREEN}Exiting...${NC}"
-        exit
+            echo -e "${GREEN}Exiting...${NC}"
+            exit
+            ;;
     esac
 done

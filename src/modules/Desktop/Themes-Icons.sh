@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -31,10 +31,10 @@ fzf_confirm() {
 }
 
 detect_distro() {
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         distro="arch"
         echo -e "${GREEN}Detected distribution: Arch Linux${RESET}"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         distro="fedora"
         echo -e "${YELLOW}Detected distribution: Fedora${RESET}"
     else
@@ -57,7 +57,7 @@ install_dependencies() {
             exit 1
         }
 
-        if ! command -v nwg-look &>/dev/null; then
+        if ! command -v nwg-look &> /dev/null; then
             echo -e "${CYAN}:: Installing nwg-look for Fedora...${RESET}"
             sudo dnf copr enable -y solopasha/hyprland || {
                 echo -e "${RED}:: Failed to enable solopasha/hyprland COPR repository.${RESET}"
@@ -132,7 +132,7 @@ setup_themes() {
 
     check_and_create_dir "$HOME/.themes"
 
-    cp -r "$tmp_dir"/* "$HOME/.themes/" 2>/dev/null
+    cp -r "$tmp_dir"/* "$HOME/.themes/" 2> /dev/null
     cleanup_files "$HOME/.themes"
 
     rm -rf "$tmp_dir"
@@ -147,7 +147,7 @@ setup_icons() {
 
     check_and_create_dir "$HOME/.icons"
 
-    cp -r "$tmp_dir"/* "$HOME/.icons/" 2>/dev/null
+    cp -r "$tmp_dir"/* "$HOME/.icons/" 2> /dev/null
     cleanup_files "$HOME/.icons"
 
     rm -rf "$tmp_dir"

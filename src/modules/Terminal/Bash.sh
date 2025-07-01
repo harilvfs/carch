@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
@@ -19,7 +19,7 @@ check_essential_dependencies() {
     local missing=()
 
     for dep in "${dependencies[@]}"; do
-        if ! command -v "$dep" &>/dev/null; then
+        if ! command -v "$dep" &> /dev/null; then
             missing+=("$dep")
         fi
     done
@@ -30,7 +30,10 @@ check_essential_dependencies() {
         case "$distro" in
             arch) sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
             fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
-            *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
+            *)
+                echo -e "${RED}Unsupported distribution.${RESET}"
+                                                                  exit 1
+                                                                         ;;
         esac
     fi
 }
@@ -46,7 +49,7 @@ check_fzf() {
 }
 
 install_eza() {
-    if command -v eza &>/dev/null; then
+    if command -v eza &> /dev/null; then
         echo -e "${GREEN}eza is already installed.${RESET}"
         return 0
     fi
@@ -138,11 +141,11 @@ echo -e "${TEAL}Nerd Font Are Recommended${RESET}"
 echo -e "${CYAN}Detected distribution: $distro${RESET}"
 
 install_arch() {
-    if ! command -v bash &>/dev/null; then
+    if ! command -v bash &> /dev/null; then
         echo -e "${CYAN}Installing Bash...${RESET}"
         sudo pacman -S --noconfirm bash
     fi
-    if ! pacman -Q bash-completion &>/dev/null; then
+    if ! pacman -Q bash-completion &> /dev/null; then
         echo -e "${CYAN}Installing bash-completion...${RESET}"
         sudo pacman -S --noconfirm bash-completion
     fi
@@ -156,7 +159,10 @@ install_fedora() {
 case "$distro" in
     arch) install_arch ;;
     fedora) install_fedora ;;
-    *) echo -e "${RED}Unsupported distribution.${RESET}"; exit 1 ;;
+    *)
+        echo -e "${RED}Unsupported distribution.${RESET}"
+                                                          exit 1
+                                                                 ;;
 esac
 
 install_eza
@@ -192,7 +198,7 @@ case "$THEME" in
         ;;
 esac
 
-if ! command -v starship &>/dev/null; then
+if ! command -v starship &> /dev/null; then
     echo -e "${CYAN}Starship not found. Installing...${RESET}"
     case "$distro" in
         arch) sudo pacman -S --noconfirm starship || curl -sS https://starship.rs/install.sh | sh ;;
@@ -220,7 +226,7 @@ echo -e "${CYAN}Applying $THEME theme for Starship...${RESET}"
 curl -fsSL "$STARSHIP_CONFIG_URL" -o "$STARSHIP_CONFIG"
 echo -e "${GREEN}Applied $THEME theme for Starship.${RESET}"
 
-if ! command -v zoxide &>/dev/null; then
+if ! command -v zoxide &> /dev/null; then
     echo -e "${CYAN}Installing zoxide...${RESET}"
     if [[ "$distro" == "arch" ]]; then
         sudo pacman -S --noconfirm zoxide
@@ -251,7 +257,7 @@ install_pokemon_colorscripts() {
             AUR_HELPER=""
 
             for helper in "${AUR_HELPERS[@]}"; do
-                if command -v "$helper" &>/dev/null; then
+                if command -v "$helper" &> /dev/null; then
                     AUR_HELPER="$helper"
                     echo -e "${GREEN}Found AUR helper: $AUR_HELPER${RESET}"
                     break
@@ -321,8 +327,8 @@ install_pokemon_colorscripts() {
 
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 cd "$HOME/pokemon-colorscripts" || {
-                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}";
-                    return 1;
+                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}"
+                    return 1
                 }
 
                 echo -e "${CYAN}Installing Pokémon Color Scripts...${RESET}"
