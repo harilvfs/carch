@@ -23,6 +23,7 @@ fn create_rounded_block() -> Block<'static,> {
     Block::default()
         .borders(Borders::ALL,)
         .border_type(BorderType::Rounded,)
+        .border_style(Style::default().fg(Color::Cyan,),)
         .style(Style::default().bg(Color::Reset,),)
 }
 
