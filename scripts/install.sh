@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
+
+REPO="harilvfs/carch"
+API_BASE="https://api.github.com"
+TIMEOUT=10
 
 error_exit() {
     echo "Error: $1" >&2
@@ -8,103 +12,67 @@ error_exit() {
 }
 
 check_requirements() {
+    local missing=()
     for tool in curl jq; do
-        if ! command -v "$tool" &> /dev/null; then
-            error_exit "Required tool not found: $tool"
-        fi
+        command -v "$tool" >/dev/null || missing+=("$tool")
     done
-}
-
-spinner() {
-    local pid=$1
-    local spin="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
-    local i=0
-
-    tput civis 2>/dev/null || true
-
-    while kill -0 "$pid" 2>/dev/null; do
-        printf "\r%s" "${spin:i++%${#spin}:1}"
-        sleep 0.1
-    done
-
-    tput cnorm 2>/dev/null || true
-    printf "\r✔\n"
+    [[ ${#missing[@]} -eq 0 ]] || error_exit "Missing required tools: ${missing[*]}"
 }
 
 detect_architecture() {
-    local arch
-    arch="$(uname -m)"
-    case "$arch" in
+    case "$(uname -m)" in
         x86_64|amd64) echo "amd64" ;;
         aarch64|arm64) echo "arm64" ;;
-        *) error_exit "Unsupported architecture: $arch" ;;
+        *) error_exit "Unsupported architecture: $(uname -m)" ;;
     esac
 }
 
-fetch_releases_json() {
-    curl -s "https://api.github.com/repos/harilvfs/carch/releases"
+get_latest_release() {
+    local url="${API_BASE}/repos/${REPO}/releases/latest"
+    curl -sSL --connect-timeout "$TIMEOUT" --max-time 30 "$url" || error_exit "Failed to fetch release info"
 }
 
-find_tag() {
+get_download_url() {
     local json=$1
-    local tag
+    local arch=$2
+    local asset_name="carch-installer-linux-${arch}"
 
-    tag="$(echo "$json" | jq -r '.[] | select(.prerelease == true) | .tag_name' | head -n1)"
-
-    if [ -z "$tag" ] || [ "$tag" == "null" ]; then
-        tag="$(echo "$json" | jq -r '.[] | select(.prerelease == false) | .tag_name' | head -n1)"
-    fi
-
-    if [ -z "$tag" ] || [ "$tag" == "null" ]; then
-        error_exit "No release found"
-    fi
-
-    echo "$tag"
+    echo "$json" | jq -r ".assets[] | select(.name == \"$asset_name\") | .browser_download_url" | head -1
 }
 
-find_asset_url() {
-    local json=$1
-    local tag=$2
-    local arch=$3
-    local asset_name
-    local url
+download_installer() {
+    local url=$1
+    local tmp_file=$2
 
-    asset_name="carch-installer-linux-${arch}"
-
-    url="$(echo "$json" | jq -r ".[] | select(.tag_name == \"$tag\") | .assets[] | select(.name == \"$asset_name\") | .browser_download_url")"
-
-    if [ -z "$url" ] || [ "$url" == "null" ]; then
-        error_exit "Release asset not found for $asset_name"
-    fi
-
-    echo "$url"
+    curl -L --progress-bar --connect-timeout "$TIMEOUT" --max-time 120 "$url" -o "$tmp_file" || {
+        rm -f "$tmp_file"
+        error_exit "Download failed"
+    }
 }
 
 main() {
-    if [ "$#" -gt 1 ]; then
-        error_exit "Too many arguments. Only one optional command (update, uninstall, help) allowed."
-    fi
+    [[ $# -le 1 ]] || error_exit "Too many arguments"
 
     check_requirements
 
+    local arch tmp_file json url
     arch="$(detect_architecture)"
-    json="$(fetch_releases_json)"
-    tag="$(find_tag "$json")"
-    url="$(find_asset_url "$json" "$tag" "$arch")"
-
     tmp_file="$(mktemp)"
 
-    (
-        curl -Ls "$url" -o "$tmp_file"
-    ) &
+    trap 'rm -f "$tmp_file"' EXIT
 
-    spinner $!
+    echo "Fetching latest release..."
+    json="$(get_latest_release)"
 
-    wait $!
+    url="$(get_download_url "$json" "$arch")"
+    [[ -n "$url" && "$url" != "null" ]] || error_exit "No binary found for $arch"
+
+    echo "Downloading installer..."
+    download_installer "$url" "$tmp_file"
 
     chmod +x "$tmp_file"
-    "$tmp_file" "$1"
-    rm -f "$tmp_file"
+    echo "Running installer..."
+    exec "$tmp_file" "${1:-}"
 }
 
 main "$@"
