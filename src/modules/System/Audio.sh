@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -32,10 +32,10 @@ fzf_confirm() {
 
 detect_distro() {
     echo -e "${TEAL}:: Detecting distribution...${ENDCOLOR}"
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         echo -e "${GREEN}:: Arch Linux detected.${ENDCOLOR}"
         DISTRO="arch"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         echo -e "${GREEN}:: Fedora detected.${ENDCOLOR}"
         DISTRO="fedora"
     else
@@ -141,7 +141,7 @@ main() {
         if fzf_confirm "Do you want to log out to apply changes? (Recommended)"; then
             echo -e "${TEAL}:: Logging out to apply audio system changes...${ENDCOLOR}"
             sleep 2
-            if command -v loginctl &>/dev/null; then
+            if command -v loginctl &> /dev/null; then
                 loginctl terminate-user "$USER"
             else
                 echo -e "${CYAN}:: Please log out manually to apply changes.${ENDCOLOR}"

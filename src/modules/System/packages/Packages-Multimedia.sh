@@ -34,37 +34,37 @@ install_multimedia() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "VLC")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur vlc
-                    version=$(get_version vlc)
-                else
-                    $pkg_manager vlc
-                    version=$(get_version vlc)
-                fi
-                echo "VLC installed successfully! Version: $version"
-                ;;
+                "VLC")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur vlc
+                        version=$(get_version vlc)
+                    else
+                        $pkg_manager vlc
+                        version=$(get_version vlc)
+                    fi
+                    echo "VLC installed successfully! Version: $version"
+                    ;;
 
-            "Netflix [Unofficial]")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur netflix
-                    version=$(get_version netflix)
-                else
-                    echo "Netflix Unofficial requires manual installation on Fedora"
-                    echo "Installing required dependencies:"
-                    sudo dnf install -y wget opencl-utils
-                    echo "Installing Microsoft Core Fonts:"
-                    sudo yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm
-                    echo "Installing Wine Silverlight & Netflix Desktop:"
-                    sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
-                    sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
+                "Netflix [Unofficial]")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur netflix
+                        version=$(get_version netflix)
+                    else
+                        echo "Netflix Unofficial requires manual installation on Fedora"
+                        echo "Installing required dependencies:"
+                        sudo dnf install -y wget opencl-utils
+                        echo "Installing Microsoft Core Fonts:"
+                        sudo yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm
+                        echo "Installing Wine Silverlight & Netflix Desktop:"
+                        sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
+                        sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
 
-                    version="(Manual installation required)"
-                fi
-                echo "Netflix [Unofficial] installed successfully! Version: $version"
-                ;;
+                        version="(Manual installation required)"
+                    fi
+                    echo "Netflix [Unofficial] installed successfully! Version: $version"
+                    ;;
 
             esac
         done

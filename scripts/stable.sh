@@ -4,10 +4,10 @@ rc='\033[0m'
 red='\033[0;31m'
 
 check_dependency() {
-    if ! command -v "$1" >/dev/null 2>&1; then
-        if command -v pacman >/dev/null 2>&1; then
+    if ! command -v "$1" > /dev/null 2>&1; then
+        if command -v pacman > /dev/null 2>&1; then
             sudo pacman -Sy --noconfirm "$1"
-        elif command -v dnf >/dev/null 2>&1; then
+        elif command -v dnf > /dev/null 2>&1; then
             sudo dnf install -y "$1"
         else
             printf '%sERROR: Package manager not supported%s\n' "$red" "$rc"
@@ -31,9 +31,9 @@ check() {
 
 findArch() {
     case "$(uname -m)" in
-        x86_64|amd64) arch="x86_64" ;;
-        aarch64|arm64) arch="aarch64" ;;
-        *) check 1 "Unsupported architecture"
+        x86_64 | amd64) arch="x86_64" ;;
+        aarch64 | arm64) arch="aarch64" ;;
+        *) check 1 "Unsupported architecture" ;;
     esac
 }
 
@@ -49,7 +49,7 @@ spinner() {
     local spin="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
     local i=0
 
-    while kill -0 "$pid" 2>/dev/null; do
+    while kill -0 "$pid" 2> /dev/null; do
         printf "\r%s" "${spin:i++%${#spin}:1}"
         sleep 0.1
     done

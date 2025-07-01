@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -31,7 +31,7 @@ fzf_confirm() {
 }
 
 installAlacritty() {
-    if command -v alacritty &>/dev/null; then
+    if command -v alacritty &> /dev/null; then
         echo -e "${GREEN}Alacritty is already installed.${RESET}"
         return
     fi

@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
@@ -51,13 +51,13 @@ fzf_choose() {
 main_menu() {
     clear
 
-    if command -v pacman &>/dev/null; then
-       distro="arch"
-    elif command -v dnf &>/dev/null; then
-       distro="fedora"
+    if command -v pacman &> /dev/null; then
+        distro="arch"
+    elif command -v dnf &> /dev/null; then
+        distro="fedora"
     else
-       echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
-       exit 1
+        echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
+        exit 1
     fi
     echo -e "${TEAL}Distro: ${distro^} Linux${RESET}"
 

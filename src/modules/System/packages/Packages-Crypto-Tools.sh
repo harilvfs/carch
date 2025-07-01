@@ -34,17 +34,17 @@ install_crypto_tools() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "Electrum")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur electrum
-                    version=$(get_version electrum)
-                else
-                    $pkg_manager electrum
-                    version=$(get_version electrum)
-                fi
-                echo "Electrum installed successfully! Version: $version"
-                ;;
+                "Electrum")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur electrum
+                        version=$(get_version electrum)
+                    else
+                        $pkg_manager electrum
+                        version=$(get_version electrum)
+                    fi
+                    echo "Electrum installed successfully! Version: $version"
+                    ;;
 
             esac
         done

@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
@@ -44,7 +44,7 @@ print_message() {
     echo -e "${color}${message}${RESET}"
 }
 
-if command -v npm &>/dev/null; then
+if command -v npm &> /dev/null; then
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
     print_message "$GREEN" "✔ npm is already installed."
@@ -70,12 +70,12 @@ if [[ ! -d "$HOME/.nvm" ]]; then
         print_message "$RED" "✖ Failed to install nvm."
 
         print_message "$YELLOW" "Falling back to package manager installation..."
-        if command -v pacman &>/dev/null; then
+        if command -v pacman &> /dev/null; then
             sudo pacman -S --noconfirm npm || {
                 print_message "$RED" "✖ Failed to install npm via pacman."
                 exit 1
             }
-        elif command -v dnf &>/dev/null; then
+        elif command -v dnf &> /dev/null; then
             sudo dnf install -y nodejs npm || {
                 print_message "$RED" "✖ Failed to install npm via dnf."
                 exit 1
@@ -104,7 +104,7 @@ else
     exit 1
 fi
 
-if command -v nvm &>/dev/null; then
+if command -v nvm &> /dev/null; then
     print_message "${TEAL}" "Installing Node.js LTS via nvm..."
     nvm install --lts
     nvm use --lts

@@ -69,11 +69,11 @@ install_browsers() {
                 "Lynx")
                     clear
                     if [[ $distro -eq 0 ]]; then
-                      $pkg_manager_pacman lynx
-                      version=$(get_version lynx)
+                        $pkg_manager_pacman lynx
+                        version=$(get_version lynx)
                     else
-                      $pkg_manager lynx
-                      version=$(get_version lynx)
+                        $pkg_manager lynx
+                        version=$(get_version lynx)
                     fi
                     echo "Lynx installed successfully! Version: $version"
                     ;;
@@ -93,13 +93,13 @@ install_browsers() {
                 "Floorp")
                     clear
                     if [[ $distro -eq 0 ]]; then
-                      $pkg_manager_aur floorp-bin
-                      version=$(get_version floorp-bin)
+                        $pkg_manager_aur floorp-bin
+                        version=$(get_version floorp-bin)
                     else
-                      echo "Setting sneexy/floorp repository"
-                      sudo dnf copr enable sneexy/floorp
-                      $pkg_manager floorp
-                      version=$(get_version floorp)
+                        echo "Setting sneexy/floorp repository"
+                        sudo dnf copr enable sneexy/floorp
+                        $pkg_manager floorp
+                        version=$(get_version floorp)
                     fi
                     echo "Floorp browser installed successfully! Version: $version"
                     ;;
@@ -190,13 +190,16 @@ install_browsers() {
                     else
                         echo "Downloading and installing Thorium Browser for Fedora..."
 
-                        if ! command -v wget &>/dev/null; then
+                        if ! command -v wget &> /dev/null; then
                             echo "Installing wget..."
                             sudo dnf install -y wget
                         fi
 
                         temp_dir=$(mktemp -d)
-                        cd "$temp_dir" || { echo -e "${RED}Failed to create temp directory${RESET}"; return; }
+                        cd "$temp_dir" || {
+                                            echo -e "${RED}Failed to create temp directory${RESET}"
+                                                                                                     return
+                        }
 
                         echo "Fetching latest Thorium Browser release..."
                         wget -q --show-progress https://github.com/Alex313031/thorium/releases/latest -O latest
@@ -205,10 +208,10 @@ install_browsers() {
 
                         echo "Latest version: $latest_version"
                         echo "Downloading Thorium Browser AVX package..."
-                        wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_${latest_version#M}_AVX.rpm" || \
-                        wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
+                        wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_${latest_version#M}_AVX.rpm" ||
+                            wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
 
-                        rpm_file=$(ls thorium*AVX.rpm 2>/dev/null)
+                        rpm_file=$(ls thorium*AVX.rpm 2> /dev/null)
                         if [ -n "$rpm_file" ]; then
                             echo "Installing Thorium Browser..."
                             sudo dnf install -y "./$rpm_file"
@@ -218,7 +221,7 @@ install_browsers() {
                             echo "Failed to download Thorium Browser. Please visit https://thorium.rocks/ for manual installation."
                         fi
 
-                        cd - >/dev/null || return
+                        cd - > /dev/null || return
                         rm -rf "$temp_dir"
                     fi
                     ;;

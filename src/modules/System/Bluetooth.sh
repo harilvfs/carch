@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -32,10 +32,10 @@ fzf_confirm() {
 
 detect_distro() {
     echo -e "${TEAL}:: Detecting distribution...${ENDCOLOR}"
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         echo -e "${GREEN}:: Arch Linux detected.${ENDCOLOR}"
         DISTRO="arch"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         echo -e "${GREEN}:: Fedora detected.${ENDCOLOR}"
         DISTRO="fedora"
     else

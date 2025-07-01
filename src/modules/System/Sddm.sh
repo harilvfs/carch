@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -31,30 +31,30 @@ fzf_confirm() {
 }
 
 print_banner() {
-echo -e "${GREEN}"
-cat <<"EOF"
+    echo -e "${GREEN}"
+    cat << "EOF"
 Catppuccin SDDM Theme
 https://github.com/catppuccin/sddm
 EOF
-echo -e "${ENDCOLOR}"
+    echo -e "${ENDCOLOR}"
 }
 
 detect_os() {
-   if command -v pacman &>/dev/null; then
-       DISTRO="arch"
-   elif command -v dnf &>/dev/null; then
-       DISTRO="fedora"
-   else
-       echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
-       exit 1
-   fi
+    if command -v pacman &> /dev/null; then
+        DISTRO="arch"
+    elif command -v dnf &> /dev/null; then
+        DISTRO="fedora"
+    else
+        echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
+        exit 1
+    fi
 }
 
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
     local dms=("gdm" "lightdm" "lxdm" "xdm" "greetd")
     for dm in "${dms[@]}"; do
-        if systemctl is-enabled "$dm" &>/dev/null; then
+        if systemctl is-enabled "$dm" &> /dev/null; then
             echo -e "${RED}:: Disabling $dm...${ENDCOLOR}"
             sudo systemctl disable "$dm" --now || echo -e "${RED}Failed to disable $dm. Continuing...${ENDCOLOR}"
         fi

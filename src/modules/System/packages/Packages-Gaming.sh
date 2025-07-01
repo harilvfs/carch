@@ -37,77 +37,77 @@ install_gaming() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "Steam")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman steam
-                    version=$(get_version steam)
-                else
-                    $flatpak_cmd com.valvesoftware.Steam
-                    version="(Flatpak version installed)"
-                fi
-                echo "Steam installed successfully! Version: $version"
-                ;;
+                "Steam")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman steam
+                        version=$(get_version steam)
+                    else
+                        $flatpak_cmd com.valvesoftware.Steam
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Steam installed successfully! Version: $version"
+                    ;;
 
-            "Lutris")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman lutris
-                    version=$(get_version lutris)
-                else
-                    $pkg_manager lutris
-                    version=$(get_version lutris)
-                fi
-                echo "Lutris installed successfully! Version: $version"
-                ;;
+                "Lutris")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman lutris
+                        version=$(get_version lutris)
+                    else
+                        $pkg_manager lutris
+                        version=$(get_version lutris)
+                    fi
+                    echo "Lutris installed successfully! Version: $version"
+                    ;;
 
-            "Heroic Games Launcher")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur heroic-games-launcher-bin
-                    version=$(get_version heroic-games-launcher-bin)
-                else
-                    $flatpak_cmd com.heroicgameslauncher.hgl
-                    version="(Flatpak version installed)"
-                fi
-                echo "Heroic Games Launcher installed successfully! Version: $version"
-                ;;
+                "Heroic Games Launcher")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur heroic-games-launcher-bin
+                        version=$(get_version heroic-games-launcher-bin)
+                    else
+                        $flatpak_cmd com.heroicgameslauncher.hgl
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "Heroic Games Launcher installed successfully! Version: $version"
+                    ;;
 
-            "ProtonUp-Qt")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur protonup-qt-bin
-                    version=$(get_version protonup-qt-bin)
-                else
-                    $flatpak_cmd net.davidotek.pupgui2
-                    version="(Flatpak version installed)"
-                fi
-                echo "ProtonUp-Qt installed successfully! Version: $version"
-                ;;
+                "ProtonUp-Qt")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_aur protonup-qt-bin
+                        version=$(get_version protonup-qt-bin)
+                    else
+                        $flatpak_cmd net.davidotek.pupgui2
+                        version="(Flatpak version installed)"
+                    fi
+                    echo "ProtonUp-Qt installed successfully! Version: $version"
+                    ;;
 
-            "MangoHud")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman mangohud
-                    version=$(get_version mangohud)
-                else
-                    $pkg_manager mangohud
-                    version=$(get_version mangohud)
-                fi
-                echo "MangoHud installed successfully! Version: $version"
-                ;;
+                "MangoHud")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman mangohud
+                        version=$(get_version mangohud)
+                    else
+                        $pkg_manager mangohud
+                        version=$(get_version mangohud)
+                    fi
+                    echo "MangoHud installed successfully! Version: $version"
+                    ;;
 
-            "GameMode")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman gamemode
-                    version=$(get_version gamemode)
-                else
-                    $pkg_manager gamemode
-                    version=$(get_version gamemode)
-                fi
-                echo "GameMode installed successfully! Version: $version"
-                ;;
+                "GameMode")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman gamemode
+                        version=$(get_version gamemode)
+                    else
+                        $pkg_manager gamemode
+                        version=$(get_version gamemode)
+                    fi
+                    echo "GameMode installed successfully! Version: $version"
+                    ;;
 
             esac
         done

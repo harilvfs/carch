@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -41,7 +41,7 @@ check_essential_dependencies() {
     local missing=()
 
     for dep in "${dependencies[@]}"; do
-        if ! command -v "$dep" &>/dev/null; then
+        if ! command -v "$dep" &> /dev/null; then
             missing+=("$dep")
         fi
     done
@@ -49,9 +49,9 @@ check_essential_dependencies() {
     if [[ ${#missing[@]} -ne 0 ]]; then
         echo "Please wait, installing required dependencies..."
 
-        if command -v pacman &>/dev/null; then
+        if command -v pacman &> /dev/null; then
             sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
-        elif command -v dnf &>/dev/null; then
+        elif command -v dnf &> /dev/null; then
             sudo dnf install -y "${missing[@]}" > /dev/null 2>&1
         else
             print_message "$RED" "Unsupported package manager. Install dependencies manually."
@@ -61,9 +61,9 @@ check_essential_dependencies() {
 }
 
 check_aur_helper() {
-    if command -v yay &>/dev/null; then
+    if command -v yay &> /dev/null; then
         AUR_HELPER="yay"
-    elif command -v paru &>/dev/null; then
+    elif command -v paru &> /dev/null; then
         AUR_HELPER="paru"
     else
         print_message "$CYAN" "No AUR helper found. Installing yay..."
@@ -79,9 +79,9 @@ check_aur_helper() {
 }
 
 detect_distro() {
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         DISTRO="arch"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         DISTRO="fedora"
     else
         print_message "$RED" "Unable to detect your Linux distribution."
@@ -138,15 +138,15 @@ fi
 
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting trash-cli
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting unzip trash-cli
 
         # due to eza is no longer available on fedora 42 installing manually
         print_message "$CYAN" "Installing eza manually for Fedora..."
 
-        if command -v eza &>/dev/null; then
+        if command -v eza &> /dev/null; then
             print_message "$GREEN" "eza is already installed."
         else
             local tmp_dir=$(mktemp -d)
@@ -185,12 +185,12 @@ install_zsh_dependencies() {
 
 install_powerlevel10k() {
     print_message "$CYAN" "Installing Powerlevel10k..."
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         $AUR_HELPER -S --noconfirm zsh-theme-powerlevel10k-git
-        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
-    elif command -v dnf &>/dev/null; then
+        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+    elif command -v dnf &> /dev/null; then
         sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
-        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
     fi
 }
 
@@ -238,9 +238,9 @@ config_zsh() {
 
 install_pokemon_colorscripts() {
     print_message "$CYAN" "Installing Pokémon Color Scripts..."
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         POKEMON_DIR="$HOME/pokemon-colorscripts"
 
         [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
@@ -260,9 +260,9 @@ install_pokemon_colorscripts() {
 
 install_zoxide() {
     print_message "$CYAN" "Installing zoxide..."
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm zoxide
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         sudo dnf install -y zoxide
     fi
 }

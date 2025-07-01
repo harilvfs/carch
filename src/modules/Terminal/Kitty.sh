@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -56,7 +56,7 @@ setup_kitty() {
         if [ ! -d "$BACKUP_DIR" ]; then
             mkdir "$BACKUP_DIR"
         fi
-        mv "$CONFIG_DIR"/* "$BACKUP_DIR/" 2>/dev/null
+        mv "$CONFIG_DIR"/* "$BACKUP_DIR/" 2> /dev/null
     else
         echo -e "${GREEN}No existing Kitty configuration found.${NC}"
         mkdir -p "$CONFIG_DIR"

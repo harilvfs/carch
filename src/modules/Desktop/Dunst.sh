@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -44,12 +44,18 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-if ! command -v dunst &>/dev/null; then
+if ! command -v dunst &> /dev/null; then
     print_message "${TEAL}" "Dunst not found. Installing..."
-    if command -v pacman &>/dev/null; then
-        sudo pacman -Sy --noconfirm dunst || { print_message "$RED" "Failed to install Dunst. Exiting..."; exit 1; }
-    elif command -v dnf &>/dev/null; then
-        sudo dnf install -y dunst || { print_message "$RED" "Failed to install Dunst. Exiting..."; exit 1; }
+    if command -v pacman &> /dev/null; then
+        sudo pacman -Sy --noconfirm dunst || {
+                                               print_message "$RED" "Failed to install Dunst. Exiting..."
+                                                                                                           exit 1
+        }
+    elif command -v dnf &> /dev/null; then
+        sudo dnf install -y dunst || {
+                                       print_message "$RED" "Failed to install Dunst. Exiting..."
+                                                                                                   exit 1
+        }
     else
         print_message "$RED" "Unsupported package manager. Install Dunst manually."
         exit 1
@@ -59,10 +65,10 @@ else
 fi
 
 print_message "${TEAL}" "Installing papirus-icon-theme..."
-if command -v pacman &>/dev/null; then
-    pacman -Qi papirus-icon-theme &>/dev/null || sudo pacman -Sy --noconfirm papirus-icon-theme
-elif command -v dnf &>/dev/null; then
-    rpm -q papirus-icon-theme &>/dev/null || sudo dnf install -y papirus-icon-theme
+if command -v pacman &> /dev/null; then
+    pacman -Qi papirus-icon-theme &> /dev/null || sudo pacman -Sy --noconfirm papirus-icon-theme
+elif command -v dnf &> /dev/null; then
+    rpm -q papirus-icon-theme &> /dev/null || sudo dnf install -y papirus-icon-theme
 fi
 
 DUNST_DIR="$HOME/.config/dunst"
@@ -70,11 +76,17 @@ DUNST_FILE="$DUNST_DIR/dunstrc"
 
 if [[ -d "$DUNST_DIR" ]]; then
     print_message "${TEAL}" "Backing up existing Dunst directory..."
-    mv "$DUNST_DIR" "${DUNST_DIR}.bak" || { print_message "$RED" "Failed to backup Dunst directory."; exit 1; }
+    mv "$DUNST_DIR" "${DUNST_DIR}.bak" || {
+                                            print_message "$RED" "Failed to backup Dunst directory."
+                                                                                                      exit 1
+    }
     print_message "$GREEN" "Backup created: ${DUNST_DIR}.bak"
 fi
 
-mkdir -p "$DUNST_DIR" || { print_message "$RED" "Failed to create ~/.config/dunst directory."; exit 1; }
+mkdir -p "$DUNST_DIR" || {
+                           print_message "$RED" "Failed to create ~/.config/dunst directory."
+                                                                                               exit 1
+}
 print_message "$GREEN" "Created ~/.config/dunst directory."
 
 DUNST_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/dunst/dunstrc"

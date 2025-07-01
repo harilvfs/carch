@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -37,9 +37,9 @@ print_color() {
 }
 
 detect_distro() {
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         DISTRO="arch"
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         DISTRO="fedora"
     else
         print_color "$RED" "Unsupported distribution!"
@@ -49,13 +49,13 @@ detect_distro() {
 
 install_fish() {
     print_color "$CYAN" "Installing dependencies..."
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm fish noto-fonts-emoji git eza trash-cli
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git trash-cli
 
         print_color "$CYAN" "Installing eza manually for Fedora..."
-        if command -v eza &>/dev/null; then
+        if command -v eza &> /dev/null; then
             print_color "$GREEN" "eza is already installed."
         else
             local tmp_dir=$(mktemp -d)
@@ -90,9 +90,9 @@ install_fish() {
 
 install_zoxide() {
     print_color "$CYAN" "Installing zoxide..."
-    if command -v pacman &>/dev/null; then
+    if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm zoxide
-    elif command -v dnf &>/dev/null; then
+    elif command -v dnf &> /dev/null; then
         sudo dnf install -y zoxide
     else
         print_color "$RED" "Unsupported distro: $DISTRO"

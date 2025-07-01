@@ -35,49 +35,49 @@ install_virtualization() {
 
         for selection in "${selected[@]}"; do
             case $selection in
-            "QEMU/KVM")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman qemu-base virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs
-                    sudo systemctl enable --now libvirtd.service
-                    sudo usermod -aG libvirt "$USER"
-                    version=$(get_version qemu)
-                else
-                    $pkg_manager @virtualization
-                    sudo systemctl enable --now libvirtd
-                    sudo usermod -aG libvirt "$USER"
-                    version=$(get_version qemu-kvm)
-                fi
-                echo "QEMU/KVM installed successfully! Version: $version"
-                echo "Note: You may need to log out and back in for group changes to take effect."
-                ;;
+                "QEMU/KVM")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman qemu-base virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs
+                        sudo systemctl enable --now libvirtd.service
+                        sudo usermod -aG libvirt "$USER"
+                        version=$(get_version qemu)
+                    else
+                        $pkg_manager @virtualization
+                        sudo systemctl enable --now libvirtd
+                        sudo usermod -aG libvirt "$USER"
+                        version=$(get_version qemu-kvm)
+                    fi
+                    echo "QEMU/KVM installed successfully! Version: $version"
+                    echo "Note: You may need to log out and back in for group changes to take effect."
+                    ;;
 
-            "VirtualBox")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman virtualbox virtualbox-host-dkms
-                    sudo usermod -aG vboxusers "$USER"
-                    sudo modprobe vboxdrv
-                    version=$(get_version virtualbox)
-                else
-                    $pkg_manager gnome-boxes
-                    version=$(get_version gnome-boxes)
-                fi
-                echo "VirtualBox installed successfully! Version: $version"
-                echo "Note: You may need to log out and back in for group changes to take effect."
-                ;;
+                "VirtualBox")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman virtualbox virtualbox-host-dkms
+                        sudo usermod -aG vboxusers "$USER"
+                        sudo modprobe vboxdrv
+                        version=$(get_version virtualbox)
+                    else
+                        $pkg_manager gnome-boxes
+                        version=$(get_version gnome-boxes)
+                    fi
+                    echo "VirtualBox installed successfully! Version: $version"
+                    echo "Note: You may need to log out and back in for group changes to take effect."
+                    ;;
 
-            "Distrobox")
-                clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman distrobox podman
-                    version=$(get_version distrobox)
-                else
-                    $pkg_manager distrobox
-                    version=$(get_version distrobox)
-                fi
-                echo "Distrobox installed successfully! Version: $version"
-                ;;
+                "Distrobox")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        $pkg_manager_pacman distrobox podman
+                        version=$(get_version distrobox)
+                    else
+                        $pkg_manager distrobox
+                        version=$(get_version distrobox)
+                    fi
+                    echo "Distrobox installed successfully! Version: $version"
+                    ;;
 
             esac
         done

@@ -86,8 +86,8 @@ install_android() {
                     else
                         echo ":: Downloading UAD binary..."
                         tmp_path="/tmp/uad-ng"
-                        bin_url=$(curl -s https://api.github.com/repos/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/latest | \
-            jq -r '.assets[] | select(.name | test("uad-ng-linux$")) | .browser_download_url')
+                        bin_url=$(curl -s https://api.github.com/repos/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/latest |
+                            jq -r '.assets[] | select(.name | test("uad-ng-linux$")) | .browser_download_url')
 
                         # incase latest binary download fail fallback to v1.1.2
                         if [[ -z "$bin_url" ]]; then
@@ -95,9 +95,9 @@ install_android() {
                             bin_url="https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/download/v1.1.2/uad-ng-linux"
                         fi
 
-                        curl -Lo "$tmp_path" "$bin_url" && \
-                        chmod +x "$tmp_path" && \
-                        sudo mv "$tmp_path" /usr/local/bin/uad-ng
+                        curl -Lo "$tmp_path" "$bin_url" &&
+                            chmod +x "$tmp_path" &&
+                            sudo mv "$tmp_path" /usr/local/bin/uad-ng
 
                         if [[ $? -eq 0 ]]; then
                             echo "UAD has been installed to /usr/local/bin/uad-ng"

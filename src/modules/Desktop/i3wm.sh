@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 BACKUP_DIR="$HOME/.i3wmdotfiles/backup"
 DOTFILES_REPO="https://github.com/harilvfs/i3wmdotfiles"
@@ -77,7 +77,7 @@ fzf_config_confirm() {
             APPLY_ALL_CONFIGS=true
             return 0
             ;;
-        "No"|*)
+        "No" | *)
             return 1
             ;;
     esac
@@ -93,13 +93,13 @@ fi
 
 echo -e "${YELLOW}Warning: If you are re-running this script, Remember to remove the .i3wmdotfiles directory in your home directory to avoid any conflicts..${ENDCOLOR}"
 
-if command -v pacman &>/dev/null; then
-   OS="arch"
-elif command -v dnf &>/dev/null; then
-   OS="fedora"
+if command -v pacman &> /dev/null; then
+    OS="arch"
+elif command -v dnf &> /dev/null; then
+    OS="fedora"
 else
-   echo -e "${GREEN}This script only supports Arch Linux and Fedora.${ENDCOLOR}"
-   exit 1
+    echo -e "${GREEN}This script only supports Arch Linux and Fedora.${ENDCOLOR}"
+    exit 1
 fi
 
 echo -e "${GREEN}Detected OS: $OS${ENDCOLOR}"
@@ -116,7 +116,7 @@ if [[ "$OS" == "arch" ]]; then
     AUR_HELPER=""
 
     for helper in paru yay; do
-        if command -v "$helper" &>/dev/null; then
+        if command -v "$helper" &> /dev/null; then
             AUR_HELPER="$helper"
             echo -e "${GREEN}Found AUR helper: $AUR_HELPER${ENDCOLOR}"
             break
@@ -146,7 +146,7 @@ install_pokemon_colorscripts() {
             AUR_HELPERS=("yay" "paru")
             AUR_HELPER=""
             for helper in "${AUR_HELPERS[@]}"; do
-                if command -v "$helper" &>/dev/null; then
+                if command -v "$helper" &> /dev/null; then
                     AUR_HELPER="$helper"
                     echo -e "${GREEN}Found AUR helper: $AUR_HELPER${RESET}"
                     break
@@ -203,8 +203,8 @@ install_pokemon_colorscripts() {
             git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 cd "$HOME/pokemon-colorscripts" || {
-                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}";
-                    return 1;
+                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${RESET}"
+                    return 1
                 }
                 echo -e "${CYAN}Installing Pokémon Color Scripts...${RESET}"
                 sudo ./install.sh
@@ -251,13 +251,13 @@ if fzf_confirm "Do you want to install Brave browser?"; then
 
     brave_installed=false
 
-    if command -v brave &>/dev/null || command -v brave-browser &>/dev/null; then
+    if command -v brave &> /dev/null || command -v brave-browser &> /dev/null; then
         brave_installed=true
         echo -e "${GREEN}Brave browser (native) is already installed.${ENDCOLOR}"
     fi
 
-    if command -v flatpak &>/dev/null; then
-        if flatpak list 2>/dev/null | grep -q "com.brave.Browser"; then
+    if command -v flatpak &> /dev/null; then
+        if flatpak list 2> /dev/null | grep -q "com.brave.Browser"; then
             brave_installed=true
             echo -e "${GREEN}Brave browser (Flatpak) is already installed.${ENDCOLOR}"
         fi
@@ -268,7 +268,7 @@ if fzf_confirm "Do you want to install Brave browser?"; then
         if [[ "$OS" == "arch" ]]; then
             "$AUR_HELPER" -S --noconfirm brave-bin
         elif [[ "$OS" == "fedora" ]]; then
-            if ! command -v flatpak &>/dev/null; then
+            if ! command -v flatpak &> /dev/null; then
                 echo -e "${GREEN}Installing Flatpak...${ENDCOLOR}"
                 sudo dnf install -y flatpak
             fi
@@ -302,8 +302,8 @@ fi
 
 echo -e "${GREEN}Cloning dotfiles repository...${ENDCOLOR}"
 git clone "$DOTFILES_REPO" "$DOTFILES_DIR" || {
-    echo -e "${GREEN}Failed to clone repository.${ENDCOLOR}";
-    exit 1;
+    echo -e "${GREEN}Failed to clone repository.${ENDCOLOR}"
+    exit 1
 }
 
 echo -e "${YELLOW}Choose your color scheme${ENDCOLOR}"
@@ -411,7 +411,7 @@ BAR_CHOICE=$(echo "$BAR_CHOICE" | tr '[:upper:]' '[:lower:]')
 if [[ "$BAR_CHOICE" == "polybar" ]]; then
     echo -e "${GREEN}Setting up Polybar...${ENDCOLOR}"
 
-    if command -v i3status &>/dev/null; then
+    if command -v i3status &> /dev/null; then
         echo -e "${GREEN}Removing i3status...${ENDCOLOR}"
         if [[ "$OS" == "arch" ]]; then
             sudo pacman -Rns --noconfirm i3status
@@ -566,7 +566,7 @@ clone_themes_icons
 move_themes_icons
 
 is_sddm_installed() {
-    command -v sddm &>/dev/null
+    command -v sddm &> /dev/null
 }
 
 install_sddm() {
@@ -626,7 +626,7 @@ enable_start_sddm() {
     echo -e "${GREEN}Checking for existing display managers...${ENDCOLOR}"
 
     for dm in gdm lightdm greetd; do
-        if command -v $dm &>/dev/null; then
+        if command -v $dm &> /dev/null; then
             echo -e "${TEAL}Removing $dm...${ENDCOLOR}"
             sudo systemctl stop $dm
             sudo systemctl disable $dm --now
@@ -642,7 +642,7 @@ enable_start_sddm() {
 setup_numlock() {
     echo -e "${GREEN}Setting up NumLock on login...${ENDCOLOR}"
 
-    sudo tee "/usr/local/bin/numlock" > /dev/null <<'EOF'
+    sudo tee "/usr/local/bin/numlock" > /dev/null << 'EOF'
 #!/bin/bash
 for tty in /dev/tty{1..6}; do
     /usr/bin/setleds -D +num < "$tty"
@@ -650,7 +650,7 @@ done
 EOF
     sudo chmod +x /usr/local/bin/numlock
 
-    sudo tee "/etc/systemd/system/numlock.service" > /dev/null <<'EOF'
+    sudo tee "/etc/systemd/system/numlock.service" > /dev/null << 'EOF'
 [Unit]
 Description=Enable NumLock on startup
 [Service]

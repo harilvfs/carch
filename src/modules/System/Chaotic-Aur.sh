@@ -2,7 +2,7 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 info() { echo -e "${MAGENTA}$1${ENDCOLOR}"; }
 success() { echo -e "${GREEN}$1${ENDCOLOR}"; }
@@ -13,10 +13,10 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-if command -v dnf &>/dev/null; then
+if command -v dnf &> /dev/null; then
     error "You are using Fedora (dnf detected). This script is only for Arch-based systems."
     exit 1
-elif ! command -v pacman &>/dev/null; then
+elif ! command -v pacman &> /dev/null; then
     error "This script is for Arch-based distros only. Exiting."
     exit 1
 fi

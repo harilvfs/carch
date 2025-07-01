@@ -2,14 +2,14 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" >/dev/null 2>&1
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 print_message() {
     echo -e "${1}${2}${NC}"
 }
 
 command_exists() {
-    command -v "$1" &>/dev/null
+    command -v "$1" &> /dev/null
 }
 
 FZF_COMMON="--layout=reverse \
@@ -39,31 +39,37 @@ fzf_confirm() {
 }
 
 install_aur_helper() {
-    if ! command -v yay >/dev/null 2>&1 && ! command -v paru >/dev/null 2>&1; then
+    if ! command -v yay > /dev/null 2>&1 && ! command -v paru > /dev/null 2>&1; then
         print_message $GREEN "Installing yay as AUR helper..."
 
         sudo pacman -S --needed base-devel git --noconfirm
 
         temp_dir=$(mktemp -d)
-        cd "$temp_dir" || { print_message $RED "Failed to create temporary directory"; return 1; }
+        cd "$temp_dir" || {
+                            print_message $RED "Failed to create temporary directory"
+                                                                                       return 1
+        }
 
         git clone https://aur.archlinux.org/yay.git
-        cd yay || { print_message $RED "Failed to enter yay directory"; return 1; }
+        cd yay || {
+                    print_message $RED "Failed to enter yay directory"
+                                                                        return 1
+        }
         makepkg -si --noconfirm
 
         cd "$OLDPWD" || true
         rm -rf "$temp_dir"
 
-        if command -v yay >/dev/null 2>&1; then
+        if command -v yay > /dev/null 2>&1; then
             print_message $GREEN "yay installed successfully."
         else
             print_message $RED "Failed to install yay."
             return 1
         fi
     else
-        if command -v yay >/dev/null 2>&1; then
+        if command -v yay > /dev/null 2>&1; then
             print_message $YELLOW "AUR helper (yay) already installed."
-        elif command -v paru >/dev/null 2>&1; then
+        elif command -v paru > /dev/null 2>&1; then
             print_message $YELLOW "AUR helper (paru) already installed."
         fi
     fi
@@ -74,7 +80,7 @@ install_packages() {
     local missing_pkgs=()
 
     for pkg in "${packages[@]}"; do
-        if ! pacman -Qq "$pkg" &>/dev/null; then
+        if ! pacman -Qq "$pkg" &> /dev/null; then
             missing_pkgs+=("$pkg")
         fi
     done
@@ -92,9 +98,9 @@ install_aur_packages() {
     local missing_pkgs=()
     local aur_helper
 
-    if command -v yay >/dev/null 2>&1; then
+    if command -v yay > /dev/null 2>&1; then
         aur_helper="yay"
-    elif command -v paru >/dev/null 2>&1; then
+    elif command -v paru > /dev/null 2>&1; then
         aur_helper="paru"
     else
         print_message $RED "No AUR helper found. Please install yay or paru first."
@@ -102,7 +108,7 @@ install_aur_packages() {
     fi
 
     for pkg in "${packages[@]}"; do
-        if ! $aur_helper -Qq "$pkg" &>/dev/null; then
+        if ! $aur_helper -Qq "$pkg" &> /dev/null; then
             missing_pkgs+=("$pkg")
         fi
     done
@@ -118,20 +124,20 @@ install_aur_packages() {
 install_pokemon_colorscripts() {
     print_message ${TEAL} "Installing Pokémon Color Scripts..."
 
-    if command -v pokemon-colorscripts >/dev/null 2>&1; then
+    if command -v pokemon-colorscripts > /dev/null 2>&1; then
         print_message $YELLOW "Pokémon Color Scripts already installed."
         return 0
     fi
 
     local aur_helper=""
-    if command -v yay >/dev/null 2>&1; then
+    if command -v yay > /dev/null 2>&1; then
         aur_helper="yay"
-    elif command -v paru >/dev/null 2>&1; then
+    elif command -v paru > /dev/null 2>&1; then
         aur_helper="paru"
     else
         print_message $RED "No AUR helper found. Installing yay first..."
         install_aur_helper
-        if command -v yay >/dev/null 2>&1; then
+        if command -v yay > /dev/null 2>&1; then
             aur_helper="yay"
         else
             print_message $RED "Failed to install AUR helper."
@@ -237,14 +243,14 @@ https://github.com/harilvfs/swaydotfiles" $NC
 
 print_message $YELLOW"----------------------------------------"
 
-if command -v pacman &>/dev/null; then
-   print_message $GREEN "Arch Linux detected. Proceeding with setup..."
-elif command -v dnf &>/dev/null; then
-   print_message $RED "Sway setup for Fedora is not finalized due to missing dependencies and runtime errors. Exiting."
-   exit 1
+if command -v pacman &> /dev/null; then
+    print_message $GREEN "Arch Linux detected. Proceeding with setup..."
+elif command -v dnf &> /dev/null; then
+    print_message $RED "Sway setup for Fedora is not finalized due to missing dependencies and runtime errors. Exiting."
+    exit 1
 else
-   print_message $RED "Unsupported distribution. Exiting."
-   exit 1
+    print_message $RED "Unsupported distribution. Exiting."
+    exit 1
 fi
 
 REQUIRED_PKGS=(git base-devel make less)
@@ -297,16 +303,16 @@ install_sddm() {
 apply_sddm_theme() {
     theme_dir="/usr/share/sddm/themes/catppuccin-mocha"
 
-if [ -d "$theme_dir" ]; then
-    print_message "$YELLOW" "$theme_dir already exists."
-    if fzf_confirm "Do you want to remove the existing theme and continue?"; then
-        sudo rm -rf "$theme_dir"
-        print_message "$GREEN" "$theme_dir removed."
-    else
-        print_message "$RED" "$theme_dir not removed, exiting."
-        exit 1
+    if [ -d "$theme_dir" ]; then
+        print_message "$YELLOW" "$theme_dir already exists."
+        if fzf_confirm "Do you want to remove the existing theme and continue?"; then
+            sudo rm -rf "$theme_dir"
+            print_message "$GREEN" "$theme_dir removed."
+        else
+            print_message "$RED" "$theme_dir not removed, exiting."
+            exit 1
+        fi
     fi
-fi
 
     temp_dir=$(mktemp -d)
     echo "Downloading Catppuccin Mocha theme..."
@@ -384,7 +390,7 @@ else
 fi
 
 print_message ${TEAL} "Default keybindings: Super+Enter (Terminal), Super+D (App Launcher)"
-if command -v pokemon-colorscripts >/dev/null 2>&1; then
+if command -v pokemon-colorscripts > /dev/null 2>&1; then
     print_message ${TEAL} "Try 'pokemon-colorscripts -r' for random Pokémon colors!"
 fi
 
