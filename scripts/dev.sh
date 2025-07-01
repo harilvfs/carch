@@ -10,7 +10,7 @@ check_dependency() {
         elif command -v dnf > /dev/null 2>&1; then
             sudo dnf install -y "$1"
         else
-            printf '%sERROR: Package manager not supported%s\n' "$red" "$rc"
+            printf '%bERROR: Package manager not supported%b\n' "$red" "$rc"
             exit 1
         fi
     fi
@@ -24,7 +24,7 @@ check() {
     exit_code=$1
     message=$2
     if [ "$exit_code" -ne 0 ]; then
-        printf '%sERROR: %s%s\n' "$red" "$message" "$rc"
+        printf '%bERROR: %s%b\n' "$red" "$message" "$rc"
         exit 1
     fi
 }
@@ -43,23 +43,10 @@ get_latest_release() {
         head -n 1 |
         sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
     if [ -z "$latest_release" ]; then
-        printf "Error fetching release data\n" >&2
+        printf '%bERROR: Failed to fetch release data%b\n' "$red" "$rc" >&2
         return 1
     fi
     printf "%s\n" "$latest_release"
-}
-
-set_download_url() {
-    latest_release=$(get_latest_release)
-    if [ -n "$latest_release" ]; then
-        url="https://github.com/harilvfs/carch/releases/download/$latest_release/carch"
-    else
-        printf "Unable to determine latest release version.\n" >&2
-        printf "Using latest Full Release\n"
-        url="https://github.com/harilvfs/carch/releases/latest/download/carch"
-    fi
-    addArch
-    printf "Using URL: %s\n" "$url"
 }
 
 addArch() {
@@ -69,17 +56,19 @@ addArch() {
     esac
 }
 
-spinner() {
-    local pid=$1
-    local spin="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
-    local i=0
-
-    while kill -0 "$pid" 2> /dev/null; do
-        printf "\r%s" "${spin:i++%${#spin}:1}"
-        sleep 0.1
-    done
-    printf "\r✔\n"
+set_download_url() {
+    latest_release=$(get_latest_release)
+    if [ -n "$latest_release" ]; then
+        url="https://github.com/harilvfs/carch/releases/download/$latest_release/carch"
+    else
+        printf '%bWARNING: Unable to determine latest release version. Falling back to latest.%b\n' "$red" "$rc"
+        url="https://github.com/harilvfs/carch/releases/latest/download/carch"
+    fi
+    addArch
+    printf "Using URL: %s\n" "$url"
 }
+
+TIMEOUT=10
 
 findArch
 set_download_url
@@ -87,13 +76,14 @@ set_download_url
 temp_file=$(mktemp)
 check $? "Creating the temporary file"
 
-curl -fsL "$url" -o "$temp_file" &
-spinner $!
-
+curl -L --progress-bar --connect-timeout "$TIMEOUT" --max-time 120 "$url" -o "$temp_file"
 check $? "Downloading carch"
+
 chmod +x "$temp_file"
 check $? "Making carch executable"
+
 "$temp_file" "$@"
 check $? "Executing carch"
+
 rm -f "$temp_file"
 check $? "Deleting the temporary file"
