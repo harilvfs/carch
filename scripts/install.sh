@@ -61,17 +61,14 @@ main() {
 
     trap 'rm -f "$tmp_file"' EXIT
 
-    echo "Fetching latest release..."
     json="$(get_latest_release)"
 
     url="$(get_download_url "$json" "$arch")"
     [[ -n "$url" && "$url" != "null" ]] || error_exit "No binary found for $arch"
 
-    echo "Downloading installer..."
     download_installer "$url" "$tmp_file"
 
     chmod +x "$tmp_file"
-    echo "Running installer..."
     exec "$tmp_file" "${1:-}"
 }
 
