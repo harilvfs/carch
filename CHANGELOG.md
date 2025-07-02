@@ -1,5 +1,46 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.1.7](https://github.com/harilvfs/carch/compare/v5.1.6...v5.1.7) - 2025-07-02
+
+
+### 🚀 Features
+
+
+- [254a32f](https://github.com/harilvfs/carch/commit/254a32f2202eefe2542d9010fd2d1f37a6c0a335)  *(setup)* Remove i3wm & sway setup scripts from tui (#510) by @harilvfs in [#510](https://github.com/harilvfs/carch/pull/510)
+
+
+
+### 🐛 Bug Fixes
+
+
+- [568cb80](https://github.com/harilvfs/carch/commit/568cb808497654723825dae5c8750971a093e431)  *(install)* Go fmt by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [81e1cdc](https://github.com/harilvfs/carch/commit/81e1cdcab8f13e20c5ade70e33b035f6b0167ba9)  *(install)* Remove confirmation prompt & banner by @harilvfs
+
+- [8234d6d](https://github.com/harilvfs/carch/commit/8234d6d928f34f3b04a064791c14b028839d19b4)  *(install)* Reducing crap by @harilvfs
+
+- [ad517c7](https://github.com/harilvfs/carch/commit/ad517c751fdc616c4a80e4d346c4ea3a812582cd)  *(script)* Remove custom spinner by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [7803352](https://github.com/harilvfs/carch/commit/780335217b9e22b6b409300f00fbcbbcac9ee3da)  *(install)* Clean up notes by @harilvfs
+
+- [8130797](https://github.com/harilvfs/carch/commit/8130797917ddac28b403bb5f223ee03eea707f5d)  *(install)* Remove text;s by @harilvfs
+
+- [1ccbbe4](https://github.com/harilvfs/carch/commit/1ccbbe460eaeb3bc76d40cdf8291a573b850a1bc)  *(lint)* Shfmt all `sh` scripts by @harilvfs
+
+- [3c5a950](https://github.com/harilvfs/carch/commit/3c5a950b139830700c9676a2b24b4f3ec47228d0)  *(tui)* Change color to cyan by @harilvfs
+
+
+
 ## [5.1.6](https://github.com/harilvfs/carch/compare/v5.1.5...v5.1.6) - 2025-06-30
 
 
