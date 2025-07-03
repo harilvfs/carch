@@ -3,9 +3,10 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::{env, fs, io};
+use std::{fs, io};
 use tempfile::TempDir;
 
+mod args;
 mod commands;
 mod display;
 mod script_list;
@@ -17,137 +18,13 @@ const EXECUTABLE_MODE: u32 = 0o755;
 
 static CLEANUP_NEEDED: AtomicBool = AtomicBool::new(false,);
 
-#[derive(Copy, Clone,)]
-struct Settings {
-    show_preview:  bool,
-    log_mode:      bool,
-    cleanup_cache: bool,
-}
-
-impl Default for Settings {
-    fn default() -> Self {
-        Self { show_preview: true, log_mode: false, cleanup_cache: true, }
-    }
-}
-
 fn main() -> Result<(), Box<dyn std::error::Error,>,> {
-    let args: Vec<String,> = env::args().collect();
-    let mut settings = Settings::default();
-
-    if args.iter().any(|arg| arg == "--log",) {
-        settings.log_mode = true;
-        let _ = commands::log_message("INFO", "Carch application started",);
-    }
-
-    if args.iter().any(|arg| arg == "--no-cleanup",) {
-        settings.cleanup_cache = false;
-        if settings.log_mode {
-            let _ = commands::log_message("INFO", "Cache cleanup disabled",);
-        }
-    }
-
+    let settings = args::Settings::default();
     if settings.cleanup_cache {
         setup_cleanup_handlers(settings.log_mode,);
     }
 
-    let result = if args.len() > 1 {
-        match args[1].as_str() {
-            "--help" | "-h" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Displaying help information",);
-                }
-                display::display_help()
-            },
-            "--list-scripts" | "-l" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Listing available scripts",);
-                }
-                let temp_dir =
-                    TempDir::new().map_err(|e| format!("Failed to create temp directory: {e}"),)?;
-                let temp_path = temp_dir.path();
-                extract_scripts(temp_path,)?;
-                let modules_dir = temp_path.join("modules",);
-                if !modules_dir.exists() || !modules_dir.is_dir() {
-                    let error_msg =
-                        format!("Modules directory not found at {}", modules_dir.display());
-                    if settings.log_mode {
-                        let _ = commands::log_message("ERROR", &error_msg,);
-                    }
-                    return Err(error_msg.into(),);
-                }
-                script_list::list_scripts(&modules_dir,)
-            },
-            "--version" | "-v" => {
-                let version_str = version::get_current_version();
-
-                if settings.log_mode {
-                    let _ =
-                        commands::log_message("INFO", &format!("Version query: {version_str}"),);
-                }
-
-                println!("{version_str}");
-                Ok((),)
-            },
-            "--check-update" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Checking for updates",);
-                }
-                version::check_for_updates()
-                    .map_err(|e| Box::new(e,) as Box<dyn std::error::Error,>,)
-            },
-            "--update" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Running update process",);
-                }
-                commands::update().map_err(|e| Box::new(e,) as Box<dyn std::error::Error,>,)
-            },
-            "--uninstall" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Running uninstall process",);
-                }
-                commands::uninstall().map_err(|e| Box::new(e,) as Box<dyn std::error::Error,>,)
-            },
-            "--no-preview" => {
-                settings.show_preview = false;
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Preview mode disabled",);
-                }
-                if args.len() > 2 {
-                    let remaining_args = args[2..].to_vec();
-                    process_args(remaining_args, settings,)
-                } else {
-                    run_tui(settings,)
-                }
-            },
-            "--log" => {
-                if args.len() > 2 {
-                    let remaining_args = args[2..].to_vec();
-                    process_args(remaining_args, settings,)
-                } else {
-                    run_tui(settings,)
-                }
-            },
-            "--no-cleanup" => {
-                if args.len() > 2 {
-                    let remaining_args = args[2..].to_vec();
-                    process_args(remaining_args, settings,)
-                } else {
-                    run_tui(settings,)
-                }
-            },
-            _ => {
-                let error_msg =
-                    format!("Error: Unknown option '{}'. Use --help for usage.", args[1]);
-                if settings.log_mode {
-                    let _ = commands::log_message("ERROR", &error_msg,);
-                }
-                eprintln!("{error_msg}");
-                Ok((),)
-            },
-        }
-    } else {
-        run_tui(settings,)
-    };
+    let result = args::parse_args();
 
     if settings.cleanup_cache && CLEANUP_NEEDED.load(Ordering::SeqCst,) {
         cleanup_cache_dir(settings.log_mode,);
@@ -156,55 +33,7 @@ fn main() -> Result<(), Box<dyn std::error::Error,>,> {
     result
 }
 
-fn process_args(
-    args: Vec<String,>,
-    settings: Settings,
-) -> Result<(), Box<dyn std::error::Error,>,> {
-    if args.is_empty() {
-        return run_tui(settings,);
-    }
-
-    match args[0].as_str() {
-        "--version" | "-v" => {
-            let version_str = version::get_current_version();
-
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", &format!("Version query: {version_str}"),);
-            }
-
-            println!("{version_str}");
-            Ok((),)
-        },
-        "--check-update" => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Checking for updates",);
-            }
-            version::check_for_updates().map_err(|e| Box::new(e,) as Box<dyn std::error::Error,>,)
-        },
-        "--update" => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Running update process",);
-            }
-            commands::update().map_err(|e| Box::new(e,) as Box<dyn std::error::Error,>,)
-        },
-        "--uninstall" => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Running uninstall process",);
-            }
-            commands::uninstall().map_err(|e| Box::new(e,) as Box<dyn std::error::Error,>,)
-        },
-        _ => {
-            let error_msg = format!("Error: Unknown option '{}'. Use --help for usage.", args[0]);
-            if settings.log_mode {
-                let _ = commands::log_message("ERROR", &error_msg,);
-            }
-            eprintln!("{error_msg}");
-            Ok((),)
-        },
-    }
-}
-
-fn run_tui(settings: Settings,) -> Result<(), Box<dyn std::error::Error,>,> {
+pub fn run_tui(settings: args::Settings,) -> Result<(), Box<dyn std::error::Error,>,> {
     if settings.log_mode {
         let _ = commands::log_message("INFO", "Starting TUI application",);
     }
@@ -247,8 +76,6 @@ fn run_tui(settings: Settings,) -> Result<(), Box<dyn std::error::Error,>,> {
     let result = ui::run_ui_with_options(
         &modules_dir,
         |script_path| {
-            // println!("\nRunning script: {}", script_path.display());
-
             if settings.log_mode {
                 let _ = commands::log_message(
                     "INFO",
@@ -355,15 +182,7 @@ fn get_scripts_path(log_mode: bool,) -> Result<PathBuf, Box<dyn std::error::Erro
 }
 
 fn get_cache_dir() -> Option<PathBuf,> {
-    if let Ok(xdg_cache,) = std::env::var("XDG_CACHE_HOME",) {
-        return Some(PathBuf::from(xdg_cache,),);
-    }
-
-    if let Ok(home,) = std::env::var("HOME",) {
-        return Some(PathBuf::from(home,).join(".cache",),);
-    }
-
-    None
+    dirs::cache_dir()
 }
 
 fn scripts_need_update(modules_dir: &Path,) -> bool {
@@ -386,7 +205,7 @@ fn scripts_need_update(modules_dir: &Path,) -> bool {
     format!("{stored_version}") != current_version
 }
 
-fn extract_scripts(temp_path: &Path,) -> Result<(), Box<dyn std::error::Error,>,> {
+pub fn extract_scripts(temp_path: &Path,) -> Result<(), Box<dyn std::error::Error,>,> {
     let modules_dir = temp_path.join("modules",);
     fs::create_dir_all(&modules_dir,)
         .map_err(|e| format!("Failed to create modules directory: {e}"),)?;

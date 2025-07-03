@@ -1,17 +1,16 @@
+use std::fs;
 use std::io::{self, Write};
-use std::path::Path;
-use std::{env, fs};
 
 const CONFIG_DIR: &str = ".config/carch";
 const LOG_FILE: &str = ".config/carch/carch.log";
 
 pub fn log_message(log_type: &str, message: &str,) -> io::Result<(),> {
-    let log_file =
-        format!("{}/{}", env::var("HOME").unwrap_or_else(|_| String::from("~")), LOG_FILE);
-    let config_dir =
-        format!("{}/{}", env::var("HOME").unwrap_or_else(|_| String::from("~")), CONFIG_DIR);
+    let home_dir = dirs::home_dir()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "Home directory not found",),)?;
+    let log_file = home_dir.join(LOG_FILE,);
+    let config_dir = home_dir.join(CONFIG_DIR,);
 
-    if !Path::new(&config_dir,).exists() {
+    if !config_dir.exists() {
         fs::create_dir_all(&config_dir,)?;
     }
 
