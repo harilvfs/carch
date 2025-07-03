@@ -44,7 +44,26 @@ func runCommand(name string, args ...string) error {
 	return cmd.Run()
 }
 
-func downloadFile(url string) (string, error) {
+type progressWriter struct {
+	Writer     io.Writer
+	Total      int64
+	Downloaded int64
+	Spinner    *spinner.Spinner
+}
+
+func (pw *progressWriter) Write(p []byte) (n int, err error) {
+	n, err = pw.Writer.Write(p)
+	pw.Downloaded += int64(n)
+	if pw.Total > 0 {
+		progress := float64(pw.Downloaded) / float64(pw.Total) * 100
+		pw.Spinner.Suffix = fmt.Sprintf(" Downloading... %.2f%%", progress)
+	} else {
+		pw.Spinner.Suffix = fmt.Sprintf(" Downloading... %d KB", pw.Downloaded/1024)
+	}
+	return
+}
+
+func downloadFile(url string, s *spinner.Spinner) (string, error) {
 	tmpFile, err := os.CreateTemp("", "carch-download-*")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp file: %v", err)
@@ -67,13 +86,33 @@ func downloadFile(url string) (string, error) {
 		return "", fmt.Errorf("download failed with status: %s", resp.Status)
 	}
 
-	_, err = io.Copy(tmpFile, resp.Body)
+	contentLength := resp.ContentLength
+	writer := &progressWriter{Writer: tmpFile, Total: contentLength, Spinner: s}
+
+	_, err = io.Copy(writer, resp.Body)
 	if err != nil {
 		_ = os.Remove(tmpFile.Name())
 		return "", fmt.Errorf("failed to save file: %v", err)
 	}
 
 	return tmpFile.Name(), nil
+}
+
+func confirm(prompt string, defaultValue bool) bool {
+	_, _ = blue.Print(":: ")
+	_, _ = rosewater.Printf("%s ", prompt)
+
+	var response string
+	_, _ = fmt.Scanln(&response)
+	response = strings.ToLower(strings.TrimSpace(response))
+
+	if response == "y" || response == "yes" {
+		return true
+	}
+	if response == "n" || response == "no" {
+		return false
+	}
+	return defaultValue
 }
 
 func installDependencies(deps []string) error {
