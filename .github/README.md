@@ -6,8 +6,8 @@
 
 <div align="center">
 
-[![Built Wit Ratatui][ratatui]][ratatui-link] \
-[![github actions build status][check]][check-link] [![Crates][crates]][crates-link] [![Carch Downloads][downloads]][downloads-link] [![License][license]][license-link] \
+[![Built Wit Ratatui][ratatui]][ratatui-link] 
+[![github actions build status][check]][check-link] [![Crates][crates]][crates-link] [![Carch Downloads][downloads]][downloads-link] [![License][license]][license-link] 
 [![deps status][deps-badge]][deps]
 
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
@@ -20,12 +20,27 @@
 
 <br>
 
-*[Carch](https://carch.chalisehari.com.np)* is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
-It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup. (*Currently supports Arch & Fedora based distros*)
+**Carch** is a tool that automates your Linux post-installation setup with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)). It uses a collection of modular Bash scripts to quickly configure your system and install your favorite applications, getting you ready to work or play in minutes.
 
-**Prerequisite:** `fzf` is required for the TUI interface in the Carch scripts. Make sure it’s installed before using Carch.
+*Currently supports Arch & Fedora based distros.*
 
-For more check out [docs](https://carch.chalisehari.com.np)
+### Features
+
+- **Interactive TUI:** A user-friendly terminal interface for selecting and running setup scripts.
+- **Modular Scripts:** Easily enable, disable, or add scripts for system settings, developer tools, desktop environments, and more.
+- **Package Management:** Streamlined installation of packages from official repositories, AUR, and other sources.
+- **Customizable:** You can modify the included scripts or add your own to fit your needs.
+
+### Quick Start
+
+**Prerequisite:** `fzf` is required for the TUI. Make sure it’s installed before using Carch.
+
+After installation, simply run the command:
+```bash
+carch
+```
+
+For more, check out the [documentation](https://carch.chalisehari.com.np).
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
