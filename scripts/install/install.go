@@ -128,10 +128,13 @@ func checkDependencies() error {
 
 	if len(missing) > 0 {
 		s.Stop()
-		_, _ = blue.Printf("→ Installing missing dependencies: %s\n", strings.Join(missing, ", "))
-
-		if err := installDependencies(missing); err != nil {
-			return fmt.Errorf("failed to install dependencies: %v", err)
+		if confirm(fmt.Sprintf("Missing dependencies: %s. Do you want to install them? [Y/n]:", strings.Join(missing, ", ")), true) {
+			_, _ = blue.Printf("→ Installing missing dependencies: %s\n", strings.Join(missing, ", "))
+			if err := installDependencies(missing); err != nil {
+				return fmt.Errorf("failed to install dependencies: %v", err)
+			}
+		} else {
+			return fmt.Errorf("missing dependencies. Please install them manually: %s", strings.Join(missing, ", "))
 		}
 	}
 
@@ -196,7 +199,7 @@ func installBinary(config *InstallConfig) error {
 
 	binaryURL := fmt.Sprintf("%s/%s", config.getDownloadURL(), config.getBinaryFileName())
 
-	tmpFile, err := downloadFile(binaryURL)
+	tmpFile, err := downloadFile(binaryURL, s)
 	if err != nil {
 		s.Stop()
 		return fmt.Errorf("failed to download binary: %v", err)
@@ -252,7 +255,7 @@ func installCompletions(config *InstallConfig) error {
 			continue
 		}
 
-		tmpFile, err := downloadFile(url)
+		tmpFile, err := downloadFile(url, s)
 		if err != nil {
 			continue
 		}
@@ -282,7 +285,7 @@ func installIcons(config *InstallConfig) error {
 		iconURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/main/assets/icons/carch_logo_%s.png",
 			config.RepoOwner, config.RepoName, size)
 
-		tmpFile, err := downloadFile(iconURL)
+		tmpFile, err := downloadFile(iconURL, s)
 		if err != nil {
 			continue
 		}
@@ -311,7 +314,7 @@ func installManPage(config *InstallConfig) error {
 	}
 
 	manURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/main/man/carch.1", config.RepoOwner, config.RepoName)
-	tmpFile, err := downloadFile(manURL)
+	tmpFile, err := downloadFile(manURL, s)
 	if err != nil {
 		s.Stop()
 		return fmt.Errorf("failed to download man page: %v", err)
@@ -341,7 +344,7 @@ func installDesktopFile(config *InstallConfig) error {
 	s.Start()
 
 	desktopURL := fmt.Sprintf("https://raw.githubusercontent.com/%s/%s/main/carch.desktop", config.RepoOwner, config.RepoName)
-	tmpFile, err := downloadFile(desktopURL)
+	tmpFile, err := downloadFile(desktopURL, s)
 	if err != nil {
 		s.Stop()
 		return fmt.Errorf("failed to download desktop file: %v", err)
@@ -394,14 +397,20 @@ func Install() error {
 	config := NewInstallConfig()
 
 	if err := detectPlatform(); err != nil {
+		_, _ = red.Printf("✖ Platform detection failed: %v\n", err)
+		_, _ = blue.Println("Please ensure you are running this installer on a supported Linux distribution (x86_64 or aarch64).")
 		return err
 	}
 
 	if err := checkDependencies(); err != nil {
+		_, _ = red.Printf("✖ Dependency check failed: %v\n", err)
+		_, _ = blue.Println("Please ensure all required dependencies are installed or allow the installer to install them.")
 		return err
 	}
 
 	if err := checkPrerelease(config); err != nil {
+		_, _ = red.Printf("✖ Pre-release check failed: %v\n", err)
+		_, _ = blue.Println("This might be a network issue or a problem with the GitHub API. The installation will proceed with the latest stable release.")
 		return err
 	}
 

@@ -33,7 +33,10 @@ func printUsage() {
 
 func checkRoot() {
 	if os.Geteuid() == 0 {
-		_, _ = yellow.Println("⚠ This script is running as root. Consider running without sudo and let the script call sudo when needed.")
+		_, _ = yellow.Println("⚠ Running as root is not recommended for this installer.")
+		_, _ = blue.Println("It's safer to run without sudo and let the script prompt for sudo when necessary.")
+		_, _ = blue.Println("Press Enter to continue, or Ctrl+C to abort and re-run without sudo.")
+		_, _ = fmt.Scanln(new(string))
 		fmt.Println()
 	}
 }
