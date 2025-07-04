@@ -31,14 +31,8 @@
 - **Package Management:** Streamlined installation of packages from official repositories, AUR, and other sources.
 - **Customizable:** You can modify the included scripts or add your own to fit your needs.
 
-### Quick Start
-
-**Prerequisite:** `fzf` is required for the TUI. Make sure it’s installed before using Carch.
-
-After installation, simply run the command:
-```bash
-carch
-```
+> [!IMPORTANT]
+> **Prerequisite:** `fzf` is required for the TUI. Make sure it’s installed before using Carch.
 
 For more, check out the [documentation](https://carch.chalisehari.com.np).
 
