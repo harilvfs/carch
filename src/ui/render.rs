@@ -19,7 +19,7 @@ use super::app::{App, AppMode, FocusedPanel, UiOptions};
 use crate::ui::popups;
 use crate::version;
 
-fn create_block(title: &str, is_focused: bool) -> Block {
+fn create_block(title: &str, is_focused: bool) -> Block<'_> {
     Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
