@@ -20,7 +20,7 @@
 
 <br>
 
-**Carch** is a tool that automates your Linux post-installation setup with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)). It uses a collection of modular Bash scripts to quickly configure your system and install your favorite applications, getting you ready to work or play in minutes.
+**Carch** is a CLI tool that automates your Linux post-installation setup with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)). It uses a collection of modular Bash scripts to quickly configure your system and install your favorite applications, getting you ready to work or play in minutes.
 
 *Currently supports Arch & Fedora based distros.*
 
