@@ -169,70 +169,6 @@ fn render_preview(f: &mut Frame, app: &App, area: Rect,) {
     f.render_widget(preview, area,);
 }
 
-fn render_fullscreen_preview(f: &mut Frame, app: &App,) {
-    let area = f.area();
-
-    let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx,),);
-
-    let title = if let Some(script,) = selected_script {
-        if !script.is_category_header {
-            format!(" Script Preview: {}/{} ", script.category, script.name)
-        } else {
-            format!(" Category: {} (No script selected) ", script.category)
-        }
-    } else {
-        " Script Preview ".to_string()
-    };
-
-    let margin_horizontal = (area.width as f32 * 0.05) as u16;
-    let margin_vertical = (area.height as f32 * 0.05) as u16;
-
-    let smaller_area = Rect {
-        x:      margin_horizontal,
-        y:      margin_vertical,
-        width:  area.width - (margin_horizontal * 2),
-        height: area.height - (margin_vertical * 2),
-    };
-
-    let preview_area = Layout::default()
-        .direction(Direction::Vertical,)
-        .constraints([Constraint::Min(1,), Constraint::Length(1,),],)
-        .split(smaller_area,);
-
-    let preview_text = Text::from(app.preview_content.clone(),);
-
-    let line_count = app.preview_content.lines().count() as u16;
-    let percentage = if line_count > 0 {
-        let scroll_percentage = (app.preview_scroll as f32 / line_count as f32 * 100.0).min(100.0,);
-        format!(" [{scroll_percentage:.0}%] ")
-    } else {
-        " [0%] ".to_string()
-    };
-
-    let formatted_title = format!("{title}{percentage}");
-
-    let block = create_rounded_block()
-        .title(Span::styled(formatted_title, Style::default().fg(Color::Cyan,),),)
-        .border_style(Style::default().fg(Color::Cyan,),);
-
-    let preview = Paragraph::new(preview_text,)
-        .block(block,)
-        .scroll((app.preview_scroll, 0,),)
-        .wrap(Wrap { trim: false, },);
-
-    f.render_widget(preview, preview_area[0],);
-
-    let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray,),),
-        Span::styled("PgUp/PgDown: Scroll faster  ", Style::default().fg(Color::Gray,),),
-        Span::styled("Home/End: Jump to start/end  ", Style::default().fg(Color::Gray,),),
-        Span::styled("ESC/q: Close preview", Style::default().fg(Color::Gray,),),
-    ],),)
-    .alignment(Alignment::Center,);
-
-    f.render_widget(help_text, preview_area[1],);
-}
-
 fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
     let mode_text = match app.mode {
         AppMode::Normal => {
@@ -356,9 +292,6 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
 
 fn ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
     match app.mode {
-        AppMode::Preview => {
-            render_fullscreen_preview(f, app,);
-        },
         AppMode::Search => {
             render_normal_ui(f, app, options,);
             popups::render_search_popup(f, app,);
@@ -374,6 +307,10 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
         },
         AppMode::Normal => {
             render_normal_ui(f, app, options,);
+        },
+        AppMode::Preview => {
+            render_normal_ui(f, app, options,);
+            popups::render_preview_popup(f, app,);
         },
     }
 }
@@ -500,17 +437,7 @@ where
                             }
                         },
                         AppMode::Preview => {
-                            if !options.show_preview {
-                                app.mode = AppMode::Normal;
-                                if options.log_mode {
-                                    let _ = crate::commands::log_message(
-                                        "INFO",
-                                        "Exiting preview mode because previews are disabled",
-                                    );
-                                }
-                            } else {
-                                app.handle_key_preview_mode(key,);
-                            }
+                            app.handle_key_preview_mode(key,);
                         },
                         AppMode::Search => app.handle_search_input(key,),
                         AppMode::Confirm => {
@@ -606,11 +533,11 @@ where
         }
     }
 
+    cleanup_terminal(&mut terminal,)?;
+
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "User requested application exit",);
     }
-
-    cleanup_terminal(&mut terminal,)?;
 
     print!("\x1B[2J\x1B[1;1H");
 
