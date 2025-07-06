@@ -417,9 +417,17 @@ impl App {
                 self.scripts.state.select(None);
             }
             KeyCode::Char('l') | KeyCode::Right => {
-                self.focused_panel = FocusedPanel::Scripts;
-                if !self.scripts.items.is_empty() {
-                    self.scripts.state.select(Some(0));
+                if self.focused_panel == FocusedPanel::Scripts {
+                    if self.scripts.state.selected().is_some()
+                        && !(self.multi_select_mode && self.multi_selected_scripts.is_empty())
+                    {
+                        self.mode = AppMode::Confirm;
+                    }
+                } else {
+                    self.focused_panel = FocusedPanel::Scripts;
+                    if !self.scripts.items.is_empty() {
+                        self.scripts.state.select(Some(0));
+                    }
                 }
             }
             KeyCode::Home => {
