@@ -61,26 +61,25 @@ fn render_title(f: &mut Frame, area: Rect) {
 fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Categories;
     let block = create_block("Categories", is_focused);
-
     let items: Vec<ListItem> = app
         .categories
         .items
         .iter()
-        .map(|i| {
-            let icon = " ";
+        .enumerate()
+        .map(|(idx, category_name)| {
+            let is_selected = app.categories.state.selected() == Some(idx);
+            let icon = if !is_focused && is_selected { "  " } else { " 󰉋 " };
             let colored_icon = Span::styled(icon, Style::default().fg(Color::Cyan));
-            let text = Span::styled(i.as_str(), Style::default().fg(Color::Cyan));
+            let text = Span::styled(category_name.as_str(), Style::default().fg(Color::Cyan));
             let line = Line::from(vec![colored_icon, text]);
             ListItem::new(line)
         })
         .collect();
-
     let list = List::new(items).block(block).highlight_style(if is_focused {
         Style::default().bg(Color::Rgb(170, 225, 225)).fg(Color::Black).add_modifier(Modifier::BOLD)
     } else {
         Style::default().bg(Color::DarkGray).fg(Color::White)
     });
-
     f.render_stateful_widget(list, area, &mut app.categories.state);
 }
 
