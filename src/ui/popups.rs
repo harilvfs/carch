@@ -6,130 +6,114 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragr
 
 use super::app::App;
 
-fn create_rounded_block() -> Block<'static,> {
-    Block::default().borders(Borders::ALL,).border_type(BorderType::Rounded,)
+fn create_rounded_block() -> Block<'static> {
+    Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
 
-pub fn render_preview_popup(f: &mut Frame, app: &App,) {
-    let area = f.area();
-
-    let popup_width = std::cmp::min(100, area.width - 4,);
-    let popup_height = std::cmp::min(20, area.height - 4,);
+pub fn render_preview_popup(f: &mut Frame, app: &App, area: Rect) {
+    let popup_width = std::cmp::min(100, area.width.saturating_sub(4));
+    let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
 
     let popup_area = Rect {
-        x:      (area.width - popup_width) / 2,
-        y:      (area.height - popup_height) / 2,
+        x:      area.x + (area.width - popup_width) / 2,
+        y:      area.y + (area.height - popup_height) / 2,
         width:  popup_width,
         height: popup_height,
     };
 
-    f.render_widget(Clear, popup_area,);
+    f.render_widget(Clear, popup_area);
 
-    let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx,),);
+    let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx));
 
-    let title = if let Some(script,) = selected_script {
-        format!(" Script Preview: {}/{} ", script.category, script.name)
+    let title = if let Some(script) = selected_script {
+        format!(" {}/{} ", script.category, script.name)
     } else {
-        " Script Preview ".to_string()
+        " ".to_string()
     };
-
-    let line_count = app.preview_content.lines().count() as u16;
-    let percentage = if line_count > 0 {
-        let scroll_percentage = (app.preview_scroll as f32 / line_count as f32 * 100.0).min(100.0,);
-        format!(" [{scroll_percentage:.0}%] ")
-    } else {
-        " [0%] ".to_string()
-    };
-
-    let formatted_title = format!("{title}{percentage}");
 
     let popup_block = create_rounded_block()
-        .title(Span::styled(formatted_title, Style::default().fg(Color::Cyan,),),)
-        .border_style(Style::default().fg(Color::Cyan,),);
+        .title(Span::styled(title, Style::default().fg(Color::Cyan)))
+        .border_style(Style::default().fg(Color::Cyan));
 
-    f.render_widget(popup_block.clone(), popup_area,);
+    f.render_widget(popup_block.clone(), popup_area);
 
     let chunks = Layout::default()
-        .direction(Direction::Vertical,)
-        .constraints([Constraint::Min(1,), Constraint::Length(2,),],)
-        .split(popup_block.inner(popup_area,),);
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Min(1), Constraint::Length(2)])
+        .split(popup_block.inner(popup_area));
 
-    let preview_text = Text::from(app.preview_content.clone(),);
+    let preview_text = Text::from(app.preview_content.clone());
 
-    let preview = Paragraph::new(preview_text,)
-        .block(Block::default(),)
-        .scroll((app.preview_scroll, 0,),)
-        .wrap(Wrap { trim: false, },);
+    let preview = Paragraph::new(preview_text)
+        .block(Block::default())
+        .scroll((app.preview_scroll, 0))
+        .wrap(Wrap { trim: false });
 
-    f.render_widget(preview, chunks[0],);
+    f.render_widget(preview, chunks[0]);
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray,),),
-        Span::styled("PgUp/PgDown: Scroll faster  ", Style::default().fg(Color::Gray,),),
-        Span::styled("Home/End: Jump to start/end  ", Style::default().fg(Color::Gray,),),
-        Span::styled("ESC/q: Close preview", Style::default().fg(Color::Gray,),),
-    ],),)
-    .alignment(Alignment::Center,)
+        Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray)),
+        Span::styled("PgUp/PgDown: Scroll faster  ", Style::default().fg(Color::Gray)),
+        Span::styled("Home/End: Jump to start/end  ", Style::default().fg(Color::Gray)),
+        Span::styled("ESC/q: Close preview", Style::default().fg(Color::Gray)),
+    ]))
+    .alignment(Alignment::Center)
     .block(
-        Block::default()
-            .borders(Borders::TOP,)
-            .border_style(Style::default().fg(Color::DarkGray,),),
+        Block::default().borders(Borders::TOP).border_style(Style::default().fg(Color::DarkGray)),
     );
 
-    f.render_widget(help_text, chunks[1],);
+    f.render_widget(help_text, chunks[1]);
 }
 
-pub fn render_search_popup(f: &mut Frame, app: &App,) {
-    let area = f.area();
-
-    let popup_width = std::cmp::min(70, area.width - 8,);
-    let popup_height = std::cmp::min(16, area.height - 6,);
+pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
+    let popup_width = std::cmp::min(70, area.width - 8);
+    let popup_height = std::cmp::min(16, area.height - 6);
 
     let popup_area = Rect {
-        x:      (area.width - popup_width) / 2,
-        y:      (area.height - popup_height) / 2,
+        x:      area.x + (area.width - popup_width) / 2,
+        y:      area.y + (area.height - popup_height) / 2,
         width:  popup_width,
         height: popup_height,
     };
 
-    f.render_widget(Clear, popup_area,);
+    f.render_widget(Clear, popup_area);
 
     let popup_block =
-        create_rounded_block().title("Search",).border_style(Style::default().fg(Color::Cyan,),);
+        create_rounded_block().title("Search").border_style(Style::default().fg(Color::Cyan));
 
-    f.render_widget(popup_block.clone(), popup_area,);
+    f.render_widget(popup_block.clone(), popup_area);
 
-    let inner_area = popup_block.inner(popup_area,);
+    let inner_area = popup_block.inner(popup_area);
 
     let popup_layout = Layout::default()
-        .direction(Direction::Vertical,)
-        .constraints([Constraint::Length(3,), Constraint::Min(3,), Constraint::Length(2,),],)
-        .split(inner_area,);
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Length(3), Constraint::Min(3), Constraint::Length(2)])
+        .split(inner_area);
 
-    let display_text = if let Some(ref autocomplete,) = app.autocomplete_text {
+    let display_text = if let Some(ref autocomplete) = app.autocomplete_text {
         let base = &app.search_input;
         let completion = &autocomplete[base.len()..];
 
         Line::from(vec![
-            Span::styled(base.clone(), Style::default(),),
-            Span::styled(completion, Style::default().fg(Color::DarkGray,),),
-        ],)
+            Span::styled(base.clone(), Style::default()),
+            Span::styled(completion, Style::default().fg(Color::DarkGray)),
+        ])
     } else {
-        Line::from(app.search_input.clone(),)
+        Line::from(app.search_input.clone())
     };
 
-    let input = Paragraph::new(display_text,)
-        .block(create_rounded_block().title("Type to search (Tab to complete)",),)
-        .style(Style::default(),)
-        .alignment(Alignment::Left,);
+    let input = Paragraph::new(display_text)
+        .block(create_rounded_block().title("Type to search (Tab to complete)"))
+        .style(Style::default())
+        .alignment(Alignment::Left);
 
-    f.render_widget(input, popup_layout[0],);
+    f.render_widget(input, popup_layout[0]);
 
     if app.search_cursor_position <= app.search_input.len() {
         f.set_cursor_position((
             popup_layout[0].x + 1 + app.search_cursor_position as u16,
             popup_layout[0].y + 1,
-        ),);
+        ));
     }
 
     let mut result_items = Vec::new();
@@ -137,7 +121,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App,) {
     let max_display = (popup_height - 5) as usize;
     let result_count = app.search_results.len();
 
-    let display_count = std::cmp::min(result_count, max_display,);
+    let display_count = std::cmp::min(result_count, max_display);
     let start_idx = if result_count <= max_display {
         0
     } else {
@@ -159,34 +143,34 @@ pub fn render_search_popup(f: &mut Frame, app: &App,) {
 
             result_items.push(ListItem::new(Line::from(vec![Span::styled(
                 display_text,
-                Style::default().fg(Color::Gray,),
-            )],),),);
+                Style::default().fg(Color::Gray),
+            )])));
         }
     }
 
     let result_count_text = format!("Found {} results", app.search_results.len());
 
-    let search_results = List::new(result_items,)
-        .block(create_rounded_block().title(result_count_text,),)
+    let search_results = List::new(result_items)
+        .block(create_rounded_block().title(result_count_text))
         .highlight_style(
             Style::default()
-                .bg(Color::Rgb(235, 235, 210,),)
-                .fg(Color::Black,)
-                .add_modifier(Modifier::BOLD,),
+                .bg(Color::Rgb(235, 235, 210))
+                .fg(Color::Black)
+                .add_modifier(Modifier::BOLD),
         )
-        .highlight_symbol("",);
+        .highlight_symbol("");
 
     let mut search_list_state = ratatui::widgets::ListState::default();
-    search_list_state.select(Some(app.search_selected_idx.saturating_sub(start_idx,),),);
+    search_list_state.select(Some(app.search_selected_idx.saturating_sub(start_idx)));
 
-    f.render_stateful_widget(search_results, popup_layout[1], &mut search_list_state,);
+    f.render_stateful_widget(search_results, popup_layout[1], &mut search_list_state);
 
     let help_block = Block::default()
-        .border_type(BorderType::Plain,)
-        .borders(Borders::TOP,)
-        .border_style(Style::default().fg(Color::DarkGray,),);
+        .border_type(BorderType::Plain)
+        .borders(Borders::TOP)
+        .border_style(Style::default().fg(Color::DarkGray));
 
-    f.render_widget(help_block, popup_layout[2],);
+    f.render_widget(help_block, popup_layout[2]);
 
     let help_inner_area = Rect {
         x:      popup_layout[2].x,
@@ -196,67 +180,65 @@ pub fn render_search_popup(f: &mut Frame, app: &App,) {
     };
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray,),),
-        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray,),),
-        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray,),),
-        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray,),),
-    ],),)
-    .alignment(Alignment::Center,);
+        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
+        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
+        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
+        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
+    ]))
+    .alignment(Alignment::Center);
 
-    f.render_widget(help_text, help_inner_area,);
+    f.render_widget(help_text, help_inner_area);
 }
 
-pub fn render_confirmation_popup(f: &mut Frame, app: &App,) {
-    let area = f.area();
-
-    let popup_width = std::cmp::min(60, area.width - 8,);
+pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
+    let popup_width = std::cmp::min(60, area.width - 8);
     let popup_height = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
-        std::cmp::min(20, area.height - 6,)
+        std::cmp::min(20, area.height - 6)
     } else {
         11
     };
 
     let popup_area = Rect {
-        x:      (area.width - popup_width) / 2,
-        y:      (area.height - popup_height) / 2,
+        x:      area.x + (area.width - popup_width) / 2,
+        y:      area.y + (area.height - popup_height) / 2,
         width:  popup_width,
         height: popup_height,
     };
 
-    f.render_widget(Clear, popup_area,);
+    f.render_widget(Clear, popup_area);
 
     let popup_block = Block::default()
-        .borders(Borders::ALL,)
-        .border_type(BorderType::Rounded,)
-        .title("Confirm selection",)
-        .border_style(Style::default().fg(Color::Cyan,),);
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .title("Confirm selection")
+        .border_style(Style::default().fg(Color::Cyan));
 
-    let inner_area = popup_block.inner(popup_area,);
+    let inner_area = popup_block.inner(popup_area);
 
     let content_layout = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
         Layout::default()
-            .direction(Direction::Vertical,)
+            .direction(Direction::Vertical)
             .constraints([
-                Constraint::Length(1,),
-                Constraint::Length(1,),
-                Constraint::Min(3,),
-                Constraint::Length(1,),
-                Constraint::Length(2,),
-            ],)
-            .split(inner_area,)
+                Constraint::Length(1),
+                Constraint::Length(1),
+                Constraint::Min(3),
+                Constraint::Length(1),
+                Constraint::Length(2),
+            ])
+            .split(inner_area)
     } else {
         Layout::default()
-            .direction(Direction::Vertical,)
+            .direction(Direction::Vertical)
             .constraints([
-                Constraint::Length(1,),
-                Constraint::Length(2,),
-                Constraint::Length(1,),
-                Constraint::Length(2,),
-            ],)
-            .split(inner_area,)
+                Constraint::Length(1),
+                Constraint::Length(2),
+                Constraint::Length(1),
+                Constraint::Length(2),
+            ])
+            .split(inner_area)
     };
 
-    f.render_widget(popup_block, popup_area,);
+    f.render_widget(popup_block, popup_area);
 
     let question_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
         "Do you want to run these scripts?"
@@ -266,24 +248,24 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App,) {
 
     let question_paragraph = Paragraph::new(Line::from(vec![Span::styled(
         question_text,
-        Style::default().fg(Color::Gray,),
-    )],),)
-    .alignment(Alignment::Center,);
+        Style::default().fg(Color::Gray),
+    )]))
+    .alignment(Alignment::Center);
 
-    f.render_widget(question_paragraph, content_layout[0],);
+    f.render_widget(question_paragraph, content_layout[0]);
 
     if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
         let count_text = Paragraph::new(Line::from(vec![Span::styled(
             format!("{} scripts selected:", app.multi_selected_scripts.len()),
-            Style::default().fg(Color::Yellow,).add_modifier(Modifier::BOLD,),
-        )],),)
-        .alignment(Alignment::Center,);
+            Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+        )]))
+        .alignment(Alignment::Center);
 
-        f.render_widget(count_text, content_layout[1],);
+        f.render_widget(count_text, content_layout[1]);
 
         let mut script_items = Vec::new();
         let max_display = (popup_height - 10) as usize;
-        let display_count = std::cmp::min(app.multi_selected_scripts.len(), max_display,);
+        let display_count = std::cmp::min(app.multi_selected_scripts.len(), max_display);
 
         for i in 0..display_count {
             let script_idx = app.multi_selected_scripts[i];
@@ -292,9 +274,9 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App,) {
                 let display_text = format!("{}/{}", item.category, item.name);
 
                 script_items.push(ListItem::new(Line::from(vec![
-                    Span::styled(" • ".to_string(), Style::default().fg(Color::Green,),),
-                    Span::styled(display_text, Style::default().fg(Color::White,),),
-                ],),),);
+                    Span::styled(" • ".to_string(), Style::default().fg(Color::Green)),
+                    Span::styled(display_text, Style::default().fg(Color::White)),
+                ])));
             }
         }
 
@@ -302,177 +284,175 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App,) {
             let more_count = app.multi_selected_scripts.len() - max_display;
             script_items.push(ListItem::new(Line::from(vec![Span::styled(
                 format!("   ... and {more_count} more"),
-                Style::default().fg(Color::DarkGray,),
-            )],),),);
+                Style::default().fg(Color::DarkGray),
+            )])));
         }
 
-        let scripts_list = List::new(script_items,);
-        f.render_widget(scripts_list, content_layout[2],);
+        let scripts_list = List::new(script_items);
+        f.render_widget(scripts_list, content_layout[2]);
 
         let options_text = Paragraph::new(Line::from(vec![
-            Span::styled("(y)", Style::default().fg(Color::Green,),),
-            Span::styled("es", Style::default().fg(Color::Gray,),),
-            Span::raw(" / ",),
-            Span::styled("(n)", Style::default().fg(Color::Red,),),
-            Span::styled("o", Style::default().fg(Color::Gray,),),
-        ],),)
-        .alignment(Alignment::Center,);
+            Span::styled("(y)", Style::default().fg(Color::Green)),
+            Span::styled("es", Style::default().fg(Color::Gray)),
+            Span::raw(" / "),
+            Span::styled("(n)", Style::default().fg(Color::Red)),
+            Span::styled("o", Style::default().fg(Color::Gray)),
+        ]))
+        .alignment(Alignment::Center);
 
-        f.render_widget(options_text, content_layout[4],);
+        f.render_widget(options_text, content_layout[4]);
     } else {
-        if let Some(idx,) = app.scripts.state.selected() {
+        if let Some(idx) = app.scripts.state.selected() {
             let script_text = Paragraph::new(Line::from(vec![Span::styled(
                 format!("{}/{}", app.scripts.items[idx].category, app.scripts.items[idx].name),
-                Style::default().fg(Color::Yellow,).add_modifier(Modifier::BOLD,),
-            )],),)
-            .alignment(Alignment::Center,);
+                Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+            )]))
+            .alignment(Alignment::Center);
 
-            f.render_widget(script_text, content_layout[1],);
+            f.render_widget(script_text, content_layout[1]);
         }
 
         let options_text = Paragraph::new(Line::from(vec![
-            Span::styled("(y)", Style::default().fg(Color::Green,),),
-            Span::styled("es", Style::default().fg(Color::Gray,),),
-            Span::raw(" / ",),
-            Span::styled("(n)", Style::default().fg(Color::Red,),),
-            Span::styled("o", Style::default().fg(Color::Gray,),),
-        ],),)
-        .alignment(Alignment::Center,);
+            Span::styled("(y)", Style::default().fg(Color::Green)),
+            Span::styled("es", Style::default().fg(Color::Gray)),
+            Span::raw(" / "),
+            Span::styled("(n)", Style::default().fg(Color::Red)),
+            Span::styled("o", Style::default().fg(Color::Gray)),
+        ]))
+        .alignment(Alignment::Center);
 
-        f.render_widget(options_text, content_layout[3],);
+        f.render_widget(options_text, content_layout[3]);
     }
 }
 
-pub fn render_help_popup(f: &mut Frame, app: &App,) -> u16 {
-    let area = f.area();
-
-    let popup_width = std::cmp::min(80, area.width - 4,);
-    let popup_height = std::cmp::min(20, area.height - 4,);
+pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
+    let popup_width = std::cmp::min(80, area.width.saturating_sub(4));
+    let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
 
     let popup_area = Rect {
-        x:      (area.width - popup_width) / 2,
-        y:      (area.height - popup_height) / 2,
+        x:      area.x + (area.width - popup_width) / 2,
+        y:      area.y + (area.height - popup_height) / 2,
         width:  popup_width,
         height: popup_height,
     };
 
-    f.render_widget(Clear, popup_area,);
+    f.render_widget(Clear, popup_area);
 
     let popup_block = create_rounded_block()
-        .title("Keyboard Shortcuts",)
-        .border_style(Style::default().fg(Color::Cyan,),);
+        .title("Keyboard Shortcuts")
+        .border_style(Style::default().fg(Color::Cyan));
 
-    f.render_widget(popup_block.clone(), popup_area,);
+    f.render_widget(popup_block.clone(), popup_area);
 
     let content_area = Rect {
-        x:      popup_block.inner(popup_area,).x + 1,
-        y:      popup_block.inner(popup_area,).y,
-        width:  popup_block.inner(popup_area,).width - 2,
-        height: popup_block.inner(popup_area,).height - 2,
+        x:      popup_block.inner(popup_area).x + 1,
+        y:      popup_block.inner(popup_area).y,
+        width:  popup_block.inner(popup_area).width.saturating_sub(2),
+        height: popup_block.inner(popup_area).height.saturating_sub(2),
     };
 
     let mut help_content = Vec::new();
 
     help_content.push(Line::from(vec![Span::styled(
         "Navigation",
-        Style::default().fg(Color::Yellow,).add_modifier(Modifier::BOLD,),
-    )],),);
-    help_content.push(Line::from("",),);
+        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+    )]));
+    help_content.push(Line::from(""));
 
-    let nav_color = Color::Rgb(137, 180, 250,);
+    let nav_color = Color::Rgb(137, 180, 250);
     help_content.push(Line::from(vec![
-        Span::styled(" ↑/↓ ", Style::default().bg(nav_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Navigate up/down in the script list", Style::default().fg(Color::Gray,),),
-    ],),);
-    help_content.push(Line::from("",),);
+        Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Navigate up/down in the script list", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" Home/End ", Style::default().bg(nav_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Jump to top/bottom of list", Style::default().fg(Color::Gray,),),
-    ],),);
-    help_content.push(Line::from("",),);
+        Span::styled(" Home/End ", Style::default().bg(nav_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Jump to top/bottom of list", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
         "Actions",
-        Style::default().fg(Color::Yellow,).add_modifier(Modifier::BOLD,),
-    )],),);
-    help_content.push(Line::from("",),);
+        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+    )]));
+    help_content.push(Line::from(""));
 
-    let action_color = Color::Rgb(166, 227, 161,);
+    let action_color = Color::Rgb(166, 227, 161);
     help_content.push(Line::from(vec![
-        Span::styled(" Enter ", Style::default().bg(action_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Run selected script", Style::default().fg(Color::Gray,),),
-    ],),);
-    help_content.push(Line::from("",),);
+        Span::styled(" Enter ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Run selected script", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" Space ", Style::default().bg(action_color,).fg(Color::Black,),),
-        Span::raw(" ",),
+        Span::styled(" Space ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
         Span::styled(
             "Toggle script selection in multi-select mode",
-            Style::default().fg(Color::Gray,),
+            Style::default().fg(Color::Gray),
         ),
-    ],),);
-    help_content.push(Line::from("",),);
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" p ", Style::default().bg(action_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray,),),
-    ],),);
-    help_content.push(Line::from("",),);
+        Span::styled(" p ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" q, Esc ", Style::default().bg(action_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Quit | Go back", Style::default().fg(Color::Gray,),),
-    ],),);
-    help_content.push(Line::from("",),);
+        Span::styled(" q, Esc ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Quit | Go back", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
         "Modes",
-        Style::default().fg(Color::Yellow,).add_modifier(Modifier::BOLD,),
-    )],),);
-    help_content.push(Line::from("",),);
+        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+    )]));
+    help_content.push(Line::from(""));
 
-    let mode_color = Color::Rgb(203, 166, 247,);
+    let mode_color = Color::Rgb(203, 166, 247);
     help_content.push(Line::from(vec![
-        Span::styled(" / ", Style::default().bg(mode_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Search mode", Style::default().fg(Color::Gray,),),
-    ],),);
-    help_content.push(Line::from("",),);
-
-    help_content.push(Line::from(vec![
-        Span::styled(" m ", Style::default().bg(mode_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray,),),
-        Span::raw(" | ",),
-        Span::styled(" Esc ", Style::default().bg(mode_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Exit multi-select mode", Style::default().fg(Color::Gray,),),
-    ],),);
-
-    help_content.push(Line::from("",),);
+        Span::styled(" / ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Search mode", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" ? ", Style::default().bg(mode_color,).fg(Color::Black,),),
-        Span::raw(" ",),
-        Span::styled("Show this help", Style::default().fg(Color::Gray,),),
-    ],),);
+        Span::styled(" m ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
+        Span::raw(" | "),
+        Span::styled(" Esc ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Exit multi-select mode", Style::default().fg(Color::Gray)),
+    ]));
+
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
+        Span::styled(" ? ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Show this help", Style::default().fg(Color::Gray)),
+    ]));
 
     let content_height = help_content.len() as u16;
     let visible_height = content_area.height;
-    let max_scroll = content_height.saturating_sub(visible_height,);
+    let max_scroll = content_height.saturating_sub(visible_height);
 
-    let help_paragraph = Paragraph::new(help_content,)
-        .block(Block::default(),)
-        .scroll((app.help_scroll.min(max_scroll,), 0,),);
+    let help_paragraph = Paragraph::new(help_content)
+        .block(Block::default())
+        .scroll((app.help_scroll.min(max_scroll), 0));
 
-    f.render_widget(help_paragraph, content_area,);
+    f.render_widget(help_paragraph, content_area);
 
     let footer_area = Rect {
         x:      popup_area.x + 1,
@@ -488,16 +468,16 @@ pub fn render_help_popup(f: &mut Frame, app: &App,) -> u16 {
     };
 
     let footer = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓/j/k: ", Style::default().fg(Color::Gray,),),
-        Span::styled("Scroll  ", Style::default().fg(Color::Blue,),),
-        Span::styled("ESC/q: ", Style::default().fg(Color::Gray,),),
-        Span::styled("Close", Style::default().fg(Color::Green,),),
-        Span::raw("  ",),
-        Span::styled(scroll_status, Style::default().fg(Color::DarkGray,),),
-    ],),)
-    .alignment(Alignment::Center,);
+        Span::styled("↑/↓/j/k: ", Style::default().fg(Color::Gray)),
+        Span::styled("Scroll  ", Style::default().fg(Color::Blue)),
+        Span::styled("ESC/q: ", Style::default().fg(Color::Gray)),
+        Span::styled("Close", Style::default().fg(Color::Green)),
+        Span::raw("  "),
+        Span::styled(scroll_status, Style::default().fg(Color::DarkGray)),
+    ]))
+    .alignment(Alignment::Center);
 
-    f.render_widget(footer, footer_area,);
+    f.render_widget(footer, footer_area);
 
     max_scroll
 }
