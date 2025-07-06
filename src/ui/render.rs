@@ -75,18 +75,11 @@ fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
         })
         .collect();
 
-    let list = List::new(items)
-        .block(block)
-        .highlight_style(if is_focused {
-            Style::default()
-                .bg(Color::Rgb(170, 225, 225))
-                .fg(Color::Black)
-                .add_modifier(Modifier::BOLD)
-        } else {
-            Style::default()
-                .bg(Color::DarkGray)
-                .fg(Color::White)
-        });
+    let list = List::new(items).block(block).highlight_style(if is_focused {
+        Style::default().bg(Color::Rgb(170, 225, 225)).fg(Color::Black).add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().bg(Color::DarkGray).fg(Color::White)
+    });
 
     f.render_stateful_widget(list, area, &mut app.categories.state);
 }
@@ -122,9 +115,8 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
                     Style::default().fg(Color::LightGreen)
                 };
 
-                let icon_style = Style::default()
-                    .fg(Color::LightGreen)
-                    .add_modifier(Modifier::BOLD);
+                let icon_style =
+                    Style::default().fg(Color::LightGreen).add_modifier(Modifier::BOLD);
 
                 let line = Line::from(vec![
                     Span::styled(prefix, style),
@@ -133,27 +125,19 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
                 ]);
                 ListItem::new(line)
             } else {
-                let icon_style = Style::default()
-                    .fg(Color::LightGreen)
-                    .add_modifier(Modifier::BOLD);
+                let icon_style =
+                    Style::default().fg(Color::LightGreen).add_modifier(Modifier::BOLD);
                 let line = Line::from(vec![Span::styled(icon, icon_style), script_name]);
                 ListItem::new(line)
             }
         })
         .collect();
 
-    let list = List::new(items)
-        .block(block)
-        .highlight_style(if is_focused {
-            Style::default()
-                .bg(Color::Rgb(170, 225, 170))
-                .fg(Color::Black)
-                .add_modifier(Modifier::BOLD)
-        } else {
-            Style::default()
-                .bg(Color::DarkGray)
-                .fg(Color::White)
-        });
+    let list = List::new(items).block(block).highlight_style(if is_focused {
+        Style::default().bg(Color::Rgb(170, 225, 170)).fg(Color::Black).add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().bg(Color::DarkGray).fg(Color::White)
+    });
 
     f.render_stateful_widget(list, area, &mut app.scripts.state);
 }
