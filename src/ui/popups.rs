@@ -32,8 +32,8 @@ pub fn render_preview_popup(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let popup_block = create_rounded_block()
-        .title(Span::styled(title, Style::default().fg(Color::Cyan)))
-        .border_style(Style::default().fg(Color::Cyan));
+        .title(Span::styled(title, Style::default().fg(Color::Green)))
+        .border_style(Style::default().fg(Color::Green));
 
     f.render_widget(popup_block.clone(), popup_area);
 
@@ -79,7 +79,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(Clear, popup_area);
 
     let popup_block =
-        create_rounded_block().title("Search").border_style(Style::default().fg(Color::Cyan));
+        create_rounded_block().title("Search").border_style(Style::default().fg(Color::Green));
 
     f.render_widget(popup_block.clone(), popup_area);
 
@@ -211,7 +211,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title("Confirm selection")
-        .border_style(Style::default().fg(Color::Cyan));
+        .border_style(Style::default().fg(Color::Green));
 
     let inner_area = popup_block.inner(popup_area);
 
@@ -341,7 +341,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
 
     let popup_block = create_rounded_block()
         .title("Keyboard Shortcuts")
-        .border_style(Style::default().fg(Color::Cyan));
+        .border_style(Style::default().fg(Color::Green));
 
     f.render_widget(popup_block.clone(), popup_area);
 
