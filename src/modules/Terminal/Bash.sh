@@ -32,8 +32,8 @@ check_essential_dependencies() {
             fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
             *)
                 echo -e "${RED}Unsupported distribution.${NC}"
-                                                                  exit 1
-                                                                         ;;
+                exit 1
+                ;;
         esac
     fi
 }
@@ -136,10 +136,6 @@ detect_distro
 check_essential_dependencies
 check_fzf
 
-echo -e "${TEAL}Nerd Font Are Recommended${NC}"
-
-echo -e "${CYAN}Detected distribution: $distro${NC}"
-
 install_arch() {
     if ! command -v bash &> /dev/null; then
         echo -e "${CYAN}Installing Bash...${NC}"
@@ -166,6 +162,10 @@ case "$distro" in
 esac
 
 install_eza
+
+clear
+echo -e "${TEAL}Nerd Font Are Recommended${NC}"
+echo -e "${CYAN}Detected distribution: $distro${NC}"
 
 options=("Catppuccin" "Nord" "Tokyo Night" "Exit")
 THEME=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
