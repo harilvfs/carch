@@ -375,7 +375,10 @@ where
                         AppMode::Search => app.handle_search_input(key),
                         AppMode::Confirm => {
                             app.handle_key_confirmation_mode(key);
-                            if key.code == KeyCode::Char('y') || key.code == KeyCode::Char('Y') {
+                            if key.code == KeyCode::Char('y')
+                                || key.code == KeyCode::Char('Y')
+                                || key.code == KeyCode::Char('l')
+                            {
                                 if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
                                     cleanup_terminal(&mut terminal)?;
 

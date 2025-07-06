@@ -452,6 +452,29 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         Span::styled("Show this help", Style::default().fg(Color::Gray)),
     ]));
 
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![Span::styled(
+        "Quick Actions",
+        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+    )]));
+
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
+        Span::styled(" l ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Confirm selection (same as Enter)", Style::default().fg(Color::Gray)),
+    ]));
+
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
+        Span::styled(" h ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Cancel selection (same as Esc)", Style::default().fg(Color::Gray)),
+    ]));
+
     let content_height = help_content.len() as u16;
     let visible_height = content_area.height;
     let max_scroll = content_height.saturating_sub(visible_height);
