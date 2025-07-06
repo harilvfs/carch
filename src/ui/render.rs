@@ -15,15 +15,20 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
 use ratatui::{Frame, Terminal};
 
-use super::app::{App, AppMode, UiOptions};
+use super::app::{App, AppMode, FocusedPanel, UiOptions};
 use crate::ui::popups;
 use crate::version;
 
-fn create_rounded_block() -> Block<'static,> {
+fn create_block(title: &str, is_focused: bool,) -> Block {
     Block::default()
         .borders(Borders::ALL,)
         .border_type(BorderType::Rounded,)
-        .border_style(Style::default().fg(Color::Cyan,),)
+        .title(title,)
+        .border_style(if is_focused {
+            Style::default().fg(Color::Cyan,)
+        } else {
+            Style::default().fg(Color::DarkGray,)
+        },)
         .style(Style::default().bg(Color::Reset,),)
 }
 
@@ -53,57 +58,14 @@ fn render_title(f: &mut Frame, area: Rect,) {
     f.render_widget(title, inner_area,);
 }
 
-fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
-    let mut list_items = Vec::new();
+fn render_category_list(f: &mut Frame, app: &mut App, area: Rect,) {
+    let is_focused = app.focused_panel == FocusedPanel::Categories;
+    let block = create_block("Categories", is_focused,);
 
-    for &idx in &app.visible_items {
-        let item = &app.scripts.items[idx];
+    let items: Vec<ListItem,> =
+        app.categories.items.iter().map(|i| ListItem::new(i.as_str(),),).collect();
 
-        if item.is_category_header {
-            let expanded = *app.expanded_categories.get(&item.category,).unwrap_or(&true,);
-            let prefix = if expanded { "▼ " } else { "▶ " };
-
-            list_items.push(ListItem::new(Line::from(vec![Span::styled(
-                format!("{}{}", prefix, item.category),
-                Style::default().fg(Color::Yellow,).add_modifier(Modifier::BOLD,),
-            )],),),);
-        } else {
-            let is_selected = app.is_script_selected(idx,);
-            let prefix = if is_selected { "[✓] " } else { "    " };
-
-            list_items.push(ListItem::new(Line::from(vec![
-                Span::styled(
-                    prefix,
-                    if is_selected {
-                        Style::default().fg(Color::Green,).add_modifier(Modifier::BOLD,)
-                    } else {
-                        Style::default().fg(Color::Gray,)
-                    },
-                ),
-                Span::styled(
-                    &item.name,
-                    if is_selected {
-                        Style::default().fg(Color::Green,).add_modifier(Modifier::BOLD,)
-                    } else {
-                        Style::default().fg(Color::Gray,)
-                    },
-                ),
-            ],),),);
-        }
-    }
-
-    let title = if app.multi_select_mode {
-        Line::from(vec![Span::styled(
-            format!("[{} selected]", app.multi_selected_scripts.len()),
-            Style::default().fg(Color::Yellow,),
-        )],)
-    } else {
-        Line::from(vec![Span::styled("Select a script to run", Style::default(),)],)
-    };
-
-    let block = create_rounded_block().title(title,);
-
-    let mut script_list = List::new(list_items,)
+    let list = List::new(items,)
         .block(block,)
         .highlight_style(
             Style::default()
@@ -111,29 +73,57 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
                 .fg(Color::Black,)
                 .add_modifier(Modifier::BOLD,),
         )
-        .highlight_symbol("",);
+        .highlight_symbol(" ",);
 
-    if let Some(selected,) = app.scripts.state.selected()
-        && selected < app.scripts.items.len()
-        && app.scripts.items[selected].is_category_header
-    {
-        script_list = script_list.highlight_style(
-            Style::default().bg(Color::Yellow,).fg(Color::Black,).add_modifier(Modifier::BOLD,),
-        );
-    }
-
-    if let Some(selected,) = app.scripts.state.selected() {
-        let visible_pos = app.visible_items.iter().position(|&i| i == selected,);
-        if let Some(pos,) = visible_pos {
-            app.list_state.select(Some(pos,),);
-        } else if !app.visible_items.is_empty() {
-            app.list_state.select(Some(0,),);
-            app.scripts.state.select(Some(app.visible_items[0],),);
-        }
-    }
-
-    f.render_stateful_widget(script_list, area, &mut app.list_state,);
+    f.render_stateful_widget(list, area, &mut app.categories.state,);
 }
+
+fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
+    let is_focused = app.focused_panel == FocusedPanel::Scripts;
+    let title = if app.multi_select_mode {
+        format!("[{} selected]", app.multi_selected_scripts.len())
+    } else {
+        "Scripts (p for preview)".to_string()
+    };
+    let block = create_block(&title, is_focused,);
+
+    let items: Vec<ListItem,> = app
+        .scripts
+        .items
+        .iter()
+        .enumerate()
+        .map(|(idx, item,)| {
+            if app.multi_select_mode {
+                let is_selected = app.is_script_selected(idx,);
+                let prefix = if is_selected { "[✓] " } else { "[ ] " };
+                let style = if is_selected {
+                    Style::default().fg(Color::Green,).add_modifier(Modifier::BOLD,)
+                } else {
+                    Style::default()
+                };
+                ListItem::new(Line::from(vec![
+                    Span::styled(prefix, style,),
+                    Span::styled(&item.name, style,),
+                ]),)
+            } else {
+                ListItem::new(item.name.as_str(),)
+            }
+        },)
+        .collect();
+
+    let list = List::new(items,)
+        .block(block,)
+        .highlight_style(
+            Style::default()
+                .bg(Color::Rgb(235, 235, 210,),)
+                .fg(Color::Black,)
+                .add_modifier(Modifier::BOLD,),
+        )
+        .highlight_symbol(" ",);
+
+    f.render_stateful_widget(list, area, &mut app.scripts.state,);
+}
+
 
 
 fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
@@ -190,7 +180,7 @@ fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
         },
         if has_selected { Span::raw(" ",) } else { Span::raw("",) },
         Span::styled(
-            " ?: Help | q: Quit ",
+            " ?: Help | q: Quit | h/l: Switch Panels",
             Style::default().bg(Color::Rgb(203, 166, 247,),).fg(Color::Black,),
         ),
         Span::raw(" ",),
@@ -212,7 +202,7 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
 
     let area = Layout::default()
         .direction(Direction::Vertical,)
-        .margin(2,)
+        .margin(1,)
         .constraints([Constraint::Min(0,),],)
         .split(f.area(),)[0];
 
@@ -222,20 +212,20 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
             Constraint::Length(3,),
             Constraint::Min(0,),
             Constraint::Length(1,),
-            Constraint::Length(1,),
         ],)
         .split(area,);
 
     render_title(f, chunks[0],);
 
-    render_script_list(f, app, chunks[1],);
+    let main_chunks = Layout::default()
+        .direction(Direction::Horizontal,)
+        .constraints([Constraint::Percentage(30,), Constraint::Percentage(70,),],)
+        .split(chunks[1],);
 
-    let help_text =
-        Paragraph::new(vec![Line::from(vec![Span::raw("Press 'p' to preview a script.",)],)],)
-            .alignment(Alignment::Center,);
+    render_category_list(f, app, main_chunks[0],);
+    render_script_list(f, app, main_chunks[1],);
 
-    f.render_widget(help_text, chunks[2],);
-    render_status_bar(f, app, chunks[3],);
+    render_status_bar(f, app, chunks[2],);
 }
 
 fn ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
@@ -312,8 +302,8 @@ where
             "INFO",
             &format!(
                 "Loaded {} scripts in {} categories",
-                app.scripts.items.iter().filter(|s| !s.is_category_header).count(),
-                app.categories.len()
+                app.all_scripts.values().map(|v| v.len()).sum::<usize>(),
+                app.categories.items.len()
             ),
         );
     }
@@ -361,24 +351,6 @@ where
                                         "INFO",
                                         "Preview toggle attempted but previews are disabled",
                                     );
-                                }
-                            } else if key.code == KeyCode::Enter {
-                                if let Some(selected,) = app.scripts.state.selected()
-                                    && selected < app.scripts.items.len()
-                                {
-                                    let is_category =
-                                        app.scripts.items[selected].is_category_header;
-
-                                    if is_category {
-                                        let category = app.scripts.items[selected].category.clone();
-                                        app.toggle_category(&category,);
-                                    } else if app.multi_select_mode {
-                                        if !app.multi_selected_scripts.is_empty() {
-                                            app.mode = AppMode::Confirm;
-                                        }
-                                    } else {
-                                        app.mode = AppMode::Confirm;
-                                    }
                                 }
                             } else {
                                 app.handle_key_normal_mode(key,);
