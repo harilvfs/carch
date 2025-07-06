@@ -1,13 +1,86 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
-use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragraph};
+use ratatui::text::{Line, Span, Text};
+use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragraph, Wrap};
 
 use super::app::App;
 
 fn create_rounded_block() -> Block<'static,> {
     Block::default().borders(Borders::ALL,).border_type(BorderType::Rounded,)
+}
+
+pub fn render_preview_popup(f: &mut Frame, app: &App,) {
+    let area = f.area();
+
+    let popup_width = std::cmp::min(100, area.width - 4,);
+    let popup_height = std::cmp::min(20, area.height - 4,);
+
+    let popup_area = Rect {
+        x:      (area.width - popup_width) / 2,
+        y:      (area.height - popup_height) / 2,
+        width:  popup_width,
+        height: popup_height,
+    };
+
+    f.render_widget(Clear, popup_area,);
+
+    let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx,),);
+
+    let title = if let Some(script,) = selected_script {
+        if !script.is_category_header {
+            format!(" Script Preview: {}/{} ", script.category, script.name)
+        } else {
+            format!(" Category: {} (No script selected) ", script.category)
+        }
+    } else {
+        " Script Preview ".to_string()
+    };
+
+    let line_count = app.preview_content.lines().count() as u16;
+    let percentage = if line_count > 0 {
+        let scroll_percentage = (app.preview_scroll as f32 / line_count as f32 * 100.0).min(100.0,);
+        format!(" [{scroll_percentage:.0}%] ")
+    } else {
+        " [0%] ".to_string()
+    };
+
+    let formatted_title = format!("{title}{percentage}");
+
+    let popup_block = create_rounded_block()
+        .title(Span::styled(formatted_title, Style::default().fg(Color::Cyan,),),)
+        .border_style(Style::default().fg(Color::Cyan,),);
+
+    f.render_widget(popup_block.clone(), popup_area,);
+
+    let chunks = Layout::default()
+        .direction(Direction::Vertical,)
+        .constraints([Constraint::Min(1,), Constraint::Length(2,),],)
+        .split(popup_block.inner(popup_area,),);
+
+    let preview_text = Text::from(app.preview_content.clone(),);
+
+    let preview = Paragraph::new(preview_text,)
+        .block(Block::default(),)
+        .scroll((app.preview_scroll, 0,),)
+        .wrap(Wrap { trim: false, },);
+
+    f.render_widget(preview, chunks[0],);
+
+    let help_text = Paragraph::new(Line::from(vec![
+        Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray,),),
+        Span::styled("PgUp/PgDown: Scroll faster  ", Style::default().fg(Color::Gray,),),
+        Span::styled("Home/End: Jump to start/end  ", Style::default().fg(Color::Gray,),),
+        Span::styled("ESC/q: Close preview", Style::default().fg(Color::Gray,),),
+    ],),)
+    .alignment(Alignment::Center,)
+    .block(
+        Block::default()
+            .borders(Borders::TOP,)
+            .border_style(Style::default().fg(Color::DarkGray,),),
+    );
+
+    f.render_widget(help_text, chunks[1],);
 }
 
 pub fn render_search_popup(f: &mut Frame, app: &App,) {

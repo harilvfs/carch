@@ -9,10 +9,10 @@ use ratatui::widgets::ListState;
 #[derive(PartialEq, Debug, Clone, Copy,)]
 pub enum AppMode {
     Normal,
-    Preview,
     Search,
     Confirm,
     Help,
+    Preview,
 }
 
 pub struct StatefulList<T,> {
@@ -347,9 +347,7 @@ impl App {
             self.mode = match self.mode {
                 AppMode::Normal => AppMode::Preview,
                 AppMode::Preview => AppMode::Normal,
-                AppMode::Search => AppMode::Normal,
-                AppMode::Confirm => AppMode::Normal,
-                AppMode::Help => AppMode::Normal,
+                _ => AppMode::Normal,
             };
 
             let ui_options = UiOptions::default();
@@ -362,7 +360,6 @@ impl App {
                         crate::commands::log_message("INFO", "Exited full-screen preview mode",);
                 }
             }
-
             self.update_preview();
         }
     }
