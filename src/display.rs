@@ -165,14 +165,6 @@ fn ui(f: &mut Frame, app: &mut App) {
             Span::raw("Check if a new version is available."),
         ]),
         Line::from(vec![
-            Span::styled("  --list-scripts, -l      ", Style::default().fg(Color::Yellow)),
-            Span::raw("List all available scripts."),
-        ]),
-        Line::from(vec![
-            Span::styled("  --no-preview            ", Style::default().fg(Color::Yellow)),
-            Span::raw("Run without displaying script previews in menus."),
-        ]),
-        Line::from(vec![
             Span::styled("  --log                   ", Style::default().fg(Color::Yellow)),
             Span::raw("Enable logging for the current session only. "),
             Span::styled("~/.config/carch/carch.log", Style::default().fg(Color::Green)),

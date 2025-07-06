@@ -1,6 +1,5 @@
-use crate::{commands, display, script_list, version};
+use crate::{commands, display, version};
 use std::env;
-use tempfile::TempDir;
 
 #[derive(Copy, Clone)]
 pub struct Settings {
@@ -39,25 +38,6 @@ pub fn parse_args() -> Result<(), Box<dyn std::error::Error>> {
                 }
                 display::display_help()
             }
-            "--list-scripts" | "-l" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Listing available scripts");
-                }
-                let temp_dir =
-                    TempDir::new().map_err(|e| format!("Failed to create temp directory: {e}"))?;
-                let temp_path = temp_dir.path();
-                crate::extract_scripts(temp_path)?;
-                let modules_dir = temp_path.join("modules");
-                if !modules_dir.exists() || !modules_dir.is_dir() {
-                    let error_msg =
-                        format!("Modules directory not found at {}", modules_dir.display());
-                    if settings.log_mode {
-                        let _ = commands::log_message("ERROR", &error_msg);
-                    }
-                    return Err(error_msg.into());
-                }
-                script_list::list_scripts(&modules_dir)
-            }
             "--version" | "-v" => {
                 let version_str = version::get_current_version();
 
@@ -85,18 +65,6 @@ pub fn parse_args() -> Result<(), Box<dyn std::error::Error>> {
                     let _ = commands::log_message("INFO", "Running uninstall process");
                 }
                 commands::uninstall().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
-            }
-            "--no-preview" => {
-                settings.show_preview = false;
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Preview mode disabled");
-                }
-                if args.len() > 2 {
-                    let remaining_args = args[2..].to_vec();
-                    process_remaining_args(remaining_args, settings)
-                } else {
-                    crate::run_tui(settings)
-                }
             }
             "--log" => {
                 if args.len() > 2 {
