@@ -79,6 +79,16 @@ Down Sleep 2s
 
 Down Sleep 2s
 
+Type "l"
+
+Sleep 2s
+
+Down Sleep 2s
+
+Down Sleep 2s
+
+Down Sleep 2s
+
 Type "/" Sleep 1s
 
 Type@200ms "Packages" Sleep 3s Enter
@@ -93,7 +103,7 @@ Type "?"
 
 Sleep 4s
 
-Type "q"
+Type "esc"
 
 Sleep 3s
 
