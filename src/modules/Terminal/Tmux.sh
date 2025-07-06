@@ -64,7 +64,7 @@ fi
 clear
 
 if ! command -v tmux &> /dev/null; then
-    echo -e "${YELLOW}Tmux is not installed. Installing...${RESET}"
+    echo -e "${YELLOW}Tmux is not installed. Installing...${NC}"
 
     if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm tmux
@@ -77,20 +77,20 @@ config_dir="$HOME/.config/tmux"
 backup_dir="$HOME/.config/tmux.bak"
 
 if [[ -d "$config_dir" ]]; then
-    echo -e "${YELLOW}Existing tmux configuration detected.${RESET}"
+    echo -e "${YELLOW}Existing tmux configuration detected.${NC}"
     if fzf_confirm "Do you want to backup the existing configuration?"; then
         if [[ -d "$backup_dir" ]]; then
-            echo -e "${YELLOW}Backup already exists.${RESET}"
+            echo -e "${YELLOW}Backup already exists.${NC}"
             if fzf_confirm "Do you want to overwrite the backup?"; then
                 rm -rf "$backup_dir"
             else
-                echo -e "${RED}Exiting to prevent data loss.${RESET}"
+                echo -e "${RED}Exiting to prevent data loss.${NC}"
                 exit 0
             fi
         fi
         mv "$config_dir" "$backup_dir"
     else
-        echo -e "${RED}Exiting to avoid overwriting existing config.${RESET}"
+        echo -e "${RED}Exiting to avoid overwriting existing config.${NC}"
         exit 0
     fi
 fi
@@ -98,36 +98,36 @@ fi
 tpm_dir="$HOME/.tmux/plugins/tpm"
 
 if [[ -d "$tpm_dir" ]]; then
-    echo -e "${YELLOW}TPM is already installed.${RESET}"
+    echo -e "${YELLOW}TPM is already installed.${NC}"
     if fzf_confirm "Do you want to overwrite TPM?"; then
         rm -rf "$tpm_dir"
     else
-        echo -e "${RED}Skipping TPM installation.${RESET}"
+        echo -e "${RED}Skipping TPM installation.${NC}"
     fi
 fi
 
-echo -e "${GREEN}Cloning TPM...${RESET}"
+echo -e "${GREEN}Cloning TPM...${NC}"
 git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
 
 mkdir -p "$config_dir"
 
 config_url="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/tmux/tmux.conf"
-echo -e "${GREEN}Downloading tmux configuration...${RESET}"
+echo -e "${GREEN}Downloading tmux configuration...${NC}"
 wget -O "$config_dir/tmux.conf" "$config_url"
 
 plugin_script_dir="$tpm_dir/scripts"
 
 if [[ -d "$plugin_script_dir" ]]; then
-    echo -e "${GREEN}Installing tmux plugins...${RESET}"
+    echo -e "${GREEN}Installing tmux plugins...${NC}"
     cd "$plugin_script_dir" || exit
     chmod +x install_plugins.sh
     ./install_plugins.sh
 
-    echo -e "${GREEN}Updating tmux plugins...${RESET}"
+    echo -e "${GREEN}Updating tmux plugins...${NC}"
     chmod +x update_plugins.sh
     ./update_plugins.sh
 else
-    echo -e "${RED}TPM scripts not found. Skipping plugin installation.${RESET}"
+    echo -e "${RED}TPM scripts not found. Skipping plugin installation.${NC}"
 fi
 
-echo -e "${GREEN}Tmux setup complete!${RESET}"
+echo -e "${GREEN}Tmux setup complete!${NC}"

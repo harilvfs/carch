@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-RESET='\e[0m'
 NC='\e[0m'
 ENDCOLOR="\e[0m"
 

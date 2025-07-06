@@ -43,12 +43,12 @@ if command -v pacman &> /dev/null; then
 elif command -v dnf &> /dev/null; then
     DISTRO="fedora"
 else
-    echo -e "${RED}Unsupported distribution!${RESET}"
+    echo -e "${RED}Unsupported distribution!${NC}"
     exit 1
 fi
 
 install_helix() {
-    echo -e "${CYAN}Installing Helix editor...${RESET}"
+    echo -e "${CYAN}Installing Helix editor...${NC}"
     if [[ $DISTRO == "arch" ]]; then
         sudo pacman -S --noconfirm helix noto-fonts-emoji git
     elif [[ $DISTRO == "fedora" ]]; then
@@ -63,22 +63,22 @@ if [[ -d "$HELIX_CONFIG" ]]; then
     fzf_confirm "Existing Helix config found. Do you want to back it up?" && {
         BACKUP_PATH="$HOME/.config/helix.bak.$(date +%s)"
         mv "$HELIX_CONFIG" "$BACKUP_PATH"
-        echo -e "${GREEN}Backup created at $BACKUP_PATH${RESET}"
+        echo -e "${GREEN}Backup created at $BACKUP_PATH${NC}"
     }
 fi
 
-echo -e "${CYAN}Cloning Helix configuration...${RESET}"
+echo -e "${CYAN}Cloning Helix configuration...${NC}"
 git clone --depth=1 https://github.com/harilvfs/dwm "$HOME/dwm"
 
 if [[ -d "$HOME/dwm/config/helix" ]]; then
-    echo -e "${CYAN}Applying Helix configuration...${RESET}"
+    echo -e "${CYAN}Applying Helix configuration...${NC}"
     mkdir -p "$HELIX_CONFIG"
     cp -r "$HOME/dwm/config/helix/"* "$HELIX_CONFIG/"
-    echo -e "${GREEN}Helix configuration applied!${RESET}"
+    echo -e "${GREEN}Helix configuration applied!${NC}"
     rm -rf "$HOME/dwm"
 else
-    echo -e "${RED}Failed to apply Helix configuration!${RESET}"
+    echo -e "${RED}Failed to apply Helix configuration!${NC}"
     exit 1
 fi
 
-echo -e "${CYAN}Helix setup complete! Restart your editor to apply changes.${RESET}"
+echo -e "${CYAN}Helix setup complete! Restart your editor to apply changes.${NC}"

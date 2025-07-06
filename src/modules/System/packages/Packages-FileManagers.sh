@@ -11,7 +11,7 @@ install_filemanagers() {
         pkg_manager="sudo dnf install -y"
         get_version() { rpm -q "$1"; }
     else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
     fi
 

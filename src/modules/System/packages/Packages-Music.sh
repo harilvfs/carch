@@ -14,7 +14,7 @@ install_music() {
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
     else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
     fi
 

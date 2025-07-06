@@ -32,32 +32,32 @@ fzf_confirm() {
 
 installAlacritty() {
     if command -v alacritty &> /dev/null; then
-        echo -e "${GREEN}Alacritty is already installed.${RESET}"
+        echo -e "${GREEN}Alacritty is already installed.${NC}"
         return
     fi
 
-    echo -e "${YELLOW}Alacritty is not installed. Installing now...${RESET}"
+    echo -e "${YELLOW}Alacritty is not installed. Installing now...${NC}"
 
     if [ -x "$(command -v pacman)" ]; then
         sudo pacman -S alacritty --noconfirm
     elif [ -x "$(command -v dnf)" ]; then
         sudo dnf install alacritty -y
     else
-        echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${RESET}"
+        echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${NC}"
         exit 1
     fi
 
-    echo -e "${GREEN}Alacritty has been installed.${RESET}"
+    echo -e "${GREEN}Alacritty has been installed.${NC}"
 }
 
 setupAlacrittyConfig() {
     local alacritty_config="${HOME}/.config/alacritty"
 
-    echo -e "${CYAN}:: Setting up Alacritty configuration...${RESET}"
+    echo -e "${CYAN}:: Setting up Alacritty configuration...${NC}"
 
     if [ -d "$alacritty_config" ] && [ ! -d "${alacritty_config}-bak" ]; then
         mv "$alacritty_config" "${alacritty_config}-bak"
-        echo -e "${YELLOW}:: Existing Alacritty configuration backed up to alacritty-bak.${RESET}"
+        echo -e "${YELLOW}:: Existing Alacritty configuration backed up to alacritty-bak.${NC}"
     fi
 
     mkdir -p "$alacritty_config"
@@ -67,10 +67,10 @@ setupAlacrittyConfig() {
         curl -sSLo "$alacritty_config/$file" "$base_url/$file"
     done
 
-    echo -e "${CYAN}:: Running 'alacritty migrate' to update the config...${RESET}"
+    echo -e "${CYAN}:: Running 'alacritty migrate' to update the config...${NC}"
     (cd "$alacritty_config" && alacritty migrate)
 
-    echo -e "${GREEN}:: Alacritty configuration files copied and migrated.${RESET}"
+    echo -e "${GREEN}:: Alacritty configuration files copied and migrated.${NC}"
 }
 
 if ! command -v fzf &> /dev/null; then
@@ -84,4 +84,4 @@ fi
 installAlacritty
 setupAlacrittyConfig
 
-echo -e "${GREEN}:: Alacritty setup complete.${RESET}"
+echo -e "${GREEN}:: Alacritty setup complete.${NC}"

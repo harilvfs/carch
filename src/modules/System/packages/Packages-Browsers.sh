@@ -15,7 +15,7 @@ install_browsers() {
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
     else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
     fi
 
@@ -197,7 +197,7 @@ install_browsers() {
 
                         temp_dir=$(mktemp -d)
                         cd "$temp_dir" || {
-                                            echo -e "${RED}Failed to create temp directory${RESET}"
+                                            echo -e "${RED}Failed to create temp directory${NC}"
                                                                                                      return
                         }
 

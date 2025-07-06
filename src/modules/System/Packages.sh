@@ -30,7 +30,7 @@ FZF_COMMON="--layout=reverse \
             --bind change:top"
 
 if [ "$(id -u)" = 0 ]; then
-    echo -e "${RED}This script should not be run as root.${RESET}"
+    echo -e "${RED}This script should not be run as root.${NC}"
     exit 1
 fi
 
@@ -42,7 +42,7 @@ detect_distro() {
     elif command -v dnf &> /dev/null; then
         return 1
     else
-        echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${RESET}"
+        echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${NC}"
         return 2
     fi
 }
@@ -55,7 +55,7 @@ detect_aur_helper() {
         fi
     done
 
-    echo -e "${YELLOW}:: No AUR helper found.${RESET}"
+    echo -e "${YELLOW}:: No AUR helper found.${NC}"
     return 1
 }
 
@@ -63,7 +63,7 @@ install_aur_helper() {
     detect_distro
     case $? in
         1) return ;;
-        2) echo -e "${YELLOW}:: Proceeding, but AUR installation may not work properly.${RESET}" ;;
+        2) echo -e "${YELLOW}:: Proceeding, but AUR installation may not work properly.${NC}" ;;
     esac
 
     detect_aur_helper
@@ -71,19 +71,19 @@ install_aur_helper() {
         return
     fi
 
-    echo -e "${RED}:: No AUR helper found. Installing yay...${RESET}"
+    echo -e "${RED}:: No AUR helper found. Installing yay...${NC}"
 
     sudo pacman -S --needed git base-devel
 
     temp_dir=$(mktemp -d)
     cd "$temp_dir" || {
-                        echo -e "${RED}Failed to create temp directory${RESET}"
+                        echo -e "${RED}Failed to create temp directory${NC}"
                                                                                  exit 1
     }
 
     git clone https://aur.archlinux.org/yay.git
     cd yay || {
-                echo -e "${RED}Failed to enter yay directory${RESET}"
+                echo -e "${RED}Failed to enter yay directory${NC}"
                                                                        exit 1
     }
     makepkg -si
@@ -91,12 +91,12 @@ install_aur_helper() {
     cd ..
     rm -rf "$temp_dir"
     AUR_HELPER="yay"
-    echo -e "${GREEN}:: Yay installed successfully and set as AUR helper.${RESET}"
+    echo -e "${GREEN}:: Yay installed successfully and set as AUR helper.${NC}"
 }
 
 install_flatpak() {
     if ! command -v flatpak &> /dev/null; then
-        echo -e "${YELLOW}:: Flatpak not found. Installing...${RESET}"
+        echo -e "${YELLOW}:: Flatpak not found. Installing...${NC}"
         sudo dnf install -y flatpak
     fi
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -109,7 +109,7 @@ install_fedora_package() {
     if sudo dnf list --available | grep -q "^$package_name"; then
         sudo dnf install -y "$package_name"
     else
-        echo -e "${YELLOW}:: $package_name not found in DNF. Falling back to Flatpak.${RESET}"
+        echo -e "${YELLOW}:: $package_name not found in DNF. Falling back to Flatpak.${NC}"
         flatpak install -y flathub "$flatpak_id"
     fi
 }
