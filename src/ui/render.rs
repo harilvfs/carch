@@ -91,10 +91,9 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
         .scripts
         .items
         .iter()
-        .enumerate()
-        .map(|(idx, item)| {
+        .map(|item| {
             if app.multi_select_mode {
-                let is_selected = app.is_script_selected(idx);
+                let is_selected = app.is_script_selected(&item.path);
                 let prefix = if is_selected { "[✓] " } else { "[ ] " };
                 let style = if is_selected {
                     Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)

@@ -103,7 +103,7 @@ pub struct App {
     pub search_cursor_position: usize,
     pub search_selected_idx:    usize,
     pub autocomplete_text:      Option<String>,
-    pub multi_selected_scripts: Vec<usize>,
+    pub multi_selected_scripts: Vec<PathBuf>,
     pub multi_select_mode:      bool,
     pub help_scroll:            u16,
     pub help_max_scroll:        u16,
@@ -601,10 +601,11 @@ impl App {
 
     pub fn toggle_script_selection(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
-            if self.multi_selected_scripts.contains(&selected) {
-                self.multi_selected_scripts.retain(|&x| x != selected);
+            let script_path = &self.scripts.items[selected].path;
+            if self.multi_selected_scripts.contains(script_path) {
+                self.multi_selected_scripts.retain(|p| p != script_path);
             } else {
-                self.multi_selected_scripts.push(selected);
+                self.multi_selected_scripts.push(script_path.clone());
             }
         }
     }
@@ -613,17 +614,14 @@ impl App {
     where
         F: Fn(&Path) -> io::Result<()>,
     {
-        for &script_idx in &self.multi_selected_scripts {
-            if script_idx < self.scripts.items.len() {
-                let script_path = &self.scripts.items[script_idx].path;
-                run_script_callback(script_path)?;
-            }
+        for script_path in &self.multi_selected_scripts {
+            run_script_callback(script_path)?;
         }
         Ok(())
     }
 
-    pub fn is_script_selected(&self, idx: usize) -> bool {
-        self.multi_selected_scripts.contains(&idx)
+    pub fn is_script_selected(&self, script_path: &Path) -> bool {
+        self.multi_selected_scripts.contains(&script_path.to_path_buf())
     }
 
     pub fn toggle_help_mode(&mut self) {

@@ -268,11 +268,12 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         let display_count = std::cmp::min(app.multi_selected_scripts.len(), max_display);
 
         for i in 0..display_count {
-            let script_idx = app.multi_selected_scripts[i];
-            if script_idx < app.scripts.items.len() {
-                let item = &app.scripts.items[script_idx];
-                let display_text = format!("{}/{}", item.category, item.name);
-
+            let script_path = &app.multi_selected_scripts[i];
+            if let Some(script_name) = script_path.file_stem().and_then(|n| n.to_str())
+                && let Some(category) =
+                    script_path.parent().and_then(|p| p.file_name()).and_then(|n| n.to_str())
+            {
+                let display_text = format!("{category}/{script_name}");
                 script_items.push(ListItem::new(Line::from(vec![
                     Span::styled(" • ".to_string(), Style::default().fg(Color::Green)),
                     Span::styled(display_text, Style::default().fg(Color::White)),
