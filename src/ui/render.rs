@@ -11,8 +11,8 @@ use crossterm::{
 use ratatui::backend::CrosstermBackend;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
-use ratatui::text::{Line, Span, Text};
-use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph, Wrap};
+use ratatui::text::{Line, Span};
+use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
 use ratatui::{Frame, Terminal};
 
 use super::app::{App, AppMode, UiOptions};
@@ -135,39 +135,6 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
     f.render_stateful_widget(script_list, area, &mut app.list_state,);
 }
 
-fn render_preview(f: &mut Frame, app: &App, area: Rect,) {
-    let selected_script = app
-        .scripts
-        .state
-        .selected()
-        .and_then(|i| app.scripts.items.get(i,).map(|s| s.full_name(),),);
-
-    let title = match selected_script {
-        Some(name,) => {
-            if let Some(selected,) = app.scripts.state.selected() {
-                if app.scripts.items[selected].is_category_header {
-                    String::from("Preview: Select a script to see preview",)
-                } else {
-                    format!("Preview: {name} (Press 'p' for full screen)")
-                }
-            } else {
-                String::from("Preview",)
-            }
-        },
-        None => String::from("Preview",),
-    };
-
-    let preview_text = Text::from(app.preview_content.clone(),);
-
-    let title_with_scroll = title;
-
-    let preview = Paragraph::new(preview_text,)
-        .block(create_rounded_block().title(title_with_scroll,),)
-        .scroll((app.preview_scroll, 0,),)
-        .wrap(Wrap { trim: false, },);
-
-    f.render_widget(preview, area,);
-}
 
 fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
     let mode_text = match app.mode {
@@ -261,30 +228,11 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
 
     render_title(f, chunks[0],);
 
-    let main_chunks = Layout::default()
-        .direction(Direction::Horizontal,)
-        .constraints([Constraint::Percentage(40,), Constraint::Percentage(60,),],)
-        .split(chunks[1],);
-
-    render_script_list(f, app, main_chunks[0],);
-
-    if options.show_preview {
-        render_preview(f, app, main_chunks[1],);
-    } else {
-        let preview_disabled_text = vec![Line::from(vec![Span::styled(
-            "Preview disabled (--no-preview)",
-            Style::default().fg(Color::Gray,),
-        )],)];
-
-        let preview_disabled = Paragraph::new(preview_disabled_text,)
-            .block(create_rounded_block().title("Preview",),)
-            .alignment(Alignment::Center,);
-
-        f.render_widget(preview_disabled, main_chunks[1],);
-    }
+    render_script_list(f, app, chunks[1],);
 
     let help_text =
-        Paragraph::new(vec![Line::from(vec![Span::raw("",)],)],).alignment(Alignment::Center,);
+        Paragraph::new(vec![Line::from(vec![Span::raw("Press 'p' to preview a script.",)],)],)
+            .alignment(Alignment::Center,);
 
     f.render_widget(help_text, chunks[2],);
     render_status_bar(f, app, chunks[3],);

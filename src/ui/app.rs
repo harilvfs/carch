@@ -72,15 +72,7 @@ pub struct ScriptItem {
     pub is_category_header: bool,
 }
 
-impl ScriptItem {
-    pub fn full_name(&self,) -> String {
-        if self.is_category_header {
-            self.category.clone()
-        } else {
-            format!("{}/{}", self.category, self.name)
-        }
-    }
-}
+impl ScriptItem {}
 
 pub struct UiOptions {
     pub show_preview: bool,
