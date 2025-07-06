@@ -369,6 +369,13 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
+        Span::styled(" h/l ", Style::default().bg(nav_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled("Switch between categories and scripts", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
         Span::styled(" Home/End ", Style::default().bg(nav_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Jump to top/bottom of list", Style::default().fg(Color::Gray)),
