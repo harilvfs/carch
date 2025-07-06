@@ -27,7 +27,7 @@ fn create_block(title: &str, is_focused: bool) -> Block<'_> {
         .border_style(if is_focused {
             Style::default().fg(Color::Cyan)
         } else {
-            Style::default().fg(Color::DarkGray)
+            Style::default().fg(Color::Cyan)
         })
         .style(Style::default().bg(Color::Reset))
 }
@@ -93,7 +93,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let block = create_block(&title, is_focused).border_style(if is_focused {
         Style::default().fg(Color::Green)
     } else {
-        Style::default().fg(Color::DarkGray)
+        Style::default().fg(Color::Green)
     });
 
     let items: Vec<ListItem> = app
