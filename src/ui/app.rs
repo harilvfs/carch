@@ -590,10 +590,14 @@ impl App {
 
     pub fn handle_key_confirmation_mode(&mut self, key: crossterm::event::KeyEvent) {
         match key.code {
-            KeyCode::Char('y') | KeyCode::Char('Y') => {
+            KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
                 self.mode = AppMode::Normal;
             }
-            KeyCode::Char('n') | KeyCode::Char('N') | KeyCode::Esc => {
+            KeyCode::Char('n')
+            | KeyCode::Char('N')
+            | KeyCode::Esc
+            | KeyCode::Char('h')
+            | KeyCode::Char('q') => {
                 self.mode = AppMode::Normal;
             }
             _ => {}
