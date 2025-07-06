@@ -28,11 +28,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &App,) {
     let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx,),);
 
     let title = if let Some(script,) = selected_script {
-        if !script.is_category_header {
-            format!(" Script Preview: {}/{} ", script.category, script.name)
-        } else {
-            format!(" Category: {} (No script selected) ", script.category)
-        }
+        format!(" Script Preview: {}/{} ", script.category, script.name)
     } else {
         " Script Preview ".to_string()
     };
@@ -158,17 +154,13 @@ pub fn render_search_popup(f: &mut Frame, app: &App,) {
     for i in 0..display_count {
         let result_idx = start_idx + i;
         if result_idx < app.search_results.len() {
-            let script_idx = app.search_results[result_idx];
+            let item = &app.search_results[result_idx];
+            let display_text = format!("{}/{}", item.category, item.name);
 
-            if script_idx < app.scripts.items.len() {
-                let item = &app.scripts.items[script_idx];
-                let display_text = format!("{}/{}", item.category, item.name);
-
-                result_items.push(ListItem::new(Line::from(vec![Span::styled(
-                    display_text,
-                    Style::default().fg(Color::Gray,),
-                )],),),);
-            }
+            result_items.push(ListItem::new(Line::from(vec![Span::styled(
+                display_text,
+                Style::default().fg(Color::Gray,),
+            )],),),);
         }
     }
 
@@ -429,7 +421,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App,) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" p ", Style::default().bg(action_color,).fg(Color::Black,),),
         Span::raw(" ",),
-        Span::styled("Toggle fullscreen preview", Style::default().fg(Color::Gray,),),
+        Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray,),),
     ],),);
     help_content.push(Line::from("",),);
 
