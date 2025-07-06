@@ -31,9 +31,6 @@
 - **Package Management:** Streamlined installation of packages from official repositories, AUR, and other sources.
 - **Customizable:** You can modify the included scripts or add your own to fit your needs.
 
-> [!NOTE]
-> `fzf` is required for the TUI. Make sure it’s installed before using Carch.
-
 For more, check out the [documentation](https://carch.chalisehari.com.np).
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
