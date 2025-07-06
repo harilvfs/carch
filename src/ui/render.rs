@@ -73,7 +73,7 @@ fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 .fg(Color::Black)
                 .add_modifier(Modifier::BOLD),
         )
-        .highlight_symbol(" ");
+        .highlight_symbol("   ");
 
     f.render_stateful_widget(list, area, &mut app.categories.state);
 }
@@ -92,6 +92,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
         .items
         .iter()
         .map(|item| {
+            let icon = " ";
             if app.multi_select_mode {
                 let is_selected = app.is_script_selected(&item.path);
                 let prefix = if is_selected { "[✓] " } else { "[ ] " };
@@ -100,25 +101,31 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
                 } else {
                     Style::default()
                 };
-                ListItem::new(Line::from(vec![
+
+                let icon_style = Style::default().add_modifier(Modifier::BOLD);
+
+                let line = Line::from(vec![
                     Span::styled(prefix, style),
+                    Span::styled(icon, icon_style),
                     Span::styled(&item.name, style),
-                ]))
+                ]);
+                ListItem::new(line)
             } else {
-                ListItem::new(item.name.as_str())
+                let line = Line::from(vec![
+                    Span::styled(icon, Style::default().add_modifier(Modifier::BOLD)),
+                    Span::raw(&item.name),
+                ]);
+                ListItem::new(line)
             }
         })
         .collect();
 
-    let list = List::new(items)
-        .block(block)
-        .highlight_style(
-            Style::default()
-                .bg(Color::Rgb(235, 235, 210))
-                .fg(Color::Black)
-                .add_modifier(Modifier::BOLD),
-        )
-        .highlight_symbol(" ");
+    let list = List::new(items).block(block).highlight_style(
+        Style::default()
+            .bg(Color::Rgb(235, 235, 210))
+            .fg(Color::Black)
+            .add_modifier(Modifier::BOLD),
+    );
 
     f.render_stateful_widget(list, area, &mut app.scripts.state);
 }
