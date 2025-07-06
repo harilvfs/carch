@@ -78,7 +78,7 @@ fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let list = List::new(items).block(block).highlight_style(if is_focused {
         Style::default().bg(Color::Rgb(170, 225, 225)).fg(Color::Black).add_modifier(Modifier::BOLD)
     } else {
-        Style::default().bg(Color::DarkGray).fg(Color::White)
+        Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)
     });
     f.render_stateful_widget(list, area, &mut app.categories.state);
 }
