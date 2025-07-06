@@ -180,19 +180,19 @@ impl App {
         Ok((),)
     }
 
-    pub fn update_script_list(&mut self) {
-        if let Some(scripts) = self
+    pub fn update_script_list(&mut self,) {
+        if let Some(scripts,) = self
             .categories
             .state
             .selected()
-            .and_then(|i| self.categories.items.get(i))
-            .and_then(|name| self.all_scripts.get(name))
+            .and_then(|i| self.categories.items.get(i,),)
+            .and_then(|name| self.all_scripts.get(name,),)
         {
-            self.scripts = StatefulList::with_items(scripts.clone());
+            self.scripts = StatefulList::with_items(scripts.clone(),);
             if self.focused_panel == FocusedPanel::Scripts && !self.scripts.items.is_empty() {
-                self.scripts.state.select(Some(0));
+                self.scripts.state.select(Some(0,),);
             } else {
-                self.scripts.state.select(None);
+                self.scripts.state.select(None,);
             }
         }
     }
@@ -411,16 +411,16 @@ impl App {
             KeyCode::Char('k',) | KeyCode::Up => {
                 self.previous();
             },
-            KeyCode::Char('h') | KeyCode::Left => {
+            KeyCode::Char('h',) | KeyCode::Left => {
                 self.focused_panel = FocusedPanel::Categories;
-                self.scripts.state.select(None);
-            }
-            KeyCode::Char('l') | KeyCode::Right => {
+                self.scripts.state.select(None,);
+            },
+            KeyCode::Char('l',) | KeyCode::Right => {
                 self.focused_panel = FocusedPanel::Scripts;
                 if !self.scripts.items.is_empty() {
-                    self.scripts.state.select(Some(0));
+                    self.scripts.state.select(Some(0,),);
                 }
-            }
+            },
             KeyCode::Home => {
                 self.top();
             },
@@ -446,7 +446,7 @@ impl App {
                 {
                     self.mode = AppMode::Confirm;
                 }
-            }
+            },
             KeyCode::Char(' ',) => {
                 if self.multi_select_mode {
                     self.toggle_script_selection();

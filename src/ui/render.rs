@@ -104,7 +104,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
                 ListItem::new(Line::from(vec![
                     Span::styled(prefix, style,),
                     Span::styled(&item.name, style,),
-                ]),)
+                ],),)
             } else {
                 ListItem::new(item.name.as_str(),)
             }
@@ -123,7 +123,6 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect,) {
 
     f.render_stateful_widget(list, area, &mut app.scripts.state,);
 }
-
 
 
 fn render_status_bar(f: &mut Frame, app: &App, area: Rect,) {
@@ -208,11 +207,7 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions,) {
 
     let chunks = Layout::default()
         .direction(Direction::Vertical,)
-        .constraints([
-            Constraint::Length(3,),
-            Constraint::Min(0,),
-            Constraint::Length(1,),
-        ],)
+        .constraints([Constraint::Length(3,), Constraint::Min(0,), Constraint::Length(1,),],)
         .split(area,);
 
     render_title(f, chunks[0],);
