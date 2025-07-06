@@ -24,14 +24,14 @@ check_fzf() {
 }
 
 install_bun() {
-    echo -e "${GREEN}Installing Bun...${RESET}"
+    echo -e "${GREEN}Installing Bun...${NC}"
     curl -fsSL https://bun.sh/install | bash
 
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Bun has been installed successfully!${RESET}"
+        echo -e "${GREEN}Bun has been installed successfully!${NC}"
     else
-        echo -e "${RED}Failed to install Bun.${RESET}"
-        echo -e "${YELLOW}Trying alternative installation method...${RESET}"
+        echo -e "${RED}Failed to install Bun.${NC}"
+        echo -e "${YELLOW}Trying alternative installation method...${NC}"
         npm install -g bun
     fi
 }
@@ -39,7 +39,7 @@ install_bun() {
 check_fzf
 
 if ! command -v curl &> /dev/null; then
-    echo -e "${YELLOW}Installing curl...${RESET}"
+    echo -e "${YELLOW}Installing curl...${NC}"
     if command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm curl
     elif command -v dnf &> /dev/null; then
@@ -48,7 +48,7 @@ if ! command -v curl &> /dev/null; then
 fi
 
 if ! command -v npm &> /dev/null; then
-    echo -e "${YELLOW}Warning: npm is required for Bun installation${RESET}"
+    echo -e "${YELLOW}Warning: npm is required for Bun installation${NC}"
     options=("Yes" "No")
     continue_install=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                        --height=40% \
@@ -58,7 +58,7 @@ if ! command -v npm &> /dev/null; then
                                                        --color='fg:white,fg+:green,bg+:black,pointer:green')
 
     if [ "$continue_install" != "Yes" ]; then
-        echo -e "${RED}Aborting Bun installation. Please install npm first.${RESET}"
+        echo -e "${RED}Aborting Bun installation. Please install npm first.${NC}"
         exit 1
     fi
 fi

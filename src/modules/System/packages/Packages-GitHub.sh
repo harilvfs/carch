@@ -14,7 +14,7 @@ install_github() {
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
     else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${RESET}"
+        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
     fi
 
@@ -90,7 +90,7 @@ install_github() {
                         version=$(get_version lazygit)
                         echo "LazyGit installed successfully! Version: $version"
                     else
-                        echo -e "${YELLOW}:: Warning: LazyGit COPR repository is no longer maintained in Fedora.${RESET}"
+                        echo -e "${YELLOW}:: Warning: LazyGit COPR repository is no longer maintained in Fedora.${NC}"
                         read -rp "Do you want to proceed with installation anyway? (y/N) " confirm
                         if [[ $confirm =~ ^[Yy]$ ]]; then
                             sudo dnf copr enable atim/lazygit -y
@@ -125,7 +125,7 @@ install_github() {
                         latest_version=$(curl -s https://api.github.com/repos/orhun/git-cliff/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
 
                         if [[ -z "$latest_version" ]]; then
-                            echo -e "${RED}:: Failed to fetch latest version. Exiting.${RESET}"
+                            echo -e "${RED}:: Failed to fetch latest version. Exiting.${NC}"
                             continue
                         fi
 
@@ -148,7 +148,7 @@ install_github() {
 
                             echo "Git-Cliff installed successfully! Version: $latest_version"
                         else
-                            echo -e "${RED}:: Failed to download git-cliff.${RESET}"
+                            echo -e "${RED}:: Failed to download git-cliff.${NC}"
                             rm -rf "$tmp_dir"
                         fi
                     fi

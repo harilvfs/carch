@@ -59,7 +59,7 @@ main_menu() {
         echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
         exit 1
     fi
-    echo -e "${TEAL}Distro: ${distro^} Linux${RESET}"
+    echo -e "${TEAL}Distro: ${distro^} Linux${NC}"
 
     if [[ "$distro" == "arch" ]]; then
         options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")
@@ -67,13 +67,13 @@ main_menu() {
         options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
     fi
 
-    echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${RESET}"
-    echo -e "${YELLOW}Backup your configurations before proceeding. I am not responsible for any data loss.${RESET}"
+    echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${NC}"
+    echo -e "${YELLOW}Backup your configurations before proceeding. I am not responsible for any data loss.${NC}"
 
     choice=$(fzf_choose "${options[@]}")
 
     if [[ "$choice" == "Exit" ]]; then
-        echo -e "${RED}Exiting...${RESET}"
+        echo -e "${RED}Exiting...${NC}"
         exit 0
     fi
 

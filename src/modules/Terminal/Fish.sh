@@ -33,7 +33,7 @@ fzf_confirm() {
 print_color() {
     local color="$1"
     local message="$2"
-    echo -e "${color}${message}${RESET}"
+    echo -e "${color}${message}${NC}"
 }
 
 detect_distro() {

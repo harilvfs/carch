@@ -12,7 +12,7 @@ install_communication() {
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         pkg_manager="install_fedora_package"
     else
-        echo -e "${RED}:: Unsupported system. Exiting.${RESET}"
+        echo -e "${RED}:: Unsupported system. Exiting.${NC}"
         return
     fi
 
@@ -52,7 +52,7 @@ install_communication() {
                         $pkg_manager betterdiscord-installer-bin
                         echo "Better Discord installed successfully!"
                     else
-                        echo -e "${YELLOW}:: Better Discord is not available for Fedora.${RESET}"
+                        echo -e "${YELLOW}:: Better Discord is not available for Fedora.${NC}"
                     fi
                     ;;
 

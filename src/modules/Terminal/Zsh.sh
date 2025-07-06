@@ -16,7 +16,7 @@ FZF_COMMON="--layout=reverse \
 print_message() {
     local color="$1"
     local message="$2"
-    echo -e "${color}${message}${RESET}"
+    echo -e "${color}${message}${NC}"
 }
 
 fzf_confirm() {

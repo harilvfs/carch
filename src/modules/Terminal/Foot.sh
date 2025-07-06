@@ -38,9 +38,9 @@ if ! command -v fzf &> /dev/null; then
     exit 1
 fi
 
-echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${RESET}"
-echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${RESET}"
-echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${RESET}"
+echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${NC}"
+echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${NC}"
+echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${NC}"
 echo
 
 setup_foot() {
@@ -68,7 +68,7 @@ setup_foot() {
             echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
             sudo dnf install jetbrains-mono-fonts-all -y
 
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${RESET}"
+            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
             echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
             echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
         else
@@ -86,18 +86,18 @@ setup_foot() {
 
         if fzf_confirm "Do you want to backup the existing configuration?"; then
             if [ -d "$BACKUP_DIR" ]; then
-                echo -e "${YELLOW}Backup already exists.${RESET}"
+                echo -e "${YELLOW}Backup already exists.${NC}"
                 if fzf_confirm "Do you want to overwrite the backup?"; then
                     rm -rf "$BACKUP_DIR"
                 else
-                    echo -e "${RED}Exiting to prevent data loss.${RESET}"
+                    echo -e "${RED}Exiting to prevent data loss.${NC}"
                     exit 0
                 fi
             fi
             mv "$CONFIG_DIR" "$BACKUP_DIR"
             mkdir -p "$CONFIG_DIR"
         else
-            echo -e "${RED}Exiting to avoid overwriting existing config.${RESET}"
+            echo -e "${RED}Exiting to avoid overwriting existing config.${NC}"
             exit 0
         fi
     else

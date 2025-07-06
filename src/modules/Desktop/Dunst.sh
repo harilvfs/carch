@@ -31,7 +31,7 @@ fzf_confirm() {
 print_message() {
     local color="$1"
     shift
-    echo -e "${color}$*${RESET}"
+    echo -e "${color}$*${NC}"
 }
 
 clear

@@ -27,7 +27,7 @@ For either option:
 
 -------------------------------------------------------------------------------------------------
 EOF
-echo -e "${RESET}"
+echo -e "${NC}"
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -63,15 +63,15 @@ fzf_select() {
 
 detect_os() {
     if command -v pacman &> /dev/null; then
-        echo -e "${TEAL}Detected Arch-based distribution.${RESET}"
+        echo -e "${TEAL}Detected Arch-based distribution.${NC}"
         echo "OS=arch" >&2
         return 0
     elif command -v dnf &> /dev/null; then
-        echo -e "${TEAL}Detected Fedora-based distribution.${RESET}"
+        echo -e "${TEAL}Detected Fedora-based distribution.${NC}"
         echo "OS=fedora" >&2
         return 0
     else
-        echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${RESET}"
+        echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${NC}"
         return 1
     fi
 }
@@ -79,7 +79,7 @@ detect_os() {
 install_dependencies() {
     local os_type=$1
 
-    echo -e "${GREEN}Installing required dependencies...${RESET}"
+    echo -e "${GREEN}Installing required dependencies...${NC}"
 
     if [[ "$os_type" == "arch" ]]; then
         sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
@@ -90,18 +90,18 @@ install_dependencies() {
             wl-clipboard lua-language-server shellcheck shfmt python3 ghc-ShellCheck meson ninja-build \
             make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts git
     else
-        echo -e "${RED}Unsupported OS type: $os_type${RESET}"
+        echo -e "${RED}Unsupported OS type: $os_type${NC}"
         return 1
     fi
 
-    echo -e "${GREEN}Dependencies installed successfully!${RESET}"
+    echo -e "${GREEN}Dependencies installed successfully!${NC}"
     return 0
 }
 
 check_command() {
     local cmd=$1
     if ! command -v "$cmd" &> /dev/null; then
-        echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${RESET}"
+        echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${NC}"
         return 1
     fi
     return 0
@@ -112,30 +112,30 @@ handle_existing_config() {
     local backup_dir="$HOME/.config/nvimbackup"
 
     if [ ! -d "$nvim_config_dir" ]; then
-        echo -e "${GREEN}:: Creating Neovim configuration directory...${RESET}"
+        echo -e "${GREEN}:: Creating Neovim configuration directory...${NC}"
         mkdir -p "$nvim_config_dir"
         return 0
     fi
 
-    echo -e "${YELLOW}Existing Neovim configuration found.${RESET}"
+    echo -e "${YELLOW}Existing Neovim configuration found.${NC}"
 
     choice=$(fzf_confirm "Backup existing config?")
 
     case $choice in
         "Yes")
-            echo -e "${RED}:: Backing up existing config...${RESET}"
+            echo -e "${RED}:: Backing up existing config...${NC}"
             mkdir -p "$backup_dir"
             mv "$nvim_config_dir" "$backup_dir/nvim_$(date +%Y%m%d_%H%M%S)"
             mkdir -p "$nvim_config_dir"
-            echo -e "${GREEN}:: Backup created at $backup_dir.${RESET}"
+            echo -e "${GREEN}:: Backup created at $backup_dir.${NC}"
             ;;
         "No")
-            echo -e "${YELLOW}:: Removing existing Neovim configuration...${RESET}"
+            echo -e "${YELLOW}:: Removing existing Neovim configuration...${NC}"
             rm -rf "$nvim_config_dir"
             mkdir -p "$nvim_config_dir"
             ;;
         "Exit")
-            echo -e "${RED}Exiting...${RESET}"
+            echo -e "${RED}Exiting...${NC}"
             exit 0
             ;;
     esac
@@ -146,17 +146,17 @@ setup_neovim() {
 
     handle_existing_config
 
-    echo -e "${GREEN}:: Cloning Neovim configuration from GitHub...${RESET}"
+    echo -e "${GREEN}:: Cloning Neovim configuration from GitHub...${NC}"
     if ! git clone https://github.com/harilvfs/nvim "$nvim_config_dir"; then
-        echo -e "${RED}Failed to clone the Neovim configuration repository.${RESET}"
+        echo -e "${RED}Failed to clone the Neovim configuration repository.${NC}"
         return 1
     fi
 
-    echo -e "${GREEN}:: Cleaning up unnecessary files...${RESET}"
+    echo -e "${GREEN}:: Cleaning up unnecessary files...${NC}"
     cd "$nvim_config_dir" || return 1
     rm -rf .git README.md LICENSE
 
-    echo -e "${GREEN}Neovim setup completed successfully!${RESET}"
+    echo -e "${GREEN}Neovim setup completed successfully!${NC}"
     return 0
 }
 
@@ -166,35 +166,35 @@ setup_nvchad() {
 
     handle_existing_config
 
-    echo -e "${GREEN}:: Cloning NvChad configuration from GitHub...${RESET}"
+    echo -e "${GREEN}:: Cloning NvChad configuration from GitHub...${NC}"
     if ! git clone https://github.com/harilvfs/chadnvim "$nvchad_dir"; then
-        echo -e "${RED}Failed to clone the NvChad repository.${RESET}"
+        echo -e "${RED}Failed to clone the NvChad repository.${NC}"
         return 1
     fi
 
-    echo -e "${GREEN}:: Moving NvChad configuration...${RESET}"
+    echo -e "${GREEN}:: Moving NvChad configuration...${NC}"
     cp -r "$nvchad_dir/nvim/"* "$nvim_config_dir/"
 
-    echo -e "${GREEN}:: Cleaning up temporary files...${RESET}"
+    echo -e "${GREEN}:: Cleaning up temporary files...${NC}"
     rm -rf "$nvchad_dir"
 
-    echo -e "${GREEN}:: Cleaning up unnecessary files...${RESET}"
+    echo -e "${GREEN}:: Cleaning up unnecessary files...${NC}"
     cd "$nvim_config_dir" || return 1
     rm -rf LICENSE README.md
 
-    echo -e "${GREEN}NvChad setup completed successfully!${RESET}"
+    echo -e "${GREEN}NvChad setup completed successfully!${NC}"
     return 0
 }
 
 main() {
     check_command git || {
-                           echo -e "${RED}Please install git and try again.${RESET}"
+                           echo -e "${RED}Please install git and try again.${NC}"
                                                                                       exit 1
     }
 
     os_info=$(detect_os 2>&1)
     if [[ $? -ne 0 ]]; then
-        echo -e "${RED}OS detection failed. Exiting.${RESET}"
+        echo -e "${RED}OS detection failed. Exiting.${NC}"
         exit 1
     fi
 
@@ -212,16 +212,16 @@ main() {
             install_dependencies "$os_type" || exit 1
             ;;
         "Exit")
-            echo -e "${RED}Exiting...${RESET}"
+            echo -e "${RED}Exiting...${NC}"
             exit 0
             ;;
         *)
-            echo -e "${RED}Invalid option selected! Exiting.${RESET}"
+            echo -e "${RED}Invalid option selected! Exiting.${NC}"
             exit 1
             ;;
     esac
 
-    echo -e "${GREEN}Setup completed!${RESET}"
+    echo -e "${GREEN}Setup completed!${NC}"
 }
 
 main

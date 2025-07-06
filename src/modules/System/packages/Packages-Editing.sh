@@ -9,7 +9,7 @@ install_editing() {
     elif [[ $distro -eq 1 ]]; then
         pkg_manager="sudo dnf install -y"
     else
-        echo -e "${RED}:: Unsupported system. Exiting.${RESET}"
+        echo -e "${RED}:: Unsupported system. Exiting.${NC}"
         return
     fi
 
