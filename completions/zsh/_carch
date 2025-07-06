@@ -9,9 +9,6 @@ _carch() {
         '--version:Show the program version'
         '-v:Show the program version'
         '--check-update:Check if a new version is available'
-        '--list-scripts:List all available scripts'
-        '-l:List all available scripts'
-        '--no-preview:Run without displaying script previews in menus (one-time)'
         '--log:Enable logging for the current session only'
         '--update:Get instructions for updating Carch'
         '--uninstall:Get instructions for uninstalling Carch'
@@ -23,9 +20,6 @@ _carch() {
         '--version[Show the program version]' \
         '-v[Show the program version]' \
         '--check-update[Check if a new version is available]' \
-        '--list-scripts[List all available scripts]' \
-        '-l[List all available scripts]' \
-        '--no-preview[Run without displaying script previews in menus]' \
         '--log[Enable logging for the current session only]' \
         '--update[Get instructions for updating Carch]' \
         '--uninstall[Get instructions for uninstalling Carch]'
