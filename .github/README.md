@@ -33,6 +33,24 @@
 
 For more, check out the [documentation](https://carch.chalisehari.com.np).
 
+
+### Quick Run / Testing
+
+> [!NOTE]
+> This method downloads and runs `carch` in a temporary location and does not install it permanently. Once you close `carch`, it will be removed.
+
+#### ⭐ Stable Version
+
+```sh
+bash -c "$(curl -fsSL chalisehari.com.np/carch)"
+```
+
+#### 🚀 Dev Version
+
+```sh
+bash -c "$(curl -fsSL chalisehari.com.np/carchdev)"
+```
+
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
 [ratatui]: https://ratatui.rs/built-with-ratatui/badge.svg
