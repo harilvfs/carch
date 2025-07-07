@@ -3,6 +3,10 @@ use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span, Text};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragraph, Wrap};
+use syntect::easy::HighlightLines;
+use syntect::highlighting::ThemeSet;
+use syntect::parsing::SyntaxSet;
+use syntect::util::LinesWithEndings;
 
 use super::app::App;
 
@@ -10,9 +14,9 @@ fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
 
-pub fn render_preview_popup(f: &mut Frame, app: &App, area: Rect) {
-    let popup_width = std::cmp::min(100, area.width.saturating_sub(4));
-    let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
+pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
+    let popup_width = area.width.saturating_sub(4);
+    let popup_height = area.height.saturating_sub(4);
 
     let popup_area = Rect {
         x:      area.x + (area.width - popup_width) / 2,
@@ -26,41 +30,78 @@ pub fn render_preview_popup(f: &mut Frame, app: &App, area: Rect) {
     let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx));
 
     let title = if let Some(script) = selected_script {
-        format!(" {}/{} ", script.category, script.name)
+        format!(" Preview: {}/{} ", script.category, script.name)
     } else {
-        " ".to_string()
+        " Preview ".to_string()
     };
 
     let popup_block = create_rounded_block()
-        .title(Span::styled(title, Style::default().fg(Color::Green)))
+        .title(Span::styled(title, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)))
         .border_style(Style::default().fg(Color::Green));
 
     f.render_widget(popup_block.clone(), popup_area);
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Min(1), Constraint::Length(2)])
+        .margin(1)
+        .constraints([Constraint::Min(1), Constraint::Length(1)])
         .split(popup_block.inner(popup_area));
 
-    let preview_text = Text::from(app.preview_content.clone());
+    let preview_text = if let Some(selected) = app.scripts.state.selected() {
+        let script_path = &app.scripts.items[selected].path;
+        if let Some(cached) = app.preview_cache.get(script_path) {
+            cached.clone()
+        } else {
+            let ps = SyntaxSet::load_defaults_newlines();
+            let ts = ThemeSet::load_defaults();
+            let syntax = ps.find_syntax_by_extension("sh").unwrap();
+            let theme = &ts.themes["base16-ocean.dark"];
+
+            let mut highlighter = HighlightLines::new(syntax, theme);
+            let mut lines = Vec::new();
+
+            for line in LinesWithEndings::from(&app.preview_content) {
+                let ranges: Vec<(syntect::highlighting::Style, &str)> =
+                    highlighter.highlight_line(line, &ps).unwrap();
+                let mut spans = Vec::new();
+                for (style, text) in ranges {
+                    spans.push(Span::styled(
+                        text.to_string(),
+                        Style::default().fg(Color::Rgb(
+                            style.foreground.r,
+                            style.foreground.g,
+                            style.foreground.b,
+                        )),
+                    ));
+                }
+                lines.push(Line::from(spans));
+            }
+            let text = Text::from(lines);
+            app.preview_cache.insert(script_path.clone(), text.clone());
+            text
+        }
+    } else {
+        Text::from("No script selected")
+    };
 
     let preview = Paragraph::new(preview_text)
-        .block(Block::default())
+        .block(Block::default().style(Style::default()))
         .scroll((app.preview_scroll, 0))
         .wrap(Wrap { trim: false });
 
     f.render_widget(preview, chunks[0]);
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓/j/k: Scroll  ", Style::default().fg(Color::Gray)),
-        Span::styled("PgUp/PgDown: Scroll faster  ", Style::default().fg(Color::Gray)),
-        Span::styled("Home/End: Jump to start/end  ", Style::default().fg(Color::Gray)),
-        Span::styled("ESC/q: Close preview", Style::default().fg(Color::Gray)),
+        Span::styled(" Scroll: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("↑/↓/j/k", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled("  Page: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("PgUp/PgDown", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled("  Jump: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("Home/End", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled("  Close: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("ESC/q", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
     ]))
-    .alignment(Alignment::Center)
-    .block(
-        Block::default().borders(Borders::TOP).border_style(Style::default().fg(Color::DarkGray)),
-    );
+    .alignment(Alignment::Center);
 
     f.render_widget(help_text, chunks[1]);
 }
