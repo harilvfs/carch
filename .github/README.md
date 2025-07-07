@@ -35,6 +35,7 @@ For more, check out the [documentation](https://carch.chalisehari.com.np).
 
 <details>
 <summary>Quick Run / Testing</summary>
+  
 This method downloads and runs `carch` in a temporary location and does not install it permanently. Once you close `carch`, it will be removed.
 
 #### ⭐ Stable Version
