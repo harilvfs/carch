@@ -476,7 +476,7 @@ impl<'a> App<'a> {
 
     pub fn handle_key_preview_mode(&mut self, key: crossterm::event::KeyEvent) {
         match key.code {
-            KeyCode::Char('q') | KeyCode::Esc | KeyCode::Char('p') => {
+            KeyCode::Char('q') | KeyCode::Esc | KeyCode::Char('p') | KeyCode::Char('h') => {
                 self.mode = AppMode::Normal;
             }
             KeyCode::Char('j') | KeyCode::Down => {
