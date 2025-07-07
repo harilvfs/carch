@@ -6,6 +6,8 @@ use crossterm::event::{KeyCode, MouseEvent, MouseEventKind};
 #[allow(unused_imports)]
 use ratatui::layout::Rect;
 
+use super::system_info::SystemInfo;
+
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum AppMode {
     Normal,
@@ -108,6 +110,7 @@ pub struct App {
     pub help_scroll:            u16,
     pub help_max_scroll:        u16,
     pub script_panel_area:      Rect,
+    pub system_info:            SystemInfo,
 }
 
 impl App {
@@ -131,6 +134,7 @@ impl App {
             help_scroll:            0,
             help_max_scroll:        0,
             script_panel_area:      Rect::default(),
+            system_info:            SystemInfo::new(),
         }
     }
 

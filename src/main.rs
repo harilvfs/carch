@@ -1,3 +1,5 @@
+use crate::ui::app::UiOptions;
+use crate::ui::render::run_ui_with_options;
 use include_dir::{Dir, include_dir};
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
@@ -60,7 +62,7 @@ pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error
     }
 
     let ui_options =
-        ui::UiOptions { show_preview: settings.show_preview, log_mode: settings.log_mode };
+        UiOptions { show_preview: settings.show_preview, log_mode: settings.log_mode };
 
     if settings.log_mode {
         let _ = commands::log_message(
@@ -72,7 +74,7 @@ pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error
         );
     }
 
-    let result = ui::run_ui_with_options(
+    let result = run_ui_with_options(
         &modules_dir,
         |script_path| {
             if settings.log_mode {

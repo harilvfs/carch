@@ -19,26 +19,41 @@ use super::app::{App, AppMode, FocusedPanel, UiOptions};
 use crate::ui::popups;
 use crate::version;
 
-fn create_block(title: &str, is_focused: bool) -> Block<'_> {
+fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
     Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title(title)
-        .border_style(if is_focused {
-            Style::default().fg(Color::Cyan)
-        } else {
-            Style::default().fg(Color::Cyan)
-        })
+        .border_style(Style::default().fg(Color::Cyan))
         .style(Style::default().bg(Color::Reset))
 }
 
-fn render_title(f: &mut Frame, area: Rect) {
-    let title_block =
-        Block::default().borders(Borders::NONE).border_style(Style::default().fg(Color::Blue));
+fn render_header(f: &mut Frame, app: &App, area: Rect) {
+    let header_block = Block::default().borders(Borders::ALL).border_type(BorderType::Rounded);
+    f.render_widget(header_block, area);
 
-    let inner_area = title_block.inner(area);
+    let inner_area = Layout::default()
+        .direction(Direction::Horizontal)
+        .margin(1)
+        .constraints([
+            Constraint::Percentage(30),
+            Constraint::Percentage(40),
+            Constraint::Percentage(30),
+        ])
+        .split(area);
 
-    let title = Paragraph::new(vec![
+    let left_text = vec![
+        Line::from(vec![
+            Span::styled("OS: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::raw(app.system_info.os.clone()),
+        ]),
+        Line::from(vec![
+            Span::styled("Kernel: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::raw(app.system_info.kernel.clone()),
+        ]),
+    ];
+
+    let center_text = vec![
         Line::from(vec![Span::styled(
             "CARCH",
             Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
@@ -47,15 +62,25 @@ fn render_title(f: &mut Frame, area: Rect) {
             "Automate Your Linux System Setup",
             Style::default().fg(Color::Rgb(235, 235, 210)).add_modifier(Modifier::ITALIC),
         )]),
-        Line::from(vec![Span::styled(
-            "───────────────────────",
-            Style::default().fg(Color::DarkGray),
-        )]),
-    ])
-    .alignment(Alignment::Center);
+    ];
 
-    f.render_widget(title_block, area);
-    f.render_widget(title, inner_area);
+    let right_text = vec![
+        Line::from(vec![
+            Span::styled("Uptime: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::raw(app.system_info.uptime.clone()),
+        ]),
+        Line::from(vec![
+            Span::styled(
+                "Hostname: ",
+                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+            ),
+            Span::raw(app.system_info.hostname.clone()),
+        ]),
+    ];
+
+    f.render_widget(Paragraph::new(left_text), inner_area[0]);
+    f.render_widget(Paragraph::new(center_text).alignment(Alignment::Center), inner_area[1]);
+    f.render_widget(Paragraph::new(right_text).alignment(Alignment::Right), inner_area[2]);
 }
 
 fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
@@ -90,11 +115,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     } else {
         "Scripts (p for preview)".to_string()
     };
-    let block = create_block(&title, is_focused).border_style(if is_focused {
-        Style::default().fg(Color::Green)
-    } else {
-        Style::default().fg(Color::Green)
-    });
+    let block = create_block(&title, is_focused).border_style(Style::default().fg(Color::Green));
 
     let items: Vec<ListItem> = app
         .scripts
@@ -223,10 +244,10 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(3), Constraint::Min(0), Constraint::Length(1)])
+        .constraints([Constraint::Length(4), Constraint::Min(0), Constraint::Length(1)])
         .split(area);
 
-    render_title(f, chunks[0]);
+    render_header(f, app, chunks[0]);
 
     let main_chunks = Layout::default()
         .direction(Direction::Horizontal)
