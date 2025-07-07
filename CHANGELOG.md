@@ -1,5 +1,96 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.2.1](https://github.com/harilvfs/carch/compare/v5.1.7...v5.2.1) - 2025-07-07
+
+
+### 🚀 Features
+
+
+- [b915060](https://github.com/harilvfs/carch/commit/b91506017058dcc417ca5a6ec4d9e03bfe9d8d0c)  *(installer)* Enhance ui/ux and usability by @harilvfs
+
+- [def2f53](https://github.com/harilvfs/carch/commit/def2f53e69fcddce7989f7e9a30f69624a92b8b0)  *(ui)* Change fullscreen preview to a popup (#514) by @harilvfs in [#514](https://github.com/harilvfs/carch/pull/514)
+
+- [9d22623](https://github.com/harilvfs/carch/commit/9d22623393d14986561a0a83e3c224a13bf0faba)  *(ui)* Remove tui side-preview by @harilvfs
+
+- [8b2fcf2](https://github.com/harilvfs/carch/commit/8b2fcf226fac373e48134a70c9e87d64712ed55e)  *(cli)* Remove obsolete --no-preview and --list-scripts commands by @harilvfs
+
+- [0e9cecb](https://github.com/harilvfs/carch/commit/0e9cecba0f1db7c038709fc0e1d9469e51ea5e4c)  *(ui)* Implement dynamic category folder icons by @harilvfs
+
+- [f4e0872](https://github.com/harilvfs/carch/commit/f4e08729d8dded88855b4229d6408a707f872d2f)  *(tui)* Improve navigation by @harilvfs
+
+- [19c3a7f](https://github.com/harilvfs/carch/commit/19c3a7ff84fb4186603c85780937c8517bf32f84)  *(tui)* Change unfocused highlight to cyan by @harilvfs
+
+- [7926cf1](https://github.com/harilvfs/carch/commit/7926cf1b731b57ed34c6aa79f72a83a46e43f452)  *(tui)* Enhance navigation and keybindings by @harilvfs
+
+- [d93e7dc](https://github.com/harilvfs/carch/commit/d93e7dc909d0553d5505697eb8c5bd981a650a60)  *(script)* Add cleanup to bash setup by @harilvfs
+
+- [033c815](https://github.com/harilvfs/carch/commit/033c8157b34bbbc04bd7e8c9e97f167629d4a71c)  *(ui)* Replace static title with system info header by @harilvfs
+
+- [56bd7e2](https://github.com/harilvfs/carch/commit/56bd7e2c4cbae520b43aae1993974b25f335d935)  *(tui)* Add syntax highlighting for script preview by @harilvfs
+
+- [0451936](https://github.com/harilvfs/carch/commit/045193628b33cb2e071178a456157131f931fa37)  *(tui)* Add 'h' key to exit preview mode by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [8c027bf](https://github.com/harilvfs/carch/commit/8c027bfd4adc642e967482dbdfe195d8543307d4)  *(lint)* Clippy warning by @harilvfs
+
+- [bcf9d31](https://github.com/harilvfs/carch/commit/bcf9d319edf2085938b8e60b1580601bf1f81fd5)  *(tui)* Multi-select by @harilvfs
+
+- [97d5666](https://github.com/harilvfs/carch/commit/97d5666daeecf1f475bf95d197461d98cf9f15f0)  *(tui)* Icon visibility by @harilvfs
+
+- [ef339c9](https://github.com/harilvfs/carch/commit/ef339c9eb34a3552012dba66d6446f444b7e59e6)  *(scripts)* Replace ${RESET} with ${NC} by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [3364f79](https://github.com/harilvfs/carch/commit/3364f79139c5575ede84728136d119fe820ebfe2)  *(core)* Improve code structure (#513) by @harilvfs in [#513](https://github.com/harilvfs/carch/pull/513)
+
+- [5fd285b](https://github.com/harilvfs/carch/commit/5fd285bfc1162e1291d4ee78927f41c25c0f7480)  *(ui)* New tui design (#515) by @harilvfs in [#515](https://github.com/harilvfs/carch/pull/515)
+
+- [e44c807](https://github.com/harilvfs/carch/commit/e44c8079c34c45f4c0408e239612136dec868b90)  *(ui)* Center popup styling by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [b52542a](https://github.com/harilvfs/carch/commit/b52542a12f068ef84e499132927080ecf6a009b3)  *(readme)* Improve guide by @harilvfs
+
+- [5ffe3c9](https://github.com/harilvfs/carch/commit/5ffe3c97bb65a1afef4a162144a1a08a0418cf48)  *(readme)* Cleanup by @harilvfs
+
+- [7eaf49b](https://github.com/harilvfs/carch/commit/7eaf49bef1b1f2068a2e1258969789df6b5d24cc)  *(readme)* Fix typo cli by @harilvfs
+
+- [8c931b2](https://github.com/harilvfs/carch/commit/8c931b2b5804947521ad2c9349fc869ec360f248)  *(tui)* Add panel switching hints to help popup by @harilvfs
+
+- [0facb54](https://github.com/harilvfs/carch/commit/0facb54721f7c21b1ed00763e314b8cd9decfda4)  *(readme)* Add quick test guide (#518) by @aayushrg7 in [#518](https://github.com/harilvfs/carch/pull/518)
+
+
+
+### 🎨 Styling
+
+
+- [622cd69](https://github.com/harilvfs/carch/commit/622cd699a6a5286e5596ca8d1f1d2cf4be9ecb2a)  *(tui)* Correct colors by @harilvfs
+
+- [a116035](https://github.com/harilvfs/carch/commit/a11603527c0297ea9970afe9dd45c84e98ee81f0)  *(lint)* Fix formatting by @harilvfs
+
+- [09d6c6e](https://github.com/harilvfs/carch/commit/09d6c6eb5dae96ca53451c80c930ad8a168ba433)  *(tui)* Remove gray highlighter by @harilvfs
+
+- [02a1a82](https://github.com/harilvfs/carch/commit/02a1a82544c6c6d4600d456aba3b252c8ec3d69e)  *(tui)* Remove fade effect switching tui's by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [b068887](https://github.com/harilvfs/carch/commit/b068887caf5500909ad1c1e83e7efa4c426efca9)  *(preview)* Update tape adapting new tui design by @harilvfs
+
+
+
 ## [5.1.7](https://github.com/harilvfs/carch/compare/v5.1.6...v5.1.7) - 2025-07-02
 
 
