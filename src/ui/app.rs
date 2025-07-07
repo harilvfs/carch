@@ -5,6 +5,7 @@ use std::{fs, io};
 use crossterm::event::{KeyCode, MouseEvent, MouseEventKind};
 #[allow(unused_imports)]
 use ratatui::layout::Rect;
+use ratatui::text::Text;
 
 use super::system_info::SystemInfo;
 
@@ -91,7 +92,7 @@ impl Default for UiOptions {
     }
 }
 
-pub struct App {
+pub struct App<'a> {
     pub scripts:                StatefulList<ScriptItem>,
     pub preview_content:        String,
     pub preview_scroll:         u16,
@@ -111,10 +112,11 @@ pub struct App {
     pub help_max_scroll:        u16,
     pub script_panel_area:      Rect,
     pub system_info:            SystemInfo,
+    pub preview_cache:          HashMap<PathBuf, Text<'a>>,
 }
 
-impl App {
-    pub fn new() -> App {
+impl<'a> App<'a> {
+    pub fn new() -> App<'a> {
         App {
             scripts:                StatefulList::new(),
             preview_content:        String::new(),
@@ -135,6 +137,7 @@ impl App {
             help_max_scroll:        0,
             script_panel_area:      Rect::default(),
             system_info:            SystemInfo::new(),
+            preview_cache:          HashMap::new(),
         }
     }
 
@@ -206,13 +209,15 @@ impl App {
     pub fn update_preview(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
             let script_path = &self.scripts.items[selected].path;
-            match fs::read_to_string(script_path) {
-                Ok(content) => {
-                    self.preview_content = content;
-                    self.preview_scroll = 0;
-                }
-                Err(_) => {
-                    self.preview_content = "Error loading script content".to_string();
+            if !self.preview_cache.contains_key(script_path) {
+                match fs::read_to_string(script_path) {
+                    Ok(content) => {
+                        self.preview_content = content;
+                        self.preview_scroll = 0;
+                    }
+                    Err(_) => {
+                        self.preview_content = "Error loading script content".to_string();
+                    }
                 }
             }
         } else {
