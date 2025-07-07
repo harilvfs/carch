@@ -33,11 +33,9 @@
 
 For more, check out the [documentation](https://carch.chalisehari.com.np).
 
-
-### Quick Run / Testing
-
-> [!NOTE]
-> This method downloads and runs `carch` in a temporary location and does not install it permanently. Once you close `carch`, it will be removed.
+<details>
+<summary>Quick Run / Testing</summary>
+This method downloads and runs `carch` in a temporary location and does not install it permanently. Once you close `carch`, it will be removed.
 
 #### ⭐ Stable Version
 
@@ -50,6 +48,8 @@ bash -c "$(curl -fsSL chalisehari.com.np/carch)"
 ```sh
 bash -c "$(curl -fsSL chalisehari.com.np/carchdev)"
 ```
+
+</details>
 
 License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 
