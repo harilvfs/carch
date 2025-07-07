@@ -101,18 +101,6 @@ Type "?"
 
 Sleep 3s
 
-Type "esc"
-
-Sleep 3s
-
-Type "p"
-
-Sleep 3s
-
-Type "q"
-
-Sleep 2s
-
 Type "q"
 
 Sleep 2s
