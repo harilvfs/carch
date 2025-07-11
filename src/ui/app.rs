@@ -96,6 +96,7 @@ pub struct App<'a> {
     pub scripts:                StatefulList<ScriptItem>,
     pub preview_content:        String,
     pub preview_scroll:         u16,
+    pub preview_max_scroll:     u16,
     pub mode:                   AppMode,
     pub all_scripts:            HashMap<String, Vec<ScriptItem>>,
     pub categories:             StatefulList<String>,
@@ -121,6 +122,7 @@ impl<'a> App<'a> {
             scripts:                StatefulList::new(),
             preview_content:        String::new(),
             preview_scroll:         0,
+            preview_max_scroll:     0,
             mode:                   AppMode::Normal,
             all_scripts:            HashMap::new(),
             categories:             StatefulList::new(),
@@ -254,7 +256,7 @@ impl<'a> App<'a> {
     }
 
     pub fn scroll_preview_down(&mut self) {
-        self.preview_scroll += 1;
+        self.preview_scroll = (self.preview_scroll + 1).min(self.preview_max_scroll);
     }
 
     pub fn scroll_preview_page_up(&mut self) {
@@ -266,7 +268,7 @@ impl<'a> App<'a> {
     }
 
     pub fn scroll_preview_page_down(&mut self) {
-        self.preview_scroll += 10;
+        self.preview_scroll = (self.preview_scroll + 10).min(self.preview_max_scroll);
     }
 
     pub fn get_script_path(&self) -> Option<PathBuf> {
@@ -495,8 +497,7 @@ impl<'a> App<'a> {
                 self.preview_scroll = 0;
             }
             KeyCode::End => {
-                let line_count = self.preview_content.lines().count() as u16;
-                self.preview_scroll = if line_count > 0 { line_count } else { 0 };
+                self.preview_scroll = self.preview_max_scroll;
             }
             _ => {}
         }

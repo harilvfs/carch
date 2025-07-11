@@ -10,6 +10,20 @@ use syntect::util::LinesWithEndings;
 
 use super::app::App;
 
+fn div_ceil(a: u16, b: u16) -> u16 {
+    if b == 0 { 0 } else { a.div_ceil(b) }
+}
+
+fn compute_total_lines(lines: &[Line], area_width: u16) -> u16 {
+    lines
+        .iter()
+        .map(|line| {
+            let width = line.width() as u16;
+            if width == 0 { 1 } else { div_ceil(width, area_width) }
+        })
+        .sum()
+}
+
 fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
@@ -83,6 +97,13 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     } else {
         Text::from("No script selected")
     };
+
+    if let Some(area) = chunks.first() {
+        let total_lines = compute_total_lines(&preview_text.lines, area.width);
+        app.preview_max_scroll = total_lines.saturating_sub(area.height);
+    } else {
+        app.preview_max_scroll = 0;
+    }
 
     let preview = Paragraph::new(preview_text)
         .block(Block::default().style(Style::default()))
