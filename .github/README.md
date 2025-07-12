@@ -1,58 +1,25 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif" alt="Carch preview"/>
-
-</div>
-
-<div align="center">
-
 [![Built Wit Ratatui][ratatui]][ratatui-link] 
-[![github actions build status][check]][check-link] [![Crates][crates]][crates-link] [![Carch Downloads][downloads]][downloads-link] [![License][license]][license-link] 
-[![deps status][deps-badge]][deps]
+[![Build Status][check]][check-link]
+[![Crates.io][crates]][crates-link]
+[![Downloads][downloads]][downloads-link]
+[![License][license]][license-link]
+[![Dependency Status][deps-badge]][deps]
 
-[Installation](https://carch.chalisehari.com.np/getting-started/installation) • 
-[Contributing](https://carch.chalisehari.com.np/project/contributing) • 
-[Changelog](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) • 
-[Docs](https://carch.chalisehari.com.np) •
-[Roadmap ↗](https://carch.chalisehari.com.np/project/roadmap)
+[Installation](https://carch.chalisehari.com.np/getting-started/installation) •
+[Overview](https://carch.chalisehari.com.np/reference/overview-scripts) •
+[Contributing](https://carch.chalisehari.com.np/project/contributing) •
+[Changelog ⇢](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md)
 
 </div>
 
-<br>
+*[Carch](https://carch.chalisehari.com.np)* is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
+It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup. (*Currently supports Arch & Fedora based distros*)
 
-**Carch** is a CLI tool that automates your Linux post-installation setup with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)). It uses a collection of modular Bash scripts to quickly configure your system and install your favorite applications, getting you ready to work or play in minutes.
+For more check out [documentation](https://carch.chalisehari.com.np)
 
-*Currently supports Arch & Fedora based distros.*
-
-### Features
-
-- **Interactive TUI:** A user-friendly terminal interface for selecting and running setup scripts.
-- **Modular Scripts:** Easily enable, disable, or add scripts for system settings, developer tools, desktop environments, and more.
-- **Package Management:** Streamlined installation of packages from official repositories, AUR, and other sources.
-- **Customizable:** You can modify the included scripts or add your own to fit your needs.
-
-For more, check out the [documentation](https://carch.chalisehari.com.np).
-
-<details>
-<summary>Quick Run / Testing</summary>
-  
-This method downloads and runs `carch` in a temporary location and does not install it permanently. Once you close `carch`, it will be removed.
-
-#### ⭐ Stable Version
-
-```sh
-bash -c "$(curl -fsSL chalisehari.com.np/carch)"
-```
-
-#### 🚀 Dev Version
-
-```sh
-bash -c "$(curl -fsSL chalisehari.com.np/carchdev)"
-```
-
-</details>
-
-License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
+<!-- Badges -->
 
 [ratatui]: https://ratatui.rs/built-with-ratatui/badge.svg
 [ratatui-link]: https://ratatui.rs/
@@ -70,4 +37,4 @@ License: [MIT](https://github.com/harilvfs/carch/blob/main/LICENSE)
 [deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F
 
 [license]: https://img.shields.io/github/license/harilvfs/carch?color=1c1c29&labelColor=black&style=flat&logo=github&logoColor=white
-[license-link]: https://github.com/harilvfs/carch/blob/main/LICENSE 
+[license-link]: https://github.com/harilvfs/carch/blob/main/LICENSE
