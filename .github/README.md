@@ -24,7 +24,7 @@ For more check out [documentation](https://carch.chalisehari.com.np)
 [ratatui]: https://ratatui.rs/built-with-ratatui/badge.svg
 [ratatui-link]: https://ratatui.rs/
 
-[check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white
+[check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white&label=CI
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [downloads]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat&color=1c1c29&logoColor=white&labelColor=black&logo=github
