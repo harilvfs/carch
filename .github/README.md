@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif"/>
+
 <div align="center">
 
 [![Built Wit Ratatui][ratatui]][ratatui-link] 
