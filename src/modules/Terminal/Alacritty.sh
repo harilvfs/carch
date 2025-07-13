@@ -42,6 +42,8 @@ installAlacritty() {
         sudo pacman -S alacritty --noconfirm
     elif [ -x "$(command -v dnf)" ]; then
         sudo dnf install alacritty -y
+    elif [ -x "$(command -v zypper)" ]; then
+        sudo zypper install -y alacritty
     else
         echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${NC}"
         exit 1
@@ -78,6 +80,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
