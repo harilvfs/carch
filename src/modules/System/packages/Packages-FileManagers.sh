@@ -10,6 +10,9 @@ install_filemanagers() {
     elif [[ $distro -eq 1 ]]; then
         pkg_manager="sudo dnf install -y"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        pkg_manager="sudo zypper install -y"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -35,33 +38,21 @@ install_filemanagers() {
             case $selection in
                 "Nemo")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager nemo
-                    else
-                        $pkg_manager nemo
-                    fi
+                    $pkg_manager nemo
                     version=$(get_version nemo)
                     echo "Nemo installed successfully! Version: $version"
                     ;;
 
                 "Thunar")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager thunar
-                    else
-                        $pkg_manager thunar
-                    fi
+                    $pkg_manager thunar
                     version=$(get_version thunar)
                     echo "Thunar installed successfully! Version: $version"
                     ;;
 
                 "Dolphin")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager dolphin
-                    else
-                        $pkg_manager dolphin
-                    fi
+                    $pkg_manager dolphin
                     version=$(get_version dolphin)
                     echo "Dolphin installed successfully! Version: $version"
                     ;;
@@ -70,8 +61,10 @@ install_filemanagers() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager lf
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         sudo dnf copr enable lsevcik/lf -y
+                        $pkg_manager lf
+                    else
                         $pkg_manager lf
                     fi
                     version=$(get_version lf)
@@ -80,22 +73,14 @@ install_filemanagers() {
 
                 "Ranger")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager ranger
-                    else
-                        $pkg_manager ranger
-                    fi
+                    $pkg_manager ranger
                     version=$(get_version ranger)
                     echo "Ranger installed successfully! Version: $version"
                     ;;
 
                 "Nautilus")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager nautilus
-                    else
-                        $pkg_manager nautilus
-                    fi
+                    $pkg_manager nautilus
                     version=$(get_version nautilus)
                     echo "Nautilus installed successfully! Version: $version"
                     ;;
@@ -104,8 +89,10 @@ install_filemanagers() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager yazi
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         sudo dnf copr enable varlad/yazi -y
+                        $pkg_manager yazi
+                    else
                         $pkg_manager yazi
                     fi
                     version=$(get_version yazi)
