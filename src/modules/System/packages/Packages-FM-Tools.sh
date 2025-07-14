@@ -10,6 +10,9 @@ install_fm_tools() {
     elif [[ $distro -eq 1 ]]; then
         pkg_manager="sudo dnf install -y"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        pkg_manager="sudo zypper install -y"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -35,26 +38,17 @@ install_fm_tools() {
             case $selection in
                 "Tumbler [Thumbnail Viewer]")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager tumbler
-                    else
-                        $pkg_manager tumbler
-                    fi
+                    $pkg_manager tumbler
                     version=$(get_version tumbler)
                     echo "Tumbler installed successfully! Version: $version"
                     ;;
 
                 "Trash-Cli")
                     clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager trash-cli
-                    else
-                        $pkg_manager trash-cli
-                    fi
+                    $pkg_manager trash-cli
                     version=$(get_version trash-cli)
                     echo "Trash-Cli installed successfully! Version: $version"
                     ;;
-
             esac
         done
 
