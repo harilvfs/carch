@@ -104,7 +104,7 @@ install_packages() {
             gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
             google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
             trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
-            pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi xautolock || {
+            pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock || {
             print_message "${RED}" "Failed to install some packages via zypper."
             exit 1
 
