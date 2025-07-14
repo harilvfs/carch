@@ -44,6 +44,8 @@ detect_package_manager() {
         pkg_manager="pacman"
     elif command -v dnf &> /dev/null; then
         pkg_manager="dnf"
+    elif command -v zypper &> /dev/null; then
+        pkg_manager="zypper"
     else
         echo -e "${RED}Unsupported package manager. Please install Picom manually.${ENDCOLOR}"
         exit 1
@@ -85,6 +87,7 @@ install_dependencies_normal() {
     case "$pkg_manager" in
         pacman) sudo pacman -S --needed --noconfirm picom ;;
         dnf) sudo dnf install -y picom ;;
+        zypper) sudo zypper install -y picom ;;
     esac
 }
 
@@ -96,6 +99,31 @@ setup_picom_ftlabs() {
 install_picom_ftlabs_fedora() {
     echo -e "${GREEN}:: Installing dependencies for Picom FT-Labs (Fedora)...${ENDCOLOR}"
     sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel cmake
+
+    echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
+    git clone https://github.com/FT-Labs/picom ~/.cache/picom
+    cd ~/.cache/picom || {
+                           echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
+                                                                                   exit 1
+    }
+
+    echo -e "${GREEN}:: Building Picom with meson and ninja...${ENDCOLOR}"
+    meson setup --buildtype=release build
+    ninja -C build
+
+    echo -e "${GREEN}:: Installing the built Picom binary...${ENDCOLOR}"
+    sudo cp build/src/picom /usr/local/bin
+    sudo ldconfig
+
+    echo -e "${GREEN}Done...${ENDCOLOR}"
+}
+
+install_picom_ftlabs_opensuse() {
+    echo -e "${GREEN}:: Installing dependencies for Picom FT-Labs (OpenSUSE)...${ENDCOLOR}"
+    sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
+            libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
+            libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
+            xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
 
     echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
@@ -138,6 +166,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • OpenSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -155,6 +184,9 @@ case "$choice" in
                 ;;
             dnf)
                 install_picom_ftlabs_fedora
+                ;;
+            zypper)
+                install_picom_ftlabs_opensuse
                 ;;
         esac
         download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
