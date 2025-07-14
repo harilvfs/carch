@@ -16,6 +16,9 @@ fi
 if command -v dnf &> /dev/null; then
     error "You are using Fedora (dnf detected). This script is only for Arch-based systems."
     exit 1
+elif command -v zypper &> /dev/null; then
+    error "You are using openSUSE (zypper detected). This script is only for Arch-based systems."
+    exit 1
 elif ! command -v pacman &> /dev/null; then
     error "This script is for Arch-based distros only. Exiting."
     exit 1
