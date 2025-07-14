@@ -9,6 +9,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -78,6 +79,8 @@ check_fastfetch() {
             sudo pacman -S fastfetch git --noconfirm
         elif [ -x "$(command -v dnf)" ]; then
             sudo dnf install fastfetch git -y
+        elif [ -x "$(command -v zypper)" ]; then
+            sudo zypper install -y fastfetch git
         else
             echo -e "${RED}Unsupported package manager! Please install Fastfetch manually.${NC}"
             exit 1
@@ -158,8 +161,8 @@ setup_png_fastfetch() {
 
 main() {
     check_command git || {
-                           echo -e "${RED}Please install git and try again.${NC}"
-                                                                                   exit 1
+        echo -e "${RED}Please install git and try again.${NC}"
+        exit 1
     }
 
     clear
