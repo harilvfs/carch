@@ -37,8 +37,9 @@ setup_kitty() {
         if [ -x "$(command -v pacman)" ]; then
             sudo pacman -S --needed --noconfirm kitty
         elif [ -x "$(command -v dnf)" ]; then
-            echo -e "${CYAN}Installing Kitty on Fedora...${NC}"
             sudo dnf install kitty -y
+        elif [ -x "$(command -v zypper)" ]; then
+            sudo zypper install -y kitty
         else
             echo -e "${RED}Unsupported package manager. Please install Kitty manually.${NC}"
             exit 1
@@ -76,11 +77,11 @@ install_font() {
         if [ -x "$(command -v pacman)" ]; then
             echo -e "${CYAN}Installing recommended fonts on Arch-based systems...${NC}"
             sudo pacman -S --needed ttf-cascadia-mono-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono
-        elif [ -x "$(command -v dnf)" ]; then
-            echo -e "${CYAN}For Fedora, please download and install the fonts manually.${NC}"
+        elif [ -x "$(command -v dnf)" ] || [ -x "$(command -v zypper)" ]; then
+            echo -e "${CYAN}For Fedora and openSUSE, please download and install the fonts manually.${NC}"
             echo -e "${CYAN}Download Cascadia Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#cascadia-mono${NC}"
             echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#jetbrains-mono${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.fonts directory and run 'fc-cache -vf'.${NC}"
+            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.fonts or ~/.local/share/fonts directory and run 'fc-cache -vf'.${NC}"
         else
             echo -e "${RED}Unsupported package manager. Please install the fonts manually.${NC}"
         fi
@@ -94,6 +95,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSuse: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
