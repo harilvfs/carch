@@ -20,12 +20,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ "$selected" == "Yes" ]]
 }
 
 print_message() {
@@ -39,25 +34,22 @@ clear
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Fedora:     ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE:   ${NC}sudo zypper install fzf"
     exit 1
 fi
 
 if ! command -v dunst &> /dev/null; then
     print_message "${TEAL}" "Dunst not found. Installing..."
     if command -v pacman &> /dev/null; then
-        sudo pacman -Sy --noconfirm dunst || {
-                                               print_message "$RED" "Failed to install Dunst. Exiting..."
-                                                                                                           exit 1
-        }
+        sudo pacman -Sy --noconfirm dunst
     elif command -v dnf &> /dev/null; then
-        sudo dnf install -y dunst || {
-                                       print_message "$RED" "Failed to install Dunst. Exiting..."
-                                                                                                   exit 1
-        }
+        sudo dnf install -y dunst
+    elif command -v zypper &> /dev/null; then
+        sudo zypper install -y dunst
     else
-        print_message "$RED" "Unsupported package manager. Install Dunst manually."
+        print_message "$RED" "Unsupported package manager."
         exit 1
     fi
 else
@@ -66,9 +58,11 @@ fi
 
 print_message "${TEAL}" "Installing papirus-icon-theme..."
 if command -v pacman &> /dev/null; then
-    pacman -Qi papirus-icon-theme &> /dev/null || sudo pacman -Sy --noconfirm papirus-icon-theme
+    sudo pacman -Sy --noconfirm papirus-icon-theme
 elif command -v dnf &> /dev/null; then
-    rpm -q papirus-icon-theme &> /dev/null || sudo dnf install -y papirus-icon-theme
+    sudo dnf install -y papirus-icon-theme
+elif command -v zypper &> /dev/null; then
+    sudo zypper install -y papirus-icon-theme
 fi
 
 DUNST_DIR="$HOME/.config/dunst"
@@ -76,17 +70,11 @@ DUNST_FILE="$DUNST_DIR/dunstrc"
 
 if [[ -d "$DUNST_DIR" ]]; then
     print_message "${TEAL}" "Backing up existing Dunst directory..."
-    mv "$DUNST_DIR" "${DUNST_DIR}.bak" || {
-                                            print_message "$RED" "Failed to backup Dunst directory."
-                                                                                                      exit 1
-    }
+    mv "$DUNST_DIR" "${DUNST_DIR}.bak"
     print_message "$GREEN" "Backup created: ${DUNST_DIR}.bak"
 fi
 
-mkdir -p "$DUNST_DIR" || {
-                           print_message "$RED" "Failed to create ~/.config/dunst directory."
-                                                                                               exit 1
-}
+mkdir -p "$DUNST_DIR"
 print_message "$GREEN" "Created ~/.config/dunst directory."
 
 DUNST_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/dunst/dunstrc"
@@ -105,11 +93,11 @@ SPIN_PID=$!
 
 if curl -fsSL "$DUNST_URL" -o "$DUNST_PATH"; then
     kill $SPIN_PID
-    printf "\r[✔] Download complete!      \n"
+    printf "\r[done] Download complete!      \n"
     print_message "$GREEN" "Dunstrc successfully downloaded to $DUNST_PATH"
 else
     kill $SPIN_PID
-    printf "\r[✖] Download failed!      \n"
+    printf "\r[fail] Download failed!      \n"
     print_message "$RED" "Failed to download Dunstrc. Exiting..."
     exit 1
 fi
