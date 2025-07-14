@@ -9,6 +9,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSuse: ${NC}sudo zypper install -y fzf"
     exit 1
 fi
 
@@ -70,8 +71,12 @@ detect_os() {
         echo -e "${TEAL}Detected Fedora-based distribution.${NC}"
         echo "OS=fedora" >&2
         return 0
+    elif command -v zypper &> /dev/null; then
+        echo -e "${TEAL}Detected opensuse distribution.${NC}"
+        echo "OS=opensuse" >&2
+        return 0
     else
-        echo -e "${RED}This script only supports Arch Linux and Fedora-based distributions.${NC}"
+        echo -e "${RED}Unsupported distribution.${NC}"
         return 1
     fi
 }
@@ -83,12 +88,16 @@ install_dependencies() {
 
     if [[ "$os_type" == "arch" ]]; then
         sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
-            xclip wl-clipboard lua-language-server shellcheck shfmt python3 yaml-language-server meson ninja \
+            xclip wl-clipboard lua-language-server shfmt python3 yaml-language-server meson ninja \
             make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd git
     elif [[ "$os_type" == "fedora" ]]; then
         sudo dnf install -y ripgrep neovim vim fzf python3-virtualenv luarocks go nodejs shellcheck xclip \
-            wl-clipboard lua-language-server shellcheck shfmt python3 ghc-ShellCheck meson ninja-build \
+            wl-clipboard lua-language-server shfmt python3 meson ninja-build \
             make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts git
+    elif [[ "$os_type" == "opensuse" ]]; then
+        sudo zypper install -y ripgrep neovim vim fzf python313-virtualenv lua53-luarocks go nodejs ShellCheck xclip \
+            wl-clipboard lua-language-server shfmt python313 meson ninja \
+            make gcc jetbrains-mono-fonts git
     else
         echo -e "${RED}Unsupported OS type: $os_type${NC}"
         return 1
@@ -187,11 +196,6 @@ setup_nvchad() {
 }
 
 main() {
-    check_command git || {
-                           echo -e "${RED}Please install git and try again.${NC}"
-                                                                                      exit 1
-    }
-
     os_info=$(detect_os 2>&1)
     if [[ $? -ne 0 ]]; then
         echo -e "${RED}OS detection failed. Exiting.${NC}"
