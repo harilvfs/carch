@@ -51,8 +51,8 @@ install_development() {
                         $pkg_manager nodejs-npm
                         version=$(get_version nodejs)
                     else
-                        $pkg_manager nodejs
-                        version=$(get_version nodejs)
+                        $pkg_manager nodejs22
+                        version=$(get_version nodejs22)
                     fi
                     echo "Node.js installed successfully! Version: $version"
                     ;;

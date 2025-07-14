@@ -61,7 +61,7 @@ if command -v pacman &> /dev/null; then
 elif command -v dnf &> /dev/null; then
     sudo dnf install -y nodejs npm
 elif command -v zypper &> /dev/null; then
-    sudo zypper install -y nodejs
+    sudo zypper install -y nodejs22
 else
     print_message "$RED" "No supported package manager found."
     exit 1
