@@ -64,7 +64,7 @@ detect_aur_helper() {
 install_aur_helper() {
     detect_distro
     case $? in
-        1|2) return ;;
+        1 | 2) return ;;
     esac
 
     detect_aur_helper
@@ -131,7 +131,7 @@ install_opensuse_package() {
     package_name="$1"
     flatpak_id="$2"
 
-    if sudo zypper search --installed-only "$package_name" &>/dev/null || sudo zypper search --available "$package_name" &>/dev/null; then
+    if sudo zypper search --installed-only "$package_name" &> /dev/null || sudo zypper search --available "$package_name" &> /dev/null; then
         sudo zypper install -y "$package_name"
     else
         echo -e "${YELLOW}:: $package_name not found in zypper. Falling back to Flatpak.${NC}"

@@ -7,10 +7,16 @@ install_communication() {
     if [[ $distro -eq 0 ]]; then
         install_aur_helper
         pkg_manager="$AUR_HELPER -S --noconfirm"
+        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
     elif [[ $distro -eq 1 ]]; then
         install_flatpak
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         pkg_manager="install_fedora_package"
+    elif [[ $distro -eq 2 ]]; then
+        install_flatpak
+        pkg_manager="sudo zypper install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported system. Exiting.${NC}"
         return
@@ -40,9 +46,13 @@ install_communication() {
                         $pkg_manager discord
                         version=$(pacman -Qi discord | grep Version | awk '{print $3}')
                         echo "Discord installed successfully! Version: $version"
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager "discord" "com.discordapp.Discord"
                         echo "Discord installed successfully!"
+                    else
+                        $pkg_manager discord
+                        version=$(get_version discord)
+                        echo "Discord installed successfully! Version: $version"
                     fi
                     ;;
 
@@ -52,7 +62,9 @@ install_communication() {
                         $pkg_manager betterdiscord-installer-bin
                         echo "Better Discord installed successfully!"
                     else
-                        echo -e "${YELLOW}:: Better Discord is not available for Fedora.${NC}"
+                        echo -e "${YELLOW}:: Better Discord requires manual installation.${NC}"
+                        echo "Please visit https://betterdiscord.app/ and download the AppImage for your system."
+                        echo "Make sure to make it executable with: chmod +x BetterDiscord.AppImage"
                     fi
                     ;;
 
@@ -62,57 +74,64 @@ install_communication() {
                         $pkg_manager signal-desktop
                         version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}')
                         echo "Signal installed successfully! Version: $version"
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager "signal-desktop" "org.signal.Signal"
                         echo "Signal installed successfully!"
+                    else
+                        $flatpak_cmd org.signal.Signal
+                        version="(Flatpak version installed)"
+                        echo "Signal installed successfully! Version: $version"
                     fi
                     ;;
 
                 "Element (Matrix)")
                     clear
                     if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur element-desktop
+                        $pkg_manager element-desktop
                         version=$(get_version element-desktop)
+                        echo "Element installed successfully! Version: $version"
                     else
                         $flatpak_cmd im.riot.Riot
                         version="(Flatpak version installed)"
+                        echo "Element installed successfully! Version: $version"
                     fi
-                    echo "Element installed successfully! Version: $version"
                     ;;
 
                 "Slack")
                     clear
                     if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur slack-desktop
+                        $pkg_manager slack-desktop
                         version=$(get_version slack-desktop)
+                        echo "Slack installed successfully! Version: $version"
                     else
                         $flatpak_cmd com.slack.Slack
                         version="(Flatpak version installed)"
+                        echo "Slack installed successfully! Version: $version"
                     fi
-                    echo "Slack installed successfully! Version: $version"
                     ;;
 
                 "Teams")
                     clear
                     if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur teams
+                        $pkg_manager teams
                         version=$(get_version teams)
                         echo "Teams installed successfully! Version: $version"
                     else
-                        echo "Microsoft Teams is not available in Fedora's repositories. Use the web version instead: https://teams.microsoft.com"
+                        echo "Microsoft Teams is not available in the repositories. Use the web version instead: https://teams.microsoft.com"
                     fi
                     ;;
 
                 "Zoom")
                     clear
                     if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur zoom
+                        $pkg_manager zoom
                         version=$(get_version zoom)
+                        echo "Zoom installed successfully! Version: $version"
                     else
                         $flatpak_cmd us.zoom.Zoom
                         version="(Flatpak version installed)"
+                        echo "Zoom installed successfully! Version: $version"
                     fi
-                    echo "Zoom installed successfully! Version: $version"
                     ;;
 
                 "Telegram")
@@ -121,9 +140,13 @@ install_communication() {
                         $pkg_manager telegram-desktop
                         version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}')
                         echo "Telegram installed successfully! Version: $version"
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager "telegram-desktop" "org.telegram.desktop"
                         echo "Telegram installed successfully!"
+                    else
+                        $flatpak_cmd org.telegram.desktop
+                        version="(Flatpak version installed)"
+                        echo "Telegram installed successfully! Version: $version"
                     fi
                     ;;
 
@@ -133,9 +156,13 @@ install_communication() {
                         $pkg_manager keybase-bin
                         version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}')
                         echo "Keybase installed successfully! Version: $version"
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
                         echo "Keybase installed successfully!"
+                    else
+                        $pkg_manager keybase-client
+                        version=$(get_version keybase-client)
+                        echo "Keybase installed successfully! Version: $version"
                     fi
                     ;;
 
