@@ -30,36 +30,26 @@ fzf_confirm() {
     fi
 }
 
-if ! command -v fzf &> /dev/null || ! command -v git &> /dev/null || ! command -v curl &> /dev/null || ! command -v wget &> /dev/null; then
+required_cmds="fzf git curl wget"
+missing=0
 
-    echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
+echo_missing_cmd() {
+    cmd="$1"
+    echo -e "${YELLOW} $cmd is not installed.${NC}"
+    echo -e "${CYAN} • Fedora:     ${NC}sudo dnf install $cmd"
+    echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S $cmd"
+    echo -e "${CYAN} • openSUSE:   ${NC}sudo zypper install $cmd"
+}
 
-    if ! command -v fzf &> /dev/null; then
-        echo -e "${YELLOW} fzf is not installed.${NC}"
-        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install fzf"
-        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S fzf"
+for cmd in $required_cmds; do
+    if ! command -v "$cmd" > /dev/null 2>&1; then
+        [ "$missing" -eq 0 ] && echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
+        echo_missing_cmd "$cmd"
+        missing=1
     fi
+done
 
-    if ! command -v git &> /dev/null; then
-        echo -e "${YELLOW} git is not installed.${NC}"
-        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install git"
-        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S git"
-    fi
-
-    if ! command -v curl &> /dev/null; then
-        echo -e "${YELLOW} curl is not installed.${NC}"
-        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install curl"
-        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S curl"
-    fi
-
-    if ! command -v wget &> /dev/null; then
-        echo -e "${YELLOW} wget is not installed.${NC}"
-        echo -e "${CYAN} • Fedora: ${NC}sudo dnf install wget"
-        echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S wget"
-    fi
-
-    exit 1
-fi
+[ "$missing" -eq 1 ] && exit 1
 
 clear
 
@@ -70,6 +60,8 @@ if ! command -v tmux &> /dev/null; then
         sudo pacman -S --noconfirm tmux
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux
+    elif command -v zypper &> /dev/null; then
+        sudo zypper install -y tmux
     fi
 fi
 
@@ -124,8 +116,8 @@ if [[ -d "$plugin_script_dir" ]]; then
     ./install_plugins.sh
 
     echo -e "${GREEN}Updating tmux plugins...${NC}"
-    chmod +x update_plugins.sh
-    ./update_plugins.sh
+    chmod +x update_plugin.sh
+    ./update_plugin.sh
 else
     echo -e "${RED}TPM scripts not found. Skipping plugin installation.${NC}"
 fi
