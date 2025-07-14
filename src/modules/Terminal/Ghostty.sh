@@ -35,6 +35,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSuse: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -48,12 +49,12 @@ setup_ghostty() {
         echo -e "${CYAN}Ghostty is not installed. :: Installing...${NC}"
 
         if command -v pacman &> /dev/null; then
-            echo -e "${CYAN}Installing Ghostty on Arch-based systems...${NC}"
             sudo pacman -S --needed ghostty
         elif command -v dnf &> /dev/null; then
-            echo -e "${CYAN}Installing Ghostty on Fedora...${NC}"
             sudo dnf copr enable pgdev/ghostty -y
             sudo dnf install ghostty -y
+        elif command -v zypper &> /dev/null; then
+            sudo zypper install -y ghostty
         else
             echo -e "${RED}Unsupported package manager. Please install Ghostty manually.${NC}"
             echo -e "${CYAN}See https://ghostty.org/docs/install for installation instructions.${NC}"
@@ -65,17 +66,24 @@ setup_ghostty() {
 
     if fzf_confirm "Do you want to install JetBrains Mono Nerd Font?"; then
         if command -v pacman &> /dev/null; then
-            echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Arch-based systems...${NC}"
             sudo pacman -S --needed ttf-jetbrains-mono-nerd
         elif command -v dnf &> /dev/null; then
-            echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
-            sudo dnf install jetbrains-mono-fonts-all -y
-
+            sudo dnf install -y jetbrains-mono-fonts-all
+            echo -e ""
+            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
+            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
+            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
+        elif command -v zypper &> /dev/null; then
+            sudo zypper install -y jetbrains-mono-fonts
+            echo -e ""
             echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
             echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
             echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
         else
             echo -e "${RED}Unsupported package manager. Please install the font manually.${NC}"
+            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
+            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
+            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
         fi
     else
         echo -e "${CYAN}Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering.${NC}"
