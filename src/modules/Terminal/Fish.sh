@@ -49,7 +49,6 @@ detect_distro() {
     fi
 }
 
-
 install_eza_manually() {
     print_color "$CYAN" "Installing eza manually for Fedora..."
     local tmp_dir

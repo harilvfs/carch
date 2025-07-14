@@ -167,7 +167,7 @@ install_opensuse() {
 case "$distro" in
     arch) install_arch ;;
     fedora) install_fedora ;;
-    opensuse) install_opensuse;;
+    opensuse) install_opensuse ;;
     *)
         echo -e "${RED}Unsupported distribution.${NC}"
                                                           exit 1
