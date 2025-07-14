@@ -41,70 +41,98 @@ detect_distro() {
         DISTRO="arch"
     elif command -v dnf &> /dev/null; then
         DISTRO="fedora"
+    elif command -v zypper &> /dev/null; then
+        DISTRO="opensuse"
     else
         print_color "$RED" "Unsupported distribution!"
         exit 1
     fi
 }
 
-install_fish() {
-    print_color "$CYAN" "Installing dependencies..."
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm fish noto-fonts-emoji git eza trash-cli
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git trash-cli
 
-        print_color "$CYAN" "Installing eza manually for Fedora..."
-        if command -v eza &> /dev/null; then
-            print_color "$GREEN" "eza is already installed."
-        else
-            local tmp_dir=$(mktemp -d)
-            cd "$tmp_dir" || exit 1
-            print_color "$CYAN" "Fetching latest eza release..."
-            local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
-            if [ -z "$latest_url" ]; then
-                print_color "$YELLOW" "Could not determine latest version, using fallback version..."
-                latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
-            fi
-            print_color "$CYAN" "Downloading eza from: $latest_url"
-            if ! curl -L -o eza.zip "$latest_url"; then
-                print_color "$RED" "Failed to download eza. Exiting..."
-                cd "$HOME" || exit
-                rm -rf "$tmp_dir"
-                exit 1
-            fi
-            print_color "$CYAN" "Extracting eza..."
-            unzip -q eza.zip
-            print_color "$CYAN" "Installing eza to /usr/bin..."
-            sudo cp eza /usr/bin/
-            sudo chmod +x /usr/bin/eza
-            cd "$HOME" || exit
-            rm -rf "$tmp_dir"
-            print_color "$GREEN" "eza installed successfully!"
-        fi
-    else
-        print_color "$RED" "Unsupported distro: $DISTRO"
+install_eza_manually() {
+    print_color "$CYAN" "Installing eza manually for Fedora..."
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    cd "$tmp_dir" || exit 1
+
+    print_color "$CYAN" "Fetching latest eza release..."
+    local latest_url
+    latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
+
+    if [ -z "$latest_url" ]; then
+        print_color "$YELLOW" "Could not determine latest version, using fallback..."
+        latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
+    fi
+
+    print_color "$CYAN" "Downloading eza from: $latest_url"
+    if ! curl -L -o eza.zip "$latest_url"; then
+        print_color "$RED" "Failed to download eza. Exiting..."
+        cd "$HOME" || exit
+        rm -rf "$tmp_dir"
         exit 1
     fi
+
+    print_color "$CYAN" "Extracting eza..."
+    unzip -q eza.zip
+    print_color "$CYAN" "Installing eza to /usr/bin..."
+    sudo cp eza /usr/bin/
+    sudo chmod +x /usr/bin/eza
+
+    cd "$HOME" || exit
+    rm -rf "$tmp_dir"
+    print_color "$GREEN" "eza installed successfully!"
+}
+
+install_fish() {
+    print_color "$CYAN" "Installing dependencies..."
+    case "$DISTRO" in
+        arch)
+            sudo pacman -S --noconfirm fish noto-fonts-emoji git eza trash-cli
+            ;;
+        fedora)
+            sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git trash-cli
+            if ! command -v eza &> /dev/null; then
+                install_eza_manually
+            else
+                print_color "$GREEN" "eza is already installed."
+            fi
+            ;;
+        opensuse)
+            sudo zypper install -y fish google-noto-fonts noto-coloremoji-fonts git eza trash-cli
+            ;;
+        *)
+            print_color "$RED" "Unsupported distro: $DISTRO"
+            exit 1
+            ;;
+    esac
 }
 
 install_zoxide() {
     print_color "$CYAN" "Installing zoxide..."
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm zoxide
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y zoxide
-    else
-        print_color "$RED" "Unsupported distro: $DISTRO"
-        exit 1
-    fi
+    case "$DISTRO" in
+        arch)
+            sudo pacman -S --noconfirm zoxide
+            ;;
+        fedora)
+            sudo dnf install -y zoxide
+            ;;
+        opensuse)
+            sudo zypper install -y zoxide
+            ;;
+        *)
+            print_color "$RED" "Unsupported distro: $DISTRO"
+            exit 1
+            ;;
+    esac
 }
 
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • openSuse: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
