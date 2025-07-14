@@ -14,6 +14,11 @@ install_productivity() {
         pkg_manager="sudo dnf install -y"
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        install_flatpak
+        pkg_manager="sudo zypper install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -42,6 +47,9 @@ install_productivity() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman libreoffice-fresh
                         version=$(get_version libreoffice-fresh)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager libreoffice
+                        version=$(get_version libreoffice)
                     else
                         $pkg_manager libreoffice
                         version=$(get_version libreoffice)
@@ -89,6 +97,9 @@ install_productivity() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman calibre
+                        version=$(get_version calibre)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager calibre
                         version=$(get_version calibre)
                     else
                         $pkg_manager calibre
