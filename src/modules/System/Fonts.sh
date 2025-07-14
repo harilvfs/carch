@@ -81,6 +81,31 @@ install_fedora_system_fonts() {
     echo -e "${GREEN}$font_pkg installed successfully!${NC}"
 }
 
+install_font_opensuse() {
+    local font_name="$1"
+    local latest_version=$(get_latest_release)
+    local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/${font_name}.zip"
+
+    echo -e "${CYAN}:: Downloading $font_name version ${latest_version} to /tmp...${NC}"
+    curl -L "$font_url" -o "/tmp/${font_name}.zip"
+
+    echo -e "${CYAN}:: Extracting $font_name...${NC}"
+    mkdir -p "$FONTS_DIR"
+    unzip -q "/tmp/${font_name}.zip" -d "$FONTS_DIR"
+
+    echo -e "${CYAN}:: Refreshing font cache...${NC}"
+    fc-cache -vf
+
+    echo -e "${GREEN}$font_name installed successfully in $FONTS_DIR!${NC}"
+}
+
+install_opensuse_system_fonts() {
+    local font_pkg="$@"
+    echo -e "${CYAN}:: Installing $font_pkg via zypper...${NC}"
+    sudo zypper install -y $font_pkg
+    echo -e "${GREEN}$font_pkg installed successfully!${NC}"
+}
+
 check_aur_helper() {
     if command -v paru &> /dev/null; then
         echo -e "$GREEN" "AUR helper paru is already installed."
@@ -138,6 +163,8 @@ choose_fonts() {
                 "FiraCode")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "ttf-firacode-nerd"
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts "fira-code-fonts"
                     else
                         install_font_fedora "FiraCode"
                     fi
@@ -146,6 +173,8 @@ choose_fonts() {
                 "Meslo")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "ttf-meslo-nerd"
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts "meslo-lg-fonts"
                     else
                         install_font_fedora "Meslo"
                     fi
@@ -154,6 +183,8 @@ choose_fonts() {
                 "JetBrainsMono")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts "jetbrains-mono-fonts"
                     else
                         install_font_fedora "JetBrainsMono"
                     fi
@@ -162,6 +193,8 @@ choose_fonts() {
                 "Hack")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "ttf-hack-nerd"
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts "hack-fonts"
                     else
                         install_font_fedora "Hack"
                     fi
@@ -170,6 +203,8 @@ choose_fonts() {
                 "CascadiaMono")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch ttf-cascadia-mono-nerd ttf-cascadia-code-nerd
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_font_opensuse "CascadiaMono"
                     else
                         install_font_fedora "CascadiaMono"
                     fi
@@ -178,6 +213,27 @@ choose_fonts() {
                 "Terminus")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "terminus-font"
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        echo -e "${CYAN}:: Installing Terminus Nerd Font manually...${NC}"
+                        latest_version=$(get_latest_release)
+                        font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/Terminus.zip"
+                        temp_dir="/tmp/terminus-font"
+
+                        echo -e "${CYAN}:: Downloading Terminus.zip...${NC}"
+                        mkdir -p "$temp_dir"
+                        curl -L "$font_url" -o "$temp_dir/Terminus.zip"
+
+                        echo -e "${CYAN}:: Extracting to $temp_dir...${NC}"
+                        unzip -q "$temp_dir/Terminus.zip" -d "$temp_dir"
+
+                        echo -e "${CYAN}:: Moving fonts to $FONTS_DIR...${NC}"
+                        mkdir -p "$FONTS_DIR"
+                        find "$temp_dir" -type f -name "*.ttf" -exec mv {} "$FONTS_DIR/" \;
+
+                        echo -e "${CYAN}:: Refreshing font cache...${NC}"
+                        fc-cache -vf "$FONTS_DIR"
+
+                        echo -e "${GREEN}Terminus Nerd Font installed successfully in $FONTS_DIR!${NC}"
                     else
                         echo -e "${CYAN}:: Installing Terminus Nerd Font manually...${NC}"
                         latest_version=$(get_latest_release)
@@ -205,6 +261,8 @@ choose_fonts() {
                 "Noto")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts google-noto-fonts noto-coloremoji-fonts
                     else
                         install_fedora_system_fonts google-noto-fonts google-noto-emoji-fonts
                     fi
@@ -213,6 +271,8 @@ choose_fonts() {
                 "DejaVu")
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch ttf-dejavu
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts "dejavu-fonts"
                     else
                         install_fedora_system_fonts dejavu-sans-fonts
                     fi
@@ -224,6 +284,13 @@ choose_fonts() {
                         echo -e "${CYAN}:: Installing JoyPixels (ttf-joypixels) via $aur_helper...${NC}"
                         $aur_helper -S --noconfirm ttf-joypixels
                         echo -e "${GREEN}JoyPixels installed successfully!${NC}"
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        echo -e "${CYAN}:: Downloading JoyPixels font...${NC}"
+                        mkdir -p "$HOME/.fonts"
+                        curl -L "https://cdn.joypixels.com/arch-linux/font/8.0.0/joypixels-android.ttf" -o "$HOME/.fonts/joypixels-android.ttf"
+                        echo -e "${CYAN}:: Refreshing font cache...${NC}"
+                        fc-cache -vf "$HOME/.fonts"
+                        echo -e "${GREEN}JoyPixels installed successfully to ~/.fonts!${NC}"
                     else
                         echo -e "${CYAN}:: Downloading JoyPixels font...${NC}"
                         mkdir -p "$HOME/.fonts"
@@ -240,6 +307,8 @@ choose_fonts() {
                         echo -e "${CYAN}:: Installing Font Awesome (ttf-font-awesome) via $aur_helper...${NC}"
                         $aur_helper -S --noconfirm ttf-font-awesome
                         echo -e "${GREEN}Font Awesome installed successfully!${NC}"
+                    elif [[ "$OS_TYPE" == "opensuse" ]]; then
+                        install_opensuse_system_fonts "fontawesome-fonts"
                     else
                         install_fedora_system_fonts fontawesome-fonts-all
                     fi
@@ -257,6 +326,8 @@ detect_os() {
         OS_TYPE="arch"
     elif command -v dnf &> /dev/null; then
         OS_TYPE="fedora"
+    elif command -v zypper &> /dev/null; then
+        OS_TYPE="opensuse"
     else
         echo -e "${RED}Unsupported OS. Please install fonts manually.${NC}"
         exit 1
@@ -269,6 +340,7 @@ main() {
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 
@@ -277,6 +349,7 @@ main() {
         echo -e "${YELLOW}Please install curl before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install curl"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S curl"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install curl"
         exit 1
     fi
 
@@ -285,6 +358,7 @@ main() {
         echo -e "${YELLOW}Please install unzip before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install unzip"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S unzip"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install unzip"
         exit 1
     fi
 
