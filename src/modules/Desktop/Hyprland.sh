@@ -82,7 +82,6 @@ main_menu() {
         exit 0
     fi
 
-    # Handle "Coming Soon" option for ml4w on OpenSUSE
     if [[ "$choice" == "mylinuxforwork/dotfiles (Coming Soon)" ]]; then
         echo -e "${YELLOW}ML4W dotfiles for OpenSUSE is coming soon!${NC}"
         echo -e "${CYAN}The owner has not officially published the guide yet.${NC}"
