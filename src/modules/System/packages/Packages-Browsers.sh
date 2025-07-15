@@ -263,7 +263,7 @@ install_browsers() {
                         echo "Latest version: $latest_version"
                         echo "Downloading Thorium Browser AVX package..."
                         wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_${latest_version#M}_AVX.rpm" ||
-                        wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
+                            wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
 
                         rpm_file=$(ls thorium*AVX.rpm 2> /dev/null)
                         if [ -n "$rpm_file" ]; then
