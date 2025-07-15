@@ -67,8 +67,8 @@ install_aur_helper() {
     temp_dir=$(mktemp -d)
     git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
     cd "$temp_dir/yay" || {
-                            echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"
-                                                                                      exit 1
+        echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"
+        exit 1
     }
     makepkg -si --noconfirm
     cd ~ || exit 1
@@ -103,8 +103,8 @@ install_picom_ftlabs_fedora() {
     echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
     cd ~/.cache/picom || {
-                           echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
-                                                                                   exit 1
+        echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
+        exit 1
     }
 
     echo -e "${GREEN}:: Building Picom with meson and ninja...${ENDCOLOR}"
@@ -128,8 +128,8 @@ install_picom_ftlabs_opensuse() {
     echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
     cd ~/.cache/picom || {
-                           echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
-                                                                                   exit 1
+        echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
+        exit 1
     }
 
     echo -e "${GREEN}:: Building Picom with meson and ninja...${ENDCOLOR}"
