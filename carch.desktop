@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Carch
-Comment=A simple CLI tool to automate Linux system setup 🧩
-Exec=/usr/local/bin/carch
+Comment=A simple Rust-based CLI tool (built with Ratatui) to streamline and automate your Linux system’s initial setup
+Exec=/usr/bin/carch
 Icon=carch
 Type=Application
 Terminal=true
