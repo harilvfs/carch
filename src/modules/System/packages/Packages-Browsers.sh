@@ -237,18 +237,22 @@ install_browsers() {
                         $pkg_manager_aur thorium-browser-bin
                         version=$(get_version thorium-browser-bin)
                         echo "Thorium Browser installed successfully! Version: $version"
-                    elif [[ $distro -eq 1 ]]; then
-                        echo "Downloading and installing Thorium Browser for Fedora..."
+                    elif [[ $distro -eq 1 ]] || [[ $distro -eq 2 ]]; then
+                        echo "Downloading and installing Thorium Browser..."
 
                         if ! command -v wget &> /dev/null; then
                             echo "Installing wget..."
-                            sudo dnf install -y wget
+                            if [[ $distro -eq 1 ]]; then
+                                sudo dnf install -y wget
+                            else
+                                sudo zypper install -y wget
+                            fi
                         fi
 
                         temp_dir=$(mktemp -d)
                         cd "$temp_dir" || {
-                                            echo -e "${RED}Failed to create temp directory${NC}"
-                                                                                                     return
+                            echo -e "${RED}Failed to create temp directory${NC}"
+                            return
                         }
 
                         echo "Fetching latest Thorium Browser release..."
@@ -259,12 +263,16 @@ install_browsers() {
                         echo "Latest version: $latest_version"
                         echo "Downloading Thorium Browser AVX package..."
                         wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_${latest_version#M}_AVX.rpm" ||
-                            wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
+                        wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
 
                         rpm_file=$(ls thorium*AVX.rpm 2> /dev/null)
                         if [ -n "$rpm_file" ]; then
                             echo "Installing Thorium Browser..."
-                            sudo dnf install -y "./$rpm_file"
+                            if [[ $distro -eq 1 ]]; then
+                                sudo dnf install -y "./$rpm_file"
+                            else
+                                sudo zypper install -y "./$rpm_file"
+                            fi
                             version="$latest_version"
                             echo "Thorium Browser installed successfully! Version: $version"
                         else
@@ -273,10 +281,6 @@ install_browsers() {
 
                         cd - > /dev/null || return
                         rm -rf "$temp_dir"
-                    else
-                        echo "Thorium Browser is not currently available for openSUSE."
-                        echo "No package found. Will check for future availability."
-                        echo "Please visit https://thorium.rocks/ for manual installation or check back later."
                     fi
                     ;;
 
