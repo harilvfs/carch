@@ -214,47 +214,9 @@ choose_fonts() {
                     if [[ "$OS_TYPE" == "arch" ]]; then
                         install_font_arch "terminus-font"
                     elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                        echo -e "${CYAN}:: Installing Terminus Nerd Font manually...${NC}"
-                        latest_version=$(get_latest_release)
-                        font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/Terminus.zip"
-                        temp_dir="/tmp/terminus-font"
-
-                        echo -e "${CYAN}:: Downloading Terminus.zip...${NC}"
-                        mkdir -p "$temp_dir"
-                        curl -L "$font_url" -o "$temp_dir/Terminus.zip"
-
-                        echo -e "${CYAN}:: Extracting to $temp_dir...${NC}"
-                        unzip -q "$temp_dir/Terminus.zip" -d "$temp_dir"
-
-                        echo -e "${CYAN}:: Moving fonts to $FONTS_DIR...${NC}"
-                        mkdir -p "$FONTS_DIR"
-                        find "$temp_dir" -type f -name "*.ttf" -exec mv {} "$FONTS_DIR/" \;
-
-                        echo -e "${CYAN}:: Refreshing font cache...${NC}"
-                        fc-cache -vf "$FONTS_DIR"
-
-                        echo -e "${GREEN}Terminus Nerd Font installed successfully in $FONTS_DIR!${NC}"
+                        install_font_opensuse "Terminus"
                     else
-                        echo -e "${CYAN}:: Installing Terminus Nerd Font manually...${NC}"
-                        latest_version=$(get_latest_release)
-                        font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/Terminus.zip"
-                        temp_dir="/tmp/terminus-font"
-
-                        echo -e "${CYAN}:: Downloading Terminus.zip...${NC}"
-                        mkdir -p "$temp_dir"
-                        curl -L "$font_url" -o "$temp_dir/Terminus.zip"
-
-                        echo -e "${CYAN}:: Extracting to $temp_dir...${NC}"
-                        unzip -q "$temp_dir/Terminus.zip" -d "$temp_dir"
-
-                        echo -e "${CYAN}:: Moving fonts to $FONTS_DIR...${NC}"
-                        mkdir -p "$FONTS_DIR"
-                        find "$temp_dir" -type f -name "*.ttf" -exec mv {} "$FONTS_DIR/" \;
-
-                        echo -e "${CYAN}:: Refreshing font cache...${NC}"
-                        fc-cache -vf "$FONTS_DIR"
-
-                        echo -e "${GREEN}Terminus Nerd Font installed successfully in $FONTS_DIR!${NC}"
+                        install_font_fedora "Terminus"
                     fi
                     ;;
 
