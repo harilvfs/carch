@@ -88,7 +88,7 @@ main_menu() {
         echo -e "${CYAN}I will add support once it's officially available.${NC}"
         echo ""
         echo -e "${GREEN}Press any key to return to menu...${NC}"
-        read -n 1 -s
+        read
         main_menu
         return
     fi
