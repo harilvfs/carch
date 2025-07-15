@@ -106,6 +106,8 @@ install_flatpak() {
             sudo dnf install -y flatpak
         elif [[ $distro -eq 2 ]]; then
             sudo zypper install -y flatpak
+        elif [[ $distro -eq 0 ]]; then
+            sudo pacman -S --noconfirm flatpak
         else
             echo -e "${RED}:: Flatpak installation not supported for this distribution${NC}"
             return 1
