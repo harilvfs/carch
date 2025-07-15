@@ -42,7 +42,7 @@ detect_distro() {
         echo -e "${GREEN}:: openSUSE detected.${ENDCOLOR}"
         DISTRO="opensuse"
     else
-        echo -e "${RED}:: Unsupported distribution. This script only supports Arch, Fedora, and openSUSE.${ENDCOLOR}"
+        echo -e "${RED}:: Unsupported distribution.${ENDCOLOR}"
         exit 1
     fi
 }
