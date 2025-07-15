@@ -296,34 +296,28 @@ detect_os() {
     fi
 }
 
+check_dependencies() {
+    local failed=0
+    local deps=("fzf" "curl" "unzip")
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            echo -e "${RED}${BOLD}Error: ${dep} is not installed.${NC}"
+            echo -e "${YELLOW}Please install ${dep} before running this script:${NC}"
+            echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install ${dep}"
+            echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S ${dep}"
+            echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install ${dep}"
+            failed=1
+        fi
+    done
+    if [ "$failed" -eq 1 ]; then
+        exit 1
+    else
+        return 0
+    fi
+}
+
 main() {
-    if ! command -v fzf &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
-        exit 1
-    fi
-
-    if ! command -v curl &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: curl is not installed${NC}"
-        echo -e "${YELLOW}Please install curl before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install curl"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S curl"
-        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install curl"
-        exit 1
-    fi
-
-    if ! command -v unzip &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: unzip is not installed${NC}"
-        echo -e "${YELLOW}Please install unzip before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install unzip"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S unzip"
-        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install unzip"
-        exit 1
-    fi
-
+    check_dependencies
     detect_os
     choose_fonts
 }
