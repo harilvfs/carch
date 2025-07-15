@@ -154,7 +154,7 @@ while true; do
         exit 1
     fi
 
-    options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Crypto Tools" "Exit")
+    options=("Android Tools" "Browsers" "Communication Apps" "Crypto Tools" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=70% \
                                                         --prompt="Choose an option: " \
@@ -166,6 +166,7 @@ while true; do
         "Android Tools") install_android ;;
         "Browsers") install_browsers ;;
         "Communication Apps") install_communication ;;
+        "Crypto Tools") install_crypto_tools ;;
         "Development Tools") install_development ;;
         "Editing Tools") install_editing ;;
         "File Managers") install_filemanagers ;;
@@ -179,7 +180,6 @@ while true; do
         "Terminals") install_terminals ;;
         "Text Editors") install_texteditor ;;
         "Virtualization") install_virtualization ;;
-        "Crypto Tools") install_crypto_tools ;;
         "Exit")
             echo -e "${GREEN}Exiting...${NC}"
             exit
