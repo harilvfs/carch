@@ -38,8 +38,11 @@ detect_distro() {
     elif command -v dnf &> /dev/null; then
         echo -e "${GREEN}:: Fedora detected.${ENDCOLOR}"
         DISTRO="fedora"
+    elif command -v zypper &> /dev/null; then
+        echo -e "${GREEN}:: openSUSE detected.${ENDCOLOR}"
+        DISTRO="opensuse"
     else
-        echo -e "${RED}:: Unsupported distribution. This script only supports Arch and Fedora.${ENDCOLOR}"
+        echo -e "${RED}:: Unsupported distribution.${ENDCOLOR}"
         exit 1
     fi
 }
@@ -54,11 +57,20 @@ install_bluetooth() {
             echo -e "${RED}:: Failed to install Bluetooth packages on Arch.${ENDCOLOR}"
             exit 1
         fi
-    else
+
+    elif [ "$DISTRO" = "fedora" ]; then
         echo -e "${CYAN}:: Installing Bluetooth packages for Fedora...${ENDCOLOR}"
         sudo dnf install -y bluez bluez-tools blueman
         if [ $? -ne 0 ]; then
             echo -e "${RED}:: Failed to install Bluetooth packages on Fedora.${ENDCOLOR}"
+            exit 1
+        fi
+
+    elif [ "$DISTRO" = "opensuse" ]; then
+        echo -e "${CYAN}:: Installing Bluetooth packages for openSUSE...${ENDCOLOR}"
+        sudo zypper install -y bluez blueman
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}:: Failed to install Bluetooth packages on openSUSE.${ENDCOLOR}"
             exit 1
         fi
     fi
@@ -86,18 +98,18 @@ provide_additional_info() {
 }
 
 main() {
-
     if ! command -v fzf &> /dev/null; then
         echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 
     detect_distro
 
-    if fzf_confirm "Do you want to install Bluetooth system?"; then
+    if fzf_confirm "Do you want to install the Bluetooth system?"; then
         install_bluetooth
         enable_bluetooth
         echo -e "${GREEN}:: Bluetooth setup completed successfully!${ENDCOLOR}"

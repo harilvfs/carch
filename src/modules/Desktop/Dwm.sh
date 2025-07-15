@@ -43,6 +43,9 @@ detect_distro() {
     elif command -v dnf &> /dev/null; then
         distro="fedora"
         print_message "$YELLOW" "Detected distribution: Fedora"
+    elif command -v zypper &> /dev/null; then
+        distro="opensuse"
+        print_message "$YELLOW" "Detected distribution: opensuse"
     else
         print_message "$RED" "Unsupported distribution. Exiting..."
         exit 1
@@ -86,12 +89,25 @@ install_packages() {
         }
 
         sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
-            gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build gnome-keyring jetbrains-mono-fonts-all \
+            gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
             google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
             trash-cli tumbler gvfs-mtp fzf vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
             pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock || {
             print_message "$RED" "Failed to install some packages via dnf."
             exit 1
+        }
+
+    elif [ "$distro" == "opensuse" ]; then
+        print_message "$CYAN" ":: Installing required packages using zypper..."
+
+        sudo zypper install -y libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
+            gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
+            google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
+            trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
+            pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock || {
+            print_message "${RED}" "Failed to install some packages via zypper."
+            exit 1
+
         }
     fi
 }
@@ -174,12 +190,21 @@ install_nerd_font() {
     fi
 
     print_message "$CYAN" "Installing Meslo Nerd Font..."
-    if command -v dnf &> /dev/null; then
+
+    if command -v pacman &> /dev/null; then
+        sudo pacman -S --needed ttf-meslo-nerd || exit 1
+
+    elif command -v dnf &> /dev/null; then
         wget -P /tmp https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip || exit 1
         unzip /tmp/Meslo.zip -d /tmp/Meslo || exit 1
         mv /tmp/Meslo/* "$FONT_DIR" || exit 1
+
+    elif command -v zypper &> /dev/null; then
+        sudo zypper install -y meslo-lg-fonts || exit 1
+
     else
-        sudo pacman -S --needed ttf-meslo-nerd || exit 1
+        print_message "$RED" "Unsupported package manager. Please install Meslo Nerd Font manually."
+        return 1
     fi
 
     fc-cache -vf || exit 1
@@ -192,22 +217,30 @@ install_picom() {
 
         print_message "$CYAN" ":: Installing Picom with $aur_helper..."
         $aur_helper -S --noconfirm picom-ftlabs-git || {
-            print_message "$RED" "Failed to install Picom."
-            print_message "$YELLOW" "Trying alternative installation method..."
-
-            local temp_dir=$(mktemp -d)
-            cd "$temp_dir" || exit 1
-            git clone https://github.com/FT-Labs/picom.git
-            cd picom || exit 1
-            meson setup --buildtype=release build
-            ninja -C build
-            sudo ninja -C build install
-            cd "$HOME" || exit
-            rm -rf "$temp_dir"
+            print_message "$RED" "Failed to install Picom via $aur_helper. Please install manually."
+            exit 1
         }
+
     elif [ "$distro" == "fedora" ]; then
         print_message "$CYAN" ":: Installing Picom manually on Fedora..."
-        sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
+        sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel \
+            libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel \
+            libepoxy-devel meson pcre2-devel pixman-devel uthash-devel \
+            xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
+
+        git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
+        cd "$HOME/picom" || exit 1
+        meson setup --buildtype=release build
+        ninja -C build
+        sudo cp build/src/picom /usr/bin/
+
+    elif [ "$distro" == "opensuse" ]; then
+        print_message "$CYAN" ":: Installing Picom manually on openSUSE..."
+        sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
+            libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
+            libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
+            xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
+
         git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
         cd "$HOME/picom" || exit 1
         meson setup --buildtype=release build
@@ -375,6 +408,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 

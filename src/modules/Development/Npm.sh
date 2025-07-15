@@ -7,8 +7,9 @@ source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 if ! command -v fzf &> /dev/null; then
     echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
+    echo -e "${CYAN}  • Fedora:     ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE:   ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -30,12 +31,7 @@ fzf_confirm() {
                                                      --header="Confirm" \
                                                      --pointer="➤" \
                                                      --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+    [[ "$selected" == "Yes" ]]
 }
 
 print_message() {
@@ -47,81 +43,37 @@ print_message() {
 if command -v npm &> /dev/null; then
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
-    print_message "$GREEN" "✔ npm is already installed."
-    print_message "${TEAL}" "Node.js version: ${NODE_VERSION}"
-    print_message "${TEAL}" "npm version: ${NPM_VERSION}"
+    print_message "$GREEN" "npm is already installed."
+    print_message "$TEAL" "Node.js version: $NODE_VERSION"
+    print_message "$TEAL" "npm version: $NPM_VERSION"
     exit 0
 fi
 
-print_message "$YELLOW" "⚠ npm is not installed on your system."
-if ! fzf_confirm "Do you want to install npm using nvm? (Recommended)"; then
-    print_message "$RED" "✖ npm installation aborted."
+print_message "$YELLOW" "npm is not installed on your system."
+
+if ! fzf_confirm "Do you want to install Node.js (includes npm) using your package manager?"; then
+    print_message "$RED" "Installation aborted."
     exit 1
 fi
 
-if [[ ! -d "$HOME/.nvm" ]]; then
-    print_message "$YELLOW" "Installing nvm..."
-
-    if curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
-        print_message "$GREEN" "✔ nvm installed successfully."
-    elif wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash; then
-        print_message "$GREEN" "✔ nvm installed successfully (via wget)."
-    else
-        print_message "$RED" "✖ Failed to install nvm."
-
-        print_message "$YELLOW" "Falling back to package manager installation..."
-        if command -v pacman &> /dev/null; then
-            sudo pacman -S --noconfirm npm || {
-                print_message "$RED" "✖ Failed to install npm via pacman."
-                exit 1
-            }
-        elif command -v dnf &> /dev/null; then
-            sudo dnf install -y nodejs npm || {
-                print_message "$RED" "✖ Failed to install npm via dnf."
-                exit 1
-            }
-        else
-            print_message "$RED" "✖ No supported package manager found."
-            exit 1
-        fi
-        print_message "$GREEN" "✔ npm installed via package manager."
-        NODE_VERSION=$(node -v)
-        NPM_VERSION=$(npm -v)
-        print_message "${TEAL}" "Node.js version: ${NODE_VERSION}"
-        print_message "${TEAL}" "npm version: ${NPM_VERSION}"
-        exit 0
-    fi
+if command -v pacman &> /dev/null; then
+    sudo pacman -S --noconfirm nodejs npm
+elif command -v dnf &> /dev/null; then
+    sudo dnf install -y nodejs npm
+elif command -v zypper &> /dev/null; then
+    sudo zypper install -y nodejs22
 else
-    print_message "$GREEN" "✔ nvm is already installed."
-fi
-
-export NVM_DIR="$HOME/.nvm"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-    . "$NVM_DIR/nvm.sh"
-    print_message "$GREEN" "✔ nvm loaded successfully."
-else
-    print_message "$RED" "✖ Failed to load nvm. The installation may be incomplete."
+    print_message "$RED" "No supported package manager found."
     exit 1
 fi
 
-if command -v nvm &> /dev/null; then
-    print_message "${TEAL}" "Installing Node.js LTS via nvm..."
-    nvm install --lts
-    nvm use --lts
-    print_message "$GREEN" "✔ Node.js LTS installation completed via nvm."
-    print_message "$GREEN" "✔ npm is now available."
-
+if command -v npm &> /dev/null; then
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
-    print_message "${TEAL}" "Node.js version: ${NODE_VERSION}"
-    print_message "${TEAL}" "npm version: ${NPM_VERSION}"
-
-    print_message "$YELLOW" "⚠ Note: For nvm to work in new terminal sessions, make sure your shell's config file (e.g., ~/.bashrc) has been updated correctly."
-    print_message "$YELLOW" "⚠ You may need to restart your terminal or run 'source ~/.bashrc' (or equivalent) for permanent effects."
+    print_message "$GREEN" "Node.js and npm installed successfully."
+    print_message "$TEAL" "Node.js version: $NODE_VERSION"
+    print_message "$TEAL" "npm version: $NPM_VERSION"
 else
-    print_message "$RED" "✖ nvm command is still not available after installation."
-    print_message "$YELLOW" "Please try the following steps manually:"
-    echo -e "1. Close this terminal and open a new one"
-    echo -e "2. Run 'nvm install --lts'"
+    print_message "$RED" "npm installation failed."
     exit 1
 fi

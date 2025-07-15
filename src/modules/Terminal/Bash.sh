@@ -9,6 +9,8 @@ detect_distro() {
         distro="arch"
     elif command -v dnf &> /dev/null; then
         distro="fedora"
+    elif command -v zypper &> /dev/null; then
+        distro="opensuse"
     else
         distro="unsupported"
     fi
@@ -30,6 +32,7 @@ check_essential_dependencies() {
         case "$distro" in
             arch) sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
             fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            opensuse) sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
             *)
                 echo -e "${RED}Unsupported distribution.${NC}"
                 exit 1
@@ -44,6 +47,7 @@ check_fzf() {
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 }
@@ -89,6 +93,9 @@ install_eza() {
             cd "$HOME" || exit
             rm -rf "$tmp_dir"
             echo -e "${GREEN}eza installed successfully!${NC}"
+            ;;
+        opensuse)
+            sudo zypper install eza -y
             ;;
         *)
             echo -e "${RED}Unsupported distribution for eza installation.${NC}"
@@ -152,9 +159,15 @@ install_fedora() {
     sudo dnf install -y bash bash-completion
 }
 
+install_opensuse() {
+    echo -e "${CYAN}Reinstalling Bash and bash-completion to avoid errors...${NC}"
+    sudo zypper install -y bash bash-completion
+}
+
 case "$distro" in
     arch) install_arch ;;
     fedora) install_fedora ;;
+    opensuse) install_opensuse ;;
     *)
         echo -e "${RED}Unsupported distribution.${NC}"
                                                           exit 1
@@ -203,6 +216,7 @@ if ! command -v starship &> /dev/null; then
     case "$distro" in
         arch) sudo pacman -S --noconfirm starship || curl -sS https://starship.rs/install.sh | sh ;;
         fedora) curl -sS https://starship.rs/install.sh | sh ;;
+        opensuse) sudo zypper install -y starship || curl -sS https://starship.rs/install.sh | sh ;;
     esac
 fi
 
@@ -232,6 +246,8 @@ if ! command -v zoxide &> /dev/null; then
         sudo pacman -S --noconfirm zoxide
     elif [[ "$distro" == "fedora" ]]; then
         sudo dnf install -y zoxide
+    elif [[ "$distro" == "opensuse" ]]; then
+        sudo zypper install -y zoxide
     fi
 fi
 
@@ -313,14 +329,18 @@ install_pokemon_colorscripts() {
             }
             ;;
 
-        fedora)
+        fedora | opensuse)
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 echo -e "${YELLOW}Found existing Pokémon Color Scripts directory. Removing...${NC}"
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
 
             echo -e "${CYAN}Installing dependencies...${NC}"
-            sudo dnf install -y git
+            if [[ "$distro" == "fedora" ]]; then
+                sudo dnf install -y git
+            elif [[ "$distro" == "opensuse" ]]; then
+                sudo zypper install -y git
+            fi
 
             echo -e "${CYAN}Cloning Pokémon Color Scripts...${NC}"
             git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"

@@ -41,9 +41,11 @@ detect_distro() {
         return 0
     elif command -v dnf &> /dev/null; then
         return 1
-    else
-        echo -e "${RED}:: Unsupported distribution detected. Proceeding cautiously...${NC}"
+    elif command -v zypper &> /dev/null; then
         return 2
+    else
+        echo -e "${RED}:: Unsupported distribution detected. Exiting...${NC}"
+        exit 1
     fi
 }
 
@@ -62,8 +64,7 @@ detect_aur_helper() {
 install_aur_helper() {
     detect_distro
     case $? in
-        1) return ;;
-        2) echo -e "${YELLOW}:: Proceeding, but AUR installation may not work properly.${NC}" ;;
+        1 | 2) return ;;
     esac
 
     detect_aur_helper
@@ -95,10 +96,24 @@ install_aur_helper() {
 }
 
 install_flatpak() {
+    detect_distro
+    distro=$?
+
     if ! command -v flatpak &> /dev/null; then
         echo -e "${YELLOW}:: Flatpak not found. Installing...${NC}"
-        sudo dnf install -y flatpak
+
+        if [[ $distro -eq 1 ]]; then
+            sudo dnf install -y flatpak
+        elif [[ $distro -eq 2 ]]; then
+            sudo zypper install -y flatpak
+        elif [[ $distro -eq 0 ]]; then
+            sudo pacman -S --noconfirm flatpak
+        else
+            echo -e "${RED}:: Flatpak installation not supported for this distribution${NC}"
+            return 1
+        fi
     fi
+
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 }
 
@@ -114,6 +129,18 @@ install_fedora_package() {
     fi
 }
 
+install_opensuse_package() {
+    package_name="$1"
+    flatpak_id="$2"
+
+    if sudo zypper search --installed-only "$package_name" &> /dev/null || sudo zypper search --available "$package_name" &> /dev/null; then
+        sudo zypper install -y "$package_name"
+    else
+        echo -e "${YELLOW}:: $package_name not found in zypper. Falling back to Flatpak.${NC}"
+        flatpak install -y flathub "$flatpak_id"
+    fi
+}
+
 while true; do
 
     clear
@@ -123,10 +150,11 @@ while true; do
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • OpenSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 
-    options=("Android Tools" "Browsers" "Communication Apps" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Crypto Tools" "Exit")
+    options=("Android Tools" "Browsers" "Communication Apps" "Crypto Tools" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=70% \
                                                         --prompt="Choose an option: " \
@@ -138,6 +166,7 @@ while true; do
         "Android Tools") install_android ;;
         "Browsers") install_browsers ;;
         "Communication Apps") install_communication ;;
+        "Crypto Tools") install_crypto_tools ;;
         "Development Tools") install_development ;;
         "Editing Tools") install_editing ;;
         "File Managers") install_filemanagers ;;
@@ -151,7 +180,6 @@ while true; do
         "Terminals") install_terminals ;;
         "Text Editors") install_texteditor ;;
         "Virtualization") install_virtualization ;;
-        "Crypto Tools") install_crypto_tools ;;
         "Exit")
             echo -e "${GREEN}Exiting...${NC}"
             exit

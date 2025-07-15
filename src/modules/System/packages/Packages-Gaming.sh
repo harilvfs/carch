@@ -14,6 +14,11 @@ install_gaming() {
         pkg_manager="sudo dnf install -y"
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        install_flatpak
+        pkg_manager="sudo zypper install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -42,6 +47,9 @@ install_gaming() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman steam
                         version=$(get_version steam)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager steam
+                        version=$(get_version steam)
                     else
                         $flatpak_cmd com.valvesoftware.Steam
                         version="(Flatpak version installed)"
@@ -53,6 +61,9 @@ install_gaming() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman lutris
+                        version=$(get_version lutris)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager lutris
                         version=$(get_version lutris)
                     else
                         $pkg_manager lutris
@@ -90,6 +101,9 @@ install_gaming() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman mangohud
                         version=$(get_version mangohud)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager mangohud
+                        version=$(get_version mangohud)
                     else
                         $pkg_manager mangohud
                         version=$(get_version mangohud)
@@ -101,6 +115,9 @@ install_gaming() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman gamemode
+                        version=$(get_version gamemode)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager gamemode
                         version=$(get_version gamemode)
                     else
                         $pkg_manager gamemode

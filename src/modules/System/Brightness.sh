@@ -18,6 +18,7 @@ check_brightnessctl() {
                 echo -e "${RED}Installation failed. Please install manually: sudo pacman -S brightnessctl${NC}"
                 exit 1
             fi
+
         elif command -v dnf &> /dev/null; then
             echo -e "${YELLOW}Detected Fedora-based system.${NC}"
             echo -e "${GREEN}Installing brightnessctl with dnf...${NC}"
@@ -28,9 +29,20 @@ check_brightnessctl() {
                 echo -e "${RED}Installation failed. Please install manually: sudo dnf install brightnessctl${NC}"
                 exit 1
             fi
+
+        elif command -v zypper &> /dev/null; then
+            echo -e "${YELLOW}Detected openSUSE system.${NC}"
+            echo -e "${GREEN}Installing brightnessctl with zypper...${NC}"
+            if sudo zypper install -y brightnessctl; then
+                echo -e "${GREEN}Installation successful!${NC}"
+                sleep 1
+            else
+                echo -e "${RED}Installation failed. Please install manually: sudo zypper install brightnessctl${NC}"
+                exit 1
+            fi
+
         else
             echo -e "${RED}Unsupported distribution.${NC}"
-            echo -e "${YELLOW}This script only supports Arch and Fedora-based systems.${NC}"
             echo -e "${GREEN}Please install brightnessctl manually using your package manager.${NC}"
             exit 1
         fi
@@ -160,12 +172,12 @@ set_specific_brightness() {
 }
 
 main() {
-
     if ! command -v fzf &> /dev/null; then
         echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 

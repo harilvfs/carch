@@ -9,6 +9,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • OpenSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -55,6 +56,8 @@ main_menu() {
         distro="arch"
     elif command -v dnf &> /dev/null; then
         distro="fedora"
+    elif command -v zypper &> /dev/null; then
+        distro="opensuse"
     else
         echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
         exit 1
@@ -65,6 +68,8 @@ main_menu() {
         options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")
     elif [[ "$distro" == "fedora" ]]; then
         options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
+    elif [[ "$distro" == "opensuse" ]]; then
+        options=("mylinuxforwork/dotfiles (Coming Soon)" "jakoolit/OpenSUSE-Hyprland" "Exit")
     fi
 
     echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${NC}"
@@ -77,6 +82,17 @@ main_menu() {
         exit 0
     fi
 
+    if [[ "$choice" == "mylinuxforwork/dotfiles (Coming Soon)" ]]; then
+        echo -e "${YELLOW}ML4W dotfiles for OpenSUSE is coming soon!${NC}"
+        echo -e "${CYAN}The owner has not officially published the guide yet.${NC}"
+        echo -e "${CYAN}I will add support once it's officially available.${NC}"
+        echo ""
+        echo -e "${GREEN}Press any key to return to menu...${NC}"
+        read
+        main_menu
+        return
+    fi
+
     echo "You selected: $choice"
 
     declare -A repos
@@ -85,6 +101,7 @@ main_menu() {
     repos["end-4/dots-hyprland"]="https://github.com/end-4/dots-hyprland"
     repos["jakoolit/Arch-Hyprland"]="https://github.com/JaKooLit/Arch-Hyprland"
     repos["jakoolit/Fedora-Hyprland"]="https://github.com/JaKooLit/Fedora-Hyprland"
+    repos["jakoolit/OpenSUSE-Hyprland"]="https://github.com/JaKooLit/OpenSUSE-Hyprland"
 
     echo "Sourcing from: ${repos[$choice]}"
 
@@ -122,6 +139,11 @@ install_config() {
     elif [[ "$choice" == "jakoolit/Fedora-Hyprland" ]]; then
         git clone --depth=1 https://github.com/JaKooLit/Fedora-Hyprland.git ~/Fedora-Hyprland
         cd ~/Fedora-Hyprland || exit
+        chmod +x install.sh
+        ./install.sh
+    elif [[ "$choice" == "jakoolit/OpenSUSE-Hyprland" ]]; then
+        git clone --depth=1 https://github.com/JaKooLit/OpenSUSE-Hyprland.git ~/OpenSUSE-Hyprland
+        cd ~/OpenSUSE-Hyprland || exit
         chmod +x install.sh
         ./install.sh
     fi

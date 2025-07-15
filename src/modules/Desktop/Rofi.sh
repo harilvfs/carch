@@ -9,6 +9,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -53,11 +54,22 @@ install_rofi_fedora() {
     fi
 }
 
+install_rofi_opensuse() {
+    if ! command -v rofi &> /dev/null; then
+        echo -e "${CYAN}Rofi is not installed. :: Installing Rofi for openSUSE...${NC}"
+        sudo zypper install -y rofi
+    else
+        echo -e "${GREEN}:: Rofi is already installed on openSUSE.${NC}"
+    fi
+}
+
 setup_rofi() {
     if command -v pacman &> /dev/null; then
         install_rofi_arch
     elif command -v dnf &> /dev/null; then
         install_rofi_fedora
+    elif command -v zypper &> /dev/null; then
+        install_rofi_opensuse
     else
         echo -e "${RED}Unsupported distribution. Please install Rofi manually.${ENDCOLOR}"
         exit 1

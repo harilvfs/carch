@@ -44,6 +44,8 @@ detect_os() {
         DISTRO="arch"
     elif command -v dnf &> /dev/null; then
         DISTRO="fedora"
+    elif command -v zypper &> /dev/null; then
+        DISTRO="opensuse"
     else
         echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
         exit 1
@@ -77,6 +79,8 @@ install_sddm() {
             sudo pacman -S --noconfirm sddm
         elif [[ $DISTRO == "fedora" ]]; then
             sudo dnf install -y sddm
+        elif [[ $DISTRO == "opensuse" ]]; then
+            sudo zypper install -y sddm
         else
             echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
             exit 1
@@ -131,6 +135,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 

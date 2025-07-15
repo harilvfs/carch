@@ -3,7 +3,6 @@
 install_music() {
     detect_distro
     distro=$?
-
     if [[ $distro -eq 0 ]]; then
         install_aur_helper
         pkg_manager="$AUR_HELPER -S --noconfirm"
@@ -13,6 +12,11 @@ install_music() {
         pkg_manager="sudo dnf install -y"
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        install_flatpak
+        pkg_manager="sudo zypper install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -20,7 +24,6 @@ install_music() {
 
     while true; do
         clear
-
         options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
@@ -47,7 +50,6 @@ install_music() {
                     fi
                     echo "Youtube-Music installed successfully! Version: $version"
                     ;;
-
                 "Spotube")
                     clear
                     if [[ $distro -eq 0 ]]; then
@@ -59,7 +61,6 @@ install_music() {
                     fi
                     echo "Spotube installed successfully! Version: $version"
                     ;;
-
                 "Spotify")
                     clear
                     if [[ $distro -eq 0 ]]; then
@@ -71,21 +72,22 @@ install_music() {
                     fi
                     echo "Spotify installed successfully! Version: $version"
                     ;;
-
                 "Rhythmbox")
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager rhythmbox
+                        version=$(get_version rhythmbox)
+                    elif [[ $distro -eq 2 ]]; then
+                        $pkg_manager rhythmbox
+                        version=$(get_version rhythmbox)
                     else
                         $pkg_manager rhythmbox
+                        version=$(get_version rhythmbox)
                     fi
-                    version=$(get_version rhythmbox)
                     echo "Rhythmbox installed successfully! Version: $version"
                     ;;
-
             esac
         done
-
         echo "All selected Music Apps have been installed."
         read -rp "Press Enter to continue..."
     done

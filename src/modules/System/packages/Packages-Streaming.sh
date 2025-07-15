@@ -5,12 +5,16 @@ install_streaming() {
     distro=$?
 
     if [[ $distro -eq 0 ]]; then
-        install_aur_helper
         pkg_manager_pacman="sudo pacman -S --noconfirm"
-        #        pkg_manager_aur="$AUR_HELPER -S --noconfirm"
         get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
     elif [[ $distro -eq 1 ]]; then
+        install_flatpak
         pkg_manager="sudo dnf install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        install_flatpak
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
@@ -20,7 +24,7 @@ install_streaming() {
     while true; do
         clear
 
-        options=("OBS Studio" "SimpleScreenRecorder [Git]" "Back to Main Menu")
+        options=("OBS Studio" "SimpleScreenRecorder [Git]" "Blue Recorder" "Back to Main Menu")
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
                                                     --prompt="Choose options (TAB to select multiple): " \
@@ -40,15 +44,28 @@ install_streaming() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman obs-studio
                         version=$(get_version obs-studio)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager obs-studio
                         version=$(get_version obs-studio)
+                    else
+                        $flatpak_cmd com.obsproject.Studio
+                        version="Flatpak Version"
                     fi
                     echo "OBS Studio installed successfully! Version: $version"
                     ;;
 
                 "SimpleScreenRecorder [Git]")
                     clear
+                    if [[ $distro -eq 2 ]]; then
+                        echo -e "${YELLOW}:: SimpleScreenRecorder build dependencies have known issues on OpenSUSE.${NC}"
+                        echo -e "${YELLOW}:: Main runtime dependencies are not available or fail during build.${NC}"
+                        echo -e "${YELLOW}:: For more information, visit: https://github.com/MaartenBaert/ssr${NC}"
+                        echo ""
+                        echo -e "${BLUE}:: Instead, we recommend using Blue Recorder which works well on OpenSUSE.${NC}"
+                        read -rp "Press Enter to continue..."
+                        continue
+                    fi
+
                     read -rp "This will clone and build SimpleScreenRecorder from source. Continue? (y/N): " confirm
                     if [[ $confirm =~ ^[Yy]$ ]]; then
                         CACHE_DIR="$HOME/.cache/ssr"
@@ -126,14 +143,27 @@ install_streaming() {
                                 echo -e "${RED}!! Build failed. Check for errors above.${NC}"
                             fi
                             rm -rf "$CACHE_DIR"
-
-                        else
-                            echo -e "${RED}:: Unsupported distribution.${NC}"
-                            rm -rf "$CACHE_DIR"
                         fi
                     else
                         echo "Installation aborted."
                     fi
+                    ;;
+
+                "Blue Recorder")
+                    clear
+                    if [[ $distro -eq 0 ]]; then
+                        install_flatpak
+                        flatpak install -y --noninteractive flathub sa.sy.bluerecorder
+                        version="Flatpak Version"
+                    elif [[ $distro -eq 1 ]]; then
+                        install_flatpak
+                        flatpak install -y --noninteractive flathub sa.sy.bluerecorder
+                        version="Flatpak Version"
+                    else
+                        $flatpak_cmd sa.sy.bluerecorder
+                        version="Flatpak Version"
+                    fi
+                    echo "Blue Recorder installed successfully! Version: $version"
                     ;;
 
             esac

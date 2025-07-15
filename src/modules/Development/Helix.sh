@@ -35,6 +35,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -42,6 +43,8 @@ if command -v pacman &> /dev/null; then
     DISTRO="arch"
 elif command -v dnf &> /dev/null; then
     DISTRO="fedora"
+elif command -v zypper &> /dev/null; then
+    DISTRO="opensuse"
 else
     echo -e "${RED}Unsupported distribution!${NC}"
     exit 1
@@ -53,6 +56,8 @@ install_helix() {
         sudo pacman -S --noconfirm helix noto-fonts-emoji git
     elif [[ $DISTRO == "fedora" ]]; then
         sudo dnf install -y helix google-noto-color-emoji-fonts google-noto-emoji-fonts git
+    elif [[ $DISTRO == "opensuse" ]]; then
+        sudo zypper install -y helix google-noto-fonts noto-coloremoji-fonts git
     fi
 }
 

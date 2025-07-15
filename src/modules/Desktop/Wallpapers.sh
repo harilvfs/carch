@@ -38,6 +38,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 
@@ -49,6 +50,17 @@ if [ ! -d "$PICTURES_DIR" ]; then
 fi
 
 setup_wallpapers() {
+    if [ -d "$WALLPAPERS_DIR" ]; then
+        echo -e "${YELLOW}:: The wallpapers directory already exists.${NC}"
+        if fzf_confirm "Overwrite existing wallpapers directory?"; then
+            echo -e "${CYAN}:: Removing existing wallpapers directory...${NC}"
+            rm -rf "$WALLPAPERS_DIR"
+        else
+            echo -e "${YELLOW}Operation cancelled. Keeping existing wallpapers.${NC}"
+            exit 0
+        fi
+    fi
+
     echo -e "${CYAN}:: Cloning the wallpapers repository...${NC}"
     git clone https://github.com/harilvfs/wallpapers "$WALLPAPERS_DIR"
 
@@ -56,9 +68,9 @@ setup_wallpapers() {
         echo -e "${CYAN}:: Cleaning up unnecessary files from the repository...${NC}"
         cd "$WALLPAPERS_DIR" || exit
         rm -rf .git README.md docs/
-        echo -e "${GREEN}Wallpapers have been successfully set up in your wallpapers directory.${NC}"
+        echo -e "${GREEN}:: Wallpapers have been successfully set up in your wallpapers directory.${NC}"
     else
-        echo -e "${CYAN}Failed to clone the repository.${NC}"
+        echo -e "${RED}:: Failed to clone the repository.${NC}"
     fi
 }
 

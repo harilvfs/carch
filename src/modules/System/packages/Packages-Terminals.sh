@@ -14,6 +14,9 @@ install_terminals() {
         pkg_manager="sudo dnf install -y"
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        pkg_manager="sudo zypper install -y"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -41,6 +44,8 @@ install_terminals() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager alacritty
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager alacritty
                     else
                         $pkg_manager alacritty
                     fi
@@ -52,6 +57,8 @@ install_terminals() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager kitty
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager kitty
                     else
                         $pkg_manager kitty
                     fi
@@ -61,8 +68,11 @@ install_terminals() {
 
                 "St")
                     clear
-                    if [[ distro -eq 0 ]]; then
+                    if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur st
+                        version=$(get_version st)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager st
                         version=$(get_version st)
                     else
                         $pkg_manager st
@@ -76,6 +86,9 @@ install_terminals() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur terminator
                         version=$(get_version terminator)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager terminator
+                        version=$(get_version terminator)
                     else
                         $pkg_manager terminator
                         version=$(get_version terminator)
@@ -87,6 +100,9 @@ install_terminals() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur tilix
+                        version=$(get_version tilix)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager tilix
                         version=$(get_version tilix)
                     else
                         $pkg_manager tilix
@@ -100,17 +116,39 @@ install_terminals() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur hyper
                         version=$(get_version hyper)
+                        echo "Hyper installed successfully! Version: $version"
+                    elif [[ $distro -eq 1 ]]; then
+                        echo ":: Downloading Hyper RPM for Fedora..."
+                        cd /tmp || exit
+                        wget -O hyper-3.4.1.x86_64.rpm https://github.com/vercel/hyper/releases/download/v3.4.1/hyper-3.4.1.x86_64.rpm
+                        if [[ $? -eq 0 ]]; then
+                            sudo dnf install -y hyper-3.4.1.x86_64.rpm
+                            version=$(get_version hyper)
+                            echo "Hyper installed successfully! Version: $version"
+                            rm -f hyper-3.4.1.x86_64.rpm
+                        else
+                            echo -e "${RED}!! Failed to download Hyper RPM.${NC}"
+                        fi
                     else
-                        echo "Hyper is not directly available in Fedora repositories."
-                        echo "Download from: [Hyper Website](https://hyper.is/)"
-                        version="(Manual installation required)"
+                        echo ":: Downloading Hyper RPM for OpenSUSE..."
+                        cd /tmp || exit
+                        wget -O hyper-3.4.1.x86_64.rpm https://github.com/vercel/hyper/releases/download/v3.4.1/hyper-3.4.1.x86_64.rpm
+                        if [[ $? -eq 0 ]]; then
+                            sudo zypper install -y hyper-3.4.1.x86_64.rpm
+                            version=$(get_version hyper)
+                            echo "Hyper installed successfully! Version: $version"
+                            rm -f hyper-3.4.1.x86_64.rpm
+                        else
+                            echo -e "${RED}!! Failed to download Hyper RPM.${NC}"
+                        fi
                     fi
-                    echo "Hyper installation completed! Version: $version"
                     ;;
 
                 "GNOME Terminal")
                     clear
                     if [[ $distro -eq 0 ]]; then
+                        $pkg_manager gnome-terminal
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager gnome-terminal
                     else
                         $pkg_manager gnome-terminal
@@ -122,6 +160,8 @@ install_terminals() {
                 "Konsole")
                     clear
                     if [[ $distro -eq 0 ]]; then
+                        $pkg_manager konsole
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager konsole
                     else
                         $pkg_manager konsole
@@ -141,13 +181,17 @@ install_terminals() {
                             version=$(get_version wezterm)
                             echo "WezTerm is already installed! Version: $version"
                         else
-                            sudo dnf install -y wezterm
-                            if [[ $? -ne 0 ]]; then
-                                $flatpak_cmd org.wezfurlong.wezterm
-                                version="(Flatpak version installed)"
-                            else
-                                version=$(get_version wezterm)
-                            fi
+                            $flatpak_cmd org.wezfurlong.wezterm
+                            version="(Flatpak version installed)"
+                            echo "WezTerm installed successfully! Version: $version"
+                        fi
+                    else
+                        if sudo zypper se -i wezterm &> /dev/null; then
+                            version=$(get_version wezterm)
+                            echo "WezTerm is already installed! Version: $version"
+                        else
+                            sudo zypper install -y wezterm
+                            version=$(get_version wezterm)
                             echo "WezTerm installed successfully! Version: $version"
                         fi
                     fi
@@ -160,6 +204,8 @@ install_terminals() {
                     elif [[ $distro -eq 1 ]]; then
                         sudo dnf copr enable pgdev/ghostty -y
                         sudo dnf install -y ghostty
+                    else
+                        $pkg_manager ghostty
                     fi
                     version=$(get_version ghostty)
                     echo "Ghostty installed successfully! Version: $version"

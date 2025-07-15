@@ -53,6 +53,8 @@ check_essential_dependencies() {
             sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
         elif command -v dnf &> /dev/null; then
             sudo dnf install -y "${missing[@]}" > /dev/null 2>&1
+        elif command -v zypper &> /dev/null; then
+            sudo zypper install -y "${missing[@]}" > /dev/null 2>&1
         else
             print_message "$RED" "Unsupported package manager. Install dependencies manually."
             exit 1
@@ -83,6 +85,8 @@ detect_distro() {
         DISTRO="arch"
     elif command -v dnf &> /dev/null; then
         DISTRO="fedora"
+    elif command -v zypper &> /dev/null; then
+        DISTRO="opensuse"
     else
         print_message "$RED" "Unable to detect your Linux distribution."
         exit 1
@@ -96,6 +100,7 @@ check_fzf() {
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • OpenSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 }
@@ -180,6 +185,8 @@ install_zsh_dependencies() {
 
             print_message "$GREEN" "eza installed successfully!"
         fi
+    elif command -v zypper &> /dev/null; then
+        sudo zypper install -y zsh trash-cli eza
     fi
 }
 
@@ -188,7 +195,7 @@ install_powerlevel10k() {
     if command -v pacman &> /dev/null; then
         $AUR_HELPER -S --noconfirm zsh-theme-powerlevel10k-git
         echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-    elif command -v dnf &> /dev/null; then
+    elif command -v dnf &> /dev/null || command -v zypper &> /dev/null; then
         sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
         echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
     fi
@@ -240,7 +247,7 @@ install_pokemon_colorscripts() {
     print_message "$CYAN" "Installing Pokémon Color Scripts..."
     if command -v pacman &> /dev/null; then
         $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
-    elif command -v dnf &> /dev/null; then
+    elif command -v dnf &> /dev/null || command -v zypper &> /dev/null; then
         POKEMON_DIR="$HOME/pokemon-colorscripts"
 
         [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
@@ -264,6 +271,8 @@ install_zoxide() {
         sudo pacman -S --noconfirm zoxide
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y zoxide
+    elif command -v zypper &> /dev/null; then
+        sudo zypper install -y zoxide
     fi
 }
 

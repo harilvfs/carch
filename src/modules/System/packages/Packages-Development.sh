@@ -14,6 +14,11 @@ install_development() {
         pkg_manager="sudo dnf install -y"
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        install_flatpak
+        pkg_manager="sudo zypper install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -42,9 +47,12 @@ install_development() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman nodejs npm
                         version=$(get_version nodejs)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager nodejs-npm
                         version=$(get_version nodejs)
+                    else
+                        $pkg_manager nodejs22
+                        version=$(get_version nodejs22)
                     fi
                     echo "Node.js installed successfully! Version: $version"
                     ;;
@@ -54,9 +62,12 @@ install_development() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman python python-pip
                         version=$(get_version python)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager python3 python3-pip
                         version=$(get_version python3)
+                    else
+                        $pkg_manager python313
+                        version=$(get_version python313)
                     fi
                     echo "Python installed successfully! Version: $version"
                     ;;
@@ -74,9 +85,12 @@ install_development() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman go
                         version=$(get_version go)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager golang
                         version=$(get_version golang)
+                    else
+                        $pkg_manager go
+                        version=$(get_version go)
                     fi
                     echo "Go installed successfully! Version: $version"
                     ;;
@@ -85,15 +99,14 @@ install_development() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman docker
-                        sudo systemctl enable --now docker
-                        sudo usermod -aG docker "$USER"
-                        version=$(get_version docker)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager docker
                     else
                         $pkg_manager docker
-                        sudo systemctl enable --now docker
-                        sudo usermod -aG docker "$USER"
-                        version=$(get_version docker)
                     fi
+                    sudo systemctl enable --now docker
+                    sudo usermod -aG docker "$USER"
+                    version=$(get_version docker)
                     echo "Docker installed successfully! Version: $version"
                     echo "Note: You may need to log out and back in for group changes to take effect."
                     ;;
@@ -126,6 +139,9 @@ install_development() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_pacman hugo
+                        version=$(get_version hugo)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager hugo
                         version=$(get_version hugo)
                     else
                         $pkg_manager hugo

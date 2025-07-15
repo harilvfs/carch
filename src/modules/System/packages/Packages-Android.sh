@@ -11,6 +11,9 @@ install_android() {
     elif [[ $distro -eq 1 ]]; then
         pkg_manager="sudo dnf install -y"
         get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        pkg_manager="sudo zypper install -y"
+        get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
         return
@@ -46,9 +49,12 @@ install_android() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur gvfs-mtp
                         version=$(get_version gvfs-mtp)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager gvfs-mtp
                         version=$(get_version gvfs-mtp)
+                    else
+                        $pkg_manager mtp-tools
+                        version=$(get_version mtp-tools)
                     fi
                     echo "Gvfs-MTP installed successfully! Version: $version"
                     ;;
@@ -57,6 +63,9 @@ install_android() {
                     clear
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur android-tools
+                        version=$(get_version android-tools)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager android-tools
                         version=$(get_version android-tools)
                     else
                         $pkg_manager android-tools
@@ -70,9 +79,12 @@ install_android() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur jdk-openjdk
                         version=$(get_version jdk-openjdk)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $pkg_manager java-latest-openjdk.x86_64
                         version=$(get_version java-latest-openjdk)
+                    else
+                        $pkg_manager java-17-openjdk
+                        version=$(get_version java-17-openjdk)
                     fi
                     echo "OpenJDK installed successfully! Version: $version"
                     ;;

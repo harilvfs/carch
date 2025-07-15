@@ -38,8 +38,11 @@ detect_distro() {
     elif command -v dnf &> /dev/null; then
         echo -e "${GREEN}:: Fedora detected.${ENDCOLOR}"
         DISTRO="fedora"
+    elif command -v zypper &> /dev/null; then
+        echo -e "${GREEN}:: openSUSE detected.${ENDCOLOR}"
+        DISTRO="opensuse"
     else
-        echo -e "${RED}:: Unsupported distribution. This script only supports Arch and Fedora.${ENDCOLOR}"
+        echo -e "${RED}:: Unsupported distribution.${ENDCOLOR}"
         exit 1
     fi
 }
@@ -94,11 +97,18 @@ install_pipewire() {
             echo -e "${RED}:: Failed to install PipeWire packages on Arch.${ENDCOLOR}"
             exit 1
         fi
-    else
+    elif [ "$DISTRO" = "fedora" ]; then
         echo -e "${CYAN}:: Installing PipeWire packages for Fedora...${ENDCOLOR}"
         sudo dnf install -y pipewire
         if [ $? -ne 0 ]; then
             echo -e "${RED}:: Failed to install PipeWire packages on Fedora.${ENDCOLOR}"
+            exit 1
+        fi
+    elif [ "$DISTRO" = "opensuse" ]; then
+        echo -e "${CYAN}:: Installing PipeWire packages for openSUSE...${ENDCOLOR}"
+        sudo zypper install -y pipewire rtkit wireplumber pipewire-alsa gstreamer-plugin-pipewire pipewire-pulseaudio
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}:: Failed to install PipeWire packages on openSUSE.${ENDCOLOR}"
             exit 1
         fi
     fi
@@ -130,6 +140,7 @@ main() {
         echo -e "${YELLOW}Please install fzf before running this script:${NC}"
         echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
         echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
         exit 1
     fi
 

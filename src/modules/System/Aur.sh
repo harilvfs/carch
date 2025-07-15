@@ -9,6 +9,8 @@ detect_distro() {
         distro="arch"
     elif command -v dnf &> /dev/null; then
         distro="fedora"
+    elif command -v zypper &> /dev/null; then
+        distro="opensuse"
     else
         distro="unsupported"
     fi
@@ -16,38 +18,18 @@ detect_distro() {
 
 check_dependencies() {
     local failed=0
+    local deps=("fzf" "git" "make" "less")
 
-    if ! command -v fzf &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-        failed=1
-    fi
-
-    if ! command -v git &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: git is not installed.${NC}"
-        echo -e "${YELLOW}Please install git before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install git"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S git"
-        failed=1
-    fi
-
-    if ! command -v make &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: make is not installed.${NC}"
-        echo -e "${YELLOW}Please install make before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install make"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S base-devel make"
-        failed=1
-    fi
-
-    if ! command -v less &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: less is not installed.${NC}"
-        echo -e "${YELLOW}Please install less before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install less"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S less"
-        failed=1
-    fi
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            echo -e "${RED}${BOLD}Error: ${dep} is not installed.${NC}"
+            echo -e "${YELLOW}Please install ${dep} before running this script:${NC}"
+            echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install ${dep}"
+            echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S ${dep}"
+            echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install ${dep}"
+            failed=1
+        fi
+    done
 
     if [ "$failed" -eq 1 ]; then
         exit 1
@@ -156,9 +138,9 @@ check_existing_helpers() {
 
 detect_distro
 
-if [ "$distro" == "fedora" ]; then
-    echo -e "${YELLOW}NOTICE:${NC} This system is detected as ${RED}Fedora${NC}."
-    echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with Fedora.${NC}"
+if [ "$distro" == "fedora" ] || [ "$distro" == "opensuse" ]; then
+    echo -e "${YELLOW}NOTICE:${NC} This system is detected as ${RED}${distro^}${NC}."
+    echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with ${distro^}.${NC}"
     echo -e "${YELLOW}These tools will not work on your system.${NC}"
     exit 1
 fi

@@ -37,6 +37,9 @@ detect_distro() {
     elif command -v dnf &> /dev/null; then
         distro="fedora"
         echo -e "${YELLOW}Detected distribution: Fedora${NC}"
+    elif command -v zypper &> /dev/null; then
+        distro="opensuse"
+        echo -e "${CYAN}Detected distribution: openSUSE${NC}"
     else
         echo -e "${RED}Unsupported distribution. Exiting...${NC}"
         exit 1
@@ -68,6 +71,11 @@ install_dependencies() {
                 exit 1
             }
         fi
+    elif [ "$distro" == "opensuse" ]; then
+        sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
+            echo -e "${RED}:: Failed to install dependencies. Exiting...${NC}"
+            exit 1
+        }
     fi
 
     echo -e "${GREEN}:: Dependencies installed successfully.${NC}"
@@ -78,6 +86,7 @@ if ! command -v fzf &> /dev/null; then
     echo -e "${YELLOW}Please install fzf before running this script:${NC}"
     echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
     echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
+    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
     exit 1
 fi
 

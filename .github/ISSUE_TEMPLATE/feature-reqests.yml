@@ -11,7 +11,6 @@ body:
       value: |
         Thank you for taking the time to submit a feature request! Please note that submitting a request does not guarantee implementation.
 
-
   - type: dropdown
     id: distro
     attributes:
@@ -20,7 +19,8 @@ body:
       options:
         - Arch Linux
         - Fedora Linux
-        - Both
+        - openSUSE
+        - All
     validations:
       required: true
 
