@@ -14,8 +14,10 @@ install_texteditor() {
         flatpak_cmd="flatpak install -y --noninteractive flathub"
         get_version() { rpm -q "$1"; }
     else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-        return
+        install_flatpak
+        pkg_manager="sudo zypper install -y"
+        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
     fi
 
     while true; do
@@ -42,8 +44,8 @@ install_texteditor() {
                         $pkg_manager_aur cursor-bin
                         version=$(get_version cursor-bin)
                     else
-                        echo "Cursor is not available in Fedora repositories."
-                        echo "Download AppImage from:** [Cursor Official Site](https://www.cursor.com/)"
+                        echo "Cursor is not available in Fedora/openSUSE repositories."
+                        echo "Download AppImage from: [Cursor Official Site](https://www.cursor.com/)"
                         echo "To Run: chmod +x Cursor.AppImage && ./Cursor.AppImage"
                         version="(Manual installation required)"
                     fi
@@ -55,9 +57,13 @@ install_texteditor() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur visual-studio-code-bin
                         version=$(get_version visual-studio-code-bin)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $flatpak_cmd com.visualstudio.code
                         version="(Flatpak version installed)"
+                    else
+                        sudo zypper ar -cf https://download.opensuse.org/repositories/devel:/tools:/ide:/vscode/openSUSE_Tumbleweed devel_tools_ide_vscode
+                        sudo zypper install -y code
+                        version=$(get_version code)
                     fi
                     echo "VS Code installed successfully! Version: $version"
                     ;;
@@ -79,9 +85,13 @@ install_texteditor() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur zed-preview-bin
                         version=$(get_version zed-preview-bin)
-                    else
+                    elif [[ $distro -eq 1 ]]; then
                         $flatpak_cmd dev.zed.Zed
                         version="(Flatpak version installed)"
+                    else
+                        sudo zypper addrepo https://download.opensuse.org/repositories/home:hennevogel/openSUSE_Tumbleweed/home:hennevogel.repo
+                        sudo zypper install -y zed
+                        version=$(get_version zed)
                     fi
                     echo "ZED installed successfully! Version: $version"
                     ;;
@@ -103,9 +113,12 @@ install_texteditor() {
                     if [[ $distro -eq 0 ]]; then
                         $pkg_manager_aur vim
                         version=$(get_version vim)
+                    elif [[ $distro -eq 1 ]]; then
+                        $pkg_manager vim-enhanced
+                        version=$(get_version vim-enhanced)
                     else
-                        $flatpak_cmd org.vim.Vim
-                        version="(Flatpak version installed)"
+                        $pkg_manager vim
+                        version=$(get_version vim)
                     fi
                     echo "Vim installed successfully! Version: $version"
                     ;;
