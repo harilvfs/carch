@@ -60,13 +60,17 @@ install_font_fedora() {
     local font_name="$1"
     local latest_version=$(get_latest_release)
     local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/${font_name}.zip"
+    local zip_file="/tmp/${font_name}.zip"
 
     echo -e "${CYAN}:: Downloading $font_name version ${latest_version} to /tmp...${NC}"
-    curl -L "$font_url" -o "/tmp/${font_name}.zip"
+    curl -L "$font_url" -o "$zip_file"
 
     echo -e "${CYAN}:: Extracting $font_name...${NC}"
     mkdir -p "$FONTS_DIR"
-    unzip -q "/tmp/${font_name}.zip" -d "$FONTS_DIR"
+    unzip -q "$zip_file" -d "$FONTS_DIR"
+
+    echo -e "${CYAN}:: Cleaning up temporary files...${NC}"
+    rm -f "$zip_file"
 
     echo -e "${CYAN}:: Refreshing font cache...${NC}"
     fc-cache -vf
@@ -85,13 +89,17 @@ install_font_opensuse() {
     local font_name="$1"
     local latest_version=$(get_latest_release)
     local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/${font_name}.zip"
+    local zip_file="/tmp/${font_name}.zip"
 
     echo -e "${CYAN}:: Downloading $font_name version ${latest_version} to /tmp...${NC}"
-    curl -L "$font_url" -o "/tmp/${font_name}.zip"
+    curl -L "$font_url" -o "$zip_file"
 
     echo -e "${CYAN}:: Extracting $font_name...${NC}"
     mkdir -p "$FONTS_DIR"
-    unzip -q "/tmp/${font_name}.zip" -d "$FONTS_DIR"
+    unzip -q "$zip_file" -d "$FONTS_DIR"
+
+    echo -e "${CYAN}:: Cleaning up temporary files...${NC}"
+    rm -f "$zip_file"
 
     echo -e "${CYAN}:: Refreshing font cache...${NC}"
     fc-cache -vf
