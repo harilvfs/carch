@@ -52,6 +52,7 @@ body:
       options:
         - Arch Linux
         - Fedora Linux
+        - openSUSE
         - Other (please specify below)
     validations:
       required: true
