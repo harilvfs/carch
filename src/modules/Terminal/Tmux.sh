@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -30,7 +31,10 @@ fzf_confirm() {
     fi
 }
 
-required_cmds="fzf git curl wget"
+clear
+check_fzf
+
+required_cmds="git curl wget"
 missing=0
 
 echo_missing_cmd() {
@@ -50,8 +54,6 @@ for cmd in $required_cmds; do
 done
 
 [ "$missing" -eq 1 ] && exit 1
-
-clear
 
 if ! command -v tmux &> /dev/null; then
     echo -e "${YELLOW}Tmux is not installed. Installing...${NC}"

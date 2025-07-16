@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
@@ -18,7 +19,7 @@ detect_distro() {
 
 check_dependencies() {
     local failed=0
-    local deps=("fzf" "git" "make" "less")
+    local deps=("git" "make" "less")
 
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
@@ -137,6 +138,7 @@ check_existing_helpers() {
 }
 
 detect_distro
+check_fzf
 
 if [ "$distro" == "fedora" ] || [ "$distro" == "opensuse" ]; then
     echo -e "${YELLOW}NOTICE:${NC} This system is detected as ${RED}${distro^}${NC}."

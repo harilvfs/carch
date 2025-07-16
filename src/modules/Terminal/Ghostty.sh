@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -30,21 +31,12 @@ fzf_confirm() {
     fi
 }
 
-if ! command -v fzf &> /dev/null; then
-    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
-    exit 1
-fi
-
-echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${NC}"
-echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${NC}"
-echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${NC}"
-echo
-
 setup_ghostty() {
+    echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${NC}"
+    echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${NC}"
+    echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${NC}"
+    echo
+
     if ! command -v ghostty &> /dev/null; then
         echo -e "${CYAN}Ghostty is not installed. :: Installing...${NC}"
 
@@ -139,4 +131,5 @@ setup_ghostty() {
     fi
 }
 
+check_fzf
 setup_ghostty

@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 check_brightnessctl() {
     if ! command -v brightnessctl &> /dev/null; then
@@ -172,15 +173,7 @@ set_specific_brightness() {
 }
 
 main() {
-    if ! command -v fzf &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-        echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
-        exit 1
-    fi
-
+    check_fzf
     check_brightnessctl
 
     while true; do

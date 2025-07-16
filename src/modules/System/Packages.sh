@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 source "$(dirname "$0")/packages/Packages-Android.sh"
 source "$(dirname "$0")/packages/Packages-Browsers.sh"
@@ -142,18 +143,8 @@ install_opensuse_package() {
 }
 
 while true; do
-
     clear
-
-    if ! command -v fzf &> /dev/null; then
-        echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-        echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-        echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-        echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-        echo -e "${CYAN}  • OpenSUSE: ${NC}sudo zypper install fzf"
-        exit 1
-    fi
-
+    check_fzf
     options=("Android Tools" "Browsers" "Communication Apps" "Crypto Tools" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Exit")
     selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                         --height=70% \

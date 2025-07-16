@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -130,15 +131,7 @@ Current=catppuccin-mocha
 EOF'
 }
 
-if ! command -v fzf &> /dev/null; then
-    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
-    exit 1
-fi
-
+check_fzf
 print_banner
 detect_os
 

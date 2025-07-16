@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 FONTS_DIR="$HOME/.fonts"
 
@@ -306,7 +307,7 @@ detect_os() {
 
 check_dependencies() {
     local failed=0
-    local deps=("fzf" "curl" "unzip")
+    local deps=("curl" "unzip")
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
             echo -e "${RED}${BOLD}Error: ${dep} is not installed.${NC}"
@@ -325,6 +326,7 @@ check_dependencies() {
 }
 
 main() {
+    check_fzf
     check_dependencies
     detect_os
     choose_fonts

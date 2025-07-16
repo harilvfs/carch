@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 FZF_COMMON="--layout=reverse \
             --border=bold \
@@ -30,14 +31,7 @@ fzf_confirm() {
     fi
 }
 
-if ! command -v fzf &> /dev/null; then
-    echo -e "${RED}${BOLD}Error: fzf is not installed${NC}"
-    echo -e "${YELLOW}Please install fzf before running this script:${NC}"
-    echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install fzf"
-    echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S fzf"
-    echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install fzf"
-    exit 1
-fi
+check_fzf
 
 echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${NC}"
 echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${NC}"
