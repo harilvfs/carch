@@ -171,15 +171,11 @@ fn ui(f: &mut Frame, app: &mut App) {
         ]),
         Line::from(vec![
             Span::styled("  --update                ", Style::default().fg(Color::Yellow)),
-            Span::raw(
-                "Interactively update Carch based on the installation method.",
-            ),
+            Span::raw("Interactively update Carch based on the installation method."),
         ]),
         Line::from(vec![
             Span::styled("  --uninstall             ", Style::default().fg(Color::Yellow)),
-            Span::raw(
-                "Interactively uninstall Carch based on the installation method.",
-            ),
+            Span::raw("Interactively uninstall Carch based on the installation method."),
         ]),
         Line::from(""),
         Line::from(Span::styled("Installation & Update:", Style::default().fg(Color::Cyan))),
