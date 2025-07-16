@@ -1,5 +1,67 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.2.3](https://github.com/harilvfs/carch/compare/v5.2.2...v5.2.3) - 2025-07-16
+
+
+### 🚀 Features
+
+
+- [063aa13](https://github.com/harilvfs/carch/commit/063aa1347e5589176be70208341908d645df7beb) Initial support for opensuse (#524) by @harilvfs in [#524](https://github.com/harilvfs/carch/pull/524)
+
+- [c98c1c6](https://github.com/harilvfs/carch/commit/c98c1c6f8b45fda585da26a3778665ad13972201)  *(cmd)* Implement direct update and uninstall by @harilvfs
+
+- [8e10e2d](https://github.com/harilvfs/carch/commit/8e10e2dac36f7b44bdd6f5b9a512b0f4dcd54ceb)  *(script)* Add reusable check_fzf function by @harilvfs
+
+- [0b2abae](https://github.com/harilvfs/carch/commit/0b2abae5909887795c1cda46166f4b7660e28cac)  *(package-git)* Add opensuse support by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [1d621ab](https://github.com/harilvfs/carch/commit/1d621ab1e98b412e58d2f63f8e0d48d1124ced7f)  *(desktop)* Binary dir & desc by @harilvfs
+
+- [9934ac7](https://github.com/harilvfs/carch/commit/9934ac73e163d744879f90ea7cb86e285dce99c9)  *(lint)* Shell format by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [f8ce413](https://github.com/harilvfs/carch/commit/f8ce413961cb41bddf6202954cd9714b60457068)  *(readme)* Add preview by @harilvfs
+
+- [f54a44b](https://github.com/harilvfs/carch/commit/f54a44b3379d88d9ed25e7e54fe5c7e01eae4721) Update help and completions for commands by @harilvfs
+
+- [44cc5a3](https://github.com/harilvfs/carch/commit/44cc5a3db31084b8511683b260c74fd0f91a741a)  *(readme)* Add opensuse support by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [27de3c8](https://github.com/harilvfs/carch/commit/27de3c895455589b2903fbc7cb7ee901941bde85)  *(lint)* Fix fmt by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [0bc78a3](https://github.com/harilvfs/carch/commit/0bc78a3ed96c22e5d117f7a631b6231a0e608361) Remove pre-release by @harilvfs
+
+- [a0a9d36](https://github.com/harilvfs/carch/commit/a0a9d36b8edb40996b0f1f4aa35d1ecb25359ae5)  *(cmd)* Clean up command for new changes by @harilvfs
+
+- [6c03caf](https://github.com/harilvfs/carch/commit/6c03caf6888330e4da848f4e154604063c68c447)  *(install)* Remove Go installer (using RPM/PKGBUILD instead) (#525) by @harilvfs in [#525](https://github.com/harilvfs/carch/pull/525)
+
+- [893d285](https://github.com/harilvfs/carch/commit/893d285489446b93b39ac740975589d7a19e889b) Clean old .gitignore dir by @harilvfs
+
+- [12370c0](https://github.com/harilvfs/carch/commit/12370c00a389b424ddedfa6480d02e8b96cdabd9) Update man pages commands by @harilvfs
+
+- [ef6202c](https://github.com/harilvfs/carch/commit/ef6202c08cc744efb0101594b3a70a89c5dd1e19)  *(man)* Fix typo by @harilvfs
+
+- [24dce83](https://github.com/harilvfs/carch/commit/24dce834db322ff869b1fb400d5477ab54d0a41b) Remove go for editorconfig by @harilvfs
+
+
+
 ## [5.2.2](https://github.com/harilvfs/carch/compare/v5.2.1...v5.2.2) - 2025-07-12
 
 
