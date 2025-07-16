@@ -160,7 +160,9 @@ pub fn uninstall() -> io::Result<()> {
                 .is_ok_and(|o| o.status.success())
             {
                 println!("Uninstalling for Arch Linux...");
-                Command::new("sudo").arg("pacman").arg("-R").arg("carch").status()?;
+                let _ = Command::new("sudo").arg("pacman").arg("-R").arg("carch-bin").status();
+                let _ =
+                    Command::new("sudo").arg("pacman").arg("-R").arg("carch-bin-debug").status();
                 println!("Uninstallation done.");
             } else if Command::new("sh")
                 .arg("-c")
