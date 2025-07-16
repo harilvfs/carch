@@ -10,8 +10,8 @@ _carch() {
         '-v:Show the program version'
         '--check-update:Check if a new version is available'
         '--log:Enable logging for the current session only'
-        '--update:Get instructions for updating Carch'
-        '--uninstall:Get instructions for uninstalling Carch'
+        '--update:Interactively update Carch'
+        '--uninstall:Interactively uninstall Carch'
     )
 
     _arguments \
@@ -21,8 +21,8 @@ _carch() {
         '-v[Show the program version]' \
         '--check-update[Check if a new version is available]' \
         '--log[Enable logging for the current session only]' \
-        '--update[Get instructions for updating Carch]' \
-        '--uninstall[Get instructions for uninstalling Carch]'
+        '--update[Interactively update Carch]' \
+        '--uninstall[Interactively uninstall Carch]'
 }
 
 _carch

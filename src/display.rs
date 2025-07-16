@@ -172,28 +172,28 @@ fn ui(f: &mut Frame, app: &mut App) {
         Line::from(vec![
             Span::styled("  --update                ", Style::default().fg(Color::Yellow)),
             Span::raw(
-                "Provide instructions for updating Carch with both cargo and installation script.",
+                "Interactively update Carch based on the installation method.",
             ),
         ]),
         Line::from(vec![
             Span::styled("  --uninstall             ", Style::default().fg(Color::Yellow)),
             Span::raw(
-                "Provide instructions for uninstalling Carch with both cargo and installation script.",
+                "Interactively uninstall Carch based on the installation method.",
             ),
         ]),
         Line::from(""),
         Line::from(Span::styled("Installation & Update:", Style::default().fg(Color::Cyan))),
         Line::from(vec![
-            Span::raw("Carch can be installed either via "),
-            Span::styled("cargo install carch", Style::default().fg(Color::Green)),
-            Span::raw(" or using the installation script."),
+            Span::raw("Carch can be installed via "),
+            Span::styled("cargo", Style::default().fg(Color::Green)),
+            Span::raw(" or a package manager."),
         ]),
         Line::from(vec![
             Span::raw("To update or uninstall, use "),
             Span::styled("--update", Style::default().fg(Color::Green)),
             Span::raw(" or "),
             Span::styled("--uninstall", Style::default().fg(Color::Green)),
-            Span::raw(" which will provide instructions for both installation methods."),
+            Span::raw(", which will guide you through the process."),
         ]),
         Line::from(""),
         Line::from(Span::styled(

@@ -14,6 +14,6 @@ complete -c carch -n '__fish_carch_no_subcommand' -l version -d "Show the progra
 complete -c carch -n '__fish_carch_no_subcommand' -s v -d "Show the program version"
 complete -c carch -n '__fish_carch_no_subcommand' -l log -d "Enable logging for the current session only"
 complete -c carch -n '__fish_carch_no_subcommand' -l check-update -d "Check if a new version of Carch is available"
-complete -c carch -n '__fish_carch_no_subcommand' -l update -d "Get instructions for updating Carch"
-complete -c carch -n '__fish_carch_no_subcommand' -l uninstall -d "Get instructions for uninstalling Carch"
+complete -c carch -n '__fish_carch_no_subcommand' -l update -d "Interactively update Carch"
+complete -c carch -n '__fish_carch_no_subcommand' -l uninstall -d "Interactively uninstall Carch"
 
