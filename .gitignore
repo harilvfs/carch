@@ -1,5 +1,4 @@
 build/
-scripts/install/build
 site/node_modules
 target/
 tui/target
