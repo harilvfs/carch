@@ -11,7 +11,9 @@ install_github() {
         get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
     elif [[ $distro -eq 1 ]]; then
         pkg_manager="sudo dnf install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
+        get_version() { rpm -q "$1"; }
+    elif [[ $distro -eq 2 ]]; then
+        pkg_manager="sudo zypper install -y"
         get_version() { rpm -q "$1"; }
     else
         echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
@@ -54,21 +56,60 @@ install_github() {
                         $pkg_manager_aur github-desktop-bin
                         version=$(get_version github-desktop-bin)
                     else
-                        echo "Setting up GitHub Desktop repository..."
-                        sudo dnf upgrade --refresh
-                        sudo rpm --import https://rpm.packages.shiftkey.dev/gpg.key
-                        echo -e "[shiftkey-packages]\nname=GitHub Desktop\nbaseurl=https://rpm.packages.shiftkey.dev/rpm/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://rpm.packages.shiftkey.dev/gpg.key" | sudo tee /etc/yum.repos.d/shiftkey-packages.repo > /dev/null
+                        echo "Downloading GitHub Desktop from latest release..."
 
-                        $pkg_manager github-desktop
-                        if [[ $? -ne 0 ]]; then
-                            echo "RPM installation failed. Falling back to Flatpak..."
-                            $flatpak_cmd io.github.shiftey.Desktop
-                            version="(Flatpak version installed)"
-                        else
-                            version=$(get_version github-desktop)
+                        if ! command -v curl &> /dev/null; then
+                            echo "Installing curl..."
+                            $pkg_manager curl
                         fi
+
+                        if ! command -v wget &> /dev/null; then
+                            echo "Installing wget..."
+                            $pkg_manager wget
+                        fi
+
+                        latest_release=$(curl -s https://api.github.com/repos/shiftkey/desktop/releases/latest)
+                        if [[ -z "$latest_release" ]]; then
+                            echo -e "${RED}:: Failed to fetch latest release info. Exiting.${NC}"
+                            continue
+                        fi
+
+                        rpm_url=$(echo "$latest_release" | grep -o 'https://github.com/shiftkey/desktop/releases/download/[^"]*GitHubDesktop-linux-x86_64-[^"]*\.rpm' | head -1)
+
+                        if [[ -z "$rpm_url" ]]; then
+                            echo -e "${RED}:: Failed to find RPM download URL. Exiting.${NC}"
+                            continue
+                        fi
+
+                        echo "Found RPM URL: $rpm_url"
+
+                        tmp_dir=$(mktemp -d)
+                        cd "$tmp_dir" || exit 1
+
+                        echo "Downloading GitHub Desktop RPM..."
+                        if wget "$rpm_url"; then
+                            rpm_file=$(basename "$rpm_url")
+
+                            echo "Installing GitHub Desktop..."
+                            if [[ $distro -eq 1 ]]; then
+                                sudo dnf install -y "./$rpm_file"
+                            elif [[ $distro -eq 2 ]]; then
+                                sudo zypper install -y --allow-unsigned-rpm "./$rpm_file"
+                            fi
+
+                            if [[ $? -eq 0 ]]; then
+                                version=$(get_version github-desktop 2> /dev/null || echo "Latest version installed")
+                                echo "GitHub Desktop installed successfully! Version: $version"
+                            else
+                                echo -e "${RED}:: Failed to install GitHub Desktop RPM.${NC}"
+                            fi
+                        else
+                            echo -e "${RED}:: Failed to download GitHub Desktop RPM.${NC}"
+                        fi
+
+                        cd /
+                        rm -rf "$tmp_dir"
                     fi
-                    echo "GitHub Desktop installed successfully! Version: $version"
                     ;;
 
                 "GitHub CLI")
@@ -90,16 +131,9 @@ install_github() {
                         version=$(get_version lazygit)
                         echo "LazyGit installed successfully! Version: $version"
                     else
-                        echo -e "${YELLOW}:: Warning: LazyGit COPR repository is no longer maintained in Fedora.${NC}"
-                        read -rp "Do you want to proceed with installation anyway? (y/N) " confirm
-                        if [[ $confirm =~ ^[Yy]$ ]]; then
-                            sudo dnf copr enable atim/lazygit -y
-                            $pkg_manager lazygit
-                            version=$(get_version lazygit)
-                            echo "LazyGit installed successfully! Version: $version"
-                        else
-                            echo "LazyGit installation aborted."
-                        fi
+                        $pkg_manager lazygit
+                        version=$(get_version lazygit)
+                        echo "LazyGit installed successfully! Version: $version"
                     fi
                     ;;
 
