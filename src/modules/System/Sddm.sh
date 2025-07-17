@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1

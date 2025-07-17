@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 check() {
     if [ "$1" -ne 0 ]; then
         printf "Error: %s\n" "$2" >&2

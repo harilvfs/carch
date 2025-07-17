@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 if [[ "$(basename "$(pwd)")" == "scripts" ]]; then
     PROJECT_ROOT="$(cd .. && pwd)"
 else

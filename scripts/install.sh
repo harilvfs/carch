@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -eu
+
 detect_distro() {
     if command -v pacman > /dev/null 2>&1; then
         echo "arch"
