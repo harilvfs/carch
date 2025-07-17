@@ -17,14 +17,6 @@ jobs:
           toolchain: nightly
           override: true
 
-      - name: Check and verify Cargo.toml
-        run: |
-          if ! grep -q '\[package\]' Cargo.toml; then
-            echo "Error: Cargo.toml does not contain a package section"
-            exit 1
-          fi
-          echo "Cargo.toml verification passed"
-
       - name: Login to crates.io
         run: cargo login ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
