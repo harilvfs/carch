@@ -7,9 +7,6 @@ on:
       version:
         description: 'Version number without v prefix (e.g. 1.1.1)'
         required: true
-      date:
-        description: 'Release date (YYYY-MM-DD)'
-        required: true
 
 jobs:
   send-notifications:
@@ -23,30 +20,18 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" == "release" ]; then
             VERSION="${{ github.event.release.tag_name }}"
-            # need to remove 'v' prefix for changelog purpose
-            VERSION_NO_V="${VERSION#v}"
-            DATE="${{ github.event.release.published_at }}"
-            DATE=$(echo "$DATE" | cut -d'T' -f1)
           else
             VERSION="v${{ github.event.inputs.version }}"
-            VERSION_NO_V="${{ github.event.inputs.version }}"
-            DATE="${{ github.event.inputs.date }}"
           fi
-
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "version_no_v=$VERSION_NO_V" >> $GITHUB_OUTPUT
-          echo "date=$DATE" >> $GITHUB_OUTPUT
 
       - name: Prepare release message
         id: release_message
         run: |
           VERSION="${{ steps.release_info.outputs.version }}"
-          VERSION_NO_V="${{ steps.release_info.outputs.version_no_v }}"
-          DATE="${{ steps.release_info.outputs.date }}"
           RELEASE_TAG="$VERSION"
-          CHANGELOG_VERSION_NO_DOTS=$(echo "$VERSION_NO_V" | tr -d '.')
 
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\n\nRelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\n\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS---$DATE"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\n\nRelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG"
 
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
@@ -56,12 +41,9 @@ jobs:
         id: telegram_message
         run: |
           VERSION="${{ steps.release_info.outputs.version }}"
-          VERSION_NO_V="${{ steps.release_info.outputs.version_no_v }}"
-          DATE="${{ steps.release_info.outputs.date }}"
           RELEASE_TAG="$VERSION"
-          CHANGELOG_VERSION_NO_DOTS=$(echo "$VERSION_NO_V" | tr -d '.')
 
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG%0A%0AChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS---$DATE"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG"
 
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
