@@ -1,6 +1,7 @@
 name: Release Notified
-
 on:
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       version:
@@ -17,26 +18,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get latest release
-        id: latest_release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { data: release } = await github.rest.repos.getLatestRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-            return release.tag_name;
-          result-encoding: string
+      - name: Get release info
+        id: release_info
+        run: |
+          if [ "${{ github.event_name }}" == "release" ]; then
+            VERSION="${{ github.event.release.tag_name }}"
+            # need to remove 'v' prefix for changelog purpose
+            VERSION_NO_V="${VERSION#v}"
+            DATE="${{ github.event.release.published_at }}"
+            DATE=$(echo "$DATE" | cut -d'T' -f1)
+          else
+            VERSION="v${{ github.event.inputs.version }}"
+            VERSION_NO_V="${{ github.event.inputs.version }}"
+            DATE="${{ github.event.inputs.date }}"
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version_no_v=$VERSION_NO_V" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_OUTPUT
 
       - name: Prepare release message
         id: release_message
         run: |
-          VERSION="v${{ github.event.inputs.version }}"
-          DATE="${{ github.event.inputs.date }}"
+          VERSION="${{ steps.release_info.outputs.version }}"
+          VERSION_NO_V="${{ steps.release_info.outputs.version_no_v }}"
+          DATE="${{ steps.release_info.outputs.date }}"
           RELEASE_TAG="$VERSION"
-          CHANGELOG_VERSION="${{ github.event.inputs.version }}"
-          CHANGELOG_VERSION_NO_DOTS=$(echo "$CHANGELOG_VERSION" | tr -d '.')
+          CHANGELOG_VERSION_NO_DOTS=$(echo "$VERSION_NO_V" | tr -d '.')
 
           RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\n\nRelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG\n\nChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS---$DATE"
 
@@ -47,11 +55,11 @@ jobs:
       - name: Prepare Telegram message
         id: telegram_message
         run: |
-          VERSION="v${{ github.event.inputs.version }}"
-          DATE="${{ github.event.inputs.date }}"
+          VERSION="${{ steps.release_info.outputs.version }}"
+          VERSION_NO_V="${{ steps.release_info.outputs.version_no_v }}"
+          DATE="${{ steps.release_info.outputs.date }}"
           RELEASE_TAG="$VERSION"
-          CHANGELOG_VERSION="${{ github.event.inputs.version }}"
-          CHANGELOG_VERSION_NO_DOTS=$(echo "$CHANGELOG_VERSION" | tr -d '.')
+          CHANGELOG_VERSION_NO_DOTS=$(echo "$VERSION_NO_V" | tr -d '.')
 
           RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG%0A%0AChangelog: https://github.com/harilvfs/carch/blob/main/CHANGELOG.md#$CHANGELOG_VERSION_NO_DOTS---$DATE"
 
