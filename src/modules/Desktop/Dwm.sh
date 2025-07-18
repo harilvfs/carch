@@ -112,6 +112,9 @@ install_packages() {
             exit 1
 
         }
+
+        print_message "$YELLOW" "NOTE: openSUSE uses i3lock instead of slock (slock is not available in official repositories)."
+        print_message "$YELLOW" "To manually lock your screen, run: i3lock"
     fi
 }
 
@@ -305,7 +308,23 @@ setup_xinitrc() {
     fi
 
     print_message "$CYAN" ":: Creating .xinitrc file for DWM..."
-    cat > "$XINITRC" << 'EOF'
+
+    if [ "$distro" == "opensuse" ]; then
+        cat > "$XINITRC" << 'EOF'
+#!/bin/sh
+
+pgrep dunst > /dev/null || /usr/bin/dunst &
+
+xautolock \
+  -time 10 \
+  -locker i3lock \
+  -notify 10 \
+  -notifier "/usr/bin/notify-send '🔒 Locking soon' 'The screen will lock in 10 seconds...'" &
+
+exec dwm
+EOF
+    else
+        cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 
 pgrep dunst > /dev/null || /usr/bin/dunst &
@@ -318,6 +337,7 @@ xautolock \
 
 exec dwm
 EOF
+    fi
 
     chmod +x "$XINITRC"
     print_message "$GREEN" ".xinitrc configured successfully!"
