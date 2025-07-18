@@ -1,5 +1,26 @@
-use crate::{commands, display, version};
-use std::env;
+use crate::{commands, version};
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command:    Option<Commands>,
+    #[arg(long, global = true, help = "Enable logging")]
+    pub log:        bool,
+    #[arg(long, global = true, help = "Disable cache cleanup")]
+    pub no_cleanup: bool,
+}
+
+#[derive(Subcommand)]
+pub enum Commands {
+    #[command(about = "Check for updates")]
+    CheckUpdate,
+    #[command(about = "Update the application")]
+    Update,
+    #[command(about = "Uninstall the application")]
+    Uninstall,
+}
 
 #[derive(Copy, Clone)]
 pub struct Settings {
@@ -15,132 +36,40 @@ impl Default for Settings {
 }
 
 pub fn parse_args() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Vec<String> = env::args().collect();
+    let cli = Cli::parse();
     let mut settings = Settings::default();
 
-    if args.iter().any(|arg| arg == "--log") {
+    if cli.log {
         settings.log_mode = true;
         let _ = commands::log_message("INFO", "Carch application started");
     }
 
-    if args.iter().any(|arg| arg == "--no-cleanup") {
+    if cli.no_cleanup {
         settings.cleanup_cache = false;
         if settings.log_mode {
             let _ = commands::log_message("INFO", "Cache cleanup disabled");
         }
     }
 
-    if args.len() > 1 {
-        match args[1].as_str() {
-            "--help" | "-h" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Displaying help information");
-                }
-                display::display_help()
-            }
-            "--version" | "-v" => {
-                let version_str = version::get_current_version();
-
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", &format!("Version query: {version_str}"));
-                }
-
-                println!("{version_str}");
-                Ok(())
-            }
-            "--check-update" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Checking for updates");
-                }
-                version::check_for_updates().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
-            }
-            "--update" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Running update process");
-                }
-                commands::update().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
-            }
-            "--uninstall" => {
-                if settings.log_mode {
-                    let _ = commands::log_message("INFO", "Running uninstall process");
-                }
-                commands::uninstall().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
-            }
-            "--log" => {
-                if args.len() > 2 {
-                    let remaining_args = args[2..].to_vec();
-                    process_remaining_args(remaining_args, settings)
-                } else {
-                    crate::run_tui(settings)
-                }
-            }
-            "--no-cleanup" => {
-                if args.len() > 2 {
-                    let remaining_args = args[2..].to_vec();
-                    process_remaining_args(remaining_args, settings)
-                } else {
-                    crate::run_tui(settings)
-                }
-            }
-            _ => {
-                let error_msg =
-                    format!("Error: Unknown option '{}'. Use --help for usage.", args[1]);
-                if settings.log_mode {
-                    let _ = commands::log_message("ERROR", &error_msg);
-                }
-                eprintln!("{error_msg}");
-                Ok(())
-            }
-        }
-    } else {
-        crate::run_tui(settings)
-    }
-}
-
-fn process_remaining_args(
-    args: Vec<String>,
-    settings: Settings,
-) -> Result<(), Box<dyn std::error::Error>> {
-    if args.is_empty() {
-        return crate::run_tui(settings);
-    }
-
-    match args[0].as_str() {
-        "--version" | "-v" => {
-            let version_str = version::get_current_version();
-
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", &format!("Version query: {version_str}"));
-            }
-
-            println!("{version_str}");
-            Ok(())
-        }
-        "--check-update" => {
+    match cli.command {
+        Some(Commands::CheckUpdate) => {
             if settings.log_mode {
                 let _ = commands::log_message("INFO", "Checking for updates");
             }
             version::check_for_updates().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
         }
-        "--update" => {
+        Some(Commands::Update) => {
             if settings.log_mode {
                 let _ = commands::log_message("INFO", "Running update process");
             }
             commands::update().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
         }
-        "--uninstall" => {
+        Some(Commands::Uninstall) => {
             if settings.log_mode {
                 let _ = commands::log_message("INFO", "Running uninstall process");
             }
             commands::uninstall().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
         }
-        _ => {
-            let error_msg = format!("Error: Unknown option '{}'. Use --help for usage.", args[0]);
-            if settings.log_mode {
-                let _ = commands::log_message("ERROR", &error_msg);
-            }
-            eprintln!("{error_msg}");
-            Ok(())
-        }
+        None => crate::run_tui(settings),
     }
 }

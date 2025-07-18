@@ -10,7 +10,6 @@ use tempfile::TempDir;
 
 mod args;
 mod commands;
-mod display;
 mod ui;
 mod version;
 
