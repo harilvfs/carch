@@ -22,7 +22,7 @@ strip = true
 incremental = false
 
 [term]
-verbose = true
+verbose = false
 color = "always"
 
 [env]
@@ -31,3 +31,6 @@ RUSTFLAGS = "-D warnings"
 
 [net]
 git-fetch-with-cli = true
+
+[alias]
+xtask = "run --package xtask --"

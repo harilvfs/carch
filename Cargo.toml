@@ -43,3 +43,6 @@ incremental = false
 [[bin]]
 name = "carch"
 path = "src/main.rs"
+
+[workspace]
+members = [".", "xtask"]
