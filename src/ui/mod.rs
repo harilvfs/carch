@@ -5,3 +5,4 @@ pub mod popups;
 pub mod render;
 pub mod state;
 pub mod system_info;
+pub mod widgets;

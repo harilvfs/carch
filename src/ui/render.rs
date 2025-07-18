@@ -2,235 +2,22 @@ use std::io;
 use std::path::Path;
 use std::time::Duration;
 
-#[allow(unused_imports)]
-use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, MouseEvent},
-    execute,
-    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
+use crossterm::event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode};
+use crossterm::execute;
+use crossterm::terminal::{
+    EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
 };
 use ratatui::backend::CrosstermBackend;
-use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style};
-use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
+use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::{Frame, Terminal};
 
-use super::actions::{get_script_path, is_script_selected, load_scripts, run_selected_scripts};
-use super::state::{App, AppMode, FocusedPanel, UiOptions};
+use super::actions::{get_script_path, load_scripts, run_selected_scripts};
+use super::state::{App, AppMode, UiOptions};
+use super::widgets::category_list::render_category_list;
+use super::widgets::header::render_header;
+use super::widgets::script_list::render_script_list;
+use super::widgets::status_bar::render_status_bar;
 use crate::ui::popups;
-use crate::version;
-
-fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
-    Block::default()
-        .borders(Borders::ALL)
-        .border_type(BorderType::Rounded)
-        .title(title)
-        .border_style(Style::default().fg(Color::Cyan))
-        .style(Style::default().bg(Color::Reset))
-}
-
-fn render_header(f: &mut Frame, app: &App, area: Rect) {
-    let header_block = Block::default().borders(Borders::ALL).border_type(BorderType::Rounded);
-    f.render_widget(header_block, area);
-
-    let inner_area = Layout::default()
-        .direction(Direction::Horizontal)
-        .margin(1)
-        .constraints([
-            Constraint::Percentage(30),
-            Constraint::Percentage(40),
-            Constraint::Percentage(30),
-        ])
-        .split(area);
-
-    let left_text = vec![
-        Line::from(vec![
-            Span::styled("OS: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
-            Span::raw(app.system_info.os.clone()),
-        ]),
-        Line::from(vec![
-            Span::styled("Kernel: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
-            Span::raw(app.system_info.kernel.clone()),
-        ]),
-    ];
-
-    let center_text = vec![
-        Line::from(vec![Span::styled(
-            "CARCH",
-            Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
-        )]),
-        Line::from(vec![Span::styled(
-            "Automate Your Linux System Setup",
-            Style::default().fg(Color::Rgb(235, 235, 210)).add_modifier(Modifier::ITALIC),
-        )]),
-    ];
-
-    let right_text = vec![
-        Line::from(vec![
-            Span::styled("Uptime: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
-            Span::raw(app.system_info.uptime.clone()),
-        ]),
-        Line::from(vec![
-            Span::styled(
-                "Hostname: ",
-                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
-            ),
-            Span::raw(app.system_info.hostname.clone()),
-        ]),
-    ];
-
-    f.render_widget(Paragraph::new(left_text), inner_area[0]);
-    f.render_widget(Paragraph::new(center_text).alignment(Alignment::Center), inner_area[1]);
-    f.render_widget(Paragraph::new(right_text).alignment(Alignment::Right), inner_area[2]);
-}
-
-fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
-    let is_focused = app.focused_panel == FocusedPanel::Categories;
-    let block = create_block("Categories", is_focused);
-    let items: Vec<ListItem> = app
-        .categories
-        .items
-        .iter()
-        .enumerate()
-        .map(|(idx, category_name)| {
-            let is_selected = app.categories.state.selected() == Some(idx);
-            let icon = if !is_focused && is_selected { "  " } else { " 󰉋 " };
-            let colored_icon = Span::styled(icon, Style::default().fg(Color::Cyan));
-            let text = Span::styled(category_name.as_str(), Style::default().fg(Color::Cyan));
-            let line = Line::from(vec![colored_icon, text]);
-            ListItem::new(line)
-        })
-        .collect();
-    let list = List::new(items).block(block).highlight_style(if is_focused {
-        Style::default().bg(Color::Rgb(170, 225, 225)).fg(Color::Black).add_modifier(Modifier::BOLD)
-    } else {
-        Style::default().bg(Color::Cyan).fg(Color::Black).add_modifier(Modifier::BOLD)
-    });
-    f.render_stateful_widget(list, area, &mut app.categories.state);
-}
-
-fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
-    let is_focused = app.focused_panel == FocusedPanel::Scripts;
-    let title = if app.multi_select.enabled {
-        format!("[{} selected]", app.multi_select.scripts.len())
-    } else {
-        "Scripts (p for preview)".to_string()
-    };
-    let block = create_block(&title, is_focused).border_style(Style::default().fg(Color::Green));
-
-    let items: Vec<ListItem> = app
-        .scripts
-        .items
-        .iter()
-        .map(|item| {
-            let icon = " ";
-            let script_name_style = Style::default().fg(Color::LightGreen);
-            let script_name = Span::styled(&item.name, script_name_style);
-
-            if app.multi_select.enabled {
-                let is_selected = is_script_selected(app, &item.path);
-                let prefix = if is_selected { "[✓] " } else { "[ ] " };
-                let style = if is_selected {
-                    Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)
-                } else {
-                    Style::default().fg(Color::LightGreen)
-                };
-
-                let icon_style =
-                    Style::default().fg(Color::LightGreen).add_modifier(Modifier::BOLD);
-
-                let line = Line::from(vec![
-                    Span::styled(prefix, style),
-                    Span::styled(icon, icon_style),
-                    Span::styled(&item.name, style),
-                ]);
-                ListItem::new(line)
-            } else {
-                let icon_style =
-                    Style::default().fg(Color::LightGreen).add_modifier(Modifier::BOLD);
-                let line = Line::from(vec![Span::styled(icon, icon_style), script_name]);
-                ListItem::new(line)
-            }
-        })
-        .collect();
-
-    let list = List::new(items).block(block).highlight_style(if is_focused {
-        Style::default().bg(Color::Rgb(170, 225, 170)).fg(Color::Black).add_modifier(Modifier::BOLD)
-    } else {
-        Style::default().bg(Color::DarkGray).fg(Color::White)
-    });
-
-    f.render_stateful_widget(list, area, &mut app.scripts.state);
-}
-
-fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
-    let mode_text = match app.mode {
-        AppMode::Normal => {
-            if app.multi_select.enabled {
-                "MULTI-SELECT (Space to select) | (Esc To Exit)"
-            } else {
-                "NORMAL"
-            }
-        }
-        AppMode::Preview => "PREVIEW",
-        AppMode::Search => "SEARCH",
-        AppMode::Confirm => "CONFIRM",
-        AppMode::Help => "HELP",
-    };
-
-    let mode_color = match app.mode {
-        AppMode::Normal => {
-            if app.multi_select.enabled {
-                Color::Magenta
-            } else {
-                Color::Green
-            }
-        }
-        AppMode::Preview => Color::Cyan,
-        AppMode::Search => Color::Yellow,
-        AppMode::Confirm => Color::Red,
-        AppMode::Help => Color::Blue,
-    };
-
-    let selected_count = if app.multi_select.enabled {
-        format!(" {} selected ", app.multi_select.scripts.len())
-    } else {
-        String::new()
-    };
-
-    let has_selected = !selected_count.is_empty();
-    let version = version::get_current_version();
-
-    let status = Line::from(vec![
-        Span::styled(
-            format!(" MODE: {mode_text} "),
-            Style::default().bg(mode_color).fg(Color::Black).add_modifier(Modifier::BOLD),
-        ),
-        Span::raw(" "),
-        if has_selected {
-            Span::styled(
-                selected_count,
-                Style::default().bg(Color::Yellow).fg(Color::Black).add_modifier(Modifier::BOLD),
-            )
-        } else {
-            Span::raw("")
-        },
-        if has_selected { Span::raw(" ") } else { Span::raw("") },
-        Span::styled(
-            " ?: Help | q: Quit | h/l: Switch Panels",
-            Style::default().bg(Color::Rgb(203, 166, 247)).fg(Color::Black),
-        ),
-        Span::raw(" "),
-        Span::styled(
-            format!(" {version} "),
-            Style::default().bg(Color::Cyan).fg(Color::Black).add_modifier(Modifier::BOLD),
-        ),
-    ]);
-
-    let status_widget = Paragraph::new(status).style(Style::default().bg(Color::Reset));
-
-    f.render_widget(status_widget, area);
-}
 
 fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     if app.mode == AppMode::Preview && !options.show_preview {
@@ -267,15 +54,15 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     match app.mode {
         AppMode::Search => {
             render_normal_ui(f, app, options);
-            popups::render_search_popup(f, app, app.script_panel_area);
+            popups::search::render_search_popup(f, app, app.script_panel_area);
         }
         AppMode::Confirm => {
             render_normal_ui(f, app, options);
-            popups::render_confirmation_popup(f, app, app.script_panel_area);
+            popups::confirmation::render_confirmation_popup(f, app, app.script_panel_area);
         }
         AppMode::Help => {
             render_normal_ui(f, app, options);
-            let max_scroll = popups::render_help_popup(f, app, app.script_panel_area);
+            let max_scroll = popups::help::render_help_popup(f, app, app.script_panel_area);
             app.help.max_scroll = max_scroll;
         }
         AppMode::Normal => {
@@ -283,7 +70,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         }
         AppMode::Preview => {
             render_normal_ui(f, app, options);
-            popups::render_preview_popup(f, app, app.script_panel_area);
+            popups::preview::render_preview_popup(f, app, app.script_panel_area);
         }
     }
 }
