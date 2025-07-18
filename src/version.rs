@@ -1,6 +1,11 @@
+use serde::Deserialize;
 use std::error::Error;
 use std::io;
-use std::process::Command;
+
+#[derive(Deserialize)]
+struct Release {
+    tag_name: String,
+}
 
 pub fn get_current_version() -> String {
     let version = env!("CARGO_PKG_VERSION");
@@ -8,41 +13,17 @@ pub fn get_current_version() -> String {
 }
 
 pub fn get_latest_version() -> Result<String, Box<dyn Error>> {
-    if Command::new("curl").arg("--version").output().is_err() {
-        return Err("curl is not installed. Please install it to check for updates.".into());
-    }
+    let client = reqwest::blocking::Client::builder().user_agent("carch").build()?;
+    let response =
+        client.get("https://api.github.com/repos/harilvfs/carch/releases/latest").send()?;
 
-    let output = Command::new("curl")
-        .args(["-s", "https://api.github.com/repos/harilvfs/carch/releases/latest"])
-        .output()?;
-
-    if !output.status.success() {
+    if !response.status().is_success() {
         return Err("Failed to fetch latest version information".into());
     }
 
-    let response = String::from_utf8_lossy(&output.stdout);
-
-    let tag_name = response
-        .lines()
-        .find(|line| line.contains("\"tag_name\""))
-        .and_then(|line| {
-            let parts: Vec<&str> = line.split(":").collect();
-            if parts.len() >= 2 {
-                let version_part = parts[1].trim();
-                let cleaned = version_part
-                    .trim_start_matches('"')
-                    .trim_end_matches('"')
-                    .trim_end_matches(',')
-                    .trim_start_matches('v')
-                    .trim();
-                Some(cleaned.to_string())
-            } else {
-                None
-            }
-        })
-        .ok_or("Could not parse version from GitHub response")?;
-
-    Ok(tag_name)
+    let release: Release = response.json()?;
+    let version = release.tag_name.trim_start_matches('v').to_string();
+    Ok(version)
 }
 
 pub fn check_for_updates() -> io::Result<()> {
@@ -52,13 +33,10 @@ pub fn check_for_updates() -> io::Result<()> {
 
     match get_latest_version() {
         Ok(latest_version) => {
-            let latest =
-                latest_version.trim().trim_start_matches('v').trim_matches('"').trim_matches('\'');
-
             println!("Current version: {current_version}");
-            println!("Latest version: {latest}");
+            println!("Latest version: {latest_version}");
 
-            if latest != current_version {
+            if latest_version != current_version {
                 println!("\nA new version of Carch is available!");
                 println!("Run 'carch --update' to update.");
             } else {
