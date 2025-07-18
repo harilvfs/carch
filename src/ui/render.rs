@@ -15,7 +15,8 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
 use ratatui::{Frame, Terminal};
 
-use super::app::{App, AppMode, FocusedPanel, UiOptions};
+use super::actions::{get_script_path, is_script_selected, load_scripts, run_selected_scripts};
+use super::state::{App, AppMode, FocusedPanel, UiOptions};
 use crate::ui::popups;
 use crate::version;
 
@@ -127,7 +128,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let script_name = Span::styled(&item.name, script_name_style);
 
             if app.multi_select.enabled {
-                let is_selected = app.is_script_selected(&item.path);
+                let is_selected = is_script_selected(app, &item.path);
                 let prefix = if is_selected { "[✓] " } else { "[ ] " };
                 let style = if is_selected {
                     Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)
@@ -329,7 +330,7 @@ where
         let _ = crate::commands::log_message("INFO", "Loading scripts from modules directory");
     }
 
-    app.load_scripts(modules_dir)?;
+    load_scripts(&mut app, modules_dir)?;
 
     if options.log_mode {
         let _ = crate::commands::log_message(
@@ -414,7 +415,7 @@ where
                                         );
                                     }
 
-                                    app.run_selected_scripts(&run_script_callback)?;
+                                    run_selected_scripts(&app, &run_script_callback)?;
 
                                     if options.log_mode {
                                         let _ = crate::commands::log_message(
@@ -430,7 +431,7 @@ where
                                     let backend = CrosstermBackend::new(stdout);
                                     terminal = Terminal::new(backend)?;
                                     terminal.clear()?;
-                                } else if let Some(script_path) = app.get_script_path() {
+                                } else if let Some(script_path) = get_script_path(&app) {
                                     if options.log_mode {
                                         let script_name = script_path
                                             .file_name()

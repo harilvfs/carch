@@ -1,5 +1,5 @@
-use crate::ui::app::UiOptions;
 use crate::ui::render::run_ui_with_options;
+use crate::ui::state::UiOptions;
 use include_dir::{Dir, include_dir};
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};

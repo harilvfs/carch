@@ -8,7 +8,7 @@ use syntect::highlighting::ThemeSet;
 use syntect::parsing::SyntaxSet;
 use syntect::util::LinesWithEndings;
 
-use super::app::App;
+use super::state::App;
 
 fn div_ceil(a: u16, b: u16) -> u16 {
     if b == 0 { 0 } else { a.div_ceil(b) }
