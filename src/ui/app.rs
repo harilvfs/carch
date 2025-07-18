@@ -79,67 +79,80 @@ pub struct ScriptItem {
     pub path:     PathBuf,
 }
 
-impl ScriptItem {}
-
+#[derive(Default)]
 pub struct UiOptions {
     pub show_preview: bool,
     pub log_mode:     bool,
 }
 
-impl Default for UiOptions {
-    fn default() -> Self {
-        Self { show_preview: true, log_mode: false }
-    }
+// --- State Structs ---
+
+#[derive(Default)]
+pub struct PreviewState<'a> {
+    pub content:    String,
+    pub scroll:     u16,
+    pub max_scroll: u16,
+    pub cache:      HashMap<PathBuf, Text<'a>>,
+}
+
+#[derive(Default)]
+pub struct SearchState {
+    pub input:           String,
+    pub results:         Vec<ScriptItem>,
+    pub cursor_position: usize,
+    pub selected_idx:    usize,
+    pub autocomplete:    Option<String>,
+}
+
+#[derive(Default)]
+pub struct MultiSelectState {
+    pub enabled: bool,
+    pub scripts: Vec<PathBuf>,
+}
+
+#[derive(Default)]
+pub struct HelpState {
+    pub scroll:     u16,
+    pub max_scroll: u16,
 }
 
 pub struct App<'a> {
-    pub scripts:                StatefulList<ScriptItem>,
-    pub preview_content:        String,
-    pub preview_scroll:         u16,
-    pub preview_max_scroll:     u16,
-    pub mode:                   AppMode,
-    pub all_scripts:            HashMap<String, Vec<ScriptItem>>,
-    pub categories:             StatefulList<String>,
-    pub focused_panel:          FocusedPanel,
-    pub quit:                   bool,
-    pub search_input:           String,
-    pub search_results:         Vec<ScriptItem>,
-    pub search_cursor_position: usize,
-    pub search_selected_idx:    usize,
-    pub autocomplete_text:      Option<String>,
-    pub multi_selected_scripts: Vec<PathBuf>,
-    pub multi_select_mode:      bool,
-    pub help_scroll:            u16,
-    pub help_max_scroll:        u16,
-    pub script_panel_area:      Rect,
-    pub system_info:            SystemInfo,
-    pub preview_cache:          HashMap<PathBuf, Text<'a>>,
+    // Core state
+    pub mode:          AppMode,
+    pub quit:          bool,
+    pub focused_panel: FocusedPanel,
+
+    // Data
+    pub scripts:     StatefulList<ScriptItem>,
+    pub categories:  StatefulList<String>,
+    pub all_scripts: HashMap<String, Vec<ScriptItem>>,
+
+    // UI and Sub-states
+    pub system_info:       SystemInfo,
+    pub script_panel_area: Rect,
+    pub preview:           PreviewState<'a>,
+    pub search:            SearchState,
+    pub multi_select:      MultiSelectState,
+    pub help:              HelpState,
 }
 
 impl<'a> App<'a> {
     pub fn new() -> App<'a> {
         App {
-            scripts:                StatefulList::new(),
-            preview_content:        String::new(),
-            preview_scroll:         0,
-            preview_max_scroll:     0,
-            mode:                   AppMode::Normal,
-            all_scripts:            HashMap::new(),
-            categories:             StatefulList::new(),
-            focused_panel:          FocusedPanel::Categories,
-            quit:                   false,
-            search_input:           String::new(),
-            search_results:         Vec::new(),
-            search_cursor_position: 0,
-            search_selected_idx:    0,
-            autocomplete_text:      None,
-            multi_selected_scripts: Vec::new(),
-            multi_select_mode:      false,
-            help_scroll:            0,
-            help_max_scroll:        0,
-            script_panel_area:      Rect::default(),
-            system_info:            SystemInfo::new(),
-            preview_cache:          HashMap::new(),
+            mode:          AppMode::Normal,
+            quit:          false,
+            focused_panel: FocusedPanel::Categories,
+
+            scripts:     StatefulList::new(),
+            categories:  StatefulList::new(),
+            all_scripts: HashMap::new(),
+
+            system_info:       SystemInfo::new(),
+            script_panel_area: Rect::default(),
+            preview:           PreviewState::default(),
+            search:            SearchState::default(),
+            multi_select:      MultiSelectState::default(),
+            help:              HelpState::default(),
         }
     }
 
@@ -172,7 +185,7 @@ impl<'a> App<'a> {
                         let script_item = ScriptItem {
                             category: category_name.clone(),
                             name:     script_name,
-                            path:     script_path.clone(),
+                            path:     script_path,
                         };
                         scripts_in_category.push(script_item);
                     }
@@ -211,19 +224,19 @@ impl<'a> App<'a> {
     pub fn update_preview(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
             let script_path = &self.scripts.items[selected].path;
-            if !self.preview_cache.contains_key(script_path) {
+            if !self.preview.cache.contains_key(script_path) {
                 match fs::read_to_string(script_path) {
                     Ok(content) => {
-                        self.preview_content = content;
-                        self.preview_scroll = 0;
+                        self.preview.content = content;
+                        self.preview.scroll = 0;
                     }
                     Err(_) => {
-                        self.preview_content = "Error loading script content".to_string();
+                        self.preview.content = "Error loading script content".to_string();
                     }
                 }
             }
         } else {
-            self.preview_content = "No script selected".to_string();
+            self.preview.content = "No script selected".to_string();
         }
     }
 
@@ -250,25 +263,19 @@ impl<'a> App<'a> {
     }
 
     pub fn scroll_preview_up(&mut self) {
-        if self.preview_scroll > 0 {
-            self.preview_scroll -= 1;
-        }
+        self.preview.scroll = self.preview.scroll.saturating_sub(1);
     }
 
     pub fn scroll_preview_down(&mut self) {
-        self.preview_scroll = (self.preview_scroll + 1).min(self.preview_max_scroll);
+        self.preview.scroll = (self.preview.scroll + 1).min(self.preview.max_scroll);
     }
 
     pub fn scroll_preview_page_up(&mut self) {
-        if self.preview_scroll > 10 {
-            self.preview_scroll -= 10;
-        } else {
-            self.preview_scroll = 0;
-        }
+        self.preview.scroll = self.preview.scroll.saturating_sub(10);
     }
 
     pub fn scroll_preview_page_down(&mut self) {
-        self.preview_scroll = (self.preview_scroll + 10).min(self.preview_max_scroll);
+        self.preview.scroll = (self.preview.scroll + 10).min(self.preview.max_scroll);
     }
 
     pub fn get_script_path(&self) -> Option<PathBuf> {
@@ -277,10 +284,7 @@ impl<'a> App<'a> {
 
     pub fn toggle_search_mode(&mut self) {
         let prev_mode = self.mode;
-        self.mode = match self.mode {
-            AppMode::Search => AppMode::Normal,
-            _ => AppMode::Search,
-        };
+        self.mode = if self.mode == AppMode::Search { AppMode::Normal } else { AppMode::Search };
 
         let ui_options = UiOptions::default();
         if ui_options.log_mode {
@@ -292,11 +296,7 @@ impl<'a> App<'a> {
         }
 
         if self.mode == AppMode::Search {
-            self.search_input = String::new();
-            self.search_results = Vec::new();
-            self.search_cursor_position = 0;
-            self.search_selected_idx = 0;
-            self.autocomplete_text = None;
+            self.search = SearchState::default();
         }
     }
 
@@ -304,8 +304,8 @@ impl<'a> App<'a> {
         match key.code {
             KeyCode::Esc => self.toggle_search_mode(),
             KeyCode::Enter => {
-                if !self.search_results.is_empty() {
-                    let selected_item = self.search_results[self.search_selected_idx].clone();
+                if !self.search.results.is_empty() {
+                    let selected_item = self.search.results[self.search.selected_idx].clone();
 
                     if let Some(category_idx) =
                         self.categories.items.iter().position(|c| *c == selected_item.category)
@@ -327,59 +327,59 @@ impl<'a> App<'a> {
                 }
             }
             KeyCode::Down => {
-                if !self.search_results.is_empty() {
-                    self.search_selected_idx =
-                        (self.search_selected_idx + 1) % self.search_results.len();
+                if !self.search.results.is_empty() {
+                    self.search.selected_idx =
+                        (self.search.selected_idx + 1) % self.search.results.len();
                 }
             }
             KeyCode::Up => {
-                if !self.search_results.is_empty() {
-                    self.search_selected_idx = if self.search_selected_idx > 0 {
-                        self.search_selected_idx - 1
+                if !self.search.results.is_empty() {
+                    self.search.selected_idx = if self.search.selected_idx > 0 {
+                        self.search.selected_idx - 1
                     } else {
-                        self.search_results.len() - 1
+                        self.search.results.len() - 1
                     };
                 }
             }
             KeyCode::Tab => {
-                if let Some(autocomplete) = self.autocomplete_text.take() {
-                    self.search_input = autocomplete;
-                    self.search_cursor_position = self.search_input.len();
+                if let Some(autocomplete) = self.search.autocomplete.take() {
+                    self.search.input = autocomplete;
+                    self.search.cursor_position = self.search.input.len();
                     self.perform_search();
                     self.update_autocomplete();
                 }
             }
             KeyCode::Char(c) => {
-                self.search_input.push(c);
-                self.search_cursor_position += 1;
+                self.search.input.push(c);
+                self.search.cursor_position += 1;
                 self.perform_search();
                 self.update_autocomplete();
-                self.search_selected_idx = 0;
+                self.search.selected_idx = 0;
             }
             KeyCode::Backspace => {
-                if self.search_cursor_position > 0 {
-                    self.search_input.remove(self.search_cursor_position - 1);
-                    self.search_cursor_position -= 1;
+                if self.search.cursor_position > 0 {
+                    self.search.input.remove(self.search.cursor_position - 1);
+                    self.search.cursor_position -= 1;
                     self.perform_search();
                     self.update_autocomplete();
-                    self.search_selected_idx = 0;
+                    self.search.selected_idx = 0;
                 }
             }
             KeyCode::Left => {
-                if self.search_cursor_position > 0 {
-                    self.search_cursor_position -= 1;
+                if self.search.cursor_position > 0 {
+                    self.search.cursor_position -= 1;
                 }
-                self.autocomplete_text = None;
+                self.search.autocomplete = None;
             }
             KeyCode::Right => {
-                if self.search_cursor_position < self.search_input.len() {
-                    self.search_cursor_position += 1;
+                if self.search.cursor_position < self.search.input.len() {
+                    self.search.cursor_position += 1;
                 }
-                if self.search_cursor_position == self.search_input.len()
-                    && self.autocomplete_text.is_some()
+                if self.search.cursor_position == self.search.input.len()
+                    && self.search.autocomplete.is_some()
                 {
-                    self.search_input = self.autocomplete_text.take().unwrap();
-                    self.search_cursor_position = self.search_input.len();
+                    self.search.input = self.search.autocomplete.take().unwrap();
+                    self.search.cursor_position = self.search.input.len();
                     self.perform_search();
                 }
             }
@@ -388,20 +388,20 @@ impl<'a> App<'a> {
     }
 
     pub fn perform_search(&mut self) {
-        self.search_results.clear();
+        self.search.results.clear();
 
-        if self.search_input.is_empty() {
+        if self.search.input.is_empty() {
             return;
         }
 
-        let search_term = self.search_input.to_lowercase();
+        let search_term = self.search.input.to_lowercase();
 
         for scripts in self.all_scripts.values() {
             for item in scripts {
                 if item.name.to_lowercase().contains(&search_term)
                     || item.category.to_lowercase().contains(&search_term)
                 {
-                    self.search_results.push(item.clone());
+                    self.search.results.push(item.clone());
                 }
             }
         }
@@ -413,7 +413,7 @@ impl<'a> App<'a> {
                 self.quit = true;
             }
             KeyCode::Esc => {
-                if self.multi_select_mode {
+                if self.multi_select.enabled {
                     self.toggle_multi_select_mode();
                 }
             }
@@ -430,7 +430,7 @@ impl<'a> App<'a> {
             KeyCode::Char('l') | KeyCode::Right => {
                 if self.focused_panel == FocusedPanel::Scripts {
                     if self.scripts.state.selected().is_some()
-                        && !(self.multi_select_mode && self.multi_selected_scripts.is_empty())
+                        && !(self.multi_select.enabled && self.multi_select.scripts.is_empty())
                     {
                         self.mode = AppMode::Confirm;
                     }
@@ -462,13 +462,13 @@ impl<'a> App<'a> {
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts
                     && self.scripts.state.selected().is_some()
-                    && !(self.multi_select_mode && self.multi_selected_scripts.is_empty())
+                    && !(self.multi_select.enabled && self.multi_select.scripts.is_empty())
                 {
                     self.mode = AppMode::Confirm;
                 }
             }
             KeyCode::Char(' ') => {
-                if self.multi_select_mode {
+                if self.multi_select.enabled {
                     self.toggle_script_selection();
                 }
             }
@@ -494,10 +494,10 @@ impl<'a> App<'a> {
                 self.scroll_preview_page_up();
             }
             KeyCode::Home => {
-                self.preview_scroll = 0;
+                self.preview.scroll = 0;
             }
             KeyCode::End => {
-                self.preview_scroll = self.preview_max_scroll;
+                self.preview.scroll = self.preview.max_scroll;
             }
             _ => {}
         }
@@ -515,7 +515,7 @@ impl<'a> App<'a> {
                 AppMode::Search => {}
                 AppMode::Confirm => {}
                 AppMode::Help => {
-                    self.help_scroll = self.help_scroll.saturating_add(2);
+                    self.help.scroll = self.help.scroll.saturating_add(2);
                 }
             },
             MouseEventKind::ScrollUp => match self.mode {
@@ -528,7 +528,7 @@ impl<'a> App<'a> {
                 AppMode::Search => {}
                 AppMode::Confirm => {}
                 AppMode::Help => {
-                    self.help_scroll = self.help_scroll.saturating_sub(2);
+                    self.help.scroll = self.help.scroll.saturating_sub(2);
                 }
             },
             _ => {}
@@ -564,13 +564,13 @@ impl<'a> App<'a> {
     }
 
     pub fn update_autocomplete(&mut self) {
-        self.autocomplete_text = None;
+        self.search.autocomplete = None;
 
-        if self.search_input.is_empty() {
+        if self.search.input.is_empty() {
             return;
         }
 
-        let search_term = self.search_input.to_lowercase();
+        let search_term = self.search.input.to_lowercase();
         let mut best_match = None;
         let mut shortest_len = usize::MAX;
 
@@ -595,7 +595,7 @@ impl<'a> App<'a> {
             }
         }
 
-        self.autocomplete_text = best_match;
+        self.search.autocomplete = best_match;
     }
 
     pub fn handle_key_confirmation_mode(&mut self, key: crossterm::event::KeyEvent) {
@@ -615,19 +615,19 @@ impl<'a> App<'a> {
     }
 
     pub fn toggle_multi_select_mode(&mut self) {
-        self.multi_select_mode = !self.multi_select_mode;
-        if !self.multi_select_mode {
-            self.multi_selected_scripts.clear();
+        self.multi_select.enabled = !self.multi_select.enabled;
+        if !self.multi_select.enabled {
+            self.multi_select.scripts.clear();
         }
     }
 
     pub fn toggle_script_selection(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
             let script_path = &self.scripts.items[selected].path;
-            if self.multi_selected_scripts.contains(script_path) {
-                self.multi_selected_scripts.retain(|p| p != script_path);
+            if self.multi_select.scripts.contains(script_path) {
+                self.multi_select.scripts.retain(|p| p != script_path);
             } else {
-                self.multi_selected_scripts.push(script_path.clone());
+                self.multi_select.scripts.push(script_path.clone());
             }
         }
     }
@@ -636,14 +636,14 @@ impl<'a> App<'a> {
     where
         F: Fn(&Path) -> io::Result<()>,
     {
-        for script_path in &self.multi_selected_scripts {
+        for script_path in &self.multi_select.scripts {
             run_script_callback(script_path)?;
         }
         Ok(())
     }
 
     pub fn is_script_selected(&self, script_path: &Path) -> bool {
-        self.multi_selected_scripts.contains(&script_path.to_path_buf())
+        self.multi_select.scripts.contains(&script_path.to_path_buf())
     }
 
     pub fn toggle_help_mode(&mut self) {
@@ -654,25 +654,25 @@ impl<'a> App<'a> {
         match key.code {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('?') => {
                 self.mode = AppMode::Normal;
-                self.help_scroll = 0;
+                self.help.scroll = 0;
             }
             KeyCode::Char('j') | KeyCode::Down => {
-                self.help_scroll = (self.help_scroll + 1).min(self.help_max_scroll);
+                self.help.scroll = (self.help.scroll + 1).min(self.help.max_scroll);
             }
             KeyCode::Char('k') | KeyCode::Up => {
-                self.help_scroll = self.help_scroll.saturating_sub(1);
+                self.help.scroll = self.help.scroll.saturating_sub(1);
             }
             KeyCode::Home => {
-                self.help_scroll = 0;
+                self.help.scroll = 0;
             }
             KeyCode::End => {
-                self.help_scroll = self.help_max_scroll;
+                self.help.scroll = self.help.max_scroll;
             }
             KeyCode::PageDown => {
-                self.help_scroll = (self.help_scroll + 10).min(self.help_max_scroll);
+                self.help.scroll = (self.help.scroll + 10).min(self.help.max_scroll);
             }
             KeyCode::PageUp => {
-                self.help_scroll = self.help_scroll.saturating_sub(10);
+                self.help.scroll = self.help.scroll.saturating_sub(10);
             }
             _ => {}
         }

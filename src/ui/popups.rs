@@ -63,7 +63,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
 
     let preview_text = if let Some(selected) = app.scripts.state.selected() {
         let script_path = &app.scripts.items[selected].path;
-        if let Some(cached) = app.preview_cache.get(script_path) {
+        if let Some(cached) = app.preview.cache.get(script_path) {
             cached.clone()
         } else {
             let ps = SyntaxSet::load_defaults_newlines();
@@ -74,7 +74,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
             let mut highlighter = HighlightLines::new(syntax, theme);
             let mut lines = Vec::new();
 
-            for line in LinesWithEndings::from(&app.preview_content) {
+            for line in LinesWithEndings::from(&app.preview.content) {
                 let ranges: Vec<(syntect::highlighting::Style, &str)> =
                     highlighter.highlight_line(line, &ps).unwrap();
                 let mut spans = Vec::new();
@@ -91,7 +91,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
                 lines.push(Line::from(spans));
             }
             let text = Text::from(lines);
-            app.preview_cache.insert(script_path.clone(), text.clone());
+            app.preview.cache.insert(script_path.clone(), text.clone());
             text
         }
     } else {
@@ -100,14 +100,14 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
 
     if let Some(area) = chunks.first() {
         let total_lines = compute_total_lines(&preview_text.lines, area.width);
-        app.preview_max_scroll = total_lines.saturating_sub(area.height);
+        app.preview.max_scroll = total_lines.saturating_sub(area.height);
     } else {
-        app.preview_max_scroll = 0;
+        app.preview.max_scroll = 0;
     }
 
     let preview = Paragraph::new(preview_text)
         .block(Block::default().style(Style::default()))
-        .scroll((app.preview_scroll, 0))
+        .scroll((app.preview.scroll, 0))
         .wrap(Wrap { trim: false });
 
     f.render_widget(preview, chunks[0]);
@@ -152,8 +152,8 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .constraints([Constraint::Length(3), Constraint::Min(3), Constraint::Length(2)])
         .split(inner_area);
 
-    let display_text = if let Some(ref autocomplete) = app.autocomplete_text {
-        let base = &app.search_input;
+    let display_text = if let Some(ref autocomplete) = app.search.autocomplete {
+        let base = &app.search.input;
         let completion = &autocomplete[base.len()..];
 
         Line::from(vec![
@@ -161,7 +161,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
             Span::styled(completion, Style::default().fg(Color::DarkGray)),
         ])
     } else {
-        Line::from(app.search_input.clone())
+        Line::from(app.search.input.clone())
     };
 
     let input = Paragraph::new(display_text)
@@ -171,9 +171,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(input, popup_layout[0]);
 
-    if app.search_cursor_position <= app.search_input.len() {
+    if app.search.cursor_position <= app.search.input.len() {
         f.set_cursor_position((
-            popup_layout[0].x + 1 + app.search_cursor_position as u16,
+            popup_layout[0].x + 1 + app.search.cursor_position as u16,
             popup_layout[0].y + 1,
         ));
     }
@@ -181,26 +181,26 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let mut result_items = Vec::new();
 
     let max_display = (popup_height - 5) as usize;
-    let result_count = app.search_results.len();
+    let result_count = app.search.results.len();
 
     let display_count = std::cmp::min(result_count, max_display);
     let start_idx = if result_count <= max_display {
         0
     } else {
         let half_display = max_display / 2;
-        if app.search_selected_idx < half_display {
+        if app.search.selected_idx < half_display {
             0
-        } else if app.search_selected_idx >= result_count - half_display {
+        } else if app.search.selected_idx >= result_count - half_display {
             result_count - max_display
         } else {
-            app.search_selected_idx - half_display
+            app.search.selected_idx - half_display
         }
     };
 
     for i in 0..display_count {
         let result_idx = start_idx + i;
-        if result_idx < app.search_results.len() {
-            let item = &app.search_results[result_idx];
+        if result_idx < app.search.results.len() {
+            let item = &app.search.results[result_idx];
             let display_text = format!("{}/{}", item.category, item.name);
 
             result_items.push(ListItem::new(Line::from(vec![Span::styled(
@@ -210,7 +210,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         }
     }
 
-    let result_count_text = format!("Found {} results", app.search_results.len());
+    let result_count_text = format!("Found {} results", app.search.results.len());
 
     let search_results = List::new(result_items)
         .block(create_rounded_block().title(result_count_text))
@@ -223,7 +223,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .highlight_symbol("");
 
     let mut search_list_state = ratatui::widgets::ListState::default();
-    search_list_state.select(Some(app.search_selected_idx.saturating_sub(start_idx)));
+    search_list_state.select(Some(app.search.selected_idx.saturating_sub(start_idx)));
 
     f.render_stateful_widget(search_results, popup_layout[1], &mut search_list_state);
 
@@ -254,7 +254,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
 pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_width = std::cmp::min(60, area.width - 8);
-    let popup_height = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+    let popup_height = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         std::cmp::min(20, area.height - 6)
     } else {
         11
@@ -277,7 +277,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let inner_area = popup_block.inner(popup_area);
 
-    let content_layout = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+    let content_layout = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         Layout::default()
             .direction(Direction::Vertical)
             .constraints([
@@ -302,7 +302,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(popup_block, popup_area);
 
-    let question_text = if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+    let question_text = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         "Do you want to run these scripts?"
     } else {
         "Do you want to run this script?"
@@ -316,9 +316,9 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(question_paragraph, content_layout[0]);
 
-    if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+    if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         let count_text = Paragraph::new(Line::from(vec![Span::styled(
-            format!("{} scripts selected:", app.multi_selected_scripts.len()),
+            format!("{} scripts selected:", app.multi_select.scripts.len()),
             Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
         )]))
         .alignment(Alignment::Center);
@@ -327,10 +327,10 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
 
         let mut script_items = Vec::new();
         let max_display = (popup_height - 10) as usize;
-        let display_count = std::cmp::min(app.multi_selected_scripts.len(), max_display);
+        let display_count = std::cmp::min(app.multi_select.scripts.len(), max_display);
 
         for i in 0..display_count {
-            let script_path = &app.multi_selected_scripts[i];
+            let script_path = &app.multi_select.scripts[i];
             if let Some(script_name) = script_path.file_stem().and_then(|n| n.to_str())
                 && let Some(category) =
                     script_path.parent().and_then(|p| p.file_name()).and_then(|n| n.to_str())
@@ -343,8 +343,8 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
             }
         }
 
-        if app.multi_selected_scripts.len() > max_display {
-            let more_count = app.multi_selected_scripts.len() - max_display;
+        if app.multi_select.scripts.len() > max_display {
+            let more_count = app.multi_select.scripts.len() - max_display;
             script_items.push(ListItem::new(Line::from(vec![Span::styled(
                 format!("   ... and {more_count} more"),
                 Style::default().fg(Color::DarkGray),
@@ -543,7 +543,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
 
     let help_paragraph = Paragraph::new(help_content)
         .block(Block::default())
-        .scroll((app.help_scroll.min(max_scroll), 0));
+        .scroll((app.help.scroll.min(max_scroll), 0));
 
     f.render_widget(help_paragraph, content_area);
 
@@ -555,7 +555,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     };
 
     let scroll_status = if max_scroll > 0 {
-        format!("{}/{}", app.help_scroll.min(max_scroll), max_scroll)
+        format!("{}/{}", app.help.scroll.min(max_scroll), max_scroll)
     } else {
         "No scroll needed".to_string()
     };

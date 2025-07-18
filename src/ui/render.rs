@@ -110,8 +110,8 @@ fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
 
 fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Scripts;
-    let title = if app.multi_select_mode {
-        format!("[{} selected]", app.multi_selected_scripts.len())
+    let title = if app.multi_select.enabled {
+        format!("[{} selected]", app.multi_select.scripts.len())
     } else {
         "Scripts (p for preview)".to_string()
     };
@@ -126,7 +126,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let script_name_style = Style::default().fg(Color::LightGreen);
             let script_name = Span::styled(&item.name, script_name_style);
 
-            if app.multi_select_mode {
+            if app.multi_select.enabled {
                 let is_selected = app.is_script_selected(&item.path);
                 let prefix = if is_selected { "[✓] " } else { "[ ] " };
                 let style = if is_selected {
@@ -165,7 +165,7 @@ fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
 fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_text = match app.mode {
         AppMode::Normal => {
-            if app.multi_select_mode {
+            if app.multi_select.enabled {
                 "MULTI-SELECT (Space to select) | (Esc To Exit)"
             } else {
                 "NORMAL"
@@ -179,7 +179,7 @@ fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
 
     let mode_color = match app.mode {
         AppMode::Normal => {
-            if app.multi_select_mode {
+            if app.multi_select.enabled {
                 Color::Magenta
             } else {
                 Color::Green
@@ -191,8 +191,8 @@ fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Help => Color::Blue,
     };
 
-    let selected_count = if app.multi_select_mode {
-        format!(" {} selected ", app.multi_selected_scripts.len())
+    let selected_count = if app.multi_select.enabled {
+        format!(" {} selected ", app.multi_select.scripts.len())
     } else {
         String::new()
     };
@@ -275,7 +275,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::Help => {
             render_normal_ui(f, app, options);
             let max_scroll = popups::render_help_popup(f, app, app.script_panel_area);
-            app.help_max_scroll = max_scroll;
+            app.help.max_scroll = max_scroll;
         }
         AppMode::Normal => {
             render_normal_ui(f, app, options);
@@ -400,7 +400,8 @@ where
                                 || key.code == KeyCode::Char('Y')
                                 || key.code == KeyCode::Char('l')
                             {
-                                if app.multi_select_mode && !app.multi_selected_scripts.is_empty() {
+                                if app.multi_select.enabled && !app.multi_select.scripts.is_empty()
+                                {
                                     cleanup_terminal(&mut terminal)?;
 
                                     if options.log_mode {
@@ -408,7 +409,7 @@ where
                                             "INFO",
                                             &format!(
                                                 "Exiting UI to run {} selected scripts",
-                                                app.multi_selected_scripts.len()
+                                                app.multi_select.scripts.len()
                                             ),
                                         );
                                     }
