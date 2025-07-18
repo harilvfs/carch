@@ -89,16 +89,13 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
             if let Some(script_name) = script_path.file_stem().and_then(|n| n.to_str())
                 && let Some(category) =
                     script_path.parent().and_then(|p| p.file_name()).and_then(|n| n.to_str())
-                {
-                    let display_text = format!("{category}/{script_name}");
-                    script_items.push(ListItem::new(ratatui::text::Line::from(vec![
-                        ratatui::text::Span::styled(" • ", Style::default().fg(Color::Green)),
-                        ratatui::text::Span::styled(
-                            display_text,
-                            Style::default().fg(Color::White),
-                        ),
-                    ])));
-                }
+            {
+                let display_text = format!("{category}/{script_name}");
+                script_items.push(ListItem::new(ratatui::text::Line::from(vec![
+                    ratatui::text::Span::styled(" • ", Style::default().fg(Color::Green)),
+                    ratatui::text::Span::styled(display_text, Style::default().fg(Color::White)),
+                ])));
+            }
         }
 
         if app.multi_select.scripts.len() > max_display {

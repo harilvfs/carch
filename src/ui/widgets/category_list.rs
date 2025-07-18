@@ -5,16 +5,12 @@ use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::{App, FocusedPanel};
 
-fn create_block(title: &str, is_focused: bool) -> Block<'_> {
+fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
     Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title(title)
-        .border_style(if is_focused {
-            Style::default().fg(Color::Cyan)
-        } else {
-            Style::default().fg(Color::DarkGray)
-        })
+        .border_style(Style::default().fg(Color::Cyan))
         .style(Style::default().bg(Color::Reset))
 }
 
