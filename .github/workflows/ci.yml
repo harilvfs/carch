@@ -29,15 +29,10 @@ jobs:
         with:
           components: rustfmt, clippy
 
-      - name: Run cargo-deny
-        uses: EmbarkStudios/cargo-deny-action@v2
+      - name: Install tools
+        uses: taiki-e/install-action@v2
         with:
-          log-level: warn
-          command: check
-          arguments: --all-features
-
-      - name: Install Taplo CLI
-        run: cargo install taplo-cli --locked
+          tool: taplo-cli,cargo-deny
 
       - name: Run CI checks
         run: cargo xtask ci
