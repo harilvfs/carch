@@ -16,17 +16,17 @@
 
 </div>
 
-*[Carch](https://carch.chalisehari.com.np)* is collection of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
-It’s especially useful if you want to quickly start using your *favorite apps* with a clean and ready-to-use setup. (*Currently supports Arch, Fedora, and openSUSE-based distros*)
+*[Carch](https://carch.chalisehari.com.np)* is **a collection** of modular Bash scripts with a beautiful TUI (*built with* [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
+It’s especially useful if you want to quickly set up and start using your *favorite apps* on a clean, ready-to-use system. (*Currently supports Arch, Fedora, and openSUSE-based distros*)
 
-For more check out [documentation](https://carch.chalisehari.com.np)
+For more, see the [documentation](https://carch.chalisehari.com.np). You can also join us on [Discord](https://discord.com/invite/8NJWstnUHd) or [Telegram](https://t.me/carchx) for help and discussions.
 
 <!-- Badges -->
 
 [ratatui]: https://ratatui.rs/built-with-ratatui/badge.svg
 [ratatui-link]: https://ratatui.rs/
 
-[check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=github&logoColor=white&label=CI
+[check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=GitHub%20Actions&logoColor=white&label=CI
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 
 [downloads]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat&color=1c1c29&logoColor=white&labelColor=black&logo=github
