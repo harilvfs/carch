@@ -124,8 +124,14 @@ pub fn scroll_preview_page_down(app: &mut App) {
 }
 
 pub fn get_script_path(app: &App) -> Option<PathBuf> {
-    if let Some(selected_idx) = app.search.results.get(app.search.selected_idx) {
-        return Some(selected_idx.item.path.clone());
+    if app.mode == AppMode::Search {
+        if let Some(selected_idx) = app.search.results.get(app.search.selected_idx) {
+            return Some(selected_idx.item.path.clone());
+        }
+    } else if let Some(script_item) =
+        app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx))
+    {
+        return Some(script_item.path.clone());
     }
     None
 }
