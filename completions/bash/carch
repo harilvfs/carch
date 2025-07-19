@@ -4,7 +4,7 @@ _carch() {
     local cur prev opts
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --version --log --check-update --update --uninstall -h -v"
+    opts="--help --version --log --no-cleanup -h -v check-update update uninstall"
 
     case "$prev" in
         --config|-c|--run-script|-r)
