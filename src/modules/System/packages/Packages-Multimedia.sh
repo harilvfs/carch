@@ -5,6 +5,7 @@ install_multimedia() {
     distro=$?
     if [[ $distro -eq 0 ]]; then
         install_aur_helper
+        pkg_manager="sudo pacman -S --noconfirm"
         pkg_manager_aur="$AUR_HELPER -S --noconfirm"
         get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
     elif [[ $distro -eq 1 ]]; then
@@ -20,14 +21,12 @@ install_multimedia() {
 
     while true; do
         clear
-
         if [[ $distro -eq 2 ]]; then
             # for opensuse
-            options=("VLC" "Back to Main Menu")
+            options=("VLC" "MPV" "Back to Main Menu")
         else
-            options=("VLC" "Netflix [Unofficial]" "Back to Main Menu")
+            options=("VLC" "MPV" "Netflix [Unofficial]" "Back to Main Menu")
         fi
-
         mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
                                                     --height=40% \
                                                     --prompt="Choose options (TAB to select multiple): " \
@@ -56,6 +55,14 @@ install_multimedia() {
                     fi
                     echo "VLC installed successfully! Version: $version"
                     ;;
+
+                "MPV")
+                    clear
+                    $pkg_manager mpv
+                    version=$(get_version mpv)
+                    echo "MPV installed successfully! Version: $version"
+                    ;;
+
                 "Netflix [Unofficial]")
                     clear
                     if [[ $distro -eq 0 ]]; then
