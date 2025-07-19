@@ -91,7 +91,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         }
     }
 
-    let result_count_text = format!("Found {} results", app.search.results.len());
+    let result_count_text = format!("Found {} scripts", app.search.results.len());
 
     let search_results = List::new(result_items)
         .block(create_rounded_block().title(result_count_text))

@@ -139,21 +139,18 @@ pub fn toggle_search_mode(app: &mut App) {
 
     if app.mode == AppMode::Search {
         app.search = SearchState::default();
+        perform_search(app);
     }
 }
 
 pub fn perform_search(app: &mut App) {
     app.search.results.clear();
-
-    if app.search.input.is_empty() {
-        return;
-    }
-
     let search_term = app.search.input.to_lowercase();
 
     for scripts in app.all_scripts.values() {
         for item in scripts {
-            if item.name.to_lowercase().contains(&search_term)
+            if app.search.input.is_empty()
+                || item.name.to_lowercase().contains(&search_term)
                 || item.category.to_lowercase().contains(&search_term)
             {
                 app.search.results.push(item.clone());
