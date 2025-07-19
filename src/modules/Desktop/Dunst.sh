@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
