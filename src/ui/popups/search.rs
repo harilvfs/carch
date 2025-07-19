@@ -1,6 +1,7 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::style::{Color, Modifier, Style, Stylize};
+use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragraph};
 
 use crate::ui::state::App;
@@ -38,12 +39,12 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         let base = &app.search.input;
         let completion = &autocomplete[base.len()..];
 
-        ratatui::text::Line::from(vec![
-            ratatui::text::Span::styled(base.clone(), Style::default()),
-            ratatui::text::Span::styled(completion, Style::default().fg(Color::DarkGray)),
+        Line::from(vec![
+            Span::styled(base.clone(), Style::default()),
+            Span::styled(completion, Style::default().fg(Color::DarkGray)),
         ])
     } else {
-        ratatui::text::Line::from(app.search.input.clone())
+        Line::from(app.search.input.clone())
     };
 
     let input = Paragraph::new(display_text)
@@ -82,12 +83,38 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     for i in 0..display_count {
         let result_idx = start_idx + i;
         if result_idx < app.search.results.len() {
-            let item = &app.search.results[result_idx];
-            let display_text = format!("{}/{}", item.category, item.name);
+            let result = &app.search.results[result_idx];
+            let display_text = format!("{}/{}", result.item.category, result.item.name);
 
-            result_items.push(ListItem::new(ratatui::text::Line::from(vec![
-                ratatui::text::Span::styled(display_text, Style::default().fg(Color::Gray)),
-            ])));
+            if app.search.input.is_empty() {
+                result_items.push(ListItem::new(Line::from(vec![Span::styled(
+                    display_text,
+                    Style::default().fg(Color::Gray),
+                )])));
+            } else {
+                let mut spans = Vec::new();
+                let mut last_idx = 0;
+                for &idx in &result.indices {
+                    if idx > last_idx {
+                        spans.push(Span::styled(
+                            display_text[last_idx..idx].to_string(),
+                            Style::default().fg(Color::Gray),
+                        ));
+                    }
+                    spans.push(Span::styled(
+                        display_text[idx..idx + 1].to_string(),
+                        Style::default().fg(Color::Green).add_modifier(Modifier::BOLD),
+                    ));
+                    last_idx = idx + 1;
+                }
+                if last_idx < display_text.len() {
+                    spans.push(Span::styled(
+                        display_text[last_idx..].to_string(),
+                        Style::default().fg(Color::Gray),
+                    ));
+                }
+                result_items.push(ListItem::new(Line::from(spans)));
+            }
         }
     }
 
@@ -95,12 +122,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let search_results = List::new(result_items)
         .block(create_rounded_block().title(result_count_text))
-        .highlight_style(
-            Style::default()
-                .bg(Color::Rgb(235, 235, 210))
-                .fg(Color::Black)
-                .add_modifier(Modifier::BOLD),
-        )
+        .highlight_style(Style::default().bg(Color::Rgb(235, 235, 210)).fg(Color::Black).bold())
         .highlight_symbol("");
 
     let mut search_list_state = ratatui::widgets::ListState::default();
@@ -122,11 +144,11 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         height: popup_layout[2].height - 1,
     };
 
-    let help_text = Paragraph::new(ratatui::text::Line::from(vec![
-        ratatui::text::Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
-        ratatui::text::Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
-        ratatui::text::Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
-        ratatui::text::Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
+    let help_text = Paragraph::new(Line::from(vec![
+        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
+        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
+        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
+        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
     ]))
     .alignment(Alignment::Center);
 

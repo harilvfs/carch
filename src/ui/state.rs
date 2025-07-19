@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 
+use fuzzy_matcher::skim::SkimMatcherV2;
 use ratatui::layout::Rect;
 use ratatui::text::Text;
 
@@ -69,7 +70,7 @@ impl<T> StatefulList<T> {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct ScriptItem {
     pub category: String,
     pub name:     String,
@@ -90,13 +91,21 @@ pub struct PreviewState<'a> {
     pub cache:      HashMap<PathBuf, Text<'a>>,
 }
 
+#[derive(Clone, Debug)]
+pub struct SearchResult {
+    pub item:    ScriptItem,
+    pub score:   i64,
+    pub indices: Vec<usize>,
+}
+
 #[derive(Default)]
 pub struct SearchState {
     pub input:           String,
-    pub results:         Vec<ScriptItem>,
+    pub results:         Vec<SearchResult>,
     pub cursor_position: usize,
     pub selected_idx:    usize,
     pub autocomplete:    Option<String>,
+    pub matcher:         SkimMatcherV2,
 }
 
 #[derive(Default)]

@@ -17,13 +17,16 @@ impl<'a> App<'a> {
                     let selected_item = self.search.results[self.search.selected_idx].clone();
 
                     if let Some(category_idx) =
-                        self.categories.items.iter().position(|c| *c == selected_item.category)
+                        self.categories.items.iter().position(|c| *c == selected_item.item.category)
                     {
                         self.categories.state.select(Some(category_idx));
                         super::actions::update_script_list(self);
 
-                        if let Some(script_idx) =
-                            self.scripts.items.iter().position(|s| s.name == selected_item.name)
+                        if let Some(script_idx) = self
+                            .scripts
+                            .items
+                            .iter()
+                            .position(|s| s.name == selected_item.item.name)
                         {
                             self.scripts.state.select(Some(script_idx));
                         }

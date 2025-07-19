@@ -1,7 +1,10 @@
 use std::path::{Path, PathBuf};
 use std::{fs, io};
 
-use super::state::{App, AppMode, FocusedPanel, ScriptItem, SearchState, StatefulList, UiOptions};
+use super::state::{
+    App, AppMode, FocusedPanel, ScriptItem, SearchResult, SearchState, StatefulList, UiOptions,
+};
+use fuzzy_matcher::FuzzyMatcher;
 
 pub fn load_scripts(app: &mut App, modules_dir: &Path) -> io::Result<()> {
     let mut categories = Vec::new();
@@ -121,7 +124,10 @@ pub fn scroll_preview_page_down(app: &mut App) {
 }
 
 pub fn get_script_path(app: &App) -> Option<PathBuf> {
-    app.scripts.state.selected().map(|i| app.scripts.items[i].path.clone())
+    if let Some(selected_idx) = app.search.results.get(app.search.selected_idx) {
+        return Some(selected_idx.item.path.clone());
+    }
+    None
 }
 
 pub fn toggle_search_mode(app: &mut App) {
@@ -145,18 +151,30 @@ pub fn toggle_search_mode(app: &mut App) {
 
 pub fn perform_search(app: &mut App) {
     app.search.results.clear();
-    let search_term = app.search.input.to_lowercase();
 
-    for scripts in app.all_scripts.values() {
-        for item in scripts {
-            if app.search.input.is_empty()
-                || item.name.to_lowercase().contains(&search_term)
-                || item.category.to_lowercase().contains(&search_term)
-            {
-                app.search.results.push(item.clone());
-            }
+    if app.search.input.is_empty() {
+        let mut all_scripts: Vec<_> = app
+            .all_scripts
+            .values()
+            .flat_map(|scripts| scripts.iter().cloned())
+            .map(|item| SearchResult { item, score: 0, indices: Vec::new() })
+            .collect();
+        all_scripts.sort_by(|a, b| a.item.name.cmp(&b.item.name));
+        app.search.results = all_scripts;
+        return;
+    }
+
+    let mut results = Vec::new();
+    for item in app.all_scripts.values().flat_map(|scripts| scripts.iter()) {
+        let choice = format!("{}/{}", item.category, item.name);
+        if let Some((score, indices)) = app.search.matcher.fuzzy_indices(&choice, &app.search.input)
+        {
+            results.push(SearchResult { item: item.clone(), score, indices });
         }
     }
+
+    results.sort_by(|a, b| b.score.cmp(&a.score));
+    app.search.results = results;
 }
 
 pub fn next(app: &mut App) {
