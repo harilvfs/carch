@@ -17,6 +17,7 @@ fn main() -> Result<(), anyhow::Error> {
 
     let sh = Shell::new()?;
     let cmd = args.subcommand()?.unwrap_or_else(|| "ci".to_string());
+
     match cmd.as_str() {
         "ci" => {
             cmd!(sh, "cargo +nightly fmt --all --check").run()?;
@@ -26,7 +27,11 @@ fn main() -> Result<(), anyhow::Error> {
             cmd!(sh, "cargo +nightly check --workspace --locked --no-default-features").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --all-features").run()?;
             cmd!(sh, "taplo fmt --check").run()?;
-            cmd!(sh, "cargo deny check").run()?;
+
+            if std::env::var("CI").is_err() && cmd!(sh, "which cargo-deny").run().is_ok() {
+                cmd!(sh, "cargo deny check").run()?;
+            }
+
             Ok(())
         }
         _ => {

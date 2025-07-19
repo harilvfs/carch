@@ -29,8 +29,12 @@ jobs:
         with:
           components: rustfmt, clippy
 
-      - name: Install cargo-deny
-        run: cargo install cargo-deny --locked
+      - name: Run cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          log-level: warn
+          command: check
+          arguments: --all-features
 
       - name: Install Taplo CLI
         run: cargo install taplo-cli --locked
