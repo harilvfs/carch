@@ -81,16 +81,6 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" Space ", Style::default().bg(action_color).fg(Color::Black)),
-        Span::raw(" "),
-        Span::styled(
-            "Toggle script selection in multi-select mode",
-            Style::default().fg(Color::Gray),
-        ),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
         Span::styled(" p ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray)),
@@ -116,18 +106,6 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         Span::raw(" "),
         Span::styled("Search mode", Style::default().fg(Color::Gray)),
     ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" m ", Style::default().bg(mode_color).fg(Color::Black)),
-        Span::raw(" "),
-        Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
-        Span::raw(" | "),
-        Span::styled(" Esc ", Style::default().bg(mode_color).fg(Color::Black)),
-        Span::raw(" "),
-        Span::styled("Exit multi-select mode", Style::default().fg(Color::Gray)),
-    ]));
-
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![

@@ -111,11 +111,7 @@ pub struct SearchState {
     pub matcher:         SkimMatcherV2,
 }
 
-#[derive(Default)]
-pub struct MultiSelectState {
-    pub enabled: bool,
-    pub scripts: Vec<PathBuf>,
-}
+
 
 #[derive(Default)]
 pub struct HelpState {
@@ -136,7 +132,6 @@ pub struct App<'a> {
     pub script_panel_area: Rect,
     pub preview:           PreviewState<'a>,
     pub search:            SearchState,
-    pub multi_select:      MultiSelectState,
     pub help:              HelpState,
     pub run_script_popup:  Option<RunScriptPopup>,
     pub run_script_receiver: Option<Receiver<RunScriptPopupLoaded>>,

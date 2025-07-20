@@ -9,13 +9,7 @@ use crate::version;
 
 pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_text = match app.mode {
-        AppMode::Normal => {
-            if app.multi_select.enabled {
-                "MULTI-SELECT (Space to select) | (Esc To Exit)"
-            } else {
-                "NORMAL"
-            }
-        }
+        AppMode::Normal => "NORMAL",
         AppMode::Preview => "PREVIEW",
         AppMode::Search => "SEARCH",
         AppMode::Confirm => "CONFIRM",
@@ -24,13 +18,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let mode_color = match app.mode {
-        AppMode::Normal => {
-            if app.multi_select.enabled {
-                Color::Magenta
-            } else {
-                Color::Green
-            }
-        }
+        AppMode::Normal => Color::Green,
         AppMode::Preview => Color::Cyan,
         AppMode::Search => Color::Yellow,
         AppMode::Confirm => Color::Red,
@@ -38,13 +26,6 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::RunScript => Color::Yellow,
     };
 
-    let selected_count = if app.multi_select.enabled {
-        format!(" {} selected ", app.multi_select.scripts.len())
-    } else {
-        String::new()
-    };
-
-    let has_selected = !selected_count.is_empty();
     let version = version::get_current_version();
 
     let status = Line::from(vec![
@@ -53,15 +34,6 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
             Style::default().bg(mode_color).fg(Color::Black).add_modifier(Modifier::BOLD),
         ),
         Span::raw(" "),
-        if has_selected {
-            Span::styled(
-                selected_count,
-                Style::default().bg(Color::Yellow).fg(Color::Black).add_modifier(Modifier::BOLD),
-            )
-        } else {
-            Span::raw("")
-        },
-        if has_selected { Span::raw(" ") } else { Span::raw("") },
         Span::styled(
             " ?: Help | q: Quit | h/l: Switch Panels",
             Style::default().bg(Color::Rgb(203, 166, 247)).fg(Color::Black),

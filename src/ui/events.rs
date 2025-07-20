@@ -3,8 +3,7 @@ use crossterm::event::{KeyCode, KeyEvent, MouseEvent, MouseEventKind};
 use super::actions::{
     bottom, get_script_path, next, perform_search, previous, scroll_preview_down,
     scroll_preview_page_down, scroll_preview_page_up, scroll_preview_up, toggle_help_mode,
-    toggle_multi_select_mode, toggle_preview_mode, toggle_script_selection, toggle_search_mode,
-    top, update_autocomplete, update_preview,
+    toggle_preview_mode, toggle_search_mode, top, update_autocomplete, update_preview,
 };
 use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
@@ -105,11 +104,7 @@ impl<'a> App<'a> {
             KeyCode::Char('q') => {
                 self.quit = true;
             }
-            KeyCode::Esc => {
-                if self.multi_select.enabled {
-                    toggle_multi_select_mode(self);
-                }
-            }
+            KeyCode::Esc => {}
             KeyCode::Char('j') | KeyCode::Down => {
                 next(self);
             }
@@ -122,9 +117,7 @@ impl<'a> App<'a> {
             }
             KeyCode::Char('l') | KeyCode::Right => {
                 if self.focused_panel == FocusedPanel::Scripts {
-                    if self.scripts.state.selected().is_some()
-                        && !(self.multi_select.enabled && self.multi_select.scripts.is_empty())
-                    {
+                    if self.scripts.state.selected().is_some() {
                         self.mode = AppMode::Confirm;
                     }
                 } else {
@@ -146,23 +139,14 @@ impl<'a> App<'a> {
             KeyCode::Char('p') => {
                 toggle_preview_mode(self);
             }
-            KeyCode::Char('m') => {
-                toggle_multi_select_mode(self);
-            }
             KeyCode::Char('?') => {
                 toggle_help_mode(self);
             }
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts
                     && self.scripts.state.selected().is_some()
-                    && !(self.multi_select.enabled && self.multi_select.scripts.is_empty())
                 {
                     self.mode = AppMode::Confirm;
-                }
-            }
-            KeyCode::Char(' ') => {
-                if self.multi_select.enabled {
-                    toggle_script_selection(self);
                 }
             }
             _ => {}
@@ -238,9 +222,6 @@ impl<'a> App<'a> {
                     self.run_script_popup = Some(popup);
                     self.run_script_receiver = Some(rx);
                     self.mode = AppMode::RunScript;
-                } else {
-                    // TODO: handle multi-select
-                    self.mode = AppMode::Normal;
                 }
             }
             KeyCode::Char('n')
