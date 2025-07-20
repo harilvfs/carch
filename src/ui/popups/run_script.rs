@@ -162,7 +162,7 @@ impl RunScriptPopup {
     fn handle_passthrough_key_event(&mut self, key: KeyEvent) {
         let input_bytes = match key.code {
             KeyCode::Char(ch) => ch.to_string().into_bytes(),
-            KeyCode::Enter => vec![b'\n'],
+            KeyCode::Enter => vec![b'\r'],
             KeyCode::Backspace => vec![0x7f],
             KeyCode::Left => vec![27, 91, 68],
             KeyCode::Right => vec![27, 91, 67],
