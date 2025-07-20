@@ -2,10 +2,11 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 
 use fuzzy_matcher::skim::SkimMatcherV2;
+use oneshot::Receiver;
 use ratatui::layout::Rect;
 use ratatui::text::Text;
 
-use super::popups::run_script::RunScriptPopup;
+use super::popups::run_script::{RunScriptPopup, RunScriptPopupLoaded};
 use super::system_info::SystemInfo;
 
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -137,6 +138,7 @@ pub struct App<'a> {
     pub search:            SearchState,
     pub multi_select:      MultiSelectState,
     pub help:              HelpState,
-    pub run_script_popup: Option<RunScriptPopup>,
+    pub run_script_popup:  Option<RunScriptPopup>,
+    pub run_script_receiver: Option<Receiver<RunScriptPopupLoaded>>,
 }
 

@@ -25,6 +25,7 @@ impl<'a> App<'a> {
             multi_select:      MultiSelectState::default(),
             help:              HelpState::default(),
             run_script_popup: None,
+            run_script_receiver: None,
         }
     }
 }

@@ -234,8 +234,9 @@ impl<'a> App<'a> {
         match key.code {
             KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
                 if let Some(script_path) = get_script_path(self) {
-                    let popup = RunScriptPopup::new(script_path);
+                    let (popup, rx) = RunScriptPopup::new(script_path);
                     self.run_script_popup = Some(popup);
+                    self.run_script_receiver = Some(rx);
                     self.mode = AppMode::RunScript;
                 } else {
                     // TODO: handle multi-select

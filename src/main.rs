@@ -3,9 +3,8 @@ use crate::ui::state::UiOptions;
 use include_dir::{Dir, include_dir};
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
-use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::{fs, io};
+use std::fs;
 use tempfile::TempDir;
 
 mod args;
