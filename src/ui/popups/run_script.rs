@@ -6,7 +6,7 @@ use portable_pty::{
 use ratatui::{
     prelude::*,
     symbols::border,
-    widgets::{Block, Paragraph, Widget},
+    widgets::{Block, Widget},
 };
 use std::{
     io::Write,
@@ -22,39 +22,7 @@ pub enum PopupEvent {
     None,
 }
 
-pub enum RunScriptPopup {
-    Loading,
-    Loaded(RunScriptPopupLoaded),
-}
-
-impl RunScriptPopup {
-    pub fn new(script_path: PathBuf) -> (Self, Receiver<RunScriptPopupLoaded>) {
-        let (tx, rx) = oneshot::channel();
-
-        std::thread::spawn(move || {
-            let loaded = RunScriptPopupLoaded::new(script_path);
-            let _ = tx.send(loaded);
-        });
-
-        (Self::Loading, rx)
-    }
-
-    pub fn handle_key_event(&mut self, key: KeyEvent) -> PopupEvent {
-        if let Self::Loaded(popup) = self {
-            popup.handle_key_event(key)
-        } else {
-            PopupEvent::None
-        }
-    }
-
-    pub fn kill_child(&mut self) {
-        if let Self::Loaded(popup) = self {
-            popup.kill_child();
-        }
-    }
-}
-
-pub struct RunScriptPopupLoaded {
+pub struct RunScriptPopup {
     buffer: Arc<Mutex<Vec<u8>>>,
     command_thread: Option<JoinHandle<ExitStatus>>,
     child_killer: Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
@@ -65,7 +33,7 @@ pub struct RunScriptPopupLoaded {
     scroll_offset: usize,
 }
 
-impl RunScriptPopupLoaded {
+impl RunScriptPopup {
     pub fn new(script_path: PathBuf) -> Self {
         let pty_system = NativePtySystem::default();
 
@@ -214,24 +182,6 @@ impl RunScriptPopupLoaded {
 }
 
 impl Widget for &mut RunScriptPopup {
-    fn render(self, area: Rect, buf: &mut Buffer) {
-        match self {
-            RunScriptPopup::Loading => {
-                let block = Block::bordered()
-                    .border_set(border::ROUNDED)
-                    .title_top(Line::from("Loading script...").centered());
-                let text = Paragraph::new("Please wait...").centered();
-                let text_area = block.inner(area);
-
-                block.render(area, buf);
-                text.render(text_area, buf);
-            }
-            RunScriptPopup::Loaded(popup) => popup.render(area, buf),
-        }
-    }
-}
-
-impl Widget for &mut RunScriptPopupLoaded {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let block = if !self.is_finished() {
             Block::bordered()

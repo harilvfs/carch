@@ -19,7 +19,6 @@ use super::widgets::header::render_header;
 use super::widgets::script_list::render_script_list;
 use super::widgets::status_bar::render_status_bar;
 use crate::ui::popups;
-use crate::ui::popups::run_script::RunScriptPopup;
 
 fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     if app.mode == AppMode::Preview && !options.show_preview {
@@ -150,14 +149,6 @@ pub fn run_ui_with_options(
 
     while !app.quit {
         terminal.autoresize()?;
-
-        if let Some(rx) = app.run_script_receiver.take() {
-            if let Ok(loaded_popup) = rx.try_recv() {
-                app.run_script_popup = Some(RunScriptPopup::Loaded(loaded_popup));
-            } else {
-                app.run_script_receiver = Some(rx);
-            }
-        }
 
         terminal.draw(|f| ui(f, &mut app, &options))?;
 
