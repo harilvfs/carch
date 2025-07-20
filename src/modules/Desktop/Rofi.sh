@@ -3,57 +3,50 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-check_fzf
-
-echo -e "${YELLOW}:: Note: JetBrains Mono Nerd Font is required for proper Rofi display. Please install it before continuing.${ENDCOLOR}"
-
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-    [[ "$selected" == "Yes" ]]
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
 }
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+print_message "$YELLOW" ":: Note: JetBrains Mono Nerd Font is required for proper Rofi display. Please install it before continuing."
 
 install_rofi_arch() {
     if ! command -v rofi &> /dev/null; then
-        echo -e "${CYAN}Rofi is not installed. :: Installing Rofi for Arch...${NC}"
+        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi for Arch..."
         sudo pacman -S --needed --noconfirm rofi
     else
-        echo -e "${GREEN}:: Rofi is already installed on Arch.${NC}"
+        print_message "$GREEN" ":: Rofi is already installed on Arch."
     fi
 }
 
 install_rofi_fedora() {
     if ! command -v rofi &> /dev/null; then
-        echo -e "${CYAN}Rofi is not installed. :: Installing Rofi for Fedora...${NC}"
+        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi for Fedora..."
         sudo dnf install --assumeyes rofi
     else
-        echo -e "${GREEN}:: Rofi is already installed on Fedora.${NC}"
+        print_message "$GREEN" ":: Rofi is already installed on Fedora."
     fi
 }
 
 install_rofi_opensuse() {
     if ! command -v rofi &> /dev/null; then
-        echo -e "${CYAN}Rofi is not installed. :: Installing Rofi for openSUSE...${NC}"
+        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi for openSUSE..."
         sudo zypper install -y rofi
     else
-        echo -e "${GREEN}:: Rofi is already installed on openSUSE.${NC}"
+        print_message "$GREEN" ":: Rofi is already installed on openSUSE."
     fi
 }
 
@@ -65,7 +58,7 @@ setup_rofi() {
     elif command -v zypper &> /dev/null; then
         install_rofi_opensuse
     else
-        echo -e "${RED}Unsupported distribution. Please install Rofi manually.${ENDCOLOR}"
+        print_message "$RED" "Unsupported distribution. Please install Rofi manually."
         exit 1
     fi
 
@@ -73,34 +66,35 @@ setup_rofi() {
     BACKUP_DIR="$HOME/.config/rofi_backup"
 
     if [ -d "$ROFI_CONFIG_DIR" ]; then
-        echo -e "${CYAN}:: Rofi configuration directory exists. Backing up the current configuration...${NC}"
+        print_message "$CYAN" ":: Rofi configuration directory exists. Backing up the current configuration..."
 
         if [ -d "$BACKUP_DIR" ]; then
-            echo -e "${YELLOW}:: Backup already exists.${NC}"
-            if fzf_confirm "Overwrite the existing backup?"; then
+            print_message "$YELLOW" ":: Backup already exists."
+            if confirm "Overwrite the existing backup?"; then
                 rm -rf "$BACKUP_DIR"
                 mkdir -p "$BACKUP_DIR"
                 mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
-                echo -e "${GREEN}:: Existing Rofi configuration has been backed up to ~/.config/rofi_backup.${NC}"
+                print_message "$GREEN" ":: Existing Rofi configuration has been backed up to ~/.config/rofi_backup."
             else
-                echo -e "${GREEN}:: Keeping the existing backup. Skipping backup process.${NC}"
+                print_message "$GREEN" ":: Keeping the existing backup. Skipping backup process."
             fi
         else
             mkdir -p "$BACKUP_DIR"
             mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
-            echo -e "${GREEN}:: Existing Rofi configuration backed up to ~/.config/rofi_backup.${NC}"
+            print_message "$GREEN" ":: Existing Rofi configuration backed up to ~/.config/rofi_backup."
         fi
     else
         mkdir -p "$ROFI_CONFIG_DIR"
     fi
 
-    echo -e "${CYAN}:: Applying new Rofi configuration...${NC}"
+    print_message "$CYAN" ":: Applying new Rofi configuration..."
+
     wget -q https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/rofi/config.rasi -O "$ROFI_CONFIG_DIR/config.rasi"
 
     mkdir -p "$ROFI_CONFIG_DIR/themes"
     wget -q https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/rofi/themes/nord.rasi -O "$ROFI_CONFIG_DIR/themes/nord.rasi"
 
-    echo -e "${GREEN}:: Rofi configuration applied successfully!${NC}"
+    print_message "$GREEN" ":: Rofi configuration applied successfully!"
 }
 
 setup_rofi
