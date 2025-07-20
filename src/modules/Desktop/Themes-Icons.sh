@@ -2,111 +2,111 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
+source "$(dirname "$0")"/../colors.sh > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
 
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
 }
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
         distro="arch"
-        echo -e "${GREEN}Detected distribution: Arch Linux${NC}"
+        print_message "$GREEN" "Detected distribution: Arch Linux"
     elif command -v dnf &> /dev/null; then
         distro="fedora"
-        echo -e "${YELLOW}Detected distribution: Fedora${NC}"
+        print_message "$YELLOW" "Detected distribution: Fedora"
     elif command -v zypper &> /dev/null; then
         distro="opensuse"
-        echo -e "${CYAN}Detected distribution: openSUSE${NC}"
+        print_message "$CYAN" "Detected distribution: openSUSE"
     else
-        echo -e "${RED}Unsupported distribution. Exiting...${NC}"
+        print_message "$RED" "Unsupported distribution. Exiting..."
         exit 1
     fi
 }
 
 install_dependencies() {
-    echo -e "${CYAN}:: Installing dependencies...${NC}"
+    print_message "$CYAN" ":: Installing dependencies..."
 
     if [ "$distro" == "arch" ]; then
-        sudo pacman -S --needed git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
-            echo -e "${RED}:: Failed to install dependencies. Exiting...${NC}"
+        sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
+            print_message "$RED" ":: Failed to install dependencies. Exiting..."
             exit 1
         }
     elif [ "$distro" == "fedora" ]; then
         sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
-            echo -e "${RED}:: Failed to install dependencies. Exiting...${NC}"
+            print_message "$RED" ":: Failed to install dependencies. Exiting..."
             exit 1
         }
 
         if ! command -v nwg-look &> /dev/null; then
-            echo -e "${CYAN}:: Installing nwg-look for Fedora...${NC}"
+            print_message "$CYAN" ":: Installing nwg-look for Fedora..."
             sudo dnf copr enable -y solopasha/hyprland || {
-                echo -e "${RED}:: Failed to enable solopasha/hyprland COPR repository.${NC}"
+                print_message "$RED" ":: Failed to enable solopasha/hyprland COPR repository."
                 exit 1
             }
             sudo dnf install -y nwg-look || {
-                echo -e "${RED}:: Failed to install nwg-look. Exiting...${NC}"
+                print_message "$RED" ":: Failed to install nwg-look. Exiting..."
                 exit 1
             }
         fi
     elif [ "$distro" == "opensuse" ]; then
-        sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
-            echo -e "${RED}:: Failed to install dependencies. Exiting...${NC}"
+        sudo zypper install --no-confirm -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
+            print_message "$RED" ":: Failed to install dependencies. Exiting..."
             exit 1
         }
     fi
 
-    echo -e "${GREEN}:: Dependencies installed successfully.${NC}"
+    print_message "$GREEN" ":: Dependencies installed successfully."
 }
-
-check_fzf
-
-option=$(printf "Themes\nIcons\nBoth\nExit" | fzf ${FZF_COMMON} \
-                                              --height=40% \
-                                              --prompt="Choose an option: " \
-                                              --header="Themes and Icons" \
-                                              --pointer="➤" \
-                                              --color='fg:white,fg+:blue,bg+:black,pointer:blue')
 
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
         mkdir -p "$1"
-        echo -e "${TEAL}:: Created directory: $1${NC}"
+        print_message "$TEAL" ":: Created directory: $1"
     fi
-}
-
-check_existing_dir() {
-    if [ -d "$1" ]; then
-        echo -e "${YELLOW}:: $1 already exists. Do you want to overwrite?${NC}"
-        if ! fzf_confirm "Continue?"; then
-            echo -e "${YELLOW}Operation canceled.${NC}"
-            return 1
-        fi
-    fi
-    return 0
 }
 
 clone_repo() {
@@ -114,10 +114,10 @@ clone_repo() {
     local target_dir=$2
 
     if [ -d "$target_dir" ]; then
-        echo -e "${YELLOW}:: $target_dir already exists. Skipping clone.${NC}"
+        print_message "$YELLOW" ":: $target_dir already exists. Skipping clone."
     else
         git clone "$repo_url" "$target_dir" || {
-            echo -e "${RED}:: Failed to clone $repo_url. Exiting...${NC}"
+            print_message "$RED" ":: Failed to clone $repo_url. Exiting..."
             exit 1
         }
     fi
@@ -129,7 +129,7 @@ cleanup_files() {
 }
 
 setup_themes() {
-    echo -e "${CYAN}:: Setting up Themes...${NC}"
+    print_message "$CYAN" ":: Setting up Themes..."
     local tmp_dir="/tmp/themes"
     clone_repo "https://github.com/harilvfs/themes" "$tmp_dir"
 
@@ -140,11 +140,11 @@ setup_themes() {
 
     rm -rf "$tmp_dir"
 
-    echo -e "${GREEN}:: Themes have been set up successfully.${NC}"
+    print_message "$GREEN" ":: Themes have been set up successfully."
 }
 
 setup_icons() {
-    echo -e "${CYAN}:: Setting up Icons...${NC}"
+    print_message "$CYAN" ":: Setting up Icons..."
     local tmp_dir="/tmp/icons"
     clone_repo "https://github.com/harilvfs/icons" "$tmp_dir"
 
@@ -155,47 +155,57 @@ setup_icons() {
 
     rm -rf "$tmp_dir"
 
-    echo -e "${GREEN}:: Icons have been set up successfully.${NC}"
+    print_message "$GREEN" ":: Icons have been set up successfully."
 }
 
 confirm_and_proceed() {
-    echo -e "${YELLOW}:: This will install themes and icons, but you must select them manually using lxappearance (X11) or nwg-look (Wayland).${NC}"
+    print_message "$YELLOW" ":: This will install themes and icons, but you must select them manually using lxappearance (X11) or nwg-look (Wayland)."
 
-    if ! fzf_confirm "Do you want to continue?"; then
-        echo -e "${YELLOW}Operation canceled.${NC}"
+    if ! confirm "Do you want to continue?"; then
+        print_message "$YELLOW" "Operation canceled."
         exit 0
     fi
 }
 
-case "$option" in
-    "Themes")
-        detect_distro
-        install_dependencies
-        confirm_and_proceed
-        setup_themes
-        echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme.${NC}"
-        ;;
-    "Icons")
-        detect_distro
-        install_dependencies
-        confirm_and_proceed
-        setup_icons
-        echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the icons.${NC}"
-        ;;
-    "Both")
-        detect_distro
-        install_dependencies
-        confirm_and_proceed
-        setup_themes
-        setup_icons
-        echo -e "${TEAL}:: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons.${NC}"
-        ;;
-    "Exit")
-        echo -e "${YELLOW}Exiting...${NC}"
-        exit 0
-        ;;
-    *)
-        echo -e "${YELLOW}Invalid option. Exiting...${NC}"
-        exit 1
-        ;;
-esac
+main() {
+    local options=("Themes" "Icons" "Both" "Exit")
+    show_menu "Themes and Icons" "${options[@]}"
+    get_choice "${#options[@]}"
+    choice_index=$?
+    choice="${options[$((choice_index - 1))]}"
+
+    case "$choice" in
+        "Themes")
+            detect_distro
+            install_dependencies
+            confirm_and_proceed
+            setup_themes
+            print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme."
+            ;;
+        "Icons")
+            detect_distro
+            install_dependencies
+            confirm_and_proceed
+            setup_icons
+            print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the icons."
+            ;;
+        "Both")
+            detect_distro
+            install_dependencies
+            confirm_and_proceed
+            setup_themes
+            setup_icons
+            print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons."
+            ;;
+        "Exit")
+            print_message "$YELLOW" "Exiting..."
+            exit 0
+            ;;
+        *)
+            print_message "$RED" "Invalid option. Exiting..."
+            exit 1
+            ;;
+    esac
+}
+
+main

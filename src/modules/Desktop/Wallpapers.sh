@@ -3,69 +3,56 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 PICTURES_DIR="$HOME/Pictures"
 WALLPAPERS_DIR="$PICTURES_DIR/wallpapers"
 
-check_fzf
+main() {
+    print_message "$CYAN" ":: Wallpapers will be set up in the Pictures directory ($PICTURES_DIR)."
 
-echo -e "${CYAN}:: Wallpapers will be set up in the Pictures directory (${PICTURES_DIR}).${NC}"
+    if [ ! -d "$PICTURES_DIR" ]; then
+        print_message "$CYAN" ":: Creating the Pictures directory..."
+        mkdir -p "$PICTURES_DIR"
+    fi
 
-if [ ! -d "$PICTURES_DIR" ]; then
-    echo -e "${CYAN}:: Creating the Pictures directory...${NC}"
-    mkdir -p "$PICTURES_DIR"
-fi
-
-setup_wallpapers() {
     if [ -d "$WALLPAPERS_DIR" ]; then
-        echo -e "${YELLOW}:: The wallpapers directory already exists.${NC}"
-        if fzf_confirm "Overwrite existing wallpapers directory?"; then
-            echo -e "${CYAN}:: Removing existing wallpapers directory...${NC}"
+        print_message "$YELLOW" ":: The wallpapers directory already exists."
+        if confirm "Overwrite existing wallpapers directory?"; then
+            print_message "$CYAN" ":: Removing existing wallpapers directory..."
             rm -rf "$WALLPAPERS_DIR"
         else
-            echo -e "${YELLOW}Operation cancelled. Keeping existing wallpapers.${NC}"
+            print_message "$YELLOW" "Operation cancelled. Keeping existing wallpapers."
             exit 0
         fi
     fi
 
-    echo -e "${CYAN}:: Cloning the wallpapers repository...${NC}"
-    git clone https://github.com/harilvfs/wallpapers "$WALLPAPERS_DIR"
-
-    if [ -d "$WALLPAPERS_DIR" ]; then
-        echo -e "${CYAN}:: Cleaning up unnecessary files from the repository...${NC}"
-        cd "$WALLPAPERS_DIR" || exit
-        rm -rf .git README.md docs/
-        echo -e "${GREEN}:: Wallpapers have been successfully set up in your wallpapers directory.${NC}"
+    print_message "$CYAN" ":: Cloning the wallpapers repository..."
+    if git clone https://github.com/harilvfs/wallpapers "$WALLPAPERS_DIR"; then
+        print_message "$CYAN" ":: Cleaning up unnecessary files from the repository..."
+        cd "$WALLPAPERS_DIR" || exit 1
+        rm -rf .git README.md docs/ 2> /dev/null || true
+        print_message "$GREEN" ":: Wallpapers have been successfully set up in your wallpapers directory."
     else
-        echo -e "${RED}:: Failed to clone the repository.${NC}"
+        print_message "$RED" ":: Failed to clone the repository."
+        exit 1
     fi
 }
 
-setup_wallpapers
+main
