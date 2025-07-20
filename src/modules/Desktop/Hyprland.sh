@@ -3,44 +3,52 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-check_fzf
-
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$NC"
 }
 
-fzf_choose() {
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
+    shift
     local options=("$@")
-    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                     --height=50% \
-                                     --prompt="Select an option: " \
-                                     --header="Hyprland Configuration Options" \
-                                     --pointer="➤" \
-                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue'
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
 }
 
 main_menu() {
@@ -53,10 +61,11 @@ main_menu() {
     elif command -v zypper &> /dev/null; then
         distro="opensuse"
     else
-        echo -e "\e[31mUnsupported distro. Exiting...\e[0m"
+        print_message "$RED" "Unsupported distro. Exiting..."
         exit 1
     fi
-    echo -e "${TEAL}Distro: ${distro^} Linux${NC}"
+
+    print_message "$TEAL" "Distro: ${distro^} Linux"
 
     if [[ "$distro" == "arch" ]]; then
         options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")
@@ -66,28 +75,35 @@ main_menu() {
         options=("mylinuxforwork/dotfiles (Coming Soon)" "jakoolit/OpenSUSE-Hyprland" "Exit")
     fi
 
-    echo -e "${YELLOW}Note: These are not my personal dotfiles; I am sourcing them from their respective users.${NC}"
-    echo -e "${YELLOW}Backup your configurations before proceeding. I am not responsible for any data loss.${NC}"
+    echo
+    print_message "$YELLOW" "Note: These are not my personal dotfiles; I am sourcing them from their respective users."
+    print_message "$YELLOW" "Backup your configurations before proceeding. I am not responsible for any data loss."
 
-    choice=$(fzf_choose "${options[@]}")
+    show_menu "Hyprland Configuration Options" "${options[@]}"
+
+    get_choice "${#options[@]}"
+    choice_index=$?
+    choice="${options[$((choice_index - 1))]}"
 
     if [[ "$choice" == "Exit" ]]; then
-        echo -e "${RED}Exiting...${NC}"
+        print_message "$RED" "Exiting..."
         exit 0
     fi
 
     if [[ "$choice" == "mylinuxforwork/dotfiles (Coming Soon)" ]]; then
-        echo -e "${YELLOW}ML4W dotfiles for OpenSUSE is coming soon!${NC}"
-        echo -e "${CYAN}The owner has not officially published the guide yet.${NC}"
-        echo -e "${CYAN}I will add support once it's officially available.${NC}"
-        echo ""
-        echo -e "${GREEN}Press any key to return to menu...${NC}"
-        read
+        echo
+        print_message "$YELLOW" "ML4W dotfiles for OpenSUSE is coming soon!"
+        print_message "$CYAN" "The owner has not officially published the guide yet."
+        print_message "$CYAN" "I will add support once it's officially available."
+        echo
+        print_message "$GREEN" "Press any key to return to menu..."
+        read -n 1
         main_menu
         return
     fi
 
-    echo "You selected: $choice"
+    echo
+    print_message "$GREEN" "You selected: $choice"
 
     declare -A repos
     repos["prasanthrangan/hyprdots"]="https://github.com/prasanthrangan/hyprdots"
@@ -97,10 +113,11 @@ main_menu() {
     repos["jakoolit/Fedora-Hyprland"]="https://github.com/JaKooLit/Fedora-Hyprland"
     repos["jakoolit/OpenSUSE-Hyprland"]="https://github.com/JaKooLit/OpenSUSE-Hyprland"
 
-    echo "Sourcing from: ${repos[$choice]}"
+    print_message "$CYAN" "Sourcing from: ${repos[$choice]}"
+    echo
 
-    if ! fzf_confirm "Do you want to continue?"; then
-        echo "Returning to menu..."
+    if ! confirm "Do you want to continue?"; then
+        print_message "$YELLOW" "Returning to menu..."
         main_menu
         return
     fi
@@ -111,6 +128,10 @@ main_menu() {
 install_config() {
     local choice="$1"
     local distro="$2"
+
+    echo
+    print_message "$GREEN" "Installing configuration: $choice"
+    echo
 
     if [[ "$choice" == "prasanthrangan/hyprdots" ]]; then
         pacman -S --needed git base-devel
