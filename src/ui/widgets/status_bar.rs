@@ -20,6 +20,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Search => "SEARCH",
         AppMode::Confirm => "CONFIRM",
         AppMode::Help => "HELP",
+        AppMode::RunScript => "RUNNING",
     };
 
     let mode_color = match app.mode {
@@ -34,6 +35,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Search => Color::Yellow,
         AppMode::Confirm => Color::Red,
         AppMode::Help => Color::Blue,
+        AppMode::RunScript => Color::Yellow,
     };
 
     let selected_count = if app.multi_select.enabled {

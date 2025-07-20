@@ -264,16 +264,6 @@ pub fn toggle_script_selection(app: &mut App) {
     }
 }
 
-pub fn run_selected_scripts<F>(app: &App, run_script_callback: &F) -> io::Result<()>
-where
-    F: Fn(&Path) -> io::Result<()>,
-{
-    for script_path in &app.multi_select.scripts {
-        run_script_callback(script_path)?;
-    }
-    Ok(())
-}
-
 pub fn is_script_selected(app: &App, script_path: &Path) -> bool {
     app.multi_select.scripts.contains(&script_path.to_path_buf())
 }

@@ -24,6 +24,7 @@ impl<'a> App<'a> {
             search:            SearchState::default(),
             multi_select:      MultiSelectState::default(),
             help:              HelpState::default(),
+            run_script_popup: None,
         }
     }
 }

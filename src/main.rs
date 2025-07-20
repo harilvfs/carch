@@ -75,48 +75,6 @@ pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error
 
     let result = run_ui_with_options(
         &modules_dir,
-        |script_path| {
-            if settings.log_mode {
-                let _ = commands::log_message(
-                    "INFO",
-                    &format!("Running script: {}", script_path.display()),
-                );
-            }
-
-            let result = Command::new("bash")
-                .arg(script_path)
-                .status()
-                .map_err(|e| io::Error::other(format!("Failed to execute script: {e}")));
-
-            if settings.log_mode {
-                match &result {
-                    Ok(status) => {
-                        let _ = commands::log_message(
-                            "INFO",
-                            &format!(
-                                "Script {} completed with exit code: {}",
-                                script_path.display(),
-                                status.code().map_or(String::from("unknown"), |c| c.to_string())
-                            ),
-                        );
-                    }
-                    Err(e) => {
-                        let _ = commands::log_message(
-                            "ERROR",
-                            &format!("Script {} failed with error: {}", script_path.display(), e),
-                        );
-                    }
-                }
-            }
-
-            result?;
-
-            println!("Press Enter to return...");
-            let mut buffer = String::new();
-            io::stdin().read_line(&mut buffer)?;
-
-            Ok(())
-        },
         ui_options,
     );
 
