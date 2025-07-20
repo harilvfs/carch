@@ -5,7 +5,7 @@ use portable_pty::{
 };
 use ratatui::prelude::*;
 use ratatui::symbols::border;
-use ratatui::widgets::{Block, Widget};
+use ratatui::widgets::{Block, Clear, Widget};
 use std::io::Write;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
@@ -200,6 +200,7 @@ impl Widget for &mut RunScriptPopup {
         let screen = self.screen(inner_area.as_size());
         let pseudo_term = PseudoTerminal::new(&screen);
 
+        Clear.render(area, buf);
         block.render(area, buf);
         pseudo_term.render(inner_area, buf);
     }
