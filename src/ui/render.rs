@@ -56,12 +56,12 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::RunScript => {
             render_normal_ui(f, app, options);
             if let Some(popup) = &mut app.run_script_popup {
-                let area = f.area();
+                let area = app.script_panel_area;
                 let popup_area = Rect {
-                    x: area.width / 4,
-                    y: area.height / 4,
-                    width: area.width / 2,
-                    height: area.height / 2,
+                    x: area.x + area.width / 6,
+                    y: area.y + area.height / 6,
+                    width: area.width * 2 / 3,
+                    height: area.height * 2 / 3,
                 };
                 f.render_widget(popup, popup_area);
             }
