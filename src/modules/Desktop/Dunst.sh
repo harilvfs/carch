@@ -1,28 +1,6 @@
 #!/usr/bin/env bash
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
-
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-    [[ "$selected" == "Yes" ]]
-}
 
 print_message() {
     local color="$1"
@@ -31,8 +9,6 @@ print_message() {
 }
 
 clear
-
-check_fzf
 
 if ! command -v dunst &> /dev/null; then
     print_message "${TEAL}" "Dunst not found. Installing..."
