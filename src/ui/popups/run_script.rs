@@ -59,7 +59,7 @@ impl RunScriptPopup {
         let reader_handle = {
             let command_buffer = command_buffer.clone();
             std::thread::spawn(move || {
-                let mut buf = [0u8; 8192];
+                let mut buf = [0u8; 16384];
                 while let Ok(size) = reader.read(&mut buf) {
                     if size == 0 {
                         break;

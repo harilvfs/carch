@@ -93,7 +93,6 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
     terminal.show_cursor()?;
-    terminal.clear()?;
     Ok(())
 }
 
@@ -112,8 +111,6 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
-
-    terminal.clear()?;
 
     let mut app = App::new();
 
@@ -147,7 +144,13 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
 
         terminal.draw(|f| ui(f, &mut app, &options))?;
 
-        if let Ok(true) = event::poll(Duration::from_millis(100))
+        let poll_duration = if app.mode == AppMode::RunScript {
+            Duration::from_millis(16)
+        } else {
+            Duration::from_millis(100)
+        };
+
+        if let Ok(true) = event::poll(poll_duration)
             && let Ok(event) = event::read()
         {
             match event {
@@ -228,8 +231,6 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "User requested application exit");
     }
-
-    print!("\x1B[2J\x1B[1;1H");
 
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "UI terminated normally");
