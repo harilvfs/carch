@@ -98,6 +98,7 @@ impl RunScriptPopup {
                 PopupEvent::None
             }
             KeyCode::Enter if self.is_finished() => PopupEvent::Close,
+            KeyCode::Esc if self.is_finished() => PopupEvent::Close,
             KeyCode::PageUp => {
                 self.scroll_offset = self.scroll_offset.saturating_add(10);
                 PopupEvent::None
@@ -191,12 +192,12 @@ impl Widget for &mut RunScriptPopup {
         } else {
             let title_line = if self.get_exit_status().success() {
                 Line::styled(
-                    "SUCCESS! Press <ENTER> to close",
+                    "SUCCESS! Press <ESC> to close",
                     Style::default().fg(Color::Green).reversed(),
                 )
             } else {
                 Line::styled(
-                    "FAILED! Press <ENTER> to close",
+                    "FAILED! Press <ESC> to close",
                     Style::default().fg(Color::Red).reversed(),
                 )
             };
