@@ -58,10 +58,10 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
             if let Some(popup) = &mut app.run_script_popup {
                 let area = app.script_panel_area;
                 let popup_area = Rect {
-                    x:      area.x + area.width / 6,
-                    y:      area.y + area.height / 6,
-                    width:  area.width * 2 / 3,
-                    height: area.height * 2 / 3,
+                    x:      area.x + area.width / 8,
+                    y:      area.y + area.height / 8,
+                    width:  area.width * 3 / 4,
+                    height: area.height * 3 / 4,
                 };
                 f.render_widget(popup, popup_area);
             }
