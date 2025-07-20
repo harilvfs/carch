@@ -186,7 +186,6 @@ impl Widget for &mut RunScriptPopup {
         let block = if !self.is_finished() {
             Block::bordered()
                 .border_set(border::ROUNDED)
-                .title_top(Line::from("Running script...").centered())
                 .title_style(Style::default().reversed())
                 .title_bottom(Line::from("Press Ctrl-C to KILL"))
         } else {
