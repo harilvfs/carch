@@ -1,10 +1,10 @@
 use crate::ui::render::run_ui_with_options;
 use crate::ui::state::UiOptions;
 use include_dir::{Dir, include_dir};
+use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::fs;
 use tempfile::TempDir;
 
 mod args;
@@ -72,10 +72,7 @@ pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error
         );
     }
 
-    let result = run_ui_with_options(
-        &modules_dir,
-        ui_options,
-    );
+    let result = run_ui_with_options(&modules_dir, ui_options);
 
     if settings.log_mode {
         let _ = commands::log_message("INFO", "Carch application exiting normally");

@@ -246,8 +246,6 @@ pub fn update_autocomplete(app: &mut App) {
     app.search.autocomplete = best_match;
 }
 
-
-
 pub fn toggle_help_mode(app: &mut App) {
     app.mode = if app.mode == AppMode::Help { AppMode::Normal } else { AppMode::Help };
 }

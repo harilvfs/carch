@@ -110,8 +110,6 @@ pub struct SearchState {
     pub matcher:         SkimMatcherV2,
 }
 
-
-
 #[derive(Default)]
 pub struct HelpState {
     pub scroll:     u16,
@@ -134,4 +132,3 @@ pub struct App<'a> {
     pub help:              HelpState,
     pub run_script_popup:  Option<RunScriptPopup>,
 }
-

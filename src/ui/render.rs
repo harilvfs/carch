@@ -12,7 +12,7 @@ use ratatui::backend::CrosstermBackend;
 use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::{Frame, Terminal};
 
-use super::actions::{load_scripts};
+use super::actions::load_scripts;
 use super::state::{App, AppMode, UiOptions};
 use super::widgets::category_list::render_category_list;
 use super::widgets::header::render_header;
@@ -58,9 +58,9 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
             if let Some(popup) = &mut app.run_script_popup {
                 let area = app.script_panel_area;
                 let popup_area = Rect {
-                    x: area.x + area.width / 6,
-                    y: area.y + area.height / 6,
-                    width: area.width * 2 / 3,
+                    x:      area.x + area.width / 6,
+                    y:      area.y + area.height / 6,
+                    width:  area.width * 2 / 3,
                     height: area.height * 2 / 3,
                 };
                 f.render_widget(popup, popup_area);
@@ -98,16 +98,11 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io
 }
 
 #[allow(dead_code)]
-pub fn run_ui(modules_dir: &Path) -> io::Result<()>
-{
+pub fn run_ui(modules_dir: &Path) -> io::Result<()> {
     run_ui_with_options(modules_dir, UiOptions::default())
 }
 
-pub fn run_ui_with_options(
-    modules_dir: &Path,
-    options: UiOptions,
-) -> io::Result<()>
-{
+pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result<()> {
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "UI initialization started");
     }
@@ -242,4 +237,3 @@ pub fn run_ui_with_options(
 
     Ok(())
 }
-

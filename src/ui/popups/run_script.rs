@@ -3,17 +3,13 @@ use oneshot::Receiver;
 use portable_pty::{
     ChildKiller, CommandBuilder, ExitStatus, MasterPty, NativePtySystem, PtySize, PtySystem,
 };
-use ratatui::{
-    prelude::*,
-    symbols::border,
-    widgets::{Block, Widget},
-};
-use std::{
-    io::Write,
-    path::PathBuf,
-    sync::{Arc, Mutex},
-    thread::JoinHandle,
-};
+use ratatui::prelude::*;
+use ratatui::symbols::border;
+use ratatui::widgets::{Block, Widget};
+use std::io::Write;
+use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
 use vt100_ctt::{Parser, Screen};
 
@@ -23,14 +19,14 @@ pub enum PopupEvent {
 }
 
 pub struct RunScriptPopup {
-    buffer: Arc<Mutex<Vec<u8>>>,
+    buffer:         Arc<Mutex<Vec<u8>>>,
     command_thread: Option<JoinHandle<ExitStatus>>,
-    child_killer: Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
+    child_killer:   Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
     _reader_thread: JoinHandle<()>,
-    pty_master: Box<dyn MasterPty + Send>,
-    writer: Box<dyn Write + Send>,
-    status: Option<ExitStatus>,
-    scroll_offset: usize,
+    pty_master:     Box<dyn MasterPty + Send>,
+    writer:         Box<dyn Write + Send>,
+    status:         Option<ExitStatus>,
+    scroll_offset:  usize,
 }
 
 impl RunScriptPopup {
@@ -42,9 +38,9 @@ impl RunScriptPopup {
 
         let pair = pty_system
             .openpty(PtySize {
-                rows: 24,
-                cols: 80,
-                pixel_width: 0,
+                rows:         24,
+                cols:         80,
+                pixel_width:  0,
                 pixel_height: 0,
             })
             .unwrap();
@@ -64,16 +60,12 @@ impl RunScriptPopup {
             let command_buffer = command_buffer.clone();
             std::thread::spawn(move || {
                 let mut buf = [0u8; 8192];
-                loop {
-                    if let Ok(size) = reader.read(&mut buf) {
-                        if size == 0 {
-                            break;
-                        }
-                        let mut mutex = command_buffer.lock().unwrap();
-                        mutex.extend_from_slice(&buf[0..size]);
-                    } else {
+                while let Ok(size) = reader.read(&mut buf) {
+                    if size == 0 {
                         break;
                     }
+                    let mut mutex = command_buffer.lock().unwrap();
+                    mutex.extend_from_slice(&buf[0..size]);
                 }
             })
         };
@@ -125,9 +117,9 @@ impl RunScriptPopup {
     fn screen(&mut self, size: Size) -> Screen {
         self.pty_master
             .resize(PtySize {
-                rows: size.height,
-                cols: size.width,
-                pixel_width: 0,
+                rows:         size.height,
+                cols:         size.width,
+                pixel_width:  0,
                 pixel_height: 0,
             })
             .unwrap();
@@ -151,12 +143,11 @@ impl RunScriptPopup {
     }
 
     pub fn kill_child(&mut self) {
-        if !self.is_finished() {
-            if let Some(killer_rx) = self.child_killer.take() {
-                if let Ok(mut killer) = killer_rx.recv() {
-                    let _ = killer.kill();
-                }
-            }
+        if !self.is_finished()
+            && let Some(killer_rx) = self.child_killer.take()
+            && let Ok(mut killer) = killer_rx.recv()
+        {
+            let _ = killer.kill();
         }
     }
 
@@ -202,9 +193,7 @@ impl Widget for &mut RunScriptPopup {
                 )
             };
 
-            Block::bordered()
-                .border_set(border::ROUNDED)
-                .title_top(title_line.centered())
+            Block::bordered().border_set(border::ROUNDED).title_top(title_line.centered())
         };
 
         let inner_area = block.inner(area);
