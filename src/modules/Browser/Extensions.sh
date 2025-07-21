@@ -2,6 +2,53 @@
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
+
 declare -A chromium_extensions=(
      ["Improve Tube"]="https://chromewebstore.google.com/detail/improve-youtube-%F0%9F%8E%A7-for-yo/bnomihfieiccainjcjblhegjgglakjdd"
      ["Enhancer for YouTube"]="https://chromewebstore.google.com/detail/enhancer-for-youtube/ponfpcnoihfmfllpaingbgckeeldkhle"
@@ -50,13 +97,13 @@ detect_default_browser() {
 
 open_url() {
     local url="$1"
-    echo -e "${CYAN}Opening: ${BOLD}$url${NC}"
+    print_message "$CYAN" "Opening: $url"
     if command -v xdg-open &> /dev/null; then
         xdg-open "$url"
     elif command -v open &> /dev/null; then
         open "$url"
     else
-        echo -e "${RED}Could not find xdg-open or open. Please open the URL manually.${NC}"
+        print_message "$RED" "Could not find xdg-open or open. Please open the URL manually."
     fi
 }
 
@@ -73,13 +120,10 @@ select_extensions() {
 
     while true; do
         clear
-        echo -e "${GREEN}Available ${BOLD}$(echo "$browser_type" | tr '[:lower:]' '[:upper:]')${NC}${GREEN} extensions:${NC}"
+        local title="Available $(echo "$browser_type" | tr '[:lower:]' '[:upper:]') extensions"
+        show_menu "$title" "${extension_names[@]}"
 
-        for i in "${!extension_names[@]}"; do
-            printf "  ${YELLOW}%2d${NC}) %s\n" "$((i + 1))" "${extension_names[i]}"
-        done
-
-        echo -ne "${CYAN}Enter number(s) to install (e.g., 1 3 5), 'a' for all, or 'b' to go back: ${NC}"
+        echo -ne "${CYAN}Enter number(s) to install (e.g., 1 3 5), 'a' for all, or 'b' to go back: ${ENDCOLOR}"
         read -r -a choices
 
         if [[ " ${choices[*]} " =~ " b " ]]; then
@@ -95,7 +139,7 @@ select_extensions() {
                 if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#extension_names[@]}" ]; then
                     selected_for_install+=("${extension_names[$((choice - 1))]}")
                 else
-                    echo -e "${RED}Invalid selection: '$choice'. Please try again.${NC}"
+                    print_message "$RED" "Invalid selection: '$choice'. Please try again."
                     sleep 2
                     continue 2
                 fi
@@ -103,28 +147,34 @@ select_extensions() {
         fi
 
         if [ ${#selected_for_install[@]} -eq 0 ]; then
-            echo -e "${YELLOW}No extensions selected.${NC}"
+            print_message "$YELLOW" "No extensions selected."
             sleep 1
             continue
         fi
 
-        echo -e "\n${GREEN}The following extensions will be opened:${NC}"
+        print_message "$GREEN" ""
+        print_message "$GREEN" "The following extensions will be opened:"
         for name in "${selected_for_install[@]}"; do
-            echo -e "  ${CYAN}• ${BOLD}$name${NC}"
+            printf "  %b• %s%b\n" "$CYAN" "$name" "$ENDCOLOR"
         done
+        echo
 
-        read -rp "$(echo -e "\n${CYAN}Press ENTER to confirm and open, or Ctrl+C to cancel: ${NC}")"
+        if confirm "Open selected extensions?"; then
+            for name in "${selected_for_install[@]}"; do
+                open_url "${extensions_map[$name]}"
+                sleep 1
+            done
 
-        for name in "${selected_for_install[@]}"; do
-            open_url "${extensions_map[$name]}"
+            echo
+            print_message "$GREEN" "All selected extensions have been opened in your browser."
+            print_message "$YELLOW" "Note: You still need to complete the installation in the browser."
+            read -rp "$(echo -e "\n${CYAN}Press ENTER to return to the main menu...${ENDCOLOR}")"
+            clear
+            return
+        else
+            print_message "$YELLOW" "Installation cancelled."
             sleep 1
-        done
-
-        echo -e "\n${GREEN}${BOLD}All selected extensions have been opened in your browser.${NC}"
-        echo -e "${YELLOW}Note: You still need to complete the installation in the browser.${NC}"
-        read -rp "$(echo -e "\n${CYAN}Press ENTER to return to the main menu...${NC}")"
-        clear
-        return
+        fi
     done
 }
 
@@ -134,33 +184,32 @@ main() {
         local default_browser
         default_browser=$(detect_default_browser)
 
-        echo -e "${YELLOW}Detected default browser: ${BOLD}$default_browser${NC}"
-        echo -e "${YELLOW}NOTE: Extensions will open in your default browser.${NC}"
-        echo -e "${YELLOW}Make sure your selection matches your default browser type.${NC}\n"
+        print_message "$YELLOW" "Detected default browser: $default_browser"
+        print_message "$YELLOW" "NOTE: Extensions will open in your default browser."
+        print_message "$YELLOW" "Make sure your selection matches your default browser type."
 
-        PS3="$(echo -e "${CYAN}Select your browser type: ${NC}")"
-        options=("Chromium-based" "Firefox-based" "Exit")
+        local options=("Chromium-based" "Firefox-based" "Exit")
+        show_menu "Select your browser type" "${options[@]}"
 
-        select browser_choice in "${options[@]}"; do
-            case $browser_choice in
-                "Chromium-based")
-                    select_extensions "Chromium" chromium_extensions
-                    break
-                    ;;
-                "Firefox-based")
-                    select_extensions "Firefox" firefox_extensions
-                    break
-                    ;;
-                "Exit")
-                    return 0
-                    ;;
-                *)
-                    echo -e "${RED}Invalid option $REPLY. Please try again.${NC}"
-                    sleep 1
-                    break
-                    ;;
-            esac
-        done
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local choice="${options[$((choice_index - 1))]}"
+
+        case "$choice" in
+            "Chromium-based")
+                select_extensions "Chromium" chromium_extensions
+                ;;
+            "Firefox-based")
+                select_extensions "Firefox" firefox_extensions
+                ;;
+            "Exit")
+                return 0
+                ;;
+            *)
+                print_message "$RED" "Invalid option. Please try again."
+                sleep 1
+                ;;
+        esac
     done
 }
 
