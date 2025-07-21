@@ -66,12 +66,13 @@ setup_ghostty() {
     fi
 
     CONFIG_DIR="$HOME/.config/ghostty"
-    BACKUP_DIR="$HOME/.config/ghostty.bak"
+    BACKUP_DIR="$HOME/.config/carch/backups/ghostty.bak"
 
     if [ -d "$CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Existing Ghostty configuration detected.${NC}"
 
         if confirm "Do you want to backup the existing configuration?"; then
+            mkdir -p "$(dirname "$BACKUP_DIR")"
             if [ -d "$BACKUP_DIR" ]; then
                 echo -e "${YELLOW}Backup already exists.${NC}"
                 if confirm "Do you want to overwrite the backup?"; then

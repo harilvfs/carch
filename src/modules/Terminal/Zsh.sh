@@ -183,11 +183,14 @@ install_ohmyzsh_plugins() {
 }
 
 config_zsh() {
+    local backup_dir="$HOME/.config/carch/backups"
+    mkdir -p "$backup_dir"
+
     P10K_CONFIG="$HOME/.p10k.zsh"
     if [[ -f "$P10K_CONFIG" ]]; then
         if confirm ".p10k.zsh found. Do you want to back it up?"; then
-            mv "$P10K_CONFIG" "$P10K_CONFIG.bak"
-            print_message "$GREEN" "Backup created: $P10K_CONFIG.bak"
+            mv "$P10K_CONFIG" "$backup_dir/.p10k.zsh.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/.p10k.zsh.bak"
         fi
     fi
 
@@ -197,6 +200,8 @@ config_zsh() {
     ZSHRC="$HOME/.zshrc"
     if [[ -f "$ZSHRC" ]]; then
         if confirm ".zshrc already exists. Use the recommended version?"; then
+            mv "$ZSHRC" "$backup_dir/.zshrc.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/.zshrc.bak"
             curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.zshrc" -o "$ZSHRC"
             print_message "$GREEN" "Applied recommended .zshrc."
         fi

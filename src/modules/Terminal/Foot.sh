@@ -69,12 +69,13 @@ setup_foot() {
     fi
 
     CONFIG_DIR="$HOME/.config/foot"
-    BACKUP_DIR="$HOME/.config/foot.bak"
+    BACKUP_DIR="$HOME/.config/carch/backups/foot.bak"
 
     if [ -d "$CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Existing Foot configuration detected.${NC}"
 
         if confirm "Do you want to backup the existing configuration?"; then
+            mkdir -p "$(dirname "$BACKUP_DIR")"
             if [ -d "$BACKUP_DIR" ]; then
                 echo -e "${YELLOW}Backup already exists.${NC}"
                 if confirm "Do you want to overwrite the backup?"; then

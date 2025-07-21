@@ -34,19 +34,24 @@ setup_kitty() {
     fi
 
     CONFIG_DIR="$HOME/.config/kitty"
-    BACKUP_DIR="$HOME/.config/kitty_backup"
+    BACKUP_DIR="$HOME/.config/carch/backups/kitty.bak"
 
     if [ -d "$CONFIG_DIR" ]; then
-        echo -e "${CYAN}:: Backing up existing Kitty configuration...${NC}"
-
-        if [ ! -d "$BACKUP_DIR" ]; then
-            mkdir "$BACKUP_DIR"
+        echo -e "${CYAN}:: Existing Kitty configuration detected.${NC}"
+        if confirm "Do you want to backup the existing configuration?"; then
+            mkdir -p "$(dirname "$BACKUP_DIR")"
+            if [ -d "$BACKUP_DIR" ]; then
+                echo -e "${YELLOW}Backup already exists. Overwriting...${NC}"
+                rm -rf "$BACKUP_DIR"
+            fi
+            mv "$CONFIG_DIR" "$BACKUP_DIR"
+            echo -e "${GREEN}:: Existing Kitty configuration backed up to $BACKUP_DIR.${NC}"
+        else
+            echo -e "${CYAN}:: Skipping backup. Your existing configuration will be overwritten.${NC}"
         fi
-        mv "$CONFIG_DIR"/* "$BACKUP_DIR/" 2> /dev/null
-    else
-        echo -e "${GREEN}No existing Kitty configuration found.${NC}"
-        mkdir -p "$CONFIG_DIR"
     fi
+
+    mkdir -p "$CONFIG_DIR"
 
     echo -e "${CYAN}:: Downloading Kitty configuration files...${NC}"
 

@@ -49,11 +49,12 @@ if ! command -v tmux &> /dev/null; then
 fi
 
 config_dir="$HOME/.config/tmux"
-backup_dir="$HOME/.config/tmux.bak"
+backup_dir="$HOME/.config/carch/backups/tmux.bak"
 
 if [[ -d "$config_dir" ]]; then
     echo -e "${YELLOW}Existing tmux configuration detected.${NC}"
     if confirm "Do you want to backup the existing configuration?"; then
+        mkdir -p "$(dirname "$backup_dir")"
         if [[ -d "$backup_dir" ]]; then
             echo -e "${YELLOW}Backup already exists.${NC}"
             if confirm "Do you want to overwrite the backup?"; then

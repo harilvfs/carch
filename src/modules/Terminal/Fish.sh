@@ -121,9 +121,14 @@ main() {
     install_fish_packages
 
     local FISH_CONFIG="$HOME/.config/fish"
+    local backup_dir="$HOME/.config/carch/backups"
     if [[ -d "$FISH_CONFIG" ]]; then
         if confirm "Existing Fish config found. Do you want to back it up?"; then
-            local BACKUP_PATH="$HOME/.config/fish.bak.$(date +%s)"
+            mkdir -p "$backup_dir"
+            local BACKUP_PATH="$backup_dir/fish.bak"
+            if [ -d "$BACKUP_PATH" ]; then
+                rm -rf "$BACKUP_PATH"
+            fi
             mv "$FISH_CONFIG" "$BACKUP_PATH"
             print_message "$GREEN" "Backup created at $BACKUP_PATH"
         fi

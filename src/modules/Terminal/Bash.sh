@@ -332,10 +332,12 @@ main() {
     fi
 
     local STARSHIP_CONFIG="$HOME/.config/starship.toml"
+    local backup_dir="$HOME/.config/carch/backups"
     if [[ -f "$STARSHIP_CONFIG" ]]; then
         if confirm "Starship configuration found. Do you want to back it up?"; then
-            mv "$STARSHIP_CONFIG" "$STARSHIP_CONFIG.bak"
-            print_message "$GREEN" "Backup created: $STARSHIP_CONFIG.bak"
+            mkdir -p "$backup_dir"
+            mv "$STARSHIP_CONFIG" "$backup_dir/starship.toml.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/starship.toml.bak"
         fi
     fi
 
