@@ -48,7 +48,11 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let input = Paragraph::new(display_text)
-        .block(create_rounded_block().title("Type to search (Tab to complete)"))
+        .block(
+            create_rounded_block()
+                .title("Type to search (Tab to complete)")
+                .border_style(Style::default().fg(Color::Green)),
+        )
         .style(Style::default())
         .alignment(Alignment::Left);
 
@@ -121,7 +125,11 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let result_count_text = format!("Found {} scripts", app.search.results.len());
 
     let search_results = List::new(result_items)
-        .block(create_rounded_block().title(result_count_text))
+        .block(
+            create_rounded_block()
+                .title(result_count_text)
+                .border_style(Style::default().fg(Color::Green)),
+        )
         .highlight_style(Style::default().bg(Color::Rgb(235, 235, 210)).fg(Color::Black).bold())
         .highlight_symbol("");
 
