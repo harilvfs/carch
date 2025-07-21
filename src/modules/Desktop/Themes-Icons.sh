@@ -93,7 +93,7 @@ install_dependencies() {
             }
         fi
     elif [ "$distro" == "opensuse" ]; then
-        sudo zypper install --no-confirm -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
+        sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
             print_message "$RED" ":: Failed to install dependencies. Exiting..."
             exit 1
         }

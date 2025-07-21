@@ -3,45 +3,29 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 GRUB_THEME_DIR="$HOME/.local/share/Top-5-Bootloader-Themes"
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(echo -e "${CYAN}:: $1 [y/N]: ${ENDCOLOR}")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) echo -e "${YELLOW}:: Please answer with y/yes or n/no.${ENDCOLOR}" ;;
+        esac
+    done
 }
 
 print_message() {
     echo -e "${TEAL}:: This Grub Theme Script is from Chris Titus Tech.${ENDCOLOR}"
-    echo -e "${TEAL}:: Check out the source code here: ${GREEN}https://github.com/harilvfs/Top-5-Bootloader-Themes${ENDCOLOR}"
+    echo -e "${TEAL}:: Check out the source code here: ${GREEN}httpshttps://github.com/harilvfs/Top-5-Bootloader-Themes${ENDCOLOR}"
 }
 
 check_existing_dir() {
     if [[ -d "$GRUB_THEME_DIR" ]]; then
         echo -e "${RED}:: Directory $GRUB_THEME_DIR already exists.${ENDCOLOR}"
-        if fzf_confirm "Do you want to overwrite it?"; then
+        if confirm "Do you want to overwrite it?"; then
             echo -e "${TEAL}:: Removing existing directory...${ENDCOLOR}"
             rm -rf "$GRUB_THEME_DIR"
         else
@@ -62,7 +46,6 @@ install_theme() {
     sudo ./install.sh
 }
 
-check_fzf
 print_message
 check_existing_dir
 clone_repo
