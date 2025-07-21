@@ -209,7 +209,6 @@ main() {
             print_message "$GREEN" ":: Picom setup completed without animations!"
             ;;
         "Exit")
-            print_message "$YELLOW" "Exiting..."
             exit 0
             ;;
         *)

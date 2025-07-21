@@ -203,7 +203,6 @@ main() {
             "Install Paru") install_paru ;;
             "Install Yay") install_yay ;;
             "Exit")
-                print_message "$GREEN" "Exiting..."
                 exit 0
                 ;;
         esac

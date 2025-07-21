@@ -95,7 +95,7 @@ handle_existing_config() {
                 mkdir -p "$BACKUP_DIR"
             fi
             print_message "$CYAN" "Backing up existing Fastfetch configuration..."
-            cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2>/dev/null
+            cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2> /dev/null
             print_message "$GREEN" "Backup completed to $BACKUP_DIR"
         else
             print_message "$YELLOW" "Proceeding without backup..."
@@ -122,7 +122,7 @@ setup_png_fastfetch() {
     print_message "$CYAN" "Setting up Fastfetch with custom PNG support..."
     print_message "$CYAN" "Cloning Fastfetch repository directly..."
 
-    rm -rf "$FASTFETCH_DIR"/* 2>/dev/null
+    rm -rf "$FASTFETCH_DIR"/* 2> /dev/null
     mkdir -p "$FASTFETCH_DIR"
 
     git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"
@@ -160,7 +160,6 @@ main() {
                 break
                 ;;
             "Exit")
-                print_message "$RED" "Exiting the script."
                 exit 0
                 ;;
         esac

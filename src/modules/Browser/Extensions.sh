@@ -152,7 +152,6 @@ main() {
                     break
                     ;;
                 "Exit")
-                    echo -e "${YELLOW}Exiting...${NC}"
                     return 0
                     ;;
                 *)

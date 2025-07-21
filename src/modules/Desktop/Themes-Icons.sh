@@ -198,7 +198,6 @@ main() {
             print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons."
             ;;
         "Exit")
-            print_message "$YELLOW" "Exiting..."
             exit 0
             ;;
         *)

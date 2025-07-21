@@ -202,7 +202,6 @@ main() {
             install_dependencies "$os_type"
             ;;
         "Exit")
-            print_message "$YELLOW" "Exiting..."
             exit 0
             ;;
         *)

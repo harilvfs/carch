@@ -86,7 +86,6 @@ main_menu() {
     choice="${options[$((choice_index - 1))]}"
 
     if [[ "$choice" == "Exit" ]]; then
-        print_message "$RED" "Exiting..."
         exit 0
     fi
 
