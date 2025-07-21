@@ -3,36 +3,17 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+        esac
+    done
 }
-
-clear
-check_fzf
 
 required_cmds="git curl wget"
 missing=0
@@ -72,10 +53,10 @@ backup_dir="$HOME/.config/tmux.bak"
 
 if [[ -d "$config_dir" ]]; then
     echo -e "${YELLOW}Existing tmux configuration detected.${NC}"
-    if fzf_confirm "Do you want to backup the existing configuration?"; then
+    if confirm "Do you want to backup the existing configuration?"; then
         if [[ -d "$backup_dir" ]]; then
             echo -e "${YELLOW}Backup already exists.${NC}"
-            if fzf_confirm "Do you want to overwrite the backup?"; then
+            if confirm "Do you want to overwrite the backup?"; then
                 rm -rf "$backup_dir"
             else
                 echo -e "${RED}Exiting to prevent data loss.${NC}"
@@ -93,7 +74,7 @@ tpm_dir="$HOME/.tmux/plugins/tpm"
 
 if [[ -d "$tpm_dir" ]]; then
     echo -e "${YELLOW}TPM is already installed.${NC}"
-    if fzf_confirm "Do you want to overwrite TPM?"; then
+    if confirm "Do you want to overwrite TPM?"; then
         rm -rf "$tpm_dir"
     else
         echo -e "${RED}Skipping TPM installation.${NC}"
