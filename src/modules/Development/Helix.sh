@@ -48,7 +48,9 @@ install_helix
 HELIX_CONFIG="$HOME/.config/helix"
 if [[ -d "$HELIX_CONFIG" ]]; then
     if confirm "Existing Helix config found. Do you want to back it up?"; then
-        BACKUP_PATH="$HOME/.config/helix.bak.$(date +%s)"
+        BACKUP_DIR="$HOME/.config/carch/backups"
+        mkdir -p "$BACKUP_DIR"
+        BACKUP_PATH="$BACKUP_DIR/helix.bak"
         mv "$HELIX_CONFIG" "$BACKUP_PATH"
         echo -e "${GREEN}Backup created at $BACKUP_PATH${NC}"
     fi

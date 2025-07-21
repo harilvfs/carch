@@ -48,7 +48,9 @@ check_multilib() {
         print_message "$YELLOW" ":: Multilib repository found but is commented out."
 
         if confirm "Do you want to enable the multilib repository?"; then
-            sudo cp /etc/pacman.conf /etc/pacman.conf.bak
+            print_message "$CYAN" "Backing up /etc/pacman.conf to ~/.config/carch/backups/pacman.conf.bak..."
+            mkdir -p "$HOME/.config/carch/backups"
+            sudo cp /etc/pacman.conf "$HOME/.config/carch/backups/pacman.conf.bak"
             sudo sed -i '/^\#\[multilib\]/,+1 s/^\#//' /etc/pacman.conf
             print_message "$GREEN" ":: Multilib repository has been enabled."
             print_message "$CYAN" ":: Updating package databases..."

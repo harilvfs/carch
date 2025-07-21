@@ -77,6 +77,11 @@ install_chaotic_aur() {
         exit 1
     }
 
+    print_message "$TEAL" "Backing up /etc/pacman.conf..."
+    mkdir -p "$HOME/.config/carch/backups"
+    sudo cp /etc/pacman.conf "$HOME/.config/carch/backups/pacman.conf.bak"
+    print_message "$GREEN" "Backup of pacman.conf created at ~/.config/carch/backups/pacman.conf.bak"
+
     print_message "$TEAL" "Adding Chaotic AUR to pacman.conf..."
     echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf > /dev/null || {
         print_message "$RED" "Failed to modify pacman.conf. Please try again with sudo permissions."

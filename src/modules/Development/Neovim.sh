@@ -111,7 +111,7 @@ install_dependencies() {
 
 handle_existing_config() {
     local nvim_config_dir="$HOME/.config/nvim"
-    local backup_dir="$HOME/.config/nvim.bak"
+    local backup_dir="$HOME/.config/carch/backups"
 
     if [ ! -d "$nvim_config_dir" ]; then
         print_message "$GREEN" ":: Creating Neovim configuration directory..."
@@ -123,7 +123,8 @@ handle_existing_config() {
 
     if confirm "Backup existing config?"; then
         print_message "$RED" ":: Backing up existing config..."
-        local backup_path="$backup_dir.$(date +%s)"
+        mkdir -p "$backup_dir"
+        local backup_path="$backup_dir/nvim.bak"
         mv "$nvim_config_dir" "$backup_path"
         mkdir -p "$nvim_config_dir"
         print_message "$GREEN" ":: Backup created at $backup_path."

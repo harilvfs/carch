@@ -160,9 +160,14 @@ install_picom_ftlabs_opensuse() {
 download_config() {
     local config_url="$1"
     local config_path="$HOME/.config/picom.conf"
+    local backup_dir="$HOME/.config/carch/backups"
 
     if [ -f "$config_path" ]; then
         if confirm "Overwrite existing picom.conf?"; then
+            print_message "$GREEN" ":: Backing up existing picom.conf..."
+            mkdir -p "$backup_dir"
+            cp "$config_path" "$backup_dir/picom.conf.bak"
+            print_message "$GREEN" ":: Backup created: $backup_dir/picom.conf.bak"
             print_message "$GREEN" ":: Overwriting picom.conf..."
         else
             print_message "$RED" ":: Skipping picom.conf download..."

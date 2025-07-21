@@ -52,7 +52,6 @@ get_choice() {
 }
 
 FASTFETCH_DIR="$HOME/.config/fastfetch"
-BACKUP_DIR="$HOME/.config/fastfetch_backup"
 
 check_command() {
     local cmd=$1
@@ -90,13 +89,19 @@ handle_existing_config() {
     if [ -d "$FASTFETCH_DIR" ]; then
         print_message "$YELLOW" "Existing Fastfetch configuration found."
         if confirm "Do you want to back up your existing Fastfetch configuration?"; then
-            if [ ! -d "$BACKUP_DIR" ]; then
-                print_message "$CYAN" "Creating backup directory..."
-                mkdir -p "$BACKUP_DIR"
+            local backup_dir="$HOME/.config/carch/backups"
+            local backup_path="$backup_dir/fastfetch.bak"
+
+            mkdir -p "$backup_dir"
+
+            print_message "$CYAN" "Backing up existing Fastfetch configuration to $backup_path..."
+
+            if [ -d "$backup_path" ]; then
+                rm -rf "$backup_path"
             fi
-            print_message "$CYAN" "Backing up existing Fastfetch configuration..."
-            cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2> /dev/null
-            print_message "$GREEN" "Backup completed to $BACKUP_DIR"
+
+            cp -r "$FASTFETCH_DIR" "$backup_path"
+            print_message "$GREEN" "Backup completed."
         else
             print_message "$YELLOW" "Proceeding without backup..."
         fi

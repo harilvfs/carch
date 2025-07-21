@@ -63,29 +63,18 @@ setup_rofi() {
     fi
 
     ROFI_CONFIG_DIR="$HOME/.config/rofi"
-    BACKUP_DIR="$HOME/.config/rofi_backup"
+    BACKUP_DIR="$HOME/.config/carch/backups"
 
     if [ -d "$ROFI_CONFIG_DIR" ]; then
         print_message "$CYAN" ":: Rofi configuration directory exists. Backing up the current configuration..."
-
-        if [ -d "$BACKUP_DIR" ]; then
-            print_message "$YELLOW" ":: Backup already exists."
-            if confirm "Overwrite the existing backup?"; then
-                rm -rf "$BACKUP_DIR"
-                mkdir -p "$BACKUP_DIR"
-                mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
-                print_message "$GREEN" ":: Existing Rofi configuration has been backed up to ~/.config/rofi_backup."
-            else
-                print_message "$GREEN" ":: Keeping the existing backup. Skipping backup process."
-            fi
-        else
-            mkdir -p "$BACKUP_DIR"
-            mv "$ROFI_CONFIG_DIR"/* "$BACKUP_DIR"/
-            print_message "$GREEN" ":: Existing Rofi configuration backed up to ~/.config/rofi_backup."
+        mkdir -p "$BACKUP_DIR"
+        if [ -d "$BACKUP_DIR/rofi.bak" ]; then
+            rm -rf "$BACKUP_DIR/rofi.bak"
         fi
-    else
-        mkdir -p "$ROFI_CONFIG_DIR"
+        mv "$ROFI_CONFIG_DIR" "$BACKUP_DIR/rofi.bak"
+        print_message "$GREEN" ":: Existing Rofi configuration backed up to $BACKUP_DIR/rofi.bak."
     fi
+    mkdir -p "$ROFI_CONFIG_DIR"
 
     print_message "$CYAN" ":: Applying new Rofi configuration..."
 

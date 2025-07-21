@@ -36,12 +36,14 @@ elif command -v zypper &> /dev/null; then
 fi
 
 DUNST_DIR="$HOME/.config/dunst"
+BACKUP_DIR="$HOME/.config/carch/backups"
 DUNST_FILE="$DUNST_DIR/dunstrc"
 
 if [[ -d "$DUNST_DIR" ]]; then
     print_message "${TEAL}" "Backing up existing Dunst directory..."
-    mv "$DUNST_DIR" "${DUNST_DIR}.bak"
-    print_message "$GREEN" "Backup created: ${DUNST_DIR}.bak"
+    mkdir -p "$BACKUP_DIR"
+    mv "$DUNST_DIR" "$BACKUP_DIR/dunst.bak"
+    print_message "$GREEN" "Backup created: $BACKUP_DIR/dunst.bak"
 fi
 
 mkdir -p "$DUNST_DIR"
