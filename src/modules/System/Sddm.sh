@@ -3,32 +3,22 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 print_banner() {
@@ -97,7 +87,7 @@ install_theme() {
 
     if [ -d "$theme_dir/catppuccin-mocha" ]; then
         echo -e "${RED}:: Catppuccin theme already exists.${ENDCOLOR}"
-        if fzf_confirm "Do you want to remove the existing theme and install a new one?"; then
+        if confirm "Do you want to remove the existing theme and install a new one?"; then
             echo -e "${GREEN}:: Removing the existing theme...${ENDCOLOR}"
             sudo rm -rf "$theme_dir/catppuccin-mocha"
         else
@@ -131,7 +121,6 @@ Current=catppuccin-mocha
 EOF'
 }
 
-check_fzf
 print_banner
 detect_os
 
