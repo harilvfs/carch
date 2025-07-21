@@ -21,38 +21,31 @@ install_fm_tools() {
     while true; do
         clear
 
-        options=("Tumbler [Thumbnail Viewer]" "Trash-Cli" "Back to Main Menu")
-        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        local options=("Tumbler [Thumbnail Viewer]" "Trash-Cli" "Back to Main Menu")
 
-        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
-            return
-        fi
+        show_menu "FM Tools Selection" "${options[@]}"
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local selection="${options[$((choice_index - 1))]}"
 
-        for selection in "${selected[@]}"; do
-            case $selection in
-                "Tumbler [Thumbnail Viewer]")
-                    clear
-                    $pkg_manager tumbler
-                    version=$(get_version tumbler)
-                    echo "Tumbler installed successfully! Version: $version"
-                    ;;
+        case "$selection" in
+            "Tumbler [Thumbnail Viewer]")
+                clear
+                $pkg_manager tumbler
+                version=$(get_version tumbler)
+                echo "Tumbler installed successfully! Version: $version"
+                ;;
 
-                "Trash-Cli")
-                    clear
-                    $pkg_manager trash-cli
-                    version=$(get_version trash-cli)
-                    echo "Trash-Cli installed successfully! Version: $version"
-                    ;;
-            esac
-        done
-
-        echo "All selected FM tools have been installed."
-        read -rp "Press Enter to continue..."
+            "Trash-Cli")
+                clear
+                $pkg_manager trash-cli
+                version=$(get_version trash-cli)
+                echo "Trash-Cli installed successfully! Version: $version"
+                ;;
+            "Back to Main Menu")
+                return
+                ;;
+        esac
+        read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }

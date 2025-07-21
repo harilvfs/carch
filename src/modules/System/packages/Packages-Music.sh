@@ -24,71 +24,65 @@ install_music() {
 
     while true; do
         clear
-        options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Back to Main Menu")
-        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        local options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Back to Main Menu")
 
-        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
-            return
-        fi
+        show_menu "Music App Selection" "${options[@]}"
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local selection="${options[$((choice_index - 1))]}"
 
-        for selection in "${selected[@]}"; do
-            case $selection in
-                "Youtube-Music")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager youtube-music-bin
-                        version=$(get_version youtube-music-bin)
-                    else
-                        $flatpak_cmd app.ytmdesktop.ytmdesktop
-                        version="Flatpak Version"
-                    fi
-                    echo "Youtube-Music installed successfully! Version: $version"
-                    ;;
-                "Spotube")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager spotube
-                        version=$(get_version spotube)
-                    else
-                        $flatpak_cmd com.github.KRTirtho.Spotube
-                        version="Flatpak Version"
-                    fi
-                    echo "Spotube installed successfully! Version: $version"
-                    ;;
-                "Spotify")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager spotify
-                        version=$(get_version spotify)
-                    else
-                        $flatpak_cmd com.spotify.Client
-                        version="Flatpak Version"
-                    fi
-                    echo "Spotify installed successfully! Version: $version"
-                    ;;
-                "Rhythmbox")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager rhythmbox
-                        version=$(get_version rhythmbox)
-                    elif [[ $distro -eq 2 ]]; then
-                        $pkg_manager rhythmbox
-                        version=$(get_version rhythmbox)
-                    else
-                        $pkg_manager rhythmbox
-                        version=$(get_version rhythmbox)
-                    fi
-                    echo "Rhythmbox installed successfully! Version: $version"
-                    ;;
-            esac
-        done
-        echo "All selected Music Apps have been installed."
-        read -rp "Press Enter to continue..."
+        case "$selection" in
+            "Youtube-Music")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager youtube-music-bin
+                    version=$(get_version youtube-music-bin)
+                else
+                    $flatpak_cmd app.ytmdesktop.ytmdesktop
+                    version="Flatpak Version"
+                fi
+                echo "Youtube-Music installed successfully! Version: $version"
+                ;;
+            "Spotube")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager spotube
+                    version=$(get_version spotube)
+                else
+                    $flatpak_cmd com.github.KRTirtho.Spotube
+                    version="Flatpak Version"
+                fi
+                echo "Spotube installed successfully! Version: $version"
+                ;;
+            "Spotify")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager spotify
+                    version=$(get_version spotify)
+                else
+                    $flatpak_cmd com.spotify.Client
+                    version="Flatpak Version"
+                fi
+                echo "Spotify installed successfully! Version: $version"
+                ;;
+            "Rhythmbox")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager rhythmbox
+                    version=$(get_version rhythmbox)
+                elif [[ $distro -eq 2 ]]; then
+                    $pkg_manager rhythmbox
+                    version=$(get_version rhythmbox)
+                else
+                    $pkg_manager rhythmbox
+                    version=$(get_version rhythmbox)
+                fi
+                echo "Rhythmbox installed successfully! Version: $version"
+                ;;
+            "Back to Main Menu")
+                return
+                ;;
+        esac
+        read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
