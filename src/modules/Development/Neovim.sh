@@ -3,9 +3,53 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-check_fzf
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$NC"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
 
 echo -e "${TEAL}"
 cat << "EOF"
@@ -24,61 +68,26 @@ For either option:
 EOF
 echo -e "${NC}"
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No" "Exit")
-    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-        --height=40% \
-        --prompt="$prompt " \
-        --header="Confirm" \
-        --pointer="➤" \
-        --color='fg:white,fg+:green,bg+:black,pointer:green'
-}
-
-fzf_select() {
-    local prompt="$1"
-    shift
-    local options=("$@")
-    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-        --height=40% \
-        --prompt="$prompt " \
-        --header="Select Option" \
-        --pointer="➤" \
-        --color='fg:white,fg+:blue,bg+:black,pointer:blue'
-}
-
 detect_os() {
     if command -v pacman &> /dev/null; then
-        echo -e "${TEAL}Detected Arch-based distribution.${NC}"
-        echo "OS=arch" >&2
-        return 0
+        print_message "$TEAL" "Detected Arch-based distribution." >&2
+        echo "arch"
     elif command -v dnf &> /dev/null; then
-        echo -e "${TEAL}Detected Fedora-based distribution.${NC}"
-        echo "OS=fedora" >&2
-        return 0
+        print_message "$TEAL" "Detected Fedora-based distribution." >&2
+        echo "fedora"
     elif command -v zypper &> /dev/null; then
-        echo -e "${TEAL}Detected opensuse distribution.${NC}"
-        echo "OS=opensuse" >&2
-        return 0
+        print_message "$TEAL" "Detected opensuse distribution." >&2
+        echo "opensuse"
     else
-        echo -e "${RED}Unsupported distribution.${NC}"
-        return 1
+        print_message "$RED" "Unsupported distribution." >&2
+        exit 1
     fi
 }
 
 install_dependencies() {
     local os_type=$1
 
-    echo -e "${GREEN}Installing required dependencies...${NC}"
+    print_message "$GREEN" "Installing required dependencies..."
 
     if [[ "$os_type" == "arch" ]]; then
         sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
@@ -93,55 +102,36 @@ install_dependencies() {
             wl-clipboard lua-language-server shfmt python313 meson ninja \
             make gcc jetbrains-mono-fonts git
     else
-        echo -e "${RED}Unsupported OS type: $os_type${NC}"
+        print_message "$RED" "Unsupported OS type: $os_type"
         return 1
     fi
 
-    echo -e "${GREEN}Dependencies installed successfully!${NC}"
-    return 0
-}
-
-check_command() {
-    local cmd=$1
-    if ! command -v "$cmd" &> /dev/null; then
-        echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${NC}"
-        return 1
-    fi
-    return 0
+    print_message "$GREEN" "Dependencies installed successfully!"
 }
 
 handle_existing_config() {
     local nvim_config_dir="$HOME/.config/nvim"
-    local backup_dir="$HOME/.config/nvimbackup"
+    local backup_dir="$HOME/.config/nvim.bak"
 
     if [ ! -d "$nvim_config_dir" ]; then
-        echo -e "${GREEN}:: Creating Neovim configuration directory...${NC}"
+        print_message "$GREEN" ":: Creating Neovim configuration directory..."
         mkdir -p "$nvim_config_dir"
-        return 0
+        return
     fi
 
-    echo -e "${YELLOW}Existing Neovim configuration found.${NC}"
+    print_message "$YELLOW" "Existing Neovim configuration found."
 
-    choice=$(fzf_confirm "Backup existing config?")
-
-    case $choice in
-        "Yes")
-            echo -e "${RED}:: Backing up existing config...${NC}"
-            mkdir -p "$backup_dir"
-            mv "$nvim_config_dir" "$backup_dir/nvim_$(date +%Y%m%d_%H%M%S)"
-            mkdir -p "$nvim_config_dir"
-            echo -e "${GREEN}:: Backup created at $backup_dir.${NC}"
-            ;;
-        "No")
-            echo -e "${YELLOW}:: Removing existing Neovim configuration...${NC}"
-            rm -rf "$nvim_config_dir"
-            mkdir -p "$nvim_config_dir"
-            ;;
-        "Exit")
-            echo -e "${RED}Exiting...${NC}"
-            exit 0
-            ;;
-    esac
+    if confirm "Backup existing config?"; then
+        print_message "$RED" ":: Backing up existing config..."
+        local backup_path="$backup_dir.$(date +%s)"
+        mv "$nvim_config_dir" "$backup_path"
+        mkdir -p "$nvim_config_dir"
+        print_message "$GREEN" ":: Backup created at $backup_path."
+    else
+        print_message "$YELLOW" ":: Removing existing Neovim configuration..."
+        rm -rf "$nvim_config_dir"
+        mkdir -p "$nvim_config_dir"
+    fi
 }
 
 setup_neovim() {
@@ -149,18 +139,17 @@ setup_neovim() {
 
     handle_existing_config
 
-    echo -e "${GREEN}:: Cloning Neovim configuration from GitHub...${NC}"
+    print_message "$GREEN" ":: Cloning Neovim configuration from GitHub..."
     if ! git clone https://github.com/harilvfs/nvim "$nvim_config_dir"; then
-        echo -e "${RED}Failed to clone the Neovim configuration repository.${NC}"
-        return 1
+        print_message "$RED" "Failed to clone the Neovim configuration repository."
+        exit 1
     fi
 
-    echo -e "${GREEN}:: Cleaning up unnecessary files...${NC}"
-    cd "$nvim_config_dir" || return 1
+    print_message "$GREEN" ":: Cleaning up unnecessary files..."
+    cd "$nvim_config_dir" || exit 1
     rm -rf .git README.md LICENSE
 
-    echo -e "${GREEN}Neovim setup completed successfully!${NC}"
-    return 0
+    print_message "$GREEN" "Neovim setup completed successfully!"
 }
 
 setup_nvchad() {
@@ -169,57 +158,60 @@ setup_nvchad() {
 
     handle_existing_config
 
-    echo -e "${GREEN}:: Cloning NvChad configuration from GitHub...${NC}"
+    print_message "$GREEN" ":: Cloning NvChad configuration from GitHub..."
     if ! git clone https://github.com/harilvfs/chadnvim "$nvchad_dir"; then
-        echo -e "${RED}Failed to clone the NvChad repository.${NC}"
+        print_message "$RED" "Failed to clone the NvChad repository."
         return 1
     fi
 
-    echo -e "${GREEN}:: Moving NvChad configuration...${NC}"
+    print_message "$GREEN" ":: Moving NvChad configuration..."
     cp -r "$nvchad_dir/nvim/"* "$nvim_config_dir/"
 
-    echo -e "${GREEN}:: Cleaning up temporary files...${NC}"
+    print_message "$GREEN" ":: Cleaning up temporary files..."
     rm -rf "$nvchad_dir"
 
-    echo -e "${GREEN}:: Cleaning up unnecessary files...${NC}"
+    print_message "$GREEN" ":: Cleaning up unnecessary files..."
     cd "$nvim_config_dir" || return 1
     rm -rf LICENSE README.md
 
-    echo -e "${GREEN}NvChad setup completed successfully!${NC}"
-    return 0
+    print_message "$GREEN" "NvChad setup completed successfully!"
 }
 
 main() {
-    os_info=$(detect_os 2>&1)
-    if [[ $? -ne 0 ]]; then
-        echo -e "${RED}OS detection failed. Exiting.${NC}"
+    local os_type
+    os_type=$(detect_os)
+    if [[ -z "$os_type" ]]; then
+        print_message "$RED" "OS detection failed. Exiting."
         exit 1
     fi
 
-    os_type=$(echo "$os_info" | grep "OS=" | cut -d= -f2)
+    local options=("Neovim" "NvChad" "Exit")
+    show_menu "Choose the setup option:" "${options[@]}"
 
-    choice=$(fzf_select "Choose the setup option:" "Neovim" "NvChad" "Exit")
+    get_choice "${#options[@]}"
+    local choice_index=$?
+    local choice="${options[$((choice_index - 1))]}"
 
-    case $choice in
+    case "$choice" in
         "Neovim")
-            setup_neovim || exit 1
-            install_dependencies "$os_type" || exit 1
+            setup_neovim
+            install_dependencies "$os_type"
             ;;
         "NvChad")
-            setup_nvchad || exit 1
-            install_dependencies "$os_type" || exit 1
+            setup_nvchad
+            install_dependencies "$os_type"
             ;;
         "Exit")
-            echo -e "${RED}Exiting...${NC}"
+            print_message "$YELLOW" "Exiting..."
             exit 0
             ;;
         *)
-            echo -e "${RED}Invalid option selected! Exiting.${NC}"
+            print_message "$RED" "Invalid option selected! Exiting."
             exit 1
             ;;
     esac
 
-    echo -e "${GREEN}Setup completed!${NC}"
+    print_message "$GREEN" "Setup completed!"
 }
 
 main
