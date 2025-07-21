@@ -2,90 +2,78 @@
 
 clear
 
-source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
+source "$(dirname "$0")"/../colors.sh > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 detect_distro() {
-    echo -e "${TEAL}:: Detecting distribution...${ENDCOLOR}"
+    print_message "$TEAL" ":: Detecting distribution..."
     if command -v pacman &> /dev/null; then
-        echo -e "${GREEN}:: Arch Linux detected.${ENDCOLOR}"
+        print_message "$GREEN" ":: Arch Linux detected."
         DISTRO="arch"
     elif command -v dnf &> /dev/null; then
-        echo -e "${GREEN}:: Fedora detected.${ENDCOLOR}"
+        print_message "$GREEN" ":: Fedora detected."
         DISTRO="fedora"
     elif command -v zypper &> /dev/null; then
-        echo -e "${GREEN}:: openSUSE detected.${ENDCOLOR}"
+        print_message "$GREEN" ":: openSUSE detected."
         DISTRO="opensuse"
     else
-        echo -e "${RED}:: Unsupported distribution.${ENDCOLOR}"
+        print_message "$RED" ":: Unsupported distribution."
         exit 1
     fi
 }
 
 check_multilib() {
-    echo -e "${TEAL}:: Checking multilib repository status...${ENDCOLOR}"
+    print_message "$TEAL" ":: Checking multilib repository status..."
 
     if grep -q '^\[multilib\]' /etc/pacman.conf; then
-        echo -e "${GREEN}:: 32-bit multilib repository is already enabled.${ENDCOLOR}"
+        print_message "$GREEN" ":: 32-bit multilib repository is already enabled."
         return 0
     elif grep -q '^\#\[multilib\]' /etc/pacman.conf; then
-        echo -e "${YELLOW}:: Multilib repository found but is commented out.${ENDCOLOR}"
+        print_message "$YELLOW" ":: Multilib repository found but is commented out."
 
-        if fzf_confirm "Do you want to enable the multilib repository?"; then
+        if confirm "Do you want to enable the multilib repository?"; then
             sudo cp /etc/pacman.conf /etc/pacman.conf.bak
-
             sudo sed -i '/^\#\[multilib\]/,+1 s/^\#//' /etc/pacman.conf
-
-            echo -e "${GREEN}:: Multilib repository has been enabled.${ENDCOLOR}"
-            echo -e "${CYAN}:: Updating package databases...${ENDCOLOR}"
+            print_message "$GREEN" ":: Multilib repository has been enabled."
+            print_message "$CYAN" ":: Updating package databases..."
             sudo pacman -Sy
             return 0
         else
-            echo -e "${YELLOW}:: Warning: Multilib repository is required for 32-bit applications.${ENDCOLOR}"
-            echo -e "${YELLOW}:: Some functionality may be limited.${ENDCOLOR}"
+            print_message "$YELLOW" ":: Warning: Multilib repository is required for 32-bit applications."
+            print_message "$YELLOW" ":: Some functionality may be limited."
             return 1
         fi
     else
-        echo -e "${RED}:: Multilib repository not found in pacman.conf.${ENDCOLOR}"
+        print_message "$RED" ":: Multilib repository not found in pacman.conf."
         return 1
     fi
 }
 
 install_pipewire() {
-    echo -e "${TEAL}:: Installing PipeWire and related packages...${ENDCOLOR}"
+    print_message "$TEAL" ":: Installing PipeWire and related packages..."
     if [ "$DISTRO" = "arch" ]; then
-        echo -e "${CYAN}:: Installing PipeWire packages for Arch Linux...${ENDCOLOR}"
+        print_message "$CYAN" ":: Installing PipeWire packages for Arch Linux..."
 
         local multilib_enabled=true
         if ! check_multilib; then
             multilib_enabled=false
-            echo -e "${YELLOW}:: Installing without 32-bit support...${ENDCOLOR}"
+            print_message "$YELLOW" ":: Installing without 32-bit support..."
         fi
 
         if [ "$multilib_enabled" = true ]; then
@@ -95,66 +83,65 @@ install_pipewire() {
         fi
 
         if [ $? -ne 0 ]; then
-            echo -e "${RED}:: Failed to install PipeWire packages on Arch.${ENDCOLOR}"
+            print_message "$RED" ":: Failed to install PipeWire packages on Arch."
             exit 1
         fi
     elif [ "$DISTRO" = "fedora" ]; then
-        echo -e "${CYAN}:: Installing PipeWire packages for Fedora...${ENDCOLOR}"
+        print_message "$CYAN" ":: Installing PipeWire packages for Fedora..."
         sudo dnf install -y pipewire
         if [ $? -ne 0 ]; then
-            echo -e "${RED}:: Failed to install PipeWire packages on Fedora.${ENDCOLOR}"
+            print_message "$RED" ":: Failed to install PipeWire packages on Fedora."
             exit 1
         fi
     elif [ "$DISTRO" = "opensuse" ]; then
-        echo -e "${CYAN}:: Installing PipeWire packages for openSUSE...${ENDCOLOR}"
+        print_message "$CYAN" ":: Installing PipeWire packages for openSUSE..."
         sudo zypper install -y pipewire rtkit wireplumber pipewire-alsa gstreamer-plugin-pipewire pipewire-pulseaudio
         if [ $? -ne 0 ]; then
-            echo -e "${RED}:: Failed to install PipeWire packages on openSUSE.${ENDCOLOR}"
+            print_message "$RED" ":: Failed to install PipeWire packages on openSUSE."
             exit 1
         fi
     fi
 
-    echo -e "${GREEN}:: PipeWire packages installed successfully.${ENDCOLOR}"
+    print_message "$GREEN" ":: PipeWire packages installed successfully."
 }
 
 setup_user_and_services() {
-    echo -e "${TEAL}:: Configuring user permissions and services...${ENDCOLOR}"
-    echo -e "${CYAN}:: Adding user to rtkit group for realtime audio processing...${ENDCOLOR}"
+    print_message "$TEAL" ":: Configuring user permissions and services..."
+    print_message "$CYAN" ":: Adding user to rtkit group for realtime audio processing..."
     sudo usermod -a -G rtkit "$USER"
     if [ $? -ne 0 ]; then
-        echo -e "${RED}:: Failed to add user to rtkit group.${ENDCOLOR}"
+        print_message "$RED" ":: Failed to add user to rtkit group."
         exit 1
     fi
-    echo -e "${CYAN}:: Enabling PipeWire services...${ENDCOLOR}"
+    print_message "$CYAN" ":: Enabling PipeWire services..."
     systemctl --user enable pipewire pipewire-pulse wireplumber
     if [ $? -ne 0 ]; then
-        echo -e "${RED}:: Failed to enable PipeWire services.${ENDCOLOR}"
+        print_message "$RED" ":: Failed to enable PipeWire services."
         exit 1
     fi
 
-    echo -e "${GREEN}:: User settings and services configured successfully.${ENDCOLOR}"
+    print_message "$GREEN" ":: User settings and services configured successfully."
 }
 
 main() {
-    check_fzf
     detect_distro
-    if fzf_confirm "Do you want to install PipeWire audio system?"; then
+    if confirm "Do you want to install PipeWire audio system?"; then
         install_pipewire
         setup_user_and_services
-        echo -e "${GREEN}:: PipeWire setup completed successfully!${ENDCOLOR}"
-        if fzf_confirm "Do you want to log out to apply changes? (Recommended)"; then
-            echo -e "${TEAL}:: Logging out to apply audio system changes...${ENDCOLOR}"
+        print_message "$GREEN" ":: PipeWire setup completed successfully!"
+        if confirm "Do you want to log out to apply changes? (Recommended)"; then
+            print_message "$TEAL" ":: Logging out to apply audio system changes..."
             sleep 2
             if command -v loginctl &> /dev/null; then
                 loginctl terminate-user "$USER"
             else
-                echo -e "${CYAN}:: Please log out manually to apply changes.${ENDCOLOR}"
+                print_message "$CYAN" ":: Please log out manually to apply changes."
             fi
         else
-            echo -e "${CYAN}:: Please log out or reboot your system later to apply changes.${ENDCOLOR}"
+            print_message "$CYAN" ":: Please log out or reboot your system later to apply changes."
         fi
     else
-        echo -e "${TEAL}:: PipeWire installation cancelled.${ENDCOLOR}"
+        print_message "$TEAL" ":: PipeWire installation cancelled."
     fi
 }
 
