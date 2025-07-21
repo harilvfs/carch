@@ -25,7 +25,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
 
     let popup_block = create_rounded_block()
         .title("Keyboard Shortcuts")
-        .border_style(Style::default().fg(Color::Green));
+        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)));
 
     f.render_widget(popup_block.clone(), popup_area);
 
@@ -163,7 +163,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         Span::styled("↑/↓/j/k: ", Style::default().fg(Color::Gray)),
         Span::styled("Scroll  ", Style::default().fg(Color::Blue)),
         Span::styled("ESC/q: ", Style::default().fg(Color::Gray)),
-        Span::styled("Close", Style::default().fg(Color::Green)),
+        Span::styled("Close", Style::default().fg(Color::Rgb(129, 200, 190))),
         Span::raw("  "),
         Span::styled(scroll_status, Style::default().fg(Color::DarkGray)),
     ]))

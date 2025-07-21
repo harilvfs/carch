@@ -22,7 +22,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title("Confirm selection")
-        .border_style(Style::default().fg(Color::Green));
+        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)));
 
     let inner_area = popup_block.inner(popup_area);
 

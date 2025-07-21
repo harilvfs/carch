@@ -178,22 +178,32 @@ impl Widget for &mut RunScriptPopup {
         let block = if !self.is_finished() {
             Block::bordered()
                 .border_set(border::ROUNDED)
-                .border_style(Style::default().fg(Color::Green))
-                .title_style(Style::default().fg(Color::Green).reversed())
+                .border_style(Style::default().fg(Color::Rgb(129, 200, 190)))
+                .title_style(Style::default().fg(Color::Rgb(129, 200, 190)).reversed())
                 .title_bottom(Line::from("Press Ctrl-C to KILL"))
         } else {
             let (title_text, style_color) = if self.get_exit_status().success() {
-                ("SUCCESS! Press <ESC> to close", Color::Green)
+                (
+                    Line::styled(
+                        "SUCCESS! Press <Enter> to close",
+                        Style::default().fg(Color::Green).reversed(),
+                    ),
+                    Color::Rgb(129, 200, 190),
+                )
             } else {
-                ("FAILED! Press <ESC> to close", Color::Red)
+                (
+                    Line::styled(
+                        "FAILED! Press <Enter> to close",
+                        Style::default().fg(Color::Red).reversed(),
+                    ),
+                    Color::Rgb(129, 200, 190),
+                )
             };
-
-            let title_line = Line::styled(title_text, Style::default().fg(style_color).reversed());
 
             Block::bordered()
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(style_color))
-                .title_top(title_line.centered())
+                .title_top(title_text.centered())
         };
 
         let inner_area = block.inner(area);
