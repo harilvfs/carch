@@ -3,61 +3,61 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-check_fzf
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-echo -e "${TEAL}"
-cat << "EOF"
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
 
-Standard is best for terminals that don't support image rendering
-PNG option should only be used in terminals that support image rendering
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
 
-EOF
-echo -e "${NC}"
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
 
 FASTFETCH_DIR="$HOME/.config/fastfetch"
 BACKUP_DIR="$HOME/.config/fastfetch_backup"
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No" "Back to Menu")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    echo "$selected"
-}
-
-fzf_select() {
-    local prompt="$1"
-    shift
-    local options=("$@")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Select Option" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    echo "$selected"
-}
-
 check_command() {
     local cmd=$1
     if ! command -v "$cmd" &> /dev/null; then
-        echo -e "${RED}Required command '$cmd' not found. Please install it and try again.${NC}"
+        print_message "$RED" "Required command '$cmd' not found. Please install it and try again."
         return 1
     fi
     return 0
@@ -65,57 +65,41 @@ check_command() {
 
 check_fastfetch() {
     if command -v fastfetch &> /dev/null; then
-        echo -e "${GREEN}Fastfetch is already installed.${NC}"
+        print_message "$GREEN" "Fastfetch is already installed."
     else
-        echo -e "${CYAN}Fastfetch is not installed. Installing...${NC}"
+        print_message "$CYAN" "Fastfetch is not installed. Installing..."
+        local pkg_manager=""
+        if command -v pacman &> /dev/null; then pkg_manager="pacman"; fi
+        if command -v dnf &> /dev/null; then pkg_manager="dnf"; fi
+        if command -v zypper &> /dev/null; then pkg_manager="zypper"; fi
 
-        if [ -x "$(command -v pacman)" ]; then
-            sudo pacman -S fastfetch git --noconfirm
-        elif [ -x "$(command -v dnf)" ]; then
-            sudo dnf install fastfetch git -y
-        elif [ -x "$(command -v zypper)" ]; then
-            sudo zypper install -y fastfetch git
-        else
-            echo -e "${RED}Unsupported package manager! Please install Fastfetch manually.${NC}"
-            exit 1
-        fi
-        echo -e "${GREEN}Fastfetch has been installed.${NC}"
+        case "$pkg_manager" in
+            pacman) sudo pacman -S --noconfirm fastfetch git ;;
+            dnf) sudo dnf install -y fastfetch git ;;
+            zypper) sudo zypper install -y fastfetch git ;;
+            *)
+                print_message "$RED" "Unsupported package manager! Please install Fastfetch manually."
+                exit 1
+                ;;
+        esac
+        print_message "$GREEN" "Fastfetch has been installed."
     fi
 }
 
 handle_existing_config() {
     if [ -d "$FASTFETCH_DIR" ]; then
-        echo -e "${YELLOW}Existing Fastfetch configuration found.${NC}"
-
-        choice=$(fzf_confirm "Do you want to back up your existing Fastfetch configuration?")
-
-        case $choice in
-            "Yes")
-                if [ ! -d "$BACKUP_DIR" ]; then
-                    echo -e "${CYAN}Creating backup directory...${NC}"
-                    mkdir -p "$BACKUP_DIR"
-                fi
-                echo -e "${CYAN}Backing up existing Fastfetch configuration...${NC}"
-                cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2> /dev/null
-                echo -e "${GREEN}Backup completed to $BACKUP_DIR${NC}"
-                return 0
-                ;;
-            "No")
-                echo -e "${YELLOW}Proceeding without backup...${NC}"
-                return 0
-                ;;
-            "Back to Menu")
-                clear
-                main
-                exit 0
-                ;;
-            *)
-                echo -e "${RED}Invalid option. Returning to menu...${NC}"
-                clear
-                main
-                exit 0
-                ;;
-        esac
+        print_message "$YELLOW" "Existing Fastfetch configuration found."
+        if confirm "Do you want to back up your existing Fastfetch configuration?"; then
+            if [ ! -d "$BACKUP_DIR" ]; then
+                print_message "$CYAN" "Creating backup directory..."
+                mkdir -p "$BACKUP_DIR"
+            fi
+            print_message "$CYAN" "Backing up existing Fastfetch configuration..."
+            cp -r "$FASTFETCH_DIR"/* "$BACKUP_DIR/" 2>/dev/null
+            print_message "$GREEN" "Backup completed to $BACKUP_DIR"
+        else
+            print_message "$YELLOW" "Proceeding without backup..."
+        fi
     else
         mkdir -p "$FASTFETCH_DIR"
     fi
@@ -125,73 +109,62 @@ setup_standard_fastfetch() {
     check_fastfetch
     handle_existing_config
 
-    echo -e "${CYAN}Setting up standard Fastfetch configuration...${NC}"
-
-    echo -e "${CYAN}Downloading standard configuration...${NC}"
+    print_message "$CYAN" "Setting up standard Fastfetch configuration..."
+    print_message "$CYAN" "Downloading standard configuration..."
     curl -sSLo "$FASTFETCH_DIR/config.jsonc" "https://raw.githubusercontent.com/harilvfs/fastfetch/refs/heads/old-days/fastfetch/config.jsonc"
-
-    echo -e "${GREEN}Standard Fastfetch setup completed!${NC}"
+    print_message "$GREEN" "Standard Fastfetch setup completed!"
 }
 
 setup_png_fastfetch() {
     check_fastfetch
-    if ! handle_existing_config; then
-        return
-    fi
+    handle_existing_config
 
-    echo -e "${CYAN}Setting up Fastfetch with custom PNG support...${NC}"
-    echo -e "${CYAN}Cloning Fastfetch repository directly...${NC}"
+    print_message "$CYAN" "Setting up Fastfetch with custom PNG support..."
+    print_message "$CYAN" "Cloning Fastfetch repository directly..."
 
-    rm -rf "$FASTFETCH_DIR"/* 2> /dev/null
+    rm -rf "$FASTFETCH_DIR"/* 2>/dev/null
     mkdir -p "$FASTFETCH_DIR"
 
     git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"
 
-    echo -e "${CYAN}Cleaning up unnecessary files...${NC}"
+    print_message "$CYAN" "Cleaning up unnecessary files..."
     rm -rf "$FASTFETCH_DIR/.git" "$FASTFETCH_DIR/LICENSE" "$FASTFETCH_DIR/README.md"
 
-    echo -e "${GREEN}Fastfetch with PNG support setup completed!${NC}"
+    print_message "$GREEN" "Fastfetch with PNG support setup completed!"
 }
 
 main() {
-    check_command git || {
-        echo -e "${RED}Please install git and try again.${NC}"
-        exit 1
-    }
+    check_command "git" || exit 1
 
-    clear
+    while true; do
+        clear
+        print_message "$TEAL" "Standard is best for terminals that don't support image rendering"
+        print_message "$TEAL" "PNG option should only be used in terminals that support image rendering"
 
-    echo -e "${TEAL}"
-    cat << "EOF"
+        local options=("Fastfetch Standard" "Fastfetch with PNG" "Exit")
+        show_menu "Choose the setup option" "${options[@]}"
 
-Standard is best for terminals that don't support image rendering
-PNG option should only be used in terminals that support image rendering
+        get_choice "${#options[@]}"
+        choice_index=$?
+        choice="${options[$((choice_index - 1))]}"
 
-EOF
-    echo -e "${NC}"
-
-    choice=$(fzf_select "Choose the setup option:" "Fastfetch Standard" "Fastfetch with PNG" "Exit")
-
-    case $choice in
-        "Fastfetch Standard")
-            setup_standard_fastfetch
-            echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
-            exit 0
-            ;;
-        "Fastfetch with PNG")
-            setup_png_fastfetch
-            echo -e "${GREEN}Setup completed! You can now run 'fastfetch' to see the results.${NC}"
-            exit 0
-            ;;
-        "Exit")
-            echo -e "${RED}Exiting the script.${NC}"
-            exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid option selected! Please try again.${NC}"
-            main
-            ;;
-    esac
+        case "$choice" in
+            "Fastfetch Standard")
+                setup_standard_fastfetch
+                print_message "$GREEN" "Setup completed! You can now run 'fastfetch' to see the results."
+                break
+                ;;
+            "Fastfetch with PNG")
+                setup_png_fastfetch
+                print_message "$GREEN" "Setup completed! You can now run 'fastfetch' to see the results."
+                break
+                ;;
+            "Exit")
+                print_message "$RED" "Exiting the script."
+                exit 0
+                ;;
+        esac
+    done
 }
 
 main
