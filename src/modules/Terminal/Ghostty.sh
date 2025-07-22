@@ -3,32 +3,16 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+        esac
+    done
 }
 
 setup_ghostty() {
@@ -56,7 +40,7 @@ setup_ghostty() {
         echo -e "${GREEN}Ghostty is already installed.${NC}"
     fi
 
-    if fzf_confirm "Do you want to install JetBrains Mono Nerd Font?"; then
+    if confirm "Do you want to install JetBrains Mono Nerd Font?"; then
         if command -v pacman &> /dev/null; then
             sudo pacman -S --needed ttf-jetbrains-mono-nerd
         elif command -v dnf &> /dev/null; then
@@ -82,15 +66,16 @@ setup_ghostty() {
     fi
 
     CONFIG_DIR="$HOME/.config/ghostty"
-    BACKUP_DIR="$HOME/.config/ghostty.bak"
+    BACKUP_DIR="$HOME/.config/carch/backups/ghostty.bak"
 
     if [ -d "$CONFIG_DIR" ]; then
         echo -e "${CYAN}:: Existing Ghostty configuration detected.${NC}"
 
-        if fzf_confirm "Do you want to backup the existing configuration?"; then
+        if confirm "Do you want to backup the existing configuration?"; then
+            mkdir -p "$(dirname "$BACKUP_DIR")"
             if [ -d "$BACKUP_DIR" ]; then
                 echo -e "${YELLOW}Backup already exists.${NC}"
-                if fzf_confirm "Do you want to overwrite the backup?"; then
+                if confirm "Do you want to overwrite the backup?"; then
                     rm -rf "$BACKUP_DIR"
                 else
                     echo -e "${RED}Exiting to prevent data loss.${NC}"
@@ -131,5 +116,4 @@ setup_ghostty() {
     fi
 }
 
-check_fzf
 setup_ghostty

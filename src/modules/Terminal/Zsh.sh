@@ -3,16 +3,6 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
-
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
 
 print_message() {
     local color="$1"
@@ -20,21 +10,15 @@ print_message() {
     echo -e "${color}${message}${NC}"
 }
 
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+        esac
+    done
 }
 
 check_essential_dependencies() {
@@ -101,15 +85,7 @@ check_default_shell() {
     if [[ "$current_shell" != "zsh" ]]; then
         print_message "$YELLOW" "Current default shell: $current_shell"
 
-        local shell_options=("Yes" "No")
-        local change_shell=$(printf "%s\n" "${shell_options[@]}" | fzf ${FZF_COMMON} \
-                                                                --height=40% \
-                                                                --prompt="Zsh is not your default shell. Do you want to change it to zsh? " \
-                                                                --header="Default Shell Check" \
-                                                                --pointer="➤" \
-                                                                --color='fg:white,fg+:yellow,bg+:black,pointer:yellow')
-
-        if [[ "$change_shell" == "Yes" ]]; then
+        if confirm "Zsh is not your default shell. Do you want to change it to zsh?"; then
             print_message "$CYAN" "Changing default shell to zsh..."
             chsh -s /bin/zsh
             print_message "$GREEN" "Default shell changed to zsh. Please log out and log back in for the change to take effect."
@@ -120,8 +96,6 @@ check_default_shell() {
         print_message "$GREEN" "Zsh is already your default shell."
     fi
 }
-
-check_fzf
 
 detect_distro
 
@@ -209,11 +183,14 @@ install_ohmyzsh_plugins() {
 }
 
 config_zsh() {
+    local backup_dir="$HOME/.config/carch/backups"
+    mkdir -p "$backup_dir"
+
     P10K_CONFIG="$HOME/.p10k.zsh"
     if [[ -f "$P10K_CONFIG" ]]; then
-        if fzf_confirm ".p10k.zsh found. Do you want to back it up?"; then
-            mv "$P10K_CONFIG" "$P10K_CONFIG.bak"
-            print_message "$GREEN" "Backup created: $P10K_CONFIG.bak"
+        if confirm ".p10k.zsh found. Do you want to back it up?"; then
+            mv "$P10K_CONFIG" "$backup_dir/.p10k.zsh.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/.p10k.zsh.bak"
         fi
     fi
 
@@ -222,7 +199,9 @@ config_zsh() {
 
     ZSHRC="$HOME/.zshrc"
     if [[ -f "$ZSHRC" ]]; then
-        if fzf_confirm ".zshrc already exists. Use the recommended version?"; then
+        if confirm ".zshrc already exists. Use the recommended version?"; then
+            mv "$ZSHRC" "$backup_dir/.zshrc.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/.zshrc.bak"
             curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.zshrc" -o "$ZSHRC"
             print_message "$GREEN" "Applied recommended .zshrc."
         fi

@@ -23,8 +23,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(Clear, popup_area);
 
-    let popup_block =
-        create_rounded_block().title("Search").border_style(Style::default().fg(Color::Green));
+    let popup_block = create_rounded_block()
+        .title("Search")
+        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)));
 
     f.render_widget(popup_block.clone(), popup_area);
 
@@ -48,7 +49,11 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let input = Paragraph::new(display_text)
-        .block(create_rounded_block().title("Type to search (Tab to complete)"))
+        .block(
+            create_rounded_block()
+                .title("Type to search (Tab to complete)")
+                .border_style(Style::default().fg(Color::Rgb(129, 200, 190))),
+        )
         .style(Style::default())
         .alignment(Alignment::Left);
 
@@ -103,7 +108,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
                     }
                     spans.push(Span::styled(
                         display_text[idx..idx + 1].to_string(),
-                        Style::default().fg(Color::Green).add_modifier(Modifier::BOLD),
+                        Style::default().fg(Color::Rgb(129, 200, 190)).add_modifier(Modifier::BOLD),
                     ));
                     last_idx = idx + 1;
                 }
@@ -121,7 +126,11 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let result_count_text = format!("Found {} scripts", app.search.results.len());
 
     let search_results = List::new(result_items)
-        .block(create_rounded_block().title(result_count_text))
+        .block(
+            create_rounded_block()
+                .title(result_count_text)
+                .border_style(Style::default().fg(Color::Rgb(129, 200, 190))),
+        )
         .highlight_style(Style::default().bg(Color::Rgb(235, 235, 210)).fg(Color::Black).bold())
         .highlight_symbol("");
 

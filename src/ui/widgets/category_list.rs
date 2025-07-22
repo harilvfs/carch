@@ -10,7 +10,7 @@ fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title(title)
-        .border_style(Style::default().fg(Color::Cyan))
+        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)))
         .style(Style::default().bg(Color::Reset))
 }
 
@@ -25,19 +25,21 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
         .map(|(idx, category_name)| {
             let is_selected = app.categories.state.selected() == Some(idx);
             let icon = if !is_focused && is_selected { "  " } else { " 󰉋 " };
-            let colored_icon = ratatui::text::Span::styled(icon, Style::default().fg(Color::Cyan));
+            let colored_icon =
+                ratatui::text::Span::styled(icon, Style::default().fg(Color::Rgb(129, 200, 190)));
             let text = ratatui::text::Span::styled(
                 category_name.as_str(),
-                Style::default().fg(Color::Cyan),
+                Style::default().fg(Color::Rgb(129, 200, 190)),
             );
             let line = ratatui::text::Line::from(vec![colored_icon, text]);
             ListItem::new(line)
         })
         .collect();
-    let list = List::new(items).block(block).highlight_style(if is_focused {
-        Style::default().bg(Color::Rgb(170, 225, 225)).fg(Color::Black).add_modifier(Modifier::BOLD)
-    } else {
-        Style::default().bg(Color::Cyan).fg(Color::Black).add_modifier(Modifier::BOLD)
-    });
+    let list = List::new(items).block(block).highlight_style(
+        Style::default()
+            .bg(Color::Rgb(129, 200, 190))
+            .fg(Color::Black)
+            .add_modifier(Modifier::BOLD),
+    );
     f.render_stateful_widget(list, area, &mut app.categories.state);
 }

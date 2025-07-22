@@ -3,32 +3,16 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+        esac
+    done
 }
 
 setup_kitty() {
@@ -50,19 +34,24 @@ setup_kitty() {
     fi
 
     CONFIG_DIR="$HOME/.config/kitty"
-    BACKUP_DIR="$HOME/.config/kitty_backup"
+    BACKUP_DIR="$HOME/.config/carch/backups/kitty.bak"
 
     if [ -d "$CONFIG_DIR" ]; then
-        echo -e "${CYAN}:: Backing up existing Kitty configuration...${NC}"
-
-        if [ ! -d "$BACKUP_DIR" ]; then
-            mkdir "$BACKUP_DIR"
+        echo -e "${CYAN}:: Existing Kitty configuration detected.${NC}"
+        if confirm "Do you want to backup the existing configuration?"; then
+            mkdir -p "$(dirname "$BACKUP_DIR")"
+            if [ -d "$BACKUP_DIR" ]; then
+                echo -e "${YELLOW}Backup already exists. Overwriting...${NC}"
+                rm -rf "$BACKUP_DIR"
+            fi
+            mv "$CONFIG_DIR" "$BACKUP_DIR"
+            echo -e "${GREEN}:: Existing Kitty configuration backed up to $BACKUP_DIR.${NC}"
+        else
+            echo -e "${CYAN}:: Skipping backup. Your existing configuration will be overwritten.${NC}"
         fi
-        mv "$CONFIG_DIR"/* "$BACKUP_DIR/" 2> /dev/null
-    else
-        echo -e "${GREEN}No existing Kitty configuration found.${NC}"
-        mkdir -p "$CONFIG_DIR"
     fi
+
+    mkdir -p "$CONFIG_DIR"
 
     echo -e "${CYAN}:: Downloading Kitty configuration files...${NC}"
 
@@ -74,7 +63,7 @@ setup_kitty() {
 }
 
 install_font() {
-    if fzf_confirm "Do you want to install recommended fonts (Cascadia and JetBrains Mono Nerd Fonts)?"; then
+    if confirm "Do you want to install recommended fonts (Cascadia and JetBrains Mono Nerd Fonts)?"; then
         if [ -x "$(command -v pacman)" ]; then
             echo -e "${CYAN}Installing recommended fonts on Arch-based systems...${NC}"
             sudo pacman -S --needed ttf-cascadia-mono-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono
@@ -91,6 +80,5 @@ install_font() {
     fi
 }
 
-check_fzf
 setup_kitty
 install_font

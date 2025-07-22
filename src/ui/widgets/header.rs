@@ -7,7 +7,10 @@ use ratatui::widgets::{Block, BorderType, Borders, Paragraph};
 use crate::ui::state::App;
 
 pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
-    let header_block = Block::default().borders(Borders::ALL).border_type(BorderType::Rounded);
+    let header_block = Block::default()
+        .borders(Borders::ALL)
+        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)))
+        .border_type(BorderType::Rounded);
     f.render_widget(header_block, area);
 
     let inner_area = ratatui::layout::Layout::default()

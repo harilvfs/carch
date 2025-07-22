@@ -3,118 +3,100 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-
-    if [[ "$selected" == "Yes" ]]; then
-        return 0
-    else
-        return 1
-    fi
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 detect_distro() {
-    echo -e "${TEAL}:: Detecting distribution...${ENDCOLOR}"
+    print_message "$TEAL" ":: Detecting distribution..."
     if command -v pacman &> /dev/null; then
-        echo -e "${GREEN}:: Arch Linux detected.${ENDCOLOR}"
+        print_message "$GREEN" ":: Arch Linux detected."
         DISTRO="arch"
     elif command -v dnf &> /dev/null; then
-        echo -e "${GREEN}:: Fedora detected.${ENDCOLOR}"
+        print_message "$GREEN" ":: Fedora detected."
         DISTRO="fedora"
     elif command -v zypper &> /dev/null; then
-        echo -e "${GREEN}:: openSUSE detected.${ENDCOLOR}"
+        print_message "$GREEN" ":: openSUSE detected."
         DISTRO="opensuse"
     else
-        echo -e "${RED}:: Unsupported distribution.${ENDCOLOR}"
+        print_message "$RED" ":: Unsupported distribution."
         exit 1
     fi
 }
 
 install_bluetooth() {
-    echo -e "${TEAL}:: Installing Bluetooth packages...${ENDCOLOR}"
+    print_message "$TEAL" ":: Installing Bluetooth packages..."
 
-    if [ "$DISTRO" = "arch" ]; then
-        echo -e "${CYAN}:: Installing Bluetooth packages for Arch Linux...${ENDCOLOR}"
-        sudo pacman -S --noconfirm bluez bluez-utils blueman
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}:: Failed to install Bluetooth packages on Arch.${ENDCOLOR}"
-            exit 1
-        fi
+    case "$DISTRO" in
+        "arch")
+            print_message "$CYAN" ":: Installing Bluetooth packages for Arch Linux..."
+            sudo pacman -S --noconfirm bluez bluez-utils blueman
+            ;;
+        "fedora")
+            print_message "$CYAN" ":: Installing Bluetooth packages for Fedora..."
+            sudo dnf install -y bluez bluez-tools blueman
+            ;;
+        "opensuse")
+            print_message "$CYAN" ":: Installing Bluetooth packages for openSUSE..."
+            sudo zypper install -y bluez blueman
+            ;;
+    esac
 
-    elif [ "$DISTRO" = "fedora" ]; then
-        echo -e "${CYAN}:: Installing Bluetooth packages for Fedora...${ENDCOLOR}"
-        sudo dnf install -y bluez bluez-tools blueman
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}:: Failed to install Bluetooth packages on Fedora.${ENDCOLOR}"
-            exit 1
-        fi
-
-    elif [ "$DISTRO" = "opensuse" ]; then
-        echo -e "${CYAN}:: Installing Bluetooth packages for openSUSE...${ENDCOLOR}"
-        sudo zypper install -y bluez blueman
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}:: Failed to install Bluetooth packages on openSUSE.${ENDCOLOR}"
-            exit 1
-        fi
-    fi
-
-    echo -e "${GREEN}:: Bluetooth packages installed successfully.${ENDCOLOR}"
-}
-
-enable_bluetooth() {
-    echo -e "${TEAL}:: Enabling Bluetooth service...${ENDCOLOR}"
-
-    sudo systemctl enable --now bluetooth.service
     if [ $? -ne 0 ]; then
-        echo -e "${RED}:: Failed to enable Bluetooth service.${ENDCOLOR}"
+        print_message "$RED" ":: Failed to install Bluetooth packages on ${DISTRO^}."
         exit 1
     fi
 
-    echo -e "${GREEN}:: Bluetooth service enabled successfully.${ENDCOLOR}"
+    print_message "$GREEN" ":: Bluetooth packages installed successfully."
+}
+
+enable_bluetooth() {
+    print_message "$TEAL" ":: Enabling Bluetooth service..."
+    sudo systemctl enable --now bluetooth.service
+    if [ $? -ne 0 ]; then
+        print_message "$RED" ":: Failed to enable Bluetooth service."
+        exit 1
+    fi
+    print_message "$GREEN" ":: Bluetooth service enabled successfully."
 }
 
 provide_additional_info() {
-    echo -e "${TEAL}:: Additional Information:${ENDCOLOR}"
+    print_message "$TEAL" ":: Additional Information:"
     echo -e "${CYAN}:: • To pair a device: Use the Blueman applet or 'bluetoothctl' in terminal${ENDCOLOR}"
     echo -e "${CYAN}:: • To access Bluetooth settings: Use the Blueman application${ENDCOLOR}"
     echo -e "${CYAN}:: • To pair via terminal: Run 'bluetoothctl', then 'power on', 'scan on', 'pair MAC_ADDRESS'${ENDCOLOR}"
 }
 
 main() {
-    check_fzf
     detect_distro
 
-    if fzf_confirm "Do you want to install the Bluetooth system?"; then
+    if confirm "Do you want to install the Bluetooth system?"; then
         install_bluetooth
         enable_bluetooth
-        echo -e "${GREEN}:: Bluetooth setup completed successfully!${ENDCOLOR}"
+        print_message "$GREEN" ":: Bluetooth setup completed successfully!"
         provide_additional_info
 
-        if fzf_confirm "Do you want to restart the Bluetooth service now?"; then
-            echo -e "${TEAL}:: Restarting Bluetooth service...${ENDCOLOR}"
+        if confirm "Do you want to restart the Bluetooth service now?"; then
+            print_message "$TEAL" ":: Restarting Bluetooth service..."
             sudo systemctl restart bluetooth.service
-            echo -e "${GREEN}:: Bluetooth service restarted.${ENDCOLOR}"
+            print_message "$GREEN" ":: Bluetooth service restarted."
         fi
     else
-        echo -e "${TEAL}:: Bluetooth installation cancelled.${ENDCOLOR}"
+        print_message "$TEAL" ":: Bluetooth installation cancelled."
     fi
 }
 

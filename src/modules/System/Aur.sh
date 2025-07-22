@@ -3,7 +3,53 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
+
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
@@ -19,94 +65,86 @@ detect_distro() {
 
 check_dependencies() {
     local failed=0
-    local deps=("git" "make" "less")
+    local deps=("git" "make")
 
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
-            echo -e "${RED}${BOLD}Error: ${dep} is not installed.${NC}"
-            echo -e "${YELLOW}Please install ${dep} before running this script:${NC}"
-            echo -e "${CYAN}  • Fedora: ${NC}sudo dnf install ${dep}"
-            echo -e "${CYAN}  • Arch Linux: ${NC}sudo pacman -S ${dep}"
-            echo -e "${CYAN}  • openSUSE: ${NC}sudo zypper install ${dep}"
+            print_message "$RED" "Error: ${dep} is not installed."
+            print_message "$YELLOW" "Please install ${dep} before running this script:"
+            echo -e "${CYAN}  • Arch Linux: ${ENDCOLOR}sudo pacman -S ${dep}"
             failed=1
         fi
     done
 
     if [ "$failed" -eq 1 ]; then
         exit 1
-    else
-        return 0
     fi
 }
 
 install_paru() {
     if command -v paru &> /dev/null; then
-        echo -e "${GREEN}Paru is already installed on this system.${NC}"
+        print_message "$GREEN" "Paru is already installed on this system."
         echo -e "$(paru --version | head -n 1)"
         read -p "Press Enter to continue..."
         return
     fi
 
-    if ! check_dependencies; then
+    print_message "$CYAN" ":: Installing Paru..."
+    sudo pacman -S --needed --noconfirm base-devel git
+    if [ $? -ne 0 ]; then
+        print_message "$RED" "Failed to install dependencies."
+        read -p "Press Enter to continue..."
         return
     fi
 
-    echo -e "${CYAN}:: Installing Paru...${NC}"
-    sudo pacman -S --needed base-devel git
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || {
-                        echo -e "${RED}Failed to create temp directory${NC}"
-                                                                              exit 1
+    git clone https://aur.archlinux.org/paru.git "$temp_dir/paru"
+    cd "$temp_dir/paru" || {
+        print_message "$RED" "Failed to enter paru directory"
+        exit 1
     }
-    git clone https://aur.archlinux.org/paru.git
-    cd paru || {
-                 echo -e "${RED}Failed to enter paru directory${NC}"
-                                                                      exit 1
-    }
-    makepkg -si
-    cd ..
+    makepkg -si --noconfirm
+    cd ~ || exit 1
     rm -rf "$temp_dir"
 
     if command -v paru &> /dev/null; then
-        echo -e "${GREEN}Paru installed successfully.${NC}"
+        print_message "$GREEN" "Paru installed successfully."
     else
-        echo -e "${RED}Paru installation failed.${NC}"
+        print_message "$RED" "Paru installation failed."
     fi
     read -p "Press Enter to continue..."
 }
 
 install_yay() {
     if command -v yay &> /dev/null; then
-        echo -e "${GREEN}Yay is already installed on this system.${NC}"
+        print_message "$GREEN" "Yay is already installed on this system."
         echo -e "$(yay --version | head -n 1)"
         read -p "Press Enter to continue..."
         return
     fi
 
-    if ! check_dependencies; then
+    print_message "$CYAN" ":: Installing Yay..."
+    sudo pacman -S --needed --noconfirm git base-devel
+    if [ $? -ne 0 ]; then
+        print_message "$RED" "Failed to install dependencies."
+        read -p "Press Enter to continue..."
         return
     fi
 
-    echo -e "${CYAN}:: Installing Yay...${NC}"
-    sudo pacman -S --needed git base-devel
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || {
-                        echo -e "${RED}Failed to create temp directory${NC}"
-                                                                              exit 1
+    git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
+    cd "$temp_dir/yay" || {
+        print_message "$RED" "Failed to enter yay directory"
+        exit 1
     }
-    git clone https://aur.archlinux.org/yay.git
-    cd yay || {
-                echo -e "${RED}Failed to enter yay directory${NC}"
-                                                                    exit 1
-    }
-    makepkg -si
-    cd ..
+    makepkg -si --noconfirm
+    cd ~ || exit 1
     rm -rf "$temp_dir"
 
     if command -v yay &> /dev/null; then
-        echo -e "${GREEN}Yay installed successfully.${NC}"
+        print_message "$GREEN" "Yay installed successfully."
     else
-        echo -e "${RED}Yay installation failed.${NC}"
+        print_message "$RED" "Yay installation failed."
     fi
     read -p "Press Enter to continue..."
 }
@@ -128,71 +166,47 @@ check_existing_helpers() {
     fi
 
     if $helpers_found; then
-        echo -e "${GREEN}AUR helper(s) already installed on this system:${NC}"
+        print_message "$GREEN" "AUR helper(s) already installed on this system:"
         echo -e "$helper_list"
-        return 0
     else
-        echo -e "${YELLOW}No AUR helpers detected on this system.${NC}"
-        return 1
+        print_message "$YELLOW" "No AUR helpers detected on this system."
     fi
 }
 
-detect_distro
-check_fzf
+main() {
+    detect_distro
 
-if [ "$distro" == "fedora" ] || [ "$distro" == "opensuse" ]; then
-    echo -e "${YELLOW}NOTICE:${NC} This system is detected as ${RED}${distro^}${NC}."
-    echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with ${distro^}.${NC}"
-    echo -e "${YELLOW}These tools will not work on your system.${NC}"
-    exit 1
-fi
-
-if [ "$distro" == "unsupported" ]; then
-    echo -e "${YELLOW}NOTICE:${NC} Your distribution could not be detected."
-    echo -e "${RED}AUR helpers (Paru/Yay) are specifically for Arch-based distributions.${NC}"
-    echo -e "${YELLOW}Please verify that you are using an Arch-based distribution before continuing.${NC}"
-
-    read -p "Do you want to continue anyway? [y/N] " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "${RED}Exiting...${NC}"
+    if [ "$distro" != "arch" ]; then
+        print_message "$YELLOW" "NOTICE: This system is detected as ${distro^}."
+        print_message "$RED" "AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with ${distro^}."
+        print_message "$YELLOW" "These tools will not work on your system."
         exit 1
     fi
-fi
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-while true; do
-    clear
     check_dependencies
-    echo -e "${CYAN}:: AUR Setup Menu [ For Arch Only ]${NC}"
-    echo
 
-    check_existing_helpers
-    echo
+    while true; do
+        clear
+        print_message "$CYAN" ":: AUR Setup Menu [ For Arch Only ] ::"
+        echo
+        check_existing_helpers
+        echo
 
-        options=("Install Paru" "Install Yay" "Exit")
-        selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=40% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="AUR Helper Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        local options=("Install Paru" "Install Yay" "Exit")
+        show_menu "Choose an option" "${options[@]}"
 
-        case $selected in
-        "Install Paru") install_paru ;;
-        "Install Yay") install_yay ;;
-        "Exit")
-            echo -e "${GREEN}Exiting...${NC}"
-            exit
-                 ;;
-        *) continue ;;
-    esac
-done
+        get_choice "${#options[@]}"
+        choice_index=$?
+        choice="${options[$((choice_index - 1))]}"
+
+        case "$choice" in
+            "Install Paru") install_paru ;;
+            "Install Yay") install_yay ;;
+            "Exit")
+                exit 0
+                ;;
+        esac
+    done
+}
+
+main

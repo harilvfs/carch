@@ -3,41 +3,54 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 aur_helper=""
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-fzf_confirm() {
-    local prompt="$1"
-    local options=("Yes" "No")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="$prompt " \
-                                                     --header="Confirm" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:green,bg+:black,pointer:green')
-    [[ "$selected" == "Yes" ]]
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
 }
 
-fzf_select() {
-    local prompt="$1"
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
     shift
     local options=("$@")
-    printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                      --height=40% \
-                                      --prompt="$prompt " \
-                                      --header="Select Option" \
-                                      --pointer="➤" \
-                                      --color='fg:white,fg+:blue,bg+:black,pointer:blue'
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
 }
 
 detect_package_manager() {
@@ -48,7 +61,7 @@ detect_package_manager() {
     elif command -v zypper &> /dev/null; then
         pkg_manager="zypper"
     else
-        echo -e "${RED}Unsupported package manager. Please install Picom manually.${ENDCOLOR}"
+        print_message "$RED" "Unsupported package manager. Please install Picom manually."
         exit 1
     fi
 }
@@ -57,34 +70,34 @@ install_aur_helper() {
     local aur_helpers=("yay" "paru")
     for helper in "${aur_helpers[@]}"; do
         if command -v "$helper" &> /dev/null; then
-            echo -e "${GREEN}:: AUR helper '$helper' is already installed. Using it.${ENDCOLOR}"
+            print_message "$GREEN" ":: AUR helper '$helper' is already installed. Using it."
             aur_helper="$helper"
             return
         fi
     done
 
-    echo -e "${RED}No AUR helper found. Installing yay...${ENDCOLOR}"
+    print_message "$RED" "No AUR helper found. Installing yay..."
     sudo pacman -S --needed --noconfirm git base-devel
     temp_dir=$(mktemp -d)
     git clone https://aur.archlinux.org/yay.git "$temp_dir/yay"
     cd "$temp_dir/yay" || {
-        echo -e "${RED}Failed to enter yay directory${ENDCOLOR}"
+        print_message "$RED" "Failed to enter yay directory"
         exit 1
     }
     makepkg -si --noconfirm
     cd ~ || exit 1
     rm -rf "$temp_dir"
-    echo -e "${GREEN}yay installed successfully.${ENDCOLOR}"
+    print_message "$GREEN" "yay installed successfully."
     aur_helper="yay"
 }
 
 print_source_message() {
-    echo -e "${TEAL}:: This Picom build is from FT-Labs.${ENDCOLOR}"
-    echo -e "${TEAL}:: Check out here: ${GREEN}https://github.com/FT-Labs/picom${ENDCOLOR}"
+    print_message "$TEAL" ":: This Picom build is from FT-Labs."
+    print_message "$TEAL" ":: Check out here: https://github.com/FT-Labs/picom"
 }
 
 install_dependencies_normal() {
-    echo -e "${GREEN}:: Installing Picom...${ENDCOLOR}"
+    print_message "$GREEN" ":: Installing Picom..."
     case "$pkg_manager" in
         pacman) sudo pacman -S --needed --noconfirm picom ;;
         dnf) sudo dnf install -y picom ;;
@@ -93,109 +106,121 @@ install_dependencies_normal() {
 }
 
 setup_picom_ftlabs() {
-    echo -e "${GREEN}:: Installing Picom FT-Labs (picom-ftlabs-git) via $aur_helper...${ENDCOLOR}"
+    print_message "$GREEN" ":: Installing Picom FT-Labs (picom-ftlabs-git) via $aur_helper..."
     "$aur_helper" -S --noconfirm picom-ftlabs-git
 }
 
 install_picom_ftlabs_fedora() {
-    echo -e "${GREEN}:: Installing dependencies for Picom FT-Labs (Fedora)...${ENDCOLOR}"
+    print_message "$GREEN" ":: Installing dependencies for Picom FT-Labs (Fedora)..."
     sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel cmake
 
-    echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
+    print_message "$GREEN" ":: Cloning Picom FT-Labs repository..."
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
     cd ~/.cache/picom || {
-        echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
+        print_message "$RED" "Failed to clone Picom repo."
         exit 1
     }
 
-    echo -e "${GREEN}:: Building Picom with meson and ninja...${ENDCOLOR}"
+    print_message "$GREEN" ":: Building Picom with meson and ninja..."
     meson setup --buildtype=release build
     ninja -C build
 
-    echo -e "${GREEN}:: Installing the built Picom binary...${ENDCOLOR}"
+    print_message "$GREEN" ":: Installing the built Picom binary..."
     sudo cp build/src/picom /usr/local/bin
     sudo ldconfig
 
-    echo -e "${GREEN}Done...${ENDCOLOR}"
+    print_message "$GREEN" "Done..."
 }
 
 install_picom_ftlabs_opensuse() {
-    echo -e "${GREEN}:: Installing dependencies for Picom FT-Labs (OpenSUSE)...${ENDCOLOR}"
+    print_message "$GREEN" ":: Installing dependencies for Picom FT-Labs (OpenSUSE)..."
     sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
             libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
             libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
             xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
 
-    echo -e "${GREEN}:: Cloning Picom FT-Labs repository...${ENDCOLOR}"
+    print_message "$GREEN" ":: Cloning Picom FT-Labs repository..."
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
     cd ~/.cache/picom || {
-        echo -e "${RED}Failed to clone Picom repo.${ENDCOLOR}"
+        print_message "$RED" "Failed to clone Picom repo."
         exit 1
     }
 
-    echo -e "${GREEN}:: Building Picom with meson and ninja...${ENDCOLOR}"
+    print_message "$GREEN" ":: Building Picom with meson and ninja..."
     meson setup --buildtype=release build
     ninja -C build
 
-    echo -e "${GREEN}:: Installing the built Picom binary...${ENDCOLOR}"
+    print_message "$GREEN" ":: Installing the built Picom binary..."
     sudo cp build/src/picom /usr/local/bin
     sudo ldconfig
 
-    echo -e "${GREEN}Done...${ENDCOLOR}"
+    print_message "$GREEN" "Done..."
 }
 
 download_config() {
     local config_url="$1"
     local config_path="$HOME/.config/picom.conf"
+    local backup_dir="$HOME/.config/carch/backups"
 
     if [ -f "$config_path" ]; then
-        if fzf_confirm "Overwrite existing picom.conf?"; then
-            echo -e "${GREEN}:: Overwriting picom.conf...${ENDCOLOR}"
+        if confirm "Overwrite existing picom.conf?"; then
+            print_message "$GREEN" ":: Backing up existing picom.conf..."
+            mkdir -p "$backup_dir"
+            cp "$config_path" "$backup_dir/picom.conf.bak"
+            print_message "$GREEN" ":: Backup created: $backup_dir/picom.conf.bak"
+            print_message "$GREEN" ":: Overwriting picom.conf..."
         else
-            echo -e "${RED}:: Skipping picom.conf download...${ENDCOLOR}"
+            print_message "$RED" ":: Skipping picom.conf download..."
             return
         fi
     fi
 
     mkdir -p ~/.config
-    echo -e "${GREEN}:: Downloading Picom configuration...${ENDCOLOR}"
+    print_message "$GREEN" ":: Downloading Picom configuration..."
     wget -O "$config_path" "$config_url"
 }
 
-check_fzf
-detect_package_manager
-print_source_message
+main() {
+    detect_package_manager
+    print_source_message
 
-choice=$(fzf_select "Choose Picom version:" "Picom with animation (FT-Labs)" "Picom normal" "Exit")
+    local options=("Picom with animation (FT-Labs)" "Picom normal" "Exit")
+    show_menu "Choose Picom version:" "${options[@]}"
 
-case "$choice" in
-    "Picom with animation (FT-Labs)")
-        case "$pkg_manager" in
-            pacman)
-                install_aur_helper
-                setup_picom_ftlabs
-                ;;
-            dnf)
-                install_picom_ftlabs_fedora
-                ;;
-            zypper)
-                install_picom_ftlabs_opensuse
-                ;;
-        esac
-        download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
-        echo -e "${GREEN}:: Picom setup completed with animations from FT-Labs!${ENDCOLOR}"
-        ;;
-    "Picom normal")
-        install_dependencies_normal
-        download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
-        echo -e "${GREEN}:: Picom setup completed without animations!${ENDCOLOR}"
-        ;;
-    "Exit")
-        echo "Exiting..."
-        exit 0
-        ;;
-    *)
-        echo -e "${RED}Invalid option. Please try again.${ENDCOLOR}"
-        exit 1
-        ;;
-esac
+    get_choice "${#options[@]}"
+    choice_index=$?
+    choice="${options[$((choice_index - 1))]}"
+
+    case "$choice" in
+        "Picom with animation (FT-Labs)")
+            case "$pkg_manager" in
+                pacman)
+                    install_aur_helper
+                    setup_picom_ftlabs
+                    ;;
+                dnf)
+                    install_picom_ftlabs_fedora
+                    ;;
+                zypper)
+                    install_picom_ftlabs_opensuse
+                    ;;
+            esac
+            download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
+            print_message "$GREEN" ":: Picom setup completed with animations from FT-Labs!"
+            ;;
+        "Picom normal")
+            install_dependencies_normal
+            download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
+            print_message "$GREEN" ":: Picom setup completed without animations!"
+            ;;
+        "Exit")
+            exit 0
+            ;;
+        *)
+            print_message "$RED" "Invalid option. Please try again."
+            exit 1
+            ;;
+    esac
+}
+
+main

@@ -1,11 +1,12 @@
 use crossterm::event::{KeyCode, KeyEvent, MouseEvent, MouseEventKind};
 
 use super::actions::{
-    bottom, next, perform_search, previous, scroll_preview_down, scroll_preview_page_down,
-    scroll_preview_page_up, scroll_preview_up, toggle_help_mode, toggle_multi_select_mode,
-    toggle_preview_mode, toggle_script_selection, toggle_search_mode, top, update_autocomplete,
-    update_preview,
+    bottom, get_script_path, next, perform_search, previous, scroll_preview_down,
+    scroll_preview_page_down, scroll_preview_page_up, scroll_preview_up, toggle_help_mode,
+    toggle_multi_select_mode, toggle_preview_mode, toggle_script_selection, toggle_search_mode,
+    top, update_autocomplete, update_preview,
 };
+use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
 
 impl<'a> App<'a> {
@@ -209,6 +210,7 @@ impl<'a> App<'a> {
                 AppMode::Help => {
                     self.help.scroll = self.help.scroll.saturating_add(2);
                 }
+                AppMode::RunScript => {}
             },
             MouseEventKind::ScrollUp => match self.mode {
                 AppMode::Normal => previous(self),
@@ -222,6 +224,7 @@ impl<'a> App<'a> {
                 AppMode::Help => {
                     self.help.scroll = self.help.scroll.saturating_sub(2);
                 }
+                AppMode::RunScript => {}
             },
             _ => {}
         }
@@ -230,7 +233,20 @@ impl<'a> App<'a> {
     pub fn handle_key_confirmation_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
-                self.mode = AppMode::Normal;
+                if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
+                    self.script_execution_queue = self.multi_select.scripts.clone();
+                } else if let Some(script_path) = get_script_path(self) {
+                    self.script_execution_queue.push(script_path);
+                }
+
+                if !self.script_execution_queue.is_empty() {
+                    let script_path = self.script_execution_queue.remove(0);
+                    let popup = RunScriptPopup::new(script_path);
+                    self.run_script_popup = Some(popup);
+                    self.mode = AppMode::RunScript;
+                } else {
+                    self.mode = AppMode::Normal;
+                }
             }
             KeyCode::Char('n')
             | KeyCode::Char('N')

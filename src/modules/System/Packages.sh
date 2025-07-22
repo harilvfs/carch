@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
 source "$(dirname "$0")/packages/Packages-Android.sh"
 source "$(dirname "$0")/packages/Packages-Browsers.sh"
@@ -21,14 +20,41 @@ source "$(dirname "$0")/packages/Packages-TextEditors.sh"
 source "$(dirname "$0")/packages/Packages-Virtualization.sh"
 source "$(dirname "$0")/packages/Packages-Crypto-Tools.sh"
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "${NC}"
+}
+
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "${NC}" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "${NC}")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
 
 if [ "$(id -u)" = 0 ]; then
     echo -e "${RED}This script should not be run as root.${NC}"
@@ -142,38 +168,40 @@ install_opensuse_package() {
     fi
 }
 
-while true; do
-    clear
-    check_fzf
-    options=("Android Tools" "Browsers" "Communication Apps" "Crypto Tools" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Exit")
-    selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                        --height=70% \
-                                                        --prompt="Choose an option: " \
-                                                        --header="Package Selection" \
-                                                        --pointer="➤" \
-                                                        --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+main() {
+    while true; do
+        clear
+        local options=("Android Tools" "Browsers" "Communication Apps" "Crypto Tools" "Development Tools" "Editing Tools" "File Managers" "FM Tools" "Gaming" "GitHub" "Multimedia" "Music Apps" "Productivity Apps" "Streaming Tools" "Terminals" "Text Editors" "Virtualization" "Exit")
 
-    case $selected in
-        "Android Tools") install_android ;;
-        "Browsers") install_browsers ;;
-        "Communication Apps") install_communication ;;
-        "Crypto Tools") install_crypto_tools ;;
-        "Development Tools") install_development ;;
-        "Editing Tools") install_editing ;;
-        "File Managers") install_filemanagers ;;
-        "FM Tools") install_fm_tools ;;
-        "Gaming") install_gaming ;;
-        "GitHub") install_github ;;
-        "Multimedia") install_multimedia ;;
-        "Music Apps") install_music ;;
-        "Productivity Apps") install_productivity ;;
-        "Streaming Tools") install_streaming ;;
-        "Terminals") install_terminals ;;
-        "Text Editors") install_texteditor ;;
-        "Virtualization") install_virtualization ;;
-        "Exit")
-            echo -e "${GREEN}Exiting...${NC}"
-            exit
-            ;;
-    esac
-done
+        show_menu "Package Selection" "${options[@]}"
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local choice="${options[$((choice_index - 1))]}"
+
+        case "$choice" in
+            "Android Tools") install_android ;;
+            "Browsers") install_browsers ;;
+            "Communication Apps") install_communication ;;
+            "Crypto Tools") install_crypto_tools ;;
+            "Development Tools") install_development ;;
+            "Editing Tools") install_editing ;;
+            "File Managers") install_filemanagers ;;
+            "FM Tools") install_fm_tools ;;
+            "Gaming") install_gaming ;;
+            "GitHub") install_github ;;
+            "Multimedia") install_multimedia ;;
+            "Music Apps") install_music ;;
+            "Productivity Apps") install_productivity ;;
+            "Streaming Tools") install_streaming ;;
+            "Terminals") install_terminals ;;
+            "Text Editors") install_texteditor ;;
+            "Virtualization") install_virtualization ;;
+            "Exit")
+                exit 0
+                ;;
+        esac
+        read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
+    done
+}
+
+main

@@ -27,91 +27,83 @@ install_productivity() {
     while true; do
         clear
 
-        options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Back to Main Menu")
-        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        local options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Back to Main Menu")
 
-        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
-            return
-        fi
+        show_menu "Productivity Apps Selection" "${options[@]}"
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local selection="${options[$((choice_index - 1))]}"
 
-        for selection in "${selected[@]}"; do
-            case $selection in
-                "LibreOffice")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman libreoffice-fresh
-                        version=$(get_version libreoffice-fresh)
-                    elif [[ $distro -eq 2 ]]; then
-                        $pkg_manager libreoffice
-                        version=$(get_version libreoffice)
-                    else
-                        $pkg_manager libreoffice
-                        version=$(get_version libreoffice)
-                    fi
-                    echo "LibreOffice installed successfully! Version: $version"
-                    ;;
+        case "$selection" in
+            "LibreOffice")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman libreoffice-fresh
+                    version=$(get_version libreoffice-fresh)
+                elif [[ $distro -eq 2 ]]; then
+                    $pkg_manager libreoffice
+                    version=$(get_version libreoffice)
+                else
+                    $pkg_manager libreoffice
+                    version=$(get_version libreoffice)
+                fi
+                echo "LibreOffice installed successfully! Version: $version"
+                ;;
 
-                "OnlyOffice")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur onlyoffice-bin
-                        version=$(get_version onlyoffice-bin)
-                    else
-                        $flatpak_cmd org.onlyoffice.desktopeditors
-                        version="(Flatpak version installed)"
-                    fi
-                    echo "OnlyOffice installed successfully! Version: $version"
-                    ;;
+            "OnlyOffice")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_aur onlyoffice-bin
+                    version=$(get_version onlyoffice-bin)
+                else
+                    $flatpak_cmd org.onlyoffice.desktopeditors
+                    version="(Flatpak version installed)"
+                fi
+                echo "OnlyOffice installed successfully! Version: $version"
+                ;;
 
-                "Obsidian")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur obsidian
-                        version=$(get_version obsidian)
-                    else
-                        $flatpak_cmd md.obsidian.Obsidian
-                        version="(Flatpak version installed)"
-                    fi
-                    echo "Obsidian installed successfully! Version: $version"
-                    ;;
+            "Obsidian")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_aur obsidian
+                    version=$(get_version obsidian)
+                else
+                    $flatpak_cmd md.obsidian.Obsidian
+                    version="(Flatpak version installed)"
+                fi
+                echo "Obsidian installed successfully! Version: $version"
+                ;;
 
-                "Joplin")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur joplin-desktop
-                        version=$(get_version joplin-desktop)
-                    else
-                        $flatpak_cmd net.cozic.joplin_desktop
-                        version="(Flatpak version installed)"
-                    fi
-                    echo "Joplin installed successfully! Version: $version"
-                    ;;
+            "Joplin")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_aur joplin-desktop
+                    version=$(get_version joplin-desktop)
+                else
+                    $flatpak_cmd net.cozic.joplin_desktop
+                    version="(Flatpak version installed)"
+                fi
+                echo "Joplin installed successfully! Version: $version"
+                ;;
 
-                "Calibre")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman calibre
-                        version=$(get_version calibre)
-                    elif [[ $distro -eq 2 ]]; then
-                        $pkg_manager calibre
-                        version=$(get_version calibre)
-                    else
-                        $pkg_manager calibre
-                        version=$(get_version calibre)
-                    fi
-                    echo "Calibre installed successfully! Version: $version"
-                    ;;
-
-            esac
-        done
-
-        echo "All selected Productivity Apps have been installed."
-        read -rp "Press Enter to continue..."
+            "Calibre")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman calibre
+                    version=$(get_version calibre)
+                elif [[ $distro -eq 2 ]]; then
+                    $pkg_manager calibre
+                    version=$(get_version calibre)
+                else
+                    $pkg_manager calibre
+                    version=$(get_version calibre)
+                fi
+                echo "Calibre installed successfully! Version: $version"
+                ;;
+            "Back to Main Menu")
+                return
+                ;;
+        esac
+        read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }

@@ -1,3 +1,4 @@
+use ratatui::prelude::*;
 use std::io;
 use std::path::Path;
 use std::time::Duration;
@@ -11,7 +12,8 @@ use ratatui::backend::CrosstermBackend;
 use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::{Frame, Terminal};
 
-use super::actions::{get_script_path, load_scripts, run_selected_scripts};
+use super::actions::load_scripts;
+use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, UiOptions};
 use super::widgets::category_list::render_category_list;
 use super::widgets::header::render_header;
@@ -52,6 +54,19 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
 
 fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     match app.mode {
+        AppMode::RunScript => {
+            render_normal_ui(f, app, options);
+            if let Some(popup) = &mut app.run_script_popup {
+                let area = app.script_panel_area;
+                let popup_area = Rect {
+                    x:      area.x + area.width / 12,
+                    y:      area.y + area.height / 10,
+                    width:  area.width * 5 / 6,
+                    height: area.height * 4 / 5,
+                };
+                f.render_widget(popup, popup_area);
+            }
+        }
         AppMode::Search => {
             render_normal_ui(f, app, options);
             popups::search::render_search_popup(f, app, app.script_panel_area);
@@ -79,26 +94,15 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
     terminal.show_cursor()?;
-    terminal.clear()?;
     Ok(())
 }
 
 #[allow(dead_code)]
-pub fn run_ui<F>(modules_dir: &Path, run_script_callback: F) -> io::Result<()>
-where
-    F: Fn(&Path) -> io::Result<()>,
-{
-    run_ui_with_options(modules_dir, run_script_callback, UiOptions::default())
+pub fn run_ui(modules_dir: &Path) -> io::Result<()> {
+    run_ui_with_options(modules_dir, UiOptions::default())
 }
 
-pub fn run_ui_with_options<F>(
-    modules_dir: &Path,
-    run_script_callback: F,
-    options: UiOptions,
-) -> io::Result<()>
-where
-    F: Fn(&Path) -> io::Result<()>,
-{
+pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result<()> {
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "UI initialization started");
     }
@@ -108,8 +112,6 @@ where
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
-
-    terminal.clear()?;
 
     let mut app = App::new();
 
@@ -143,7 +145,13 @@ where
 
         terminal.draw(|f| ui(f, &mut app, &options))?;
 
-        if let Ok(true) = event::poll(Duration::from_millis(100))
+        let poll_duration = if app.mode == AppMode::RunScript {
+            Duration::from_millis(16)
+        } else {
+            Duration::from_millis(100)
+        };
+
+        if let Ok(true) = event::poll(poll_duration)
             && let Ok(event) = event::read()
         {
             match event {
@@ -165,103 +173,49 @@ where
                         );
                     }
 
-                    match app.mode {
-                        AppMode::Normal => {
-                            if key.code == KeyCode::Char('p') && !options.show_preview {
-                                if options.log_mode {
-                                    let _ = crate::commands::log_message(
-                                        "INFO",
-                                        "Preview toggle attempted but previews are disabled",
-                                    );
+                    if app.mode == AppMode::RunScript {
+                        if let Some(popup) = &mut app.run_script_popup {
+                            match popup.handle_key_event(key) {
+                                crate::ui::popups::run_script::PopupEvent::Close => {
+                                    app.run_script_popup = None;
+                                    if !app.script_execution_queue.is_empty() {
+                                        let script_path = app.script_execution_queue.remove(0);
+                                        let next_popup = RunScriptPopup::new(script_path);
+                                        app.run_script_popup = Some(next_popup);
+                                    } else {
+                                        app.mode = AppMode::Normal;
+                                    }
                                 }
-                            } else {
-                                app.handle_key_normal_mode(key);
+                                crate::ui::popups::run_script::PopupEvent::None => {}
                             }
                         }
-                        AppMode::Preview => {
-                            app.handle_key_preview_mode(key);
-                        }
-                        AppMode::Search => app.handle_search_input(key),
-                        AppMode::Confirm => {
-                            app.handle_key_confirmation_mode(key);
-                            if key.code == KeyCode::Char('y')
-                                || key.code == KeyCode::Char('Y')
-                                || key.code == KeyCode::Char('l')
-                            {
-                                if app.multi_select.enabled && !app.multi_select.scripts.is_empty()
-                                {
-                                    cleanup_terminal(&mut terminal)?;
-
+                    } else {
+                        match app.mode {
+                            AppMode::Normal => {
+                                if key.code == KeyCode::Char('p') && !options.show_preview {
                                     if options.log_mode {
                                         let _ = crate::commands::log_message(
                                             "INFO",
-                                            &format!(
-                                                "Exiting UI to run {} selected scripts",
-                                                app.multi_select.scripts.len()
-                                            ),
+                                            "Preview toggle attempted but previews are disabled",
                                         );
                                     }
-
-                                    run_selected_scripts(&app, &run_script_callback)?;
-
-                                    if options.log_mode {
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            "Multiple script execution completed, returning to UI",
-                                        );
-                                    }
-
-                                    enable_raw_mode()?;
-                                    let mut stdout = io::stdout();
-                                    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-
-                                    let backend = CrosstermBackend::new(stdout);
-                                    terminal = Terminal::new(backend)?;
-                                    terminal.clear()?;
-                                } else if let Some(script_path) = get_script_path(&app) {
-                                    if options.log_mode {
-                                        let script_name = script_path
-                                            .file_name()
-                                            .unwrap_or_default()
-                                            .to_string_lossy();
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            &format!(
-                                                "Selected script for execution: {script_name}"
-                                            ),
-                                        );
-                                    }
-
-                                    cleanup_terminal(&mut terminal)?;
-
-                                    if options.log_mode {
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            "Exiting UI to run script",
-                                        );
-                                    }
-
-                                    run_script_callback(&script_path)?;
-
-                                    if options.log_mode {
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            "Script execution completed, returning to UI",
-                                        );
-                                    }
-
-                                    enable_raw_mode()?;
-                                    let mut stdout = io::stdout();
-                                    execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
-
-                                    let backend = CrosstermBackend::new(stdout);
-                                    terminal = Terminal::new(backend)?;
-                                    terminal.clear()?;
+                                } else {
+                                    app.handle_key_normal_mode(key);
                                 }
                             }
-                        }
-                        AppMode::Help => {
-                            app.handle_key_help_mode(key);
+                            AppMode::Preview => {
+                                app.handle_key_preview_mode(key);
+                            }
+                            AppMode::Search => app.handle_search_input(key),
+                            AppMode::Confirm => {
+                                app.handle_key_confirmation_mode(key);
+                            }
+                            AppMode::Help => {
+                                app.handle_key_help_mode(key);
+                            }
+                            AppMode::RunScript => {
+                                // Already handled
+                            }
                         }
                     }
                 }
@@ -284,8 +238,6 @@ where
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "User requested application exit");
     }
-
-    print!("\x1B[2J\x1B[1;1H");
 
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "UI terminated normally");

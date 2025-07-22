@@ -50,8 +50,11 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     };
 
     let popup_block = create_rounded_block()
-        .title(Span::styled(title, Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)))
-        .border_style(Style::default().fg(Color::Green));
+        .title(Span::styled(
+            title,
+            Style::default().fg(Color::Rgb(129, 200, 190)).add_modifier(Modifier::BOLD),
+        ))
+        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)));
 
     f.render_widget(popup_block.clone(), popup_area);
 

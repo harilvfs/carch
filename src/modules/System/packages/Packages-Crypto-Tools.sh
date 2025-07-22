@@ -24,41 +24,34 @@ install_crypto_tools() {
     while true; do
         clear
 
-        options=("Electrum" "Back to Main Menu")
-        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        local options=("Electrum" "Back to Main Menu")
 
-        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
-            return
-        fi
+        show_menu "Crypto Tools Selection" "${options[@]}"
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local selection="${options[$((choice_index - 1))]}"
 
-        for selection in "${selected[@]}"; do
-            case $selection in
-                "Electrum")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur electrum
-                        version=$(get_version electrum)
-                        echo "Electrum installed successfully! Version: $version"
-                    elif [[ $distro -eq 1 ]]; then
-                        $pkg_manager electrum
-                        version=$(get_version electrum)
-                        echo "Electrum installed successfully! Version: $version"
-                    else
-                        $flatpak_cmd org.electrum.electrum
-                        version="(Flatpak version installed)"
-                        echo "Electrum installed successfully! Version: $version"
-                    fi
-                    ;;
-            esac
-        done
-
-        echo "All selected Crypto tools have been installed."
-        read -rp "Press Enter to continue..."
+        case "$selection" in
+            "Electrum")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_aur electrum
+                    version=$(get_version electrum)
+                    echo "Electrum installed successfully! Version: $version"
+                elif [[ $distro -eq 1 ]]; then
+                    $pkg_manager electrum
+                    version=$(get_version electrum)
+                    echo "Electrum installed successfully! Version: $version"
+                else
+                    $flatpak_cmd org.electrum.electrum
+                    version="(Flatpak version installed)"
+                    echo "Electrum installed successfully! Version: $version"
+                fi
+                ;;
+            "Back to Main Menu")
+                return
+                ;;
+        esac
+        read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }

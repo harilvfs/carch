@@ -1,18 +1,53 @@
 #!/usr/bin/env bash
 
-clear
-
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
 
 declare -A chromium_extensions=(
      ["Improve Tube"]="https://chromewebstore.google.com/detail/improve-youtube-%F0%9F%8E%A7-for-yo/bnomihfieiccainjcjblhegjgglakjdd"
@@ -49,162 +84,133 @@ declare -A firefox_extensions=(
      ["Ghostery Private Search"]="https://addons.mozilla.org/en-US/firefox/addon/ghostery-private-search/"
 )
 
-fzf_select() {
-    local prompt="$1"
-    shift
-    local options=("$@")
-    local selected
-    selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                 --height=40% \
-                                                 --prompt="$prompt " \
-                                                 --header="Select Option" \
-                                                 --pointer="➤" \
-                                                 --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    echo "$selected"
-}
-
-fzf_multiselect() {
-    local prompt="$1"
-    shift
-    local options=("$@")
-    local selected
-    selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                 --height=80% \
-                                                 --prompt="$prompt " \
-                                                 --header="Select Extensions (TAB to select, ENTER to confirm, ESC to exit)" \
-                                                 --pointer="➤" \
-                                                 --multi \
-                                                 --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    echo "$selected"
-}
-
 detect_default_browser() {
     local default_browser
-
     if command -v xdg-settings &> /dev/null; then
         default_browser=$(xdg-settings get default-web-browser 2> /dev/null | sed 's/\.desktop//')
     fi
-
     if [ -z "$default_browser" ] && [ -f ~/.config/mimeapps.list ]; then
         default_browser=$(grep -E "text/html=" ~/.config/mimeapps.list | head -1 | sed 's/text\/html=//' | sed 's/\.desktop.*//' | sed 's/;.*//')
     fi
+    echo "${default_browser:-Unknown}"
+}
 
-    if [ -z "$default_browser" ]; then
-        echo "unknown"
+open_url() {
+    local url="$1"
+    print_message "$CYAN" "Opening: $url"
+    if command -v xdg-open &> /dev/null; then
+        xdg-open "$url"
+    elif command -v open &> /dev/null; then
+        open "$url"
     else
-        echo "$default_browser"
+        print_message "$RED" "Could not find xdg-open or open. Please open the URL manually."
     fi
 }
 
-open_extension() {
-    local url="$1"
-    echo -e "${CYAN}Opening extension in default browser...${NC}"
-    xdg-open "$url" || open "$url"
+select_extensions() {
+    local browser_type=$1
+    local -n extensions_map=$2
+
+    local extension_names=()
+    for name in "${!extensions_map[@]}"; do
+        extension_names+=("$name")
+    done
+    IFS=$'\n' extension_names=($(sort <<< "${extension_names[*]}"))
+    unset IFS
+
+    while true; do
+        clear
+        local title="Available $(echo "$browser_type" | tr '[:lower:]' '[:upper:]') extensions"
+        show_menu "$title" "${extension_names[@]}"
+
+        echo -ne "${CYAN}Enter number(s) to install (e.g., 1 3 5), 'a' for all, or 'b' to go back: ${ENDCOLOR}"
+        read -r -a choices
+
+        if [[ " ${choices[*]} " =~ " b " ]]; then
+            clear
+            return
+        fi
+
+        local selected_for_install=()
+        if [[ " ${choices[*]} " =~ " a " ]]; then
+            selected_for_install=("${extension_names[@]}")
+        else
+            for choice in "${choices[@]}"; do
+                if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#extension_names[@]}" ]; then
+                    selected_for_install+=("${extension_names[$((choice - 1))]}")
+                else
+                    print_message "$RED" "Invalid selection: '$choice'. Please try again."
+                    sleep 2
+                    continue 2
+                fi
+            done
+        fi
+
+        if [ ${#selected_for_install[@]} -eq 0 ]; then
+            print_message "$YELLOW" "No extensions selected."
+            sleep 1
+            continue
+        fi
+
+        print_message "$GREEN" ""
+        print_message "$GREEN" "The following extensions will be opened:"
+        for name in "${selected_for_install[@]}"; do
+            printf "  %b• %s%b\n" "$CYAN" "$name" "$ENDCOLOR"
+        done
+        echo
+
+        if confirm "Open selected extensions?"; then
+            for name in "${selected_for_install[@]}"; do
+                open_url "${extensions_map[$name]}"
+                sleep 1
+            done
+
+            echo
+            print_message "$GREEN" "All selected extensions have been opened in your browser."
+            print_message "$YELLOW" "Note: You still need to complete the installation in the browser."
+            read -rp "$(echo -e "\n${CYAN}Press ENTER to return to the main menu...${ENDCOLOR}")"
+            clear
+            return
+        else
+            print_message "$YELLOW" "Installation cancelled."
+            sleep 1
+        fi
+    done
 }
 
 main() {
-    clear
+    while true; do
+        clear
+        local default_browser
+        default_browser=$(detect_default_browser)
 
-    local default_browser
-    default_browser=$(detect_default_browser)
+        print_message "$YELLOW" "Detected default browser: $default_browser"
+        print_message "$YELLOW" "NOTE: Extensions will open in your default browser."
+        print_message "$YELLOW" "Make sure your selection matches your default browser type."
 
-    local browser_choice
-    browser_choice=$(fzf_select "Select your browser type:" "Chromium-based" "Firefox-based" "Exit")
+        local options=("Chromium-based" "Firefox-based" "Exit")
+        show_menu "Select your browser type" "${options[@]}"
 
-    if [ "$browser_choice" == "Exit" ]; then
-        echo -e "${YELLOW}Exiting...${NC}"
-        exit 0
-    fi
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local choice="${options[$((choice_index - 1))]}"
 
-    local browser_type
-    if [ "$browser_choice" == "Chromium-based" ]; then
-        browser_type="chromium"
-    elif [ "$browser_choice" == "Firefox-based" ]; then
-        browser_type="firefox"
-    else
-        echo -e "${RED}Invalid choice. Exiting...${NC}"
-        exit 1
-    fi
-
-    echo -e "${GREEN}Selected browser type: ${BOLD}$browser_choice${NC}"
-    echo -e "${YELLOW}Default browser detected: ${BOLD}$default_browser${NC}"
-    echo -e "${YELLOW}NOTE: Extensions will open in your default browser.${NC}"
-    echo -e "${YELLOW}Make sure your selection matches your default browser type.${NC}"
-    sleep 0.5
-
-    if [ "$browser_type" == "chromium" ]; then
-        local extension_names=("${!chromium_extensions[@]}" "Back to Menu")
-        local selected_extensions
-        selected_extensions=$(fzf_multiselect "Select Chromium extensions to install:" "${extension_names[@]}")
-
-        if [ -z "$selected_extensions" ]; then
-            echo -e "${YELLOW}No extensions selected. Returning to main menu...${NC}"
-            sleep 1
-            main
-            return
-        fi
-
-        if echo "$selected_extensions" | grep -q "Back to Menu"; then
-            main
-            return
-        fi
-
-        echo -e "${GREEN}Selected extensions:${NC}"
-        echo "$selected_extensions" | while read -r extension; do
-            echo -e "  ${CYAN}• ${BOLD}$extension${NC}"
-        done
-
-        echo "$selected_extensions" | while read -r extension; do
-            local url="${chromium_extensions[$extension]}"
-            open_extension "$url"
-            sleep 2
-        done
-
-        echo -e "${GREEN}${BOLD}All selected extensions have been opened in your browser.${NC}"
-        echo -e "${YELLOW}Note: You still need to complete installation in the browser.${NC}"
-
-        echo ""
-        echo -e "${CYAN}Press ENTER to return to the main menu...${NC}"
-        read
-        main
-
-    elif [ "$browser_type" == "firefox" ]; then
-        local extension_names=("${!firefox_extensions[@]}" "Back to Menu")
-        local selected_extensions
-        selected_extensions=$(fzf_multiselect "Select Firefox extensions to install:" "${extension_names[@]}")
-
-        if [ -z "$selected_extensions" ]; then
-            echo -e "${YELLOW}No extensions selected. Returning to main menu...${NC}"
-            sleep 1
-            main
-            return
-        fi
-
-        if echo "$selected_extensions" | grep -q "Back to Menu"; then
-            main
-            return
-        fi
-
-        echo -e "${GREEN}Selected extensions:${NC}"
-        echo "$selected_extensions" | while read -r extension; do
-            echo -e "  ${CYAN}• ${BOLD}$extension${NC}"
-        done
-
-        echo "$selected_extensions" | while read -r extension; do
-            local url="${firefox_extensions[$extension]}"
-            open_extension "$url"
-            sleep 2
-        done
-
-        echo -e "${GREEN}${BOLD}All selected extensions have been opened in your browser.${NC}"
-        echo -e "${YELLOW}Note: You still need to complete installation in the browser.${NC}"
-
-        echo ""
-        echo -e "${CYAN}Press ENTER to return to the main menu...${NC}"
-        read
-        main
-    fi
+        case "$choice" in
+            "Chromium-based")
+                select_extensions "Chromium" chromium_extensions
+                ;;
+            "Firefox-based")
+                select_extensions "Firefox" firefox_extensions
+                ;;
+            "Exit")
+                return 0
+                ;;
+            *)
+                print_message "$RED" "Invalid option. Please try again."
+                sleep 1
+                ;;
+        esac
+    done
 }
 
-check_fzf
 main

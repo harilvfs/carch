@@ -3,37 +3,22 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
 
-fzf_confirm() {
-    local kernel_info="The system is currently running kernel: $(uname -r)"
-    local options=("Yes, install LTS kernel" "No, cancel installation")
-    local selected=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                     --height=40% \
-                                                     --prompt="Do you want to continue with LTS kernel installation? " \
-                                                     --header="$kernel_info" \
-                                                     --pointer="➤" \
-                                                     --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-    case "$selected" in
-        "Yes, install LTS kernel") return 0 ;;
-        "No, cancel installation")
-                                   echo "Exiting..."
-                                                      exit 0
-                                                             ;;
-        *)
-            echo "Invalid selection"
-                                     exit 1
-                                            ;;
-    esac
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 check_current_kernel() {
@@ -54,8 +39,6 @@ configure_grub() {
     echo -e "${GREEN}:: Updating GRUB configuration...${ENDCOLOR}"
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
-
-check_fzf
 
 check_current_kernel
 
@@ -80,7 +63,7 @@ fi
 
 echo ""
 
-if fzf_confirm; then
+if confirm "Do you want to continue with LTS kernel installation?"; then
     if [ -x "$(command -v pacman)" ]; then
         install_lts_kernel_arch
     elif [ -x "$(command -v dnf)" ]; then

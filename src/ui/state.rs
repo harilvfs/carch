@@ -5,6 +5,7 @@ use fuzzy_matcher::skim::SkimMatcherV2;
 use ratatui::layout::Rect;
 use ratatui::text::Text;
 
+use super::popups::run_script::RunScriptPopup;
 use super::system_info::SystemInfo;
 
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -14,6 +15,7 @@ pub enum AppMode {
     Confirm,
     Help,
     Preview,
+    RunScript,
 }
 
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -129,10 +131,12 @@ pub struct App<'a> {
     pub categories:  StatefulList<String>,
     pub all_scripts: HashMap<String, Vec<ScriptItem>>,
 
-    pub system_info:       SystemInfo,
-    pub script_panel_area: Rect,
-    pub preview:           PreviewState<'a>,
-    pub search:            SearchState,
-    pub multi_select:      MultiSelectState,
-    pub help:              HelpState,
+    pub system_info:            SystemInfo,
+    pub script_panel_area:      Rect,
+    pub preview:                PreviewState<'a>,
+    pub search:                 SearchState,
+    pub multi_select:           MultiSelectState,
+    pub help:                   HelpState,
+    pub run_script_popup:       Option<RunScriptPopup>,
+    pub script_execution_queue: Vec<PathBuf>,
 }

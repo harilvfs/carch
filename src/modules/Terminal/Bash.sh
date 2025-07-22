@@ -3,7 +3,55 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
-source "$(dirname "$0")/../fzf.sh" > /dev/null 2>&1
+
+distro=""
+
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
+show_menu() {
+    local title="$1"
+    shift
+    local options=("$@")
+
+    echo
+    print_message "$CYAN" "=== $title ==="
+    echo
+
+    for i in "${!options[@]}"; do
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+    done
+    echo
+}
+
+get_choice() {
+    local max_option="$1"
+    local choice
+
+    while true; do
+        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
+            return "$choice"
+        else
+            print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
+        fi
+    done
+}
 
 detect_distro() {
     if command -v pacman &> /dev/null; then
@@ -28,335 +76,296 @@ check_essential_dependencies() {
     done
 
     if [[ ${#missing[@]} -ne 0 ]]; then
-        echo "Please wait, installing required dependencies..."
+        print_message "$YELLOW" "Please wait, installing required dependencies..."
 
         case "$distro" in
             arch) sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
             fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
             opensuse) sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
             *)
-                echo -e "${RED}Unsupported distribution.${NC}"
+                print_message "$RED" "Unsupported distribution."
                 exit 1
                 ;;
         esac
     fi
 }
 
-check_fzf
-
 install_eza() {
     if command -v eza &> /dev/null; then
-        echo -e "${GREEN}eza is already installed.${NC}"
+        print_message "$GREEN" "eza is already installed."
         return 0
     fi
 
-    echo -e "${CYAN}Installing eza...${NC}"
+    print_message "$CYAN" "Installing eza..."
     case "$distro" in
         arch)
             sudo pacman -S --noconfirm eza
             ;;
         fedora)
-            echo -e "${CYAN}Installing eza manually for Fedora...${NC}"
-            local tmp_dir=$(mktemp -d)
+            print_message "$CYAN" "Installing eza manually for Fedora..."
+            local tmp_dir
+            tmp_dir=$(mktemp -d)
             cd "$tmp_dir" || exit 1
-            echo -e "${CYAN}Fetching latest eza release...${NC}"
-            local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
+            print_message "$CYAN" "Fetching latest eza release..."
+            local latest_url
+            latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
             if [ -z "$latest_url" ]; then
-                echo -e "${YELLOW}Could not determine latest version, using fallback version...${NC}"
+                print_message "$YELLOW" "Could not determine latest version, using fallback version..."
                 latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
             fi
-            echo -e "${CYAN}Downloading eza from: $latest_url${NC}"
+            print_message "$CYAN" "Downloading eza from: $latest_url"
             if ! curl -L -o eza.zip "$latest_url"; then
-                echo -e "${RED}Failed to download eza. Continuing without it...${NC}"
+                print_message "$RED" "Failed to download eza. Continuing without it..."
                 cd "$HOME" || exit
                 rm -rf "$tmp_dir"
                 return 1
             fi
-            echo -e "${CYAN}Extracting eza...${NC}"
+            print_message "$CYAN" "Extracting eza..."
             if ! unzip -q eza.zip; then
-                echo -e "${RED}Failed to extract eza. Continuing without it...${NC}"
+                print_message "$RED" "Failed to extract eza. Continuing without it..."
                 cd "$HOME" || exit
                 rm -rf "$tmp_dir"
                 return 1
             fi
-            echo -e "${CYAN}Installing eza to /usr/bin...${NC}"
+            print_message "$CYAN" "Installing eza to /usr/bin..."
             sudo cp eza /usr/bin/
             sudo chmod +x /usr/bin/eza
             cd "$HOME" || exit
             rm -rf "$tmp_dir"
-            echo -e "${GREEN}eza installed successfully!${NC}"
+            print_message "$GREEN" "eza installed successfully!"
             ;;
         opensuse)
             sudo zypper install eza -y
             ;;
         *)
-            echo -e "${RED}Unsupported distribution for eza installation.${NC}"
+            print_message "$RED" "Unsupported distribution for eza installation."
             return 1
             ;;
     esac
 }
 
 check_default_shell() {
-    local current_shell=$(basename "$SHELL")
+    local current_shell
+    current_shell=$(basename "$SHELL")
 
     if [[ "$current_shell" != "bash" ]]; then
-        echo -e "${YELLOW}Current default shell: $current_shell${NC}"
-
-        shell_options=("Yes" "No")
-        change_shell=$(printf "%s\n" "${shell_options[@]}" | fzf ${FZF_COMMON} \
-                                                            --height=40% \
-                                                            --prompt="Bash is not your default shell. Do you want to change it to bash? " \
-                                                            --header="Default Shell Check" \
-                                                            --pointer="➤" \
-                                                            --color='fg:white,fg+:yellow,bg+:black,pointer:yellow')
-
-        if [[ "$change_shell" == "Yes" ]]; then
-            echo -e "${CYAN}Changing default shell to bash...${NC}"
+        print_message "$YELLOW" "Current default shell: $current_shell"
+        if confirm "Bash is not your default shell. Do you want to change it to bash?"; then
+            print_message "$CYAN" "Changing default shell to bash..."
             chsh -s /bin/bash
-            echo -e "${GREEN}Default shell changed to bash. Please log out and log back in for the change to take effect.${NC}"
+            print_message "$GREEN" "Default shell changed to bash. Please log out and log back in for the change to take effect."
         else
-            echo -e "${TEAL}Keeping current shell: $current_shell${NC}"
+            print_message "$TEAL" "Keeping current shell: $current_shell"
         fi
     else
-        echo -e "${GREEN}Bash is already your default shell.${NC}"
+        print_message "$GREEN" "Bash is already your default shell."
     fi
 }
 
-FZF_COMMON="--layout=reverse \
-            --border=bold \
-            --border=rounded \
-            --margin=5% \
-            --color=dark \
-            --info=inline \
-            --header-first \
-            --bind change:top"
-
-detect_distro
-check_essential_dependencies
-check_fzf
-
-install_arch() {
-    if ! command -v bash &> /dev/null; then
-        echo -e "${CYAN}Installing Bash...${NC}"
-        sudo pacman -S --noconfirm bash
-    fi
-    if ! pacman -Q bash-completion &> /dev/null; then
-        echo -e "${CYAN}Installing bash-completion...${NC}"
-        sudo pacman -S --noconfirm bash-completion
-    fi
-}
-
-install_fedora() {
-    echo -e "${CYAN}Reinstalling Bash and bash-completion to avoid errors...${NC}"
-    sudo dnf install -y bash bash-completion
-}
-
-install_opensuse() {
-    echo -e "${CYAN}Reinstalling Bash and bash-completion to avoid errors...${NC}"
-    sudo zypper install -y bash bash-completion
-}
-
-case "$distro" in
-    arch) install_arch ;;
-    fedora) install_fedora ;;
-    opensuse) install_opensuse ;;
-    *)
-        echo -e "${RED}Unsupported distribution.${NC}"
-                                                          exit 1
-                                                                 ;;
-esac
-
-install_eza
-
-clear
-echo -e "${TEAL}Nerd Font Are Recommended${NC}"
-echo -e "${CYAN}Detected distribution: $distro${NC}"
-
-options=("Catppuccin" "Nord" "Tokyo Night" "Exit")
-THEME=$(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                             --height=40% \
-                                             --prompt="Select a theme: " \
-                                             --header="Theme Selection" \
-                                             --pointer="➤" \
-                                             --color='fg:white,fg+:blue,bg+:black,pointer:blue')
-
-if [[ -z "$THEME" || "$THEME" == "Exit" ]]; then
-    echo -e "${RED}Exiting...${NC}"
-    exit 0
-fi
-
-echo -e "${GREEN}You selected $THEME theme.${NC}"
-
-case "$THEME" in
-    "Catppuccin")
-        STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/starship.toml"
-        ;;
-    "Nord")
-        STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/nord-theme/starship.toml"
-        ;;
-    "Tokyo Night")
-        STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/tokyo-preset/starship.toml"
-        ;;
-    *)
-        echo -e "${RED}Invalid theme selection. Exiting...${NC}"
-        exit 1
-        ;;
-esac
-
-if ! command -v starship &> /dev/null; then
-    echo -e "${CYAN}Starship not found. Installing...${NC}"
+install_distro_packages() {
     case "$distro" in
-        arch) sudo pacman -S --noconfirm starship || curl -sS https://starship.rs/install.sh | sh ;;
-        fedora) curl -sS https://starship.rs/install.sh | sh ;;
-        opensuse) sudo zypper install -y starship || curl -sS https://starship.rs/install.sh | sh ;;
+        arch)
+            if ! command -v bash &> /dev/null; then
+                print_message "$CYAN" "Installing Bash..."
+                sudo pacman -S --noconfirm bash
+            fi
+            if ! pacman -Q bash-completion &> /dev/null; then
+                print_message "$CYAN" "Installing bash-completion..."
+                sudo pacman -S --noconfirm bash-completion
+            fi
+            ;;
+        fedora)
+            print_message "$CYAN" "Reinstalling Bash and bash-completion to avoid errors..."
+            sudo dnf install -y bash bash-completion
+            ;;
+        opensuse)
+            print_message "$CYAN" "Reinstalling Bash and bash-completion to avoid errors..."
+            sudo zypper install -y bash bash-completion
+            ;;
+        *)
+            print_message "$RED" "Unsupported distribution."
+            exit 1
+            ;;
     esac
-fi
-
-STARSHIP_CONFIG="$HOME/.config/starship.toml"
-if [[ -f "$STARSHIP_CONFIG" ]]; then
-    backup_options=("Yes" "No")
-    backup=$(printf "%s\n" "${backup_options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Starship configuration found. Do you want to back it up? " \
-                                                    --header="Confirm" \
-                                                    --pointer="➤" \
-                                                    --color='fg:white,fg+:green,bg+:black,pointer:green')
-    if [[ "$backup" == "Yes" ]]; then
-        mv "$STARSHIP_CONFIG" "$STARSHIP_CONFIG.bak"
-        echo -e "${GREEN}Backup created: $STARSHIP_CONFIG.bak${NC}"
-    fi
-fi
-
-mkdir -p "$HOME/.config"
-echo -e "${CYAN}Applying $THEME theme for Starship...${NC}"
-curl -fsSL "$STARSHIP_CONFIG_URL" -o "$STARSHIP_CONFIG"
-echo -e "${GREEN}Applied $THEME theme for Starship.${NC}"
-
-if ! command -v zoxide &> /dev/null; then
-    echo -e "${CYAN}Installing zoxide...${NC}"
-    if [[ "$distro" == "arch" ]]; then
-        sudo pacman -S --noconfirm zoxide
-    elif [[ "$distro" == "fedora" ]]; then
-        sudo dnf install -y zoxide
-    elif [[ "$distro" == "opensuse" ]]; then
-        sudo zypper install -y zoxide
-    fi
-fi
-
-BASHRC="$HOME/.bashrc"
-if [[ -f "$BASHRC" ]]; then
-    bashrc_options=("Yes" "No")
-    replace_bashrc=$(printf "%s\n" "${bashrc_options[@]}" | fzf ${FZF_COMMON} \
-                                                           --height=40% \
-                                                           --prompt=".bashrc already exists. Use the recommended version? " \
-                                                           --header="Confirm" \
-                                                           --pointer="➤" \
-                                                           --color='fg:white,fg+:green,bg+:black,pointer:green')
-    if [[ "$replace_bashrc" == "Yes" ]]; then
-        curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
-        echo -e "${GREEN}Applied recommended .bashrc.${NC}"
-    fi
-fi
+}
 
 install_pokemon_colorscripts() {
     case "$distro" in
         arch)
-            AUR_HELPERS=("yay" "paru")
-            AUR_HELPER=""
+            local AUR_HELPERS=("yay" "paru")
+            local AUR_HELPER=""
 
             for helper in "${AUR_HELPERS[@]}"; do
                 if command -v "$helper" &> /dev/null; then
                     AUR_HELPER="$helper"
-                    echo -e "${GREEN}Found AUR helper: $AUR_HELPER${NC}"
+                    print_message "$GREEN" "Found AUR helper: $AUR_HELPER"
                     break
                 fi
             done
 
             if [[ -z "$AUR_HELPER" ]]; then
-                echo -e "${CYAN}No AUR helper found. Installing yay...${NC}"
-
-                echo -e "${CYAN}Installing dependencies...${NC}"
+                print_message "$CYAN" "No AUR helper found. Installing yay..."
+                print_message "$CYAN" "Installing dependencies..."
                 sudo pacman -S --needed --noconfirm git base-devel
 
+                local TEMP_DIR
                 TEMP_DIR=$(mktemp -d)
                 cd "$TEMP_DIR" || {
-                    echo -e "${RED}Failed to create temporary directory${NC}"
-                    exit 1
+                                    print_message "$RED" "Failed to create temporary directory"
+                                                                                                 exit 1
                 }
 
-                echo -e "${CYAN}Cloning yay repository...${NC}"
+                print_message "$CYAN" "Cloning yay repository..."
                 git clone https://aur.archlinux.org/yay.git || {
-                    echo -e "${RED}Failed to clone yay repository${NC}"
-                    cd "$HOME" || exit 1
-                    rm -rf "$TEMP_DIR"
-                    exit 1
+                                                                 print_message "$RED" "Failed to clone yay repository"
+                                                                                                                        cd "$HOME" || exit 1
+                                                                                                                                              rm -rf "$TEMP_DIR"
+                                                                                                                                                                  exit 1
                 }
 
                 cd yay || {
-                    echo -e "${RED}Failed to enter yay directory${NC}"
-                    cd "$HOME" || exit 1
-                    rm -rf "$TEMP_DIR"
-                    exit 1
+                            print_message "$RED" "Failed to enter yay directory"
+                                                                                  cd "$HOME" || exit 1
+                                                                                                        rm -rf "$TEMP_DIR"
+                                                                                                                            exit 1
                 }
 
-                echo -e "${CYAN}Building yay...${NC}"
+                print_message "$CYAN" "Building yay..."
                 makepkg -si --noconfirm || {
-                    echo -e "${RED}Failed to build yay${NC}"
-                    cd "$HOME" || exit 1
-                    rm -rf "$TEMP_DIR"
-                    exit 1
+                                             print_message "$RED" "Failed to build yay"
+                                                                                         cd "$HOME" || exit 1
+                                                                                                               rm -rf "$TEMP_DIR"
+                                                                                                                                   exit 1
                 }
 
                 cd "$HOME" || exit 1
                 rm -rf "$TEMP_DIR"
                 AUR_HELPER="yay"
-
-                echo -e "${GREEN}Successfully installed yay!${NC}"
+                print_message "$GREEN" "Successfully installed yay!"
             fi
 
-            echo -e "${CYAN}Installing Pokémon Color Scripts (AUR)...${NC}"
-            $AUR_HELPER -S --noconfirm pokemon-colorscripts-git || {
-                echo -e "${RED}Failed to install pokemon-colorscripts-git${NC}"
-                exit 1
+            print_message "$CYAN" "Installing Pokémon Color Scripts (AUR)..."
+            "$AUR_HELPER" -S --noconfirm pokemon-colorscripts-git || {
+                                                                       print_message "$RED" "Failed to install pokemon-colorscripts-git"
+                                                                                                                                          exit 1
             }
             ;;
 
         fedora | opensuse)
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
-                echo -e "${YELLOW}Found existing Pokémon Color Scripts directory. Removing...${NC}"
+                print_message "$YELLOW" "Found existing Pokémon Color Scripts directory. Removing..."
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
 
-            echo -e "${CYAN}Installing dependencies...${NC}"
+            print_message "$CYAN" "Installing dependencies..."
             if [[ "$distro" == "fedora" ]]; then
                 sudo dnf install -y git
             elif [[ "$distro" == "opensuse" ]]; then
                 sudo zypper install -y git
             fi
 
-            echo -e "${CYAN}Cloning Pokémon Color Scripts...${NC}"
+            print_message "$CYAN" "Cloning Pokémon Color Scripts..."
             git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
 
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 cd "$HOME/pokemon-colorscripts" || {
-                    echo -e "${RED}Failed to change directory to pokemon-colorscripts!${NC}"
-                    return 1
+                                                     print_message "$RED" "Failed to change directory to pokemon-colorscripts!"
+                                                                                                                                 return 1
                 }
 
-                echo -e "${CYAN}Installing Pokémon Color Scripts...${NC}"
+                print_message "$CYAN" "Installing Pokémon Color Scripts..."
                 sudo ./install.sh
-
                 cd - > /dev/null || true
             else
-                echo -e "${RED}Failed to clone pokemon-colorscripts repository!${NC}"
+                print_message "$RED" "Failed to clone pokemon-colorscripts repository!"
                 return 1
             fi
             ;;
     esac
 }
 
-install_pokemon_colorscripts
+main() {
+    detect_distro
+    check_essential_dependencies
+    install_distro_packages
+    install_eza
 
-check_default_shell
+    clear
+    print_message "$TEAL" "Nerd Fonts are recommended for the best experience."
+    print_message "$CYAN" "Detected distribution: $distro"
 
-echo -e "${TEAL}Setup completed successfully!${NC}"
+    local options=("Catppuccin" "Nord" "Tokyo Night" "Exit")
+    show_menu "Select a theme for Starship:" "${options[@]}"
+    get_choice "${#options[@]}"
+    local choice_index=$?
+    local THEME="${options[$((choice_index - 1))]}"
+
+    if [[ -z "$THEME" || "$THEME" == "Exit" ]]; then
+        exit 0
+    fi
+
+    print_message "$GREEN" "You selected $THEME theme."
+
+    local STARSHIP_CONFIG_URL=""
+    case "$THEME" in
+        "Catppuccin")
+            STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/starship.toml"
+            ;;
+        "Nord")
+            STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/nord-theme/starship.toml"
+            ;;
+        "Tokyo Night")
+            STARSHIP_CONFIG_URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/starship/tokyo-preset/starship.toml"
+            ;;
+        *)
+            print_message "$RED" "Invalid theme selection. Exiting..."
+            exit 1
+            ;;
+    esac
+
+    if ! command -v starship &> /dev/null; then
+        print_message "$CYAN" "Starship not found. Installing..."
+        if ! curl -sS https://starship.rs/install.sh | sh -s -- -y; then
+             print_message "$RED" "Failed to install Starship. Please try installing it manually."
+        fi
+    fi
+
+    local STARSHIP_CONFIG="$HOME/.config/starship.toml"
+    local backup_dir="$HOME/.config/carch/backups"
+    if [[ -f "$STARSHIP_CONFIG" ]]; then
+        if confirm "Starship configuration found. Do you want to back it up?"; then
+            mkdir -p "$backup_dir"
+            mv "$STARSHIP_CONFIG" "$backup_dir/starship.toml.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/starship.toml.bak"
+        fi
+    fi
+
+    mkdir -p "$HOME/.config"
+    print_message "$CYAN" "Applying $THEME theme for Starship..."
+    curl -fsSL "$STARSHIP_CONFIG_URL" -o "$STARSHIP_CONFIG"
+    print_message "$GREEN" "Applied $THEME theme for Starship."
+
+    if ! command -v zoxide &> /dev/null; then
+        print_message "$CYAN" "Installing zoxide..."
+        case "$distro" in
+            arch) sudo pacman -S --noconfirm zoxide ;;
+            fedora) sudo dnf install -y zoxide ;;
+            opensuse) sudo zypper install -y zoxide ;;
+        esac
+    fi
+
+    local BASHRC="$HOME/.bashrc"
+    if [[ -f "$BASHRC" ]]; then
+        if confirm ".bashrc already exists. Use the recommended version?"; then
+            curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
+            print_message "$GREEN" "Applied recommended .bashrc."
+        fi
+    fi
+
+    install_pokemon_colorscripts
+    check_default_shell
+
+    print_message "$TEAL" "Setup completed successfully!"
+}
+
+main

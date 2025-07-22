@@ -27,133 +27,125 @@ install_development() {
     while true; do
         clear
 
-        options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Back to Main Menu")
-        mapfile -t selected < <(printf "%s\n" "${options[@]}" | fzf ${FZF_COMMON} \
-                                                    --height=40% \
-                                                    --prompt="Choose options (TAB to select multiple): " \
-                                                    --header="Package Selection" \
-                                                    --pointer="➤" \
-                                                    --multi \
-                                                    --color='fg:white,fg+:blue,bg+:black,pointer:blue')
+        local options=("Node.js" "Python" "Rust" "Go" "Docker" "Postman" "DBeaver" "Hugo" "Back to Main Menu")
 
-        if printf '%s\n' "${selected[@]}" | grep -q "Back to Main Menu" || [[ ${#selected[@]} -eq 0 ]]; then
-            return
-        fi
+        show_menu "Development Tools Selection" "${options[@]}"
+        get_choice "${#options[@]}"
+        local choice_index=$?
+        local selection="${options[$((choice_index - 1))]}"
 
-        for selection in "${selected[@]}"; do
-            case $selection in
-                "Node.js")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman nodejs npm
-                        version=$(get_version nodejs)
-                    elif [[ $distro -eq 1 ]]; then
-                        $pkg_manager nodejs-npm
-                        version=$(get_version nodejs)
-                    else
-                        $pkg_manager nodejs22
-                        version=$(get_version nodejs22)
-                    fi
-                    echo "Node.js installed successfully! Version: $version"
-                    ;;
+        case "$selection" in
+            "Node.js")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman nodejs npm
+                    version=$(get_version nodejs)
+                elif [[ $distro -eq 1 ]]; then
+                    $pkg_manager nodejs-npm
+                    version=$(get_version nodejs)
+                else
+                    $pkg_manager nodejs22
+                    version=$(get_version nodejs22)
+                fi
+                echo "Node.js installed successfully! Version: $version"
+                ;;
 
-                "Python")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman python python-pip
-                        version=$(get_version python)
-                    elif [[ $distro -eq 1 ]]; then
-                        $pkg_manager python3 python3-pip
-                        version=$(get_version python3)
-                    else
-                        $pkg_manager python313
-                        version=$(get_version python313)
-                    fi
-                    echo "Python installed successfully! Version: $version"
-                    ;;
+            "Python")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman python python-pip
+                    version=$(get_version python)
+                elif [[ $distro -eq 1 ]]; then
+                    $pkg_manager python3 python3-pip
+                    version=$(get_version python3)
+                else
+                    $pkg_manager python313
+                    version=$(get_version python313)
+                fi
+                echo "Python installed successfully! Version: $version"
+                ;;
 
-                "Rust")
-                    clear
-                    bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
-                    source "$HOME/.cargo/env"
-                    version=$(rustc --version | awk '{print $2}')
-                    echo "Rust installed successfully! Version: $version"
-                    ;;
+            "Rust")
+                clear
+                bash -c "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+                source "$HOME/.cargo/env"
+                version=$(rustc --version | awk '{print $2}')
+                echo "Rust installed successfully! Version: $version"
+                ;;
 
-                "Go")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman go
-                        version=$(get_version go)
-                    elif [[ $distro -eq 1 ]]; then
-                        $pkg_manager golang
-                        version=$(get_version golang)
-                    else
-                        $pkg_manager go
-                        version=$(get_version go)
-                    fi
-                    echo "Go installed successfully! Version: $version"
-                    ;;
+            "Go")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman go
+                    version=$(get_version go)
+                elif [[ $distro -eq 1 ]]; then
+                    $pkg_manager golang
+                    version=$(get_version golang)
+                else
+                    $pkg_manager go
+                    version=$(get_version go)
+                fi
+                echo "Go installed successfully! Version: $version"
+                ;;
 
-                "Docker")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman docker
-                    elif [[ $distro -eq 1 ]]; then
-                        $pkg_manager docker
-                    else
-                        $pkg_manager docker
-                    fi
-                    sudo systemctl enable --now docker
-                    sudo usermod -aG docker "$USER"
-                    version=$(get_version docker)
-                    echo "Docker installed successfully! Version: $version"
-                    echo "Note: You may need to log out and back in for group changes to take effect."
-                    ;;
+            "Docker")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman docker
+                elif [[ $distro -eq 1 ]]; then
+                    $pkg_manager docker
+                else
+                    $pkg_manager docker
+                fi
+                sudo systemctl enable --now docker
+                sudo usermod -aG docker "$USER"
+                version=$(get_version docker)
+                echo "Docker installed successfully! Version: $version"
+                echo "Note: You may need to log out and back in for group changes to take effect."
+                ;;
 
-                "Postman")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_aur postman-bin
-                        version=$(get_version postman-bin)
-                    else
-                        $flatpak_cmd com.getpostman.Postman
-                        version="(Flatpak version installed)"
-                    fi
-                    echo "Postman installed successfully! Version: $version"
-                    ;;
+            "Postman")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_aur postman-bin
+                    version=$(get_version postman-bin)
+                else
+                    $flatpak_cmd com.getpostman.Postman
+                    version="(Flatpak version installed)"
+                fi
+                echo "Postman installed successfully! Version: $version"
+                ;;
 
-                "DBeaver")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman dbeaver
-                        version=$(get_version dbeaver)
-                    else
-                        $flatpak_cmd io.dbeaver.DBeaverCommunity
-                        version="(Flatpak version installed)"
-                    fi
-                    echo "DBeaver installed successfully! Version: $version"
-                    ;;
+            "DBeaver")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman dbeaver
+                    version=$(get_version dbeaver)
+                else
+                    $flatpak_cmd io.dbeaver.DBeaverCommunity
+                    version="(Flatpak version installed)"
+                fi
+                echo "DBeaver installed successfully! Version: $version"
+                ;;
 
-                "Hugo")
-                    clear
-                    if [[ $distro -eq 0 ]]; then
-                        $pkg_manager_pacman hugo
-                        version=$(get_version hugo)
-                    elif [[ $distro -eq 1 ]]; then
-                        $pkg_manager hugo
-                        version=$(get_version hugo)
-                    else
-                        $pkg_manager hugo
-                        version=$(get_version hugo)
-                    fi
-                    echo "Hugo installed successfully! Version: $version"
-                    ;;
-
-            esac
-        done
-
-        echo "All selected Development tools have been installed."
-        read -rp "Press Enter to continue..."
+            "Hugo")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager_pacman hugo
+                    version=$(get_version hugo)
+                elif [[ $distro -eq 1 ]]; then
+                    $pkg_manager hugo
+                    version=$(get_version hugo)
+                else
+                    $pkg_manager hugo
+                    version=$(get_version hugo)
+                fi
+                echo "Hugo installed successfully! Version: $version"
+                ;;
+            "Back to Main Menu")
+                return
+                ;;
+        esac
+        read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
