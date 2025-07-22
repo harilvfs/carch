@@ -83,21 +83,21 @@ Type "l"
 
 Sleep 2s
 
-Down Sleep 2s
-
-Down Sleep 2s
-
 Type "/" Sleep 1s
 
-Type@200ms "Packages" Sleep 3s Enter
+Type@200ms "Extensions" Sleep 3s Enter
 
 Sleep 3s
 
-Type "n"
+Type "y"
 
-Sleep 3s
+Sleep 4s
 
-Type "?"
+Type "3" Sleep 2s Enter
+
+Sleep 2s
+
+Type "Enter"
 
 Sleep 3s
 
