@@ -301,7 +301,6 @@ main() {
     local THEME="${options[$((choice_index - 1))]}"
 
     if [[ -z "$THEME" || "$THEME" == "Exit" ]]; then
-        print_message "$RED" "Exiting..."
         exit 0
     fi
 
