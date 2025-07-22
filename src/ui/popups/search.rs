@@ -25,7 +25,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let popup_block = create_rounded_block()
         .title("Search")
-        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)));
+        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
     f.render_widget(popup_block.clone(), popup_area);
 
@@ -52,7 +52,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .block(
             create_rounded_block()
                 .title("Type to search (Tab to complete)")
-                .border_style(Style::default().fg(Color::Rgb(129, 200, 190))),
+                .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )
         .style(Style::default())
         .alignment(Alignment::Left);
@@ -108,7 +108,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
                     }
                     spans.push(Span::styled(
                         display_text[idx..idx + 1].to_string(),
-                        Style::default().fg(Color::Rgb(129, 200, 190)).add_modifier(Modifier::BOLD),
+                        Style::default().fg(Color::Rgb(137, 180, 250)).add_modifier(Modifier::BOLD),
                     ));
                     last_idx = idx + 1;
                 }
@@ -129,7 +129,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .block(
             create_rounded_block()
                 .title(result_count_text)
-                .border_style(Style::default().fg(Color::Rgb(129, 200, 190))),
+                .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )
         .highlight_style(Style::default().bg(Color::Rgb(235, 235, 210)).fg(Color::Black).bold())
         .highlight_symbol("");

@@ -10,7 +10,7 @@ fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title(title)
-        .border_style(Style::default().fg(Color::Rgb(129, 200, 190)))
+        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
         .style(Style::default().bg(Color::Reset))
 }
 
@@ -26,10 +26,10 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
             let is_selected = app.categories.state.selected() == Some(idx);
             let icon = if !is_focused && is_selected { "  " } else { " 󰉋 " };
             let colored_icon =
-                ratatui::text::Span::styled(icon, Style::default().fg(Color::Rgb(129, 200, 190)));
+                ratatui::text::Span::styled(icon, Style::default().fg(Color::Rgb(137, 180, 250)));
             let text = ratatui::text::Span::styled(
                 category_name.as_str(),
-                Style::default().fg(Color::Rgb(129, 200, 190)),
+                Style::default().fg(Color::Rgb(137, 180, 250)),
             );
             let line = ratatui::text::Line::from(vec![colored_icon, text]);
             ListItem::new(line)
@@ -37,7 +37,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
         .collect();
     let list = List::new(items).block(block).highlight_style(
         Style::default()
-            .bg(Color::Rgb(129, 200, 190))
+            .bg(Color::Rgb(137, 180, 250))
             .fg(Color::Black)
             .add_modifier(Modifier::BOLD),
     );
