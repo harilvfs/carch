@@ -9,7 +9,6 @@ _carch() {
         '--version:Show the program version'
         '-v:Show the program version'
         '--log:Enable logging for the current session only'
-        '--no-cleanup:Disable cache cleanup'
         'check-update:Check if a new version is available'
         'update:Interactively update Carch'
         'uninstall:Interactively uninstall Carch'
@@ -21,7 +20,6 @@ _carch() {
         '--version[Show the program version]' \
         '-v[Show the program version]' \
         '--log[Enable logging for the current session only]' \
-        '--no-cleanup[Disable cache cleanup]' \
         'check-update[Check if a new version is available]' \
         'update[Interactively update Carch]' \
         'uninstall[Interactively uninstall Carch]'

@@ -5,11 +5,9 @@ use clap::{Parser, Subcommand};
 #[command(author, version, about, long_about = None)]
 pub struct Cli {
     #[command(subcommand)]
-    pub command:    Option<Commands>,
+    pub command: Option<Commands>,
     #[arg(long, global = true, help = "Enable logging")]
-    pub log:        bool,
-    #[arg(long, global = true, help = "Disable cache cleanup")]
-    pub no_cleanup: bool,
+    pub log:     bool,
 }
 
 #[derive(Subcommand)]
@@ -24,14 +22,13 @@ pub enum Commands {
 
 #[derive(Copy, Clone)]
 pub struct Settings {
-    pub show_preview:  bool,
-    pub log_mode:      bool,
-    pub cleanup_cache: bool,
+    pub show_preview: bool,
+    pub log_mode:     bool,
 }
 
 impl Default for Settings {
     fn default() -> Self {
-        Self { show_preview: true, log_mode: false, cleanup_cache: true }
+        Self { show_preview: true, log_mode: false }
     }
 }
 
@@ -42,13 +39,6 @@ pub fn parse_args() -> Result<(), Box<dyn std::error::Error>> {
     if cli.log {
         settings.log_mode = true;
         let _ = commands::log_message("INFO", "Carch application started");
-    }
-
-    if cli.no_cleanup {
-        settings.cleanup_cache = false;
-        if settings.log_mode {
-            let _ = commands::log_message("INFO", "Cache cleanup disabled");
-        }
     }
 
     match cli.command {

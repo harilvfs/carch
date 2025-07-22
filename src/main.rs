@@ -3,8 +3,7 @@ use crate::ui::state::UiOptions;
 use include_dir::{Dir, include_dir};
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
-use std::path::{Path, PathBuf};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::path::Path;
 use tempfile::TempDir;
 
 mod args;
@@ -15,21 +14,8 @@ mod version;
 static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 const EXECUTABLE_MODE: u32 = 0o755;
 
-static CLEANUP_NEEDED: AtomicBool = AtomicBool::new(false);
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let settings = args::Settings::default();
-    if settings.cleanup_cache {
-        setup_cleanup_handlers(settings.log_mode);
-    }
-
-    let result = args::parse_args();
-
-    if settings.cleanup_cache && CLEANUP_NEEDED.load(Ordering::SeqCst) {
-        cleanup_cache_dir(settings.log_mode);
-    }
-
-    result
+    args::parse_args()
 }
 
 pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error>> {
@@ -37,11 +23,16 @@ pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error
         let _ = commands::log_message("INFO", "Starting TUI application");
     }
 
-    let scripts_path = get_scripts_path(settings.log_mode)?;
+    let temp_dir = TempDir::new().map_err(|e| {
+        let error_msg = format!("Failed to create temp directory: {e}");
+        if settings.log_mode {
+            let _ = commands::log_message("ERROR", &error_msg);
+        }
+        error_msg
+    })?;
 
-    if settings.cleanup_cache {
-        CLEANUP_NEEDED.store(true, Ordering::SeqCst);
-    }
+    let scripts_path = temp_dir.path();
+    extract_scripts(scripts_path)?;
 
     if settings.log_mode {
         let _ = commands::log_message(
@@ -81,84 +72,6 @@ pub fn run_tui(settings: args::Settings) -> Result<(), Box<dyn std::error::Error
     result.map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
 }
 
-fn get_scripts_path(log_mode: bool) -> Result<PathBuf, Box<dyn std::error::Error>> {
-    if let Some(cache_dir) = get_cache_dir() {
-        let carch_cache = cache_dir.join("carch");
-        let modules_dir = carch_cache.join("modules");
-
-        if !carch_cache.exists() {
-            if log_mode {
-                let _ = commands::log_message(
-                    "INFO",
-                    &format!("Creating cache directory at {}", carch_cache.display()),
-                );
-            }
-            fs::create_dir_all(&carch_cache)
-                .map_err(|e| format!("Failed to create cache directory: {e}"))?;
-        }
-
-        let should_extract = !modules_dir.exists() || scripts_need_update(&modules_dir);
-
-        if should_extract {
-            if log_mode {
-                let _ = commands::log_message("INFO", "Extracting scripts to cache directory");
-            }
-            extract_scripts(&carch_cache)?;
-        } else if log_mode {
-            let _ = commands::log_message("INFO", "Using existing cached scripts");
-        }
-
-        return Ok(carch_cache);
-    }
-
-    if log_mode {
-        let _ = commands::log_message(
-            "INFO",
-            "Cache directory not available, using temporary directory",
-        );
-    }
-
-    let temp_dir = TempDir::new().map_err(|e| {
-        let error_msg = format!("Failed to create temp directory: {e}");
-        if log_mode {
-            let _ = commands::log_message("ERROR", &error_msg);
-        }
-        error_msg
-    })?;
-
-    let temp_path = temp_dir.path().to_path_buf();
-
-    std::mem::forget(temp_dir);
-
-    extract_scripts(&temp_path)?;
-
-    Ok(temp_path)
-}
-
-fn get_cache_dir() -> Option<PathBuf> {
-    dirs::cache_dir()
-}
-
-fn scripts_need_update(modules_dir: &Path) -> bool {
-    let version_file = modules_dir.join(".version");
-
-    if !version_file.exists() {
-        return true;
-    }
-
-    let stored_version = match fs::read_to_string(&version_file) {
-        Ok(content) => match content.trim().parse::<u64>() {
-            Ok(timestamp) => timestamp,
-            Err(_) => return true,
-        },
-        Err(_) => return true,
-    };
-
-    let current_version = version::get_current_version();
-
-    format!("{stored_version}") != current_version
-}
-
 pub fn extract_scripts(temp_path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     let modules_dir = temp_path.join("modules");
     fs::create_dir_all(&modules_dir)
@@ -173,11 +86,6 @@ pub fn extract_scripts(temp_path: &Path) -> Result<(), Box<dyn std::error::Error
 
     std::os::unix::fs::symlink(&modules_dir, &preview_link)
         .map_err(|e| format!("Failed to create preview symlink: {e}"))?;
-
-    let version_file = modules_dir.join(".version");
-    let current_version = version::get_current_version();
-    fs::write(&version_file, current_version)
-        .map_err(|e| format!("Failed to write version file: {e}"))?;
 
     Ok(())
 }
@@ -218,47 +126,4 @@ fn set_executable(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
     fs::set_permissions(path, perms)
         .map_err(|e| format!("Failed to set permissions for {}: {}", path.display(), e))?;
     Ok(())
-}
-
-fn cleanup_cache_dir(log_mode: bool) {
-    if let Some(cache_dir) = get_cache_dir() {
-        let carch_cache = cache_dir.join("carch");
-
-        if carch_cache.exists() {
-            if log_mode {
-                let _ = commands::log_message(
-                    "INFO",
-                    &format!("Cleaning up cache directory at {}", carch_cache.display()),
-                );
-            }
-
-            if let Err(e) = fs::remove_dir_all(&carch_cache) {
-                if log_mode {
-                    let _ = commands::log_message(
-                        "ERROR",
-                        &format!("Failed to clean up cache directory: {e}"),
-                    );
-                }
-                eprintln!("Warning: Failed to clean up cache directory: {e}");
-            } else if log_mode {
-                let _ = commands::log_message("INFO", "Cache directory cleaned up successfully");
-            }
-        }
-    }
-}
-
-fn setup_cleanup_handlers(log_mode: bool) {
-    let log_mode_copy = log_mode;
-
-    if let Err(e) = ctrlc::set_handler(move || {
-        if CLEANUP_NEEDED.load(Ordering::SeqCst) {
-            cleanup_cache_dir(log_mode_copy);
-        }
-        std::process::exit(0);
-    }) {
-        if log_mode {
-            let _ = commands::log_message("ERROR", &format!("Failed to set cleanup handler: {e}"));
-        }
-        eprintln!("Warning: Failed to set up cleanup handler: {e}");
-    }
 }
