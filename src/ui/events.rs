@@ -235,8 +235,6 @@ impl<'a> App<'a> {
             KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
                 if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
                     self.script_execution_queue = self.multi_select.scripts.clone();
-                    self.multi_select.scripts.clear();
-                    toggle_multi_select_mode(self);
                 } else if let Some(script_path) = get_script_path(self) {
                     self.script_execution_queue.push(script_path);
                 }
