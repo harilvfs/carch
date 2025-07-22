@@ -13,6 +13,7 @@ impl<'a> App<'a> {
             mode:          AppMode::Normal,
             quit:          false,
             focused_panel: FocusedPanel::Categories,
+            log_mode:      false,
 
             scripts:     StatefulList::new(),
             categories:  StatefulList::new(),

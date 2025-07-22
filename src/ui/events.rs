@@ -241,7 +241,7 @@ impl<'a> App<'a> {
 
                 if !self.script_execution_queue.is_empty() {
                     let script_path = self.script_execution_queue.remove(0);
-                    let popup = RunScriptPopup::new(script_path);
+                    let popup = RunScriptPopup::new(script_path, self.log_mode);
                     self.run_script_popup = Some(popup);
                     self.mode = AppMode::RunScript;
                 } else {

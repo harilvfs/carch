@@ -1,3 +1,4 @@
+use crate::commands;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use oneshot::Receiver;
 use portable_pty::{
@@ -30,7 +31,7 @@ pub struct RunScriptPopup {
 }
 
 impl RunScriptPopup {
-    pub fn new(script_path: PathBuf) -> Self {
+    pub fn new(script_path: PathBuf, log_mode: bool) -> Self {
         let pty_system = NativePtySystem::default();
 
         let mut cmd = CommandBuilder::new("bash");
@@ -65,7 +66,11 @@ impl RunScriptPopup {
                         break;
                     }
                     let mut mutex = command_buffer.lock().unwrap();
-                    mutex.extend_from_slice(&buf[0..size]);
+                    let data = &buf[0..size];
+                    if log_mode {
+                        let _ = commands::log_message("INFO", &String::from_utf8_lossy(data));
+                    }
+                    mutex.extend_from_slice(data);
                 }
             })
         };

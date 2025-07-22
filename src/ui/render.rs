@@ -114,6 +114,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
     let mut terminal = Terminal::new(backend)?;
 
     let mut app = App::new();
+    app.log_mode = options.log_mode;
 
     if options.log_mode {
         let _ = crate::commands::log_message("INFO", "Loading scripts from modules directory");
@@ -180,7 +181,8 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
                                     app.run_script_popup = None;
                                     if !app.script_execution_queue.is_empty() {
                                         let script_path = app.script_execution_queue.remove(0);
-                                        let next_popup = RunScriptPopup::new(script_path);
+                                        let next_popup =
+                                            RunScriptPopup::new(script_path, app.log_mode);
                                         app.run_script_popup = Some(next_popup);
                                     } else {
                                         app.mode = AppMode::Normal;

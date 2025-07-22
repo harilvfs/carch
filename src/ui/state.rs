@@ -126,6 +126,7 @@ pub struct App<'a> {
     pub mode:          AppMode,
     pub quit:          bool,
     pub focused_panel: FocusedPanel,
+    pub log_mode:      bool,
 
     pub scripts:     StatefulList<ScriptItem>,
     pub categories:  StatefulList<String>,
