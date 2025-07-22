@@ -3,7 +3,8 @@ use std::collections::HashMap;
 use ratatui::layout::Rect;
 
 use super::state::{
-    App, AppMode, FocusedPanel, HelpState, PreviewState, SearchState, StatefulList,
+    App, AppMode, FocusedPanel, HelpState, MultiSelectState, PreviewState, SearchState,
+    StatefulList,
 };
 
 impl<'a> App<'a> {
@@ -17,12 +18,14 @@ impl<'a> App<'a> {
             categories:  StatefulList::new(),
             all_scripts: HashMap::new(),
 
-            system_info:       super::system_info::SystemInfo::new(),
-            script_panel_area: Rect::default(),
-            preview:           PreviewState::default(),
-            search:            SearchState::default(),
-            help:              HelpState::default(),
-            run_script_popup:  None,
+            system_info:            super::system_info::SystemInfo::new(),
+            script_panel_area:      Rect::default(),
+            preview:                PreviewState::default(),
+            search:                 SearchState::default(),
+            multi_select:           MultiSelectState::default(),
+            help:                   HelpState::default(),
+            run_script_popup:       None,
+            script_execution_queue: Vec::new(),
         }
     }
 }

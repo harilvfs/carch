@@ -111,6 +111,12 @@ pub struct SearchState {
 }
 
 #[derive(Default)]
+pub struct MultiSelectState {
+    pub enabled: bool,
+    pub scripts: Vec<PathBuf>,
+}
+
+#[derive(Default)]
 pub struct HelpState {
     pub scroll:     u16,
     pub max_scroll: u16,
@@ -125,10 +131,12 @@ pub struct App<'a> {
     pub categories:  StatefulList<String>,
     pub all_scripts: HashMap<String, Vec<ScriptItem>>,
 
-    pub system_info:       SystemInfo,
-    pub script_panel_area: Rect,
-    pub preview:           PreviewState<'a>,
-    pub search:            SearchState,
-    pub help:              HelpState,
-    pub run_script_popup:  Option<RunScriptPopup>,
+    pub system_info:            SystemInfo,
+    pub script_panel_area:      Rect,
+    pub preview:                PreviewState<'a>,
+    pub search:                 SearchState,
+    pub multi_select:           MultiSelectState,
+    pub help:                   HelpState,
+    pub run_script_popup:       Option<RunScriptPopup>,
+    pub script_execution_queue: Vec<PathBuf>,
 }

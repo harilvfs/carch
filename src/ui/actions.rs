@@ -246,6 +246,28 @@ pub fn update_autocomplete(app: &mut App) {
     app.search.autocomplete = best_match;
 }
 
+pub fn toggle_multi_select_mode(app: &mut App) {
+    app.multi_select.enabled = !app.multi_select.enabled;
+    if !app.multi_select.enabled {
+        app.multi_select.scripts.clear();
+    }
+}
+
+pub fn toggle_script_selection(app: &mut App) {
+    if let Some(selected) = app.scripts.state.selected() {
+        let script_path = &app.scripts.items[selected].path;
+        if app.multi_select.scripts.contains(script_path) {
+            app.multi_select.scripts.retain(|p| p != script_path);
+        } else {
+            app.multi_select.scripts.push(script_path.clone());
+        }
+    }
+}
+
+pub fn is_script_selected(app: &App, script_path: &Path) -> bool {
+    app.multi_select.scripts.contains(&script_path.to_path_buf())
+}
+
 pub fn toggle_help_mode(app: &mut App) {
     app.mode = if app.mode == AppMode::Help { AppMode::Normal } else { AppMode::Help };
 }

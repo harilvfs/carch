@@ -13,6 +13,7 @@ use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::{Frame, Terminal};
 
 use super::actions::load_scripts;
+use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, UiOptions};
 use super::widgets::category_list::render_category_list;
 use super::widgets::header::render_header;
@@ -176,8 +177,14 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
                         if let Some(popup) = &mut app.run_script_popup {
                             match popup.handle_key_event(key) {
                                 crate::ui::popups::run_script::PopupEvent::Close => {
-                                    app.mode = AppMode::Normal;
                                     app.run_script_popup = None;
+                                    if !app.script_execution_queue.is_empty() {
+                                        let script_path = app.script_execution_queue.remove(0);
+                                        let next_popup = RunScriptPopup::new(script_path);
+                                        app.run_script_popup = Some(next_popup);
+                                    } else {
+                                        app.mode = AppMode::Normal;
+                                    }
                                 }
                                 crate::ui::popups::run_script::PopupEvent::None => {}
                             }
