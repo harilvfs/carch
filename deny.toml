@@ -18,8 +18,7 @@ yanked = "deny"
 ignore = [
   "RUSTSEC-2024-0436",
   "RUSTSEC-2024-0320",
-  "RUSTSEC-2017-0008",
-] # paste, yaml_rust and serial unmaintained crates
+] # paste, yaml_rust unmaintained crates
 version = 2
 
 [bans]
