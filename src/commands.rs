@@ -171,20 +171,32 @@ pub fn uninstall() -> io::Result<()> {
         "p" | "package manager" => match detect_package_manager() {
             PkgManager::Pacman => {
                 println!("Uninstalling for Arch Linux...");
-                let _ = run_command(Command::new("sudo").arg("pacman").arg("-R").arg("carch-bin"));
                 let _ = run_command(
-                    Command::new("sudo").arg("pacman").arg("-R").arg("carch-bin-debug"),
+                    Command::new("sudo")
+                        .arg("pacman")
+                        .arg("-R")
+                        .arg("--noconfirm")
+                        .arg("carch-bin"),
+                );
+                let _ = run_command(
+                    Command::new("sudo")
+                        .arg("pacman")
+                        .arg("-R")
+                        .arg("--noconfirm")
+                        .arg("carch-bin-debug"),
                 );
                 println!("Uninstallation done.");
             }
             PkgManager::Dnf => {
                 println!("Uninstalling for Fedora...");
-                run_command(Command::new("sudo").arg("dnf").arg("remove").arg("carch"))?;
+                run_command(Command::new("sudo").arg("dnf").arg("remove").arg("-y").arg("carch"))?;
                 println!("Uninstallation done.");
             }
             PkgManager::Zypper => {
                 println!("Uninstalling for openSUSE...");
-                run_command(Command::new("sudo").arg("zypper").arg("remove").arg("carch"))?;
+                run_command(
+                    Command::new("sudo").arg("zypper").arg("remove").arg("-y").arg("carch"),
+                )?;
                 println!("Uninstallation done.");
             }
             PkgManager::Unsupported => {
