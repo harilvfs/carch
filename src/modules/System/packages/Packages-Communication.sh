@@ -25,7 +25,7 @@ install_communication() {
     while true; do
         clear
 
-        local options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Zulip" "Back to Main Menu")
+        local options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Zulip" "ProtonVPN" "Back to Main Menu")
 
         show_menu "Communication Apps Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -169,6 +169,31 @@ install_communication() {
                     $flatpak_cmd org.zulip.Zulip
                     version="(Flatpak version installed)"
                     echo "Zulip installed successfully! Version: $version"
+                fi
+                ;;
+
+            "ProtonVPN")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager proton-vpn-gtk-app
+                    version=$(get_version proton-vpn-gtk-app)
+                    echo "ProtonVPN installed successfully! Version: $version"
+                elif [[ $distro -eq 1 ]]; then
+                    echo "Installing ProtonVPN for Fedora..."
+                    temp_dir=$(mktemp -d)
+                    (   
+                        cd "$temp_dir" || exit 1
+                        wget "https://repo.protonvpn.com/fedora-$(cut -d' ' -f 3 < /etc/fedora-release)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm"
+                        sudo dnf install -y ./protonvpn-stable-release-1.0.3-1.noarch.rpm
+                        sudo dnf check-update --refresh
+                        sudo dnf install -y proton-vpn-gnome-desktop libappindicator-gtk3 gnome-shell-extension-appindicator gnome-extensions-app
+                    )
+                    rm -rf "$temp_dir"
+                    echo "ProtonVPN installed successfully!"
+                else
+                    $pkg_manager protonvpn-gui
+                    version=$(get_version protonvpn-gui)
+                    echo "ProtonVPN installed successfully! Version: $version"
                 fi
                 ;;
             "Back to Main Menu")
