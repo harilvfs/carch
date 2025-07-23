@@ -24,7 +24,7 @@ install_arch() {
     git clone https://github.com/carch-org/pkgs ~/pkgs > /dev/null 2>&1
 
     cd ~/pkgs/carch-bin || exit 1
-    makepkg -si
+    makepkg -si --noconfirm
 }
 
 install_fedora() {
