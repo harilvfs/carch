@@ -1,5 +1,110 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.2.4](https://github.com/harilvfs/carch/compare/v5.2.3...v5.2.4) - 2025-07-23
+
+
+### 🚀 Features
+
+
+- [3786272](https://github.com/harilvfs/carch/commit/3786272eb415c25089f977b7bff748bf0f7047dd)  *(script)* Add install script by @harilvfs
+
+- [ca2a37f](https://github.com/harilvfs/carch/commit/ca2a37f8bbb6073fb6e00180aa17f37b4c36b7a7)  *(version)* Use reqwest for update checks by @harilvfs
+
+- [e4e766b](https://github.com/harilvfs/carch/commit/e4e766b2e1e7e4a88cdd099139d936d67dc8b9c7)  *(opensuse)* Add slock/i3lock compatibility note and config by @harilvfs
+
+- [1322b4a](https://github.com/harilvfs/carch/commit/1322b4aafad83a011cb8036bebc5e10f0e1222e8)  *(dev)* Introduce xtask for development tasks by @harilvfs
+
+- [d5198d1](https://github.com/harilvfs/carch/commit/d5198d194cce5bba4fedf5423ba5c9fcac5bdee4)  *(search)* Using fuzzy matcher by @harilvfs
+
+- [0784a6f](https://github.com/harilvfs/carch/commit/0784a6f0a18dde4388a0229b7c7df16386168161) Make cargo-deny conditional in xtask by @harilvfs
+
+- [ced9a89](https://github.com/harilvfs/carch/commit/ced9a89ab6fa45354e2a751651bc3c02a7b07388)  *(package)* Add mpv player by @harilvfs
+
+- [5c172fe](https://github.com/harilvfs/carch/commit/5c172fe2725faffd29c67cb1ff908976e701b9bb)  *(script)* Remove strict set -e ( unexpected happen ) by @harilvfs
+
+- [b19f128](https://github.com/harilvfs/carch/commit/b19f1281b350e045dbbeed24ed60ebebb5c8ae9a)  *(tui)* Run scripts inside popup tui using portable pty (#530) by @harilvfs in [#530](https://github.com/harilvfs/carch/pull/530)
+
+- [b196dcd](https://github.com/harilvfs/carch/commit/b196dcd7a5615d55e9d01a719e8d2a3e94d68ccb)  *(logging)* Capture script execution output in logs by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [b7b8639](https://github.com/harilvfs/carch/commit/b7b86390875a5f6fd76497c62eed2bbb3ea23f4a)  *(pages)* Some typos man-pages by @harilvfs
+
+- [7c81823](https://github.com/harilvfs/carch/commit/7c818238ed0e561bbee12692230d74b45f57fce2)  *(commands)* Correct package names for arch linux uninstallation by @harilvfs
+
+- [5509727](https://github.com/harilvfs/carch/commit/550972720200ca04551b420c5628152b05112fd2)  *(ui)* Prevent unfocused panels from fading by @harilvfs
+
+- [75cdc60](https://github.com/harilvfs/carch/commit/75cdc60d3a74c383bec3395be9421d5a99098bcf)  *(fmt)* Toml checks by @harilvfs
+
+- [3bcc63a](https://github.com/harilvfs/carch/commit/3bcc63a7bf0bfd2207b8b7fa7b9e87af142dd654)  *(navigation)* My nonsense mistake by @harilvfs
+
+- [1798e7c](https://github.com/harilvfs/carch/commit/1798e7c8c28aa54eb842a4a073c3d1f4c943de9e)  *(lint)* Correct clippy & fmt issue by @harilvfs
+
+- [ffc5cdc](https://github.com/harilvfs/carch/commit/ffc5cdc3ba6d5b05cc19f8b3c1edbe0cdd80c0ff)  *(deps)* Replace OpenSSL with rustls in reqwest for MUSL builds by @harilvfs
+
+- [5d130de](https://github.com/harilvfs/carch/commit/5d130de368ea65375ecad3f916a1a0b42f393667)  *(check)* Allow CDLA-Permissive-2.0 & ISC license by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [0178cea](https://github.com/harilvfs/carch/commit/0178cea8427ae77b9c405cea25e8d3cb1106db74)  *(cli)* Use clap for argument parsing by @harilvfs
+
+- [f44f40e](https://github.com/harilvfs/carch/commit/f44f40e3b1f75c47ff280465e0c796e42f8cc11d)  *(commands)* Improve structure by @harilvfs
+
+- [3ce80ee](https://github.com/harilvfs/carch/commit/3ce80ee806ebd3f2bf1aa9efacc10eb01103de32)  *(ui)* Decouple UI state into smaller components by @harilvfs
+
+- [bc29d20](https://github.com/harilvfs/carch/commit/bc29d206d439d0bf76438b68790bc0fc279eb806)  *(ui)* Separate ui modules by @harilvfs
+
+- [e193895](https://github.com/harilvfs/carch/commit/e1938951e2e3cafce15029eaeff441264711f146)  *(ui)* Modularize popups and rendering widgets by @harilvfs
+
+- [9789feb](https://github.com/harilvfs/carch/commit/9789febcaf6b1367ba039a2072c407f626dc7694) Use temporary directory for script extraction by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [89a1d5b](https://github.com/harilvfs/carch/commit/89a1d5b97561f8ceeacfea3af881203b4307f3a0)  *(readme)* Add social links by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [5dde4d4](https://github.com/harilvfs/carch/commit/5dde4d4006a0e58d7ba6a61957fd8e6508aef135)  *(tui)* Using more better color by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [16badb6](https://github.com/harilvfs/carch/commit/16badb62b09388490d5755fce00b23468718c3e7)  *(release)* Fix version prefix by @harilvfs
+
+- [911ccf7](https://github.com/harilvfs/carch/commit/911ccf7ac8f44b041d586632b126e5c2a9f1cade) Apply set -euo pipefail to all scripts by @harilvfs
+
+- [3388494](https://github.com/harilvfs/carch/commit/33884942b9e24dfe17e0457574e7f4b1fb16f83c)  *(cargo)* Cleanup by @harilvfs
+
+- [77fa578](https://github.com/harilvfs/carch/commit/77fa578fa9d049b2366a8421e7396c9fd7966d43)  *(notify)* Add autorun on release published by @harilvfs
+
+- [d331495](https://github.com/harilvfs/carch/commit/d331495f0a1c29c0c8a38ba49e0d09e904f9fb48)  *(notify)* Simplify release note by @harilvfs
+
+- [e9a59b5](https://github.com/harilvfs/carch/commit/e9a59b598fd7e5e4eca6a31c0b68fb41c0cd3327) Switch to taiki-e/install-action by @harilvfs
+
+- [ff170b2](https://github.com/harilvfs/carch/commit/ff170b2afc74eaeca9efcaacf2b7cea76c69dd88)  *(commands)* Add missing commands entry by @harilvfs
+
+- [8c1879f](https://github.com/harilvfs/carch/commit/8c1879fc7914db8f39109fe5418584dc12efc019)  *(preview)* Update tape adapting the tui changes by @harilvfs
+
+- [c46b89d](https://github.com/harilvfs/carch/commit/c46b89d0aa701e5ceb94f90d89ce446792b72c16)  *(crates)* Bump version locally by @harilvfs
+
+- [99631e7](https://github.com/harilvfs/carch/commit/99631e7c1df05bd811ac834dc3951457fa340cae)  *(cmds)* Update commands on manpages by @harilvfs
+
+
+
 ## [5.2.3](https://github.com/harilvfs/carch/compare/v5.2.2...v5.2.3) - 2025-07-16
 
 
