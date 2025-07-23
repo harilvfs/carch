@@ -2,7 +2,6 @@
 
 _carch() {
     local -a commands
-
     commands=(
         '--help:Show the help message'
         '-h:Show the help message'
@@ -14,15 +13,18 @@ _carch() {
         'uninstall:Interactively uninstall Carch'
     )
 
-    _arguments \
+    _arguments -C \
         '--help[Show the help message]' \
         '-h[Show the help message]' \
         '--version[Show the program version]' \
         '-v[Show the program version]' \
         '--log[Enable logging for the current session only]' \
-        'check-update[Check if a new version is available]' \
-        'update[Interactively update Carch]' \
-        'uninstall[Interactively uninstall Carch]'
-}
+        '1: :->commands' && return 0
 
+    case $state in
+        commands)
+            _describe 'commands' commands
+            ;;
+    esac
+}
 _carch
