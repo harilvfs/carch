@@ -1,5 +1,5 @@
 use pico_args::Arguments;
-use xshell::{cmd, Shell};
+use xshell::{Shell, cmd};
 
 const HELP: &str = r#"
 Usage: cargo xtask <COMMAND>
@@ -11,7 +11,7 @@ Commands:
 fn main() -> Result<(), anyhow::Error> {
     let mut args = Arguments::from_env();
     if args.contains(["-h", "--help"]) {
-        print!("{}", HELP);
+        print!("{HELP}");
         return Ok(());
     }
 
@@ -30,8 +30,8 @@ fn main() -> Result<(), anyhow::Error> {
             Ok(())
         }
         _ => {
-            eprintln!("Invalid command: {}", cmd);
-            print!("{}", HELP);
+            eprintln!("Invalid command: {cmd}");
+            print!("{HELP}");
             Err(anyhow::anyhow!("Invalid command"))
         }
     }
