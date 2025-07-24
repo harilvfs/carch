@@ -58,32 +58,26 @@ install_opensuse() {
 }
 
 uninstall_arch() {
-    printf "${RED}==> ${NC}Removing carch from Arch Linux\n"
     sudo pacman -R carch-bin carch-bin-debug --noconfirm
 }
 
 uninstall_fedora() {
-    printf "${RED}:: ${NC}Removing carch from Fedora\n"
     sudo dnf remove carch -y
 }
 
 uninstall_opensuse() {
-    printf "${RED}:: ${NC}Removing carch from openSUSE\n"
     sudo zypper remove -y carch
 }
 
 update_arch() {
-    printf "${GREEN}==> ${NC}Updating carch on Arch Linux\n"
     install_arch
 }
 
 update_fedora() {
-    printf "${YELLOW}:: ${NC}Updating carch on Fedora\n"
     install_fedora
 }
 
 update_opensuse() {
-    printf "${YELLOW}:: ${NC}Updating carch on openSUSE\n"
     install_opensuse
 }
 
