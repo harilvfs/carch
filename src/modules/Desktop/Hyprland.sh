@@ -89,18 +89,6 @@ main_menu() {
         exit 0
     fi
 
-    if [[ "$choice" == "mylinuxforwork/dotfiles (Coming Soon)" ]]; then
-        echo
-        print_message "$YELLOW" "ML4W dotfiles for OpenSUSE is coming soon!"
-        print_message "$CYAN" "The owner has not officially published the guide yet."
-        print_message "$CYAN" "I will add support once it's officially available."
-        echo
-        print_message "$GREEN" "Press any key to return to menu..."
-        read -n 1
-        main_menu
-        return
-    fi
-
     echo
     print_message "$GREEN" "You selected: $choice"
 
@@ -118,6 +106,9 @@ main_menu() {
 
     if [[ "$choice" == "mylinuxforwork/dotfiles" ]]; then
         print_message "$RED" "IMPORTANT: ML4W installation methods may have changed. Please check the official repo first!"
+        echo
+    elif [[ "$choice" != "Exit" ]]; then
+        print_message "$YELLOW" "NOTE: Installation methods may have changed. Please check the official repository first!"
         echo
     fi
 
