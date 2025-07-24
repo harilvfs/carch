@@ -91,8 +91,7 @@ main() {
     action="${1:-install}"
 
     case "$action" in
-        install|uninstall|update)
-            ;;
+        install | uninstall | update) ;;
         *)
             printf "Error: Invalid action '%s'\n" "$action"
             show_usage
