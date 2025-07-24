@@ -8,7 +8,7 @@ RED='\033[1;31m'
 NC='\033[0m'
 
 show_usage() {
-    printf "Usage: %s [install|uninstall|update]\n" "$0"
+    printf "Usage: carch [install|uninstall|update]\n" "$0"
     printf "  install   - Install carch (default)\n"
     printf "  uninstall - Remove carch from system\n"
     printf "  update    - Update carch to latest version\n"
