@@ -68,7 +68,7 @@ main_menu() {
     print_message "$TEAL" "Distro: ${distro^} Linux"
 
     if [[ "$distro" == "arch" ]]; then
-        options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")
+        options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "basecamp/omarchy" "Exit")
     elif [[ "$distro" == "fedora" ]]; then
         options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
     elif [[ "$distro" == "opensuse" ]]; then
@@ -111,6 +111,7 @@ main_menu() {
     repos["jakoolit/Arch-Hyprland"]="https://github.com/JaKooLit/Arch-Hyprland"
     repos["jakoolit/Fedora-Hyprland"]="https://github.com/JaKooLit/Fedora-Hyprland"
     repos["jakoolit/OpenSUSE-Hyprland"]="https://github.com/JaKooLit/OpenSUSE-Hyprland"
+    repos["basecamp/omarchy"]="https://github.com/basecamp/omarchy"
 
     print_message "$CYAN" "Sourcing from: ${repos[$choice]}"
     echo
@@ -160,6 +161,9 @@ install_config() {
         cd ~/OpenSUSE-Hyprland || exit
         chmod +x install.sh
         ./install.sh
+    elif [[ "$choice" == "basecamp/omarchy" ]]; then
+        print_message "$CYAN" "Installing Omarchy configuration..."
+        wget -qO- https://omarchy.org/install | bash
     fi
 }
 
