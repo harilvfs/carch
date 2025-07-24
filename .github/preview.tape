@@ -73,35 +73,43 @@ Type "carch" Sleep 2s  Enter
 
 Sleep 2s
 
-Down Sleep 2s
+Down Sleep 1s
 
-Down Sleep 2s
+Down Sleep 1s
 
-Down Sleep 2s
+Down Sleep 1s
 
 Type "l"
 
-Sleep 2s
+Sleep 1s
 
 Type "/" Sleep 1s
 
-Type@200ms "Extensions" Sleep 3s Enter
+Type@200ms "Extensions" Sleep 2s Enter
 
-Sleep 3s
+Sleep 1s
 
 Enter
 
 Type "y"
 
-Sleep 4s
+Sleep 2s
 
 Type "3" Sleep 2s Enter
 
-Sleep 2s
+Sleep 1s
 
 Enter
 
-Sleep 3s
+Sleep 2s
+
+Type "p" Sleep 2s
+
+Sleep 2s
+
+Type "q"
+
+Sleep 2s
 
 Type "q"
 
