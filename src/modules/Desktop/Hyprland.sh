@@ -72,7 +72,7 @@ main_menu() {
     elif [[ "$distro" == "fedora" ]]; then
         options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
     elif [[ "$distro" == "opensuse" ]]; then
-        options=("mylinuxforwork/dotfiles (Coming Soon)" "jakoolit/OpenSUSE-Hyprland" "Exit")
+        options=("mylinuxforwork/dotfiles" "jakoolit/OpenSUSE-Hyprland" "Exit")
     fi
 
     echo
@@ -116,6 +116,11 @@ main_menu() {
     print_message "$CYAN" "Sourcing from: ${repos[$choice]}"
     echo
 
+    if [[ "$choice" == "mylinuxforwork/dotfiles" ]]; then
+        print_message "$RED" "IMPORTANT: ML4W installation methods may have changed. Please check the official repo first!"
+        echo
+    fi
+
     if ! confirm "Do you want to continue?"; then
         print_message "$YELLOW" "Returning to menu..."
         main_menu
@@ -140,9 +145,11 @@ install_config() {
         ./install.sh
     elif [[ "$choice" == "mylinuxforwork/dotfiles" ]]; then
         if [[ "$distro" == "arch" ]]; then
-            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-arch.sh)"
-        else
-            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/setup-fedora.sh)"
+            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-arch.sh)"
+        elif [[ "$distro" == "fedora" ]]; then
+            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
+        elif [[ "$distro" == "opensuse" ]]; then
+            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
         fi
     elif [[ "$choice" == "end-4/dots-hyprland" ]]; then
         bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
