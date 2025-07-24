@@ -91,7 +91,7 @@ impl RunScriptPopup {
     pub fn handle_key_event(&mut self, key: KeyEvent) -> PopupEvent {
         match key.code {
             KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                self.kill_child();
+                let _ = self.writer.write_all(&[3]);
                 PopupEvent::None
             }
             KeyCode::Enter if self.is_finished() => PopupEvent::Close,
