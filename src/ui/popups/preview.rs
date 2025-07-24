@@ -27,17 +27,8 @@ fn compute_total_lines(lines: &[Line], area_width: u16) -> u16 {
 /// draws the script preview pop-up.
 /// it shows the content of the selected script with syntax highlighting.
 pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
-    let popup_width = area.width.saturating_sub(4);
-    let popup_height = area.height.saturating_sub(4);
-
-    let popup_area = Rect {
-        x:      area.x + (area.width - popup_width) / 2,
-        y:      area.y + (area.height - popup_height) / 2,
-        width:  popup_width,
-        height: popup_height,
-    };
-
-    f.render_widget(Clear, popup_area);
+    // clear the area to ensure the popup is drawn on a clean slate.
+    f.render_widget(Clear, area);
 
     let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx));
 
@@ -56,13 +47,15 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         ))
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
-    f.render_widget(popup_block.clone(), popup_area);
+    // draw the border and title.
+    f.render_widget(popup_block.clone(), area);
 
+    // get the inner area of the popup block to render the content inside the border.
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
         .constraints([Constraint::Min(1), Constraint::Length(1)])
-        .split(popup_block.inner(popup_area));
+        .split(popup_block.inner(area));
 
     let preview_text = if let Some(selected) = app.scripts.state.selected() {
         let script_path = &app.scripts.items[selected].path;

@@ -22,6 +22,27 @@ use super::widgets::status_bar::render_status_bar;
 use crate::error::Result;
 use crate::ui::popups;
 
+/// helper function to create a centered rect using up certain percentage of the available rect `r`
+fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
+    let popup_layout = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([
+            Constraint::Percentage((100 - percent_y) / 2),
+            Constraint::Percentage(percent_y),
+            Constraint::Percentage((100 - percent_y) / 2),
+        ])
+        .split(r);
+
+    Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            Constraint::Percentage((100 - percent_x) / 2),
+            Constraint::Percentage(percent_x),
+            Constraint::Percentage((100 - percent_x) / 2),
+        ])
+        .split(popup_layout[1])[1]
+}
+
 /// draws the main ui for the normal mode.
 /// this includes the header, category list, script list, and status bar.
 fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
@@ -62,12 +83,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::RunScript => {
             if let Some(popup) = &mut app.run_script_popup {
                 let area = app.script_panel_area;
-                let popup_area = Rect {
-                    x:      area.x + area.width / 12,
-                    y:      area.y + area.height / 10,
-                    width:  area.width * 5 / 6,
-                    height: area.height * 4 / 5,
-                };
+                let popup_area = centered_rect(83, 80, area);
                 f.render_widget(popup, popup_area);
             }
         }
@@ -82,7 +98,9 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
             app.help.max_scroll = max_scroll;
         }
         AppMode::Preview => {
-            popups::preview::render_preview_popup(f, app, app.script_panel_area);
+            let area = app.script_panel_area;
+            let popup_area = centered_rect(83, 80, area);
+            popups::preview::render_preview_popup(f, app, popup_area);
         }
         AppMode::Normal => {
             // no pop-up to draw in normal mode.
