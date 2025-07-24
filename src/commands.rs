@@ -1,16 +1,23 @@
-use std::error::Error;
+use crate::error::{CarchError, Result};
+use log::info;
 use std::fs;
 use std::io::{self, Write};
 use std::process::{Command, Stdio};
 
-const CONFIG_DIR: &str = ".config/carch";
-const LOG_FILE: &str = ".config/carch/carch.log";
+const GITHUB_API_URL: &str = "https://api.github.com/repos/harilvfs/carch/releases/latest";
+const PKGS_URL: &str = "https://github.com/carch-org/pkgs";
 
 enum PkgManager {
     Pacman,
     Dnf,
     Zypper,
-    Unsupported,
+}
+
+enum InstallMethod {
+    Cargo,
+    PackageManager(PkgManager),
+    Exit,
+    Invalid,
 }
 
 #[derive(serde::Deserialize)]
@@ -33,182 +40,181 @@ fn command_exists(command: &str) -> bool {
         .is_ok_and(|s| s.success())
 }
 
-fn detect_package_manager() -> PkgManager {
+fn detect_package_manager() -> Result<PkgManager> {
     if command_exists("pacman") {
-        PkgManager::Pacman
+        Ok(PkgManager::Pacman)
     } else if command_exists("dnf") {
-        PkgManager::Dnf
+        Ok(PkgManager::Dnf)
     } else if command_exists("zypper") {
-        PkgManager::Zypper
+        Ok(PkgManager::Zypper)
     } else {
-        PkgManager::Unsupported
+        Err(CarchError::UnsupportedPackageManager)
     }
 }
 
-fn run_command(command: &mut Command) -> io::Result<()> {
+fn run_command(command: &mut Command) -> Result<()> {
     let status = command.status()?;
     if !status.success() {
-        return Err(io::Error::other(format!("Command failed with exit code {status}")));
+        return Err(CarchError::Command(format!("Command failed with exit code {status}")));
     }
     Ok(())
 }
 
-fn get_latest_rpm_url() -> Result<String, Box<dyn Error + Send + Sync>> {
+fn get_latest_rpm_url() -> Result<String> {
     let client = reqwest::blocking::Client::builder().user_agent("carch").build()?;
-    let release_url = "https://api.github.com/repos/harilvfs/carch/releases/latest";
-    let response: GitHubRelease = client.get(release_url).send()?.json()?;
+    let response: GitHubRelease = client.get(GITHUB_API_URL).send()?.json()?;
 
     for asset in response.assets {
         if asset.browser_download_url.ends_with(".rpm") {
             return Ok(asset.browser_download_url);
         }
     }
-    Err("No RPM found in the latest release".into())
+    Err(CarchError::NoRpmFound)
 }
 
-fn get_installation_method() -> io::Result<String> {
+fn get_installation_method() -> Result<InstallMethod> {
     print!(
         "From which install media have you installed carch? (c)argo, (p)ackage manager, or (e)xit: "
     );
     io::stdout().flush()?;
     let mut choice = String::new();
     io::stdin().read_line(&mut choice)?;
-    Ok(choice.trim().to_lowercase())
+    Ok(match choice.trim().to_lowercase().as_str() {
+        "c" | "cargo" => InstallMethod::Cargo,
+        "p" | "package manager" => InstallMethod::PackageManager(detect_package_manager()?),
+        "e" | "exit" => InstallMethod::Exit,
+        _ => InstallMethod::Invalid,
+    })
 }
 
-pub fn log_message(log_type: &str, message: &str) -> io::Result<()> {
-    let home_dir = dirs::home_dir()
-        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "Home directory not found"))?;
-    let log_file = home_dir.join(LOG_FILE);
-    let config_dir = home_dir.join(CONFIG_DIR);
-
-    if !config_dir.exists() {
-        fs::create_dir_all(&config_dir)?;
-    }
-
-    let mut file = fs::OpenOptions::new().create(true).append(true).open(log_file)?;
-    let timestamp = chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
-    let log_entry = format!("{timestamp} [{log_type}] {message}\n");
-    file.write_all(log_entry.as_bytes())
-}
-
-pub fn update() -> io::Result<()> {
+pub fn update() -> Result<()> {
     if !command_exists("carch") {
         println!("Carch is not installed. Please install it first.");
         return Ok(());
     }
 
-    match get_installation_method()?.as_str() {
-        "c" | "cargo" => {
-            println!("Updating via cargo...");
-            run_command(Command::new("cargo").arg("install").arg("carch").arg("--force"))?;
-            println!("Update done.");
-        }
-        "p" | "package manager" => match detect_package_manager() {
-            PkgManager::Pacman => {
-                println!("Updating for Arch Linux...");
-                let home_dir = dirs::home_dir().ok_or_else(|| {
-                    io::Error::new(io::ErrorKind::NotFound, "Home directory not found")
-                })?;
-                let pkgs_dir = home_dir.join("pkgs");
-                if pkgs_dir.exists() {
-                    fs::remove_dir_all(&pkgs_dir)?;
-                }
-                run_command(
-                    Command::new("git")
-                        .arg("clone")
-                        .arg("https://github.com/carch-org/pkgs")
-                        .arg(&pkgs_dir),
-                )?;
-                let carch_bin_path = pkgs_dir.join("carch-bin");
-                run_command(Command::new("makepkg").arg("-si").current_dir(carch_bin_path))?;
-                println!("Update done.");
-            }
-            PkgManager::Dnf => {
-                println!("Updating for Fedora...");
-                let url = get_latest_rpm_url().map_err(io::Error::other)?;
-                let rpm_path = std::env::temp_dir().join("carch.rpm");
-                run_command(Command::new("wget").arg("-O").arg(&rpm_path).arg(&url))?;
-                run_command(Command::new("sudo").arg("dnf").arg("install").arg(&rpm_path))?;
-                fs::remove_file(&rpm_path)?;
-                println!("Update done.");
-            }
-            PkgManager::Zypper => {
-                println!("Updating for openSUSE...");
-                let url = get_latest_rpm_url().map_err(io::Error::other)?;
-                let rpm_path = std::env::temp_dir().join("carch.rpm");
-                run_command(Command::new("wget").arg("-O").arg(&rpm_path).arg(&url))?;
-                run_command(Command::new("sudo").arg("zypper").arg("install").arg(&rpm_path))?;
-                fs::remove_file(&rpm_path)?;
-                println!("Update done.");
-            }
-            PkgManager::Unsupported => {
-                println!("Unsupported package manager for this option.");
-            }
-        },
-        "e" | "exit" => {
+    match get_installation_method()? {
+        InstallMethod::Cargo => update_via_cargo(),
+        InstallMethod::PackageManager(pm) => update_via_package_manager(pm),
+        InstallMethod::Exit => {
             println!("Exiting update.");
+            Ok(())
         }
-        _ => {
+        InstallMethod::Invalid => {
             println!("Invalid choice. Please run the command again.");
+            Ok(())
         }
     }
+}
+
+fn update_via_cargo() -> Result<()> {
+    info!("Updating via cargo...");
+    run_command(Command::new("cargo").arg("install").arg("carch").arg("--force"))?;
+    println!("Update done.");
     Ok(())
 }
 
-pub fn uninstall() -> io::Result<()> {
+fn update_via_package_manager(pm: PkgManager) -> Result<()> {
+    match pm {
+        PkgManager::Pacman => update_for_arch(),
+        PkgManager::Dnf => update_for_fedora(),
+        PkgManager::Zypper => update_for_opensuse(),
+    }
+}
+
+fn update_for_arch() -> Result<()> {
+    info!("Updating for Arch Linux...");
+    let home_dir = dirs::home_dir().ok_or(CarchError::HomeDirNotFound)?;
+    let pkgs_dir = home_dir.join("pkgs");
+    if pkgs_dir.exists() {
+        fs::remove_dir_all(&pkgs_dir)?;
+    }
+    run_command(Command::new("git").arg("clone").arg(PKGS_URL).arg(&pkgs_dir))?;
+    let carch_bin_path = pkgs_dir.join("carch-bin");
+    run_command(Command::new("makepkg").arg("-si").current_dir(carch_bin_path))?;
+    println!("Update done.");
+    Ok(())
+}
+
+fn update_for_fedora() -> Result<()> {
+    info!("Updating for Fedora...");
+    let url = get_latest_rpm_url()?;
+    let rpm_path = std::env::temp_dir().join("carch.rpm");
+    run_command(Command::new("wget").arg("-O").arg(&rpm_path).arg(&url))?;
+    run_command(Command::new("sudo").arg("dnf").arg("install").arg(&rpm_path))?;
+    fs::remove_file(&rpm_path)?;
+    println!("Update done.");
+    Ok(())
+}
+
+fn update_for_opensuse() -> Result<()> {
+    info!("Updating for openSUSE...");
+    let url = get_latest_rpm_url()?;
+    let rpm_path = std::env::temp_dir().join("carch.rpm");
+    run_command(Command::new("wget").arg("-O").arg(&rpm_path).arg(&url))?;
+    run_command(Command::new("sudo").arg("zypper").arg("install").arg(&rpm_path))?;
+    fs::remove_file(&rpm_path)?;
+    println!("Update done.");
+    Ok(())
+}
+
+pub fn uninstall() -> Result<()> {
     if !command_exists("carch") {
         println!("Carch is not installed.");
         return Ok(());
     }
 
-    match get_installation_method()?.as_str() {
-        "c" | "cargo" => {
-            println!("Uninstalling via cargo...");
-            run_command(Command::new("cargo").arg("uninstall").arg("carch"))?;
-            println!("Uninstallation done.");
-        }
-        "p" | "package manager" => match detect_package_manager() {
-            PkgManager::Pacman => {
-                println!("Uninstalling for Arch Linux...");
-                let _ = run_command(
-                    Command::new("sudo")
-                        .arg("pacman")
-                        .arg("-R")
-                        .arg("--noconfirm")
-                        .arg("carch-bin"),
-                );
-                let _ = run_command(
-                    Command::new("sudo")
-                        .arg("pacman")
-                        .arg("-R")
-                        .arg("--noconfirm")
-                        .arg("carch-bin-debug"),
-                );
-                println!("Uninstallation done.");
-            }
-            PkgManager::Dnf => {
-                println!("Uninstalling for Fedora...");
-                run_command(Command::new("sudo").arg("dnf").arg("remove").arg("-y").arg("carch"))?;
-                println!("Uninstallation done.");
-            }
-            PkgManager::Zypper => {
-                println!("Uninstalling for openSUSE...");
-                run_command(
-                    Command::new("sudo").arg("zypper").arg("remove").arg("-y").arg("carch"),
-                )?;
-                println!("Uninstallation done.");
-            }
-            PkgManager::Unsupported => {
-                println!("Unsupported package manager for this option.");
-            }
-        },
-        "e" | "exit" => {
+    match get_installation_method()? {
+        InstallMethod::Cargo => uninstall_via_cargo(),
+        InstallMethod::PackageManager(pm) => uninstall_via_package_manager(pm),
+        InstallMethod::Exit => {
             println!("Exiting uninstallation.");
+            Ok(())
         }
-        _ => {
+        InstallMethod::Invalid => {
             println!("Invalid choice. Please run the command again.");
+            Ok(())
         }
     }
+}
+
+fn uninstall_via_cargo() -> Result<()> {
+    info!("Uninstalling via cargo...");
+    run_command(Command::new("cargo").arg("uninstall").arg("carch"))?;
+    println!("Uninstallation done.");
+    Ok(())
+}
+
+fn uninstall_via_package_manager(pm: PkgManager) -> Result<()> {
+    match pm {
+        PkgManager::Pacman => uninstall_for_arch(),
+        PkgManager::Dnf => uninstall_for_fedora(),
+        PkgManager::Zypper => uninstall_for_opensuse(),
+    }
+}
+
+fn uninstall_for_arch() -> Result<()> {
+    info!("Uninstalling for Arch Linux...");
+    let _ = run_command(
+        Command::new("sudo").arg("pacman").arg("-R").arg("--noconfirm").arg("carch-bin"),
+    );
+    let _ = run_command(
+        Command::new("sudo").arg("pacman").arg("-R").arg("--noconfirm").arg("carch-bin-debug"),
+    );
+    println!("Uninstallation done.");
+    Ok(())
+}
+
+fn uninstall_for_fedora() -> Result<()> {
+    info!("Uninstalling for Fedora...");
+    run_command(Command::new("sudo").arg("dnf").arg("remove").arg("-y").arg("carch"))?;
+    println!("Uninstallation done.");
+    Ok(())
+}
+
+fn uninstall_for_opensuse() -> Result<()> {
+    info!("Uninstalling for openSUSE...");
+    run_command(Command::new("sudo").arg("zypper").arg("remove").arg("-y").arg("carch"))?;
+    println!("Uninstallation done.");
     Ok(())
 }

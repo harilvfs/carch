@@ -1,8 +1,9 @@
+use log::info;
 use std::path::{Path, PathBuf};
 use std::{fs, io};
 
 use super::state::{
-    App, AppMode, FocusedPanel, ScriptItem, SearchResult, SearchState, StatefulList, UiOptions,
+    App, AppMode, FocusedPanel, ScriptItem, SearchResult, SearchState, StatefulList,
 };
 use fuzzy_matcher::FuzzyMatcher;
 
@@ -95,12 +96,11 @@ pub fn toggle_preview_mode(app: &mut App) {
             _ => AppMode::Normal,
         };
 
-        let ui_options = UiOptions::default();
-        if ui_options.log_mode {
+        if app.log_mode {
             if prev_mode == AppMode::Normal && app.mode == AppMode::Preview {
-                let _ = crate::commands::log_message("INFO", "Entered full-screen preview mode");
+                info!("Entered preview mode");
             } else if prev_mode == AppMode::Preview && app.mode == AppMode::Normal {
-                let _ = crate::commands::log_message("INFO", "Exited full-screen preview mode");
+                info!("Exited preview mode");
             }
         }
         update_preview(app);
@@ -140,12 +140,11 @@ pub fn toggle_search_mode(app: &mut App) {
     let prev_mode = app.mode;
     app.mode = if app.mode == AppMode::Search { AppMode::Normal } else { AppMode::Search };
 
-    let ui_options = UiOptions::default();
-    if ui_options.log_mode {
+    if app.log_mode {
         if prev_mode != AppMode::Search && app.mode == AppMode::Search {
-            let _ = crate::commands::log_message("INFO", "Entered search mode");
+            info!("Entered search mode");
         } else if prev_mode == AppMode::Search && app.mode != AppMode::Search {
-            let _ = crate::commands::log_message("INFO", "Exited search mode");
+            info!("Exited search mode");
         }
     }
 

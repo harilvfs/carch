@@ -1,3 +1,4 @@
+use log::{debug, info};
 use ratatui::prelude::*;
 use std::io;
 use std::path::Path;
@@ -19,6 +20,7 @@ use super::widgets::category_list::render_category_list;
 use super::widgets::header::render_header;
 use super::widgets::script_list::render_script_list;
 use super::widgets::status_bar::render_status_bar;
+use crate::error::Result;
 use crate::ui::popups;
 
 fn render_normal_ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
@@ -90,7 +92,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     }
 }
 
-fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io::Result<()> {
+fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<()> {
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
     terminal.show_cursor()?;
@@ -98,13 +100,13 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> io
 }
 
 #[allow(dead_code)]
-pub fn run_ui(modules_dir: &Path) -> io::Result<()> {
+pub fn run_ui(modules_dir: &Path) -> Result<()> {
     run_ui_with_options(modules_dir, UiOptions::default())
 }
 
-pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result<()> {
+pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()> {
     if options.log_mode {
-        let _ = crate::commands::log_message("INFO", "UI initialization started");
+        info!("UI initialization started");
     }
 
     enable_raw_mode()?;
@@ -117,19 +119,16 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
     app.log_mode = options.log_mode;
 
     if options.log_mode {
-        let _ = crate::commands::log_message("INFO", "Loading scripts from modules directory");
+        info!("Loading scripts from modules directory");
     }
 
     load_scripts(&mut app, modules_dir)?;
 
     if options.log_mode {
-        let _ = crate::commands::log_message(
-            "INFO",
-            &format!(
-                "Loaded {} scripts in {} categories",
-                app.all_scripts.values().map(|v| v.len()).sum::<usize>(),
-                app.categories.items.len()
-            ),
+        info!(
+            "Loaded {} scripts in {} categories",
+            app.all_scripts.values().map(|v| v.len()).sum::<usize>(),
+            app.categories.items.len()
         );
     }
 
@@ -137,7 +136,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
         app.mode = AppMode::Normal;
 
         if options.log_mode {
-            let _ = crate::commands::log_message("INFO", "Preview mode disabled by configuration");
+            info!("Preview mode disabled by configuration");
         }
     }
 
@@ -168,10 +167,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
                             KeyCode::Right => "Right".to_string(),
                             _ => format!("{:?}", key.code),
                         };
-                        let _ = crate::commands::log_message(
-                            "DEBUG",
-                            &format!("Key pressed: {} in mode: {:?}", key_name, app.mode),
-                        );
+                        debug!("Key pressed: {} in mode: {:?}", key_name, app.mode);
                     }
 
                     if app.mode == AppMode::RunScript {
@@ -196,10 +192,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
                             AppMode::Normal => {
                                 if key.code == KeyCode::Char('p') && !options.show_preview {
                                     if options.log_mode {
-                                        let _ = crate::commands::log_message(
-                                            "INFO",
-                                            "Preview toggle attempted but previews are disabled",
-                                        );
+                                        info!("Preview toggle attempted but previews are disabled");
                                     }
                                 } else {
                                     app.handle_key_normal_mode(key);
@@ -223,10 +216,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
                 }
                 Event::Mouse(mouse_event) => {
                     if options.log_mode {
-                        let _ = crate::commands::log_message(
-                            "DEBUG",
-                            &format!("Mouse event: {mouse_event:?}"),
-                        );
+                        debug!("Mouse event: {mouse_event:?}");
                     }
                     app.handle_mouse(mouse_event);
                 }
@@ -238,11 +228,11 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> io::Result
     cleanup_terminal(&mut terminal)?;
 
     if options.log_mode {
-        let _ = crate::commands::log_message("INFO", "User requested application exit");
+        info!("User requested application exit");
     }
 
     if options.log_mode {
-        let _ = crate::commands::log_message("INFO", "UI terminated normally");
+        info!("UI terminated normally");
     }
 
     Ok(())

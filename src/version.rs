@@ -1,6 +1,5 @@
+use crate::error::{CarchError, Result};
 use serde::Deserialize;
-use std::error::Error;
-use std::io;
 
 #[derive(Deserialize)]
 struct Release {
@@ -12,13 +11,13 @@ pub fn get_current_version() -> String {
     format!("Carch version {version}")
 }
 
-pub fn get_latest_version() -> Result<String, Box<dyn Error>> {
+pub fn get_latest_version() -> Result<String> {
     let client = reqwest::blocking::Client::builder().user_agent("carch").build()?;
     let response =
         client.get("https://api.github.com/repos/harilvfs/carch/releases/latest").send()?;
 
     if !response.status().is_success() {
-        return Err("Failed to fetch latest version information".into());
+        return Err(CarchError::Command("Failed to fetch latest version information".to_string()));
     }
 
     let release: Release = response.json()?;
@@ -26,7 +25,7 @@ pub fn get_latest_version() -> Result<String, Box<dyn Error>> {
     Ok(version)
 }
 
-pub fn check_for_updates() -> io::Result<()> {
+pub fn check_for_updates() -> Result<()> {
     println!("Checking for updates...");
 
     let current_version = env!("CARGO_PKG_VERSION");
@@ -45,7 +44,7 @@ pub fn check_for_updates() -> io::Result<()> {
         }
         Err(e) => {
             eprintln!("Error checking for updates: {e}");
-            return Err(io::Error::other(e.to_string()));
+            return Err(e);
         }
     }
 

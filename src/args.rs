@@ -1,13 +1,20 @@
+use crate::error::{CarchError, Result};
 use crate::{commands, version};
-use clap::{Parser, Subcommand};
+use clap::{ArgAction, Parser, Subcommand};
+use env_logger::{Builder, Target};
+use log::info;
+use std::fs::{self, OpenOptions};
 
 #[derive(Parser)]
-#[command(author, version, about, long_about = None)]
+#[command(author, about, long_about = None, version = env!("CARGO_PKG_VERSION"))]
+#[command(disable_version_flag = true)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Option<Commands>,
     #[arg(long, global = true, help = "Enable logging")]
     pub log:     bool,
+    #[arg(short = 'v', long = "version", action = ArgAction::Version, help = "Print version information")]
+    version:     Option<bool>,
 }
 
 #[derive(Subcommand)]
@@ -32,33 +39,37 @@ impl Default for Settings {
     }
 }
 
-pub fn parse_args() -> Result<(), Box<dyn std::error::Error>> {
+pub fn parse_args() -> Result<()> {
     let cli = Cli::parse();
     let mut settings = Settings::default();
 
     if cli.log {
         settings.log_mode = true;
-        let _ = commands::log_message("INFO", "Carch application started");
+        let log_dir = dirs::home_dir().ok_or(CarchError::HomeDirNotFound)?.join(".config/carch");
+        fs::create_dir_all(&log_dir)?;
+        let log_file = log_dir.join("carch.log");
+
+        let file = OpenOptions::new().create(true).append(true).open(log_file)?;
+
+        Builder::new()
+            .target(Target::Pipe(Box::new(file)))
+            .filter(None, log::LevelFilter::Info)
+            .init();
+        info!("Carch application started");
     }
 
     match cli.command {
         Some(Commands::CheckUpdate) => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Checking for updates");
-            }
-            version::check_for_updates().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+            info!("Checking for updates");
+            version::check_for_updates()
         }
         Some(Commands::Update) => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Running update process");
-            }
-            commands::update().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+            info!("Running update process");
+            commands::update()
         }
         Some(Commands::Uninstall) => {
-            if settings.log_mode {
-                let _ = commands::log_message("INFO", "Running uninstall process");
-            }
-            commands::uninstall().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)
+            info!("Running uninstall process");
+            commands::uninstall()
         }
         None => crate::run_tui(settings),
     }

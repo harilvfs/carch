@@ -1,5 +1,5 @@
-use crate::commands;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use log::info;
 use oneshot::Receiver;
 use portable_pty::{
     ChildKiller, CommandBuilder, ExitStatus, MasterPty, NativePtySystem, PtySize, PtySystem,
@@ -68,7 +68,7 @@ impl RunScriptPopup {
                     let mut mutex = command_buffer.lock().unwrap();
                     let data = &buf[0..size];
                     if log_mode {
-                        let _ = commands::log_message("INFO", &String::from_utf8_lossy(data));
+                        info!("{}", &String::from_utf8_lossy(data));
                     }
                     mutex.extend_from_slice(data);
                 }
