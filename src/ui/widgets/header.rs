@@ -6,6 +6,8 @@ use ratatui::widgets::{Block, BorderType, Borders, Paragraph};
 
 use crate::ui::state::App;
 
+/// draws the header at the top of the screen.
+/// it shows system info and the app title.
 pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
     let header_block = Block::default()
         .borders(Borders::ALL)
@@ -25,34 +27,34 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
 
     let left_text = vec![
         Line::from(vec![
-            Span::styled("OS: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled("os: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
             Span::raw(app.system_info.os.clone()),
         ]),
         Line::from(vec![
-            Span::styled("Kernel: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled("kernel: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
             Span::raw(app.system_info.kernel.clone()),
         ]),
     ];
 
     let center_text = vec![
         Line::from(vec![Span::styled(
-            "CARCH",
+            "carch",
             Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
         )]),
         Line::from(vec![Span::styled(
-            "Automate Your Linux System Setup",
+            "automate your linux system setup",
             Style::default().fg(Color::Rgb(235, 235, 210)).add_modifier(Modifier::ITALIC),
         )]),
     ];
 
     let right_text = vec![
         Line::from(vec![
-            Span::styled("Uptime: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::styled("uptime: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
             Span::raw(app.system_info.uptime.clone()),
         ]),
         Line::from(vec![
             Span::styled(
-                "Hostname: ",
+                "hostname: ",
                 Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
             ),
             Span::raw(app.system_info.hostname.clone()),

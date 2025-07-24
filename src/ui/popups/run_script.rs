@@ -14,23 +14,36 @@ use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
 use vt100_ctt::{Parser, Screen};
 
+/// events that can be sent from the pop-up.
 pub enum PopupEvent {
+    /// tells the main app to close the pop-up.
     Close,
+    /// no event.
     None,
 }
 
+/// holds the state for the pop-up that runs a script.
 pub struct RunScriptPopup {
+    /// the output from the command.
     buffer:         Arc<Mutex<Vec<u8>>>,
+    /// the thread that the command is running in.
     command_thread: Option<JoinHandle<ExitStatus>>,
+    /// used to kill the running command.
     child_killer:   Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
+    /// the thread that reads the command's output.
     _reader_thread: JoinHandle<()>,
+    /// the master side of the pty.
     pty_master:     Box<dyn MasterPty + Send>,
+    /// used to write to the command's input.
     writer:         Box<dyn Write + Send>,
+    /// the exit status of the command.
     status:         Option<ExitStatus>,
+    /// how far the user has scrolled up.
     scroll_offset:  usize,
 }
 
 impl RunScriptPopup {
+    /// creates a new pop-up to run a script.
     pub fn new(script_path: PathBuf, log_mode: bool) -> Self {
         let pty_system = NativePtySystem::default();
 
@@ -88,6 +101,7 @@ impl RunScriptPopup {
         }
     }
 
+    /// handles key events for the pop-up.
     pub fn handle_key_event(&mut self, key: KeyEvent) -> PopupEvent {
         match key.code {
             KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
@@ -111,6 +125,7 @@ impl RunScriptPopup {
         }
     }
 
+    /// checks if the script has finished running.
     fn is_finished(&self) -> bool {
         if let Some(command_thread) = &self.command_thread {
             command_thread.is_finished()
@@ -119,6 +134,7 @@ impl RunScriptPopup {
         }
     }
 
+    /// creates a `screen` from the command's output buffer.
     fn screen(&mut self, size: Size) -> Screen {
         self.pty_master
             .resize(PtySize {
@@ -136,6 +152,7 @@ impl RunScriptPopup {
         parser.screen().clone()
     }
 
+    /// gets the exit status of the script.
     fn get_exit_status(&mut self) -> ExitStatus {
         if self.command_thread.is_some() {
             let handle = self.command_thread.take().unwrap();
@@ -147,6 +164,7 @@ impl RunScriptPopup {
         }
     }
 
+    /// kills the running script.
     pub fn kill_child(&mut self) {
         if !self.is_finished()
             && let Some(killer_rx) = self.child_killer.take()
@@ -156,6 +174,7 @@ impl RunScriptPopup {
         }
     }
 
+    /// sends key events to the running script.
     fn handle_passthrough_key_event(&mut self, key: KeyEvent) {
         let input_bytes = match key.code {
             KeyCode::Char(ch) => ch.to_string().into_bytes(),
@@ -185,12 +204,12 @@ impl Widget for &mut RunScriptPopup {
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
                 .title_style(Style::default().fg(Color::Rgb(137, 180, 250)).reversed())
-                .title_bottom(Line::from("Press Ctrl-C to KILL"))
+                .title_bottom(Line::from("press ctrl-c to kill"))
         } else {
             let (title_text, style_color) = if self.get_exit_status().success() {
                 (
                     Line::styled(
-                        "SUCCESS! Press <Enter> to close",
+                        "success! press <enter> to close",
                         Style::default().fg(Color::Green).reversed(),
                     ),
                     Color::Rgb(137, 180, 250),
@@ -198,7 +217,7 @@ impl Widget for &mut RunScriptPopup {
             } else {
                 (
                     Line::styled(
-                        "FAILED! Press <Enter> to close",
+                        "failed! press <enter> to close",
                         Style::default().fg(Color::Red).reversed(),
                     ),
                     Color::Rgb(137, 180, 250),

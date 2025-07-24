@@ -10,6 +10,7 @@ fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
 
+/// draws the help pop-up with keyboard shortcuts.
 pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     let popup_width = std::cmp::min(80, area.width.saturating_sub(4));
     let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
@@ -24,7 +25,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     f.render_widget(Clear, popup_area);
 
     let popup_block = create_rounded_block()
-        .title("Keyboard Shortcuts")
+        .title("keyboard shortcuts")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
     f.render_widget(popup_block.clone(), popup_area);
@@ -39,7 +40,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     let mut help_content = Vec::new();
 
     help_content.push(Line::from(vec![Span::styled(
-        "Navigation",
+        "navigation",
         Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
     )]));
     help_content.push(Line::from(""));
@@ -48,26 +49,26 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Navigate up/down in the script list", Style::default().fg(Color::Gray)),
+        Span::styled("move up/down in the script list", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
         Span::styled(" h/l ", Style::default().bg(nav_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Switch between categories and scripts", Style::default().fg(Color::Gray)),
+        Span::styled("switch between categories and scripts", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
         Span::styled(" Home/End ", Style::default().bg(nav_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Jump to top/bottom of list", Style::default().fg(Color::Gray)),
+        Span::styled("jump to top/bottom of list", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
-        "Actions",
+        "actions",
         Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
     )]));
     help_content.push(Line::from(""));
@@ -76,7 +77,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" Enter ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Run selected script", Style::default().fg(Color::Gray)),
+        Span::styled("run selected script", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
@@ -84,7 +85,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         Span::styled(" Space ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled(
-            "Toggle script selection in multi-select mode",
+            "toggle script selection in multi-select mode",
             Style::default().fg(Color::Gray),
         ),
     ]));
@@ -93,19 +94,19 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" p ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray)),
+        Span::styled("toggle preview for scripts", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
         Span::styled(" q, Esc ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Quit | Go back", Style::default().fg(Color::Gray)),
+        Span::styled("quit | go back", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
-        "Modes",
+        "modes",
         Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
     )]));
     help_content.push(Line::from(""));
@@ -114,18 +115,18 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" / ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Search mode", Style::default().fg(Color::Gray)),
+        Span::styled("search mode", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
         Span::styled(" m ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
+        Span::styled("toggle multi-select mode", Style::default().fg(Color::Gray)),
         Span::raw(" | "),
         Span::styled(" Esc ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Exit multi-select mode", Style::default().fg(Color::Gray)),
+        Span::styled("exit multi-select mode", Style::default().fg(Color::Gray)),
     ]));
 
     help_content.push(Line::from(""));
@@ -133,13 +134,13 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" ? ", Style::default().bg(mode_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Show this help", Style::default().fg(Color::Gray)),
+        Span::styled("show this help", Style::default().fg(Color::Gray)),
     ]));
 
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
-        "Quick Actions",
+        "quick actions",
         Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
     )]));
 
@@ -148,7 +149,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" l ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Confirm selection (same as Enter)", Style::default().fg(Color::Gray)),
+        Span::styled("confirm selection (same as enter)", Style::default().fg(Color::Gray)),
     ]));
 
     help_content.push(Line::from(""));
@@ -156,7 +157,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" h ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Cancel selection (same as Esc)", Style::default().fg(Color::Gray)),
+        Span::styled("cancel selection (same as esc)", Style::default().fg(Color::Gray)),
     ]));
 
     let content_height = help_content.len() as u16;
@@ -178,14 +179,14 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     let scroll_status = if max_scroll > 0 {
         format!("{}/{}", app.help.scroll.min(max_scroll), max_scroll)
     } else {
-        "No scroll needed".to_string()
+        "no scroll needed".to_string()
     };
 
     let footer = Paragraph::new(Line::from(vec![
         Span::styled("↑/↓/j/k: ", Style::default().fg(Color::Gray)),
-        Span::styled("Scroll  ", Style::default().fg(Color::Blue)),
+        Span::styled("scroll  ", Style::default().fg(Color::Blue)),
         Span::styled("ESC/q: ", Style::default().fg(Color::Gray)),
-        Span::styled("Close", Style::default().fg(Color::Rgb(137, 180, 250))),
+        Span::styled("close", Style::default().fg(Color::Rgb(137, 180, 250))),
         Span::raw("  "),
         Span::styled(scroll_status, Style::default().fg(Color::DarkGray)),
     ]))

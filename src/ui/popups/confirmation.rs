@@ -5,6 +5,8 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragr
 
 use crate::ui::state::App;
 
+/// draws the confirmation pop-up.
+/// this asks the user to confirm if they want to run a script or a set of scripts.
 pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_width = std::cmp::min(60, area.width - 8);
     let popup_height = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
@@ -25,7 +27,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title("Confirm selection")
+        .title("confirm")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
     let inner_area = popup_block.inner(popup_area);
@@ -56,9 +58,9 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(popup_block, popup_area);
 
     let question_text = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
-        "Do you want to run these scripts?"
+        "do you want to run these scripts?"
     } else {
-        "Do you want to run this script?"
+        "do you want to run this script?"
     };
 
     let question_paragraph =

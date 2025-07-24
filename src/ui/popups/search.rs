@@ -6,10 +6,8 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragr
 
 use crate::ui::state::App;
 
-fn create_rounded_block() -> Block<'static> {
-    Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
-}
-
+/// draws the search pop-up.
+/// it shows a search box and a list of results.
 pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_width = std::cmp::min(70, area.width - 8);
     let popup_height = std::cmp::min(16, area.height - 6);
@@ -23,8 +21,10 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(Clear, popup_area);
 
-    let popup_block = create_rounded_block()
-        .title("Search")
+    let popup_block = Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .title("search")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
     f.render_widget(popup_block.clone(), popup_area);
@@ -50,8 +50,10 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let input = Paragraph::new(display_text)
         .block(
-            create_rounded_block()
-                .title("Type to search (Tab to complete)")
+            Block::default()
+                .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
+                .title("type to search (tab to complete)")
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )
         .style(Style::default())
@@ -123,11 +125,13 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         }
     }
 
-    let result_count_text = format!("Found {} scripts", app.search.results.len());
+    let result_count_text = format!("found {} scripts", app.search.results.len());
 
     let search_results = List::new(result_items)
         .block(
-            create_rounded_block()
+            Block::default()
+                .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
                 .title(result_count_text)
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )
@@ -154,10 +158,10 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
-        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
-        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
-        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
+        Span::styled("↑/↓: navigate  ", Style::default().fg(Color::Gray)),
+        Span::styled("tab: complete  ", Style::default().fg(Color::Gray)),
+        Span::styled("enter: select  ", Style::default().fg(Color::Gray)),
+        Span::styled("esc: cancel", Style::default().fg(Color::Gray)),
     ]))
     .alignment(Alignment::Center);
 

@@ -24,10 +24,8 @@ fn compute_total_lines(lines: &[Line], area_width: u16) -> u16 {
         .sum()
 }
 
-fn create_rounded_block() -> Block<'static> {
-    Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
-}
-
+/// draws the script preview pop-up.
+/// it shows the content of the selected script with syntax highlighting.
 pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     let popup_width = area.width.saturating_sub(4);
     let popup_height = area.height.saturating_sub(4);
@@ -44,12 +42,14 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx));
 
     let title = if let Some(script) = selected_script {
-        format!(" Preview: {}/{} ", script.category, script.name)
+        format!(" preview: {}/{} ", script.category, script.name)
     } else {
-        " Preview ".to_string()
+        " preview ".to_string()
     };
 
-    let popup_block = create_rounded_block()
+    let popup_block = Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .title(Span::styled(
             title,
             Style::default().fg(Color::Rgb(137, 180, 250)).add_modifier(Modifier::BOLD),
@@ -98,7 +98,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
             text
         }
     } else {
-        Text::from("No script selected")
+        Text::from("no script selected")
     };
 
     if let Some(area) = chunks.first() {
@@ -116,14 +116,14 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     f.render_widget(preview, chunks[0]);
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled(" Scroll: ", Style::default().fg(Color::DarkGray)),
+        Span::styled(" scroll: ", Style::default().fg(Color::DarkGray)),
         Span::styled("↑/↓/j/k", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-        Span::styled("  Page: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("PgUp/PgDown", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-        Span::styled("  Jump: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("Home/End", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-        Span::styled("  Close: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("ESC/q", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled("  page: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("pgup/pgdown", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled("  jump: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("home/end", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled("  close: ", Style::default().fg(Color::DarkGray)),
+        Span::styled("esc/q", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
     ]))
     .alignment(Alignment::Center);
 

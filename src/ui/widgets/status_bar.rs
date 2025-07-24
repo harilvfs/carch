@@ -7,20 +7,22 @@ use ratatui::widgets::Paragraph;
 use crate::ui::state::{App, AppMode};
 use crate::version;
 
+/// draws the status bar at the bottom of the screen.
+/// it shows the current mode, help text, and app version.
 pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_text = match app.mode {
         AppMode::Normal => {
             if app.multi_select.enabled {
-                "MULTI-SELECT (Space to select) | (Esc To Exit)"
+                "multi-select (space to select) | (esc to exit)"
             } else {
-                "NORMAL"
+                "normal"
             }
         }
-        AppMode::Preview => "PREVIEW",
-        AppMode::Search => "SEARCH",
-        AppMode::Confirm => "CONFIRM",
-        AppMode::Help => "HELP",
-        AppMode::RunScript => "RUNNING",
+        AppMode::Preview => "preview",
+        AppMode::Search => "search",
+        AppMode::Confirm => "confirm",
+        AppMode::Help => "help",
+        AppMode::RunScript => "running",
     };
 
     let mode_color = match app.mode {
@@ -49,7 +51,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
 
     let status = Line::from(vec![
         Span::styled(
-            format!(" MODE: {mode_text} "),
+            format!(" mode: {mode_text} "),
             Style::default().bg(mode_color).fg(Color::Black).add_modifier(Modifier::BOLD),
         ),
         Span::raw(" "),
@@ -63,7 +65,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         },
         if has_selected { Span::raw(" ") } else { Span::raw("") },
         Span::styled(
-            " ?: Help | q: Quit | h/l: Switch Panels",
+            " ?: help | q: quit | h/l: switch panels",
             Style::default().bg(Color::Rgb(203, 166, 247)).fg(Color::Black),
         ),
         Span::raw(" "),
