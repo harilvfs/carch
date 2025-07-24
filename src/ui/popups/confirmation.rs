@@ -27,7 +27,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title("confirm")
+        .title("Confirm")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
     let inner_area = popup_block.inner(popup_area);
@@ -58,9 +58,9 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(popup_block, popup_area);
 
     let question_text = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
-        "do you want to run these scripts?"
+        "Do you want to run these scripts?"
     } else {
-        "do you want to run this script?"
+        "Do you want to run this script?"
     };
 
     let question_paragraph =
@@ -75,7 +75,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         let count_text =
             Paragraph::new(ratatui::text::Line::from(vec![ratatui::text::Span::styled(
-                format!("{} scripts selected:", app.multi_select.scripts.len()),
+                format!("{} Scripts Selected:", app.multi_select.scripts.len()),
                 Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
             )]))
             .alignment(Alignment::Center);
@@ -114,10 +114,10 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         f.render_widget(scripts_list, content_layout[2]);
 
         let options_text = Paragraph::new(ratatui::text::Line::from(vec![
-            ratatui::text::Span::styled("(y)", Style::default().fg(Color::Green)),
+            ratatui::text::Span::styled("(Y)", Style::default().fg(Color::Green)),
             ratatui::text::Span::styled("es", Style::default().fg(Color::Gray)),
             ratatui::text::Span::raw(" / "),
-            ratatui::text::Span::styled("(n)", Style::default().fg(Color::Red)),
+            ratatui::text::Span::styled("(N)", Style::default().fg(Color::Red)),
             ratatui::text::Span::styled("o", Style::default().fg(Color::Gray)),
         ]))
         .alignment(Alignment::Center);
@@ -136,10 +136,10 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         }
 
         let options_text = Paragraph::new(ratatui::text::Line::from(vec![
-            ratatui::text::Span::styled("(y)", Style::default().fg(Color::Green)),
+            ratatui::text::Span::styled("(Y)", Style::default().fg(Color::Green)),
             ratatui::text::Span::styled("es", Style::default().fg(Color::Gray)),
             ratatui::text::Span::raw(" / "),
-            ratatui::text::Span::styled("(n)", Style::default().fg(Color::Red)),
+            ratatui::text::Span::styled("(N)", Style::default().fg(Color::Red)),
             ratatui::text::Span::styled("o", Style::default().fg(Color::Gray)),
         ]))
         .alignment(Alignment::Center);

@@ -87,12 +87,12 @@ impl<'a> App<'a> {
                         self.preview.scroll = 0;
                     }
                     Err(_) => {
-                        self.preview.content = "error loading script content".to_string();
+                        self.preview.content = "Error loading script content".to_string();
                     }
                 }
             }
         } else {
-            self.preview.content = "no script selected".to_string();
+            self.preview.content = "No script selected".to_string();
         }
     }
 

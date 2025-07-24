@@ -11,10 +11,10 @@ pub struct SystemInfo {
 impl SystemInfo {
     /// gets the current system info.
     pub fn new() -> Self {
-        let os = System::name().unwrap_or_else(|| "unknown os".to_string());
-        let kernel = System::kernel_version().unwrap_or_else(|| "unknown kernel".to_string());
+        let os = System::name().unwrap_or_else(|| "Unknown OS".to_string());
+        let kernel = System::kernel_version().unwrap_or_else(|| "Unknown kernel".to_string());
         let uptime = format_uptime(System::uptime());
-        let hostname = System::host_name().unwrap_or_else(|| "unknown hostname".to_string());
+        let hostname = System::host_name().unwrap_or_else(|| "Unknown hostname".to_string());
 
         SystemInfo { os, kernel, uptime, hostname }
     }

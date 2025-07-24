@@ -11,7 +11,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title("categories")
+        .title("Categories")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
         .style(Style::default().bg(Color::Reset));
 

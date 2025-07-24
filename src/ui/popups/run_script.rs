@@ -204,12 +204,12 @@ impl Widget for &mut RunScriptPopup {
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
                 .title_style(Style::default().fg(Color::Rgb(137, 180, 250)).reversed())
-                .title_bottom(Line::from("press ctrl-c to kill"))
+                .title_bottom(Line::from("Press Ctrl-C to kill"))
         } else {
             let (title_text, style_color) = if self.get_exit_status().success() {
                 (
                     Line::styled(
-                        "success! press <enter> to close",
+                        "Success! Press <Enter> to close",
                         Style::default().fg(Color::Green).reversed(),
                     ),
                     Color::Rgb(137, 180, 250),
@@ -217,7 +217,7 @@ impl Widget for &mut RunScriptPopup {
             } else {
                 (
                     Line::styled(
-                        "failed! press <enter> to close",
+                        "Failed! Press <Enter> to close",
                         Style::default().fg(Color::Red).reversed(),
                     ),
                     Color::Rgb(137, 180, 250),

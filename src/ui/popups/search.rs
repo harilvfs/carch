@@ -24,7 +24,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title("search")
+        .title("Search")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
     f.render_widget(popup_block.clone(), popup_area);
@@ -53,7 +53,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
             Block::default()
                 .borders(Borders::ALL)
                 .border_type(BorderType::Rounded)
-                .title("type to search (tab to complete)")
+                .title("Type to search (Tab to complete)")
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )
         .style(Style::default())
@@ -125,7 +125,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         }
     }
 
-    let result_count_text = format!("found {} scripts", app.search.results.len());
+    let result_count_text = format!("Found {} scripts", app.search.results.len());
 
     let search_results = List::new(result_items)
         .block(
@@ -158,10 +158,10 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓: navigate  ", Style::default().fg(Color::Gray)),
-        Span::styled("tab: complete  ", Style::default().fg(Color::Gray)),
-        Span::styled("enter: select  ", Style::default().fg(Color::Gray)),
-        Span::styled("esc: cancel", Style::default().fg(Color::Gray)),
+        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
+        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
+        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
+        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
     ]))
     .alignment(Alignment::Center);
 

@@ -13,16 +13,16 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_text = match app.mode {
         AppMode::Normal => {
             if app.multi_select.enabled {
-                "multi-select (space to select) | (esc to exit)"
+                "Multi-select (Space to select) | (Esc to exit)"
             } else {
-                "normal"
+                "Normal"
             }
         }
-        AppMode::Preview => "preview",
-        AppMode::Search => "search",
-        AppMode::Confirm => "confirm",
-        AppMode::Help => "help",
-        AppMode::RunScript => "running",
+        AppMode::Preview => "Preview",
+        AppMode::Search => "Search",
+        AppMode::Confirm => "Confirm",
+        AppMode::Help => "Help",
+        AppMode::RunScript => "Running",
     };
 
     let mode_color = match app.mode {
@@ -51,7 +51,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
 
     let status = Line::from(vec![
         Span::styled(
-            format!(" mode: {mode_text} "),
+            format!(" Mode: {mode_text} "),
             Style::default().bg(mode_color).fg(Color::Black).add_modifier(Modifier::BOLD),
         ),
         Span::raw(" "),
@@ -65,7 +65,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         },
         if has_selected { Span::raw(" ") } else { Span::raw("") },
         Span::styled(
-            " ?: help | q: quit | h/l: switch panels",
+            " ?: Help | q: Quit | h/l: Switch panels",
             Style::default().bg(Color::Rgb(203, 166, 247)).fg(Color::Black),
         ),
         Span::raw(" "),

@@ -8,7 +8,7 @@ struct Release {
 
 pub fn get_current_version() -> String {
     let version = env!("CARGO_PKG_VERSION");
-    format!("carch version {version}")
+    format!("Carch version {version}")
 }
 
 pub fn get_latest_version() -> Result<String> {
