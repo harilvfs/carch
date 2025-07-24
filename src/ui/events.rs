@@ -36,7 +36,7 @@ impl<'a> App<'a> {
                     update_preview(self);
                     toggle_search_mode(self);
                     self.focused_panel = FocusedPanel::Scripts;
-                    self.mode = AppMode::Confirm;
+                    self.mode = AppMode::Normal;
                 }
             }
             KeyCode::Down => {
