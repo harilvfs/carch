@@ -199,10 +199,15 @@ impl<'a> App<'a> {
                         self.scroll_preview_down();
                     }
                 }
-                AppMode::Search => {}
+                AppMode::Search => {
+                    if !self.search.results.is_empty() {
+                        self.search.selected_idx =
+                            (self.search.selected_idx + 1) % self.search.results.len();
+                    }
+                }
                 AppMode::Confirm => {}
                 AppMode::Help => {
-                    self.help.scroll = self.help.scroll.saturating_add(2);
+                    self.help.scroll = self.help.scroll.saturating_add(2).min(self.help.max_scroll);
                 }
                 AppMode::RunScript => {}
             },
@@ -213,7 +218,15 @@ impl<'a> App<'a> {
                         self.scroll_preview_up();
                     }
                 }
-                AppMode::Search => {}
+                AppMode::Search => {
+                    if !self.search.results.is_empty() {
+                        self.search.selected_idx = if self.search.selected_idx > 0 {
+                            self.search.selected_idx - 1
+                        } else {
+                            self.search.results.len() - 1
+                        };
+                    }
+                }
                 AppMode::Confirm => {}
                 AppMode::Help => {
                     self.help.scroll = self.help.scroll.saturating_sub(2);

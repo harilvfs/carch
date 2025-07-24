@@ -19,7 +19,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let title = if app.multi_select.enabled {
         format!("[{} selected]", app.multi_select.scripts.len())
     } else {
-        "Scripts (p for preview)".to_string()
+        "scripts (p for preview)".to_string()
     };
     let block = create_block(&title, is_focused);
 
