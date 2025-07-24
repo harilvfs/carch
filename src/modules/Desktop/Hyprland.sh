@@ -108,7 +108,7 @@ main_menu() {
         print_message "$RED" "IMPORTANT: ML4W installation methods may have changed. Please check the official repo first!"
         echo
     elif [[ "$choice" != "Exit" ]]; then
-        print_message "$YELLOW" "NOTE: Installation methods may have changed. Please check the official repository first!"
+        print_message "$RED" "IMPORTANT: Please check the official repository first to ensure installation methods haven't changed!"
         echo
     fi
 
