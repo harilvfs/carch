@@ -1,17 +1,17 @@
 [Bspwm]
-description = "Bspwm is a minimal, scriptable tiling window manager for X11 that uses binary space partitioning and relies on an external hotkey daemon for keyboard input. The script installs the Bspwm configuration from [gh0stzk/dotfiles](https://github.com/gh0stzk/dotfiles). The setup script is for Arch only, so for other distros, check the [repo](https://github.com/gh0stzk/dotfiles)."
+description = "Bspwm is a minimal, scriptable tiling window manager for X11 that uses binary space partitioning and relies on an external hotkey daemon for keyboard input. The script installs the Bspwm configuration from gh0stzk/dotfiles. The setup script is for Arch only, so for other distros, check the repo."
 
 [Dunst]
 description = "Dunst is a lightweight, customizable notification daemon for Linux that shows minimal, unobtrusive desktop notifications. The script applies my pre-configured Dunst setup."
 
 [Dwm]
-description = "dwm is a dynamic tiling window manager for X11, known for being minimal, fast, and configurable by editing its source code. The script will apply my pre-configured dwm setup from my [harilvfs/dwm](https://github.com/harilvfs/dwm) repo and install all necessary dependencies to make the environment fully functional."
+description = "dwm is a dynamic tiling window manager for X11, known for being minimal, fast, and configurable by editing its source code. The script will apply my pre-configured dwm setup from my harilvfs/dwm repo and install all necessary dependencies to make the environment fully functional."
 
 [Hyprland]
-description = "Hyprland is a dynamic tiling Wayland compositor that supports modern features like animations, window effects, and flexible tiling layouts. The script lets you install pre-configured Hyprland setups from respected users - [ml4w](https://github.com/mylinuxforwork/dotfiles), [end-4](https://github.com/end-4/dots-hyprland), [Jakoolit](https://github.com/JaKooLit/Arch-Hyprland), [omarchy](https://github.com/basecamp/omarchy) and [prasanthrangan dots](https://github.com/prasanthrangan/hyprdots)."
+description = "Hyprland is a dynamic tiling Wayland compositor that supports modern features like animations, window effects, and flexible tiling layouts. The script lets you install pre-configured Hyprland setups from respected users - ml4w, end-4, Jakoolit, omarchy and prasanthrangan dots."
 
 [Picom]
-description = "Picom is a lightweight compositor for X11 that adds window transparency, shadows, and animations. The script offers installation of my pre-configured Picom config and support for animated Picom from [picom-ftlabs](https://github.com/r0-zero/picom)."
+description = "Picom is a lightweight compositor for X11 that adds window transparency, shadows, and animations. The script offers installation of my pre-configured Picom config and support for animated Picom from picom-ftlabs."
 
 [Rofi]
 description = "Rofi is a lightweight application launcher, window switcher, and dmenu replacement for X11. The script applies my pre-configured Rofi config."

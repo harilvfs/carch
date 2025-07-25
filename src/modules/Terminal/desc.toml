@@ -5,7 +5,7 @@ description = "Alacritty is a fast, GPU-accelerated terminal emulator focused on
 description = "The customizable command-line prompt for the Bash shell. The script lets you choose between Tokyo Night, Catppuccin, and Nord themes."
 
 [Fish]
-description = "Fish (Friendly Interactive Shell) is a user-friendly Unix shell with smart auto-suggestions, syntax highlighting, and easy scripting. The script installs and applies the [tide](https://github.com/IlanCosman/tide) theme."
+description = "Fish (Friendly Interactive Shell) is a user-friendly Unix shell with smart auto-suggestions, syntax highlighting, and easy scripting. The script installs and applies the tide theme."
 
 [Foot]
 description = "Foot is a lightweight, fast, minimal Wayland-native terminal emulator designed for simplicity and performance. The script applies my pre-configured Foot config."
