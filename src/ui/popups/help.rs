@@ -10,7 +10,7 @@ fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
 
-/// draws the help pop-up with keyboard shortcuts.
+/// draws the help pop-up with keyboard shortcuts
 pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     f.render_widget(Clear, area);
 
@@ -85,6 +85,16 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         Span::styled(" p ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray)),
+    ]));
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
+        Span::styled(" d ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::raw(" "),
+        Span::styled(
+            "Show script description (press 'd' again to close)",
+            Style::default().fg(Color::Gray),
+        ),
     ]));
     help_content.push(Line::from(""));
 

@@ -6,16 +6,16 @@ use ratatui::widgets::{Block, BorderType, Borders, Paragraph};
 
 use crate::ui::state::App;
 
-/// draws the header at the top of the screen.
-/// it shows breadcrumbs, script counts, and the app title.
+/// draws the header at the top of the screen
+/// it shows breadcrumbs, script counts, and the app title
 pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
     let header_block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
         .border_type(BorderType::Rounded);
 
-    // get the inner area to draw the content.
-    // this prevents the margin from affecting the layout.
+    // get the inner area to draw the content
+    // this prevents the margin from affecting the layout
     let inner_area = header_block.inner(area);
     f.render_widget(header_block, area);
 

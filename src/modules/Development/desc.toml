@@ -1,0 +1,11 @@
+[Bun]
+description = "Bun is a fast, all-in-one JavaScript runtime, bundler, and package manager focused on performance. The script installs Bun on your system."
+
+[Helix]
+description = "Helix is a modal text editor inspired by Vim, focused on speed and modern features such as syntax highlighting, language server protocol (LSP) integration, and multiple cursors. The script applies my pre-configured Helix config."
+
+[Neovim]
+description = "Neovim is a modern, improved fork of Vim designed to be more extensible, faster, and easier to integrate with plugins. The script lets you choose between Kickstart Neovim and NvChad setups to customize your IDE environment."
+
+[Npm]
+description = "npm (Node Package Manager) is the default package manager for Node.js, used for managing JavaScript libraries and dependencies. The script installs npm on your system."

@@ -15,28 +15,28 @@ mod error;
 mod ui;
 mod version;
 
-// puts the `src/modules` folder into the app binary.
-// this means we can ship the app as a single file.
+// puts the `src/modules` folder into the app binary
+// this means we can ship the app as a single file
 static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 
-// sets file permissions to be runnable for the owner, and readable for everyone.
-// we use this for the shell scripts we pull out of the binary.
+// sets file permissions to be runnable for the owner, and readable for everyone
+// we use this for the shell scripts we pull out of the binary
 const EXECUTABLE_MODE: u32 = 0o755;
 
 fn main() -> Result<()> {
     args::parse_args()
 }
 
-// this is where the tui (the app's user interface) starts.
+// this is where the tui (the app's user interface) starts
 // it makes a temporary folder, pulls the shell scripts out into it,
-// and then starts the ui.
+// and then starts the ui
 pub fn run_tui(settings: Settings) -> Result<()> {
     if settings.log_mode {
         info!("Starting TUI application");
     }
 
-    // we use a temporary folder to hold the shell scripts.
-    // this folder gets deleted when the app closes.
+    // we use a temporary folder to hold the shell scripts
+    // this folder gets deleted when the app closes
     let temp_dir = TempDir::new().map_err(|e| CarchError::TempDir(e.to_string()))?;
     let scripts_path = temp_dir.path();
     extract_scripts(scripts_path)?;
@@ -67,8 +67,8 @@ pub fn run_tui(settings: Settings) -> Result<()> {
     result
 }
 
-// pulls out the embedded files and folders into a temporary folder.
-// it also makes sure any shell scripts (.sh) can be run.
+// pulls out the embedded files and folders into a temporary folder
+// it also makes sure any shell scripts (.sh) can be run
 pub fn extract_scripts(temp_path: &Path) -> Result<()> {
     let modules_dir = temp_path.join("modules");
     fs::create_dir_all(&modules_dir)
@@ -77,7 +77,7 @@ pub fn extract_scripts(temp_path: &Path) -> Result<()> {
     extract_dir_recursive(&EMBEDDED_DIR, &modules_dir)?;
 
     // we make a symlink (like a shortcut) to the `modules` folder to make it easier to find
-    // and look at the scripts the app is using.
+    // and look at the scripts the app is using
     let preview_link = temp_path.join("preview_scripts");
     if fs::remove_file(&preview_link).is_err() {
         // ignore if the link doesn't exist yet
@@ -114,7 +114,7 @@ fn extract_dir_recursive(dir: &Dir, target_path: &Path) -> Result<()> {
     Ok(())
 }
 
-// makes a file runnable.
+// makes a file runnable
 fn set_executable(path: &Path) -> Result<()> {
     let mut perms = fs::metadata(path)
         .map_err(|e| CarchError::Metadata(path.display().to_string(), e))?

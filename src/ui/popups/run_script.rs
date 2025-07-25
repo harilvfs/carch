@@ -14,36 +14,36 @@ use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
 use vt100_ctt::{Parser, Screen};
 
-/// events that can be sent from the pop-up.
+/// events that can be sent from the pop-up
 pub enum PopupEvent {
-    /// tells the main app to close the pop-up.
+    /// tells the main app to close the pop-up
     Close,
-    /// no event.
+    /// no event
     None,
 }
 
-/// holds the state for the pop-up that runs a script.
+/// holds the state for the pop-up that runs a script
 pub struct RunScriptPopup {
-    /// the output from the command.
+    /// the output from the command
     buffer:         Arc<Mutex<Vec<u8>>>,
-    /// the thread that the command is running in.
+    /// the thread that the command is running in
     command_thread: Option<JoinHandle<ExitStatus>>,
-    /// used to kill the running command.
+    /// used to kill the running command
     child_killer:   Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
-    /// the thread that reads the command's output.
+    /// the thread that reads the command's output
     _reader_thread: JoinHandle<()>,
-    /// the master side of the pty.
+    /// the master side of the pty
     pty_master:     Box<dyn MasterPty + Send>,
-    /// used to write to the command's input.
+    /// used to write to the command's input
     writer:         Box<dyn Write + Send>,
-    /// the exit status of the command.
+    /// the exit status of the command
     status:         Option<ExitStatus>,
-    /// how far the user has scrolled up.
+    /// how far the user has scrolled up
     scroll_offset:  usize,
 }
 
 impl RunScriptPopup {
-    /// creates a new pop-up to run a script.
+    /// creates a new pop-up to run a script
     pub fn new(script_path: PathBuf, log_mode: bool) -> Self {
         let pty_system = NativePtySystem::default();
 
@@ -101,7 +101,7 @@ impl RunScriptPopup {
         }
     }
 
-    /// handles key events for the pop-up.
+    /// handles key events for the pop-up
     pub fn handle_key_event(&mut self, key: KeyEvent) -> PopupEvent {
         match key.code {
             KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
@@ -125,7 +125,7 @@ impl RunScriptPopup {
         }
     }
 
-    /// checks if the script has finished running.
+    /// checks if the script has finished running
     fn is_finished(&self) -> bool {
         if let Some(command_thread) = &self.command_thread {
             command_thread.is_finished()
@@ -134,7 +134,7 @@ impl RunScriptPopup {
         }
     }
 
-    /// creates a `screen` from the command's output buffer.
+    /// creates a `screen` from the command's output buffer
     fn screen(&mut self, size: Size) -> Screen {
         self.pty_master
             .resize(PtySize {
@@ -152,7 +152,7 @@ impl RunScriptPopup {
         parser.screen().clone()
     }
 
-    /// gets the exit status of the script.
+    /// gets the exit status of the script
     fn get_exit_status(&mut self) -> ExitStatus {
         if self.command_thread.is_some() {
             let handle = self.command_thread.take().unwrap();
@@ -164,7 +164,7 @@ impl RunScriptPopup {
         }
     }
 
-    /// kills the running script.
+    /// kills the running script
     pub fn kill_child(&mut self) {
         if !self.is_finished()
             && let Some(killer_rx) = self.child_killer.take()
@@ -174,7 +174,7 @@ impl RunScriptPopup {
         }
     }
 
-    /// sends key events to the running script.
+    /// sends key events to the running script
     fn handle_passthrough_key_event(&mut self, key: KeyEvent) {
         let input_bytes = match key.code {
             KeyCode::Char(ch) => ch.to_string().into_bytes(),
