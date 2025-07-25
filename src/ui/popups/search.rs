@@ -9,17 +9,7 @@ use crate::ui::state::App;
 /// draws the search pop-up.
 /// it shows a search box and a list of results.
 pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
-    let popup_width = std::cmp::min(70, area.width - 8);
-    let popup_height = std::cmp::min(16, area.height - 6);
-
-    let popup_area = Rect {
-        x:      area.x + (area.width - popup_width) / 2,
-        y:      area.y + (area.height - popup_height) / 2,
-        width:  popup_width,
-        height: popup_height,
-    };
-
-    f.render_widget(Clear, popup_area);
+    f.render_widget(Clear, area);
 
     let popup_block = Block::default()
         .borders(Borders::ALL)
@@ -27,9 +17,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .title("Search")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
-    f.render_widget(popup_block.clone(), popup_area);
+    f.render_widget(popup_block.clone(), area);
 
-    let inner_area = popup_block.inner(popup_area);
+    let inner_area = popup_block.inner(area);
 
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)
@@ -70,7 +60,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let mut result_items = Vec::new();
 
-    let max_display = (popup_height - 5) as usize;
+    let max_display = (area.height - 5) as usize;
     let result_count = app.search.results.len();
 
     let display_count = std::cmp::min(result_count, max_display);

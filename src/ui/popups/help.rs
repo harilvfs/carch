@@ -12,29 +12,19 @@ fn create_rounded_block() -> Block<'static> {
 
 /// draws the help pop-up with keyboard shortcuts.
 pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
-    let popup_width = std::cmp::min(80, area.width.saturating_sub(4));
-    let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
-
-    let popup_area = Rect {
-        x:      area.x + (area.width - popup_width) / 2,
-        y:      area.y + (area.height - popup_height) / 2,
-        width:  popup_width,
-        height: popup_height,
-    };
-
-    f.render_widget(Clear, popup_area);
+    f.render_widget(Clear, area);
 
     let popup_block = create_rounded_block()
         .title("Keyboard Shortcuts")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
-    f.render_widget(popup_block.clone(), popup_area);
+    f.render_widget(popup_block.clone(), area);
 
     let content_area = Rect {
-        x:      popup_block.inner(popup_area).x + 1,
-        y:      popup_block.inner(popup_area).y,
-        width:  popup_block.inner(popup_area).width.saturating_sub(2),
-        height: popup_block.inner(popup_area).height.saturating_sub(2),
+        x:      popup_block.inner(area).x + 1,
+        y:      popup_block.inner(area).y,
+        width:  popup_block.inner(area).width.saturating_sub(2),
+        height: popup_block.inner(area).height.saturating_sub(2),
     };
 
     let mut help_content = Vec::new();
@@ -170,9 +160,9 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     f.render_widget(help_paragraph, content_area);
 
     let footer_area = Rect {
-        x:      popup_area.x + 1,
-        y:      popup_area.y + popup_area.height - 2,
-        width:  popup_area.width - 2,
+        x:      area.x + 1,
+        y:      area.y + area.height - 2,
+        width:  area.width - 2,
         height: 1,
     };
 

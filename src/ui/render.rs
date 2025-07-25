@@ -79,6 +79,8 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     render_normal_ui(f, app, options);
 
     // draw pop-ups on top of the normal ui based on the current mode.
+    // for popups with dynamic sizes, we calculate the percentage of the area to use.
+    // this allows us to use the `centered_rect` function while preserving the intended size.
     match app.mode {
         AppMode::RunScript => {
             if let Some(popup) = &mut app.run_script_popup {
@@ -88,13 +90,41 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
             }
         }
         AppMode::Search => {
-            popups::search::render_search_popup(f, app, app.script_panel_area);
+            let area = app.script_panel_area;
+            let popup_width = std::cmp::min(70, area.width.saturating_sub(8));
+            let popup_height = std::cmp::min(16, area.height.saturating_sub(6));
+
+            let percent_x = if area.width > 0 { (popup_width * 100) / area.width } else { 100 };
+            let percent_y = if area.height > 0 { (popup_height * 100) / area.height } else { 100 };
+
+            let popup_area = centered_rect(percent_x, percent_y, area);
+            popups::search::render_search_popup(f, app, popup_area);
         }
         AppMode::Confirm => {
-            popups::confirmation::render_confirmation_popup(f, app, app.script_panel_area);
+            let area = app.script_panel_area;
+            let popup_width = std::cmp::min(60, area.width.saturating_sub(8));
+            let popup_height = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
+                std::cmp::min(20, area.height.saturating_sub(6))
+            } else {
+                11
+            };
+
+            let percent_x = if area.width > 0 { (popup_width * 100) / area.width } else { 100 };
+            let percent_y = if area.height > 0 { (popup_height * 100) / area.height } else { 100 };
+
+            let popup_area = centered_rect(percent_x, percent_y, area);
+            popups::confirmation::render_confirmation_popup(f, app, popup_area);
         }
         AppMode::Help => {
-            let max_scroll = popups::help::render_help_popup(f, app, app.script_panel_area);
+            let area = app.script_panel_area;
+            let popup_width = std::cmp::min(80, area.width.saturating_sub(4));
+            let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
+
+            let percent_x = if area.width > 0 { (popup_width * 100) / area.width } else { 100 };
+            let percent_y = if area.height > 0 { (popup_height * 100) / area.height } else { 100 };
+
+            let popup_area = centered_rect(percent_x, percent_y, area);
+            let max_scroll = popups::help::render_help_popup(f, app, popup_area);
             app.help.max_scroll = max_scroll;
         }
         AppMode::Preview => {

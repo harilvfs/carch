@@ -8,21 +8,7 @@ use crate::ui::state::App;
 /// draws the confirmation pop-up.
 /// this asks the user to confirm if they want to run a script or a set of scripts.
 pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
-    let popup_width = std::cmp::min(60, area.width - 8);
-    let popup_height = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
-        std::cmp::min(20, area.height - 6)
-    } else {
-        11
-    };
-
-    let popup_area = Rect {
-        x:      area.x + (area.width - popup_width) / 2,
-        y:      area.y + (area.height - popup_height) / 2,
-        width:  popup_width,
-        height: popup_height,
-    };
-
-    f.render_widget(Clear, popup_area);
+    f.render_widget(Clear, area);
 
     let popup_block = Block::default()
         .borders(Borders::ALL)
@@ -30,7 +16,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         .title("Confirm")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
-    let inner_area = popup_block.inner(popup_area);
+    let inner_area = popup_block.inner(area);
 
     let content_layout = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         Layout::default()
@@ -55,7 +41,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
             .split(inner_area)
     };
 
-    f.render_widget(popup_block, popup_area);
+    f.render_widget(popup_block, area);
 
     let question_text = if app.multi_select.enabled && !app.multi_select.scripts.is_empty() {
         "Do you want to run these scripts?"
@@ -83,7 +69,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         f.render_widget(count_text, content_layout[1]);
 
         let mut script_items = Vec::new();
-        let max_display = (popup_height - 10) as usize;
+        let max_display = (area.height - 10) as usize;
         let display_count = std::cmp::min(app.multi_select.scripts.len(), max_display);
 
         for i in 0..display_count {
