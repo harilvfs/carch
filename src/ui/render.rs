@@ -61,7 +61,7 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
 
     let main_chunks = Layout::default()
         .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(30), Constraint::Percentage(70)])
+        .constraints([Constraint::Percentage(20), Constraint::Percentage(80)])
         .split(chunks[1]);
 
     app.script_panel_area = main_chunks[1];
