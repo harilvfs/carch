@@ -6,7 +6,6 @@ use ratatui::layout::Rect;
 use ratatui::text::Text;
 
 use super::popups::run_script::RunScriptPopup;
-use super::system_info::SystemInfo;
 
 /// shows the different modes the app can be in.
 /// each mode changes how user input works and what's on the screen.
@@ -191,8 +190,6 @@ pub struct App<'a> {
     /// a map of all scripts, sorted by group.
     pub all_scripts: HashMap<String, Vec<ScriptItem>>,
 
-    /// info about the system, like os, kernel version, etc.
-    pub system_info:            SystemInfo,
     /// the part of the screen the script panel uses.
     pub script_panel_area:      Rect,
     /// the state of the script preview panel.

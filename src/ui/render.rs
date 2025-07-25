@@ -54,7 +54,7 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(4), Constraint::Min(0), Constraint::Length(1)])
+        .constraints([Constraint::Length(3), Constraint::Min(0), Constraint::Length(1)])
         .split(area);
 
     render_header(f, app, chunks[0]);

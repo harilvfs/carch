@@ -25,8 +25,6 @@ impl<'a> App<'a> {
             categories:  StatefulList::new(),
             all_scripts: HashMap::new(),
 
-            // get the system info.
-            system_info:            super::system_info::SystemInfo::new(),
             // the script panel area starts as a zero-sized box.
             script_panel_area:      Rect::default(),
             // set up the starting state for preview, search, multi-select, and help.
