@@ -1,18 +1,12 @@
 use crossterm::event::{KeyCode, KeyEvent, MouseEvent, MouseEventKind};
 
-use super::actions::{
-    bottom, get_script_path, next, perform_search, previous, scroll_preview_down,
-    scroll_preview_page_down, scroll_preview_page_up, scroll_preview_up, toggle_help_mode,
-    toggle_multi_select_mode, toggle_preview_mode, toggle_script_selection, toggle_search_mode,
-    top, update_autocomplete, update_preview,
-};
 use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
 
 impl<'a> App<'a> {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
-            KeyCode::Esc => toggle_search_mode(self),
+            KeyCode::Esc => self.toggle_search_mode(),
             KeyCode::Enter => {
                 if !self.search.results.is_empty() {
                     let selected_item = self.search.results[self.search.selected_idx].clone();
@@ -21,7 +15,7 @@ impl<'a> App<'a> {
                         self.categories.items.iter().position(|c| *c == selected_item.item.category)
                     {
                         self.categories.state.select(Some(category_idx));
-                        super::actions::update_script_list(self);
+                        self.update_script_list();
 
                         if let Some(script_idx) = self
                             .scripts
@@ -33,8 +27,8 @@ impl<'a> App<'a> {
                         }
                     }
 
-                    update_preview(self);
-                    toggle_search_mode(self);
+                    self.update_preview();
+                    self.toggle_search_mode();
                     self.focused_panel = FocusedPanel::Scripts;
                     self.mode = AppMode::Normal;
                 }
@@ -58,23 +52,23 @@ impl<'a> App<'a> {
                 if let Some(autocomplete) = self.search.autocomplete.take() {
                     self.search.input = autocomplete;
                     self.search.cursor_position = self.search.input.len();
-                    perform_search(self);
-                    update_autocomplete(self);
+                    self.perform_search();
+                    self.update_autocomplete();
                 }
             }
             KeyCode::Char(c) => {
                 self.search.input.push(c);
                 self.search.cursor_position += 1;
-                perform_search(self);
-                update_autocomplete(self);
+                self.perform_search();
+                self.update_autocomplete();
                 self.search.selected_idx = 0;
             }
             KeyCode::Backspace => {
                 if self.search.cursor_position > 0 {
                     self.search.input.remove(self.search.cursor_position - 1);
                     self.search.cursor_position -= 1;
-                    perform_search(self);
-                    update_autocomplete(self);
+                    self.perform_search();
+                    self.update_autocomplete();
                     self.search.selected_idx = 0;
                 }
             }
@@ -93,7 +87,7 @@ impl<'a> App<'a> {
                 {
                     self.search.input = self.search.autocomplete.take().unwrap();
                     self.search.cursor_position = self.search.input.len();
-                    perform_search(self);
+                    self.perform_search();
                 }
             }
             _ => {}
@@ -107,14 +101,14 @@ impl<'a> App<'a> {
             }
             KeyCode::Esc => {
                 if self.multi_select.enabled {
-                    toggle_multi_select_mode(self);
+                    self.toggle_multi_select_mode();
                 }
             }
             KeyCode::Char('j') | KeyCode::Down => {
-                next(self);
+                self.next();
             }
             KeyCode::Char('k') | KeyCode::Up => {
-                previous(self);
+                self.previous();
             }
             KeyCode::Char('h') | KeyCode::Left => {
                 self.focused_panel = FocusedPanel::Categories;
@@ -135,22 +129,22 @@ impl<'a> App<'a> {
                 }
             }
             KeyCode::Home => {
-                top(self);
+                self.top();
             }
             KeyCode::End => {
-                bottom(self);
+                self.bottom();
             }
             KeyCode::Char('/') => {
-                toggle_search_mode(self);
+                self.toggle_search_mode();
             }
             KeyCode::Char('p') => {
-                toggle_preview_mode(self);
+                self.toggle_preview_mode();
             }
             KeyCode::Char('m') => {
-                toggle_multi_select_mode(self);
+                self.toggle_multi_select_mode();
             }
             KeyCode::Char('?') => {
-                toggle_help_mode(self);
+                self.toggle_help_mode();
             }
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts
@@ -162,7 +156,7 @@ impl<'a> App<'a> {
             }
             KeyCode::Char(' ') => {
                 if self.multi_select.enabled {
-                    toggle_script_selection(self);
+                    self.toggle_script_selection();
                 }
             }
             _ => {}
@@ -175,16 +169,16 @@ impl<'a> App<'a> {
                 self.mode = AppMode::Normal;
             }
             KeyCode::Char('j') | KeyCode::Down => {
-                scroll_preview_down(self);
+                self.scroll_preview_down();
             }
             KeyCode::Char('k') | KeyCode::Up => {
-                scroll_preview_up(self);
+                self.scroll_preview_up();
             }
             KeyCode::PageDown => {
-                scroll_preview_page_down(self);
+                self.scroll_preview_page_down();
             }
             KeyCode::PageUp => {
-                scroll_preview_page_up(self);
+                self.scroll_preview_page_up();
             }
             KeyCode::Home => {
                 self.preview.scroll = 0;
@@ -199,27 +193,43 @@ impl<'a> App<'a> {
     pub fn handle_mouse(&mut self, event: MouseEvent) {
         match event.kind {
             MouseEventKind::ScrollDown => match self.mode {
-                AppMode::Normal => next(self),
+                AppMode::Normal => self.next(),
                 AppMode::Preview => {
                     for _ in 0..2 {
-                        scroll_preview_down(self);
+                        self.scroll_preview_down();
                     }
                 }
-                AppMode::Search => {}
+                AppMode::Search => {
+                    // allows scrolling down through search results
+                    if !self.search.results.is_empty() {
+                        self.search.selected_idx =
+                            (self.search.selected_idx + 1) % self.search.results.len();
+                    }
+                }
                 AppMode::Confirm => {}
                 AppMode::Help => {
-                    self.help.scroll = self.help.scroll.saturating_add(2);
+                    // ensures scrolling doesn't go past the bottom of the help text
+                    self.help.scroll = self.help.scroll.saturating_add(2).min(self.help.max_scroll);
                 }
                 AppMode::RunScript => {}
             },
             MouseEventKind::ScrollUp => match self.mode {
-                AppMode::Normal => previous(self),
+                AppMode::Normal => self.previous(),
                 AppMode::Preview => {
                     for _ in 0..2 {
-                        scroll_preview_up(self);
+                        self.scroll_preview_up();
                     }
                 }
-                AppMode::Search => {}
+                AppMode::Search => {
+                    // allows scrolling up through search results
+                    if !self.search.results.is_empty() {
+                        self.search.selected_idx = if self.search.selected_idx > 0 {
+                            self.search.selected_idx - 1
+                        } else {
+                            self.search.results.len() - 1
+                        };
+                    }
+                }
                 AppMode::Confirm => {}
                 AppMode::Help => {
                     self.help.scroll = self.help.scroll.saturating_sub(2);
@@ -235,7 +245,7 @@ impl<'a> App<'a> {
             KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
                 if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
                     self.script_execution_queue = self.multi_select.scripts.clone();
-                } else if let Some(script_path) = get_script_path(self) {
+                } else if let Some(script_path) = self.get_script_path() {
                     self.script_execution_queue.push(script_path);
                 }
 

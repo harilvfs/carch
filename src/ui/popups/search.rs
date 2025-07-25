@@ -6,10 +6,8 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragr
 
 use crate::ui::state::App;
 
-fn create_rounded_block() -> Block<'static> {
-    Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
-}
-
+/// draws the search pop-up.
+/// it shows a search box and a list of results.
 pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let popup_width = std::cmp::min(70, area.width - 8);
     let popup_height = std::cmp::min(16, area.height - 6);
@@ -23,7 +21,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(Clear, popup_area);
 
-    let popup_block = create_rounded_block()
+    let popup_block = Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
         .title("Search")
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
@@ -50,7 +50,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let input = Paragraph::new(display_text)
         .block(
-            create_rounded_block()
+            Block::default()
+                .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
                 .title("Type to search (Tab to complete)")
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )
@@ -127,7 +129,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let search_results = List::new(result_items)
         .block(
-            create_rounded_block()
+            Block::default()
+                .borders(Borders::ALL)
+                .border_type(BorderType::Rounded)
                 .title(result_count_text)
                 .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
         )

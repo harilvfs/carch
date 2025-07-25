@@ -10,6 +10,7 @@ fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
 
+/// draws the help pop-up with keyboard shortcuts.
 pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     let popup_width = std::cmp::min(80, area.width.saturating_sub(4));
     let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
@@ -48,7 +49,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled("Navigate up/down in the script list", Style::default().fg(Color::Gray)),
+        Span::styled("Move up/down in the script list", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
@@ -184,7 +185,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     let footer = Paragraph::new(Line::from(vec![
         Span::styled("↑/↓/j/k: ", Style::default().fg(Color::Gray)),
         Span::styled("Scroll  ", Style::default().fg(Color::Blue)),
-        Span::styled("ESC/q: ", Style::default().fg(Color::Gray)),
+        Span::styled("Esc/q: ", Style::default().fg(Color::Gray)),
         Span::styled("Close", Style::default().fg(Color::Rgb(137, 180, 250))),
         Span::raw("  "),
         Span::styled(scroll_status, Style::default().fg(Color::DarkGray)),

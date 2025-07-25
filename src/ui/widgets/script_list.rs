@@ -3,7 +3,6 @@ use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
-use crate::ui::actions::is_script_selected;
 use crate::ui::state::{App, FocusedPanel};
 
 fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
@@ -18,7 +17,7 @@ fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Scripts;
     let title = if app.multi_select.enabled {
-        format!("[{} selected]", app.multi_select.scripts.len())
+        format!("[{} Selected]", app.multi_select.scripts.len())
     } else {
         "Scripts (p for preview)".to_string()
     };
@@ -34,7 +33,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let script_name = ratatui::text::Span::styled(&item.name, script_name_style);
 
             if app.multi_select.enabled {
-                let is_selected = is_script_selected(app, &item.path);
+                let is_selected = app.is_script_selected(&item.path);
                 let prefix = if is_selected { "[✓] " } else { "[ ] " };
 
                 let prefix_style = if is_selected {

@@ -27,16 +27,9 @@ pub enum Commands {
     Uninstall,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Default)]
 pub struct Settings {
-    pub show_preview: bool,
-    pub log_mode:     bool,
-}
-
-impl Default for Settings {
-    fn default() -> Self {
-        Self { show_preview: true, log_mode: false }
-    }
+    pub log_mode: bool,
 }
 
 pub fn parse_args() -> Result<()> {
@@ -55,7 +48,7 @@ pub fn parse_args() -> Result<()> {
             .target(Target::Pipe(Box::new(file)))
             .filter(None, log::LevelFilter::Info)
             .init();
-        info!("Carch application started");
+        info!("Carch TUI started");
     }
 
     match cli.command {

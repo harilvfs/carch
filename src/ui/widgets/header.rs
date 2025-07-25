@@ -6,6 +6,8 @@ use ratatui::widgets::{Block, BorderType, Borders, Paragraph};
 
 use crate::ui::state::App;
 
+/// draws the header at the top of the screen.
+/// it shows system info and the app title.
 pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
     let header_block = Block::default()
         .borders(Borders::ALL)
@@ -36,11 +38,11 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
 
     let center_text = vec![
         Line::from(vec![Span::styled(
-            "CARCH",
+            "Carch",
             Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
         )]),
         Line::from(vec![Span::styled(
-            "Automate Your Linux System Setup",
+            "Automate your Linux system setup",
             Style::default().fg(Color::Rgb(235, 235, 210)).add_modifier(Modifier::ITALIC),
         )]),
     ];

@@ -1,5 +1,6 @@
 use sysinfo::System;
 
+/// holds info about the system.
 pub struct SystemInfo {
     pub os:       String,
     pub kernel:   String,
@@ -8,16 +9,18 @@ pub struct SystemInfo {
 }
 
 impl SystemInfo {
+    /// gets the current system info.
     pub fn new() -> Self {
         let os = System::name().unwrap_or_else(|| "Unknown OS".to_string());
-        let kernel = System::kernel_version().unwrap_or_else(|| "Unknown Kernel".to_string());
+        let kernel = System::kernel_version().unwrap_or_else(|| "Unknown kernel".to_string());
         let uptime = format_uptime(System::uptime());
-        let hostname = System::host_name().unwrap_or_else(|| "Unknown Hostname".to_string());
+        let hostname = System::host_name().unwrap_or_else(|| "Unknown hostname".to_string());
 
         SystemInfo { os, kernel, uptime, hostname }
     }
 }
 
+/// turns seconds into a human-readable string (e.g., "1d 2h 3m").
 fn format_uptime(secs: u64) -> String {
     let days = secs / (24 * 3600);
     let hours = (secs % (24 * 3600)) / 3600;
