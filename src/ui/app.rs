@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 
+use log::info;
 use ratatui::layout::Rect;
 
 use super::state::{
@@ -49,23 +50,55 @@ impl<'a> App<'a> {
         if self.mode == AppMode::Description {
             self.mode = AppMode::Normal;
             self.description.content = None;
+            if self.log_mode {
+                info!("Closed description popup");
+            }
         } else if let Some(selected_script) = self.get_selected_script() {
             let desc_path = self.modules_dir.join(&selected_script.category).join("desc.toml");
 
-            if desc_path.exists()
-                && let Ok(content) = std::fs::read_to_string(desc_path)
-                && let Ok(table) = content.parse::<toml::Value>()
-            {
-                let script_path = PathBuf::from(&selected_script.name);
-                let script_name_without_ext = script_path.file_stem().and_then(|s| s.to_str());
+            if self.log_mode {
+                info!(
+                    "Attempting to show description for script: {}/{}",
+                    selected_script.category, selected_script.name
+                );
+                info!("Description file path: {}", desc_path.display());
+            }
 
-                if let Some(name) = script_name_without_ext
-                    && let Some(desc) =
-                        table.get(name).and_then(|v| v.get("description")).and_then(|v| v.as_str())
-                {
-                    self.description.content = Some(desc.to_string());
-                    self.mode = AppMode::Description;
+            if desc_path.exists() {
+                if let Ok(content) = std::fs::read_to_string(&desc_path) {
+                    if let Ok(table) = content.parse::<toml::Value>() {
+                        let script_path = PathBuf::from(&selected_script.name);
+                        let script_name_without_ext =
+                            script_path.file_stem().and_then(|s| s.to_str());
+
+                        if let Some(name) = script_name_without_ext {
+                            if let Some(desc) = table
+                                .get(name)
+                                .and_then(|v| v.get("description"))
+                                .and_then(|v| v.as_str())
+                            {
+                                self.description.content = Some(desc.to_string());
+                                self.mode = AppMode::Description;
+                                if self.log_mode {
+                                    info!(
+                                        "Successfully loaded description and entered description mode."
+                                    );
+                                }
+                            } else if self.log_mode {
+                                info!(
+                                    "No description found for script '{}' in desc.toml",
+                                    selected_script.name
+                                );
+                            }
+                        }
+                    } else if self.log_mode {
+                        info!("Failed to parse desc.toml at {}", desc_path.display());
+                    }
+                } else if self.log_mode {
+                    info!("Failed to read desc.toml at {}", desc_path.display());
                 }
+            } else if self.log_mode {
+                info!("desc.toml not found at {}", desc_path.display());
             }
         }
     }

@@ -1,4 +1,5 @@
 use crossterm::event::{KeyCode, KeyEvent, MouseEvent, MouseEventKind};
+use log::info;
 
 use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
@@ -10,6 +11,12 @@ impl<'a> App<'a> {
             KeyCode::Enter => {
                 if !self.search.results.is_empty() {
                     let selected_item = self.search.results[self.search.selected_idx].clone();
+                    if self.log_mode {
+                        info!(
+                            "Selected script from search: {}/{}",
+                            selected_item.item.category, selected_item.item.name
+                        );
+                    }
 
                     if let Some(category_idx) =
                         self.categories.items.iter().position(|c| *c == selected_item.item.category)
@@ -248,6 +255,17 @@ impl<'a> App<'a> {
     pub fn handle_key_confirmation_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
+                if self.log_mode {
+                    if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
+                        info!(
+                            "Confirmed execution of {} scripts.",
+                            self.multi_select.scripts.len()
+                        );
+                    } else if let Some(script_path) = self.get_script_path() {
+                        info!("Confirmed execution of script: {}", script_path.display());
+                    }
+                }
+
                 if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
                     self.script_execution_queue = self.multi_select.scripts.clone();
                 } else if let Some(script_path) = self.get_script_path() {
@@ -268,6 +286,9 @@ impl<'a> App<'a> {
             | KeyCode::Esc
             | KeyCode::Char('h')
             | KeyCode::Char('q') => {
+                if self.log_mode {
+                    info!("Cancelled script execution.");
+                }
                 self.mode = AppMode::Normal;
             }
             _ => {}

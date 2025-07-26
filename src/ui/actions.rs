@@ -202,6 +202,9 @@ impl<'a> App<'a> {
 
     /// selects the next item in the focused list
     pub fn next(&mut self) {
+        if self.log_mode {
+            info!("Navigating next in {:?}", self.focused_panel);
+        }
         match self.focused_panel {
             FocusedPanel::Categories => {
                 self.categories.next();
@@ -217,6 +220,9 @@ impl<'a> App<'a> {
 
     /// selects the previous item in the focused list
     pub fn previous(&mut self) {
+        if self.log_mode {
+            info!("Navigating previous in {:?}", self.focused_panel);
+        }
         match self.focused_panel {
             FocusedPanel::Categories => {
                 self.categories.previous();
