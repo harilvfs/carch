@@ -91,10 +91,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(vec![
         Span::styled(" d ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
-        Span::styled(
-            "Show script description (press 'd' again to close)",
-            Style::default().fg(Color::Gray),
-        ),
+        Span::styled("Show script description", Style::default().fg(Color::Gray)),
     ]));
     help_content.push(Line::from(""));
 
@@ -147,7 +144,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" l ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" l/-> ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Confirm selection (same as Enter)", Style::default().fg(Color::Gray)),
     ]));
@@ -155,7 +152,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" h ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" h/<- ", Style::default().bg(action_color).fg(Color::Black)),
         Span::raw(" "),
         Span::styled("Cancel selection (same as Esc)", Style::default().fg(Color::Gray)),
     ]));

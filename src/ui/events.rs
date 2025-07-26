@@ -258,7 +258,7 @@ impl<'a> App<'a> {
 
     pub fn handle_key_confirmation_mode(&mut self, key: KeyEvent) {
         match key.code {
-            KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') => {
+            KeyCode::Char('y') | KeyCode::Char('Y') | KeyCode::Char('l') | KeyCode::Right => {
                 if self.log_mode {
                     if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
                         info!(
@@ -289,7 +289,8 @@ impl<'a> App<'a> {
             | KeyCode::Char('N')
             | KeyCode::Esc
             | KeyCode::Char('h')
-            | KeyCode::Char('q') => {
+            | KeyCode::Char('q')
+            | KeyCode::Left => {
                 if self.log_mode {
                     info!("Cancelled script execution.");
                 }
