@@ -104,7 +104,11 @@ impl<'a> App<'a> {
     pub fn handle_key_normal_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Char('q') => {
-                self.quit = true;
+                if self.multi_select.enabled {
+                    self.toggle_multi_select_mode();
+                } else {
+                    self.quit = true;
+                }
             }
             KeyCode::Esc => {
                 if self.multi_select.enabled {
