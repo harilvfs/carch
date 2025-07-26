@@ -24,7 +24,7 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
         .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
         .split(inner_area);
 
-    // left side is  title and total scripts seprated by |
+    // left side is  title and total scripts separated by |
     let total_scripts = app.all_scripts.values().map(Vec::len).sum::<usize>();
     let left_text = Text::from(Line::from(vec![
         Span::styled("Carch", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
