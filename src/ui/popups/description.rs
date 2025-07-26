@@ -1,11 +1,13 @@
 use ratatui::Frame;
-use ratatui::layout::Rect;
-use ratatui::style::{Color, Style};
-use ratatui::text::Text;
+use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
+use ratatui::style::{Color, Modifier, Style};
+use ratatui::text::{Line, Span, Text};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
 
 use crate::ui::state::App;
 
+// we need to manually wrap text to calculate the number of lines for scrolling
+// the default tui widget wrapping doesn't tell us how many lines are created
 /// wraps the given text to fit within the specified width
 fn word_wrap(text: &str, width: u16) -> String {
     let mut wrapped_text = String::new();
@@ -35,20 +37,36 @@ pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
             .border_type(BorderType::Rounded)
             .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
-        let available_width = area.width.saturating_sub(2);
+        f.render_widget(Clear, area);
+        f.render_widget(popup_block.clone(), area);
+
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .margin(1)
+            .constraints([Constraint::Min(1), Constraint::Length(1)])
+            .split(area);
+
+        let available_width = chunks[0].width.saturating_sub(2);
         let wrapped_description = word_wrap(description, available_width);
 
         let text = Text::from(wrapped_description.as_str());
-        let paragraph = Paragraph::new(text)
-            .wrap(Wrap { trim: true })
-            .block(popup_block.clone())
-            .scroll((app.description.scroll, 0));
+        let paragraph =
+            Paragraph::new(text).wrap(Wrap { trim: true }).scroll((app.description.scroll, 0));
 
         let lines = wrapped_description.lines().count() as u16;
-        let available_height = area.height.saturating_sub(2);
+        let available_height = chunks[0].height;
         app.description.max_scroll = lines.saturating_sub(available_height);
 
-        f.render_widget(Clear, area);
-        f.render_widget(paragraph, area);
+        f.render_widget(paragraph, chunks[0]);
+
+        let help_text = Paragraph::new(Line::from(vec![
+            Span::styled(" Scroll: ", Style::default().fg(Color::DarkGray)),
+            Span::styled("↑/↓/j/k", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+            Span::styled("  Close: ", Style::default().fg(Color::DarkGray)),
+            Span::styled("Esc/q/d", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        ]))
+        .alignment(Alignment::Center);
+
+        f.render_widget(help_text, chunks[1]);
     }
 }
