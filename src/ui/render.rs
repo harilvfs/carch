@@ -135,7 +135,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::Description => {
             let area = app.script_panel_area;
             let popup_area = centered_rect(80, 80, area);
-            popups::description::render_description_popup(f, app, popup_area);
+            popups::description::render_description_popup(f, &mut *app, popup_area);
         }
         AppMode::Normal => {
             // no pop-up to draw in normal mode

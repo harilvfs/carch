@@ -332,6 +332,14 @@ impl<'a> App<'a> {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('d') => {
                 self.mode = AppMode::Normal;
                 self.description.content = None;
+                self.description.scroll = 0;
+            }
+            KeyCode::Char('j') | KeyCode::Down => {
+                self.description.scroll =
+                    (self.description.scroll + 1).min(self.description.max_scroll);
+            }
+            KeyCode::Char('k') | KeyCode::Up => {
+                self.description.scroll = self.description.scroll.saturating_sub(1);
             }
             _ => {}
         }

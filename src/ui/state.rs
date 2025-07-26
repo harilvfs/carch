@@ -177,7 +177,11 @@ pub struct HelpState {
 #[derive(Default)]
 pub struct DescriptionState {
     /// the content of the description
-    pub content: Option<String>,
+    pub content:    Option<String>,
+    /// how far down you've scrolled
+    pub scroll:     u16,
+    /// the furthest you can scroll
+    pub max_scroll: u16,
 }
 
 /// the main state for the whole app
