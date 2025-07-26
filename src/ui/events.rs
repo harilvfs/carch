@@ -146,6 +146,9 @@ impl<'a> App<'a> {
             KeyCode::Char('?') => {
                 self.toggle_help_mode();
             }
+            KeyCode::Char('d') => {
+                self.toggle_description_popup();
+            }
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts
                     && self.scripts.state.selected().is_some()
@@ -211,6 +214,7 @@ impl<'a> App<'a> {
                     // ensures scrolling doesn't go past the bottom of the help text
                     self.help.scroll = self.help.scroll.saturating_add(2).min(self.help.max_scroll);
                 }
+                AppMode::Description => {}
                 AppMode::RunScript => {}
             },
             MouseEventKind::ScrollUp => match self.mode {
@@ -234,6 +238,7 @@ impl<'a> App<'a> {
                 AppMode::Help => {
                     self.help.scroll = self.help.scroll.saturating_sub(2);
                 }
+                AppMode::Description => {}
                 AppMode::RunScript => {}
             },
             _ => {}
@@ -292,6 +297,16 @@ impl<'a> App<'a> {
             }
             KeyCode::PageUp => {
                 self.help.scroll = self.help.scroll.saturating_sub(10);
+            }
+            _ => {}
+        }
+    }
+
+    pub fn handle_key_description_mode(&mut self, key: KeyEvent) {
+        match key.code {
+            KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('d') => {
+                self.mode = AppMode::Normal;
+                self.description.content = None;
             }
             _ => {}
         }

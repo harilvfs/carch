@@ -24,10 +24,10 @@ fn compute_total_lines(lines: &[Line], area_width: u16) -> u16 {
         .sum()
 }
 
-/// draws the script preview pop-up.
-/// it shows the content of the selected script with syntax highlighting.
+/// draws the script preview pop-up
+/// it shows the content of the selected script with syntax highlighting
 pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
-    // clear the area to ensure the popup is drawn on a clean slate.
+    // clear the area to ensure the popup is drawn on a clean slate
     f.render_widget(Clear, area);
 
     let selected_script = app.scripts.state.selected().and_then(|idx| app.scripts.items.get(idx));
@@ -47,10 +47,10 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         ))
         .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
 
-    // draw the border and title.
+    // draw the border and title
     f.render_widget(popup_block.clone(), area);
 
-    // get the inner area of the popup block to render the content inside the border.
+    // get the inner area of the popup block to render the content inside the border
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)

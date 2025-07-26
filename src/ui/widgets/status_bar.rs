@@ -7,8 +7,8 @@ use ratatui::widgets::Paragraph;
 use crate::ui::state::{App, AppMode};
 use crate::version;
 
-/// draws the status bar at the bottom of the screen.
-/// it shows the current mode, help text, and app version.
+/// draws the status bar at the bottom of the screen
+/// it shows the current mode, help text, and app version
 pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_text = match app.mode {
         AppMode::Normal => {
@@ -22,6 +22,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Search => "Search",
         AppMode::Confirm => "Confirm",
         AppMode::Help => "Help",
+        AppMode::Description => "Description",
         AppMode::RunScript => "Running",
     };
 
@@ -37,6 +38,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Search => Color::Yellow,
         AppMode::Confirm => Color::Red,
         AppMode::Help => Color::Blue,
+        AppMode::Description => Color::Blue,
         AppMode::RunScript => Color::Yellow,
     };
 

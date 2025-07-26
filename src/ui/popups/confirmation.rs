@@ -5,8 +5,8 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragr
 
 use crate::ui::state::App;
 
-/// draws the confirmation pop-up.
-/// this asks the user to confirm if they want to run a script or a set of scripts.
+/// draws the confirmation pop-up
+/// this asks the user to confirm if they want to run a script or a set of scripts
 pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(Clear, area);
 

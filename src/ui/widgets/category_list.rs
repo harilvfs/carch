@@ -5,7 +5,7 @@ use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::{App, FocusedPanel};
 
-/// draws the list of script categories.
+/// draws the list of script categories
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Categories;
     let block = Block::default()
