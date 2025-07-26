@@ -21,54 +21,40 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
 
     let chunks = ratatui::layout::Layout::default()
         .direction(ratatui::layout::Direction::Horizontal)
-        .constraints([
-            Constraint::Percentage(33), // left
-            Constraint::Percentage(34), // center
-            Constraint::Percentage(33), // right
-        ])
+        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
         .split(inner_area);
 
-    // left side: breadcrumb
+    // left side is  title and total scripts seprated by |
+    let total_scripts = app.all_scripts.values().map(Vec::len).sum::<usize>();
+    let left_text = Text::from(Line::from(vec![
+        Span::styled("Carch", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+        Span::raw(format!(" | Total Scripts: {total_scripts}")),
+    ]));
+    f.render_widget(Paragraph::new(left_text).alignment(Alignment::Left), chunks[0]);
+
+    // right side is our breadcrumb
     let breadcrumb = if let Some(script_idx) = app.scripts.state.selected() {
         let script = &app.scripts.items[script_idx];
+        let category_scripts = app.scripts.items.len();
+        let script_pos = script_idx + 1;
         Text::from(Line::from(vec![
-            Span::styled("Script: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
-            Span::raw(format!("{}/{}", script.category, script.name)),
+            Span::styled(&script.category, Style::default().fg(Color::Cyan)),
+            Span::raw(" > "),
+            Span::styled(
+                &script.name,
+                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
+            ),
+            Span::raw(format!(" ({script_pos}/{category_scripts})")),
         ]))
     } else if let Some(category_idx) = app.categories.state.selected() {
         let category = &app.categories.items[category_idx];
+        let category_scripts = app.all_scripts.get(category).map_or(0, |s| s.len());
         Text::from(Line::from(vec![
-            Span::styled(
-                "Category: ",
-                Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
-            ),
-            Span::raw(category.clone()),
+            Span::styled(category, Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
+            Span::raw(format!(" ({category_scripts} scripts)")),
         ]))
     } else {
-        Text::from("")
+        Text::from(Span::styled("Select a category", Style::default().fg(Color::DarkGray)))
     };
-
-    // center: title
-    let center_text = Text::from(Line::from(Span::styled(
-        "Carch",
-        Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD),
-    )));
-
-    // right side: script counts
-    let total_scripts = app.all_scripts.values().map(Vec::len).sum::<usize>();
-    let category_scripts = if let Some(category_idx) = app.categories.state.selected() {
-        let category = &app.categories.items[category_idx];
-        app.all_scripts.get(category).map_or(0, |scripts| scripts.len())
-    } else {
-        total_scripts
-    };
-
-    let right_text = Text::from(Line::from(vec![
-        Span::styled("Scripts: ", Style::default().fg(Color::Cyan).add_modifier(Modifier::BOLD)),
-        Span::raw(format!("{category_scripts} / {total_scripts}")),
-    ]));
-
-    f.render_widget(Paragraph::new(breadcrumb).alignment(Alignment::Left), chunks[0]);
-    f.render_widget(Paragraph::new(center_text).alignment(Alignment::Center), chunks[1]);
-    f.render_widget(Paragraph::new(right_text).alignment(Alignment::Right), chunks[2]);
+    f.render_widget(Paragraph::new(breadcrumb).alignment(Alignment::Right), chunks[1]);
 }
