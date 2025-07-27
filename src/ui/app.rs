@@ -66,7 +66,7 @@ impl<'a> App<'a> {
 
             if desc_path.exists() {
                 if let Ok(content) = std::fs::read_to_string(&desc_path) {
-                    if let Ok(table) = content.parse::<toml::Value>() {
+                    if let Ok(table) = content.parse::<toml::Table>() {
                         let script_path = PathBuf::from(&selected_script.name);
                         let script_name_without_ext =
                             script_path.file_stem().and_then(|s| s.to_str());
@@ -74,7 +74,8 @@ impl<'a> App<'a> {
                         if let Some(name) = script_name_without_ext {
                             if let Some(desc) = table
                                 .get(name)
-                                .and_then(|v| v.get("description"))
+                                .and_then(|v| v.as_table())
+                                .and_then(|t| t.get("description"))
                                 .and_then(|v| v.as_str())
                             {
                                 self.description.content = Some(desc.to_string());
