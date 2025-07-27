@@ -114,6 +114,7 @@ jobs:
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v4
         with:
+          version: "v2.9.1"
           config: cliff.toml
           args: --unreleased --strip header
         env:
