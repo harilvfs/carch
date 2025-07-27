@@ -37,7 +37,7 @@ pub fn check_for_updates() -> Result<()> {
 
             if latest_version != current_version {
                 println!("\nA new version of Carch is available!");
-                println!("Run 'carch --update' to update.");
+                println!("Run 'carch update' to update to the latest version.");
             } else {
                 println!("\nYou are using the latest version of Carch.");
             }
