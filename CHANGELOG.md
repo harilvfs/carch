@@ -1,5 +1,103 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.2.5](https://github.com/harilvfs/carch/compare/v5.2.4...v5.2.5) - 2025-07-27
+
+
+### 🚀 Features
+
+
+- [790821f](https://github.com/harilvfs/carch/commit/790821f9b7e5b44d44b8dc274b71fffa02a43368)  *(install)* Add output text's by @harilvfs
+
+- [0b7a1c0](https://github.com/harilvfs/carch/commit/0b7a1c0d6b93150ecf9ad6b55d089ac819263687)  *(commands)* Make uninstall command non-interactive by @harilvfs
+
+- [fcd05d9](https://github.com/harilvfs/carch/commit/fcd05d9e82ba466aab1620efad9d96cb5107598b)  *(install)* Add --noconfirm for arch by @harilvfs
+
+- [a3471a0](https://github.com/harilvfs/carch/commit/a3471a08dbd2c47f2b33c63283e1d00ca781bd32)  *(package)* Add protonvpn by @harilvfs
+
+- [2aedd4d](https://github.com/harilvfs/carch/commit/2aedd4d44aef9411ee8260101ba237ee1f232642)  *(install)* Add uninstall and update commands by @harilvfs
+
+- [59ea4fe](https://github.com/harilvfs/carch/commit/59ea4fe1c53978d30074e88c2a756c91b90abfda)  *(script)* Add omarchy hyprland setup by @harilvfs
+
+- [00a6834](https://github.com/harilvfs/carch/commit/00a68342cd30006f3f764f5af2a7b67a7e5b1859)  *(script)* Add note for ml4w hyprland setup by @harilvfs
+
+- [53fbc2f](https://github.com/harilvfs/carch/commit/53fbc2f7b7418261df6a9d9c5191c001e8410c44)  *(script)* Add bspwm setup script from gh0stzk/dotfiles by @harilvfs
+
+- [9a0b450](https://github.com/harilvfs/carch/commit/9a0b4502e432aa93dc751c33486e93e3539cf8e8)  *(script)* Add note for hyprland setup's by @harilvfs
+
+- [a4124a8](https://github.com/harilvfs/carch/commit/a4124a8cd387b6c0ca3091162b704f0b3e621e26)  *(ui)* Redesign and fix header layout by @harilvfs
+
+- [1895dbf](https://github.com/harilvfs/carch/commit/1895dbfcea6f9019df92c42c34bb657110d564dd) Add description functionality for scripts (#537) by @harilvfs in [#537](https://github.com/harilvfs/carch/pull/537)
+
+- [f09fc39](https://github.com/harilvfs/carch/commit/f09fc39da9bfd1584835f0cfbc8b0fa761d58a9c)  *(tui)* Added missing log implementation by @harilvfs
+
+- [98d9ced](https://github.com/harilvfs/carch/commit/98d9ced9dfd1069afef717cca550e08e892b2379)  *(tui)* Exit multi-select with 'q` by @harilvfs
+
+- [93d9389](https://github.com/harilvfs/carch/commit/93d9389638229883d07511b08c7d134dc8044833)  *(tui)* Add scrolling to description popup (#538) by @harilvfs in [#538](https://github.com/harilvfs/carch/pull/538)
+
+- [74efbc7](https://github.com/harilvfs/carch/commit/74efbc76719b11884ec3bb1675c18d045e6735a2)  *(bindings)* Make arrow left/right key work same as `h` & `l` by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [13a8e56](https://github.com/harilvfs/carch/commit/13a8e568e572da878bbeb60ab921d9cc293c6e76)  *(completion)* Correct zsh completion syntax for subcommands by @harilvfs
+
+- [d1180fa](https://github.com/harilvfs/carch/commit/d1180faac3bb18543aceedfee389ba9d60acd8f7)  *(lint)* Shell style format by @harilvfs
+
+- [ccec155](https://github.com/harilvfs/carch/commit/ccec15571b077790ae2f65082f10942bc4bd22e3)  *(tui)* Propagate Ctrl+C to terminate running scripts by @harilvfs
+
+- [1bdfd12](https://github.com/harilvfs/carch/commit/1bdfd1254bf2751f8fc6f2de3ddab0a960b04eac)  *(tui)* Correct search by @harilvfs
+
+- [9eaed7f](https://github.com/harilvfs/carch/commit/9eaed7f41c3f9f292b9f915fd1eedbbdafdbdf62)  *(preview)* Correct tape logic by @harilvfs
+
+- [70a6ede](https://github.com/harilvfs/carch/commit/70a6edee9fca1996110b958d6dd390d685085305)  *(install)* Argument passing on usage by @harilvfs
+
+- [b87b6b2](https://github.com/harilvfs/carch/commit/b87b6b24a0f8e29a3e110cd6a234a1cb088ace78)  *(tui)* Adapt to toml v0.9.2 api changes by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [2d23534](https://github.com/harilvfs/carch/commit/2d2353441b197350cf188ba3f4de0ee59f9e6b8a) Improve error handling, logging, and command structure by @harilvfs
+
+- [872120a](https://github.com/harilvfs/carch/commit/872120a765a66694adc350ce420b566e48bea857) Document rust code (#536) by @harilvfs in [#536](https://github.com/harilvfs/carch/pull/536)
+
+- [e489951](https://github.com/harilvfs/carch/commit/e48995168ca19fdee8c9df2d48ef3180201e875c)  *(ui)* Unify popup centering logic by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [e3fec8c](https://github.com/harilvfs/carch/commit/e3fec8c95794f26a167f042f1abacd7bac92643c)  *(tui)* Adjust category side tui size by @harilvfs
+
+- [72cd6b6](https://github.com/harilvfs/carch/commit/72cd6b6da6bd2809c8504e2b808e16c8f0fef2bb)  *(header)* Some layout changes by @harilvfs
+
+- [b6f16c0](https://github.com/harilvfs/carch/commit/b6f16c0795cd55480aa3039a71b6b668621909b1)  *(tui)* Add arrow on highlight on script tui by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [94c8558](https://github.com/harilvfs/carch/commit/94c8558d13bec46df8a93052cec446fa3f91bff3) Remove shell style checker by @harilvfs
+
+- [a0c76d5](https://github.com/harilvfs/carch/commit/a0c76d5d7c7b38533278bd96b5ddf300a0f7dc62)  *(install)* Correct typo by @harilvfs
+
+- [24a73da](https://github.com/harilvfs/carch/commit/24a73da181b964379906da6fb59a261ba4a09c0a) Update preview tape with current changes on tui by @harilvfs
+
+- [6acbad7](https://github.com/harilvfs/carch/commit/6acbad78f2917db7cd22b0ba9c06706925c8c32b)  *(install)* Remove print message by @harilvfs
+
+- [435ebf2](https://github.com/harilvfs/carch/commit/435ebf26f2a87451e53d80311c281a581107dedd)  *(hyprland)* Correct minor typo by @harilvfs
+
+- [a814fc9](https://github.com/harilvfs/carch/commit/a814fc984c7bfbdae9a8a5b40e33affdbc0aac17)  *(typos)* Remove unused extend word by @harilvfs
+
+- [09c5155](https://github.com/harilvfs/carch/commit/09c5155963e911680c48c40c6a8c81ee2c88d9fc)  *(release)* Using cliff v2.9.1 by @harilvfs
+
+
+
 ## [5.2.4](https://github.com/harilvfs/carch/compare/v5.2.3...v5.2.4) - 2025-07-23
 
 
