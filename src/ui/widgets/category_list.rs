@@ -3,11 +3,10 @@ use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
-use crate::ui::state::{App, FocusedPanel};
+use crate::ui::state::App;
 
 /// draws the list of script categories
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
-    let is_focused = app.focused_panel == FocusedPanel::Categories;
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
@@ -19,10 +18,8 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
         .categories
         .items
         .iter()
-        .enumerate()
-        .map(|(idx, category_name)| {
-            let is_selected = app.categories.state.selected() == Some(idx);
-            let icon = if !is_focused && is_selected { "  " } else { " 󰉋 " };
+        .map(|category_name| {
+            let icon = " 󰉋 ";
             let colored_icon =
                 ratatui::text::Span::styled(icon, Style::default().fg(app.theme.primary));
             let text = ratatui::text::Span::styled(
