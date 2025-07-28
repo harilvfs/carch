@@ -113,8 +113,6 @@ pub struct ScriptItem {
 pub struct UiOptions {
     /// if true, turn on logging
     pub log_mode: bool,
-    /// the theme to use
-    pub theme:    Option<String>,
 }
 
 /// holds the state for the script preview panel

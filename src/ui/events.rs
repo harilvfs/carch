@@ -160,6 +160,9 @@ impl<'a> App<'a> {
             KeyCode::Char('d') => {
                 self.toggle_description_popup();
             }
+            KeyCode::Char('t') => {
+                self.cycle_theme();
+            }
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts
                     && self.scripts.state.selected().is_some()

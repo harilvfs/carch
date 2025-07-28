@@ -132,6 +132,14 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
+        Span::styled(" t ", Style::default().bg(mode_color).fg(app.theme.background)),
+        Span::raw(" "),
+        Span::styled("Cycle themes", Style::default().fg(app.theme.foreground)),
+    ]));
+
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
         Span::styled(" ? ", Style::default().bg(mode_color).fg(app.theme.background)),
         Span::raw(" "),
         Span::styled("Show this help", Style::default().fg(app.theme.foreground)),

@@ -70,6 +70,11 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         },
         if has_selected { Span::raw(" ") } else { Span::raw("") },
         Span::styled(
+            format!(" Theme: {} ", app.theme.name),
+            Style::default().bg(app.theme.secondary).fg(app.theme.background),
+        ),
+        Span::raw(" "),
+        Span::styled(
             " ?: Help | q: Quit | h/l: Switch panels",
             Style::default().bg(app.theme.accent).fg(app.theme.background),
         ),

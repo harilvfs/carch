@@ -52,7 +52,7 @@ pub fn run_tui(settings: Settings) -> Result<()> {
         return Err(CarchError::ModulesDirNotFound(error_msg));
     }
 
-    let ui_options = UiOptions { log_mode: settings.log_mode, theme: settings.theme };
+    let ui_options = UiOptions { log_mode: settings.log_mode };
 
     if settings.log_mode {
         info!("TUI initialized with settings: log_mode={}", settings.log_mode);
