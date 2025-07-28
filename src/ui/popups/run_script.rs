@@ -14,6 +14,8 @@ use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
 use vt100_ctt::{Parser, Screen};
 
+use crate::ui::theme::Theme;
+
 /// events that can be sent from the pop-up
 pub enum PopupEvent {
     /// tells the main app to close the pop-up
@@ -40,11 +42,13 @@ pub struct RunScriptPopup {
     status:         Option<ExitStatus>,
     /// how far the user has scrolled up
     scroll_offset:  usize,
+    /// the theme for the popup
+    theme:          Theme,
 }
 
 impl RunScriptPopup {
     /// creates a new pop-up to run a script
-    pub fn new(script_path: PathBuf, log_mode: bool) -> Self {
+    pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Self {
         let pty_system = NativePtySystem::default();
 
         let mut cmd = CommandBuilder::new("bash");
@@ -98,6 +102,7 @@ impl RunScriptPopup {
             writer,
             status: None,
             scroll_offset: 0,
+            theme,
         }
     }
 
@@ -202,25 +207,25 @@ impl Widget for &mut RunScriptPopup {
         let block = if !self.is_finished() {
             Block::bordered()
                 .border_set(border::ROUNDED)
-                .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
-                .title_style(Style::default().fg(Color::Rgb(137, 180, 250)).reversed())
+                .border_style(Style::default().fg(self.theme.primary))
+                .title_style(Style::default().fg(self.theme.primary).reversed())
                 .title_bottom(Line::from("Press Ctrl-C to kill"))
         } else {
             let (title_text, style_color) = if self.get_exit_status().success() {
                 (
                     Line::styled(
                         "Success! Press <Enter> to close",
-                        Style::default().fg(Color::Green).reversed(),
+                        Style::default().fg(self.theme.success).reversed(),
                     ),
-                    Color::Rgb(137, 180, 250),
+                    self.theme.primary,
                 )
             } else {
                 (
                     Line::styled(
                         "Failed! Press <Enter> to close",
-                        Style::default().fg(Color::Red).reversed(),
+                        Style::default().fg(self.theme.error).reversed(),
                     ),
-                    Color::Rgb(137, 180, 250),
+                    self.theme.primary,
                 )
             };
 

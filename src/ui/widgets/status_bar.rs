@@ -29,17 +29,17 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mode_color = match app.mode {
         AppMode::Normal => {
             if app.multi_select.enabled {
-                Color::Magenta
+                app.theme.accent
             } else {
-                Color::Green
+                app.theme.success
             }
         }
-        AppMode::Preview => Color::Cyan,
-        AppMode::Search => Color::Yellow,
-        AppMode::Confirm => Color::Red,
-        AppMode::Help => Color::Blue,
-        AppMode::Description => Color::Blue,
-        AppMode::RunScript => Color::Yellow,
+        AppMode::Preview => app.theme.primary,
+        AppMode::Search => app.theme.warning,
+        AppMode::Confirm => app.theme.error,
+        AppMode::Help => app.theme.primary,
+        AppMode::Description => app.theme.primary,
+        AppMode::RunScript => app.theme.warning,
     };
 
     let selected_count = if app.multi_select.enabled {
@@ -54,26 +54,37 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let status = Line::from(vec![
         Span::styled(
             format!(" Mode: {mode_text} "),
-            Style::default().bg(mode_color).fg(Color::Black).add_modifier(Modifier::BOLD),
+            Style::default().bg(mode_color).fg(app.theme.background).add_modifier(Modifier::BOLD),
         ),
         Span::raw(" "),
         if has_selected {
             Span::styled(
                 selected_count,
-                Style::default().bg(Color::Yellow).fg(Color::Black).add_modifier(Modifier::BOLD),
+                Style::default()
+                    .bg(app.theme.warning)
+                    .fg(app.theme.background)
+                    .add_modifier(Modifier::BOLD),
             )
         } else {
             Span::raw("")
         },
         if has_selected { Span::raw(" ") } else { Span::raw("") },
         Span::styled(
+            format!(" Theme: {} ", app.theme.name),
+            Style::default().bg(app.theme.secondary).fg(app.theme.background),
+        ),
+        Span::raw(" "),
+        Span::styled(
             " ?: Help | q: Quit | h/l: Switch panels",
-            Style::default().bg(Color::Rgb(203, 166, 247)).fg(Color::Black),
+            Style::default().bg(app.theme.accent).fg(app.theme.background),
         ),
         Span::raw(" "),
         Span::styled(
             format!(" {version} "),
-            Style::default().bg(Color::Cyan).fg(Color::Black).add_modifier(Modifier::BOLD),
+            Style::default()
+                .bg(app.theme.primary)
+                .fg(app.theme.background)
+                .add_modifier(Modifier::BOLD),
         ),
     ]);
 

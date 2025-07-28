@@ -8,11 +8,12 @@ use super::state::{
     App, AppMode, DescriptionState, FocusedPanel, HelpState, MultiSelectState, PreviewState,
     SearchState, StatefulList,
 };
-use crate::ui::state::ScriptItem;
+use crate::ui::state::{ScriptItem, UiOptions};
+use crate::ui::theme::Theme;
 
 impl<'a> App<'a> {
     /// makes a new app with a starting state
-    pub fn new() -> App<'a> {
+    pub fn new(_options: &UiOptions) -> App<'a> {
         App {
             // set the starting mode to normal
             mode:          AppMode::Normal,
@@ -24,6 +25,8 @@ impl<'a> App<'a> {
             log_mode:      false,
             // path starts empty and is set when the ui is initialized
             modules_dir:   PathBuf::new(),
+            // set the theme
+            theme:         Theme::catppuccin_mocha(),
 
             // the lists of scripts and categories start empty
             scripts:     StatefulList::new(),
@@ -42,6 +45,17 @@ impl<'a> App<'a> {
             run_script_popup:       None,
             // the list of scripts to run starts empty
             script_execution_queue: Vec::new(),
+        }
+    }
+
+    pub fn cycle_theme(&mut self) {
+        self.theme = match self.theme.name.as_str() {
+            "Catppuccin Mocha" => Theme::dracula(),
+            "Dracula" => Theme::gruvbox(),
+            "Gruvbox" => Theme::nord(),
+            "Nord" => Theme::rose_pine(),
+            "Rosé Pine" => Theme::catppuccin_mocha(),
+            _ => Theme::catppuccin_mocha(),
         }
     }
 

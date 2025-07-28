@@ -6,6 +6,7 @@ use ratatui::layout::Rect;
 use ratatui::text::Text;
 
 use super::popups::run_script::RunScriptPopup;
+use super::theme::Theme;
 
 /// shows the different modes the app can be in
 /// each mode changes how user input works and what's on the screen
@@ -108,7 +109,7 @@ pub struct ScriptItem {
 }
 
 /// holds the ui options you can set at the start
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct UiOptions {
     /// if true, turn on logging
     pub log_mode: bool,
@@ -197,6 +198,8 @@ pub struct App<'a> {
     pub log_mode:      bool,
     /// the path to the modules directory
     pub modules_dir:   PathBuf,
+    /// the current theme
+    pub theme:         Theme,
 
     /// the list of scripts for the chosen group
     pub scripts:     StatefulList<ScriptItem>,

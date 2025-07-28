@@ -5,12 +5,12 @@ use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::{App, FocusedPanel};
 
-fn create_block(title: &str, _is_focused: bool) -> Block<'_> {
+fn create_block<'a>(title: &'a str, _is_focused: bool, app: &App) -> Block<'a> {
     Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title(title)
-        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)))
+        .border_style(Style::default().fg(app.theme.primary))
         .style(Style::default().bg(Color::Reset))
 }
 
@@ -21,7 +21,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     } else {
         "Scripts (p for preview)".to_string()
     };
-    let block = create_block(&title, is_focused);
+    let block = create_block(&title, is_focused, app);
 
     let items: Vec<ListItem> = app
         .scripts
@@ -29,7 +29,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
         .iter()
         .map(|item| {
             let icon = " ";
-            let script_name_style = Style::default().fg(Color::Rgb(173, 216, 190));
+            let script_name_style = Style::default().fg(app.theme.secondary);
             let script_name = ratatui::text::Span::styled(&item.name, script_name_style);
 
             if app.multi_select.enabled {
@@ -37,19 +37,19 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
                 let prefix = if is_selected { "[✓] " } else { "[ ] " };
 
                 let prefix_style = if is_selected {
-                    Style::default().fg(Color::Rgb(173, 216, 190)).add_modifier(Modifier::BOLD)
+                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD)
                 } else {
-                    Style::default().fg(Color::Rgb(173, 216, 190))
+                    Style::default().fg(app.theme.secondary)
                 };
 
                 let script_name_style = if is_selected {
-                    Style::default().fg(Color::Rgb(173, 216, 190)).add_modifier(Modifier::BOLD)
+                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD)
                 } else {
-                    Style::default().fg(Color::Rgb(173, 216, 190))
+                    Style::default().fg(app.theme.secondary)
                 };
 
                 let icon_style =
-                    Style::default().fg(Color::Rgb(173, 216, 190)).add_modifier(Modifier::BOLD);
+                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
 
                 let line = ratatui::text::Line::from(vec![
                     ratatui::text::Span::styled(prefix, prefix_style),
@@ -59,7 +59,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
                 ListItem::new(line)
             } else {
                 let icon_style =
-                    Style::default().fg(Color::Rgb(173, 216, 190)).add_modifier(Modifier::BOLD);
+                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
                 let line = ratatui::text::Line::from(vec![
                     ratatui::text::Span::styled(icon, icon_style),
                     script_name,
@@ -73,8 +73,8 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
         .block(block)
         .highlight_style(
             Style::default()
-                .bg(Color::Rgb(173, 216, 190))
-                .fg(Color::Black)
+                .bg(app.theme.secondary)
+                .fg(app.theme.background)
                 .add_modifier(Modifier::BOLD),
         )
         .highlight_symbol(">> ");

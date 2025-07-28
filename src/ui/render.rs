@@ -170,7 +170,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
     }
 
     let mut terminal = setup_terminal()?;
-    let mut app = App::new();
+    let mut app = App::new(&options);
     app.log_mode = options.log_mode;
     app.modules_dir = modules_dir.to_path_buf();
 
@@ -240,7 +240,11 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                             app.run_script_popup = None;
                             // if there are more scripts in the queue, run the next one
                             if let Some(script_path) = app.script_execution_queue.pop() {
-                                let next_popup = RunScriptPopup::new(script_path, app.log_mode);
+                                let next_popup = RunScriptPopup::new(
+                                    script_path,
+                                    app.log_mode,
+                                    app.theme.clone(),
+                                );
                                 app.run_script_popup = Some(next_popup);
                             } else {
                                 app.mode = AppMode::Normal;

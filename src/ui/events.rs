@@ -160,6 +160,9 @@ impl<'a> App<'a> {
             KeyCode::Char('d') => {
                 self.toggle_description_popup();
             }
+            KeyCode::Char('t') => {
+                self.cycle_theme();
+            }
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts
                     && self.scripts.state.selected().is_some()
@@ -278,7 +281,7 @@ impl<'a> App<'a> {
 
                 if !self.script_execution_queue.is_empty() {
                     let script_path = self.script_execution_queue.remove(0);
-                    let popup = RunScriptPopup::new(script_path, self.log_mode);
+                    let popup = RunScriptPopup::new(script_path, self.log_mode, self.theme.clone());
                     self.run_script_popup = Some(popup);
                     self.mode = AppMode::RunScript;
                 } else {

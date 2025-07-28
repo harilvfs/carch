@@ -27,7 +27,7 @@ pub enum Commands {
     Uninstall,
 }
 
-#[derive(Copy, Clone, Default)]
+#[derive(Clone, Default)]
 pub struct Settings {
     pub log_mode: bool,
 }
