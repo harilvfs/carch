@@ -87,7 +87,7 @@ Type "/" Sleep 1s
 
 Type@200ms "Extensions" Sleep 2s Enter
 
-Sleep 1s
+Sleep 2s
 
 Enter
 
@@ -97,7 +97,7 @@ Sleep 2s
 
 Type "3" Sleep 2s Enter
 
-Sleep 1s
+Sleep 2s
 
 Enter
 
