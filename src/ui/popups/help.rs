@@ -1,6 +1,6 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Rect};
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
 
@@ -16,7 +16,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
 
     let popup_block = create_rounded_block()
         .title("Keyboard Shortcuts")
-        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
+        .border_style(Style::default().fg(app.theme.primary));
 
     f.render_widget(popup_block.clone(), area);
 
@@ -31,130 +31,136 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
 
     help_content.push(Line::from(vec![Span::styled(
         "Navigation",
-        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
     )]));
     help_content.push(Line::from(""));
 
-    let nav_color = Color::Rgb(137, 180, 250);
+    let nav_color = app.theme.primary;
     help_content.push(Line::from(vec![
-        Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(Color::Black)),
+        Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Move up/down in the script list", Style::default().fg(Color::Gray)),
+        Span::styled("Move up/down in the script list", Style::default().fg(app.theme.foreground)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" h/l ", Style::default().bg(nav_color).fg(Color::Black)),
-        Span::raw(" "),
-        Span::styled("Switch between categories and scripts", Style::default().fg(Color::Gray)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" Home/End ", Style::default().bg(nav_color).fg(Color::Black)),
-        Span::raw(" "),
-        Span::styled("Jump to top/bottom of list", Style::default().fg(Color::Gray)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![Span::styled(
-        "Actions",
-        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
-    )]));
-    help_content.push(Line::from(""));
-
-    let action_color = Color::Rgb(166, 227, 161);
-    help_content.push(Line::from(vec![
-        Span::styled(" Enter ", Style::default().bg(action_color).fg(Color::Black)),
-        Span::raw(" "),
-        Span::styled("Run selected script", Style::default().fg(Color::Gray)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" Space ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" h/l ", Style::default().bg(nav_color).fg(app.theme.background)),
         Span::raw(" "),
         Span::styled(
-            "Toggle script selection in multi-select mode",
-            Style::default().fg(Color::Gray),
+            "Switch between categories and scripts",
+            Style::default().fg(app.theme.foreground),
         ),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" p ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" Home/End ", Style::default().bg(nav_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Toggle preview for scripts", Style::default().fg(Color::Gray)),
+        Span::styled("Jump to top/bottom of list", Style::default().fg(app.theme.foreground)),
+    ]));
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![Span::styled(
+        "Actions",
+        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
+    )]));
+    help_content.push(Line::from(""));
+
+    let action_color = app.theme.success;
+    help_content.push(Line::from(vec![
+        Span::styled(" Enter ", Style::default().bg(action_color).fg(app.theme.background)),
+        Span::raw(" "),
+        Span::styled("Run selected script", Style::default().fg(app.theme.foreground)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" d ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" Space ", Style::default().bg(action_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Show script description", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "Toggle script selection in multi-select mode",
+            Style::default().fg(app.theme.foreground),
+        ),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" q, Esc ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" p ", Style::default().bg(action_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Quit | Go back", Style::default().fg(Color::Gray)),
+        Span::styled("Toggle preview for scripts", Style::default().fg(app.theme.foreground)),
+    ]));
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
+        Span::styled(" d ", Style::default().bg(action_color).fg(app.theme.background)),
+        Span::raw(" "),
+        Span::styled("Show script description", Style::default().fg(app.theme.foreground)),
+    ]));
+    help_content.push(Line::from(""));
+
+    help_content.push(Line::from(vec![
+        Span::styled(" q, Esc ", Style::default().bg(action_color).fg(app.theme.background)),
+        Span::raw(" "),
+        Span::styled("Quit | Go back", Style::default().fg(app.theme.foreground)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
         "Modes",
-        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
     )]));
     help_content.push(Line::from(""));
 
-    let mode_color = Color::Rgb(203, 166, 247);
+    let mode_color = app.theme.accent;
     help_content.push(Line::from(vec![
-        Span::styled(" / ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::styled(" / ", Style::default().bg(mode_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Search mode", Style::default().fg(Color::Gray)),
+        Span::styled("Search mode", Style::default().fg(app.theme.foreground)),
     ]));
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" m ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::styled(" m ", Style::default().bg(mode_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Toggle multi-select mode", Style::default().fg(Color::Gray)),
+        Span::styled("Toggle multi-select mode", Style::default().fg(app.theme.foreground)),
         Span::raw(" | "),
-        Span::styled(" Esc ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::styled(" Esc ", Style::default().bg(mode_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Exit multi-select mode", Style::default().fg(Color::Gray)),
+        Span::styled("Exit multi-select mode", Style::default().fg(app.theme.foreground)),
     ]));
 
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" ? ", Style::default().bg(mode_color).fg(Color::Black)),
+        Span::styled(" ? ", Style::default().bg(mode_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Show this help", Style::default().fg(Color::Gray)),
+        Span::styled("Show this help", Style::default().fg(app.theme.foreground)),
     ]));
 
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![Span::styled(
         "Quick Actions",
-        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
     )]));
 
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" l/-> ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" l/-> ", Style::default().bg(action_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Confirm selection (same as Enter)", Style::default().fg(Color::Gray)),
+        Span::styled(
+            "Confirm selection (same as Enter)",
+            Style::default().fg(app.theme.foreground),
+        ),
     ]));
 
     help_content.push(Line::from(""));
 
     help_content.push(Line::from(vec![
-        Span::styled(" h/<- ", Style::default().bg(action_color).fg(Color::Black)),
+        Span::styled(" h/<- ", Style::default().bg(action_color).fg(app.theme.background)),
         Span::raw(" "),
-        Span::styled("Cancel selection (same as Esc)", Style::default().fg(Color::Gray)),
+        Span::styled("Cancel selection (same as Esc)", Style::default().fg(app.theme.foreground)),
     ]));
 
     let content_height = help_content.len() as u16;
@@ -180,12 +186,12 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     };
 
     let footer = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓/j/k: ", Style::default().fg(Color::Gray)),
-        Span::styled("Scroll  ", Style::default().fg(Color::Blue)),
-        Span::styled("Esc/q: ", Style::default().fg(Color::Gray)),
-        Span::styled("Close", Style::default().fg(Color::Rgb(137, 180, 250))),
+        Span::styled("↑/↓/j/k: ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Scroll  ", Style::default().fg(app.theme.primary)),
+        Span::styled("Esc/q: ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Close", Style::default().fg(app.theme.primary)),
         Span::raw("  "),
-        Span::styled(scroll_status, Style::default().fg(Color::DarkGray)),
+        Span::styled(scroll_status, Style::default().fg(app.theme.secondary)),
     ]))
     .alignment(Alignment::Center);
 

@@ -13,6 +13,8 @@ pub struct Cli {
     pub command: Option<Commands>,
     #[arg(long, global = true, help = "Enable logging")]
     pub log:     bool,
+    #[arg(long, global = true, help = "Set the theme [default: catppuccin]")]
+    pub theme:   Option<String>,
     #[arg(short = 'v', long = "version", action = ArgAction::Version, help = "Print version information")]
     version:     Option<bool>,
 }
@@ -27,9 +29,10 @@ pub enum Commands {
     Uninstall,
 }
 
-#[derive(Copy, Clone, Default)]
+#[derive(Clone, Default)]
 pub struct Settings {
     pub log_mode: bool,
+    pub theme:    Option<String>,
 }
 
 pub fn parse_args() -> Result<()> {
@@ -49,6 +52,10 @@ pub fn parse_args() -> Result<()> {
             .filter(None, log::LevelFilter::Info)
             .init();
         info!("Carch TUI started");
+    }
+
+    if let Some(theme) = cli.theme {
+        settings.theme = Some(theme);
     }
 
     match cli.command {

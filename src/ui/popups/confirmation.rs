@@ -1,6 +1,6 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::style::{Modifier, Style};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragraph};
 
 use crate::ui::state::App;
@@ -14,7 +14,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title("Confirm")
-        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
+        .border_style(Style::default().fg(app.theme.primary));
 
     let inner_area = popup_block.inner(area);
 
@@ -52,7 +52,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
     let question_paragraph =
         Paragraph::new(ratatui::text::Line::from(vec![ratatui::text::Span::styled(
             question_text,
-            Style::default().fg(Color::Gray),
+            Style::default().fg(app.theme.foreground),
         )]))
         .alignment(Alignment::Center);
 
@@ -62,7 +62,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         let count_text =
             Paragraph::new(ratatui::text::Line::from(vec![ratatui::text::Span::styled(
                 format!("{} Scripts Selected:", app.multi_select.scripts.len()),
-                Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
             )]))
             .alignment(Alignment::Center);
 
@@ -80,8 +80,11 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
             {
                 let display_text = format!("{category}/{script_name}");
                 script_items.push(ListItem::new(ratatui::text::Line::from(vec![
-                    ratatui::text::Span::styled(" • ", Style::default().fg(Color::Green)),
-                    ratatui::text::Span::styled(display_text, Style::default().fg(Color::White)),
+                    ratatui::text::Span::styled(" • ", Style::default().fg(app.theme.success)),
+                    ratatui::text::Span::styled(
+                        display_text,
+                        Style::default().fg(app.theme.foreground),
+                    ),
                 ])));
             }
         }
@@ -91,7 +94,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
             script_items.push(ListItem::new(ratatui::text::Line::from(vec![
                 ratatui::text::Span::styled(
                     format!("   ... and {more_count} more"),
-                    Style::default().fg(Color::DarkGray),
+                    Style::default().fg(app.theme.secondary),
                 ),
             ])));
         }
@@ -100,11 +103,11 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         f.render_widget(scripts_list, content_layout[2]);
 
         let options_text = Paragraph::new(ratatui::text::Line::from(vec![
-            ratatui::text::Span::styled("(Y)", Style::default().fg(Color::Green)),
-            ratatui::text::Span::styled("es", Style::default().fg(Color::Gray)),
+            ratatui::text::Span::styled("(Y)", Style::default().fg(app.theme.success)),
+            ratatui::text::Span::styled("es", Style::default().fg(app.theme.foreground)),
             ratatui::text::Span::raw(" / "),
-            ratatui::text::Span::styled("(N)", Style::default().fg(Color::Red)),
-            ratatui::text::Span::styled("o", Style::default().fg(Color::Gray)),
+            ratatui::text::Span::styled("(N)", Style::default().fg(app.theme.error)),
+            ratatui::text::Span::styled("o", Style::default().fg(app.theme.foreground)),
         ]))
         .alignment(Alignment::Center);
 
@@ -114,7 +117,7 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
             let script_text =
                 Paragraph::new(ratatui::text::Line::from(vec![ratatui::text::Span::styled(
                     format!("{}/{}", app.scripts.items[idx].category, app.scripts.items[idx].name),
-                    Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                    Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
                 )]))
                 .alignment(Alignment::Center);
 
@@ -122,11 +125,11 @@ pub fn render_confirmation_popup(f: &mut Frame, app: &App, area: Rect) {
         }
 
         let options_text = Paragraph::new(ratatui::text::Line::from(vec![
-            ratatui::text::Span::styled("(Y)", Style::default().fg(Color::Green)),
-            ratatui::text::Span::styled("es", Style::default().fg(Color::Gray)),
+            ratatui::text::Span::styled("(Y)", Style::default().fg(app.theme.success)),
+            ratatui::text::Span::styled("es", Style::default().fg(app.theme.foreground)),
             ratatui::text::Span::raw(" / "),
-            ratatui::text::Span::styled("(N)", Style::default().fg(Color::Red)),
-            ratatui::text::Span::styled("o", Style::default().fg(Color::Gray)),
+            ratatui::text::Span::styled("(N)", Style::default().fg(app.theme.error)),
+            ratatui::text::Span::styled("o", Style::default().fg(app.theme.foreground)),
         ]))
         .alignment(Alignment::Center);
 

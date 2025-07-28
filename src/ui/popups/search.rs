@@ -1,6 +1,6 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style, Stylize};
+use ratatui::style::{Modifier, Style, Stylize};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragraph};
 
@@ -15,7 +15,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title("Search")
-        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
+        .border_style(Style::default().fg(app.theme.primary));
 
     f.render_widget(popup_block.clone(), area);
 
@@ -32,7 +32,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
         Line::from(vec![
             Span::styled(base.clone(), Style::default()),
-            Span::styled(completion, Style::default().fg(Color::DarkGray)),
+            Span::styled(completion, Style::default().fg(app.theme.secondary)),
         ])
     } else {
         Line::from(app.search.input.clone())
@@ -44,7 +44,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
                 .borders(Borders::ALL)
                 .border_type(BorderType::Rounded)
                 .title("Type to search (Tab to complete)")
-                .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
+                .border_style(Style::default().fg(app.theme.primary)),
         )
         .style(Style::default())
         .alignment(Alignment::Left);
@@ -86,7 +86,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
             if app.search.input.is_empty() {
                 result_items.push(ListItem::new(Line::from(vec![Span::styled(
                     display_text,
-                    Style::default().fg(Color::Gray),
+                    Style::default().fg(app.theme.foreground),
                 )])));
             } else {
                 let mut spans = Vec::new();
@@ -95,19 +95,19 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
                     if idx > last_idx {
                         spans.push(Span::styled(
                             display_text[last_idx..idx].to_string(),
-                            Style::default().fg(Color::Gray),
+                            Style::default().fg(app.theme.foreground),
                         ));
                     }
                     spans.push(Span::styled(
                         display_text[idx..idx + 1].to_string(),
-                        Style::default().fg(Color::Rgb(137, 180, 250)).add_modifier(Modifier::BOLD),
+                        Style::default().fg(app.theme.primary).add_modifier(Modifier::BOLD),
                     ));
                     last_idx = idx + 1;
                 }
                 if last_idx < display_text.len() {
                     spans.push(Span::styled(
                         display_text[last_idx..].to_string(),
-                        Style::default().fg(Color::Gray),
+                        Style::default().fg(app.theme.foreground),
                     ));
                 }
                 result_items.push(ListItem::new(Line::from(spans)));
@@ -123,9 +123,9 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
                 .borders(Borders::ALL)
                 .border_type(BorderType::Rounded)
                 .title(result_count_text)
-                .border_style(Style::default().fg(Color::Rgb(137, 180, 250))),
+                .border_style(Style::default().fg(app.theme.primary)),
         )
-        .highlight_style(Style::default().bg(Color::Rgb(235, 235, 210)).fg(Color::Black).bold())
+        .highlight_style(Style::default().bg(app.theme.secondary).fg(app.theme.background).bold())
         .highlight_symbol("");
 
     let mut search_list_state = ratatui::widgets::ListState::default();
@@ -136,7 +136,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     let help_block = Block::default()
         .border_type(BorderType::Plain)
         .borders(Borders::TOP)
-        .border_style(Style::default().fg(Color::DarkGray));
+        .border_style(Style::default().fg(app.theme.secondary));
 
     f.render_widget(help_block, popup_layout[2]);
 
@@ -148,10 +148,10 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     };
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓: Navigate  ", Style::default().fg(Color::Gray)),
-        Span::styled("Tab: Complete  ", Style::default().fg(Color::Gray)),
-        Span::styled("Enter: Select  ", Style::default().fg(Color::Gray)),
-        Span::styled("Esc: Cancel", Style::default().fg(Color::Gray)),
+        Span::styled("↑/↓: Navigate  ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Tab: Complete  ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Enter: Select  ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Esc: Cancel", Style::default().fg(app.theme.foreground)),
     ]))
     .alignment(Alignment::Center);
 

@@ -8,38 +8,46 @@ use super::state::{
     App, AppMode, DescriptionState, FocusedPanel, HelpState, MultiSelectState, PreviewState,
     SearchState, StatefulList,
 };
-use crate::ui::state::ScriptItem;
+use crate::ui::state::{ScriptItem, UiOptions};
+use crate::ui::theme::Theme;
 
 impl<'a> App<'a> {
     /// makes a new app with a starting state
-    pub fn new() -> App<'a> {
+    pub fn new(options: &UiOptions) -> App<'a> {
+        let theme = match options.theme.as_deref() {
+            Some("dracula") => Theme::dracula(),
+            _ => Theme::catppuccin_mocha(),
+        };
+
         App {
             // set the starting mode to normal
-            mode:          AppMode::Normal,
+            mode: AppMode::Normal,
             // the app shouldn't close by default
-            quit:          false,
+            quit: false,
             // the categories panel is focused at the start
             focused_panel: FocusedPanel::Categories,
             // logging is off by default
-            log_mode:      false,
+            log_mode: false,
             // path starts empty and is set when the ui is initialized
-            modules_dir:   PathBuf::new(),
+            modules_dir: PathBuf::new(),
+            // set the theme
+            theme,
 
             // the lists of scripts and categories start empty
-            scripts:     StatefulList::new(),
-            categories:  StatefulList::new(),
+            scripts: StatefulList::new(),
+            categories: StatefulList::new(),
             all_scripts: HashMap::new(),
 
             // the script panel area starts as a zero-sized box
-            script_panel_area:      Rect::default(),
+            script_panel_area: Rect::default(),
             // set up the starting state for preview, search, multi-select, and help
-            preview:                PreviewState::default(),
-            search:                 SearchState::default(),
-            multi_select:           MultiSelectState::default(),
-            help:                   HelpState::default(),
-            description:            DescriptionState::default(),
+            preview: PreviewState::default(),
+            search: SearchState::default(),
+            multi_select: MultiSelectState::default(),
+            help: HelpState::default(),
+            description: DescriptionState::default(),
             // no pop-ups are shown at the start
-            run_script_popup:       None,
+            run_script_popup: None,
             // the list of scripts to run starts empty
             script_execution_queue: Vec::new(),
         }

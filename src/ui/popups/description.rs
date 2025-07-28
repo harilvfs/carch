@@ -1,6 +1,6 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::style::{Modifier, Style};
 use ratatui::text::{Line, Span, Text};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
 
@@ -35,7 +35,7 @@ pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
             .title(" Description ")
             .borders(Borders::ALL)
             .border_type(BorderType::Rounded)
-            .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
+            .border_style(Style::default().fg(app.theme.primary));
 
         f.render_widget(Clear, area);
         f.render_widget(popup_block.clone(), area);
@@ -60,10 +60,16 @@ pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
         f.render_widget(paragraph, chunks[0]);
 
         let help_text = Paragraph::new(Line::from(vec![
-            Span::styled(" Scroll: ", Style::default().fg(Color::DarkGray)),
-            Span::styled("↑/↓/j/k", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-            Span::styled("  Close: ", Style::default().fg(Color::DarkGray)),
-            Span::styled("Esc/q/d", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+            Span::styled(" Scroll: ", Style::default().fg(app.theme.secondary)),
+            Span::styled(
+                "↑/↓/j/k",
+                Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
+            ),
+            Span::styled("  Close: ", Style::default().fg(app.theme.secondary)),
+            Span::styled(
+                "Esc/q/d",
+                Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
+            ),
         ]))
         .alignment(Alignment::Center);
 

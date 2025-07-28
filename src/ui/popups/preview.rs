@@ -43,9 +43,9 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         .border_type(BorderType::Rounded)
         .title(Span::styled(
             title,
-            Style::default().fg(Color::Rgb(137, 180, 250)).add_modifier(Modifier::BOLD),
+            Style::default().fg(app.theme.primary).add_modifier(Modifier::BOLD),
         ))
-        .border_style(Style::default().fg(Color::Rgb(137, 180, 250)));
+        .border_style(Style::default().fg(app.theme.primary));
 
     // draw the border and title
     f.render_widget(popup_block.clone(), area);
@@ -109,14 +109,26 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     f.render_widget(preview, chunks[0]);
 
     let help_text = Paragraph::new(Line::from(vec![
-        Span::styled(" Scroll: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("↑/↓/j/k", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-        Span::styled("  Page: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("Pgup/Pgdown", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-        Span::styled("  Jump: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("Home/End", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
-        Span::styled("  Close: ", Style::default().fg(Color::DarkGray)),
-        Span::styled("Esc/q", Style::default().fg(Color::Gray).add_modifier(Modifier::BOLD)),
+        Span::styled(" Scroll: ", Style::default().fg(app.theme.secondary)),
+        Span::styled(
+            "↑/↓/j/k",
+            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("  Page: ", Style::default().fg(app.theme.secondary)),
+        Span::styled(
+            "Pgup/Pgdown",
+            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("  Jump: ", Style::default().fg(app.theme.secondary)),
+        Span::styled(
+            "Home/End",
+            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
+        ),
+        Span::styled("  Close: ", Style::default().fg(app.theme.secondary)),
+        Span::styled(
+            "Esc/q",
+            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
+        ),
     ]))
     .alignment(Alignment::Center);
 
