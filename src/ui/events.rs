@@ -161,7 +161,9 @@ impl<'a> App<'a> {
                 self.toggle_description_popup();
             }
             KeyCode::Char('t') => {
-                self.cycle_theme();
+                if !self.theme_locked {
+                    self.cycle_theme();
+                }
             }
             KeyCode::Enter => {
                 if self.focused_panel == FocusedPanel::Scripts

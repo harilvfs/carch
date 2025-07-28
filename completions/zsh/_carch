@@ -1,30 +1,224 @@
 #compdef carch
 
-_carch() {
-    local -a commands
-    commands=(
-        '--help:Show the help message'
-        '-h:Show the help message'
-        '--version:Show the program version'
-        '-v:Show the program version'
-        '--log:Enable logging for the current session only'
-        'check-update:Check if a new version is available'
-        'update:Interactively update Carch'
-        'uninstall:Interactively uninstall Carch'
-    )
+autoload -U is-at-least
 
-    _arguments -C \
-        '--help[Show the help message]' \
-        '-h[Show the help message]' \
-        '--version[Show the program version]' \
-        '-v[Show the program version]' \
-        '--log[Enable logging for the current session only]' \
-        '1: :->commands' && return 0
+_carch() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" : \
+'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
+'-v[Print version information]' \
+'--version[Print version information]' \
+'-c[Set theme to Catppuccin Mocha]' \
+'--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
+'-d[Set theme to Dracula]' \
+'--dracula[Set theme to Dracula]' \
+'-g[Set theme to Gruvbox]' \
+'--gruvbox[Set theme to Gruvbox]' \
+'-n[Set theme to Nord]' \
+'--nord[Set theme to Nord]' \
+'-r[Set theme to Rosé Pine]' \
+'--rose-pine[Set theme to Rosé Pine]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_carch_commands" \
+"*::: :->carch" \
+&& ret=0
+    case $state in
+    (carch)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:carch-command-$line[1]:"
+        case $line[1] in
+            (check-update)
+_arguments "${_arguments_options[@]}" : \
+'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
+'-c[Set theme to Catppuccin Mocha]' \
+'--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
+'-d[Set theme to Dracula]' \
+'--dracula[Set theme to Dracula]' \
+'-g[Set theme to Gruvbox]' \
+'--gruvbox[Set theme to Gruvbox]' \
+'-n[Set theme to Nord]' \
+'--nord[Set theme to Nord]' \
+'-r[Set theme to Rosé Pine]' \
+'--rose-pine[Set theme to Rosé Pine]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" : \
+'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
+'-c[Set theme to Catppuccin Mocha]' \
+'--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
+'-d[Set theme to Dracula]' \
+'--dracula[Set theme to Dracula]' \
+'-g[Set theme to Gruvbox]' \
+'--gruvbox[Set theme to Gruvbox]' \
+'-n[Set theme to Nord]' \
+'--nord[Set theme to Nord]' \
+'-r[Set theme to Rosé Pine]' \
+'--rose-pine[Set theme to Rosé Pine]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(uninstall)
+_arguments "${_arguments_options[@]}" : \
+'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
+'-c[Set theme to Catppuccin Mocha]' \
+'--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
+'-d[Set theme to Dracula]' \
+'--dracula[Set theme to Dracula]' \
+'-g[Set theme to Gruvbox]' \
+'--gruvbox[Set theme to Gruvbox]' \
+'-n[Set theme to Nord]' \
+'--nord[Set theme to Nord]' \
+'-r[Set theme to Rosé Pine]' \
+'--rose-pine[Set theme to Rosé Pine]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(completions)
+_arguments "${_arguments_options[@]}" : \
+'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
+'-c[Set theme to Catppuccin Mocha]' \
+'--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
+'-d[Set theme to Dracula]' \
+'--dracula[Set theme to Dracula]' \
+'-g[Set theme to Gruvbox]' \
+'--gruvbox[Set theme to Gruvbox]' \
+'-n[Set theme to Nord]' \
+'--nord[Set theme to Nord]' \
+'-r[Set theme to Rosé Pine]' \
+'--rose-pine[Set theme to Rosé Pine]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':shell:(bash elvish fish powershell zsh)' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+":: :_carch__help_commands" \
+"*::: :->help" \
+&& ret=0
 
     case $state in
-        commands)
-            _describe 'commands' commands
-            ;;
-    esac
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:carch-help-command-$line[1]:"
+        case $line[1] in
+            (check-update)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(update)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(uninstall)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(completions)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" : \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
 }
-_carch
+
+(( $+functions[_carch_commands] )) ||
+_carch_commands() {
+    local commands; commands=(
+'check-update:Check for updates' \
+'update:Update the application' \
+'uninstall:Uninstall the application' \
+'completions:Generate completions for a shell' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'carch commands' commands "$@"
+}
+(( $+functions[_carch__check-update_commands] )) ||
+_carch__check-update_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch check-update commands' commands "$@"
+}
+(( $+functions[_carch__completions_commands] )) ||
+_carch__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch completions commands' commands "$@"
+}
+(( $+functions[_carch__help_commands] )) ||
+_carch__help_commands() {
+    local commands; commands=(
+'check-update:Check for updates' \
+'update:Update the application' \
+'uninstall:Uninstall the application' \
+'completions:Generate completions for a shell' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'carch help commands' commands "$@"
+}
+(( $+functions[_carch__help__check-update_commands] )) ||
+_carch__help__check-update_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch help check-update commands' commands "$@"
+}
+(( $+functions[_carch__help__completions_commands] )) ||
+_carch__help__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch help completions commands' commands "$@"
+}
+(( $+functions[_carch__help__help_commands] )) ||
+_carch__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch help help commands' commands "$@"
+}
+(( $+functions[_carch__help__uninstall_commands] )) ||
+_carch__help__uninstall_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch help uninstall commands' commands "$@"
+}
+(( $+functions[_carch__help__update_commands] )) ||
+_carch__help__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch help update commands' commands "$@"
+}
+(( $+functions[_carch__uninstall_commands] )) ||
+_carch__uninstall_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch uninstall commands' commands "$@"
+}
+(( $+functions[_carch__update_commands] )) ||
+_carch__update_commands() {
+    local commands; commands=()
+    _describe -t commands 'carch update commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_carch" ]; then
+    _carch "$@"
+else
+    compdef _carch carch
+fi

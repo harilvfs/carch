@@ -112,7 +112,11 @@ pub struct ScriptItem {
 #[derive(Default, Clone)]
 pub struct UiOptions {
     /// if true, turn on logging
-    pub log_mode: bool,
+    pub log_mode:     bool,
+    /// the name of the theme to use
+    pub theme:        String,
+    /// if true, the theme cannot be changed
+    pub theme_locked: bool,
 }
 
 /// holds the state for the script preview panel
@@ -200,6 +204,8 @@ pub struct App<'a> {
     pub modules_dir:   PathBuf,
     /// the current theme
     pub theme:         Theme,
+    /// if true, the theme cannot be changed
+    pub theme_locked:  bool,
 
     /// the list of scripts for the chosen group
     pub scripts:     StatefulList<ScriptItem>,
