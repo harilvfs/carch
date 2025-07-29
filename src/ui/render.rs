@@ -140,6 +140,11 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::Normal => {
             // no pop-up to draw in normal mode
         }
+        AppMode::RootWarning => {
+            let area = app.script_panel_area;
+            let popup_area = centered_rect(80, 50, area);
+            popups::root_warning::render_root_warning_popup(f, app, popup_area);
+        }
     }
 }
 
@@ -262,6 +267,7 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     AppMode::Confirm => app.handle_key_confirmation_mode(key),
                     AppMode::Help => app.handle_key_help_mode(key),
                     AppMode::Description => app.handle_key_description_mode(key),
+                    AppMode::RootWarning => app.handle_key_root_warning_mode(key),
                     AppMode::RunScript => {
                         // already handled above
                     }

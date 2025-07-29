@@ -232,6 +232,7 @@ impl<'a> App<'a> {
                 }
                 AppMode::Description => {}
                 AppMode::RunScript => {}
+                AppMode::RootWarning => {}
             },
             MouseEventKind::ScrollUp => match self.mode {
                 AppMode::Normal => self.previous(),
@@ -256,6 +257,7 @@ impl<'a> App<'a> {
                 }
                 AppMode::Description => {}
                 AppMode::RunScript => {}
+                AppMode::RootWarning => {}
             },
             _ => {}
         }

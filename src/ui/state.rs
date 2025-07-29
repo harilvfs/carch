@@ -26,6 +26,8 @@ pub enum AppMode {
     RunScript,
     /// the mode for showing the description pop-up
     Description,
+    /// the mode for showing the root warning pop-up
+    RootWarning,
 }
 
 /// shows which panel is currently being used
@@ -117,6 +119,8 @@ pub struct UiOptions {
     pub theme:        String,
     /// if true, the theme cannot be changed
     pub theme_locked: bool,
+    /// if true, the user is running as root
+    pub is_root:      bool,
 }
 
 /// holds the state for the script preview panel

@@ -25,7 +25,7 @@ impl<'a> App<'a> {
 
         App {
             // set the starting mode to normal
-            mode: AppMode::Normal,
+            mode: if options.is_root { AppMode::RootWarning } else { AppMode::Normal },
             // the app shouldn't close by default
             quit: false,
             // the categories panel is focused at the start

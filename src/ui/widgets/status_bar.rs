@@ -24,6 +24,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Help => "Help",
         AppMode::Description => "Description",
         AppMode::RunScript => "Running",
+        AppMode::RootWarning => "Root Warning",
     };
 
     let mode_color = match app.mode {
@@ -40,6 +41,7 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
         AppMode::Help => app.theme.primary,
         AppMode::Description => app.theme.primary,
         AppMode::RunScript => app.theme.warning,
+        AppMode::RootWarning => app.theme.error,
     };
 
     let selected_count = if app.multi_select.enabled {

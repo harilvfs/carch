@@ -56,6 +56,7 @@ pub fn run_tui(settings: Settings) -> Result<()> {
         log_mode:     settings.log_mode,
         theme:        settings.theme,
         theme_locked: settings.theme_locked,
+        is_root:      std::env::var("USER").unwrap_or_default() == "root",
     };
 
     if settings.log_mode {

@@ -333,4 +333,17 @@ impl<'a> App<'a> {
             }
         }
     }
+
+    /// handles key presses in root warning mode
+    pub fn handle_key_root_warning_mode(&mut self, key: crossterm::event::KeyEvent) {
+        match key.code {
+            crossterm::event::KeyCode::Char('y') | crossterm::event::KeyCode::Char('Y') => {
+                self.mode = AppMode::Normal;
+            }
+            crossterm::event::KeyCode::Char('n') | crossterm::event::KeyCode::Char('N') => {
+                self.quit = true;
+            }
+            _ => {}
+        }
+    }
 }
