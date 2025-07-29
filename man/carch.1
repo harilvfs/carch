@@ -33,30 +33,45 @@ To get the development version, run:
 bash -c "$(curl -fsSL chalisehari.com.np/carchdev)"
 .fi
 
-.SH OPTIONS
+.SH COMMANDS
 .TP
-\fB\-\-help\fR, \fB\-h\fR
-Display this help message and exit.
-
-.TP
-\fB\-\-version\fR, \fB\-v\fR
-Show the current version of the program.
-
-.TP
-\fB\-\-log\fR
-Enable logging for the current session only.
-
+\fBcheck-update\fR
+Check for updates
 .TP
 \fBupdate\fR
-Interactively update Carch
-
-.TP
-\fBcheck\-update\fR
-Check if a new version of Carch is available.
-
+Update the application
 .TP
 \fBuninstall\fR
-Interactively uninstall Carch
+Uninstall the application
+.TP
+\fBhelp\fR
+Print this message or the help of the given subcommand(s)
+
+.SH OPTIONS
+.TP
+\fB--log\fR
+Enable logging, output is on ~/.config/carch/carch.log
+.TP
+\fB-v, --version\fR
+Print version information
+.TP
+\fB-c, --catppuccin-mocha\fR
+Set theme to Catppuccin Mocha
+.TP
+\fB-d, --dracula\fR
+Set theme to Dracula
+.TP
+\fB-g, --gruvbox\fR
+Set theme to Gruvbox
+.TP
+\fB-n, --nord\fR
+Set theme to Nord
+.TP
+\fB-r, --rose-pine\fR
+Set theme to Rosé Pine
+.TP
+\fB-h, --help\fR
+Print help
 
 .SH SUPPORT
 For assistance or to report issues, visit the official repository:

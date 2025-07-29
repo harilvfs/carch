@@ -10,11 +10,21 @@ use std::fs::{self, OpenOptions};
 #[command(disable_version_flag = true)]
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Option<Commands>,
-    #[arg(long, global = true, help = "Enable logging")]
-    pub log:     bool,
+    pub command:          Option<Commands>,
+    #[arg(long, global = true, help = "Enable logging, output is on ~/.config/carch/carch.log")]
+    pub log:              bool,
     #[arg(short = 'v', long = "version", action = ArgAction::Version, help = "Print version information")]
-    version:     Option<bool>,
+    version:              Option<bool>,
+    #[arg(short = 'c', long, global = true, help = "Set theme to Catppuccin Mocha")]
+    pub catppuccin_mocha: bool,
+    #[arg(short = 'd', long, global = true, help = "Set theme to Dracula")]
+    pub dracula:          bool,
+    #[arg(short = 'g', long, global = true, help = "Set theme to Gruvbox")]
+    pub gruvbox:          bool,
+    #[arg(short = 'n', long, global = true, help = "Set theme to Nord")]
+    pub nord:             bool,
+    #[arg(short = 'r', long, global = true, help = "Set theme to Rosé Pine")]
+    pub rose_pine:        bool,
 }
 
 #[derive(Subcommand)]
@@ -29,12 +39,14 @@ pub enum Commands {
 
 #[derive(Clone, Default)]
 pub struct Settings {
-    pub log_mode: bool,
+    pub log_mode:     bool,
+    pub theme:        String,
+    pub theme_locked: bool,
 }
 
 pub fn parse_args() -> Result<()> {
     let cli = Cli::parse();
-    let mut settings = Settings::default();
+    let mut settings = Settings { ..Default::default() };
 
     if cli.log {
         settings.log_mode = true;
@@ -49,6 +61,25 @@ pub fn parse_args() -> Result<()> {
             .filter(None, log::LevelFilter::Info)
             .init();
         info!("Carch TUI started");
+    }
+
+    if cli.catppuccin_mocha {
+        settings.theme = "catppuccin-mocha".to_string();
+        settings.theme_locked = true;
+    } else if cli.dracula {
+        settings.theme = "dracula".to_string();
+        settings.theme_locked = true;
+    } else if cli.gruvbox {
+        settings.theme = "gruvbox".to_string();
+        settings.theme_locked = true;
+    } else if cli.nord {
+        settings.theme = "nord".to_string();
+        settings.theme_locked = true;
+    } else if cli.rose_pine {
+        settings.theme = "rose-pine".to_string();
+        settings.theme_locked = true;
+    } else {
+        settings.theme = "catppuccin-mocha".to_string();
     }
 
     match cli.command {
