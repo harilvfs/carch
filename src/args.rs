@@ -103,9 +103,6 @@ pub fn parse_args() -> Result<()> {
             commands::uninstall()
         }
         Some(Commands::Completions { shell }) => {
-            // fixme: zsh completion is broken. i guess clap_complete has a bug that
-            // causes errors when there's a default command, which this app has. the
-            // error is '_: function definition file not found'.
             let mut cmd = Cli::command();
             let name = cmd.get_name().to_string();
             clap_complete::generate(shell, &mut cmd, name, &mut io::stdout());
