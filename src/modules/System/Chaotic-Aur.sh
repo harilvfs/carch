@@ -79,7 +79,7 @@ install_chaotic_aur() {
 
     print_message "$TEAL" "Backing up /etc/pacman.conf..."
     mkdir -p "$HOME/.config/carch/backups"
-    sudo cp /etc/pacman.conf "$HOME/.config/carch/backups/pacman.conf.bak"
+    sudo cp -r /etc/pacman.conf "$HOME/.config/carch/backups/pacman.conf.bak"
     print_message "$GREEN" "Backup of pacman.conf created at ~/.config/carch/backups/pacman.conf.bak"
 
     print_message "$TEAL" "Adding Chaotic AUR to pacman.conf..."

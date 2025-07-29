@@ -357,6 +357,8 @@ main() {
     local BASHRC="$HOME/.bashrc"
     if [[ -f "$BASHRC" ]]; then
         if confirm ".bashrc already exists. Use the recommended version?"; then
+            mv "$BASHRC" "$backup_dir/.bashrc.bak"
+            print_message "$GREEN" "Backup created: $backup_dir/.bashrc.bak"
             curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
             print_message "$GREEN" "Applied recommended .bashrc."
         fi

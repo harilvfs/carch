@@ -100,7 +100,7 @@ handle_existing_config() {
                 rm -rf "$backup_path"
             fi
 
-            cp -r "$FASTFETCH_DIR" "$backup_path"
+            mv "$FASTFETCH_DIR" "$backup_path"
             print_message "$GREEN" "Backup completed."
         else
             print_message "$YELLOW" "Proceeding without backup..."
