@@ -19,9 +19,6 @@ _carch() {
             carch,check-update)
                 cmd="carch__check__update"
                 ;;
-            carch,completions)
-                cmd="carch__completions"
-                ;;
             carch,help)
                 cmd="carch__help"
                 ;;
@@ -33,9 +30,6 @@ _carch() {
                 ;;
             carch__help,check-update)
                 cmd="carch__help__check__update"
-                ;;
-            carch__help,completions)
-                cmd="carch__help__completions"
                 ;;
             carch__help,help)
                 cmd="carch__help__help"
@@ -53,7 +47,7 @@ _carch() {
 
     case "${cmd}" in
         carch)
-            opts="-v -c -d -g -n -r -h --log --version --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help check-update update uninstall completions help"
+            opts="-v -c -d -g -n -r -h --log --version --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help check-update update uninstall help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -80,22 +74,8 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__completions)
-            opts="-c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help bash elvish fish powershell zsh"
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
         carch__help)
-            opts="check-update update uninstall completions help"
+            opts="check-update update uninstall help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -109,20 +89,6 @@ _carch() {
             return 0
             ;;
         carch__help__check__update)
-            opts=""
-            if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
-                COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-                return 0
-            fi
-            case "${prev}" in
-                *)
-                    COMPREPLY=()
-                    ;;
-            esac
-            COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
-            return 0
-            ;;
-        carch__help__completions)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )

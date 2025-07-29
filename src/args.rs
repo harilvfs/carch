@@ -1,11 +1,9 @@
 use crate::error::{CarchError, Result};
 use crate::{commands, version};
-use clap::{ArgAction, CommandFactory, Parser, Subcommand};
-use clap_complete::Shell;
+use clap::{ArgAction, Parser, Subcommand};
 use env_logger::{Builder, Target};
 use log::info;
 use std::fs::{self, OpenOptions};
-use std::io;
 
 #[derive(Parser)]
 #[command(author, about, long_about = None, version = env!("CARGO_PKG_VERSION"))]
@@ -37,11 +35,6 @@ pub enum Commands {
     Update,
     #[command(about = "Uninstall the application")]
     Uninstall,
-    #[command(about = "Generate completions for a shell")]
-    Completions {
-        #[arg(value_enum)]
-        shell: Shell,
-    },
 }
 
 #[derive(Clone, Default)]
@@ -101,12 +94,6 @@ pub fn parse_args() -> Result<()> {
         Some(Commands::Uninstall) => {
             info!("Running uninstall process");
             commands::uninstall()
-        }
-        Some(Commands::Completions { shell }) => {
-            let mut cmd = Cli::command();
-            let name = cmd.get_name().to_string();
-            clap_complete::generate(shell, &mut cmd, name, &mut io::stdout());
-            Ok(())
         }
         None => crate::run_tui(settings),
     }

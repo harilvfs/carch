@@ -175,7 +175,6 @@ version = "5.2.5"
 dependencies = [
  "chrono",
  "clap",
- "clap_complete",
  "crossterm 0.29.0",
  "dirs",
  "env_logger",
@@ -2761,6 +2760,8 @@ name = "xtask"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "clap",
+ "clap_complete",
  "pico-args",
  "xshell",
 ]

@@ -1,5 +1,10 @@
+use clap::CommandFactory;
+use clap_complete::{Shell, generate};
 use pico_args::Arguments;
-use xshell::{Shell, cmd};
+use std::io::Cursor;
+use xshell::{Shell as XShell, cmd};
+
+mod args;
 
 const HELP: &str = r#"
 Usage: cargo xtask <COMMAND>
@@ -16,13 +21,13 @@ fn main() -> Result<(), anyhow::Error> {
         return Ok(());
     }
 
-    let sh = Shell::new()?;
+    let sh = XShell::new()?;
     let cmd = args.subcommand()?.unwrap_or_else(|| "ci".to_string());
     match cmd.as_str() {
         "ci" => {
             cmd!(sh, "cargo +nightly fmt --all --check").run()?;
-            cmd!(sh, "cargo +nightly clippy").run()?;
-            cmd!(sh, "cargo +nightly clippy -- -D warnings").run()?;
+            cmd!(sh, "cargo +nightly clippy --workspace").run()?;
+            cmd!(sh, "cargo +nightly clippy --workspace -- -D warnings").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --no-default-features").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --all-features").run()?;
@@ -31,19 +36,24 @@ fn main() -> Result<(), anyhow::Error> {
             Ok(())
         }
         "completions" => {
-            println!("Building carch binary...");
-            cmd!(sh, "cargo build --release").run()?;
-            let carch_bin = sh.current_dir().join("build/release/carch");
-
             println!("Generating completions...");
-            let bash_completions = cmd!(sh, "{carch_bin} completions bash").read()?;
-            sh.write_file("completions/bash/carch", bash_completions)?;
 
-            let fish_completions = cmd!(sh, "{carch_bin} completions fish").read()?;
-            sh.write_file("completions/fish/carch.fish", fish_completions)?;
+            let mut cmd = crate::args::Cli::command();
+            let mut buffer = Vec::new();
 
-            let zsh_completions = cmd!(sh, "{carch_bin} completions zsh").read()?;
-            sh.write_file("completions/zsh/_carch", zsh_completions)?;
+            // generate completions for Bash
+            generate(Shell::Bash, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
+            sh.write_file("completions/bash/carch", &buffer)?;
+            buffer.clear();
+
+            // generate completions for Fish
+            generate(Shell::Fish, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
+            sh.write_file("completions/fish/carch.fish", &buffer)?;
+            buffer.clear();
+
+            // generate completions for Zsh
+            generate(Shell::Zsh, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
+            sh.write_file("completions/zsh/_carch", &buffer)?;
 
             println!("Completions generated successfully.");
             Ok(())
