@@ -26,7 +26,7 @@ For more, see the [documentation](https://carch.chalisehari.com.np). You can als
 <!-- Source: https://github.com/catppuccin/catppuccin/blob/main/assets/footers/gray0_ctp_on_line.svg -->
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/footers/gray0_ctp_on_line.svg?sanitize=true" />
+	<img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/catppuccin-footer.svg" />
 </p>
 
 <!-- Badges -->
