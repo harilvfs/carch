@@ -111,21 +111,11 @@ jobs:
             ./build/aarch64-unknown-linux-musl/release/carch-aarch64
           retention-days: 1
 
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v4
-        with:
-          version: "v2.9.1"
-          config: cliff.toml
-          args: --unreleased --strip header
-        env:
-          OUTPUT: BODY.md
-
-      - name: Add banner, badges & release header
+      - name: Create release body
         run: |
-          sed -i '/^## \[unreleased\]/d' BODY.md
           BANNER="![Carch Banner](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)"
           BADGES="![RPM Downloads](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-$VERSION-1.fc42.x86_64.rpm?color=%235E81AC&style=for-the-badge&label=RPM%20Downloads&logoColor=85e185&labelColor=1c1c29) ![Binary x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&label=x86_64%20Binary&logoColor=85e185&labelColor=1c1c29) ![Binary aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&label=aarch64%20Binary&logoColor=85e185&labelColor=1c1c29)"
-          printf "%s\n\n%s\n\n## What's Changed\n\n%s\n" "$BANNER" "$BADGES" "$(cat BODY.md)" > BODY.md
+          printf "%s\n\n%s\n\n**Refer to [CHANGELOG.md](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md) for full details.**\n" "$BANNER" "$BADGES" > BODY.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
