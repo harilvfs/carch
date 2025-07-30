@@ -23,7 +23,7 @@ It’s especially useful if you want to quickly set up and start using your *fav
 For more, see the [documentation](https://carch.chalisehari.com.np). You can also join us on [Discord](https://discord.com/invite/8NJWstnUHd) or [Telegram](https://t.me/carchx) for help and discussions.
 
 <!-- Catppuccin Footer -->
-<!-- Source: https://github.com/catppuccin/catppuccin/blob/main/assets/footers/gray0_ctp_on_line.svg -->
+<!-- Source: https://github.com/catppuccin/catppuccin -->
 
 <p align="center">
 	<img src="https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/catppuccin-footer.svg" />
