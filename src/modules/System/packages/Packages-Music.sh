@@ -24,8 +24,7 @@ install_music() {
 
     while true; do
         clear
-        local options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Back to Main Menu")
-
+        local options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Mousai" "Back to Main Menu")
         show_menu "Music App Selection" "${options[@]}"
         get_choice "${#options[@]}"
         local choice_index=$?
@@ -78,6 +77,20 @@ install_music() {
                     version=$(get_version rhythmbox)
                 fi
                 echo "Rhythmbox installed successfully! Version: $version"
+                ;;
+            "Mousai")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    $pkg_manager mousai
+                    version=$(get_version mousai)
+                elif [[ $distro -eq 2 ]]; then
+                    $pkg_manager mousai
+                    version=$(get_version mousai)
+                else
+                    $flatpak_cmd io.github.seadve.Mousai
+                    version="Flatpak Version"
+                fi
+                echo "Mousai music identifier installed successfully! Version: $version"
                 ;;
             "Back to Main Menu")
                 return
