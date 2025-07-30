@@ -24,7 +24,7 @@ install_streaming() {
     while true; do
         clear
 
-        local options=("OBS Studio" "SimpleScreenRecorder [Git]" "Blue Recorder" "Back to Main Menu")
+        local options=("OBS Studio" "SimpleScreenRecorder [Git]" "Blue Recorder" "Kooha" "Back to Main Menu")
 
         show_menu "Streaming Tools Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -146,18 +146,24 @@ install_streaming() {
                 clear
                 if [[ $distro -eq 0 ]]; then
                     install_flatpak
-                    flatpak install -y --noninteractive flathub sa.sy.bluerecorder
-                    version="Flatpak Version"
-                elif [[ $distro -eq 1 ]]; then
-                    install_flatpak
-                    flatpak install -y --noninteractive flathub sa.sy.bluerecorder
-                    version="Flatpak Version"
-                else
-                    $flatpak_cmd sa.sy.bluerecorder
-                    version="Flatpak Version"
+                    flatpak_cmd="flatpak install -y --noninteractive flathub"
                 fi
+                $flatpak_cmd sa.sy.bluerecorder
+                version="Flatpak Version"
                 echo "Blue Recorder installed successfully! Version: $version"
                 ;;
+
+            "Kooha")
+                clear
+                if [[ $distro -eq 0 ]]; then
+                    install_flatpak
+                    flatpak_cmd="flatpak install -y --noninteractive flathub"
+                fi
+                $flatpak_cmd io.github.seadve.Kooha
+                version="Flatpak Version"
+                echo "Kooha installed successfully! Version: $version"
+                ;;
+
             "Back to Main Menu")
                 return
                 ;;
