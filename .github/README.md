@@ -9,6 +9,7 @@
 [![License][license]][license-link]
 [![Dependency Status][deps-badge]][deps]
 
+[Quick Run/Test](https://carch.chalisehari.com.np/#how-to-use) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) •
 [Overview](https://carch.chalisehari.com.np/reference/overview-scripts) •
 [Contributing](https://carch.chalisehari.com.np/project/contributing) •
