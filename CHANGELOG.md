@@ -1,5 +1,65 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.2.6](https://github.com/harilvfs/carch/compare/v5.2.5...v5.2.6) - 2025-07-31
+
+
+### 🚀 Features
+
+
+- [931f214](https://github.com/harilvfs/carch/commit/931f21449d21ccdc767f0d8cde4ed51e9ad17465)  *(ui)* Implement theme switching 🌈 (#541) by @harilvfs in [#541](https://github.com/harilvfs/carch/pull/541)
+
+- [f26bb91](https://github.com/harilvfs/carch/commit/f26bb91283ab756985a58436d07a251db1496ef7)  *(tui)* Use single folder icon for categories by @harilvfs
+
+- [c123b4e](https://github.com/harilvfs/carch/commit/c123b4eec765e1bd513ac241610e292274d99d87)  *(commands)* Add cli commands for theme selection (#542) by @harilvfs in [#542](https://github.com/harilvfs/carch/pull/542)
+
+- [912cc80](https://github.com/harilvfs/carch/commit/912cc80febb43ecb5b233980d22cf1d938df0ba0)  *(tui)* Add warning popup when running as root by @harilvfs
+
+- [fca1b73](https://github.com/harilvfs/carch/commit/fca1b73fe250840b039539b139db1af5d2bb2cc6)  *(package)* Add kooha screen recorder by @harilvfs
+
+- [ba9d4df](https://github.com/harilvfs/carch/commit/ba9d4df646698370e1e0c217046e2e2db7ca56b0)  *(package)* Add mousai music identifier by @harilvfs
+
+- [5091a36](https://github.com/harilvfs/carch/commit/5091a36dfe6777347bf2eb4112a944d8cae0ca62) Add short command for --log option by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [d0abfcb](https://github.com/harilvfs/carch/commit/d0abfcb4fbb83abbcbe129fe352267505e8f38c0)  *(cmd)* Correct `update` argument by @harilvfs
+
+- [e15fcc2](https://github.com/harilvfs/carch/commit/e15fcc27aeaa7766d497c269faa3456be51bd11a)  *(ui)* Clear screen on startup by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [5253a61](https://github.com/harilvfs/carch/commit/5253a610026119c6aaf5629c3433f393cdc9005a)  *(script)* Use mv for backing up user config by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [b17d8f6](https://github.com/harilvfs/carch/commit/b17d8f6334ece356d32a18a639850da4a5e198ab)  *(readme)* Add quick link for use-case by @nissxnix
+
+- [52cece8](https://github.com/harilvfs/carch/commit/52cece82c204ebd780cdc3f42a151188d87bdd3b)  *(readme)* Add catppuccin footer (#544) by @nissxnix in [#544](https://github.com/harilvfs/carch/pull/544)
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [4ac8664](https://github.com/harilvfs/carch/commit/4ac8664b223d58c101ae44d83328c06f793e0873)  *(tape)* Increase preview command time by @harilvfs
+
+- [90fd926](https://github.com/harilvfs/carch/commit/90fd9269c54d873702126c1d792008947f2dc651)  *(release)* Add pre-release workflow by @harilvfs
+
+- [6de2e51](https://github.com/harilvfs/carch/commit/6de2e5192436d8af4e240ac3581caba131ce5bc2) Remove bacon (#543) by @nissxnix in [#543](https://github.com/harilvfs/carch/pull/543)
+
+- [ba5f20a](https://github.com/harilvfs/carch/commit/ba5f20aef33143d69d099e8d12e3c23b52df5a51) Update logs commands on manpage by @harilvfs
+
+
+
 ## [5.2.5](https://github.com/harilvfs/carch/compare/v5.2.4...v5.2.5) - 2025-07-27
 
 
