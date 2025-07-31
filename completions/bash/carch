@@ -47,7 +47,7 @@ _carch() {
 
     case "${cmd}" in
         carch)
-            opts="-v -c -d -g -n -r -h --log --version --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help check-update update uninstall help"
+            opts="-l -v -c -d -g -n -r -h --log --version --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help check-update update uninstall help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -61,7 +61,7 @@ _carch() {
             return 0
             ;;
         carch__check__update)
-            opts="-c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
+            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -145,7 +145,7 @@ _carch() {
             return 0
             ;;
         carch__uninstall)
-            opts="-c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
+            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
@@ -159,7 +159,7 @@ _carch() {
             return 0
             ;;
         carch__update)
-            opts="-c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
+            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0

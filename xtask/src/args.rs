@@ -6,7 +6,12 @@ use clap::{ArgAction, Parser, Subcommand};
 pub struct Cli {
     #[command(subcommand)]
     pub command:          Option<Commands>,
-    #[arg(long, global = true, help = "Enable logging, output is on ~/.config/carch/carch.log")]
+    #[arg(
+        short = 'l',
+        long,
+        global = true,
+        help = "Enable logging, output is on ~/.config/carch/carch.log"
+    )]
     pub log:              bool,
     #[arg(short = 'v', long = "version", action = ArgAction::Version, help = "Print version information")]
     version:              Option<bool>,
