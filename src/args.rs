@@ -3,7 +3,9 @@ use crate::{commands, version};
 use clap::{ArgAction, Parser, Subcommand};
 use env_logger::{Builder, Target};
 use log::info;
+use std::env;
 use std::fs::{self, OpenOptions};
+use std::path::PathBuf;
 
 #[derive(Parser)]
 #[command(author, about, long_about = None, version = env!("CARGO_PKG_VERSION"))]
@@ -50,7 +52,8 @@ pub fn parse_args() -> Result<()> {
 
     if cli.log {
         settings.log_mode = true;
-        let log_dir = dirs::home_dir().ok_or(CarchError::HomeDirNotFound)?.join(".config/carch");
+        let home_dir = env::var("HOME").map_err(|_| CarchError::HomeDirNotFound)?;
+        let log_dir = PathBuf::from(home_dir).join(".config/carch");
         fs::create_dir_all(&log_dir)?;
         let log_file = log_dir.join("carch.log");
 
