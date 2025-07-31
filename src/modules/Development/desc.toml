@@ -8,4 +8,4 @@ description = "Helix is a modal text editor inspired by Vim, focused on speed an
 description = "Neovim is a modern, improved fork of Vim designed to be more extensible, faster, and easier to integrate with plugins. The script lets you choose between Kickstart Neovim and NvChad setups to customize your IDE environment."
 
 [Npm]
-description = "npm (Node Package Manager) is the default package manager for Node.js, used for managing JavaScript libraries and dependencies. The script installs npm on your system."
+description = "Npm (Node Package Manager) is the default package manager for Node.js, used for managing JavaScript libraries and dependencies. The script installs npm on your system."

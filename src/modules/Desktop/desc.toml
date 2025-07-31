@@ -5,7 +5,7 @@ description = "Bspwm is a minimal, scriptable tiling window manager for X11 that
 description = "Dunst is a lightweight, customizable notification daemon for Linux that shows minimal, unobtrusive desktop notifications. The script applies my pre-configured Dunst setup."
 
 [Dwm]
-description = "dwm is a dynamic tiling window manager for X11, known for being minimal, fast, and configurable by editing its source code. The script will apply my pre-configured dwm setup from my harilvfs/dwm repo and install all necessary dependencies to make the environment fully functional."
+description = "Dwm is a dynamic tiling window manager for X11, known for being minimal, fast, and configurable by editing its source code. The script will apply my pre-configured dwm setup from my harilvfs/dwm repo and install all necessary dependencies to make the environment fully functional."
 
 [Hyprland]
 description = "Hyprland is a dynamic tiling Wayland compositor that supports modern features like animations, window effects, and flexible tiling layouts. The script lets you install pre-configured Hyprland setups from respected users - ml4w, end-4, Jakoolit, omarchy and prasanthrangan dots."
