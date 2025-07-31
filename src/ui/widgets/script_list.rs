@@ -34,27 +34,19 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
 
             if app.multi_select.enabled {
                 let is_selected = app.is_script_selected(&item.path);
-                let prefix = if is_selected { "[✓] " } else { "[ ] " };
-
-                let prefix_style = if is_selected {
-                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD)
+                let (suffix, script_name_style) = if is_selected {
+                    (" ", Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD))
                 } else {
-                    Style::default().fg(app.theme.secondary)
-                };
-
-                let script_name_style = if is_selected {
-                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD)
-                } else {
-                    Style::default().fg(app.theme.secondary)
+                    ("", Style::default().fg(app.theme.secondary))
                 };
 
                 let icon_style =
                     Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
 
                 let line = ratatui::text::Line::from(vec![
-                    ratatui::text::Span::styled(prefix, prefix_style),
                     ratatui::text::Span::styled(icon, icon_style),
                     ratatui::text::Span::styled(&item.name, script_name_style),
+                    ratatui::text::Span::styled(suffix, script_name_style),
                 ]);
                 ListItem::new(line)
             } else {
