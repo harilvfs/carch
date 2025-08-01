@@ -10,7 +10,6 @@ fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
 }
 
-/// draws the help pop-up with keyboard shortcuts
 pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     f.render_widget(Clear, area);
 

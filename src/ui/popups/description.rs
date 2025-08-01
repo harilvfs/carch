@@ -6,9 +6,6 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
 
 use crate::ui::state::App;
 
-// we need to manually wrap text to calculate the number of lines for scrolling
-// the default tui widget wrapping doesn't tell us how many lines are created
-/// wraps the given text to fit within the specified width
 fn word_wrap(text: &str, width: u16) -> String {
     let mut wrapped_text = String::new();
     let mut current_line = String::new();
@@ -28,7 +25,6 @@ fn word_wrap(text: &str, width: u16) -> String {
     wrapped_text
 }
 
-/// renders the description popup
 pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
     if let Some(description) = &app.description.content {
         let popup_block = Block::default()

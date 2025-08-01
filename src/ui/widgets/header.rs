@@ -6,16 +6,12 @@ use ratatui::widgets::{Block, BorderType, Borders, Paragraph};
 
 use crate::ui::state::App;
 
-/// draws the header at the top of the screen
-/// it shows breadcrumbs, script counts, and the app title
 pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
     let header_block = Block::default()
         .borders(Borders::ALL)
         .border_style(Style::default().fg(app.theme.primary))
         .border_type(BorderType::Rounded);
 
-    // get the inner area to draw the content
-    // this prevents the margin from affecting the layout
     let inner_area = header_block.inner(area);
     f.render_widget(header_block, area);
 
@@ -24,7 +20,6 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
         .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
         .split(inner_area);
 
-    // left side is  title and total scripts separated by |
     let total_scripts = app.all_scripts.values().map(Vec::len).sum::<usize>();
     let left_text = Text::from(Line::from(vec![
         Span::styled("Carch", Style::default().fg(app.theme.accent).add_modifier(Modifier::BOLD)),
@@ -32,7 +27,6 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
     ]));
     f.render_widget(Paragraph::new(left_text).alignment(Alignment::Left), chunks[0]);
 
-    // right side is our breadcrumb
     let breadcrumb = if let Some(script_idx) = app.scripts.state.selected() {
         let script = &app.scripts.items[script_idx];
         let category_scripts = app.scripts.items.len();

@@ -12,7 +12,6 @@ use crate::ui::state::{ScriptItem, UiOptions};
 use crate::ui::theme::Theme;
 
 impl<'a> App<'a> {
-    /// makes a new app with a starting state
     pub fn new(options: &UiOptions) -> App<'a> {
         let theme = match options.theme.as_str() {
             "catppuccin-mocha" => Theme::catppuccin_mocha(),
@@ -24,37 +23,25 @@ impl<'a> App<'a> {
         };
 
         App {
-            // set the starting mode to normal
             mode: if options.is_root { AppMode::RootWarning } else { AppMode::Normal },
-            // the app shouldn't close by default
             quit: false,
-            // the categories panel is focused at the start
             focused_panel: FocusedPanel::Categories,
-            // logging is off by default
             log_mode: false,
-            // path starts empty and is set when the ui is initialized
             modules_dir: PathBuf::new(),
-            // set the theme
             theme,
-            // theme is not locked by default
             theme_locked: options.theme_locked,
 
-            // the lists of scripts and categories start empty
             scripts: StatefulList::new(),
             categories: StatefulList::new(),
             all_scripts: HashMap::new(),
 
-            // the script panel area starts as a zero-sized box
             script_panel_area: Rect::default(),
-            // set up the starting state for preview, search, multi-select, and help
             preview: PreviewState::default(),
             search: SearchState::default(),
             multi_select: MultiSelectState::default(),
             help: HelpState::default(),
             description: DescriptionState::default(),
-            // no pop-ups are shown at the start
             run_script_popup: None,
-            // the list of scripts to run starts empty
             script_execution_queue: Vec::new(),
         }
     }
@@ -70,7 +57,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// toggles the description popup for the currently selected script
     pub fn toggle_description_popup(&mut self) {
         if self.mode == AppMode::Description {
             self.mode = AppMode::Normal;
@@ -129,7 +115,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// get the currently selected script
     pub fn get_selected_script(&self) -> Option<&ScriptItem> {
         self.scripts.state.selected().map(|i| &self.scripts.items[i])
     }

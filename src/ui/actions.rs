@@ -8,8 +8,6 @@ use super::state::{
 use fuzzy_matcher::FuzzyMatcher;
 
 impl<'a> App<'a> {
-    /// loads all scripts from the modules folder
-    /// it reads the folder structure to make a list of categories and scripts
     pub fn load_scripts(&mut self, modules_dir: &Path) -> io::Result<()> {
         let mut categories = Vec::new();
         let mut all_scripts = std::collections::HashMap::new();
@@ -58,7 +56,6 @@ impl<'a> App<'a> {
         Ok(())
     }
 
-    /// updates the script list based on the selected category
     pub fn update_script_list(&mut self) {
         if let Some(scripts) = self
             .categories
@@ -76,7 +73,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// shows the content of the selected script in the preview panel
     pub fn update_preview(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
             let script_path = &self.scripts.items[selected].path;
@@ -96,7 +92,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// turns preview mode on or off
     pub fn toggle_preview_mode(&mut self) {
         if self.scripts.state.selected().is_some() {
             let prev_mode = self.mode;
@@ -117,27 +112,22 @@ impl<'a> App<'a> {
         }
     }
 
-    /// scrolls the preview panel up by one line
     pub fn scroll_preview_up(&mut self) {
         self.preview.scroll = self.preview.scroll.saturating_sub(1);
     }
 
-    /// scrolls the preview panel down by one line
     pub fn scroll_preview_down(&mut self) {
         self.preview.scroll = (self.preview.scroll + 1).min(self.preview.max_scroll);
     }
 
-    /// scrolls the preview panel up by one page
     pub fn scroll_preview_page_up(&mut self) {
         self.preview.scroll = self.preview.scroll.saturating_sub(10);
     }
 
-    /// scrolls the preview panel down by one page
     pub fn scroll_preview_page_down(&mut self) {
         self.preview.scroll = (self.preview.scroll + 10).min(self.preview.max_scroll);
     }
 
-    /// gets the path of the selected script
     pub fn get_script_path(&self) -> Option<PathBuf> {
         if self.mode == AppMode::Search {
             if let Some(selected_idx) = self.search.results.get(self.search.selected_idx) {
@@ -151,7 +141,6 @@ impl<'a> App<'a> {
         None
     }
 
-    /// turns search mode on or off
     pub fn toggle_search_mode(&mut self) {
         let prev_mode = self.mode;
         self.mode = if self.mode == AppMode::Search { AppMode::Normal } else { AppMode::Search };
@@ -170,7 +159,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// searches based on the text in the search box
     pub fn perform_search(&mut self) {
         self.search.results.clear();
 
@@ -200,7 +188,6 @@ impl<'a> App<'a> {
         self.search.results = results;
     }
 
-    /// selects the next item in the focused list
     pub fn next(&mut self) {
         if self.log_mode {
             info!("Navigating next in {:?}", self.focused_panel);
@@ -218,7 +205,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// selects the previous item in the focused list
     pub fn previous(&mut self) {
         if self.log_mode {
             info!("Navigating previous in {:?}", self.focused_panel);
@@ -236,7 +222,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// updates the autocomplete suggestion based on the search text
     pub fn update_autocomplete(&mut self) {
         self.search.autocomplete = None;
 
@@ -272,7 +257,6 @@ impl<'a> App<'a> {
         self.search.autocomplete = best_match;
     }
 
-    /// turns multi-select mode on or off
     pub fn toggle_multi_select_mode(&mut self) {
         self.multi_select.enabled = !self.multi_select.enabled;
         if !self.multi_select.enabled {
@@ -280,7 +264,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// selects or deselects the highlighted script in multi-select mode
     pub fn toggle_script_selection(&mut self) {
         if let Some(selected) = self.scripts.state.selected() {
             let script_path = &self.scripts.items[selected].path;
@@ -292,17 +275,14 @@ impl<'a> App<'a> {
         }
     }
 
-    /// checks if a script is selected in multi-select mode
     pub fn is_script_selected(&self, script_path: &Path) -> bool {
         self.multi_select.scripts.contains(&script_path.to_path_buf())
     }
 
-    /// turns help mode on or off
     pub fn toggle_help_mode(&mut self) {
         self.mode = if self.mode == AppMode::Help { AppMode::Normal } else { AppMode::Help };
     }
 
-    /// selects the first item in the focused list
     pub fn top(&mut self) {
         match self.focused_panel {
             FocusedPanel::Categories => {
@@ -317,7 +297,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// selects the last item in the focused list
     pub fn bottom(&mut self) {
         match self.focused_panel {
             FocusedPanel::Categories => {
@@ -334,7 +313,6 @@ impl<'a> App<'a> {
         }
     }
 
-    /// handles key presses in root warning mode
     pub fn handle_key_root_warning_mode(&mut self, key: crossterm::event::KeyEvent) {
         match key.code {
             crossterm::event::KeyCode::Char('y') | crossterm::event::KeyCode::Char('Y') => {

@@ -219,7 +219,6 @@ impl<'a> App<'a> {
                     }
                 }
                 AppMode::Search => {
-                    // allows scrolling down through search results
                     if !self.search.results.is_empty() {
                         self.search.selected_idx =
                             (self.search.selected_idx + 1) % self.search.results.len();
@@ -227,7 +226,6 @@ impl<'a> App<'a> {
                 }
                 AppMode::Confirm => {}
                 AppMode::Help => {
-                    // ensures scrolling doesn't go past the bottom of the help text
                     self.help.scroll = self.help.scroll.saturating_add(2).min(self.help.max_scroll);
                 }
                 AppMode::Description => {}
@@ -242,7 +240,6 @@ impl<'a> App<'a> {
                     }
                 }
                 AppMode::Search => {
-                    // allows scrolling up through search results
                     if !self.search.results.is_empty() {
                         self.search.selected_idx = if self.search.selected_idx > 0 {
                             self.search.selected_idx - 1

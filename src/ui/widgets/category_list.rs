@@ -5,7 +5,6 @@ use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::App;
 
-/// draws the list of script categories
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let block = Block::default()
         .borders(Borders::ALL)

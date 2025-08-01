@@ -5,8 +5,6 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
 
 use crate::ui::state::App;
 
-/// draws the root warning pop-up
-/// this warns the user that they are running the app as root
 pub fn render_root_warning_popup(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(Clear, area);
 

@@ -71,8 +71,6 @@ fn update_via_cargo() -> Result<()> {
 }
 
 fn update_via_package_manager() -> Result<()> {
-    // the update logic is handled by the install script
-    // you can find the script at scripts/install.sh
     info!("Updating via install script...");
     run_command(
         Command::new("sh")
@@ -111,8 +109,6 @@ fn uninstall_via_cargo() -> Result<()> {
 }
 
 fn uninstall_via_package_manager() -> Result<()> {
-    // the uninstall logic is handled by the install script
-    // you can find the script at scripts/install.sh
     info!("Uninstalling via install script...");
     run_command(
         Command::new("sh")

@@ -41,17 +41,17 @@ fn main() -> Result<(), anyhow::Error> {
             let mut cmd = crate::args::Cli::command();
             let mut buffer = Vec::new();
 
-            // generate completions for Bash
+            // completions for Bash
             generate(Shell::Bash, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/bash/carch", &buffer)?;
             buffer.clear();
 
-            // generate completions for Fish
+            // completions for Fish
             generate(Shell::Fish, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/fish/carch.fish", &buffer)?;
             buffer.clear();
 
-            // generate completions for Zsh
+            // completions for Zsh
             generate(Shell::Zsh, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/zsh/_carch", &buffer)?;
 

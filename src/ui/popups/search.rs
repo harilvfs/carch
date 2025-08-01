@@ -6,8 +6,6 @@ use ratatui::widgets::{Block, BorderType, Borders, Clear, List, ListItem, Paragr
 
 use crate::ui::state::App;
 
-/// draws the search pop-up
-/// it shows a search box and a list of results
 pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     f.render_widget(Clear, area);
 

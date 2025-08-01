@@ -22,7 +22,6 @@ use super::widgets::status_bar::render_status_bar;
 use crate::error::Result;
 use crate::ui::popups;
 
-/// helper function to create a centered rect using a certain percentage of the available rect 'r'
 fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)
@@ -43,8 +42,6 @@ fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
         .split(popup_layout[1])[1]
 }
 
-/// draws the main ui for normal mode
-/// this includes the header, category list, script list, and status bar
 fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
     let area = Layout::default()
         .direction(Direction::Vertical)
@@ -72,15 +69,9 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
     render_status_bar(f, app, chunks[2]);
 }
 
-/// the main function for drawing the ui
-/// it calls other drawing functions based on the current appmode
 fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
-    // always draw the normal ui as the bottom layer
     render_normal_ui(f, app, options);
 
-    // draw pop-ups on top of the normal ui based on the current mode
-    // for popups with dynamic sizes, we calculate the percentage of the area to use
-    // this allows us to use the centered_rect function while preserving the intended size
     match app.mode {
         AppMode::RunScript => {
             if let Some(popup) = &mut app.run_script_popup {
@@ -138,7 +129,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
             popups::description::render_description_popup(f, &mut *app, popup_area);
         }
         AppMode::Normal => {
-            // no pop-up to draw in normal mode
+            // no pop-up
         }
         AppMode::RootWarning => {
             let area = app.script_panel_area;
@@ -148,8 +139,6 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
     }
 }
 
-/// gets the terminal ready for the tui
-/// this means turning on raw mode and going to the alternate screen
 fn setup_terminal() -> Result<Terminal<CrosstermBackend<Stdout>>> {
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -158,8 +147,6 @@ fn setup_terminal() -> Result<Terminal<CrosstermBackend<Stdout>>> {
     Terminal::new(backend).map_err(Into::into)
 }
 
-/// cleans up the terminal after the tui closes
-/// this means leaving the alternate screen and turning off raw mode
 fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<()> {
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
@@ -167,8 +154,6 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Re
     Ok(())
 }
 
-/// the main function for running the tui
-/// it sets up the app, runs the main event loop, and cleans up the terminal
 pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()> {
     if options.log_mode {
         info!("UI initialization started");
@@ -193,14 +178,10 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
         );
     }
 
-    // the main event loop
-    // it keeps running until the user quits the app
     while !app.quit {
         terminal.autoresize()?;
         terminal.draw(|f| ui(f, &mut app, &options))?;
 
-        // check for events with a timeout. the timeout is shorter in runscript mode
-        // to make the ui feel faster while a script is running
         let poll_duration = if app.mode == AppMode::RunScript {
             Duration::from_millis(16)
         } else {
@@ -223,8 +204,6 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
     Ok(())
 }
 
-/// handles events from the terminal, like key presses and mouse clicks
-/// it updates the app state based on the event and the current appmode
 fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> {
     match event {
         Event::Key(key) => {
@@ -236,14 +215,11 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                 debug!("Key pressed: {} in mode: {:?}", key_name, app.mode);
             }
 
-            // runscript mode has special event handling to work with the
-            // script running pop-up
             if app.mode == AppMode::RunScript {
                 if let Some(popup) = &mut app.run_script_popup {
                     match popup.handle_key_event(key) {
                         crate::ui::popups::run_script::PopupEvent::Close => {
                             app.run_script_popup = None;
-                            // if there are more scripts in the queue, run the next one
                             if let Some(script_path) = app.script_execution_queue.pop() {
                                 let next_popup = RunScriptPopup::new(
                                     script_path,
@@ -259,7 +235,6 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     }
                 }
             } else {
-                // pass key handling to the right function based on the current mode
                 match app.mode {
                     AppMode::Normal => app.handle_key_normal_mode(key),
                     AppMode::Preview => app.handle_key_preview_mode(key),
