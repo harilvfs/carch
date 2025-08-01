@@ -1,7 +1,7 @@
 [workspace]
 members = ["carch-cli", "carch-core", "xtask"]
 resolver = "2"
-default-members = ["carch-core", "carch-cli"]
+default-members = ["carch-cli"]
 
 [workspace.package]
 version = "5.2.6"
