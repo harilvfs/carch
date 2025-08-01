@@ -3,7 +3,13 @@ name = "carch-core"
 version.workspace = true
 license = "MIT"
 edition = "2024"
-include = ["src", "Cargo.toml", "../LICENSE", "../.github/README.md", "../scripts"]
+include = [
+  "src",
+  "Cargo.toml",
+  "../LICENSE",
+  "../.github/README.md",
+  "../scripts",
+]
 
 [dependencies]
 tempfile = { workspace = true }

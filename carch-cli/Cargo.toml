@@ -3,7 +3,13 @@ name = "carch-cli"
 version.workspace = true
 license = "MIT"
 edition = "2024"
-include = ["src", "Cargo.toml", "../LICENSE", "../.github/README.md", "../man/carch.1"]
+include = [
+  "src",
+  "Cargo.toml",
+  "../LICENSE",
+  "../.github/README.md",
+  "../man/carch.1",
+]
 
 [dependencies]
 carch-core = { path = "../carch-core" }
