@@ -1,5 +1,4 @@
 name: CI
-
 on:
   push:
     branches: [main]
@@ -7,14 +6,12 @@ on:
       - '**/*.rs'
       - '**/*.toml'
       - 'Cargo.lock'
-
   pull_request:
     branches: [main]
     paths:
       - '**/*.rs'
       - '**/*.toml'
       - 'Cargo.lock'
-
   workflow_dispatch:
 
 jobs:
@@ -28,6 +25,17 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
         with:
           components: rustfmt, clippy
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock', '**/Cargo.toml') }}
+          cache-directories: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            build/
+          cache-on-failure: true
 
       - name: Install tools
         uses: taiki-e/install-action@v2
