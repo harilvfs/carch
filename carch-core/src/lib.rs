@@ -1,67 +1,17 @@
 use crate::error::{CarchError, Result};
-use crate::ui::render::run_ui_with_options;
-use crate::ui::state::UiOptions;
-use args::Settings;
 use include_dir::{Dir, include_dir};
-use log::{error, info};
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
-use tempfile::TempDir;
 
-mod args;
-mod commands;
-mod error;
-mod ui;
-mod version;
+pub mod commands;
+pub mod error;
+pub mod ui;
+pub mod version;
 
-static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
+static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../scripts/modules");
 
 const EXECUTABLE_MODE: u32 = 0o755;
-
-fn main() -> Result<()> {
-    args::parse_args()
-}
-
-pub fn run_tui(settings: Settings) -> Result<()> {
-    if settings.log_mode {
-        info!("Starting TUI application");
-    }
-
-    let temp_dir = TempDir::new().map_err(|e| CarchError::TempDir(e.to_string()))?;
-    let scripts_path = temp_dir.path();
-    extract_scripts(scripts_path)?;
-
-    if settings.log_mode {
-        info!("Using scripts directory: {}", scripts_path.display());
-    }
-
-    let modules_dir = scripts_path.join("modules");
-    if !modules_dir.exists() || !modules_dir.is_dir() {
-        let error_msg = format!("Modules directory not found at {}", modules_dir.display());
-        error!("{error_msg}");
-        return Err(CarchError::ModulesDirNotFound(error_msg));
-    }
-
-    let ui_options = UiOptions {
-        log_mode:     settings.log_mode,
-        theme:        settings.theme,
-        theme_locked: settings.theme_locked,
-        is_root:      std::env::var("USER").unwrap_or_default() == "root",
-    };
-
-    if settings.log_mode {
-        info!("TUI initialized with settings: log_mode={}", settings.log_mode);
-    }
-
-    let result = run_ui_with_options(&modules_dir, ui_options);
-
-    if settings.log_mode {
-        info!("Carch application exiting normally");
-    }
-
-    result
-}
 
 pub fn extract_scripts(temp_path: &Path) -> Result<()> {
     let modules_dir = temp_path.join("modules");

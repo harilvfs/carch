@@ -1,5 +1,9 @@
-[package]
-name = "carch"
+[workspace]
+members = ["carch-cli", "carch-core", "xtask"]
+resolver = "2"
+default-members = ["carch-core", "carch-cli"]
+
+[workspace.package]
 version = "5.2.6"
 edition = "2024"
 description = "A simple CLI tool to automate Linux system setup 🧩"
@@ -8,14 +12,10 @@ homepage = "https://github.com/harilvfs/carch"
 readme = "./.github/README.md"
 repository = "https://github.com/harilvfs/carch"
 license-file = "LICENSE"
-
 categories = ["command-line-utilities"]
-
 keywords = ["system", "cli", "rust", "bash"]
 
-include = ["src/**", "Cargo.toml", "man/carch.1"]
-
-[dependencies]
+[workspace.dependencies]
 tempfile = "3.20.0"
 include_dir = "0.7.3"
 ratatui = "0.29"
@@ -42,10 +42,3 @@ codegen-units = 1
 panic = "abort"
 strip = true
 incremental = false
-
-[[bin]]
-name = "carch"
-path = "src/main.rs"
-
-[workspace]
-members = [".", "xtask"]

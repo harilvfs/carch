@@ -40,7 +40,7 @@ jobs:
 
       - name: Update Cargo.toml version
         run: |
-          sed -i "s/^version = \"[0-9]*\.[0-9]*\.[0-9]*\"/version = \"$VERSION\"/" Cargo.toml
+          sed -i "/\[workspace.package\]/,/^\[/ s/^version = \".*\"/version = \"$VERSION\"/" Cargo.toml
 
       - name: Install Rust (nightly) with MUSL targets
         uses: dtolnay/rust-toolchain@nightly
