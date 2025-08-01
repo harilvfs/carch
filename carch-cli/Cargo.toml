@@ -1,0 +1,17 @@
+[package]
+name = "carch-cli"
+version.workspace = true
+license = "MIT"
+edition = "2024"
+include = ["src", "Cargo.toml", "../LICENSE", "../.github/README.md", "../man/carch.1"]
+
+[dependencies]
+carch-core = { path = "../carch-core" }
+clap = { workspace = true, features = ["derive"] }
+log = { workspace = true }
+tempfile = { workspace = true }
+env_logger = { workspace = true }
+
+[[bin]]
+name = "carch"
+path = "src/main.rs"

@@ -155,10 +155,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d71b6127be86fdcfddb610f7182ac57211d4b18a3e9c82eb2d17662f2227ad6a"
 
 [[package]]
-name = "carch"
+name = "carch-cli"
 version = "5.2.6"
 dependencies = [
+ "carch-core",
  "clap",
+ "env_logger",
+ "log",
+ "tempfile",
+]
+
+[[package]]
+name = "carch-core"
+version = "5.2.6"
+dependencies = [
  "crossterm 0.29.0",
  "env_logger",
  "fuzzy-matcher",
