@@ -33,7 +33,7 @@ jobs:
         echo "Checking formatting..."
 
         SHELL_FILES=$(find . -type f \( -name "*.sh" -o -name "*.bash" \) \
-          ! -path "./src/modules/Browser/Extensions.sh" 2>/dev/null || true)
+          ! -path "./scripts/modules/Browser/Extensions.sh" 2>/dev/null || true)
 
         UNFORMATTED_FILES=""
         for file in $SHELL_FILES; do
