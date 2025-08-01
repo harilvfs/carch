@@ -29,7 +29,7 @@ findArch
 temp_file=$(mktemp)
 check $? "Creating the temporary file"
 url="$(getUrl)"
-curl -L --progress-bar --connect-timeout "$TIMEOUT" --max-time 120 "$url" -o "$temp_file"
+curl -L -s --connect-timeout "$TIMEOUT" --max-time 120 "$url" -o "$temp_file"
 check $? "Downloading carch"
 chmod +x "$temp_file"
 check $? "Making carch executable"
