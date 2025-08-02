@@ -180,7 +180,6 @@ dependencies = [
  "reqwest",
  "serde",
  "syntect",
- "tempfile",
  "thiserror 2.0.12",
  "toml",
  "tui-term",

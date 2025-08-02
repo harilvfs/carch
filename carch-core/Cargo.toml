@@ -19,7 +19,6 @@ include = [
 ]
 
 [dependencies]
-tempfile = { workspace = true }
 include_dir = { workspace = true }
 ratatui = { workspace = true }
 crossterm = { workspace = true }
