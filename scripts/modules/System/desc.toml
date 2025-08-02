@@ -4,6 +4,9 @@ description = "Installs and sets up the PipeWire audio system."
 [Aur]
 description = "AUR (Arch User Repository) is a community-driven repository for Arch Linux users, containing user-submitted package build scripts (PKGBUILDs) that make it easy to install software not available in the official repositories. The script will let you choose an AUR helper and install it according to your preference."
 
+[AutoLogin-TTY]
+description= "The script will give you two options: either to enable autologin in TTY or to remove it later if you need to after enabling. Btw, I do not recommend enabling this, as anyone can have physical access without your username and password."
+
 [Bluetooth]
 description = "Installs Bluetooth packages and sets up Bluetooth functionality."
 
