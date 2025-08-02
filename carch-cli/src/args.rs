@@ -17,7 +17,7 @@ fn styles() -> clap::builder::Styles {
 }
 
 #[derive(Parser)]
-#[command(author, about, long_about = None, version = env!("CARGO_PKG_VERSION"), disable_version_flag = true, styles = styles())]
+#[command(author, about, long_about = None, styles = styles())]
 pub struct Cli {
     #[command(subcommand)]
     pub command:          Option<Commands>,
@@ -29,7 +29,8 @@ pub struct Cli {
     )]
     pub log:              bool,
     #[arg(short = 'v', long = "version", action = ArgAction::Version, help = "Print version information")]
-    version:              Option<bool>,
+    #[arg(short = 'v', long = "version", action = ArgAction::SetTrue, help = "Print version information")]
+    version:              bool,
     #[arg(short = 'c', long, global = true, help = "Set theme to Catppuccin Mocha")]
     pub catppuccin_mocha: bool,
     #[arg(short = 'd', long, global = true, help = "Set theme to Dracula")]
@@ -61,6 +62,12 @@ pub struct Settings {
 
 pub fn parse_args() -> Result<()> {
     let cli = Cli::parse();
+
+    if cli.version {
+        println!("{}", version::get_current_version());
+        return Ok(());
+    }
+
     let mut settings = Settings { ..Default::default() };
 
     if cli.log {
