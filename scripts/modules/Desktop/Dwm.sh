@@ -324,56 +324,12 @@ EOF
     print_message "$GREEN" ".xinitrc configured successfully!"
 }
 
-setup_tty_login() {
-    if confirm "Do you want to use DWM from TTY using startx?"; then
+setup_startx() {
+    if confirm "Do you want to set up .xinitrc for starting DWM with startx?"; then
         setup_xinitrc
-
-        if confirm "Do you want to enable automatic login to TTY? (Not recommended for security reasons)"; then
-            local username=$(whoami)
-            print_message "$CYAN" ":: Setting up autologin for user: $username"
-
-            sudo mkdir -p /etc/systemd/system/getty@tty1.service.d/
-
-            sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf > /dev/null << EOF
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty --autologin $username --noclear %I 38400 linux
-EOF
-
-            sudo systemctl daemon-reexec
-            print_message "$GREEN" "Autologin configured for TTY1."
-        fi
-    fi
-}
-
-check_display_manager() {
-    local dm_found=false
-    local dm_name=""
-
-    for dm in sddm gdm lightdm lxdm xdm slim greetd; do
-        if systemctl is-enabled $dm.service &> /dev/null; then
-            dm_found=true
-            dm_name=$dm
-            break
-        fi
-    done
-
-    if $dm_found; then
-        print_message "$YELLOW" "Display manager $dm_name is detected."
-        if confirm "When using DWM from TTY, a display manager is not needed. Do you want to remove $dm_name?"; then
-            if [ "$distro" == "arch" ]; then
-                sudo systemctl disable $dm_name.service
-                sudo systemctl stop $dm_name.service
-                sudo pacman -Rns $dm_name
-            elif [ "$distro" == "fedora" ]; then
-                sudo systemctl disable $dm_name.service
-                sudo systemctl stop $dm_name.service
-                sudo dnf remove -y $dm_name
-            fi
-            print_message "$GREEN" "Display manager $dm_name has been removed."
-        fi
+        print_message "$GREEN" "You can now start DWM using 'startx' from TTY."
     else
-        print_message "$GREEN" "No display manager detected. You can start DWM using 'startx' from TTY."
+        print_message "$YELLOW" "Skipping .xinitrc setup."
     fi
 }
 
@@ -414,9 +370,7 @@ install_slstatus
 install_nerd_font
 install_picom
 configure_wallpapers
-setup_xinitrc
-setup_tty_login
-check_display_manager
+setup_startx
 setup_numlock
 print_message "$GREEN" "DWM setup completed successfully!"
 print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
