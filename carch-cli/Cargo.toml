@@ -1,8 +1,15 @@
 [package]
 name = "carch-cli"
 version.workspace = true
+description.workspace = true
+documentation.workspace = true
+repository.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
 license.workspace = true
-edition = "2024"
+edition.workspace = true
+readme.workspace = true
 include = [
   "src",
   "Cargo.toml",
