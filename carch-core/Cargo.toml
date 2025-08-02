@@ -20,17 +20,17 @@ include = [
 
 [dependencies]
 include_dir = { workspace = true }
-ratatui = { workspace = true }
+ratatui = { workspace = true, default-features = false, features = ["crossterm"] }
 crossterm = { workspace = true }
 syntect = { workspace = true }
 reqwest = { workspace = true, default-features = false, features = ["blocking", "json", "rustls-tls"] }
-serde = { workspace = true, features = ["derive"] }
+serde = { workspace = true, default-features = false, features = ["derive"] }
 fuzzy-matcher = { workspace = true }
 portable-pty = { workspace = true }
 tui-term = { workspace = true, default-features = false }
 vt100-ctt = { workspace = true }
-oneshot = { workspace = true, features = ["std"], default-features = false }
+oneshot = { workspace = true, default-features = false, features = ["std"] }
 thiserror = { workspace = true }
-toml = { workspace = true }
+toml = { workspace = true, default-features = false, features = ["parse", "serde"] }
 log = { workspace = true }
 env_logger = { workspace = true }
