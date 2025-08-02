@@ -1,5 +1,6 @@
 use carch_core::error::{CarchError, Result};
 use carch_core::{commands, version};
+use clap::builder::styling::{AnsiColor, Style};
 use clap::{ArgAction, Parser, Subcommand};
 use env_logger::{Builder, Target};
 use log::info;
@@ -7,9 +8,16 @@ use std::env;
 use std::fs::{self, OpenOptions};
 use std::path::PathBuf;
 
+fn styles() -> clap::builder::Styles {
+    clap::builder::Styles::styled()
+        .header(Style::new().fg_color(Some(AnsiColor::Green.into())).bold())
+        .usage(Style::new().fg_color(Some(AnsiColor::Green.into())).bold())
+        .literal(Style::new().fg_color(Some(AnsiColor::Cyan.into())))
+        .placeholder(Style::new().fg_color(Some(AnsiColor::Cyan.into())))
+}
+
 #[derive(Parser)]
-#[command(author, about, long_about = None, version = env!("CARGO_PKG_VERSION"))]
-#[command(disable_version_flag = true)]
+#[command(author, about, long_about = None, version = env!("CARGO_PKG_VERSION"), disable_version_flag = true, styles = styles())]
 pub struct Cli {
     #[command(subcommand)]
     pub command:          Option<Commands>,
