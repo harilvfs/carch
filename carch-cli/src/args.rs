@@ -86,24 +86,23 @@ pub fn parse_args() -> Result<()> {
         info!("Carch TUI started");
     }
 
-    if cli.catppuccin_mocha {
-        settings.theme = "catppuccin-mocha".to_string();
-        settings.theme_locked = true;
+    settings.theme = if cli.catppuccin_mocha {
+        "catppuccin-mocha"
     } else if cli.dracula {
-        settings.theme = "dracula".to_string();
-        settings.theme_locked = true;
+        "dracula"
     } else if cli.gruvbox {
-        settings.theme = "gruvbox".to_string();
-        settings.theme_locked = true;
+        "gruvbox"
     } else if cli.nord {
-        settings.theme = "nord".to_string();
-        settings.theme_locked = true;
+        "nord"
     } else if cli.rose_pine {
-        settings.theme = "rose-pine".to_string();
-        settings.theme_locked = true;
+        "rose-pine"
     } else {
-        settings.theme = "catppuccin-mocha".to_string();
+        "catppuccin-mocha"
     }
+    .to_string();
+
+    settings.theme_locked =
+        cli.catppuccin_mocha || cli.dracula || cli.gruvbox || cli.nord || cli.rose_pine;
 
     match cli.command {
         Some(Commands::CheckUpdate) => {
