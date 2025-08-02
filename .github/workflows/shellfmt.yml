@@ -1,5 +1,4 @@
 name: Shell Format Check
-
 on:
   push:
     branches: [ main ]
@@ -14,10 +13,8 @@ on:
 jobs:
   shell-format-check:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Setup Go
       uses: actions/setup-go@v5
@@ -28,46 +25,7 @@ jobs:
       run: go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
     - name: Check formatting
-      id: format-check
       run: |
-        echo "Checking formatting..."
-
-        SHELL_FILES=$(find . -type f \( -name "*.sh" -o -name "*.bash" \) \
-          ! -path "./scripts/modules/Browser/Extensions.sh" 2>/dev/null || true)
-
-        UNFORMATTED_FILES=""
-        for file in $SHELL_FILES; do
-          if ! shfmt -i 4 -ci -sr -kp -d "$file" > /dev/null 2>&1; then
-            UNFORMATTED_FILES="$UNFORMATTED_FILES $file"
-          fi
-        done
-
-        if [ -n "$UNFORMATTED_FILES" ]; then
-          echo "The following shell scripts are not formatted:"
-          for file in $UNFORMATTED_FILES; do
-            echo "  - $file"
-            echo ""
-            echo "Diff for $file:"
-            shfmt -i 4 -ci -sr -kp -d "$file" || true
-            echo ""
-          done
-          echo "::error:: formatting check failed"
-          echo "format_failed=true" >> $GITHUB_OUTPUT
-          exit 1
-        else
-          echo "All shell scripts are formatted!"
-        fi
-
-    - name: Formatting help
-      if: failure() && steps.format-check.outputs.format_failed == 'true'
-      run: |
-        echo ""
-        echo "To fix the formatting issues:"
-        echo ""
-        echo "Install shfmt:"
-        echo "   go install mvdan.cc/sh/v3/cmd/shfmt@latest"
-        echo ""
-        echo "Format all shell scripts, excluding Extensions.sh:"
-        echo "   find . -type f \\( -name \"*.sh\" -o -name \"*.bash\" \\) \\"
-        echo "     ! -path \"./src/modules/Browser/Extensions.sh\" \\"
-        echo "     -exec shfmt -i 4 -ci -sr -kp -w {} +"
+        find . -name "*.sh" -o -name "*.bash" | \
+        grep -v "./scripts/modules/Browser/Extensions.sh" | \
+        xargs shfmt -i 4 -ci -sr -kp -d
