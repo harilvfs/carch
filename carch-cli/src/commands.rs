@@ -1,10 +1,38 @@
-use crate::error::{CarchError, Result};
+use carch_core::error::{CarchError, Result};
 use log::info;
 use std::fs;
 use std::io::{self, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::process::{Command, Stdio};
 use tempfile::Builder;
+
+use carch_core::version;
+
+pub fn check_for_updates() -> Result<()> {
+    println!("Checking for updates...");
+
+    let current_version = env!("CARGO_PKG_VERSION");
+
+    match version::get_latest_version() {
+        Ok(latest_version) => {
+            println!("Current version: {current_version}");
+            println!("Latest version: {latest_version}");
+
+            if latest_version != current_version {
+                println!("\nA new version of Carch is available!");
+                println!("Run 'carch update' to update to the latest version.");
+            } else {
+                println!("\nYou are using the latest version of Carch.");
+            }
+        }
+        Err(e) => {
+            eprintln!("Error checking for updates: {e}");
+            return Err(e);
+        }
+    }
+
+    Ok(())
+}
 
 enum InstallMethod {
     Cargo,

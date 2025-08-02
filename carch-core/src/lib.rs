@@ -4,7 +4,6 @@ use std::fs;
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
-pub mod commands;
 pub mod error;
 pub mod ui;
 pub mod version;

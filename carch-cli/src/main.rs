@@ -8,6 +8,7 @@ use log::{error, info};
 use tempfile::TempDir;
 
 pub mod args;
+mod commands;
 use crate::args::Settings;
 
 fn main() -> Result<()> {

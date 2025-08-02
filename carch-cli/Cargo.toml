@@ -19,11 +19,13 @@ include = [
 ]
 
 [dependencies]
-carch-core = { path = "../carch-core" }
 clap = { workspace = true, features = ["derive"] }
+carch-core = { path = "../carch-core" }
 log = { workspace = true }
-tempfile = { workspace = true }
 env_logger = { workspace = true }
+tempfile = { workspace = true }
+reqwest = { workspace = true, default-features = false, features = ["blocking", "json", "rustls-tls"] }
+serde = { workspace = true, default-features = false, features = ["derive"] }
 
 [[bin]]
 name = "carch"

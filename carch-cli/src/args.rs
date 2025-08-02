@@ -1,5 +1,6 @@
+use crate::commands;
 use carch_core::error::{CarchError, Result};
-use carch_core::{commands, version};
+use carch_core::version;
 use clap::builder::styling::{AnsiColor, Style};
 use clap::{ArgAction, Parser, Subcommand};
 use env_logger::{Builder, Target};
@@ -107,7 +108,7 @@ pub fn parse_args() -> Result<()> {
     match cli.command {
         Some(Commands::CheckUpdate) => {
             info!("Checking for updates");
-            version::check_for_updates()
+            commands::check_for_updates()
         }
         Some(Commands::Update) => {
             info!("Running update process");
