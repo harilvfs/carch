@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -40,41 +41,39 @@ configure_grub() {
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
-check_current_kernel
+main() {
+    check_current_kernel
 
-if [ -x "$(command -v pacman)" ]; then
-    echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
-    echo -e "${TEAL}This script will install the LTS kernel alongside your current kernel.${ENDCOLOR}"
-    echo -e "${TEAL}Your current kernel will NOT be removed.${ENDCOLOR}"
-elif [ -x "$(command -v dnf)" ]; then
-    echo -e "${RED}Note: LTS kernel is not available as a package in Fedora.${ENDCOLOR}"
-    echo -e "${CYAN}Fedora's default kernel is already a stable and good option for your system.${ENDCOLOR}"
-    echo -e "${CYAN}It's recommended to stick with the Fedora kernel unless you have a specific need for LTS.${ENDCOLOR}"
-    exit 0
-elif [ -x "$(command -v zypper)" ]; then
-    echo -e "${RED}Note: LTS kernel is not available as a package in openSUSE.${ENDCOLOR}"
-    echo -e "${CYAN}openSUSE's default kernel is already a stable and good option for your system.${ENDCOLOR}"
-    echo -e "${CYAN}It's recommended to stick with the openSUSE kernel unless you have a specific need for LTS.${ENDCOLOR}"
-    exit 0
-else
-    echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
-    exit 1
-fi
+    case "$DISTRO" in
+        "Arch")
+            echo -e "${RED}Warning: If you are using systemd or EFI boot and not GRUB, you will need to manually select or set up the LTS kernel after installation.${ENDCOLOR}"
+            echo -e "${TEAL}This script will install the LTS kernel alongside your current kernel.${ENDCOLOR}"
+            echo -e "${TEAL}Your current kernel will NOT be removed.${ENDCOLOR}"
+            ;;
+        "Fedora" | "openSUSE")
+            echo -e "${CYAN}This script is intended for Arch Linux only.${ENDCOLOR}"
+            echo -e "${CYAN}The LTS kernel is generally well-integrated into the ${DISTRO} release cycle.${ENDCOLOR}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
+            exit 1
+            ;;
+    esac
 
-echo ""
+    echo ""
 
-if confirm "Do you want to continue with LTS kernel installation?"; then
-    if [ -x "$(command -v pacman)" ]; then
-        install_lts_kernel_arch
-    elif [ -x "$(command -v dnf)" ]; then
-        install_lts_kernel_fedora
-    elif [ -x "$(command -v zypper)" ]; then
-        install_lts_kernel_opensuse
+    if confirm "Do you want to continue with LTS kernel installation?"; then
+        if [ "$DISTRO" == "Arch" ]; then
+            install_lts_kernel_arch
+        fi
+
+        configure_grub
+        echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"
+    else
+        echo -e "${CYAN}Installation canceled.${ENDCOLOR}"
+        exit 0
     fi
+}
 
-    configure_grub
-    echo -e "${GREEN}LTS kernel setup completed. Please check GRUB or select the LTS kernel from the GRUB menu.${ENDCOLOR}"
-else
-    echo -e "${CYAN}Installation canceled.${ENDCOLOR}"
-    exit 0
-fi
+main

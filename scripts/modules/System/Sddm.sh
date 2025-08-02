@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -30,19 +31,6 @@ EOF
     echo -e "${ENDCOLOR}"
 }
 
-detect_os() {
-    if command -v pacman &> /dev/null; then
-        DISTRO="arch"
-    elif command -v dnf &> /dev/null; then
-        DISTRO="fedora"
-    elif command -v zypper &> /dev/null; then
-        DISTRO="opensuse"
-    else
-        echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
-        exit 1
-    fi
-}
-
 disable_other_dms() {
     echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
     local dms=("gdm" "lightdm" "lxdm" "xdm" "greetd")
@@ -66,16 +54,15 @@ install_sddm() {
     if ! command -v sddm &> /dev/null; then
         echo -e "${GREEN}:: Installing SDDM...${ENDCOLOR}"
 
-        if [[ $DISTRO == "arch" ]]; then
-            sudo pacman -S --noconfirm sddm
-        elif [[ $DISTRO == "fedora" ]]; then
-            sudo dnf install -y sddm
-        elif [[ $DISTRO == "opensuse" ]]; then
-            sudo zypper install -y sddm
-        else
-            echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
-            exit 1
-        fi
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm sddm ;;
+            "Fedora") sudo dnf install -y sddm ;;
+            "openSUSE") sudo zypper install -y sddm ;;
+            *)
+                echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
+                exit 1
+                ;;
+        esac
     else
         echo -e "${GREEN}SDDM is already installed.${ENDCOLOR}"
     fi
@@ -121,14 +108,16 @@ Current=catppuccin-mocha
 EOF'
 }
 
-print_banner
-detect_os
+main() {
+    print_banner
+    echo -e "${GREEN}:: Proceeding with installation...${ENDCOLOR}"
+    install_sddm
+    install_theme
+    set_theme
+    disable_other_dms
+    enable_sddm
 
-echo -e "${GREEN}:: Proceeding with installation...${ENDCOLOR}"
-install_sddm
-install_theme
-set_theme
-disable_other_dms
-enable_sddm
+    echo -e "${GREEN}:: Setup complete. Please reboot your system to see the changes.${ENDCOLOR}"
+}
 
-echo -e "${GREEN}:: Setup complete. Please reboot your system to see the changes.${ENDCOLOR}"
+main

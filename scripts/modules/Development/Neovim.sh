@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -68,41 +69,25 @@ For either option:
 EOF
 echo -e "${NC}"
 
-detect_os() {
-    if command -v pacman &> /dev/null; then
-        print_message "$TEAL" "Detected Arch-based distribution." >&2
-        echo "arch"
-    elif command -v dnf &> /dev/null; then
-        print_message "$TEAL" "Detected Fedora-based distribution." >&2
-        echo "fedora"
-    elif command -v zypper &> /dev/null; then
-        print_message "$TEAL" "Detected opensuse distribution." >&2
-        echo "opensuse"
-    else
-        print_message "$RED" "Unsupported distribution." >&2
-        exit 1
-    fi
-}
+distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
 
 install_dependencies() {
-    local os_type=$1
-
     print_message "$GREEN" "Installing required dependencies..."
 
-    if [[ "$os_type" == "arch" ]]; then
+    if [[ "$distro" == "arch" ]]; then
         sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
             xclip wl-clipboard lua-language-server shfmt python3 yaml-language-server meson ninja \
             make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd git
-    elif [[ "$os_type" == "fedora" ]]; then
+    elif [[ "$distro" == "fedora" ]]; then
         sudo dnf install -y ripgrep neovim vim fzf python3-virtualenv luarocks go nodejs shellcheck xclip \
             wl-clipboard lua-language-server shfmt python3 meson ninja-build \
             make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts git
-    elif [[ "$os_type" == "opensuse" ]]; then
+    elif [[ "$distro" == "opensuse" ]]; then
         sudo zypper install -y ripgrep neovim vim fzf python313-virtualenv lua53-luarocks go nodejs ShellCheck xclip \
             wl-clipboard lua-language-server shfmt python313 meson ninja \
             make gcc jetbrains-mono-fonts git
     else
-        print_message "$RED" "Unsupported OS type: $os_type"
+        print_message "$RED" "Unsupported OS type: $distro"
         return 1
     fi
 
@@ -179,9 +164,8 @@ setup_nvchad() {
 }
 
 main() {
-    local os_type
-    os_type=$(detect_os)
-    if [[ -z "$os_type" ]]; then
+    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
+    if [[ -z "$distro" ]]; then
         print_message "$RED" "OS detection failed. Exiting."
         exit 1
     fi
@@ -196,11 +180,11 @@ main() {
     case "$choice" in
         "Neovim")
             setup_neovim
-            install_dependencies "$os_type"
+            install_dependencies
             ;;
         "NvChad")
             setup_nvchad
-            install_dependencies "$os_type"
+            install_dependencies
             ;;
         "Exit")
             exit 0

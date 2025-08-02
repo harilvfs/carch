@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 confirm() {
     while true; do
@@ -39,13 +40,15 @@ done
 if ! command -v tmux &> /dev/null; then
     echo -e "${YELLOW}Tmux is not installed. Installing...${NC}"
 
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm tmux
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y tmux
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install -y tmux
-    fi
+    case "$DISTRO" in
+        "Arch") sudo pacman -S --noconfirm tmux ;;
+        "Fedora") sudo dnf install -y tmux ;;
+        "openSUSE") sudo zypper install -y tmux ;;
+        *)
+            echo -e "${RED}Unsupported package manager. Please install tmux manually.${NC}"
+            exit 1
+            ;;
+    esac
 fi
 
 config_dir="$HOME/.config/tmux"

@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 confirm() {
     while true; do
@@ -15,56 +16,50 @@ confirm() {
     done
 }
 
-setup_ghostty() {
-    echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${NC}"
-    echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${NC}"
-    echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${NC}"
-    echo
-
+install_ghostty() {
     if ! command -v ghostty &> /dev/null; then
         echo -e "${CYAN}Ghostty is not installed. :: Installing...${NC}"
 
-        if command -v pacman &> /dev/null; then
-            sudo pacman -S --needed ghostty
-        elif command -v dnf &> /dev/null; then
-            sudo dnf copr enable pgdev/ghostty -y
-            sudo dnf install ghostty -y
-        elif command -v zypper &> /dev/null; then
-            sudo zypper install -y ghostty
-        else
-            echo -e "${RED}Unsupported package manager. Please install Ghostty manually.${NC}"
-            echo -e "${CYAN}See https://ghostty.org/docs/install for installation instructions.${NC}"
-            exit 1
-        fi
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --needed ghostty ;;
+            "Fedora")
+                sudo dnf copr enable pgdev/ghostty -y
+                sudo dnf install ghostty -y
+                ;;
+            "openSUSE") sudo zypper install -y ghostty ;;
+            *)
+                echo -e "${RED}Unsupported package manager. Please install Ghostty manually.${NC}"
+                echo -e "${CYAN}See https://ghostty.org/docs/install for installation instructions.${NC}"
+                exit 1
+                ;;
+        esac
     else
         echo -e "${GREEN}Ghostty is already installed.${NC}"
     fi
+}
 
+install_fonts() {
     if confirm "Do you want to install JetBrains Mono Nerd Font?"; then
-        if command -v pacman &> /dev/null; then
-            sudo pacman -S --needed ttf-jetbrains-mono-nerd
-        elif command -v dnf &> /dev/null; then
-            sudo dnf install -y jetbrains-mono-fonts-all
-            echo -e ""
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
-        elif command -v zypper &> /dev/null; then
-            sudo zypper install -y jetbrains-mono-fonts
-            echo -e ""
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
-        else
-            echo -e "${RED}Unsupported package manager. Please install the font manually.${NC}"
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
-        fi
+        case "$DISTRO" in
+            "Arch")
+                sudo pacman -S --needed ttf-jetbrains-mono-nerd
+                ;;
+            "Fedora")
+                sudo dnf install -y jetbrains-mono-fonts-all
+                ;;
+            "openSUSE")
+                sudo zypper install -y jetbrains-mono-fonts
+                ;;
+            *)
+                echo -e "${RED}Unsupported package manager. Please install the font manually.${NC}"
+                ;;
+        esac
     else
         echo -e "${CYAN}Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering.${NC}"
     fi
+}
 
+setup_config() {
     CONFIG_DIR="$HOME/.config/ghostty"
     BACKUP_DIR="$HOME/.config/carch/backups/ghostty.bak"
 
@@ -116,4 +111,15 @@ setup_ghostty() {
     fi
 }
 
-setup_ghostty
+main() {
+    echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${NC}"
+    echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${NC}"
+    echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${NC}"
+    echo
+
+    install_ghostty
+    install_fonts
+    setup_config
+}
+
+main

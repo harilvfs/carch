@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -19,22 +20,6 @@ confirm() {
             *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
-}
-
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-        print_message "$GREEN" "Detected distribution: Arch Linux"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-        print_message "$YELLOW" "Detected distribution: Fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-        print_message "$YELLOW" "Detected distribution: opensuse"
-    else
-        print_message "$RED" "Unsupported distribution. Exiting..."
-        exit 1
-    fi
 }
 
 install_packages() {
@@ -363,15 +348,22 @@ EOF
     fi
 }
 
-detect_distro
-install_packages
-install_dwm
-install_slstatus
-install_nerd_font
-install_picom
-configure_wallpapers
-setup_startx
-setup_numlock
-print_message "$GREEN" "DWM setup completed successfully!"
-print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
-print_message "$CYAN" "https://github.com/harilvfs/dwm/blob/main/config"
+main() {
+    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
+    print_message "$GREEN" "Detected distribution: ${distro^}"
+
+    install_packages
+    install_dwm
+    install_slstatus
+    install_nerd_font
+    install_picom
+    configure_wallpapers
+    setup_startx
+    setup_numlock
+
+    print_message "$GREEN" "DWM setup completed successfully!"
+    print_message "$YELLOW" "Notice: I am not including dotfiles in this script to avoid conflicts and potential data loss. If you need dotfiles, check out my repo:"
+    print_message "$CYAN" "https://github.com/harilvfs/dwm/blob/main/config"
+}
+
+main

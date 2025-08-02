@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -22,14 +23,8 @@ confirm() {
 }
 
 check_distro() {
-    if command -v dnf &> /dev/null; then
-        print_message "$RED" "You are using Fedora (dnf detected). This script is only for Arch-based systems."
-        exit 1
-    elif command -v zypper &> /dev/null; then
-        print_message "$RED" "You are using openSUSE (zypper detected). This script is only for Arch-based systems."
-        exit 1
-    elif ! command -v pacman &> /dev/null; then
-        print_message "$RED" "This script is for Arch-based distros only. Exiting."
+    if [ "$DISTRO" != "Arch" ]; then
+        print_message "$RED" "You are using $DISTRO. This script is only for Arch-based systems."
         exit 1
     fi
 }

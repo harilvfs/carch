@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -10,54 +11,30 @@ print_message() {
     printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
 }
 
-confirm() {
-    while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
-        case ${answer,,} in
-            y | yes) return 0 ;;
-            n | no | "") return 1 ;;
-            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
-        esac
-    done
-}
-
-detect_distro() {
-    print_message "$TEAL" ":: Detecting distribution..."
-    if command -v pacman &> /dev/null; then
-        print_message "$GREEN" ":: Arch Linux detected."
-        DISTRO="arch"
-    elif command -v dnf &> /dev/null; then
-        print_message "$GREEN" ":: Fedora detected."
-        DISTRO="fedora"
-    elif command -v zypper &> /dev/null; then
-        print_message "$GREEN" ":: openSUSE detected."
-        DISTRO="opensuse"
-    else
-        print_message "$RED" ":: Unsupported distribution."
-        exit 1
-    fi
-}
-
 install_bluetooth() {
     print_message "$TEAL" ":: Installing Bluetooth packages..."
 
     case "$DISTRO" in
-        "arch")
+        "Arch")
             print_message "$CYAN" ":: Installing Bluetooth packages for Arch Linux..."
             sudo pacman -S --noconfirm bluez bluez-utils blueman
             ;;
-        "fedora")
+        "Fedora")
             print_message "$CYAN" ":: Installing Bluetooth packages for Fedora..."
             sudo dnf install -y bluez bluez-tools blueman
             ;;
-        "opensuse")
+        "openSUSE")
             print_message "$CYAN" ":: Installing Bluetooth packages for openSUSE..."
             sudo zypper install -y bluez blueman
+            ;;
+        *)
+            print_message "$RED" ":: Unsupported distribution."
+            exit 1
             ;;
     esac
 
     if [ $? -ne 0 ]; then
-        print_message "$RED" ":: Failed to install Bluetooth packages on ${DISTRO^}."
+        print_message "$RED" ":: Failed to install Bluetooth packages on ${DISTRO}."
         exit 1
     fi
 
@@ -82,21 +59,15 @@ provide_additional_info() {
 }
 
 main() {
-    detect_distro
+    install_bluetooth
+    enable_bluetooth
+    print_message "$GREEN" ":: Bluetooth setup completed successfully!"
+    provide_additional_info
 
-    if confirm "Do you want to install the Bluetooth system?"; then
-        install_bluetooth
-        enable_bluetooth
-        print_message "$GREEN" ":: Bluetooth setup completed successfully!"
-        provide_additional_info
-
-        if confirm "Do you want to restart the Bluetooth service now?"; then
-            print_message "$TEAL" ":: Restarting Bluetooth service..."
-            sudo systemctl restart bluetooth.service
-            print_message "$GREEN" ":: Bluetooth service restarted."
-        fi
-    else
-        print_message "$TEAL" ":: Bluetooth installation cancelled."
+    if confirm "Do you want to restart the Bluetooth service now?"; then
+        print_message "$TEAL" ":: Restarting Bluetooth service..."
+        sudo systemctl restart bluetooth.service
+        print_message "$GREEN" ":: Bluetooth service restarted."
     fi
 }
 

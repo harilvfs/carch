@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 aur_helper=""
 
@@ -53,19 +54,6 @@ get_choice() {
     done
 }
 
-detect_package_manager() {
-    if command -v pacman &> /dev/null; then
-        pkg_manager="pacman"
-    elif command -v dnf &> /dev/null; then
-        pkg_manager="dnf"
-    elif command -v zypper &> /dev/null; then
-        pkg_manager="zypper"
-    else
-        print_message "$RED" "Unsupported package manager. Please install Picom manually."
-        exit 1
-    fi
-}
-
 install_aur_helper() {
     local aur_helpers=("yay" "paru")
     for helper in "${aur_helpers[@]}"; do
@@ -98,10 +86,10 @@ print_source_message() {
 
 install_dependencies_normal() {
     print_message "$GREEN" ":: Installing Picom..."
-    case "$pkg_manager" in
-        pacman) sudo pacman -S --needed --noconfirm picom ;;
-        dnf) sudo dnf install -y picom ;;
-        zypper) sudo zypper install -y picom ;;
+    case "$DISTRO" in
+        "Arch") sudo pacman -S --needed --noconfirm picom ;;
+        "Fedora") sudo dnf install -y picom ;;
+        "openSUSE") sudo zypper install -y picom ;;
     esac
 }
 
@@ -180,7 +168,6 @@ download_config() {
 }
 
 main() {
-    detect_package_manager
     print_source_message
 
     local options=("Picom with animation (FT-Labs)" "Picom normal" "Exit")
@@ -192,15 +179,15 @@ main() {
 
     case "$choice" in
         "Picom with animation (FT-Labs)")
-            case "$pkg_manager" in
-                pacman)
+            case "$DISTRO" in
+                "Arch")
                     install_aur_helper
                     setup_picom_ftlabs
                     ;;
-                dnf)
+                "Fedora")
                     install_picom_ftlabs_fedora
                     ;;
-                zypper)
+                "openSUSE")
                     install_picom_ftlabs_opensuse
                     ;;
             esac

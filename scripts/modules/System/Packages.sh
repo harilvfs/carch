@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 source "$(dirname "$0")/packages/Packages-Android.sh"
 source "$(dirname "$0")/packages/Packages-Browsers.sh"
@@ -63,19 +64,6 @@ fi
 
 AUR_HELPER=""
 
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        return 0
-    elif command -v dnf &> /dev/null; then
-        return 1
-    elif command -v zypper &> /dev/null; then
-        return 2
-    else
-        echo -e "${RED}:: Unsupported distribution detected. Exiting...${NC}"
-        exit 1
-    fi
-}
-
 detect_aur_helper() {
     for helper in paru yay; do
         if command -v $helper &> /dev/null; then
@@ -89,10 +77,9 @@ detect_aur_helper() {
 }
 
 install_aur_helper() {
-    detect_distro
-    case $? in
-        1 | 2) return ;;
-    esac
+    if [ "$DISTRO" != "Arch" ]; then
+        return
+    fi
 
     detect_aur_helper
     if [ $? -eq 0 ]; then
@@ -101,44 +88,41 @@ install_aur_helper() {
 
     echo -e "${RED}:: No AUR helper found. Installing yay...${NC}"
 
-    sudo pacman -S --needed git base-devel
+    sudo pacman -S --needed --noconfirm git base-devel
 
+    local temp_dir
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || {
-                        echo -e "${RED}Failed to create temp directory${NC}"
-                                                                                 exit 1
-    }
-
-    git clone https://aur.archlinux.org/yay.git
-    cd yay || {
-                echo -e "${RED}Failed to enter yay directory${NC}"
-                                                                       exit 1
-    }
-    makepkg -si
-
-    cd ..
+    (   
+        cd "$temp_dir"
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si --noconfirm
+    )
+    local exit_code=$?
     rm -rf "$temp_dir"
+
+    if [ $exit_code -ne 0 ]; then
+        echo -e "${RED}Failed to install yay.${NC}"
+        exit 1
+    fi
+
     AUR_HELPER="yay"
     echo -e "${GREEN}:: Yay installed successfully and set as AUR helper.${NC}"
 }
 
 install_flatpak() {
-    detect_distro
-    distro=$?
-
     if ! command -v flatpak &> /dev/null; then
         echo -e "${YELLOW}:: Flatpak not found. Installing...${NC}"
 
-        if [[ $distro -eq 1 ]]; then
-            sudo dnf install -y flatpak
-        elif [[ $distro -eq 2 ]]; then
-            sudo zypper install -y flatpak
-        elif [[ $distro -eq 0 ]]; then
-            sudo pacman -S --noconfirm flatpak
-        else
-            echo -e "${RED}:: Flatpak installation not supported for this distribution${NC}"
-            return 1
-        fi
+        case "$DISTRO" in
+            "Fedora") sudo dnf install -y flatpak ;;
+            "openSUSE") sudo zypper install -y flatpak ;;
+            "Arch") sudo pacman -S --noconfirm flatpak ;;
+            *)
+                echo -e "${RED}:: Flatpak installation not supported for this distribution${NC}"
+                return 1
+                ;;
+        esac
     fi
 
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo

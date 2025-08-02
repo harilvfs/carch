@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 confirm() {
     while true; do
@@ -19,16 +20,15 @@ setup_kitty() {
     if ! command -v kitty &> /dev/null; then
         echo -e "${CYAN}Kitty is not installed. :: Installing...${NC}"
 
-        if [ -x "$(command -v pacman)" ]; then
-            sudo pacman -S --needed --noconfirm kitty
-        elif [ -x "$(command -v dnf)" ]; then
-            sudo dnf install kitty -y
-        elif [ -x "$(command -v zypper)" ]; then
-            sudo zypper install -y kitty
-        else
-            echo -e "${RED}Unsupported package manager. Please install Kitty manually.${NC}"
-            exit 1
-        fi
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --needed --noconfirm kitty ;;
+            "Fedora") sudo dnf install kitty -y ;;
+            "openSUSE") sudo zypper install -y kitty ;;
+            *)
+                echo -e "${RED}Unsupported package manager. Please install Kitty manually.${NC}"
+                exit 1
+                ;;
+        esac
     else
         echo -e "${GREEN}Kitty is already installed.${NC}"
     fi
@@ -64,17 +64,21 @@ setup_kitty() {
 
 install_font() {
     if confirm "Do you want to install recommended fonts (Cascadia and JetBrains Mono Nerd Fonts)?"; then
-        if [ -x "$(command -v pacman)" ]; then
-            echo -e "${CYAN}Installing recommended fonts on Arch-based systems...${NC}"
-            sudo pacman -S --needed ttf-cascadia-mono-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono
-        elif [ -x "$(command -v dnf)" ] || [ -x "$(command -v zypper)" ]; then
-            echo -e "${CYAN}For Fedora and openSUSE, please download and install the fonts manually.${NC}"
-            echo -e "${CYAN}Download Cascadia Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#cascadia-mono${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#jetbrains-mono${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.fonts or ~/.local/share/fonts directory and run 'fc-cache -vf'.${NC}"
-        else
-            echo -e "${RED}Unsupported package manager. Please install the fonts manually.${NC}"
-        fi
+        case "$DISTRO" in
+            "Arch")
+                echo -e "${CYAN}Installing recommended fonts on Arch-based systems...${NC}"
+                sudo pacman -S --needed ttf-cascadia-mono-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono
+                ;;
+            "Fedora" | "openSUSE")
+                echo -e "${CYAN}For Fedora and openSUSE, please download and install the fonts manually.${NC}"
+                echo -e "${CYAN}Download Cascadia Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#cascadia-mono${NC}"
+                echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest#jetbrains-mono${NC}"
+                echo -e "${CYAN}Then, unzip and move the fonts to the ~/.fonts or ~/.local/share/fonts directory and run 'fc-cache -vf'.${NC}"
+                ;;
+            *)
+                echo -e "${RED}Unsupported package manager. Please install the fonts manually.${NC}"
+                ;;
+        esac
     else
         echo -e "${CYAN}Skipping font installation.${NC}"
     fi

@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 installAlacritty() {
     if command -v alacritty &> /dev/null; then
@@ -12,16 +13,15 @@ installAlacritty() {
 
     echo -e "${YELLOW}Alacritty is not installed. Installing now...${NC}"
 
-    if [ -x "$(command -v pacman)" ]; then
-        sudo pacman -S alacritty --noconfirm
-    elif [ -x "$(command -v dnf)" ]; then
-        sudo dnf install alacritty -y
-    elif [ -x "$(command -v zypper)" ]; then
-        sudo zypper install -y alacritty
-    else
-        echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${NC}"
-        exit 1
-    fi
+    case "$DISTRO" in
+        "Arch") sudo pacman -S alacritty --noconfirm ;;
+        "Fedora") sudo dnf install alacritty -y ;;
+        "openSUSE") sudo zypper install -y alacritty ;;
+        *)
+            echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${NC}"
+            exit 1
+            ;;
+    esac
 
     echo -e "${GREEN}Alacritty has been installed.${NC}"
 }
@@ -72,7 +72,10 @@ confirm() {
     done
 }
 
-installAlacritty
-setupAlacrittyConfig
+main() {
+    installAlacritty
+    setupAlacrittyConfig
+    echo -e "${GREEN}:: Alacritty setup complete.${NC}"
+}
 
-echo -e "${GREEN}:: Alacritty setup complete.${NC}"
+main

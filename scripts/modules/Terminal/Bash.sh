@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 distro=""
 
@@ -53,18 +54,6 @@ get_choice() {
     done
 }
 
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-    else
-        distro="unsupported"
-    fi
-}
-
 check_essential_dependencies() {
     local dependencies=("git" "wget" "curl" "trash-cli")
     local missing=()
@@ -78,10 +67,10 @@ check_essential_dependencies() {
     if [[ ${#missing[@]} -ne 0 ]]; then
         print_message "$YELLOW" "Please wait, installing required dependencies..."
 
-        case "$distro" in
-            arch) sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
-            fedora) sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
-            opensuse) sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
+            "Fedora") sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            "openSUSE") sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
             *)
                 print_message "$RED" "Unsupported distribution."
                 exit 1
@@ -97,11 +86,11 @@ install_eza() {
     fi
 
     print_message "$CYAN" "Installing eza..."
-    case "$distro" in
-        arch)
+    case "$DISTRO" in
+        "Arch")
             sudo pacman -S --noconfirm eza
             ;;
-        fedora)
+        "Fedora")
             print_message "$CYAN" "Installing eza manually for Fedora..."
             local tmp_dir
             tmp_dir=$(mktemp -d)
@@ -134,7 +123,7 @@ install_eza() {
             rm -rf "$tmp_dir"
             print_message "$GREEN" "eza installed successfully!"
             ;;
-        opensuse)
+        "openSUSE")
             sudo zypper install eza -y
             ;;
         *)
@@ -163,8 +152,8 @@ check_default_shell() {
 }
 
 install_distro_packages() {
-    case "$distro" in
-        arch)
+    case "$DISTRO" in
+        "Arch")
             if ! command -v bash &> /dev/null; then
                 print_message "$CYAN" "Installing Bash..."
                 sudo pacman -S --noconfirm bash
@@ -174,11 +163,11 @@ install_distro_packages() {
                 sudo pacman -S --noconfirm bash-completion
             fi
             ;;
-        fedora)
+        "Fedora")
             print_message "$CYAN" "Reinstalling Bash and bash-completion to avoid errors..."
             sudo dnf install -y bash bash-completion
             ;;
-        opensuse)
+        "openSUSE")
             print_message "$CYAN" "Reinstalling Bash and bash-completion to avoid errors..."
             sudo zypper install -y bash bash-completion
             ;;
@@ -190,8 +179,8 @@ install_distro_packages() {
 }
 
 install_pokemon_colorscripts() {
-    case "$distro" in
-        arch)
+    case "$DISTRO" in
+        "Arch")
             local AUR_HELPERS=("yay" "paru")
             local AUR_HELPER=""
 
@@ -210,82 +199,59 @@ install_pokemon_colorscripts() {
 
                 local TEMP_DIR
                 TEMP_DIR=$(mktemp -d)
-                cd "$TEMP_DIR" || {
-                                    print_message "$RED" "Failed to create temporary directory"
-                                                                                                 exit 1
-                }
-
-                print_message "$CYAN" "Cloning yay repository..."
-                git clone https://aur.archlinux.org/yay.git || {
-                                                                 print_message "$RED" "Failed to clone yay repository"
-                                                                                                                        cd "$HOME" || exit 1
-                                                                                                                                              rm -rf "$TEMP_DIR"
-                                                                                                                                                                  exit 1
-                }
-
-                cd yay || {
-                            print_message "$RED" "Failed to enter yay directory"
-                                                                                  cd "$HOME" || exit 1
-                                                                                                        rm -rf "$TEMP_DIR"
-                                                                                                                            exit 1
-                }
-
-                print_message "$CYAN" "Building yay..."
-                makepkg -si --noconfirm || {
-                                             print_message "$RED" "Failed to build yay"
-                                                                                         cd "$HOME" || exit 1
-                                                                                                               rm -rf "$TEMP_DIR"
-                                                                                                                                   exit 1
-                }
-
-                cd "$HOME" || exit 1
+                (   
+                    cd "$TEMP_DIR"
+                    git clone https://aur.archlinux.org/yay.git
+                    cd yay
+                    makepkg -si --noconfirm
+                )
+                local exit_code=$?
                 rm -rf "$TEMP_DIR"
+
+                if [ $exit_code -ne 0 ]; then
+                    print_message "$RED" "Failed to install yay."
+                    exit 1
+                fi
+
                 AUR_HELPER="yay"
                 print_message "$GREEN" "Successfully installed yay!"
             fi
 
             print_message "$CYAN" "Installing Pokémon Color Scripts (AUR)..."
-            "$AUR_HELPER" -S --noconfirm pokemon-colorscripts-git || {
-                                                                       print_message "$RED" "Failed to install pokemon-colorscripts-git"
-                                                                                                                                          exit 1
-            }
+            if ! "$AUR_HELPER" -S --noconfirm pokemon-colorscripts-git; then
+                print_message "$RED" "Failed to install pokemon-colorscripts-git"
+                exit 1
+            fi
             ;;
 
-        fedora | opensuse)
+        "Fedora" | "openSUSE")
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 print_message "$YELLOW" "Found existing Pokémon Color Scripts directory. Removing..."
                 rm -rf "$HOME/pokemon-colorscripts"
             fi
 
             print_message "$CYAN" "Installing dependencies..."
-            if [[ "$distro" == "fedora" ]]; then
+            if [[ "$DISTRO" == "Fedora" ]]; then
                 sudo dnf install -y git
-            elif [[ "$distro" == "opensuse" ]]; then
+            elif [[ "$DISTRO" == "openSUSE" ]]; then
                 sudo zypper install -y git
             fi
 
             print_message "$CYAN" "Cloning Pokémon Color Scripts..."
-            git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$HOME/pokemon-colorscripts"
-
-            if [[ -d "$HOME/pokemon-colorscripts" ]]; then
-                cd "$HOME/pokemon-colorscripts" || {
-                                                     print_message "$RED" "Failed to change directory to pokemon-colorscripts!"
-                                                                                                                                 return 1
-                }
-
-                print_message "$CYAN" "Installing Pokémon Color Scripts..."
-                sudo ./install.sh
-                cd - > /dev/null || true
+            local POKEMON_DIR
+            POKEMON_DIR=$(mktemp -d)
+            if git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKEMON_DIR"; then
+                (cd "$POKEMON_DIR" && sudo ./install.sh)
             else
                 print_message "$RED" "Failed to clone pokemon-colorscripts repository!"
-                return 1
             fi
+            rm -rf "$POKEMON_DIR"
             ;;
     esac
 }
 
 main() {
-    detect_distro
+    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
     check_essential_dependencies
     install_distro_packages
     install_eza

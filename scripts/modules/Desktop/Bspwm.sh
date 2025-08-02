@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -54,16 +55,7 @@ get_choice() {
 main_menu() {
     clear
 
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-    else
-        print_message "$RED" "Unsupported distro. Exiting..."
-        exit 1
-    fi
+    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
 
     print_message "$TEAL" "Distro: ${distro^} Linux"
 

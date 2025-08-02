@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -67,15 +68,10 @@ check_fastfetch() {
         print_message "$GREEN" "Fastfetch is already installed."
     else
         print_message "$CYAN" "Fastfetch is not installed. Installing..."
-        local pkg_manager=""
-        if command -v pacman &> /dev/null; then pkg_manager="pacman"; fi
-        if command -v dnf &> /dev/null; then pkg_manager="dnf"; fi
-        if command -v zypper &> /dev/null; then pkg_manager="zypper"; fi
-
-        case "$pkg_manager" in
-            pacman) sudo pacman -S --noconfirm fastfetch git ;;
-            dnf) sudo dnf install -y fastfetch git ;;
-            zypper) sudo zypper install -y fastfetch git ;;
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm fastfetch git ;;
+            "Fedora") sudo dnf install -y fastfetch git ;;
+            "openSUSE") sudo zypper install -y fastfetch git ;;
             *)
                 print_message "$RED" "Unsupported package manager! Please install Fastfetch manually."
                 exit 1

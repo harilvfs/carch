@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -49,22 +50,6 @@ get_choice() {
             print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
         fi
     done
-}
-
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-        print_message "$GREEN" "Detected distribution: Arch Linux"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-        print_message "$YELLOW" "Detected distribution: Fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-        print_message "$CYAN" "Detected distribution: openSUSE"
-    else
-        print_message "$RED" "Unsupported distribution. Exiting..."
-        exit 1
-    fi
 }
 
 install_dependencies() {
@@ -174,23 +159,22 @@ main() {
     choice_index=$?
     choice="${options[$((choice_index - 1))]}"
 
+    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
+
     case "$choice" in
         "Themes")
-            detect_distro
             install_dependencies
             confirm_and_proceed
             setup_themes
             print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme."
             ;;
         "Icons")
-            detect_distro
             install_dependencies
             confirm_and_proceed
             setup_icons
             print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the icons."
             ;;
         "Both")
-            detect_distro
             install_dependencies
             confirm_and_proceed
             setup_themes

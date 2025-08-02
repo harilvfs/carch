@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -21,47 +22,24 @@ confirm() {
     done
 }
 
-print_message "$YELLOW" ":: Note: JetBrains Mono Nerd Font is required for proper Rofi display. Please install it before continuing."
-
-install_rofi_arch() {
+install_rofi() {
     if ! command -v rofi &> /dev/null; then
-        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi for Arch..."
-        sudo pacman -S --needed --noconfirm rofi
+        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi..."
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --needed --noconfirm rofi ;;
+            "Fedora") sudo dnf install -y rofi ;;
+            "openSUSE") sudo zypper install -y rofi ;;
+            *)
+                print_message "$RED" "Unsupported distribution. Please install Rofi manually."
+                exit 1
+                ;;
+        esac
     else
-        print_message "$GREEN" ":: Rofi is already installed on Arch."
+        print_message "$GREEN" ":: Rofi is already installed."
     fi
 }
 
-install_rofi_fedora() {
-    if ! command -v rofi &> /dev/null; then
-        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi for Fedora..."
-        sudo dnf install --assumeyes rofi
-    else
-        print_message "$GREEN" ":: Rofi is already installed on Fedora."
-    fi
-}
-
-install_rofi_opensuse() {
-    if ! command -v rofi &> /dev/null; then
-        print_message "$CYAN" "Rofi is not installed. :: Installing Rofi for openSUSE..."
-        sudo zypper install -y rofi
-    else
-        print_message "$GREEN" ":: Rofi is already installed on openSUSE."
-    fi
-}
-
-setup_rofi() {
-    if command -v pacman &> /dev/null; then
-        install_rofi_arch
-    elif command -v dnf &> /dev/null; then
-        install_rofi_fedora
-    elif command -v zypper &> /dev/null; then
-        install_rofi_opensuse
-    else
-        print_message "$RED" "Unsupported distribution. Please install Rofi manually."
-        exit 1
-    fi
-
+setup_rofi_config() {
     ROFI_CONFIG_DIR="$HOME/.config/rofi"
     BACKUP_DIR="$HOME/.config/carch/backups"
 
@@ -86,4 +64,10 @@ setup_rofi() {
     print_message "$GREEN" ":: Rofi configuration applied successfully!"
 }
 
-setup_rofi
+main() {
+    print_message "$YELLOW" ":: Note: JetBrains Mono Nerd Font is required for proper Rofi display. Please install it before continuing."
+    install_rofi
+    setup_rofi_config
+}
+
+main
