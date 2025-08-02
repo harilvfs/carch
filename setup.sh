@@ -5,6 +5,24 @@ set -eu
 red='\033[0;31m'
 rc='\033[0m'
 
+mode="stable"
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dev)
+            mode="dev"
+            shift
+            ;;
+        --stable)
+            mode="stable"
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
 check() {
     if [ "$1" -ne 0 ]; then
         printf "Error: %s\n" "$2" >&2
@@ -17,6 +35,13 @@ findArch() {
         x86_64 | amd64) arch="x86_64" ;;
         aarch64 | arm64) arch="aarch64" ;;
         *) check 1 "Unsupported architecture" ;;
+    esac
+}
+
+getStableUrl() {
+    case "${arch}" in
+        x86_64) printf "https://github.com/harilvfs/carch/releases/latest/download/carch\n" ;;
+        *) printf "https://github.com/harilvfs/carch/releases/latest/download/carch-%s\n" "${arch}" ;;
     esac
 }
 
@@ -39,7 +64,7 @@ addArch() {
     esac
 }
 
-set_download_url() {
+set_dev_url() {
     latest_release=$(get_latest_release)
     if [ -n "$latest_release" ]; then
         url="https://github.com/harilvfs/carch/releases/download/$latest_release/carch"
@@ -53,14 +78,24 @@ set_download_url() {
 
 TIMEOUT=10
 findArch
-set_download_url
+
+if [ "$mode" = "dev" ]; then
+    set_dev_url
+else
+    url="$(getStableUrl)"
+fi
+
 temp_file=$(mktemp)
 check $? "Creating the temporary file"
+
 curl -L -s --connect-timeout "$TIMEOUT" --max-time 120 "$url" -o "$temp_file"
 check $? "Downloading carch"
+
 chmod +x "$temp_file"
 check $? "Making carch executable"
+
 "$temp_file" "$@"
 check $? "Executing carch"
+
 rm -f "$temp_file"
 check $? "Deleting the temporary file"
