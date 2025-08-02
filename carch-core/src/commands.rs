@@ -1,7 +1,10 @@
 use crate::error::{CarchError, Result};
 use log::info;
+use std::fs;
 use std::io::{self, Write};
+use std::os::unix::fs::PermissionsExt;
 use std::process::{Command, Stdio};
+use tempfile::Builder;
 
 enum InstallMethod {
     Cargo,
@@ -43,6 +46,25 @@ fn get_installation_method() -> Result<InstallMethod> {
     })
 }
 
+fn run_script_from_url(action: &str) -> Result<()> {
+    info!("Downloading install script...");
+    let script_contents =
+        reqwest::blocking::get("https://chalisehari.com.np/carchinstall")?.bytes()?;
+
+    let mut temp_script = Builder::new().prefix("carch-install-").suffix(".sh").tempfile()?;
+    temp_script.write_all(&script_contents)?;
+
+    let temp_path = temp_script.path().to_path_buf();
+    let mut perms = fs::metadata(&temp_path)?.permissions();
+    perms.set_mode(0o755); // rwxr-xr-x
+    fs::set_permissions(&temp_path, perms)?;
+
+    info!("Executing install script with action: {action}");
+    run_command(Command::new("sh").arg(&temp_path).arg(action))?;
+
+    Ok(())
+}
+
 pub fn update() -> Result<()> {
     if !command_exists("carch") {
         println!("Carch is not installed. Please install it first.");
@@ -72,11 +94,7 @@ fn update_via_cargo() -> Result<()> {
 
 fn update_via_package_manager() -> Result<()> {
     info!("Updating via install script...");
-    run_command(
-        Command::new("sh")
-            .arg("-c")
-            .arg("curl -fsSL https://chalisehari.com.np/carchinstall | bash -s -- update"),
-    )?;
+    run_script_from_url("update")?;
     println!("Update done.");
     Ok(())
 }
@@ -110,11 +128,7 @@ fn uninstall_via_cargo() -> Result<()> {
 
 fn uninstall_via_package_manager() -> Result<()> {
     info!("Uninstalling via install script...");
-    run_command(
-        Command::new("sh")
-            .arg("-c")
-            .arg("curl -fsSL https://chalisehari.com.np/carchinstall | bash -s -- uninstall"),
-    )?;
+    run_script_from_url("uninstall")?;
     println!("Uninstallation done.");
     Ok(())
 }
