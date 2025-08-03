@@ -69,7 +69,7 @@ install_aur_helper() {
 
     local temp_dir
     temp_dir=$(mktemp -d)
-    (
+    (   
         cd "$temp_dir"
         git clone https://aur.archlinux.org/yay.git
         cd yay

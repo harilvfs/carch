@@ -101,7 +101,7 @@ main() {
                         print_message "$GREEN" "Installing ProtonVPN for Fedora..."
                         local temp_dir
                         temp_dir=$(mktemp -d)
-                        (
+                        (   
                             cd "$temp_dir" || exit 1
                             wget "https://repo.protonvpn.com/fedora-$(cut -d' ' -f 3 < /etc/fedora-release)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm"
                             sudo dnf install -y ./protonvpn-stable-release-1.0.3-1.noarch.rpm
