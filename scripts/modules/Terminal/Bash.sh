@@ -5,8 +5,6 @@ clear
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
-distro=""
-
 print_message() {
     local color="$1"
     local message="$2"
@@ -248,14 +246,13 @@ install_pokemon_colorscripts() {
 }
 
 main() {
-    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
     check_essential_dependencies
     install_distro_packages
     install_eza
 
     clear
     print_message "$TEAL" "Nerd Fonts are recommended for the best experience."
-    print_message "$CYAN" "Detected distribution: $distro"
+    print_message "$CYAN" "Detected distribution: $DISTRO"
 
     local options=("Catppuccin" "Nord" "Tokyo Night" "Exit")
     show_menu "Select a theme for Starship:" "${options[@]}"
@@ -310,10 +307,10 @@ main() {
 
     if ! command -v zoxide &> /dev/null; then
         print_message "$CYAN" "Installing zoxide..."
-        case "$distro" in
-            arch) sudo pacman -S --noconfirm zoxide ;;
-            fedora) sudo dnf install -y zoxide ;;
-            opensuse) sudo zypper install -y zoxide ;;
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm zoxide ;;
+            "Fedora") sudo dnf install -y zoxide ;;
+            "openSUSE") sudo zypper install -y zoxide ;;
         esac
     fi
 

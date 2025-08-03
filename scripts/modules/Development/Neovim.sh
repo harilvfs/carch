@@ -69,23 +69,21 @@ For either option:
 EOF
 echo -e "${NC}"
 
-distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
-
 install_dependencies() {
     print_message "$GREEN" "Installing required dependencies..."
 
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
                 xclip wl-clipboard lua-language-server shfmt python3 yaml-language-server meson ninja \
                 make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd git
             ;;
-        "fedora")
+        "Fedora")
             sudo dnf install -y ripgrep neovim vim fzf python3-virtualenv luarocks go nodejs shellcheck xclip \
                 wl-clipboard lua-language-server shfmt python3 meson ninja-build \
                 make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts git
             ;;
-        "opensuse")
+        "openSUSE")
             sudo zypper install -y ripgrep neovim vim fzf python313-virtualenv lua53-luarocks go nodejs ShellCheck xclip \
                 wl-clipboard lua-language-server shfmt python313 meson ninja \
                 make gcc jetbrains-mono-fonts git
@@ -168,12 +166,6 @@ setup_nvchad() {
 }
 
 main() {
-    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
-    if [[ -z "$distro" ]]; then
-        print_message "$RED" "OS detection failed. Exiting."
-        exit 1
-    fi
-
     local options=("Neovim" "NvChad" "Exit")
     show_menu "Choose the setup option:" "${options[@]}"
 

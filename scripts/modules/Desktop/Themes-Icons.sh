@@ -55,14 +55,14 @@ get_choice() {
 install_dependencies() {
     print_message "$CYAN" ":: Installing dependencies..."
 
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
                 print_message "$RED" ":: Failed to install dependencies. Exiting..."
                 exit 1
             }
             ;;
-        "fedora")
+        "Fedora")
             sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
                 print_message "$RED" ":: Failed to install dependencies. Exiting..."
                 exit 1
@@ -80,7 +80,7 @@ install_dependencies() {
                 }
             fi
             ;;
-        "opensuse")
+        "openSUSE")
             sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
                 print_message "$RED" ":: Failed to install dependencies. Exiting..."
                 exit 1
@@ -162,8 +162,6 @@ main() {
     get_choice "${#options[@]}"
     choice_index=$?
     choice="${options[$((choice_index - 1))]}"
-
-    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
 
     case "$choice" in
         "Themes")
