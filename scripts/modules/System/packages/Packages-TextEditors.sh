@@ -29,14 +29,14 @@ install_texteditor() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        install_package "visual-studio-code-bin" ""
+                        install_package "visual-studio-code-bin" "com.visualstudio.code"
                         ;;
                     "Fedora")
                         install_package "" "com.visualstudio.code"
                         ;;
                     "openSUSE")
                         sudo zypper ar -cf https://download.opensuse.org/repositories/devel:/tools:/ide:/vscode/openSUSE_Tumbleweed devel_tools_ide_vscode
-                        install_package "code" ""
+                        install_package "code" "com.visualstudio.code"
                         ;;
                 esac
                 ;;
@@ -50,14 +50,14 @@ install_texteditor() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        install_package "zed-preview-bin" ""
+                        install_package "zed-preview-bin" "dev.zed.Zed"
                         ;;
                     "Fedora")
                         install_package "" "dev.zed.Zed"
                         ;;
                     "openSUSE")
                         sudo zypper addrepo https://download.opensuse.org/repositories/home:hennevogel/openSUSE_Tumbleweed/home:hennevogel.repo
-                        install_package "zed" ""
+                        install_package "zed" "dev.zed.Zed"
                         ;;
                 esac
                 ;;
