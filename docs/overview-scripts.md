@@ -54,7 +54,6 @@
 - **Fonts**: *Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.*
 - **Grub**: *GRUB (GNU GRand Unified Bootloader) is a bootloader that lets you choose and load operating systems or kernels on startup. The script offers various themes and applies necessary GRUB configurations. Credit to chrisTitusTech/Top-5-Bootloader-Themes for the themes and script assistance.*
 - **LTS-Kernel**: *This script installs the LTS kernel for Arch-based distros only (not for Fedora or openSUSE).*
-- **Packages**: *Provides a menu with various package categories like Android tools, browsers, multimedia, development, and more. Most widely used packages are included, with additional packages coming in future updates.*
 - **Sddm**: *SDDM (Simple Desktop Display Manager) is a modern, Qt-based graphical login manager. The script installs a Catppuccin-based theme for SDDM from the Catppuccin community.*
 
 ### Terminal
