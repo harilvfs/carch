@@ -29,14 +29,14 @@ install_texteditor() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        install_package "visual-studio-code-bin" "com.visualstudio.code"
+                        install_package "visual-studio-code-bin" ""
                         ;;
                     "Fedora")
                         install_package "" "com.visualstudio.code"
                         ;;
                     "openSUSE")
                         sudo zypper ar -cf https://download.opensuse.org/repositories/devel:/tools:/ide:/vscode/openSUSE_Tumbleweed devel_tools_ide_vscode
-                        install_package "code" "com.visualstudio.code"
+                        install_package "code" ""
                         ;;
                 esac
                 ;;
