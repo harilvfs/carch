@@ -4,8 +4,8 @@ install_multimedia() {
     while true; do
         clear
         local options
-        if [[ "$DISTRO" == "openSUSE" ]]; then
-            # for opensuse
+        if [[ "$DISTRO" == "openSUSE" || "$DISTRO" == "Fedora" ]]; then
+            # for opensuse and fedora
             options=("VLC" "MPV" "Back to Main Menu")
         else
             options=("VLC" "MPV" "Netflix [Unofficial]" "Back to Main Menu")
@@ -32,16 +32,6 @@ install_multimedia() {
                 case "$DISTRO" in
                     "Arch")
                         install_package "netflix" ""
-                        ;;
-                    "Fedora")
-                        echo "Netflix Unofficial requires manual installation on Fedora"
-                        echo "Installing required dependencies:"
-                        sudo dnf install -y wget opencl-utils
-                        echo "Installing Microsoft Core Fonts:"
-                        sudo yum -y localinstall http://sourceforge.net/projects/postinstaller/files/fuduntu/msttcorefonts-2.0-2.noarch.rpm
-                        echo "Installing Wine Silverlight & Netflix Desktop:"
-                        sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
-                        sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
                         ;;
                 esac
                 ;;
