@@ -23,7 +23,7 @@ install_productivity() {
 
             "OnlyOffice")
                 clear
-                install_package "onlyoffice-bin" "org.onlyoffice.desktopeditors" "onlyoffice"
+                install_package "onlyoffice-bin" "org.onlyoffice.desktopeditors"
                 ;;
 
             "Obsidian")
@@ -33,7 +33,7 @@ install_productivity() {
 
             "Joplin")
                 clear
-                install_package "joplin-desktop" "net.cozic.joplin_desktop" "joplin"
+                install_package "joplin-desktop" "net.cozic.joplin_desktop"
                 ;;
 
             "Calibre")
