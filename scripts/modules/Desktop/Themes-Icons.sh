@@ -55,34 +55,38 @@ get_choice() {
 install_dependencies() {
     print_message "$CYAN" ":: Installing dependencies..."
 
-    if [ "$distro" == "arch" ]; then
-        sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
-            print_message "$RED" ":: Failed to install dependencies. Exiting..."
-            exit 1
-        }
-    elif [ "$distro" == "fedora" ]; then
-        sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
-            print_message "$RED" ":: Failed to install dependencies. Exiting..."
-            exit 1
-        }
+    case "$distro" in
+        "arch")
+            sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
+                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                exit 1
+            }
+            ;;
+        "fedora")
+            sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
+                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                exit 1
+            }
 
-        if ! command -v nwg-look &> /dev/null; then
-            print_message "$CYAN" ":: Installing nwg-look for Fedora..."
-            sudo dnf copr enable -y solopasha/hyprland || {
-                print_message "$RED" ":: Failed to enable solopasha/hyprland COPR repository."
+            if ! command -v nwg-look &> /dev/null; then
+                print_message "$CYAN" ":: Installing nwg-look for Fedora..."
+                sudo dnf copr enable -y solopasha/hyprland || {
+                    print_message "$RED" ":: Failed to enable solopasha/hyprland COPR repository."
+                    exit 1
+                }
+                sudo dnf install -y nwg-look || {
+                    print_message "$RED" ":: Failed to install nwg-look. Exiting..."
+                    exit 1
+                }
+            fi
+            ;;
+        "opensuse")
+            sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
+                print_message "$RED" ":: Failed to install dependencies. Exiting..."
                 exit 1
             }
-            sudo dnf install -y nwg-look || {
-                print_message "$RED" ":: Failed to install nwg-look. Exiting..."
-                exit 1
-            }
-        fi
-    elif [ "$distro" == "opensuse" ]; then
-        sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
-            print_message "$RED" ":: Failed to install dependencies. Exiting..."
-            exit 1
-        }
-    fi
+            ;;
+    esac
 
     print_message "$GREEN" ":: Dependencies installed successfully."
 }

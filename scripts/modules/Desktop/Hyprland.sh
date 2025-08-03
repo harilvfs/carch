@@ -59,13 +59,17 @@ main_menu() {
 
     print_message "$TEAL" "Distro: ${DISTRO^} Linux"
 
-    if [[ "$distro" == "arch" ]]; then
-        options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "basecamp/omarchy" "Exit")
-    elif [[ "$distro" == "fedora" ]]; then
-        options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
-    elif [[ "$distro" == "opensuse" ]]; then
-        options=("mylinuxforwork/dotfiles" "jakoolit/OpenSUSE-Hyprland" "Exit")
-    fi
+    case "$distro" in
+        "arch")
+            options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "basecamp/omarchy" "Exit")
+            ;;
+        "fedora")
+            options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
+            ;;
+        "opensuse")
+            options=("mylinuxforwork/dotfiles" "jakoolit/OpenSUSE-Hyprland" "Exit")
+            ;;
+    esac
 
     echo
     print_message "$YELLOW" "Note: These are not my personal dotfiles; I am sourcing them from their respective users."
@@ -121,40 +125,52 @@ install_config() {
     print_message "$GREEN" "Installing configuration: $choice"
     echo
 
-    if [[ "$choice" == "prasanthrangan/hyprdots" ]]; then
-        pacman -S --needed git base-devel
-        git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE
-        cd ~/HyDE/Scripts || exit
-        ./install.sh
-    elif [[ "$choice" == "mylinuxforwork/dotfiles" ]]; then
-        if [[ "$distro" == "arch" ]]; then
-            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-arch.sh)"
-        elif [[ "$distro" == "fedora" ]]; then
-            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
-        elif [[ "$distro" == "opensuse" ]]; then
-            bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
-        fi
-    elif [[ "$choice" == "end-4/dots-hyprland" ]]; then
-        bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
-    elif [[ "$choice" == "jakoolit/Arch-Hyprland" ]]; then
-        git clone --depth=1 https://github.com/JaKooLit/Arch-Hyprland.git ~/Arch-Hyprland
-        cd ~/Arch-Hyprland || exit
-        chmod +x install.sh
-        ./install.sh
-    elif [[ "$choice" == "jakoolit/Fedora-Hyprland" ]]; then
-        git clone --depth=1 https://github.com/JaKooLit/Fedora-Hyprland.git ~/Fedora-Hyprland
-        cd ~/Fedora-Hyprland || exit
-        chmod +x install.sh
-        ./install.sh
-    elif [[ "$choice" == "jakoolit/OpenSUSE-Hyprland" ]]; then
-        git clone --depth=1 https://github.com/JaKooLit/OpenSUSE-Hyprland.git ~/OpenSUSE-Hyprland
-        cd ~/OpenSUSE-Hyprland || exit
-        chmod +x install.sh
-        ./install.sh
-    elif [[ "$choice" == "basecamp/omarchy" ]]; then
-        print_message "$CYAN" "Installing Omarchy configuration..."
-        wget -qO- https://omarchy.org/install | bash
-    fi
+    case "$choice" in
+        "prasanthrangan/hyprdots")
+            pacman -S --needed git base-devel
+            git clone --depth 1 https://github.com/HyDE-Project/HyDE ~/HyDE
+            cd ~/HyDE/Scripts || exit
+            ./install.sh
+            ;;
+        "mylinuxforwork/dotfiles")
+            case "$distro" in
+                "arch")
+                    bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-arch.sh)"
+                    ;;
+                "fedora")
+                    bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
+                    ;;
+                "opensuse")
+                    bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
+                    ;;
+            esac
+            ;;
+        "end-4/dots-hyprland")
+            bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
+            ;;
+        "jakoolit/Arch-Hyprland")
+            git clone --depth=1 https://github.com/JaKooLit/Arch-Hyprland.git ~/Arch-Hyprland
+            cd ~/Arch-Hyprland || exit
+            chmod +x install.sh
+            ./install.sh
+            ;;
+        "jakoolit/Fedora-Hyprland")
+            git clone --depth=1 https://github.com/JaKooLit/Fedora-Hyprland.git ~/Fedora-Hyprland
+            cd ~/Fedora-Hyprland || exit
+            chmod +x install.sh
+            ./install.sh
+            ;;
+        "jakoolit/OpenSUSE-Hyprland")
+            git clone --depth=1 https://github.com/JaKooLit/OpenSUSE-Hyprland.git ~/OpenSUSE-Hyprland
+            cd ~/OpenSUSE-Hyprland || exit
+            chmod +x install.sh
+            ./install.sh
+            ;;
+        "basecamp/omarchy")
+            print_message "$CYAN" "Installing Omarchy configuration..."
+            wget -qO- https://omarchy.org/install | bash
+            ;;
+    esac
 }
 
 main_menu

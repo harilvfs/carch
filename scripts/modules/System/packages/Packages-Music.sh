@@ -1,26 +1,29 @@
 #!/usr/bin/env bash
 
 install_music() {
-    detect_distro
-    distro=$?
-    if [[ $distro -eq 0 ]]; then
-        install_aur_helper
-        pkg_manager="$AUR_HELPER -S --noconfirm"
-        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
-    elif [[ $distro -eq 1 ]]; then
-        install_flatpak
-        pkg_manager="sudo dnf install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    elif [[ $distro -eq 2 ]]; then
-        install_flatpak
-        pkg_manager="sudo zypper install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-        return
-    fi
+    case "$DISTRO" in
+        "Arch")
+            install_aur_helper
+            pkg_manager="$AUR_HELPER -S --noconfirm"
+            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+            ;;
+        "Fedora")
+            install_flatpak
+            pkg_manager="sudo dnf install -y"
+            flatpak_cmd="flatpak install -y --noninteractive flathub"
+            get_version() { rpm -q "$1"; }
+            ;;
+        "openSUSE")
+            install_flatpak
+            pkg_manager="sudo zypper install -y"
+            flatpak_cmd="flatpak install -y --noninteractive flathub"
+            get_version() { rpm -q "$1"; }
+            ;;
+        *)
+            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
+            return
+            ;;
+    esac
 
     while true; do
         clear
@@ -33,63 +36,68 @@ install_music() {
         case "$selection" in
             "Youtube-Music")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager youtube-music-bin
-                    version=$(get_version youtube-music-bin)
-                else
-                    $flatpak_cmd app.ytmdesktop.ytmdesktop
-                    version="Flatpak Version"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager youtube-music-bin
+                        version=$(get_version youtube-music-bin)
+                        ;;
+                    *)
+                        $flatpak_cmd app.ytmdesktop.ytmdesktop
+                        version="Flatpak Version"
+                        ;;
+                esac
                 echo "Youtube-Music installed successfully! Version: $version"
                 ;;
             "Spotube")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager spotube
-                    version=$(get_version spotube)
-                else
-                    $flatpak_cmd com.github.KRTirtho.Spotube
-                    version="Flatpak Version"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager spotube
+                        version=$(get_version spotube)
+                        ;;
+                    *)
+                        $flatpak_cmd com.github.KRTirtho.Spotube
+                        version="Flatpak Version"
+                        ;;
+                esac
                 echo "Spotube installed successfully! Version: $version"
                 ;;
             "Spotify")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager spotify
-                    version=$(get_version spotify)
-                else
-                    $flatpak_cmd com.spotify.Client
-                    version="Flatpak Version"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager spotify
+                        version=$(get_version spotify)
+                        ;;
+                    *)
+                        $flatpak_cmd com.spotify.Client
+                        version="Flatpak Version"
+                        ;;
+                esac
                 echo "Spotify installed successfully! Version: $version"
                 ;;
             "Rhythmbox")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager rhythmbox
-                    version=$(get_version rhythmbox)
-                elif [[ $distro -eq 2 ]]; then
-                    $pkg_manager rhythmbox
-                    version=$(get_version rhythmbox)
-                else
-                    $pkg_manager rhythmbox
-                    version=$(get_version rhythmbox)
-                fi
+                case "$DISTRO" in
+                    "Arch" | "openSUSE" | "Fedora")
+                        $pkg_manager rhythmbox
+                        version=$(get_version rhythmbox)
+                        ;;
+                esac
                 echo "Rhythmbox installed successfully! Version: $version"
                 ;;
             "Mousai")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager mousai
-                    version=$(get_version mousai)
-                elif [[ $distro -eq 2 ]]; then
-                    $pkg_manager mousai
-                    version=$(get_version mousai)
-                else
-                    $flatpak_cmd io.github.seadve.Mousai
-                    version="Flatpak Version"
-                fi
+                case "$DISTRO" in
+                    "Arch" | "openSUSE")
+                        $pkg_manager mousai
+                        version=$(get_version mousai)
+                        ;;
+                    "Fedora")
+                        $flatpak_cmd io.github.seadve.Mousai
+                        version="Flatpak Version"
+                        ;;
+                esac
                 echo "Mousai music identifier installed successfully! Version: $version"
                 ;;
             "Back to Main Menu")

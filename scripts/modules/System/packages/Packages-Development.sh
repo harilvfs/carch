@@ -1,28 +1,30 @@
 #!/usr/bin/env bash
 
 install_development() {
-    detect_distro
-    distro=$?
-
-    if [[ $distro -eq 0 ]]; then
-        install_aur_helper
-        pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-        pkg_manager_pacman="sudo pacman -S --noconfirm"
-        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
-    elif [[ $distro -eq 1 ]]; then
-        install_flatpak
-        pkg_manager="sudo dnf install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    elif [[ $distro -eq 2 ]]; then
-        install_flatpak
-        pkg_manager="sudo zypper install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-        return
-    fi
+    case "$DISTRO" in
+        "Arch")
+            install_aur_helper
+            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
+            pkg_manager_pacman="sudo pacman -S --noconfirm"
+            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+            ;;
+        "Fedora")
+            install_flatpak
+            pkg_manager="sudo dnf install -y"
+            flatpak_cmd="flatpak install -y --noninteractive flathub"
+            get_version() { rpm -q "$1"; }
+            ;;
+        "openSUSE")
+            install_flatpak
+            pkg_manager="sudo zypper install -y"
+            flatpak_cmd="flatpak install -y --noninteractive flathub"
+            get_version() { rpm -q "$1"; }
+            ;;
+        *)
+            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
+            return
+            ;;
+    esac
 
     while true; do
         clear
@@ -37,31 +39,39 @@ install_development() {
         case "$selection" in
             "Node.js")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman nodejs npm
-                    version=$(get_version nodejs)
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager nodejs-npm
-                    version=$(get_version nodejs)
-                else
-                    $pkg_manager nodejs22
-                    version=$(get_version nodejs22)
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager_pacman nodejs npm
+                        version=$(get_version nodejs)
+                        ;;
+                    "Fedora")
+                        $pkg_manager nodejs-npm
+                        version=$(get_version nodejs)
+                        ;;
+                    "openSUSE")
+                        $pkg_manager nodejs22
+                        version=$(get_version nodejs22)
+                        ;;
+                esac
                 echo "Node.js installed successfully! Version: $version"
                 ;;
 
             "Python")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman python python-pip
-                    version=$(get_version python)
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager python3 python3-pip
-                    version=$(get_version python3)
-                else
-                    $pkg_manager python313
-                    version=$(get_version python313)
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager_pacman python python-pip
+                        version=$(get_version python)
+                        ;;
+                    "Fedora")
+                        $pkg_manager python3 python3-pip
+                        version=$(get_version python3)
+                        ;;
+                    "openSUSE")
+                        $pkg_manager python313
+                        version=$(get_version python313)
+                        ;;
+                esac
                 echo "Python installed successfully! Version: $version"
                 ;;
 
@@ -75,28 +85,26 @@ install_development() {
 
             "Go")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman go
-                    version=$(get_version go)
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager golang
-                    version=$(get_version golang)
-                else
-                    $pkg_manager go
-                    version=$(get_version go)
-                fi
+                case "$DISTRO" in
+                    "Arch" | "openSUSE")
+                        $pkg_manager_pacman go
+                        version=$(get_version go)
+                        ;;
+                    "Fedora")
+                        $pkg_manager golang
+                        version=$(get_version golang)
+                        ;;
+                esac
                 echo "Go installed successfully! Version: $version"
                 ;;
 
             "Docker")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman docker
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager docker
-                else
-                    $pkg_manager docker
-                fi
+                case "$DISTRO" in
+                    "Arch" | "Fedora" | "openSUSE")
+                        $pkg_manager docker
+                        ;;
+                esac
                 sudo systemctl enable --now docker
                 sudo usermod -aG docker "$USER"
                 version=$(get_version docker)
@@ -106,40 +114,42 @@ install_development() {
 
             "Postman")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur postman-bin
-                    version=$(get_version postman-bin)
-                else
-                    $flatpak_cmd com.getpostman.Postman
-                    version="(Flatpak version installed)"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager_aur postman-bin
+                        version=$(get_version postman-bin)
+                        ;;
+                    *)
+                        $flatpak_cmd com.getpostman.Postman
+                        version="(Flatpak version installed)"
+                        ;;
+                esac
                 echo "Postman installed successfully! Version: $version"
                 ;;
 
             "DBeaver")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman dbeaver
-                    version=$(get_version dbeaver)
-                else
-                    $flatpak_cmd io.dbeaver.DBeaverCommunity
-                    version="(Flatpak version installed)"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        $pkg_manager_pacman dbeaver
+                        version=$(get_version dbeaver)
+                        ;;
+                    *)
+                        $flatpak_cmd io.dbeaver.DBeaverCommunity
+                        version="(Flatpak version installed)"
+                        ;;
+                esac
                 echo "DBeaver installed successfully! Version: $version"
                 ;;
 
             "Hugo")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_pacman hugo
-                    version=$(get_version hugo)
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager hugo
-                    version=$(get_version hugo)
-                else
-                    $pkg_manager hugo
-                    version=$(get_version hugo)
-                fi
+                case "$DISTRO" in
+                    "Arch" | "Fedora" | "openSUSE")
+                        $pkg_manager hugo
+                        version=$(get_version hugo)
+                        ;;
+                esac
                 echo "Hugo installed successfully! Version: $version"
                 ;;
             "Back to Main Menu")

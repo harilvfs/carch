@@ -38,40 +38,44 @@ check_multilib() {
 
 install_pipewire() {
     print_message "$TEAL" ":: Installing PipeWire and related packages..."
-    if [ "$distro" = "arch" ]; then
-        print_message "$CYAN" ":: Installing PipeWire packages for Arch Linux..."
+    case "$distro" in
+        "arch")
+            print_message "$CYAN" ":: Installing PipeWire packages for Arch Linux..."
 
-        local multilib_enabled=true
-        if ! check_multilib; then
-            multilib_enabled=false
-            print_message "$YELLOW" ":: Installing without 32-bit support..."
-        fi
+            local multilib_enabled=true
+            if ! check_multilib; then
+                multilib_enabled=false
+                print_message "$YELLOW" ":: Installing without 32-bit support..."
+            fi
 
-        if [ "$multilib_enabled" = true ]; then
-            sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-jack pipewire-pulse lib32-pipewire gst-plugin-pipewire wireplumber rtkit
-        else
-            sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-jack pipewire-pulse gst-plugin-pipewire wireplumber rtkit
-        fi
+            if [ "$multilib_enabled" = true ]; then
+                sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-jack pipewire-pulse lib32-pipewire gst-plugin-pipewire wireplumber rtkit
+            else
+                sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-jack pipewire-pulse gst-plugin-pipewire wireplumber rtkit
+            fi
 
-        if [ $? -ne 0 ]; then
-            print_message "$RED" ":: Failed to install PipeWire packages on Arch."
-            exit 1
-        fi
-    elif [ "$distro" = "fedora" ]; then
-        print_message "$CYAN" ":: Installing PipeWire packages for Fedora..."
-        sudo dnf install -y pipewire
-        if [ $? -ne 0 ]; then
-            print_message "$RED" ":: Failed to install PipeWire packages on Fedora."
-            exit 1
-        fi
-    elif [ "$distro" = "opensuse" ]; then
-        print_message "$CYAN" ":: Installing PipeWire packages for openSUSE..."
-        sudo zypper install -y pipewire rtkit wireplumber pipewire-alsa gstreamer-plugin-pipewire pipewire-pulseaudio
-        if [ $? -ne 0 ]; then
-            print_message "$RED" ":: Failed to install PipeWire packages on openSUSE."
-            exit 1
-        fi
-    fi
+            if [ $? -ne 0 ]; then
+                print_message "$RED" ":: Failed to install PipeWire packages on Arch."
+                exit 1
+            fi
+            ;;
+        "fedora")
+            print_message "$CYAN" ":: Installing PipeWire packages for Fedora..."
+            sudo dnf install -y pipewire
+            if [ $? -ne 0 ]; then
+                print_message "$RED" ":: Failed to install PipeWire packages on Fedora."
+                exit 1
+            fi
+            ;;
+        "opensuse")
+            print_message "$CYAN" ":: Installing PipeWire packages for openSUSE..."
+            sudo zypper install -y pipewire rtkit wireplumber pipewire-alsa gstreamer-plugin-pipewire pipewire-pulseaudio
+            if [ $? -ne 0 ]; then
+                print_message "$RED" ":: Failed to install PipeWire packages on openSUSE."
+                exit 1
+            fi
+            ;;
+    esac
 
     print_message "$GREEN" ":: PipeWire packages installed successfully."
 }

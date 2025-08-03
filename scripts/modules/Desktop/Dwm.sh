@@ -23,65 +23,67 @@ confirm() {
 }
 
 install_packages() {
-    if [ "$distro" == "arch" ]; then
-        check_aur_helper
-        print_message "$CYAN" ":: Installing required packages using pacman and AUR..."
+    case "$distro" in
+        "arch")
+            check_aur_helper
+            print_message "$CYAN" ":: Installing required packages using pacman and AUR..."
 
-        sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd \
-            ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
-            feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
-            thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
-            gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
-            print_message "$RED" "Failed to install some packages via pacman."
-            exit 1
-        }
+            sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd \
+                ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
+                feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
+                thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
+                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
+                print_message "$RED" "Failed to install some packages via pacman."
+                exit 1
+            }
 
-        print_message "$CYAN" ":: Installing xautolock from AUR..."
-        $aur_helper -S --noconfirm xautolock || {
-            print_message "$RED" "Failed to install xautolock from AUR."
-            exit 1
-        }
+            print_message "$CYAN" ":: Installing xautolock from AUR..."
+            $aur_helper -S --noconfirm xautolock || {
+                print_message "$RED" "Failed to install xautolock from AUR."
+                exit 1
+            }
+            ;;
+        "fedora")
+            print_message "$CYAN" ":: Installing required packages using dnf..."
 
-    elif [ "$distro" == "fedora" ]; then
-        print_message "$CYAN" ":: Installing required packages using dnf..."
+            print_message "$CYAN" ":: Enabling RPM Fusion repositories..."
+            sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
+                                https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm || {
+                print_message "$RED" "Failed to enable RPM Fusion repositories."
+                exit 1
+            }
 
-        print_message "$CYAN" ":: Enabling RPM Fusion repositories..."
-        sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
-                            https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm || {
-            print_message "$RED" "Failed to enable RPM Fusion repositories."
-            exit 1
-        }
+            print_message "$CYAN" ":: Enabling lihaohong/yazi COPR repository..."
+            sudo dnf copr enable -y lihaohong/yazi || {
+                print_message "$RED" "Failed to enable lihaohong/yazi COPR repository."
+                exit 1
+            }
 
-        print_message "$CYAN" ":: Enabling lihaohong/yazi COPR repository..."
-        sudo dnf copr enable -y lihaohong/yazi || {
-            print_message "$RED" "Failed to enable lihaohong/yazi COPR repository."
-            exit 1
-        }
+            sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
+                gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
+                google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
+                trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
+                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock || {
+                print_message "$RED" "Failed to install some packages via dnf."
+                exit 1
+            }
+            ;;
+        "opensuse")
+            print_message "$CYAN" ":: Installing required packages using zypper..."
 
-        sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
-            gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
-            google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
-            trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
-            pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock || {
-            print_message "$RED" "Failed to install some packages via dnf."
-            exit 1
-        }
+            sudo zypper install -y libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
+                gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
+                google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
+                trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
+                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock || {
+                print_message "${RED}" "Failed to install some packages via zypper."
+                exit 1
+            }
 
-    elif [ "$distro" == "opensuse" ]; then
-        print_message "$CYAN" ":: Installing required packages using zypper..."
-
-        sudo zypper install -y libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
-            gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
-            google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
-            trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
-            pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock || {
-            print_message "${RED}" "Failed to install some packages via zypper."
-            exit 1
-        }
-
-        print_message "$YELLOW" "NOTE: openSUSE uses i3lock instead of slock (slock is not available in official repositories)."
-        print_message "$YELLOW" "To manually lock your screen, run: i3lock"
-    fi
+            print_message "$YELLOW" "NOTE: openSUSE uses i3lock instead of slock (slock is not available in official repositories)."
+            print_message "$YELLOW" "To manually lock your screen, run: i3lock"
+            ;;
+    esac
 }
 
 check_aur_helper() {
@@ -163,62 +165,66 @@ install_nerd_font() {
 
     print_message "$CYAN" "Installing Meslo Nerd Font..."
 
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --needed ttf-meslo-nerd || exit 1
-
-    elif command -v dnf &> /dev/null; then
-        wget -P /tmp https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip || exit 1
-        unzip /tmp/Meslo.zip -d /tmp/Meslo || exit 1
-        mv /tmp/Meslo/* "$FONT_DIR" || exit 1
-
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install -y meslo-lg-fonts || exit 1
-
-    else
-        print_message "$RED" "Unsupported package manager. Please install Meslo Nerd Font manually."
-        return 1
-    fi
+    case "$distro" in
+        "arch")
+            sudo pacman -S --needed ttf-meslo-nerd || exit 1
+            ;;
+        "fedora")
+            wget -P /tmp https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip || exit 1
+            unzip /tmp/Meslo.zip -d /tmp/Meslo || exit 1
+            mv /tmp/Meslo/* "$FONT_DIR" || exit 1
+            ;;
+        "opensuse")
+            sudo zypper install -y meslo-lg-fonts || exit 1
+            ;;
+        *)
+            print_message "$RED" "Unsupported package manager. Please install Meslo Nerd Font manually."
+            return 1
+            ;;
+    esac
 
     fc-cache -vf || exit 1
     print_message "$GREEN" "Nerd Fonts installed successfully!"
 }
 
 install_picom() {
-    if [ "$distro" == "arch" ]; then
-        check_aur_helper
+    case "$distro" in
+        "arch")
+            check_aur_helper
 
-        print_message "$CYAN" ":: Installing Picom with $aur_helper..."
-        $aur_helper -S --noconfirm picom-ftlabs-git || {
-            print_message "$RED" "Failed to install Picom via $aur_helper. Please install manually."
-            exit 1
-        }
+            print_message "$CYAN" ":: Installing Picom with $aur_helper..."
+            $aur_helper -S --noconfirm picom-ftlabs-git || {
+                print_message "$RED" "Failed to install Picom via $aur_helper. Please install manually."
+                exit 1
+            }
+            ;;
+        "fedora")
+            print_message "$CYAN" ":: Installing Picom manually on Fedora..."
+            sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel \
+                libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel \
+                libepoxy-devel meson pcre2-devel pixman-devel uthash-devel \
+                xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
 
-    elif [ "$distro" == "fedora" ]; then
-        print_message "$CYAN" ":: Installing Picom manually on Fedora..."
-        sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel \
-            libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel \
-            libepoxy-devel meson pcre2-devel pixman-devel uthash-devel \
-            xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
+            git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
+            cd "$HOME/picom" || exit 1
+            meson setup --buildtype=release build
+            ninja -C build
+            sudo cp build/src/picom /usr/bin/
+            ;;
+        "opensuse")
+            print_message "$CYAN" ":: Installing Picom manually on openSUSE..."
+            sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
+                libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
+                libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
+                xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
 
-        git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
-        cd "$HOME/picom" || exit 1
-        meson setup --buildtype=release build
-        ninja -C build
-        sudo cp build/src/picom /usr/bin/
-
-    elif [ "$distro" == "opensuse" ]; then
-        print_message "$CYAN" ":: Installing Picom manually on openSUSE..."
-        sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
-            libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
-            libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
-            xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
-
-        git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
-        cd "$HOME/picom" || exit 1
-        meson setup --buildtype=release build
-        ninja -C build
-        sudo cp build/src/picom /usr/bin/
-    fi
+            git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
+            cd "$HOME/picom" || exit 1
+            meson setup --buildtype=release build
+            ninja -C build
+            sudo cp build/src/picom /usr/bin/
+            ;;
+    esac
 
     configure_picom
 }
@@ -275,8 +281,9 @@ setup_xinitrc() {
 
     print_message "$CYAN" ":: Creating .xinitrc file for DWM..."
 
-    if [ "$distro" == "opensuse" ]; then
-        cat > "$XINITRC" << 'EOF'
+    case "$distro" in
+        "opensuse")
+            cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 
 pgrep dunst > /dev/null || /usr/bin/dunst &
@@ -289,8 +296,9 @@ xautolock \
 
 exec dwm
 EOF
-    else
-        cat > "$XINITRC" << 'EOF'
+            ;;
+        *)
+            cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 
 pgrep dunst > /dev/null || /usr/bin/dunst &
@@ -303,7 +311,8 @@ xautolock \
 
 exec dwm
 EOF
-    fi
+            ;;
+    esac
 
     chmod +x "$XINITRC"
     print_message "$GREEN" ".xinitrc configured successfully!"

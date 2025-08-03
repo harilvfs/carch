@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
 
 install_filemanagers() {
-    detect_distro
-    distro=$?
-
-    if [[ $distro -eq 0 ]]; then
-        pkg_manager="sudo pacman -S --noconfirm"
-        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
-    elif [[ $distro -eq 1 ]]; then
-        pkg_manager="sudo dnf install -y"
-        get_version() { rpm -q "$1"; }
-    elif [[ $distro -eq 2 ]]; then
-        pkg_manager="sudo zypper install -y"
-        get_version() { rpm -q "$1"; }
-    else
-        echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-        return
-    fi
+    case "$DISTRO" in
+        "Arch")
+            pkg_manager="sudo pacman -S --noconfirm"
+            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+            ;;
+        "Fedora")
+            pkg_manager="sudo dnf install -y"
+            get_version() { rpm -q "$1"; }
+            ;;
+        "openSUSE")
+            pkg_manager="sudo zypper install -y"
+            get_version() { rpm -q "$1"; }
+            ;;
+        *)
+            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
+            return
+            ;;
+    esac
 
     while true; do
         clear
@@ -52,14 +54,15 @@ install_filemanagers() {
 
             "LF (Terminal File Manager)")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager lf
-                elif [[ $distro -eq 1 ]]; then
-                    sudo dnf copr enable lsevcik/lf -y
-                    $pkg_manager lf
-                else
-                    $pkg_manager lf
-                fi
+                case "$DISTRO" in
+                    "Arch" | "openSUSE")
+                        $pkg_manager lf
+                        ;;
+                    "Fedora")
+                        sudo dnf copr enable lsevcik/lf -y
+                        $pkg_manager lf
+                        ;;
+                esac
                 version=$(get_version lf)
                 echo "LF installed successfully! Version: $version"
                 ;;
@@ -80,14 +83,15 @@ install_filemanagers() {
 
             "Yazi")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager yazi
-                elif [[ $distro -eq 1 ]]; then
-                    sudo dnf copr enable varlad/yazi -y
-                    $pkg_manager yazi
-                else
-                    $pkg_manager yazi
-                fi
+                case "$DISTRO" in
+                    "Arch" | "openSUSE")
+                        $pkg_manager yazi
+                        ;;
+                    "Fedora")
+                        sudo dnf copr enable varlad/yazi -y
+                        $pkg_manager yazi
+                        ;;
+                esac
                 version=$(get_version yazi)
                 echo "Yazi installed successfully! Version: $version"
                 ;;

@@ -16,40 +16,32 @@ confirm() {
     done
 }
 
-required_cmds="git curl wget"
-missing=0
+check_essential_dependencies() {
+    local dependencies=("git" "wget" "curl" "tmux")
+    local missing=()
 
-echo_missing_cmd() {
-    cmd="$1"
-    echo -e "${YELLOW} $cmd is not installed.${NC}"
-    echo -e "${CYAN} • Fedora:     ${NC}sudo dnf install $cmd"
-    echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S $cmd"
-    echo -e "${CYAN} • openSUSE:   ${NC}sudo zypper install $cmd"
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing+=("$dep")
+        fi
+    done
+
+    if [[ ${#missing[@]} -ne 0 ]]; then
+        echo "Please wait, installing required dependencies..."
+
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
+            "Fedora") sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            "openSUSE") sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            *)
+                echo -e "${RED}Unsupported package manager. Install dependencies manually.${NC}"
+                exit 1
+                ;;
+        esac
+    fi
 }
 
-for cmd in $required_cmds; do
-    if ! command -v "$cmd" > /dev/null 2>&1; then
-        [ "$missing" -eq 0 ] && echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
-        echo_missing_cmd "$cmd"
-        missing=1
-    fi
-done
-
-[ "$missing" -eq 1 ] && exit 1
-
-if ! command -v tmux &> /dev/null; then
-    echo -e "${YELLOW}Tmux is not installed. Installing...${NC}"
-
-    case "$DISTRO" in
-        "Arch") sudo pacman -S --noconfirm tmux ;;
-        "Fedora") sudo dnf install -y tmux ;;
-        "openSUSE") sudo zypper install -y tmux ;;
-        *)
-            echo -e "${RED}Unsupported package manager. Please install tmux manually.${NC}"
-            exit 1
-            ;;
-    esac
-fi
+check_essential_dependencies
 
 config_dir="$HOME/.config/tmux"
 backup_dir="$HOME/.config/carch/backups/tmux.bak"
