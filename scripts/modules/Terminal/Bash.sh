@@ -121,7 +121,7 @@ install_eza() {
             print_message "$GREEN" "eza installed successfully!"
             ;;
         "openSUSE")
-            sudo zypper install eza -y
+            sudo zypper install -y eza
             ;;
         *)
             exit 1
