@@ -10,7 +10,7 @@ description = "Installs popular communication applications like Discord, Signal,
 ["Crypto-Tools"]
 description = "Installs essential cryptocurrency tools, such as the Electrum Bitcoin wallet, to manage your digital assets securely."
 
-[Development]
+["Development-Tools"]
 description = "Sets up your development environment with a choice of languages and tools, including Node.js, Python, Rust, Go, and Docker, to support your coding projects."
 
 [Editing]

@@ -42,6 +42,7 @@ impl<'a> App<'a> {
                         scripts_in_category.push(script_item);
                     }
                 }
+                scripts_in_category.sort_by(|a, b| a.name.cmp(&b.name));
                 all_scripts.insert(category_name, scripts_in_category);
             }
         }
