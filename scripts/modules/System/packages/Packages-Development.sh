@@ -70,7 +70,7 @@ install_development() {
 
             "Postman")
                 clear
-                install_package "postman-bin" "com.getpostman.Postman" "postman"
+                install_package "postman-bin" "com.getpostman.Postman"
                 ;;
 
             "DBeaver")
