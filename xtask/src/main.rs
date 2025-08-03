@@ -1,7 +1,9 @@
 use clap::CommandFactory;
 use clap_complete::{Shell, generate};
 use pico_args::Arguments;
+use std::collections::BTreeMap;
 use std::io::Cursor;
+use toml::Value;
 use xshell::{Shell as XShell, cmd};
 
 mod args;
@@ -10,8 +12,9 @@ const HELP: &str = r#"
 Usage: cargo xtask <COMMAND>
 
 Commands:
-  ci           Run all CI checks
-  completions  Generate shell completion scripts
+  ci                  Run all CI checks
+  completions         Generate shell completion scripts
+  ogen                Generate overview-scripts.md (alias: generate-overview)
 "#;
 
 fn main() -> Result<(), anyhow::Error> {
@@ -56,6 +59,53 @@ fn main() -> Result<(), anyhow::Error> {
             sh.write_file("completions/zsh/_carch", &buffer)?;
 
             println!("Completions generated successfully.");
+            Ok(())
+        }
+        "generate-overview" | "ogen" => {
+            println!("Generating overview-scripts.md...");
+
+            let mut markdown = String::from("## Scripts Descriptions:\n\n");
+            let mut categories: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
+
+            let desc_files = sh.read_dir("scripts/modules")?;
+            for entry in desc_files {
+                let path = entry.as_path();
+                if path.is_dir() {
+                    let dir_name = path.file_name().unwrap().to_str().unwrap();
+                    let desc_path = path.join("desc.toml");
+                    if desc_path.exists() {
+                        let content = sh.read_file(&desc_path)?;
+                        let value: Value = toml::from_str(&content)?;
+                        if let Some(table) = value.as_table() {
+                            for (key, val) in table {
+                                if let Some(inner_table) = val.as_table()
+                                    && let Some(description) =
+                                        inner_table.get("description").and_then(|v| v.as_str())
+                                {
+                                    let script_name = key.to_string();
+                                    let script_description = description.to_string();
+                                    categories
+                                        .entry(dir_name.to_string())
+                                        .or_default()
+                                        .push((script_name, script_description));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (category, scripts) in categories {
+                markdown.push_str(&format!("### {category}\n\n"));
+                for (name, description) in scripts {
+                    markdown.push_str(&format!("- **{name}**: *{description}*\n"));
+                }
+                markdown.push('\n');
+            }
+
+            sh.create_dir("docs")?;
+            sh.write_file("docs/overview-scripts.md", &markdown)?;
+            println!("overview-scripts.md generated successfully in docs/.");
             Ok(())
         }
         _ => {
