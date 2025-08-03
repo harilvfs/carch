@@ -1,0 +1,50 @@
+["Android-Tools"]
+description = "Provides options to install various Android-related tools, including Gvfs-MTP for USB file transfers, ADB for debugging, JDK (OpenJDK) for Java development, and the Universal Android Debloater for removing bloatware."
+
+[Browsers]
+description = "Offers a selection of web browsers for installation, such as Brave, Firefox, Google Chrome, and others, allowing you to choose the one that best fits your needs."
+
+[Communication]
+description = "Installs popular communication applications like Discord, Signal, Slack, and Telegram to help you stay connected with your teams and communities."
+
+["Crypto-Tools"]
+description = "Installs essential cryptocurrency tools, such as the Electrum Bitcoin wallet, to manage your digital assets securely."
+
+[Development]
+description = "Sets up your development environment with a choice of languages and tools, including Node.js, Python, Rust, Go, and Docker, to support your coding projects."
+
+[Editing]
+description = "Provides a suite of editing software for various media types, such as GIMP for images, Kdenlive for videos, and Audacity for audio, to cover all your creative needs."
+
+[FileManagers]
+description = "Offers a variety of file managers, from graphical options like Thunar and Dolphin to terminal-based ones like LF and Ranger, so you can manage your files your way."
+
+["FM-Tools"]
+description = "Installs useful file manager utilities, including Tumbler for thumbnail previews and Trash-Cli for managing your trash from the command line."
+
+[Gaming]
+description = "Enhances your gaming experience by installing essential tools like Steam, Lutris, and Heroic Games Launcher, along with performance utilities like MangoHud and GameMode."
+
+[GitHub]
+description = "Equips you with essential Git and GitHub tools, including the GitHub CLI, GitHub Desktop, and LazyGit, to streamline your version control workflow."
+
+[Multimedia]
+description = "Installs multimedia players like VLC and MPV, ensuring you have the right tools to enjoy your favorite movies and videos."
+
+[Music]
+description = "Offers a selection of music applications, including Spotify, Spotube, and YouTube Music, so you can listen to your favorite tracks and discover new artists."
+
+[Productivity]
+description = "Boosts your productivity with a choice of office suites like LibreOffice and OnlyOffice, as well as note-taking apps like Obsidian and Joplin."
+
+[Streaming]
+description = "Provides streaming and screen recording software, such as OBS Studio and SimpleScreenRecorder, to help you capture and share your screen content."
+
+[Terminals]
+description = "Offers a wide range of terminal emulators, from modern options like Alacritty and Kitty to classic choices like GNOME Terminal and Konsole."
+
+[TextEditors]
+description = "Installs a variety of text editors to suit your coding style, including VSCode, Neovim, and Zed, ensuring you have the right tool for any project."
+
+[Virtualization]
+description = "Sets up virtualization environments with tools like QEMU/KVM, VirtualBox, and Distrobox, allowing you to run multiple operating systems and test software in isolated containers."
