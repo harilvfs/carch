@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 confirm() {
     while true; do
@@ -15,38 +16,31 @@ confirm() {
     done
 }
 
-required_cmds="git curl wget"
-missing=0
+check_essential_dependencies() {
+    local dependencies=("git" "wget" "curl" "tmux")
+    local missing=()
 
-echo_missing_cmd() {
-    cmd="$1"
-    echo -e "${YELLOW} $cmd is not installed.${NC}"
-    echo -e "${CYAN} • Fedora:     ${NC}sudo dnf install $cmd"
-    echo -e "${CYAN} • Arch Linux: ${NC}sudo pacman -S $cmd"
-    echo -e "${CYAN} • openSUSE:   ${NC}sudo zypper install $cmd"
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            missing+=("$dep")
+        fi
+    done
+
+    if [[ ${#missing[@]} -ne 0 ]]; then
+        echo "Please wait, installing required dependencies..."
+
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
+            "Fedora") sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            "openSUSE") sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            *)
+                exit 1
+                ;;
+        esac
+    fi
 }
 
-for cmd in $required_cmds; do
-    if ! command -v "$cmd" > /dev/null 2>&1; then
-        [ "$missing" -eq 0 ] && echo -e "${RED}${BOLD}Error: Required command(s) not found${NC}"
-        echo_missing_cmd "$cmd"
-        missing=1
-    fi
-done
-
-[ "$missing" -eq 1 ] && exit 1
-
-if ! command -v tmux &> /dev/null; then
-    echo -e "${YELLOW}Tmux is not installed. Installing...${NC}"
-
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm tmux
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y tmux
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install -y tmux
-    fi
-fi
+check_essential_dependencies
 
 config_dir="$HOME/.config/tmux"
 backup_dir="$HOME/.config/carch/backups/tmux.bak"

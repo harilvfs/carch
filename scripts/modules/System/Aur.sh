@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -49,18 +50,6 @@ get_choice() {
             print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
         fi
     done
-}
-
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-    else
-        distro="unsupported"
-    fi
 }
 
 check_dependencies() {
@@ -174,11 +163,9 @@ check_existing_helpers() {
 }
 
 main() {
-    detect_distro
-
-    if [ "$distro" != "arch" ]; then
-        print_message "$YELLOW" "NOTICE: This system is detected as ${distro^}."
-        print_message "$RED" "AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with ${distro^}."
+    if [ "$DISTRO" != "Arch" ]; then
+        print_message "$YELLOW" "NOTICE: This system is detected as ${DISTRO}."
+        print_message "$RED" "AUR helpers (Paru/Yay) are specifically for Arch-based distributions and are not compatible with ${DISTRO}."
         print_message "$YELLOW" "These tools will not work on your system."
         exit 1
     fi

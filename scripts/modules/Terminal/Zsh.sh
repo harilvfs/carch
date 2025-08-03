@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -34,16 +35,14 @@ check_essential_dependencies() {
     if [[ ${#missing[@]} -ne 0 ]]; then
         echo "Please wait, installing required dependencies..."
 
-        if command -v pacman &> /dev/null; then
-            sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1
-        elif command -v dnf &> /dev/null; then
-            sudo dnf install -y "${missing[@]}" > /dev/null 2>&1
-        elif command -v zypper &> /dev/null; then
-            sudo zypper install -y "${missing[@]}" > /dev/null 2>&1
-        else
-            print_message "$RED" "Unsupported package manager. Install dependencies manually."
-            exit 1
-        fi
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
+            "Fedora") sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            "openSUSE") sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
+            *)
+                exit 1
+                ;;
+        esac
     fi
 }
 
@@ -65,20 +64,6 @@ check_aur_helper() {
     print_message "$GREEN" "Using AUR helper: ${AUR_HELPER}"
 }
 
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        DISTRO="arch"
-    elif command -v dnf &> /dev/null; then
-        DISTRO="fedora"
-    elif command -v zypper &> /dev/null; then
-        DISTRO="opensuse"
-    else
-        print_message "$RED" "Unable to detect your Linux distribution."
-        exit 1
-    fi
-    print_message "$CYAN" "Detected distribution: $DISTRO"
-}
-
 check_default_shell() {
     local current_shell=$(basename "$SHELL")
 
@@ -97,72 +82,77 @@ check_default_shell() {
     fi
 }
 
-detect_distro
-
 check_essential_dependencies
 
-if command -v pacman &> /dev/null; then
+if [[ "$DISTRO" == "Arch" ]]; then
     check_aur_helper
 fi
 
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting trash-cli
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting unzip trash-cli
+    case "$DISTRO" in
+        "Arch")
+            sudo pacman -S --noconfirm git zsh zsh-autosuggestions zsh-completions eza zsh-syntax-highlighting trash-cli
+            ;;
+        "Fedora")
+            sudo dnf install -y git zsh zsh-autosuggestions zsh-syntax-highlighting unzip trash-cli
 
-        # due to eza is no longer available on fedora 42 installing manually
-        print_message "$CYAN" "Installing eza manually for Fedora..."
+            # due to eza is no longer available on fedora 42 installing manually
+            print_message "$CYAN" "Installing eza manually for Fedora..."
 
-        if command -v eza &> /dev/null; then
-            print_message "$GREEN" "eza is already installed."
-        else
-            local tmp_dir=$(mktemp -d)
-            cd "$tmp_dir" || exit 1
+            if command -v eza &> /dev/null; then
+                print_message "$GREEN" "eza is already installed."
+            else
+                local tmp_dir=$(mktemp -d)
+                cd "$tmp_dir" || exit 1
 
-            print_message "$CYAN" "Fetching latest eza release..."
-            local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
+                print_message "$CYAN" "Fetching latest eza release..."
+                local latest_url=$(curl -s https://api.github.com/repos/eza-community/eza/releases/latest | grep -o "https://github.com/eza-community/eza/releases/download/.*/eza_x86_64-unknown-linux-gnu.zip" | head -1)
 
-            if [ -z "$latest_url" ]; then
-                print_message "$YELLOW" "Could not determine latest version, using fallback version..."
-                latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
-            fi
+                if [ -z "$latest_url" ]; then
+                    print_message "$YELLOW" "Could not determine latest version, using fallback version..."
+                    latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
+                fi
 
-            print_message "$CYAN" "Downloading eza from: $latest_url"
-            if ! curl -L -o eza.zip "$latest_url"; then
-                print_message "$RED" "Failed to download eza. Exiting..."
+                print_message "$CYAN" "Downloading eza from: $latest_url"
+                if ! curl -L -o eza.zip "$latest_url"; then
+                    print_message "$RED" "Failed to download eza. Exiting..."
+                    cd "$HOME" || exit
+                    rm -rf "$tmp_dir"
+                    exit 1
+                fi
+
+                print_message "$CYAN" "Extracting eza..."
+                unzip -q eza.zip
+
+                print_message "$CYAN" "Installing eza to /usr/bin..."
+                sudo cp eza /usr/bin/
+                sudo chmod +x /usr/bin/eza
+
                 cd "$HOME" || exit
                 rm -rf "$tmp_dir"
-                exit 1
+
+                print_message "$GREEN" "eza installed successfully!"
             fi
-
-            print_message "$CYAN" "Extracting eza..."
-            unzip -q eza.zip
-
-            print_message "$CYAN" "Installing eza to /usr/bin..."
-            sudo cp eza /usr/bin/
-            sudo chmod +x /usr/bin/eza
-
-            cd "$HOME" || exit
-            rm -rf "$tmp_dir"
-
-            print_message "$GREEN" "eza installed successfully!"
-        fi
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install -y zsh trash-cli eza
-    fi
+            ;;
+        "openSUSE")
+            sudo zypper install -y zsh trash-cli eza
+            ;;
+    esac
 }
 
 install_powerlevel10k() {
     print_message "$CYAN" "Installing Powerlevel10k..."
-    if command -v pacman &> /dev/null; then
-        $AUR_HELPER -S --noconfirm zsh-theme-powerlevel10k-git
-        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-    elif command -v dnf &> /dev/null || command -v zypper &> /dev/null; then
-        sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
-        echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-    fi
+    case "$DISTRO" in
+        "Arch")
+            $AUR_HELPER -S --noconfirm zsh-theme-powerlevel10k-git
+            echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+            ;;
+        "Fedora" | "openSUSE")
+            sudo git clone --depth=1 https://github.com/romkatv/powerlevel10k.git /usr/share/zsh-theme-powerlevel10k
+            echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+            ;;
+    esac
 }
 
 install_ohmyzsh() {
@@ -214,35 +204,34 @@ config_zsh() {
 
 install_pokemon_colorscripts() {
     print_message "$CYAN" "Installing Pokémon Color Scripts..."
-    if command -v pacman &> /dev/null; then
-        $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
-    elif command -v dnf &> /dev/null || command -v zypper &> /dev/null; then
-        POKEMON_DIR="$HOME/pokemon-colorscripts"
+    case "$DISTRO" in
+        "Arch")
+            $AUR_HELPER -S --noconfirm pokemon-colorscripts-git
+            ;;
+        "Fedora" | "openSUSE")
+            POKEMON_DIR="$HOME/pokemon-colorscripts"
 
-        [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
-        git clone --depth=1 https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKEMON_DIR"
+            [[ -d "$POKEMON_DIR" ]] && rm -rf "$POKEMON_DIR"
+            git clone --depth=1 https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKEMON_DIR"
 
-        if [[ -d "$POKEMON_DIR" ]]; then
-            cd "$POKEMON_DIR" || exit
-            sudo ./install.sh
-            cd ..
-            rm -rf "$POKEMON_DIR"
-        else
-            print_message "$RED" "Error: Pokémon Color Scripts failed to clone!"
-            exit 1
-        fi
-    fi
+            if [[ -d "$POKEMON_DIR" ]]; then
+                (cd "$POKEMON_DIR" && sudo ./install.sh)
+                rm -rf "$POKEMON_DIR"
+            else
+                print_message "$RED" "Error: Pokémon Color Scripts failed to clone!"
+                exit 1
+            fi
+            ;;
+    esac
 }
 
 install_zoxide() {
     print_message "$CYAN" "Installing zoxide..."
-    if command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm zoxide
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y zoxide
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install -y zoxide
-    fi
+    case "$DISTRO" in
+        "Arch") sudo pacman -S --noconfirm zoxide ;;
+        "Fedora") sudo dnf install -y zoxide ;;
+        "openSUSE") sudo zypper install -y zoxide ;;
+    esac
 }
 
 install_zsh_dependencies

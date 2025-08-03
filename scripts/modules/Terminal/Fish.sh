@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 distro=""
 
@@ -21,19 +22,6 @@ confirm() {
             *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
-}
-
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-    else
-        print_message "$RED" "Unsupported distribution!"
-        exit 1
-    fi
 }
 
 install_eza_manually() {
@@ -72,11 +60,11 @@ install_eza_manually() {
 
 install_fish_packages() {
     print_message "$CYAN" "Installing dependencies..."
-    case "$distro" in
-        arch)
+    case "$DISTRO" in
+        "Arch")
             sudo pacman -S --noconfirm fish noto-fonts-emoji git eza trash-cli
             ;;
-        fedora)
+        "Fedora")
             sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git trash-cli
             if ! command -v eza &> /dev/null; then
                 install_eza_manually
@@ -84,11 +72,10 @@ install_fish_packages() {
                 print_message "$GREEN" "eza is already installed."
             fi
             ;;
-        opensuse)
+        "openSUSE")
             sudo zypper install -y fish google-noto-fonts noto-coloremoji-fonts git eza trash-cli
             ;;
         *)
-            print_message "$RED" "Unsupported distro: $distro"
             exit 1
             ;;
     esac
@@ -100,24 +87,23 @@ install_zoxide() {
         return
     fi
     print_message "$CYAN" "Installing zoxide..."
-    case "$distro" in
-        arch)
+    case "$DISTRO" in
+        "Arch")
             sudo pacman -S --noconfirm zoxide
             ;;
-        fedora)
+        "Fedora")
             sudo dnf install -y zoxide
             ;;
-        opensuse)
+        "openSUSE")
             sudo zypper install -y zoxide
             ;;
         *)
-            print_message "$RED" "Unsupported distro for zoxide: $distro"
+            exit 1
             ;;
     esac
 }
 
 main() {
-    detect_distro
     install_fish_packages
 
     local FISH_CONFIG="$HOME/.config/fish"

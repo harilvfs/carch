@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 FONTS_DIR="$HOME/.fonts"
 aur_helper=""
@@ -52,19 +53,6 @@ get_choice() {
             print_message "$RED" "Invalid choice. Please enter a number between 1 and $max_option."
         fi
     done
-}
-
-detect_os() {
-    if command -v pacman &> /dev/null; then
-        OS_TYPE="arch"
-    elif command -v dnf &> /dev/null; then
-        OS_TYPE="fedora"
-    elif command -v zypper &> /dev/null; then
-        OS_TYPE="opensuse"
-    else
-        print_message "$RED" "Unsupported OS. Please install fonts manually."
-        exit 1
-    fi
 }
 
 check_dependencies() {
@@ -186,119 +174,99 @@ install_font() {
 
     case "$font_name" in
         "FiraCode")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch "ttf-firacode-nerd"
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts "fira-code-fonts"
-            else
-                install_font_fedora "FiraCode"
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch "ttf-firacode-nerd" ;;
+                "openSUSE") install_opensuse_system_fonts "fira-code-fonts" ;;
+                "Fedora") install_font_fedora "FiraCode" ;;
+            esac
             ;;
 
         "Meslo")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch "ttf-meslo-nerd"
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts "meslo-lg-fonts"
-            else
-                install_font_fedora "Meslo"
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch "ttf-meslo-nerd" ;;
+                "openSUSE") install_opensuse_system_fonts "meslo-lg-fonts" ;;
+                "Fedora") install_font_fedora "Meslo" ;;
+            esac
             ;;
 
         "JetBrainsMono")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts "jetbrains-mono-fonts"
-            else
-                install_font_fedora "JetBrainsMono"
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono ;;
+                "openSUSE") install_opensuse_system_fonts "jetbrains-mono-fonts" ;;
+                "Fedora") install_font_fedora "JetBrainsMono" ;;
+            esac
             ;;
 
         "Hack")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch "ttf-hack-nerd"
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts "hack-fonts"
-            else
-                install_font_fedora "Hack"
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch "ttf-hack-nerd" ;;
+                "openSUSE") install_opensuse_system_fonts "hack-fonts" ;;
+                "Fedora") install_font_fedora "Hack" ;;
+            esac
             ;;
 
         "CascadiaMono")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch ttf-cascadia-mono-nerd ttf-cascadia-code-nerd
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_font_opensuse "CascadiaMono"
-            else
-                install_font_fedora "CascadiaMono"
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ;;
+                "openSUSE") install_font_opensuse "CascadiaMono" ;;
+                "Fedora") install_font_fedora "CascadiaMono" ;;
+            esac
             ;;
 
         "Terminus")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch "terminus-font"
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_font_opensuse "Terminus"
-            else
-                install_font_fedora "Terminus"
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch "terminus-font" ;;
+                "openSUSE") install_font_opensuse "Terminus" ;;
+                "Fedora") install_font_fedora "Terminus" ;;
+            esac
             ;;
 
         "Noto")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts google-noto-fonts noto-coloremoji-fonts
-            else
-                install_fedora_system_fonts google-noto-fonts google-noto-emoji-fonts
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ;;
+                "openSUSE") install_opensuse_system_fonts google-noto-fonts noto-coloremoji-fonts ;;
+                "Fedora") install_fedora_system_fonts google-noto-fonts google-noto-emoji-fonts ;;
+            esac
             ;;
 
         "DejaVu")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                install_font_arch ttf-dejavu
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts "dejavu-fonts"
-            else
-                install_fedora_system_fonts dejavu-sans-fonts
-            fi
+            case "$DISTRO" in
+                "Arch") install_font_arch ttf-dejavu ;;
+                "openSUSE") install_opensuse_system_fonts "dejavu-fonts" ;;
+                "Fedora") install_fedora_system_fonts dejavu-sans-fonts ;;
+            esac
             ;;
 
         "JoyPixels")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                check_aur_helper
-                print_message "$GREEN" ":: Installing JoyPixels (ttf-joypixels) via $aur_helper..."
-                $aur_helper -S --noconfirm ttf-joypixels
-                print_message "$GREEN" "JoyPixels installed successfully!"
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                print_message "$GREEN" ":: Downloading JoyPixels font..."
-                mkdir -p "$HOME/.fonts"
-                curl -L "https://cdn.joypixels.com/arch-linux/font/8.0.0/joypixels-android.ttf" -o "$HOME/.fonts/joypixels-android.ttf"
-                print_message "$GREEN" ":: Refreshing font cache..."
-                fc-cache -vf "$HOME/.fonts"
-                print_message "$GREEN" "JoyPixels installed successfully to ~/.fonts!"
-            else
-                print_message "$GREEN" ":: Downloading JoyPixels font..."
-                mkdir -p "$HOME/.fonts"
-                curl -L "https://cdn.joypixels.com/arch-linux/font/8.0.0/joypixels-android.ttf" -o "$HOME/.fonts/joypixels-android.ttf"
-                print_message "$GREEN" ":: Refreshing font cache..."
-                fc-cache -vf "$HOME/.fonts"
-                print_message "$GREEN" "JoyPixels installed successfully to ~/.fonts!"
-            fi
+            case "$DISTRO" in
+                "Arch")
+                    check_aur_helper
+                    print_message "$GREEN" ":: Installing JoyPixels (ttf-joypixels) via $aur_helper..."
+                    $aur_helper -S --noconfirm ttf-joypixels
+                    print_message "$GREEN" "JoyPixels installed successfully!"
+                    ;;
+                "openSUSE" | "Fedora")
+                    print_message "$GREEN" ":: Downloading JoyPixels font..."
+                    mkdir -p "$HOME/.fonts"
+                    curl -L "https://cdn.joypixels.com/arch-linux/font/8.0.0/joypixels-android.ttf" -o "$HOME/.fonts/joypixels-android.ttf"
+                    print_message "$GREEN" ":: Refreshing font cache..."
+                    fc-cache -vf "$HOME/.fonts"
+                    print_message "$GREEN" "JoyPixels installed successfully to ~/.fonts!"
+                    ;;
+            esac
             ;;
 
         "FontAwesome")
-            if [[ "$OS_TYPE" == "arch" ]]; then
-                check_aur_helper
-                print_message "$GREEN" ":: Installing Font Awesome (ttf-font-awesome) via $aur_helper..."
-                $aur_helper -S --noconfirm ttf-font-awesome
-                print_message "$GREEN" "Font Awesome installed successfully!"
-            elif [[ "$OS_TYPE" == "opensuse" ]]; then
-                install_opensuse_system_fonts "fontawesome-fonts"
-            else
-                install_fedora_system_fonts fontawesome-fonts-all
-            fi
+            case "$DISTRO" in
+                "Arch")
+                    check_aur_helper
+                    print_message "$GREEN" ":: Installing Font Awesome (ttf-font-awesome) via $aur_helper..."
+                    $aur_helper -S --noconfirm ttf-font-awesome
+                    print_message "$GREEN" "Font Awesome installed successfully!"
+                    ;;
+                "openSUSE") install_opensuse_system_fonts "fontawesome-fonts" ;;
+                "Fedora") install_fedora_system_fonts fontawesome-fonts-all ;;
+            esac
             ;;
     esac
 }
@@ -346,8 +314,7 @@ choose_fonts() {
 
 main() {
     check_dependencies
-    detect_os
-    print_message "$TEAL" ":: Detected OS: $OS_TYPE"
+    print_message "$TEAL" ":: Detected OS: $DISTRO"
     echo
     choose_fonts
 }

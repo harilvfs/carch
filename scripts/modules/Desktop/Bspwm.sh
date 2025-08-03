@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -54,22 +55,11 @@ get_choice() {
 main_menu() {
     clear
 
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-    else
-        print_message "$RED" "Unsupported distro. Exiting..."
-        exit 1
-    fi
+    print_message "$TEAL" "Distro: $DISTRO Linux"
 
-    print_message "$TEAL" "Distro: ${distro^} Linux"
-
-    if [[ "$distro" != "arch" ]]; then
+    if [[ "$DISTRO" != "Arch" ]]; then
         echo
-        print_message "$RED" "This dotfiles configuration is not supported on ${distro^} Linux."
+        print_message "$RED" "This dotfiles configuration is not supported on $DISTRO Linux."
         print_message "$CYAN" "Please check the repository for compatible configurations: https://github.com/gh0stzk/dotfiles"
         echo
         print_message "$GREEN" "Press any key to exit..."

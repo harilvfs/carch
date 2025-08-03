@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -55,22 +56,13 @@ check_brightnessctl() {
     if ! command -v brightnessctl &> /dev/null; then
         print_message "$RED" "brightnessctl is not installed!"
 
-        local pkg_manager=""
-        if command -v pacman &> /dev/null; then
-            pkg_manager="pacman"
-        elif command -v dnf &> /dev/null; then
-            pkg_manager="dnf"
-        elif command -v zypper &> /dev/null; then
-            pkg_manager="zypper"
-        fi
-
-        if [ -n "$pkg_manager" ]; then
+        if [ -n "$DISTRO" ]; then
             print_message "$YELLOW" "Attempting to install brightnessctl..."
             if confirm "Do you want to install brightnessctl now?"; then
-                case "$pkg_manager" in
-                    pacman) sudo pacman -S --noconfirm brightnessctl ;;
-                    dnf) sudo dnf install -y brightnessctl ;;
-                    zypper) sudo zypper install -y brightnessctl ;;
+                case "$DISTRO" in
+                    "Arch") sudo pacman -S --noconfirm brightnessctl ;;
+                    "Fedora") sudo dnf install -y brightnessctl ;;
+                    "openSUSE") sudo zypper install -y brightnessctl ;;
                 esac
                 if [ $? -eq 0 ]; then
                     print_message "$GREEN" "Installation successful!"
@@ -83,7 +75,6 @@ check_brightnessctl() {
                 exit 1
             fi
         else
-            print_message "$RED" "Unsupported distribution. Please install brightnessctl manually."
             exit 1
         fi
     fi

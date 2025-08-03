@@ -1,25 +1,6 @@
 #!/usr/bin/env bash
 
 install_texteditor() {
-    detect_distro
-    distro=$?
-
-    if [[ $distro -eq 0 ]]; then
-        install_aur_helper
-        pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
-    elif [[ $distro -eq 1 ]]; then
-        install_flatpak
-        pkg_manager="sudo dnf install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    else
-        install_flatpak
-        pkg_manager="sudo zypper install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    fi
-
     while true; do
         clear
         local options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Back to Main Menu")
@@ -32,99 +13,72 @@ install_texteditor() {
         case "$selection" in
             "Cursor (AI Code Editor)")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur cursor-bin
-                    version=$(get_version cursor-bin)
-                else
-                    echo "Cursor is not available in Fedora/openSUSE repositories."
-                    echo "Download AppImage from: [Cursor Official Site](https://www.cursor.com/)"
-                    echo "To Run: chmod +x Cursor.AppImage && ./Cursor.AppImage"
-                    version="(Manual installation required)"
-                fi
-                echo "Cursor installed successfully! Version: $version"
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "cursor-bin" ""
+                        ;;
+                    *)
+                        echo "Cursor is not available in Fedora/openSUSE repositories."
+                        echo "Download AppImage from: [Cursor Official Site](https://www.cursor.com/)"
+                        echo "To Run: chmod +x Cursor.AppImage && ./Cursor.AppImage"
+                        ;;
+                esac
                 ;;
 
             "Visual Studio Code (VSCODE)")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur visual-studio-code-bin
-                    version=$(get_version visual-studio-code-bin)
-                elif [[ $distro -eq 1 ]]; then
-                    $flatpak_cmd com.visualstudio.code
-                    version="(Flatpak version installed)"
-                else
-                    sudo zypper ar -cf https://download.opensuse.org/repositories/devel:/tools:/ide:/vscode/openSUSE_Tumbleweed devel_tools_ide_vscode
-                    sudo zypper install -y code
-                    version=$(get_version code)
-                fi
-                echo "VS Code installed successfully! Version: $version"
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "visual-studio-code-bin" "com.visualstudio.code"
+                        ;;
+                    "Fedora")
+                        install_package "" "com.visualstudio.code"
+                        ;;
+                    "openSUSE")
+                        sudo zypper ar -cf https://download.opensuse.org/repositories/devel:/tools:/ide:/vscode/openSUSE_Tumbleweed devel_tools_ide_vscode
+                        install_package "code" "com.visualstudio.code"
+                        ;;
+                esac
                 ;;
 
             "Vscodium")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur vscodium-bin
-                    version=$(get_version vscodium-bin)
-                else
-                    $flatpak_cmd com.vscodium.codium
-                    version="(Flatpak version installed)"
-                fi
-                echo "Vscodium installed successfully! Version: $version"
+                install_package "vscodium-bin" "com.vscodium.codium"
                 ;;
 
             "ZED Editor")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur zed-preview-bin
-                    version=$(get_version zed-preview-bin)
-                elif [[ $distro -eq 1 ]]; then
-                    $flatpak_cmd dev.zed.Zed
-                    version="(Flatpak version installed)"
-                else
-                    sudo zypper addrepo https://download.opensuse.org/repositories/home:hennevogel/openSUSE_Tumbleweed/home:hennevogel.repo
-                    sudo zypper install -y zed
-                    version=$(get_version zed)
-                fi
-                echo "ZED installed successfully! Version: $version"
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "zed-preview-bin" "dev.zed.Zed"
+                        ;;
+                    "Fedora")
+                        install_package "" "dev.zed.Zed"
+                        ;;
+                    "openSUSE")
+                        sudo zypper addrepo https://download.opensuse.org/repositories/home:hennevogel/openSUSE_Tumbleweed/home:hennevogel.repo
+                        install_package "zed" "dev.zed.Zed"
+                        ;;
+                esac
                 ;;
 
             "Neovim")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur neovim
-                    version=$(get_version neovim)
-                else
-                    $pkg_manager neovim
-                    version=$(get_version neovim)
-                fi
-                echo "Neovim installed successfully! Version: $version"
+                install_package "neovim" ""
                 ;;
 
             "Vim")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur vim
-                    version=$(get_version vim)
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager vim-enhanced
-                    version=$(get_version vim-enhanced)
-                else
-                    $pkg_manager vim
-                    version=$(get_version vim)
+                local pkg_name="vim"
+                if [ "$DISTRO" == "Fedora" ]; then
+                    pkg_name="vim-enhanced"
                 fi
-                echo "Vim installed successfully! Version: $version"
+                install_package "$pkg_name" ""
                 ;;
 
             "Code-OSS")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager_aur code-oss
-                    version=$(get_version code-oss)
-                else
-                    $flatpak_cmd com.visualstudio.code-oss
-                    version="(Flatpak version installed)"
-                fi
-                echo "Code-OSS installed successfully! Version: $version"
+                install_package "code" "com.visualstudio.code-oss"
                 ;;
             "Back to Main Menu")
                 return

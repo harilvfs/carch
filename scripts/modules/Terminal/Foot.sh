@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 confirm() {
     while true; do
@@ -15,59 +16,54 @@ confirm() {
     done
 }
 
-echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${NC}"
-echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${NC}"
-echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${NC}"
-echo
-
-setup_foot() {
+install_foot() {
     if ! command -v foot &> /dev/null; then
         echo -e "${CYAN}Foot is not installed. :: Installing...${NC}"
 
-        if command -v pacman &> /dev/null; then
-            sudo pacman -S --needed foot
-        elif command -v dnf &> /dev/null; then
-            echo -e "${CYAN}Installing Foot on Fedora...${NC}"
-            sudo dnf install foot -y
-        elif command -v zypper &> /dev/null; then
-            echo -e "${CYAN}Installing Foot on openSuse...${NC}"
-            sudo zypper install -y foot
-        else
-            echo -e "${RED}Unsupported package manager. Please install Foot manually.${NC}"
-            exit 1
-        fi
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --needed foot ;;
+            "Fedora")
+                echo -e "${CYAN}Installing Foot on Fedora...${NC}"
+                sudo dnf install foot -y
+                ;;
+            "openSUSE")
+                echo -e "${CYAN}Installing Foot on openSuse...${NC}"
+                sudo zypper install -y foot
+                ;;
+            *)
+                exit 1
+                ;;
+        esac
     else
         echo -e "${GREEN}Foot is already installed.${NC}"
     fi
+}
 
+install_fonts() {
     if confirm "Do you want to install JetBrains Mono Nerd Font?"; then
-        if command -v pacman &> /dev/null; then
-            echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Arch-based systems...${NC}"
-            sudo pacman -S --needed ttf-jetbrains-mono-nerd
-        elif command -v dnf &> /dev/null; then
-            echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
-            sudo dnf install -y jetbrains-mono-fonts-all
-
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
-        elif command -v zypper &> /dev/null; then
-            echo -e "${CYAN}Installing JetBrains Mono Font on openSUSE...${NC}"
-            sudo zypper install -y jetbrains-mono-fonts
-
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
-        else
-            echo -e "${RED}Unsupported package manager. Please install the font manually.${NC}"
-            echo -e "${YELLOW}For Nerd Font symbols, you may need to manually install:${NC}"
-            echo -e "${CYAN}Download JetBrains Mono Nerd Font from: https://github.com/ryanoasis/nerd-fonts/releases/latest${NC}"
-            echo -e "${CYAN}Then, unzip and move the fonts to the ~/.local/share/fonts directory and run 'fc-cache -fv'.${NC}"
-        fi
+        case "$DISTRO" in
+            "Arch")
+                echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Arch-based systems...${NC}"
+                sudo pacman -S --needed ttf-jetbrains-mono-nerd
+                ;;
+            "Fedora")
+                echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
+                sudo dnf install -y jetbrains-mono-fonts-all
+                ;;
+            "openSUSE")
+                echo -e "${CYAN}Installing JetBrains Mono Font on openSUSE...${NC}"
+                sudo zypper install -y jetbrains-mono-fonts
+                ;;
+            *)
+                exit 1
+                ;;
+        esac
     else
         echo -e "${CYAN}Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering.${NC}"
     fi
+}
 
+setup_config() {
     CONFIG_DIR="$HOME/.config/foot"
     BACKUP_DIR="$HOME/.config/carch/backups/foot.bak"
 
@@ -118,4 +114,15 @@ setup_foot() {
     fi
 }
 
-setup_foot
+main() {
+    echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${NC}"
+    echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${NC}"
+    echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${NC}"
+    echo
+
+    install_foot
+    install_fonts
+    setup_config
+}
+
+main

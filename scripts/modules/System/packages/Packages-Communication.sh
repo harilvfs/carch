@@ -1,27 +1,6 @@
 #!/usr/bin/env bash
 
 install_communication() {
-    detect_distro
-    distro=$?
-
-    if [[ $distro -eq 0 ]]; then
-        install_aur_helper
-        pkg_manager="$AUR_HELPER -S --noconfirm"
-        get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
-    elif [[ $distro -eq 1 ]]; then
-        install_flatpak
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        pkg_manager="install_fedora_package"
-    elif [[ $distro -eq 2 ]]; then
-        install_flatpak
-        pkg_manager="sudo zypper install -y"
-        flatpak_cmd="flatpak install -y --noninteractive flathub"
-        get_version() { rpm -q "$1"; }
-    else
-        echo -e "${RED}:: Unsupported system. Exiting.${NC}"
-        return
-    fi
-
     while true; do
         clear
 
@@ -35,166 +14,104 @@ install_communication() {
         case "$selection" in
             "Discord")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager discord
-                    version=$(pacman -Qi discord | grep Version | awk '{print $3}')
-                    echo "Discord installed successfully! Version: $version"
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager "discord" "com.discordapp.Discord"
-                    echo "Discord installed successfully!"
-                else
-                    $pkg_manager discord
-                    version=$(get_version discord)
-                    echo "Discord installed successfully! Version: $version"
-                fi
+                install_package "discord" "com.discordapp.Discord"
                 ;;
 
             "Better Discord")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager betterdiscord-installer-bin
-                    echo "Better Discord installed successfully!"
-                else
-                    echo -e "${YELLOW}:: Better Discord requires manual installation.${NC}"
-                    echo "Please visit https://betterdiscord.app/ and download the AppImage for your system."
-                    echo "Make sure to make it executable with: chmod +x BetterDiscord.AppImage"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "betterdiscord-installer-bin" ""
+                        ;;
+                    *)
+                        print_message "$YELLOW" "Better Discord requires manual installation."
+                        echo "Please visit https://betterdiscord.app/ and download the AppImage for your system."
+                        echo "Make sure to make it executable with: chmod +x BetterDiscord.AppImage"
+                        ;;
+                esac
                 ;;
 
             "Signal")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager signal-desktop
-                    version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}')
-                    echo "Signal installed successfully! Version: $version"
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager "signal-desktop" "org.signal.Signal"
-                    echo "Signal installed successfully!"
-                else
-                    $flatpak_cmd org.signal.Signal
-                    version="(Flatpak version installed)"
-                    echo "Signal installed successfully! Version: $version"
-                fi
+                install_package "signal-desktop" "org.signal.Signal"
                 ;;
 
             "Element (Matrix)")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager element-desktop
-                    version=$(get_version element-desktop)
-                    echo "Element installed successfully! Version: $version"
-                else
-                    $flatpak_cmd im.riot.Riot
-                    version="(Flatpak version installed)"
-                    echo "Element installed successfully! Version: $version"
-                fi
+                install_package "element-desktop" "im.riot.Riot"
                 ;;
 
             "Slack")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager slack-desktop
-                    version=$(get_version slack-desktop)
-                    echo "Slack installed successfully! Version: $version"
-                else
-                    $flatpak_cmd com.slack.Slack
-                    version="(Flatpak version installed)"
-                    echo "Slack installed successfully! Version: $version"
-                fi
+                install_package "slack-desktop" "com.slack.Slack" "slack-desktop"
                 ;;
 
             "Teams")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager teams
-                    version=$(get_version teams)
-                    echo "Teams installed successfully! Version: $version"
-                else
-                    echo "Microsoft Teams is not available in the repositories. Use the web version instead: https://teams.microsoft.com"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "teams" ""
+                        ;;
+                    *)
+                        echo "Microsoft Teams is not available in the repositories. Use the web version instead: https://teams.microsoft.com"
+                        ;;
+                esac
                 ;;
 
             "Zoom")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager zoom
-                    version=$(get_version zoom)
-                    echo "Zoom installed successfully! Version: $version"
-                else
-                    $flatpak_cmd us.zoom.Zoom
-                    version="(Flatpak version installed)"
-                    echo "Zoom installed successfully! Version: $version"
-                fi
+                install_package "zoom" "us.zoom.Zoom"
                 ;;
 
             "Telegram")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager telegram-desktop
-                    version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}')
-                    echo "Telegram installed successfully! Version: $version"
-                elif [[ $distro -eq 1 ]]; then
-                    $pkg_manager "telegram-desktop" "org.telegram.desktop"
-                    echo "Telegram installed successfully!"
-                else
-                    $flatpak_cmd org.telegram.desktop
-                    version="(Flatpak version installed)"
-                    echo "Telegram installed successfully! Version: $version"
-                fi
+                install_package "telegram-desktop" "org.telegram.desktop"
                 ;;
 
             "Keybase")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager keybase-bin
-                    version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}')
-                    echo "Keybase installed successfully! Version: $version"
-                elif [[ $distro -eq 1 ]]; then
-                    sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
-                    echo "Keybase installed successfully!"
-                else
-                    $pkg_manager keybase-client
-                    version=$(get_version keybase-client)
-                    echo "Keybase installed successfully! Version: $version"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "keybase-bin" ""
+                        ;;
+                    "Fedora")
+                        install_package "https://prerelease.keybase.io/keybase_amd64.rpm" ""
+                        ;;
+                    "openSUSE")
+                        install_package "keybase-client" ""
+                        ;;
+                esac
                 ;;
 
             "Zulip")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager zulip-desktop-bin
-                    version=$(pacman -Qi zulip-desktop-bin | grep Version | awk '{print $3}')
-                    echo "Zulip installed successfully! Version: $version"
-                else
-                    $flatpak_cmd org.zulip.Zulip
-                    version="(Flatpak version installed)"
-                    echo "Zulip installed successfully! Version: $version"
-                fi
+                install_package "zulip-desktop-bin" "org.zulip.Zulip" "zulip-desktop"
                 ;;
 
             "ProtonVPN")
                 clear
-                if [[ $distro -eq 0 ]]; then
-                    $pkg_manager proton-vpn-gtk-app
-                    version=$(get_version proton-vpn-gtk-app)
-                    echo "ProtonVPN installed successfully! Version: $version"
-                elif [[ $distro -eq 1 ]]; then
-                    echo "Installing ProtonVPN for Fedora..."
-                    temp_dir=$(mktemp -d)
-                    (   
-                        cd "$temp_dir" || exit 1
-                        wget "https://repo.protonvpn.com/fedora-$(cut -d' ' -f 3 < /etc/fedora-release)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm"
-                        sudo dnf install -y ./protonvpn-stable-release-1.0.3-1.noarch.rpm
-                        sudo dnf check-update --refresh
-                        sudo dnf install -y proton-vpn-gnome-desktop libappindicator-gtk3 gnome-shell-extension-appindicator gnome-extensions-app
-                    )
-                    rm -rf "$temp_dir"
-                    echo "ProtonVPN installed successfully!"
-                else
-                    $pkg_manager protonvpn-gui
-                    version=$(get_version protonvpn-gui)
-                    echo "ProtonVPN installed successfully! Version: $version"
-                fi
+                case "$DISTRO" in
+                    "Arch")
+                        install_package "proton-vpn-gtk-app" ""
+                        ;;
+                    "Fedora")
+                        print_message "$GREEN" "Installing ProtonVPN for Fedora..."
+                        local temp_dir
+                        temp_dir=$(mktemp -d)
+                        (   
+                            cd "$temp_dir" || exit 1
+                            wget "https://repo.protonvpn.com/fedora-$(cut -d' ' -f 3 < /etc/fedora-release)-stable/protonvpn-stable-release/protonvpn-stable-release-1.0.3-1.noarch.rpm"
+                            sudo dnf install -y ./protonvpn-stable-release-1.0.3-1.noarch.rpm
+                            sudo dnf check-update --refresh
+                            sudo dnf install -y proton-vpn-gnome-desktop libappindicator-gtk3 gnome-shell-extension-appindicator gnome-extensions-app
+                        )
+                        rm -rf "$temp_dir"
+                        print_message "$GREEN" "ProtonVPN installed successfully!"
+                        ;;
+                    "openSUSE")
+                        install_package "protonvpn-gui" ""
+                        ;;
+                esac
                 ;;
             "Back to Main Menu")
                 return

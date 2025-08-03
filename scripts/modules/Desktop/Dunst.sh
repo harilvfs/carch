@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -12,28 +13,24 @@ clear
 
 if ! command -v dunst &> /dev/null; then
     print_message "${TEAL}" "Dunst not found. Installing..."
-    if command -v pacman &> /dev/null; then
-        sudo pacman -Sy --noconfirm dunst
-    elif command -v dnf &> /dev/null; then
-        sudo dnf install -y dunst
-    elif command -v zypper &> /dev/null; then
-        sudo zypper install -y dunst
-    else
-        print_message "$RED" "Unsupported package manager."
-        exit 1
-    fi
+    case "$DISTRO" in
+        "Arch") sudo pacman -Sy --noconfirm dunst ;;
+        "Fedora") sudo dnf install -y dunst ;;
+        "openSUSE") sudo zypper install -y dunst ;;
+        *)
+            exit 1
+            ;;
+    esac
 else
     print_message "$GREEN" "Dunst is already installed."
 fi
 
 print_message "${TEAL}" "Installing papirus-icon-theme..."
-if command -v pacman &> /dev/null; then
-    sudo pacman -Sy --noconfirm papirus-icon-theme
-elif command -v dnf &> /dev/null; then
-    sudo dnf install -y papirus-icon-theme
-elif command -v zypper &> /dev/null; then
-    sudo zypper install -y papirus-icon-theme
-fi
+case "$DISTRO" in
+    "Arch") sudo pacman -Sy --noconfirm papirus-icon-theme ;;
+    "Fedora") sudo dnf install -y papirus-icon-theme ;;
+    "openSUSE") sudo zypper install -y papirus-icon-theme ;;
+esac
 
 DUNST_DIR="$HOME/.config/dunst"
 BACKUP_DIR="$HOME/.config/carch/backups"

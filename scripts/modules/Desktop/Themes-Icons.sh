@@ -3,6 +3,7 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
@@ -51,53 +52,41 @@ get_choice() {
     done
 }
 
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        distro="arch"
-        print_message "$GREEN" "Detected distribution: Arch Linux"
-    elif command -v dnf &> /dev/null; then
-        distro="fedora"
-        print_message "$YELLOW" "Detected distribution: Fedora"
-    elif command -v zypper &> /dev/null; then
-        distro="opensuse"
-        print_message "$CYAN" "Detected distribution: openSUSE"
-    else
-        print_message "$RED" "Unsupported distribution. Exiting..."
-        exit 1
-    fi
-}
-
 install_dependencies() {
     print_message "$CYAN" ":: Installing dependencies..."
 
-    if [ "$distro" == "arch" ]; then
-        sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
-            print_message "$RED" ":: Failed to install dependencies. Exiting..."
-            exit 1
-        }
-    elif [ "$distro" == "fedora" ]; then
-        sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
-            print_message "$RED" ":: Failed to install dependencies. Exiting..."
-            exit 1
-        }
+    case "$DISTRO" in
+        "Arch")
+            sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
+                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                exit 1
+            }
+            ;;
+        "Fedora")
+            sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
+                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                exit 1
+            }
 
-        if ! command -v nwg-look &> /dev/null; then
-            print_message "$CYAN" ":: Installing nwg-look for Fedora..."
-            sudo dnf copr enable -y solopasha/hyprland || {
-                print_message "$RED" ":: Failed to enable solopasha/hyprland COPR repository."
+            if ! command -v nwg-look &> /dev/null; then
+                print_message "$CYAN" ":: Installing nwg-look for Fedora..."
+                sudo dnf copr enable -y solopasha/hyprland || {
+                    print_message "$RED" ":: Failed to enable solopasha/hyprland COPR repository."
+                    exit 1
+                }
+                sudo dnf install -y nwg-look || {
+                    print_message "$RED" ":: Failed to install nwg-look. Exiting..."
+                    exit 1
+                }
+            fi
+            ;;
+        "openSUSE")
+            sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
+                print_message "$RED" ":: Failed to install dependencies. Exiting..."
                 exit 1
             }
-            sudo dnf install -y nwg-look || {
-                print_message "$RED" ":: Failed to install nwg-look. Exiting..."
-                exit 1
-            }
-        fi
-    elif [ "$distro" == "opensuse" ]; then
-        sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
-            print_message "$RED" ":: Failed to install dependencies. Exiting..."
-            exit 1
-        }
-    fi
+            ;;
+    esac
 
     print_message "$GREEN" ":: Dependencies installed successfully."
 }
@@ -176,21 +165,18 @@ main() {
 
     case "$choice" in
         "Themes")
-            detect_distro
             install_dependencies
             confirm_and_proceed
             setup_themes
             print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme."
             ;;
         "Icons")
-            detect_distro
             install_dependencies
             confirm_and_proceed
             setup_icons
             print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the icons."
             ;;
         "Both")
-            detect_distro
             install_dependencies
             confirm_and_proceed
             setup_themes

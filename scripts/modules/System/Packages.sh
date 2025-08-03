@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 source "$(dirname "$0")/packages/Packages-Android.sh"
 source "$(dirname "$0")/packages/Packages-Browsers.sh"
 source "$(dirname "$0")/packages/Packages-Communication.sh"
+source "$(dirname "$0")/packages/Packages-Crypto-Tools.sh"
 source "$(dirname "$0")/packages/Packages-Development.sh"
 source "$(dirname "$0")/packages/Packages-Editing.sh"
 source "$(dirname "$0")/packages/Packages-FileManagers.sh"
@@ -18,7 +20,6 @@ source "$(dirname "$0")/packages/Packages-Streaming.sh"
 source "$(dirname "$0")/packages/Packages-Terminals.sh"
 source "$(dirname "$0")/packages/Packages-TextEditors.sh"
 source "$(dirname "$0")/packages/Packages-Virtualization.sh"
-source "$(dirname "$0")/packages/Packages-Crypto-Tools.sh"
 
 print_message() {
     local color="$1"
@@ -56,25 +57,7 @@ get_choice() {
     done
 }
 
-if [ "$(id -u)" = 0 ]; then
-    echo -e "${RED}This script should not be run as root.${NC}"
-    exit 1
-fi
-
 AUR_HELPER=""
-
-detect_distro() {
-    if command -v pacman &> /dev/null; then
-        return 0
-    elif command -v dnf &> /dev/null; then
-        return 1
-    elif command -v zypper &> /dev/null; then
-        return 2
-    else
-        echo -e "${RED}:: Unsupported distribution detected. Exiting...${NC}"
-        exit 1
-    fi
-}
 
 detect_aur_helper() {
     for helper in paru yay; do
@@ -89,10 +72,9 @@ detect_aur_helper() {
 }
 
 install_aur_helper() {
-    detect_distro
-    case $? in
-        1 | 2) return ;;
-    esac
+    if [ "$DISTRO" != "Arch" ]; then
+        return
+    fi
 
     detect_aur_helper
     if [ $? -eq 0 ]; then
@@ -101,71 +83,141 @@ install_aur_helper() {
 
     echo -e "${RED}:: No AUR helper found. Installing yay...${NC}"
 
-    sudo pacman -S --needed git base-devel
+    sudo pacman -S --needed --noconfirm git base-devel
 
+    local temp_dir
     temp_dir=$(mktemp -d)
-    cd "$temp_dir" || {
-                        echo -e "${RED}Failed to create temp directory${NC}"
-                                                                                 exit 1
-    }
-
-    git clone https://aur.archlinux.org/yay.git
-    cd yay || {
-                echo -e "${RED}Failed to enter yay directory${NC}"
-                                                                       exit 1
-    }
-    makepkg -si
-
-    cd ..
+    (   
+        cd "$temp_dir"
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si --noconfirm
+    )
+    local exit_code=$?
     rm -rf "$temp_dir"
+
+    if [ $exit_code -ne 0 ]; then
+        echo -e "${RED}Failed to install yay.${NC}"
+        exit 1
+    fi
+
     AUR_HELPER="yay"
     echo -e "${GREEN}:: Yay installed successfully and set as AUR helper.${NC}"
 }
 
 install_flatpak() {
-    detect_distro
-    distro=$?
-
     if ! command -v flatpak &> /dev/null; then
         echo -e "${YELLOW}:: Flatpak not found. Installing...${NC}"
 
-        if [[ $distro -eq 1 ]]; then
-            sudo dnf install -y flatpak
-        elif [[ $distro -eq 2 ]]; then
-            sudo zypper install -y flatpak
-        elif [[ $distro -eq 0 ]]; then
-            sudo pacman -S --noconfirm flatpak
-        else
-            echo -e "${RED}:: Flatpak installation not supported for this distribution${NC}"
-            return 1
-        fi
+        case "$DISTRO" in
+            "Fedora") sudo dnf install -y flatpak ;;
+            "openSUSE") sudo zypper install -y flatpak ;;
+            "Arch") sudo pacman -S --noconfirm flatpak ;;
+            *)
+                exit 1
+                ;;
+        esac
     fi
 
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 }
 
-install_fedora_package() {
-    package_name="$1"
-    flatpak_id="$2"
+install_arch_package() {
+    install_aur_helper
+    local package_name="$1"
+    local aur_name="$2"
+    local flatpak_id="$3"
 
-    if sudo dnf list --available | grep -q "^$package_name"; then
-        sudo dnf install -y "$package_name"
-    else
-        echo -e "${YELLOW}:: $package_name not found in DNF. Falling back to Flatpak.${NC}"
+    if pacman -Q "$package_name" &> /dev/null || ([ -n "$AUR_HELPER" ] && $AUR_HELPER -Q "$aur_name" &> /dev/null); then
+        print_message "$GREEN" "$package_name is already installed."
+        return
+    fi
+
+    if pacman -Si "$package_name" &> /dev/null; then
+        print_message "$GREEN" "Installing $package_name from official repositories..."
+        sudo pacman -S --noconfirm --needed "$package_name"
+    elif [ -n "$AUR_HELPER" ] && $AUR_HELPER -Si "$aur_name" &> /dev/null; then
+        print_message "$GREEN" "Installing $aur_name from AUR..."
+        $AUR_HELPER -S --noconfirm --needed "$aur_name"
+    elif [ -n "$flatpak_id" ]; then
+        print_message "$YELLOW" "$package_name not found in official repositories or AUR. Falling back to Flatpak."
+        install_flatpak
         flatpak install -y flathub "$flatpak_id"
+    else
+        print_message "$RED" "Cannot install $package_name. Package not found, no AUR fallback, and no Flatpak ID provided."
+    fi
+}
+
+install_fedora_package() {
+    local package_name="$1"
+    local flatpak_id="$2"
+
+    if rpm -q "$package_name" &> /dev/null; then
+        print_message "$GREEN" "$package_name is already installed."
+        return
+    fi
+
+    if sudo dnf info "$package_name" &> /dev/null; then
+        print_message "$GREEN" "Installing $package_name from dnf..."
+        sudo dnf install -y "$package_name"
+    elif [ -n "$flatpak_id" ]; then
+        print_message "$YELLOW" "$package_name not found in DNF. Falling back to Flatpak."
+        install_flatpak
+        flatpak install -y flathub "$flatpak_id"
+    else
+        print_message "$RED" "Cannot install $package_name. Package not found in dnf and no Flatpak ID provided."
     fi
 }
 
 install_opensuse_package() {
-    package_name="$1"
-    flatpak_id="$2"
+    local package_name="$1"
+    local flatpak_id="$2"
 
-    if sudo zypper search --installed-only "$package_name" &> /dev/null || sudo zypper search --available "$package_name" &> /dev/null; then
-        sudo zypper install -y "$package_name"
-    else
-        echo -e "${YELLOW}:: $package_name not found in zypper. Falling back to Flatpak.${NC}"
-        flatpak install -y flathub "$flatpak_id"
+    if rpm -q "$package_name" &> /dev/null; then
+        print_message "$GREEN" "$package_name is already installed."
+        return
     fi
+
+    if sudo zypper info "$package_name" &> /dev/null; then
+        print_message "$GREEN" "Installing $package_name from zypper..."
+        sudo zypper install -y "$package_name"
+    elif [ -n "$flatpak_id" ]; then
+        print_message "$YELLOW" "$package_name not found in zypper. Falling back to Flatpak."
+        install_flatpak
+        flatpak install -y flathub "$flatpak_id"
+    else
+        print_message "$RED" "Cannot install $package_name. Package not found in zypper and no Flatpak ID provided."
+    fi
+}
+
+install_package() {
+    local package_name="$1"
+    local flatpak_id="$2"
+    local aur_name="${3:-$package_name}"
+
+    echo
+    print_message "$CYAN" "Installing $package_name..."
+
+    case "$DISTRO" in
+        "Arch")
+            install_arch_package "$package_name" "$aur_name" "$flatpak_id"
+            ;;
+        "Fedora")
+            install_fedora_package "$package_name" "$flatpak_id"
+            ;;
+        "openSUSE")
+            install_opensuse_package "$package_name" "$flatpak_id"
+            ;;
+        *)
+            if [ -n "$flatpak_id" ]; then
+                print_message "$YELLOW" "Unsupported distribution for native packages. Falling back to Flatpak."
+                install_flatpak
+                flatpak install -y flathub "$flatpak_id"
+            else
+                print_message "$RED" "Cannot install $package_name. Unsupported distribution and no Flatpak ID provided."
+            fi
+            ;;
+    esac
 }
 
 main() {

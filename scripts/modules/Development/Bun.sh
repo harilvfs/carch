@@ -3,20 +3,19 @@
 clear
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 check_curl() {
     if ! command -v curl &> /dev/null; then
         echo -e "${YELLOW}Installing curl...${NC}"
-        if command -v pacman &> /dev/null; then
-            sudo pacman -S --noconfirm curl
-        elif command -v dnf &> /dev/null; then
-            sudo dnf install -y curl
-        elif command -v zypper &> /dev/null; then
-            sudo zypper install -y curl
-        else
-            echo -e "${RED}Unsupported package manager. Please install curl manually.${NC}"
-            exit 1
-        fi
+        case "$DISTRO" in
+            "Arch") sudo pacman -S --noconfirm curl ;;
+            "Fedora") sudo dnf install -y curl ;;
+            "openSUSE") sudo zypper install -y curl ;;
+            *)
+                exit 1
+                ;;
+        esac
     fi
 }
 
@@ -32,5 +31,9 @@ install_bun() {
     fi
 }
 
-check_curl
-install_bun
+main() {
+    check_curl
+    install_bun
+}
+
+main
