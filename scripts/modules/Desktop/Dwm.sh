@@ -23,8 +23,8 @@ confirm() {
 }
 
 install_packages() {
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             check_aur_helper
             print_message "$CYAN" ":: Installing required packages using pacman and AUR..."
 
@@ -43,7 +43,7 @@ install_packages() {
                 exit 1
             }
             ;;
-        "fedora")
+        "Fedora")
             print_message "$CYAN" ":: Installing required packages using dnf..."
 
             print_message "$CYAN" ":: Enabling RPM Fusion repositories..."
@@ -68,7 +68,7 @@ install_packages() {
                 exit 1
             }
             ;;
-        "opensuse")
+        "openSUSE")
             print_message "$CYAN" ":: Installing required packages using zypper..."
 
             sudo zypper install -y libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
@@ -165,16 +165,16 @@ install_nerd_font() {
 
     print_message "$CYAN" "Installing Meslo Nerd Font..."
 
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             sudo pacman -S --needed ttf-meslo-nerd || exit 1
             ;;
-        "fedora")
+        "Fedora")
             wget -P /tmp https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip || exit 1
             unzip /tmp/Meslo.zip -d /tmp/Meslo || exit 1
             mv /tmp/Meslo/* "$FONT_DIR" || exit 1
             ;;
-        "opensuse")
+        "openSUSE")
             sudo zypper install -y meslo-lg-fonts || exit 1
             ;;
         *)
@@ -188,8 +188,8 @@ install_nerd_font() {
 }
 
 install_picom() {
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             check_aur_helper
 
             print_message "$CYAN" ":: Installing Picom with $aur_helper..."
@@ -198,7 +198,7 @@ install_picom() {
                 exit 1
             }
             ;;
-        "fedora")
+        "Fedora")
             print_message "$CYAN" ":: Installing Picom manually on Fedora..."
             sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel \
                 libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel \
@@ -211,7 +211,7 @@ install_picom() {
             ninja -C build
             sudo cp build/src/picom /usr/bin/
             ;;
-        "opensuse")
+        "openSUSE")
             print_message "$CYAN" ":: Installing Picom manually on openSUSE..."
             sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
                 libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
@@ -281,8 +281,8 @@ setup_xinitrc() {
 
     print_message "$CYAN" ":: Creating .xinitrc file for DWM..."
 
-    case "$distro" in
-        "opensuse")
+    case "$DISTRO" in
+        "openSUSE")
             cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 
@@ -358,8 +358,7 @@ EOF
 }
 
 main() {
-    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
-    print_message "$GREEN" "Detected distribution: ${distro^}"
+    print_message "$GREEN" "Detected distribution: $DISTRO"
 
     install_packages
     install_dwm

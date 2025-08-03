@@ -55,18 +55,16 @@ get_choice() {
 main_menu() {
     clear
 
-    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
+    print_message "$TEAL" "Distro: $DISTRO Linux"
 
-    print_message "$TEAL" "Distro: ${DISTRO^} Linux"
-
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "basecamp/omarchy" "Exit")
             ;;
-        "fedora")
+        "Fedora")
             options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
             ;;
-        "opensuse")
+        "openSUSE")
             options=("mylinuxforwork/dotfiles" "jakoolit/OpenSUSE-Hyprland" "Exit")
             ;;
     esac
@@ -114,7 +112,7 @@ main_menu() {
         return
     fi
 
-    install_config "$choice" "$distro"
+    install_config "$choice" "$DISTRO"
 }
 
 install_config() {
@@ -134,13 +132,13 @@ install_config() {
             ;;
         "mylinuxforwork/dotfiles")
             case "$distro" in
-                "arch")
+                "Arch")
                     bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-arch.sh)"
                     ;;
-                "fedora")
+                "Fedora")
                     bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
                     ;;
-                "opensuse")
+                "openSUSE")
                     bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
                     ;;
             esac
