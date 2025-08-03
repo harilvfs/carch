@@ -1,26 +1,6 @@
 #!/usr/bin/env bash
 
 install_music() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager="$AUR_HELPER -S --noconfirm"
-            ;;
-        "Fedora")
-            install_flatpak
-            pkg_manager="sudo dnf install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        "openSUSE")
-            install_flatpak
-            pkg_manager="sudo zypper install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
         local options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Mousai" "Back to Main Menu")
@@ -32,55 +12,23 @@ install_music() {
         case "$selection" in
             "Youtube-Music")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager youtube-music-bin
-                        ;;
-                    *)
-                        $flatpak_cmd app.ytmdesktop.ytmdesktop
-                        ;;
-                esac
+                install_package "youtube-music-bin" "app.ytmdesktop.ytmdesktop"
                 ;;
             "Spotube")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager spotube
-                        ;;
-                    *)
-                        $flatpak_cmd com.github.KRTirtho.Spotube
-                        ;;
-                esac
+                install_package "spotube" "com.github.KRTirtho.Spotube"
                 ;;
             "Spotify")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager spotify
-                        ;;
-                    *)
-                        $flatpak_cmd com.spotify.Client
-                        ;;
-                esac
+                install_package "spotify" "com.spotify.Client"
                 ;;
             "Rhythmbox")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE" | "Fedora")
-                        $pkg_manager rhythmbox
-                        ;;
-                esac
+                install_package "rhythmbox" "org.gnome.Rhythmbox3"
                 ;;
             "Mousai")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager mousai
-                        ;;
-                    "Fedora")
-                        $flatpak_cmd io.github.seadve.Mousai
-                        ;;
-                esac
+                install_package "mousai" "io.github.seadve.Mousai"
                 ;;
             "Back to Main Menu")
                 return

@@ -1,21 +1,6 @@
 #!/usr/bin/env bash
 
 install_virtualization() {
-    case "$DISTRO" in
-        "Arch")
-            pkg_manager_pacman="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            pkg_manager="sudo zypper install -y"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
         local options=("QEMU/KVM" "VirtualBox" "Distrobox" "Back to Main Menu")
@@ -30,19 +15,28 @@ install_virtualization() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_pacman qemu-base virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat ebtables iptables-nft libguestfs
+                        install_package "qemu-base" ""
+                        install_package "virt-manager" ""
+                        install_package "virt-viewer" ""
+                        install_package "dnsmasq" ""
+                        install_package "vde2" ""
+                        install_package "bridge-utils" ""
+                        install_package "openbsd-netcat" ""
+                        install_package "ebtables" ""
+                        install_package "iptables-nft" ""
+                        install_package "libguestfs" ""
                         sudo systemctl enable --now libvirtd.service
                         sudo usermod -aG libvirt "$USER"
                         ;;
                     "Fedora")
-                        $pkg_manager @virtualization
+                        install_package "@virtualization" ""
                         sudo systemctl enable --now libvirtd
                         sudo usermod -aG libvirt "$USER"
                         ;;
                     "openSUSE")
                         sudo zypper addrepo https://download.opensuse.org/repositories/Virtualization/openSUSE_Tumbleweed/Virtualization.repo
                         sudo zypper refresh
-                        sudo zypper install -y qemu
+                        install_package "qemu" ""
                         sudo systemctl enable --now libvirtd
                         sudo usermod -aG libvirt "$USER"
                         ;;
@@ -53,12 +47,13 @@ install_virtualization() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_pacman virtualbox virtualbox-host-dkms
+                        install_package "virtualbox" ""
+                        install_package "virtualbox-host-dkms" ""
                         sudo usermod -aG vboxusers "$USER"
                         sudo modprobe vboxdrv
                         ;;
                     *)
-                        $pkg_manager virtualbox
+                        install_package "virtualbox" ""
                         sudo usermod -aG vboxusers "$USER"
                         ;;
                 esac
@@ -67,11 +62,8 @@ install_virtualization() {
 
             "Distrobox")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "Fedora" | "openSUSE")
-                        $pkg_manager distrobox podman
-                        ;;
-                esac
+                install_package "distrobox" ""
+                install_package "podman" ""
                 ;;
             "Back to Main Menu")
                 return

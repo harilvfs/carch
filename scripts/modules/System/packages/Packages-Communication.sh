@@ -1,27 +1,6 @@
 #!/usr/bin/env bash
 
 install_communication() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager="sudo pacman -S --noconfirm"
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            ;;
-        "Fedora")
-            install_flatpak
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            install_flatpak
-            pkg_manager="sudo zypper install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -35,27 +14,17 @@ install_communication() {
         case "$selection" in
             "Discord")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager discord
-                        ;;
-                    "Fedora")
-                        $pkg_manager "discord" "com.discordapp.Discord"
-                        ;;
-                    "openSUSE")
-                        $pkg_manager discord
-                        ;;
-                esac
+                install_package "discord" "com.discordapp.Discord"
                 ;;
 
             "Better Discord")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur betterdiscord-installer-bin
+                        install_package "betterdiscord-installer-bin" ""
                         ;;
                     *)
-                        echo -e "${YELLOW}:: Better Discord requires manual installation.${NC}"
+                        print_message "$YELLOW" "Better Discord requires manual installation."
                         echo "Please visit https://betterdiscord.app/ and download the AppImage for your system."
                         echo "Make sure to make it executable with: chmod +x BetterDiscord.AppImage"
                         ;;
@@ -64,48 +33,24 @@ install_communication() {
 
             "Signal")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager signal-desktop
-                        ;;
-                    "Fedora")
-                        $pkg_manager "signal-desktop" "org.signal.Signal"
-                        ;;
-                    "openSUSE")
-                        $flatpak_cmd org.signal.Signal
-                        ;;
-                esac
+                install_package "signal-desktop" "org.signal.Signal"
                 ;;
 
             "Element (Matrix)")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager element-desktop
-                        ;;
-                    *)
-                        $flatpak_cmd im.riot.Riot
-                        ;;
-                esac
+                install_package "element-desktop" "im.riot.Riot"
                 ;;
 
             "Slack")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur slack-desktop
-                        ;;
-                    *)
-                        $flatpak_cmd com.slack.Slack
-                        ;;
-                esac
+                install_package "slack-desktop" "com.slack.Slack" "slack-desktop"
                 ;;
 
             "Teams")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur teams
+                        install_package "teams" ""
                         ;;
                     *)
                         echo "Microsoft Teams is not available in the repositories. Use the web version instead: https://teams.microsoft.com"
@@ -115,66 +60,43 @@ install_communication() {
 
             "Zoom")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur zoom
-                        ;;
-                    *)
-                        $flatpak_cmd us.zoom.Zoom
-                        ;;
-                esac
+                install_package "zoom" "us.zoom.Zoom" "zoom"
                 ;;
 
             "Telegram")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager telegram-desktop
-                        ;;
-                    "Fedora")
-                        $pkg_manager telegram-desktop
-                        ;;
-                    "openSUSE")
-                        $flatpak_cmd org.telegram.desktop
-                        ;;
-                esac
+                install_package "telegram-desktop" "org.telegram.desktop"
                 ;;
 
             "Keybase")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur keybase-bin
+                        install_package "keybase-bin" ""
                         ;;
                     "Fedora")
-                        $pkg_manager https://prerelease.keybase.io/keybase_amd64.rpm
+                        install_package "https://prerelease.keybase.io/keybase_amd64.rpm" ""
                         ;;
                     "openSUSE")
-                        $pkg_manager keybase-client
+                        install_package "keybase-client" ""
                         ;;
                 esac
                 ;;
 
             "Zulip")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur zulip-desktop-bin
-                        ;;
-                    *)
-                        $flatpak_cmd org.zulip.Zulip
-                        ;;
-                esac
+                install_package "zulip-desktop-bin" "org.zulip.Zulip" "zulip-desktop"
                 ;;
 
             "ProtonVPN")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager proton-vpn-gtk-app
+                        install_package "proton-vpn-gtk-app" ""
                         ;;
                     "Fedora")
-                        echo "Installing ProtonVPN for Fedora..."
+                        print_message "$GREEN" "Installing ProtonVPN for Fedora..."
+                        local temp_dir
                         temp_dir=$(mktemp -d)
                         (   
                             cd "$temp_dir" || exit 1
@@ -184,10 +106,10 @@ install_communication() {
                             sudo dnf install -y proton-vpn-gnome-desktop libappindicator-gtk3 gnome-shell-extension-appindicator gnome-extensions-app
                         )
                         rm -rf "$temp_dir"
-                        echo "ProtonVPN installed successfully!"
+                        print_message "$GREEN" "ProtonVPN installed successfully!"
                         ;;
                     "openSUSE")
-                        $pkg_manager protonvpn-gui
+                        install_package "protonvpn-gui" ""
                         ;;
                 esac
                 ;;

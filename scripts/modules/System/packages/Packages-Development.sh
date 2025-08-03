@@ -1,27 +1,6 @@
 #!/usr/bin/env bash
 
 install_development() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            pkg_manager_pacman="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            install_flatpak
-            pkg_manager="sudo dnf install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        "openSUSE")
-            install_flatpak
-            pkg_manager="sudo zypper install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -37,13 +16,14 @@ install_development() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_pacman nodejs npm
+                        install_package "nodejs" ""
+                        install_package "npm" ""
                         ;;
                     "Fedora")
-                        $pkg_manager nodejs-npm
+                        install_package "nodejs-npm" ""
                         ;;
                     "openSUSE")
-                        $pkg_manager nodejs22
+                        install_package "nodejs22" ""
                         ;;
                 esac
                 ;;
@@ -52,13 +32,15 @@ install_development() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_pacman python python-pip
+                        install_package "python" ""
+                        install_package "python-pip" ""
                         ;;
                     "Fedora")
-                        $pkg_manager python3 python3-pip
+                        install_package "python3" ""
+                        install_package "python3-pip" ""
                         ;;
                     "openSUSE")
-                        $pkg_manager python313
+                        install_package "python313" ""
                         ;;
                 esac
                 ;;
@@ -71,23 +53,16 @@ install_development() {
 
             "Go")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager_pacman go
-                        ;;
-                    "Fedora")
-                        $pkg_manager golang
-                        ;;
-                esac
+                local pkg_name="go"
+                if [ "$DISTRO" == "Fedora" ]; then
+                    pkg_name="golang"
+                fi
+                install_package "$pkg_name" ""
                 ;;
 
             "Docker")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "Fedora" | "openSUSE")
-                        $pkg_manager docker
-                        ;;
-                esac
+                install_package "docker" ""
                 sudo systemctl enable --now docker
                 sudo usermod -aG docker "$USER"
                 echo "Note: You may need to log out and back in for group changes to take effect."
@@ -95,35 +70,17 @@ install_development() {
 
             "Postman")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur postman-bin
-                        ;;
-                    *)
-                        $flatpak_cmd com.getpostman.Postman
-                        ;;
-                esac
+                install_package "postman-bin" "com.getpostman.Postman" "postman"
                 ;;
 
             "DBeaver")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_pacman dbeaver
-                        ;;
-                    *)
-                        $flatpak_cmd io.dbeaver.DBeaverCommunity
-                        ;;
-                esac
+                install_package "dbeaver" "io.dbeaver.DBeaverCommunity"
                 ;;
 
             "Hugo")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "Fedora" | "openSUSE")
-                        $pkg_manager hugo
-                        ;;
-                esac
+                install_package "hugo" ""
                 ;;
             "Back to Main Menu")
                 return

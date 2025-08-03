@@ -1,27 +1,6 @@
 #!/usr/bin/env bash
 
 install_browsers() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            pkg_manager_pacman="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            install_flatpak
-            pkg_manager="sudo dnf install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        "openSUSE")
-            install_flatpak
-            pkg_manager="sudo zypper install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -37,63 +16,49 @@ install_browsers() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur brave-bin
+                        install_package "brave-bin" "com.brave.Browser"
                         ;;
                     "Fedora")
-                        echo "Setting up Brave repository..."
+                        print_message "$GREEN" "Setting up Brave repository..."
                         sudo dnf install -y dnf-plugins-core
                         sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
                         sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-                        $pkg_manager brave-browser
+                        install_package "brave-browser" "com.brave.Browser"
                         ;;
                     "openSUSE")
-                        echo "Setting up Brave repository for openSUSE..."
+                        print_message "$GREEN" "Setting up Brave repository for openSUSE..."
                         sudo zypper install -y curl
                         sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
                         sudo zypper addrepo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
-                        $pkg_manager brave-browser
+                        install_package "brave-browser" "com.brave.Browser"
                         ;;
                 esac
                 ;;
 
             "Firefox")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_pacman firefox
-                        ;;
-                    "Fedora" | "openSUSE")
-                        $pkg_manager firefox
-                        ;;
-                esac
+                install_package "firefox" "org.mozilla.firefox"
                 ;;
 
             "Lynx")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_pacman lynx
-                        ;;
-                    "Fedora" | "openSUSE")
-                        $pkg_manager lynx
-                        ;;
-                esac
+                install_package "lynx" ""
                 ;;
 
             "Libre Wolf")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur librewolf-bin
+                        install_package "librewolf-bin" "io.gitlab.librewolf-community"
                         ;;
                     "Fedora")
-                        $flatpak_cmd io.gitlab.librewolf-community
+                        install_package "" "io.gitlab.librewolf-community"
                         ;;
                     "openSUSE")
-                        echo "Setting up LibreWolf repository for openSUSE..."
+                        print_message "$GREEN" "Setting up LibreWolf repository for openSUSE..."
                         sudo zypper addrepo https://download.opensuse.org/repositories/home:Hoog/openSUSE_Tumbleweed/home:Hoog.repo
                         sudo zypper refresh
-                        sudo zypper install -y LibreWolf
+                        install_package "LibreWolf" "io.gitlab.librewolf-community"
                         ;;
                 esac
                 ;;
@@ -102,15 +67,15 @@ install_browsers() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur floorp-bin
+                        install_package "floorp-bin" "one.ablaze.floorp"
                         ;;
                     "Fedora")
-                        echo "Setting sneexy/floorp repository"
+                        print_message "$GREEN" "Setting sneexy/floorp repository"
                         sudo dnf copr enable sneexy/floorp
-                        $pkg_manager floorp
+                        install_package "floorp" "one.ablaze.floorp"
                         ;;
                     "openSUSE")
-                        $flatpak_cmd one.ablaze.floorp
+                        install_package "" "one.ablaze.floorp"
                         ;;
                 esac
                 ;;
@@ -119,48 +84,41 @@ install_browsers() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur google-chrome
+                        install_package "google-chrome" "com.google.Chrome"
                         ;;
                     "Fedora")
-                        echo "Setting up Google Chrome repository..."
+                        print_message "$GREEN" "Setting up Google Chrome repository..."
                         sudo dnf install -y dnf-plugins-core
                         sudo dnf config-manager --set-enabled google-chrome
-                        $pkg_manager google-chrome-stable
+                        install_package "google-chrome-stable" "com.google.Chrome"
                         ;;
                     "openSUSE")
-                        echo "Setting up Google Chrome repository for openSUSE..."
+                        print_message "$GREEN" "Setting up Google Chrome repository for openSUSE..."
                         sudo zypper ar -f http://dl.google.com/linux/chrome/rpm/stable/x86_64 google-chrome
                         sudo rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub
-                        sudo zypper in -y google-chrome-stable
+                        install_package "google-chrome-stable" "com.google.Chrome"
                         ;;
                 esac
                 ;;
 
             "Chromium")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager_pacman chromium
-                        ;;
-                    "Fedora")
-                        $flatpak_cmd org.chromium.Chromium
-                        ;;
-                esac
+                install_package "chromium" "org.chromium.Chromium"
                 ;;
 
             "Ungoogled-chromium")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur ungoogled-chromium-bin
+                        install_package "ungoogled-chromium-bin" "io.github.ungoogled_software.ungoogled_chromium"
                         ;;
                     "Fedora")
-                        echo "Enabling COPR repository..."
+                        print_message "$GREEN" "Enabling COPR repository..."
                         sudo dnf copr enable -y wojnilowicz/ungoogled-chromium
-                        $pkg_manager ungoogled-chromium
+                        install_package "ungoogled-chromium" "io.github.ungoogled_software.ungoogled_chromium"
                         ;;
                     "openSUSE")
-                        $flatpak_cmd io.github.ungoogled_software.ungoogled_chromium
+                        install_package "" "io.github.ungoogled_software.ungoogled_chromium"
                         ;;
                 esac
                 ;;
@@ -169,54 +127,40 @@ install_browsers() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_pacman vivaldi
+                        install_package "vivaldi" "com.vivaldi.Vivaldi"
                         ;;
                     "Fedora")
-                        $flatpak_cmd com.vivaldi.Vivaldi
+                        install_package "" "com.vivaldi.Vivaldi"
                         ;;
                     "openSUSE")
-                        echo "Setting up Vivaldi repository for openSUSE..."
+                        print_message "$GREEN" "Setting up Vivaldi repository for openSUSE..."
                         sudo zypper ar https://repo.vivaldi.com/archive/vivaldi-suse.repo
-                        sudo zypper in -y vivaldi-stable
+                        install_package "vivaldi-stable" "com.vivaldi.Vivaldi"
                         ;;
                 esac
                 ;;
 
             "Qute Browser")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager qutebrowser
-                        ;;
-                    "Fedora")
-                        $flatpak_cmd org.qutebrowser.qutebrowser
-                        ;;
-                esac
+                install_package "qutebrowser" "org.qutebrowser.qutebrowser"
                 ;;
 
             "Zen Browser")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur zen-browser-bin
-                        ;;
-                    "Fedora" | "openSUSE")
-                        $flatpak_cmd app.zen_browser.zen
-                        ;;
-                esac
+                install_package "zen-browser-bin" "app.zen_browser.zen"
                 ;;
 
             "Thorium Browser")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur thorium-browser-bin
+                        install_package "thorium-browser-bin" ""
                         ;;
                     "Fedora" | "openSUSE")
-                        echo "Downloading and installing Thorium Browser..."
+                        print_message "$YELLOW" "Downloading and installing Thorium Browser..."
 
                         if ! command -v wget &> /dev/null; then
-                            echo "Installing wget..."
+                            print_message "$GREEN" "Installing wget..."
                             case "$DISTRO" in
                                 "Fedora") sudo dnf install -y wget ;;
                                 "openSUSE") sudo zypper install -y wget ;;
@@ -225,29 +169,29 @@ install_browsers() {
 
                         temp_dir=$(mktemp -d)
                         cd "$temp_dir" || {
-                            echo -e "${RED}Failed to create temp directory${NC}"
+                            print_message "$RED" "Failed to create temp directory"
                             return
                         }
 
-                        echo "Fetching latest Thorium Browser release..."
+                        print_message "$GREEN" "Fetching latest Thorium Browser release..."
                         wget -q --show-progress https://github.com/Alex313031/thorium/releases/latest -O latest
                         latest_url=$(grep -o 'https://github.com/Alex313031/thorium/releases/tag/[^"\n]*' latest | head -1)
                         latest_version=$(echo "$latest_url" | grep -o '[^/]*$')
 
-                        echo "Latest version: $latest_version"
-                        echo "Downloading Thorium Browser AVX package..."
+                        print_message "$GREEN" "Latest version: $latest_version"
+                        print_message "$GREEN" "Downloading Thorium Browser AVX package..."
                         wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_${latest_version#M}_AVX.rpm" ||
                             wget -q --show-progress "https://github.com/Alex313031/thorium/releases/download/$latest_version/thorium-browser_*_AVX.rpm"
 
                         rpm_file=$(ls thorium*AVX.rpm 2> /dev/null)
                         if [ -n "$rpm_file" ]; then
-                            echo "Installing Thorium Browser..."
+                            print_message "$GREEN" "Installing Thorium Browser..."
                             case "$DISTRO" in
                                 "Fedora") sudo dnf install -y "./$rpm_file" ;;
                                 "openSUSE") sudo zypper install -y "./$rpm_file" ;;
                             esac
                         else
-                            echo "Failed to download Thorium Browser. Please visit https://thorium.rocks/."
+                            print_message "$RED" "Failed to download Thorium Browser. Please visit https://thorium.rocks/."
                         fi
 
                         cd - > /dev/null || return
@@ -260,16 +204,16 @@ install_browsers() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur opera
+                        install_package "opera" "com.opera.Opera"
                         ;;
                     "Fedora")
-                        echo "Setting up Opera repository..."
+                        print_message "$GREEN" "Setting up Opera repository..."
                         sudo rpm --import https://rpm.opera.com/rpmrepo.key
                         echo -e "[opera]\nname=Opera packages\ntype=rpm-md\nbaseurl=https://rpm.opera.com/rpm\ngpgcheck=1\ngpgkey=https://rpm.opera.com/rpmrepo.key\nenabled=1" | sudo tee /etc/yum.repos.d/opera.repo
-                        $pkg_manager opera-stable
+                        install_package "opera-stable" "com.opera.Opera"
                         ;;
                     "openSUSE")
-                        $pkg_manager opera
+                        install_package "opera" "com.opera.Opera"
                         ;;
                 esac
                 ;;
@@ -278,13 +222,13 @@ install_browsers() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur tor-browser-bin
+                        install_package "tor-browser-bin" "org.torproject.torbrowser-launcher"
                         ;;
                     "Fedora")
-                        $flatpak_cmd org.torproject.torbrowser-launcher
+                        install_package "" "org.torproject.torbrowser-launcher"
                         ;;
                     "openSUSE")
-                        $pkg_manager torbrowser-launcher
+                        install_package "torbrowser-launcher" "org.torproject.torbrowser-launcher"
                         ;;
                 esac
                 ;;

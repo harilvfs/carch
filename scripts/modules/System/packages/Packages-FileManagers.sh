@@ -1,21 +1,6 @@
 #!/usr/bin/env bash
 
 install_filemanagers() {
-    case "$DISTRO" in
-        "Arch")
-            pkg_manager="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            pkg_manager="sudo zypper install -y"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -29,53 +14,43 @@ install_filemanagers() {
         case "$selection" in
             "Nemo")
                 clear
-                $pkg_manager nemo
+                install_package "nemo" ""
                 ;;
 
             "Thunar")
                 clear
-                $pkg_manager thunar
+                install_package "thunar" ""
                 ;;
 
             "Dolphin")
                 clear
-                $pkg_manager dolphin
+                install_package "dolphin" ""
                 ;;
 
             "LF (Terminal File Manager)")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager lf
-                        ;;
-                    "Fedora")
-                        sudo dnf copr enable lsevcik/lf -y
-                        $pkg_manager lf
-                        ;;
-                esac
+                if [ "$DISTRO" == "Fedora" ]; then
+                    sudo dnf copr enable lsevcik/lf -y
+                fi
+                install_package "lf" ""
                 ;;
 
             "Ranger")
                 clear
-                $pkg_manager ranger
+                install_package "ranger" ""
                 ;;
 
             "Nautilus")
                 clear
-                $pkg_manager nautilus
+                install_package "nautilus" ""
                 ;;
 
             "Yazi")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager yazi
-                        ;;
-                    "Fedora")
-                        sudo dnf copr enable varlad/yazi -y
-                        $pkg_manager yazi
-                        ;;
-                esac
+                if [ "$DISTRO" == "Fedora" ]; then
+                    sudo dnf copr enable varlad/yazi -y
+                fi
+                install_package "yazi" ""
                 ;;
             "Back to Main Menu")
                 return

@@ -1,25 +1,6 @@
 #!/usr/bin/env bash
 
 install_terminals() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager="sudo pacman -S --noconfirm"
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            ;;
-        "Fedora")
-            install_flatpak
-            pkg_manager="sudo dnf install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        "openSUSE")
-            pkg_manager="sudo zypper install -y"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
         local options=("Alacritty" "Kitty" "St" "Terminator" "Tilix" "Hyper" "GNOME Terminal" "Konsole" "WezTerm" "Ghostty" "Back to Main Menu")
@@ -32,58 +13,37 @@ install_terminals() {
         case "$selection" in
             "Alacritty")
                 clear
-                $pkg_manager alacritty
+                install_package "alacritty" ""
                 ;;
 
             "Kitty")
                 clear
-                $pkg_manager kitty
+                install_package "kitty" ""
                 ;;
 
             "St")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur st
-                        ;;
-                    *)
-                        $pkg_manager st
-                        ;;
-                esac
+                install_package "st" ""
                 ;;
 
             "Terminator")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur terminator
-                        ;;
-                    *)
-                        $pkg_manager terminator
-                        ;;
-                esac
+                install_package "terminator" ""
                 ;;
 
             "Tilix")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur tilix
-                        ;;
-                    *)
-                        $pkg_manager tilix
-                        ;;
-                esac
+                install_package "tilix" ""
                 ;;
 
             "Hyper")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur hyper
+                        install_package "hyper" ""
                         ;;
                     "Fedora" | "openSUSE")
-                        echo ":: Downloading Hyper RPM..."
+                        print_message "$GREEN" "Downloading Hyper RPM..."
                         cd /tmp || exit
                         wget -O hyper-3.4.1.x86_64.rpm https://github.com/vercel/hyper/releases/download/v3.4.1/hyper-3.4.1.x86_64.rpm
                         if [[ $? -eq 0 ]]; then
@@ -93,7 +53,7 @@ install_terminals() {
                             esac
                             rm -f hyper-3.4.1.x86_64.rpm
                         else
-                            echo -e "${RED}!! Failed to download Hyper RPM.${NC}"
+                            print_message "$RED" "Failed to download Hyper RPM."
                         fi
                         ;;
                 esac
@@ -101,37 +61,25 @@ install_terminals() {
 
             "GNOME Terminal")
                 clear
-                $pkg_manager gnome-terminal
+                install_package "gnome-terminal" ""
                 ;;
 
             "Konsole")
                 clear
-                $pkg_manager konsole
+                install_package "konsole" ""
                 ;;
 
             "WezTerm")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager wezterm
-                        ;;
-                    "Fedora")
-                        $flatpak_cmd org.wezfurlong.wezterm
-                        ;;
-                esac
+                install_package "wezterm" "org.wezfurlong.wezterm"
                 ;;
 
             "Ghostty")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "openSUSE")
-                        $pkg_manager ghostty
-                        ;;
-                    "Fedora")
-                        sudo dnf copr enable pgdev/ghostty -y
-                        sudo dnf install -y ghostty
-                        ;;
-                esac
+                if [ "$DISTRO" == "Fedora" ]; then
+                    sudo dnf copr enable pgdev/ghostty -y
+                fi
+                install_package "ghostty" ""
                 ;;
             "Back to Main Menu")
                 return

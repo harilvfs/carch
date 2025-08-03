@@ -1,22 +1,6 @@
 #!/usr/bin/env bash
 
 install_android() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            ;;
-        "Fedora")
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            pkg_manager="sudo zypper install -y"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
         local options=(
@@ -35,58 +19,56 @@ install_android() {
         case "$selection" in
             "Gvfs-MTP [Displays Android phones via USB]")
                 clear
+                local pkg_name=""
                 case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur gvfs-mtp
-                        ;;
-                    "Fedora")
-                        $pkg_manager gvfs-mtp
+                    "Arch" | "Fedora")
+                        pkg_name="gvfs-mtp"
                         ;;
                     "openSUSE")
-                        $pkg_manager mtp-tools
+                        pkg_name="mtp-tools"
                         ;;
                 esac
+                install_package "$pkg_name" ""
                 ;;
 
             "ADB")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "Fedora" | "openSUSE")
-                        $pkg_manager_aur android-tools
-                        ;;
-                esac
+                install_package "android-tools" ""
                 ;;
 
             "JDK (OpenJDK)")
                 clear
+                local pkg_name=""
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur jdk-openjdk
+                        pkg_name="jdk-openjdk"
                         ;;
                     "Fedora")
-                        $pkg_manager java-latest-openjdk.x86_64
+                        pkg_name="java-latest-openjdk.x86_64"
                         ;;
                     "openSUSE")
-                        $pkg_manager java-17-openjdk
+                        pkg_name="java-17-openjdk"
                         ;;
                 esac
+                install_package "$pkg_name" ""
                 ;;
 
             "Universal Android Debloater (UAD-NG)")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur uad-ng-bin
+                        install_package "uad-ng-bin" ""
                         ;;
                     "Fedora" | "openSUSE")
-                        echo ":: Downloading UAD binary..."
-                        tmp_path="/tmp/uad-ng"
+                        print_message "$YELLOW" "Downloading UAD binary..."
+                        local tmp_path="/tmp/uad-ng"
+                        local bin_url
                         bin_url=$(curl -s https://api.github.com/repos/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/latest |
                             jq -r '.assets[] | select(.name | test("uad-ng-linux$")) | .browser_download_url')
 
                         # incase latest binary download fail fallback to v1.1.2
                         if [[ -z "$bin_url" ]]; then
-                            echo ":: Failed to get latest, falling back to v1.1.2"
+                            print_message "$YELLOW" "Failed to get latest, falling back to v1.1.2"
                             bin_url="https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/download/v1.1.2/uad-ng-linux"
                         fi
 
@@ -95,10 +77,10 @@ install_android() {
                             sudo mv "$tmp_path" /usr/local/bin/uad-ng
 
                         if [[ $? -eq 0 ]]; then
-                            echo "UAD has been installed to /usr/local/bin/uad-ng"
-                            echo "⟹ Run it by typing: uad-ng"
+                            print_message "$GREEN" "UAD has been installed to /usr/local/bin/uad-ng"
+                            print_message "$GREEN" "⟹ Run it by typing: uad-ng"
                         else
-                            echo "Failed to install UAD."
+                            print_message "$RED" "Failed to install UAD."
                         fi
                         ;;
                 esac

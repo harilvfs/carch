@@ -1,21 +1,6 @@
 #!/usr/bin/env bash
 
 install_fm_tools() {
-    case "$DISTRO" in
-        "Arch")
-            pkg_manager="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            pkg_manager="sudo zypper install -y"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -29,12 +14,12 @@ install_fm_tools() {
         case "$selection" in
             "Tumbler [Thumbnail Viewer]")
                 clear
-                $pkg_manager tumbler
+                install_package "tumbler" ""
                 ;;
 
             "Trash-Cli")
                 clear
-                $pkg_manager trash-cli
+                install_package "trash-cli" ""
                 ;;
             "Back to Main Menu")
                 return

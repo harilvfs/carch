@@ -1,23 +1,6 @@
 #!/usr/bin/env bash
 
 install_editing() {
-    case "$DISTRO" in
-        "Arch")
-            pkg_manager="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            install_flatpak
-            pkg_manager="sudo zypper install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -31,73 +14,39 @@ install_editing() {
         case "$selection" in
             "GIMP (Image)")
                 clear
-                $pkg_manager gimp
+                install_package "gimp" "org.gimp.GIMP"
                 ;;
 
             "Kdenlive (Videos)")
                 clear
-                $pkg_manager kdenlive
+                install_package "kdenlive" "org.kde.kdenlive"
                 ;;
 
             "Krita")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur krita
-                        ;;
-                    *)
-                        $pkg_manager krita
-                        ;;
-                esac
+                install_package "krita" "org.kde.krita"
                 ;;
 
             "Blender")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur blender
-                        ;;
-                    "Fedora")
-                        $pkg_manager blender
-                        ;;
-                    "openSUSE")
-                        $flatpak_cmd org.blender.Blender
-                        ;;
-                esac
+                install_package "blender" "org.blender.Blender"
                 ;;
 
             "Inkscape")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur inkscape
-                        ;;
-                    "Fedora")
-                        $pkg_manager inkscape
-                        ;;
-                    "openSUSE")
-                        $flatpak_cmd org.inkscape.Inkscape
-                        ;;
-                esac
+                install_package "inkscape" "org.inkscape.Inkscape"
                 ;;
 
             "Audacity")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur audacity
-                        ;;
-                    *)
-                        $pkg_manager audacity
-                        ;;
-                esac
+                install_package "audacity" "org.audacityteam.Audacity"
                 ;;
 
             "DaVinci Resolve")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur davinci-resolve
+                        install_package "davinci-resolve" ""
                         ;;
                     *)
                         echo "DaVinci Resolve is not directly available in official repositories."

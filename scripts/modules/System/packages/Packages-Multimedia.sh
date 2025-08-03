@@ -1,23 +1,6 @@
 #!/usr/bin/env bash
 
 install_multimedia() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager="sudo pacman -S --noconfirm"
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            ;;
-        "Fedora")
-            pkg_manager="sudo dnf install -y"
-            ;;
-        "openSUSE")
-            pkg_manager="sudo zypper install -y"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
         local options
@@ -36,26 +19,19 @@ install_multimedia() {
         case "$selection" in
             "VLC")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur vlc
-                        ;;
-                    *)
-                        $pkg_manager vlc
-                        ;;
-                esac
+                install_package "vlc" "org.videolan.VLC"
                 ;;
 
             "MPV")
                 clear
-                $pkg_manager mpv
+                install_package "mpv" "io.mpv.Mpv"
                 ;;
 
             "Netflix [Unofficial]")
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager_aur netflix
+                        install_package "netflix" ""
                         ;;
                     "Fedora")
                         echo "Netflix Unofficial requires manual installation on Fedora"

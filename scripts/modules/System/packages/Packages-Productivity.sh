@@ -1,27 +1,6 @@
 #!/usr/bin/env bash
 
 install_productivity() {
-    case "$DISTRO" in
-        "Arch")
-            install_aur_helper
-            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            pkg_manager_pacman="sudo pacman -S --noconfirm"
-            ;;
-        "Fedora")
-            install_flatpak
-            pkg_manager="sudo dnf install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        "openSUSE")
-            install_flatpak
-            pkg_manager="sudo zypper install -y"
-            flatpak_cmd="flatpak install -y --noninteractive flathub"
-            ;;
-        *)
-            exit 1
-            ;;
-    esac
-
     while true; do
         clear
 
@@ -35,59 +14,31 @@ install_productivity() {
         case "$selection" in
             "LibreOffice")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_pacman libreoffice-fresh
-                        ;;
-                    *)
-                        $pkg_manager libreoffice
-                        ;;
-                esac
+                local pkg_name="libreoffice"
+                if [ "$DISTRO" == "Arch" ]; then
+                    pkg_name="libreoffice-fresh"
+                fi
+                install_package "$pkg_name" "org.libreoffice.LibreOffice"
                 ;;
 
             "OnlyOffice")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur onlyoffice-bin
-                        ;;
-                    *)
-                        $flatpak_cmd org.onlyoffice.desktopeditors
-                        ;;
-                esac
+                install_package "onlyoffice-bin" "org.onlyoffice.desktopeditors" "onlyoffice"
                 ;;
 
             "Obsidian")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur obsidian
-                        ;;
-                    *)
-                        $flatpak_cmd md.obsidian.Obsidian
-                        ;;
-                esac
+                install_package "obsidian" "md.obsidian.Obsidian"
                 ;;
 
             "Joplin")
                 clear
-                case "$DISTRO" in
-                    "Arch")
-                        $pkg_manager_aur joplin-desktop
-                        ;;
-                    *)
-                        $flatpak_cmd net.cozic.joplin_desktop
-                        ;;
-                esac
+                install_package "joplin-desktop" "net.cozic.joplin_desktop" "joplin"
                 ;;
 
             "Calibre")
                 clear
-                case "$DISTRO" in
-                    "Arch" | "Fedora" | "openSUSE")
-                        $pkg_manager calibre
-                        ;;
-                esac
+                install_package "calibre" "com.calibre_ebook.calibre"
                 ;;
 
             "Back to Main Menu")
