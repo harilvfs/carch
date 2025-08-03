@@ -28,8 +28,5 @@ description = "GRUB (GNU GRand Unified Bootloader) is a bootloader that lets you
 ["LTS-Kernel"]
 description = "This script installs the LTS kernel for Arch-based distros only (not for Fedora or openSUSE)."
 
-[Packages]
-description = "Provides a menu with various package categories like Android tools, browsers, multimedia, development, and more. Most widely used packages are included, with additional packages coming in future updates."
-
 [Sddm]
 description = "SDDM (Simple Desktop Display Manager) is a modern, Qt-based graphical login manager. The script installs a Catppuccin-based theme for SDDM from the Catppuccin community."
