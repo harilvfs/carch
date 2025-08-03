@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-install_fm_tools() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-
-        local options=("Tumbler [Thumbnail Viewer]" "Trash-Cli" "Back to Main Menu")
+        local options=("Tumbler [Thumbnail Viewer]" "Trash-Cli" "Exit")
 
         show_menu "FM Tools Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -21,10 +24,12 @@ install_fm_tools() {
                 clear
                 install_package "trash-cli" ""
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

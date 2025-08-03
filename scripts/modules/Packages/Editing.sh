@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-install_editing() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-
-        local options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Back to Main Menu")
+        local options=("GIMP (Image)" "Kdenlive (Videos)" "Krita" "Blender" "Inkscape" "Audacity" "DaVinci Resolve" "Exit")
 
         show_menu "Editing Tools Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -54,10 +57,12 @@ install_editing() {
                         ;;
                 esac
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

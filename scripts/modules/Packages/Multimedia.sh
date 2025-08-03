@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
-install_multimedia() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
         local options
         if [[ "$DISTRO" == "openSUSE" || "$DISTRO" == "Fedora" ]]; then
             # for opensuse and fedora
-            options=("VLC" "MPV" "Back to Main Menu")
+            options=("VLC" "MPV" "Exit")
         else
-            options=("VLC" "MPV" "Netflix [Unofficial]" "Back to Main Menu")
+            options=("VLC" "MPV" "Netflix [Unofficial]" "Exit")
         fi
 
         show_menu "Multimedia Selection" "${options[@]}"
@@ -35,10 +39,12 @@ install_multimedia() {
                         ;;
                 esac
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

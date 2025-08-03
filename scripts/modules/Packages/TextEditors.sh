@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-install_texteditor() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-        local options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Back to Main Menu")
+        local options=("Cursor (AI Code Editor)" "Visual Studio Code (VSCODE)" "Vscodium" "ZED Editor" "Neovim" "Vim" "Code-OSS" "Exit")
 
         show_menu "Text Editor Installation" "${options[@]}"
         get_choice "${#options[@]}"
@@ -80,10 +84,12 @@ install_texteditor() {
                 clear
                 install_package "code" "com.visualstudio.code-oss"
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

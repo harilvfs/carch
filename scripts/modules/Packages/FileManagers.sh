@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-install_filemanagers() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-
-        local options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Back to Main Menu")
+        local options=("Nemo" "Thunar" "Dolphin" "LF (Terminal File Manager)" "Ranger" "Nautilus" "Yazi" "Exit")
 
         show_menu "File Manager Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -52,10 +55,12 @@ install_filemanagers() {
                 fi
                 install_package "yazi" ""
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-install_productivity() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-
-        local options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Back to Main Menu")
+        local options=("LibreOffice" "OnlyOffice" "Obsidian" "Joplin" "Calibre" "Exit")
 
         show_menu "Productivity Apps Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -40,11 +43,12 @@ install_productivity() {
                 clear
                 install_package "calibre" "com.calibre_ebook.calibre"
                 ;;
-
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

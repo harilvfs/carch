@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-install_github() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-
-        local options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Git-Cliff" "Back to Main Menu")
+        local options=("Git" "GitHub Desktop" "GitHub CLI" "LazyGit" "Git-Cliff" "Exit")
 
         show_menu "GitHub Tools Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -85,10 +88,12 @@ install_github() {
                         ;;
                 esac
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main

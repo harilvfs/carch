@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-install_music() {
+source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
+source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
+
+main() {
     while true; do
         clear
-        local options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Mousai" "Back to Main Menu")
+        local options=("Youtube-Music" "Spotube" "Spotify" "Rhythmbox" "Mousai" "Exit")
         show_menu "Music App Selection" "${options[@]}"
         get_choice "${#options[@]}"
         local choice_index=$?
@@ -30,10 +34,12 @@ install_music() {
                 clear
                 install_package "mousai" "io.github.seadve.Mousai"
                 ;;
-            "Back to Main Menu")
-                return
+            "Exit")
+                exit 0
                 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done
 }
+
+main
