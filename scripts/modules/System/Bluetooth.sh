@@ -28,7 +28,6 @@ install_bluetooth() {
             sudo zypper install -y bluez blueman
             ;;
         *)
-            print_message "$RED" ":: Unsupported distribution."
             exit 1
             ;;
     esac

@@ -44,7 +44,6 @@ check_and_install_npm() {
         "Fedora") sudo dnf install -y nodejs npm ;;
         "openSUSE") sudo zypper install -y nodejs22 ;;
         *)
-            print_message "$RED" "No supported package manager found."
             exit 1
             ;;
     esac

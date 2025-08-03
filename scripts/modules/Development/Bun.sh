@@ -13,7 +13,6 @@ check_curl() {
             "Fedora") sudo dnf install -y curl ;;
             "openSUSE") sudo zypper install -y curl ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install curl manually.${NC}"
                 exit 1
                 ;;
         esac

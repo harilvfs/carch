@@ -72,7 +72,6 @@ check_essential_dependencies() {
             "Fedora") sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
             "openSUSE") sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
             *)
-                print_message "$RED" "Unsupported distribution."
                 exit 1
                 ;;
         esac
@@ -127,8 +126,7 @@ install_eza() {
             sudo zypper install eza -y
             ;;
         *)
-            print_message "$RED" "Unsupported distribution for eza installation."
-            return 1
+            exit 1
             ;;
     esac
 }
@@ -172,7 +170,6 @@ install_distro_packages() {
             sudo zypper install -y bash bash-completion
             ;;
         *)
-            print_message "$RED" "Unsupported distribution."
             exit 1
             ;;
     esac
@@ -199,7 +196,7 @@ install_pokemon_colorscripts() {
 
                 local TEMP_DIR
                 TEMP_DIR=$(mktemp -d)
-                (   
+                (
                     cd "$TEMP_DIR"
                     git clone https://aur.archlinux.org/yay.git
                     cd yay

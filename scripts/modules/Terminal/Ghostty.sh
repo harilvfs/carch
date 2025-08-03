@@ -28,8 +28,6 @@ install_ghostty() {
                 ;;
             "openSUSE") sudo zypper install -y ghostty ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install Ghostty manually.${NC}"
-                echo -e "${CYAN}See https://ghostty.org/docs/install for installation instructions.${NC}"
                 exit 1
                 ;;
         esac
@@ -51,7 +49,7 @@ install_fonts() {
                 sudo zypper install -y jetbrains-mono-fonts
                 ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install the font manually.${NC}"
+                exit 1
                 ;;
         esac
     else

@@ -91,8 +91,7 @@ install_dependencies() {
                 make gcc jetbrains-mono-fonts git
             ;;
         *)
-            print_message "$RED" "Unsupported OS type: $distro"
-            return 1
+            exit 1
             ;;
     esac
 

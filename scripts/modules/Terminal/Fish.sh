@@ -76,7 +76,6 @@ install_fish_packages() {
             sudo zypper install -y fish google-noto-fonts noto-coloremoji-fonts git eza trash-cli
             ;;
         *)
-            print_message "$RED" "Unsupported distro: $DISTRO"
             exit 1
             ;;
     esac
@@ -99,7 +98,7 @@ install_zoxide() {
             sudo zypper install -y zoxide
             ;;
         *)
-            print_message "$RED" "Unsupported distro for zoxide: $DISTRO"
+            exit 1
             ;;
     esac
 }

@@ -40,7 +40,6 @@ check_essential_dependencies() {
             "Fedora") sudo dnf install -y "${missing[@]}" > /dev/null 2>&1 ;;
             "openSUSE") sudo zypper install -y "${missing[@]}" > /dev/null 2>&1 ;;
             *)
-                print_message "$RED" "Unsupported package manager. Install dependencies manually."
                 exit 1
                 ;;
         esac

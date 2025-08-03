@@ -73,7 +73,6 @@ check_fastfetch() {
             "Fedora") sudo dnf install -y fastfetch git ;;
             "openSUSE") sudo zypper install -y fastfetch git ;;
             *)
-                print_message "$RED" "Unsupported package manager! Please install Fastfetch manually."
                 exit 1
                 ;;
         esac

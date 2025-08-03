@@ -18,7 +18,6 @@ installAlacritty() {
         "Fedora") sudo dnf install alacritty -y ;;
         "openSUSE") sudo zypper install -y alacritty ;;
         *)
-            echo -e "${RED}Unsupported package manager! Please install Alacritty manually.${NC}"
             exit 1
             ;;
     esac

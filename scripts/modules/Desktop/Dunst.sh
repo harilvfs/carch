@@ -18,7 +18,6 @@ if ! command -v dunst &> /dev/null; then
         "Fedora") sudo dnf install -y dunst ;;
         "openSUSE") sudo zypper install -y dunst ;;
         *)
-            print_message "$RED" "Unsupported package manager."
             exit 1
             ;;
     esac

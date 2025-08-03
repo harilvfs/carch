@@ -30,7 +30,6 @@ install_rofi() {
             "Fedora") sudo dnf install -y rofi ;;
             "openSUSE") sudo zypper install -y rofi ;;
             *)
-                print_message "$RED" "Unsupported distribution. Please install Rofi manually."
                 exit 1
                 ;;
         esac

@@ -56,7 +56,6 @@ main() {
             exit 0
             ;;
         *)
-            echo -e "${RED}Unsupported package manager. Exiting...${ENDCOLOR}"
             exit 1
             ;;
     esac

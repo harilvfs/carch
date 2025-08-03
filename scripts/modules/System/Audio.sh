@@ -11,8 +11,6 @@ print_message() {
     printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
 }
 
-distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
-
 check_multilib() {
     print_message "$TEAL" ":: Checking multilib repository status..."
 
@@ -38,8 +36,8 @@ check_multilib() {
 
 install_pipewire() {
     print_message "$TEAL" ":: Installing PipeWire and related packages..."
-    case "$distro" in
-        "arch")
+    case "$DISTRO" in
+        "Arch")
             print_message "$CYAN" ":: Installing PipeWire packages for Arch Linux..."
 
             local multilib_enabled=true
@@ -59,7 +57,7 @@ install_pipewire() {
                 exit 1
             fi
             ;;
-        "fedora")
+        "Fedora")
             print_message "$CYAN" ":: Installing PipeWire packages for Fedora..."
             sudo dnf install -y pipewire
             if [ $? -ne 0 ]; then
@@ -67,7 +65,7 @@ install_pipewire() {
                 exit 1
             fi
             ;;
-        "opensuse")
+        "openSUSE")
             print_message "$CYAN" ":: Installing PipeWire packages for openSUSE..."
             sudo zypper install -y pipewire rtkit wireplumber pipewire-alsa gstreamer-plugin-pipewire pipewire-pulseaudio
             if [ $? -ne 0 ]; then
@@ -99,7 +97,6 @@ setup_user_and_services() {
 }
 
 main() {
-    distro=$(echo "$DISTRO" | tr '[:upper:]' '[:lower:]')
     install_pipewire
     setup_user_and_services
     print_message "$GREEN" ":: PipeWire setup completed successfully!"

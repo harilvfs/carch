@@ -25,7 +25,6 @@ setup_kitty() {
             "Fedora") sudo dnf install kitty -y ;;
             "openSUSE") sudo zypper install -y kitty ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install Kitty manually.${NC}"
                 exit 1
                 ;;
         esac
@@ -76,7 +75,7 @@ install_font() {
                 echo -e "${CYAN}Then, unzip and move the fonts to the ~/.fonts or ~/.local/share/fonts directory and run 'fc-cache -vf'.${NC}"
                 ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install the fonts manually.${NC}"
+                exit 1
                 ;;
         esac
     else

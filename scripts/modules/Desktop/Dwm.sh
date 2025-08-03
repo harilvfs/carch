@@ -178,8 +178,7 @@ install_nerd_font() {
             sudo zypper install -y meslo-lg-fonts || exit 1
             ;;
         *)
-            print_message "$RED" "Unsupported package manager. Please install Meslo Nerd Font manually."
-            return 1
+            exit 1
             ;;
     esac
 

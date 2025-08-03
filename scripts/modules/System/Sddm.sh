@@ -59,7 +59,6 @@ install_sddm() {
             "Fedora") sudo dnf install -y sddm ;;
             "openSUSE") sudo zypper install -y sddm ;;
             *)
-                echo -e "${RED}Unsupported distribution!${ENDCOLOR}"
                 exit 1
                 ;;
         esac

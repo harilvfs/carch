@@ -29,7 +29,6 @@ install_helix() {
         "Fedora") sudo dnf install -y helix google-noto-color-emoji-fonts google-noto-emoji-fonts git ;;
         "openSUSE") sudo zypper install -y helix google-noto-fonts noto-coloremoji-fonts git ;;
         *)
-            echo -e "${RED}Unsupported distribution!${NC}"
             exit 1
             ;;
     esac

@@ -75,7 +75,6 @@ check_brightnessctl() {
                 exit 1
             fi
         else
-            print_message "$RED" "Unsupported distribution. Please install brightnessctl manually."
             exit 1
         fi
     fi

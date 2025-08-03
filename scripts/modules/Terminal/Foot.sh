@@ -31,7 +31,6 @@ install_foot() {
                 sudo zypper install -y foot
                 ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install Foot manually.${NC}"
                 exit 1
                 ;;
         esac
@@ -56,7 +55,7 @@ install_fonts() {
                 sudo zypper install -y jetbrains-mono-fonts
                 ;;
             *)
-                echo -e "${RED}Unsupported package manager. Please install the font manually.${NC}"
+                exit 1
                 ;;
         esac
     else
