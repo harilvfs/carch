@@ -50,14 +50,14 @@ install_texteditor() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        install_package "zed-preview-bin" "dev.zed.Zed"
+                        install_package "zed-preview-bin" ""
                         ;;
                     "Fedora")
                         install_package "" "dev.zed.Zed"
                         ;;
                     "openSUSE")
                         sudo zypper addrepo https://download.opensuse.org/repositories/home:hennevogel/openSUSE_Tumbleweed/home:hennevogel.repo
-                        install_package "zed" "dev.zed.Zed"
+                        install_package "zed" ""
                         ;;
                 esac
                 ;;
