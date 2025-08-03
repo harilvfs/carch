@@ -4,23 +4,21 @@ install_communication() {
     case "$DISTRO" in
         "Arch")
             install_aur_helper
-            pkg_manager="$AUR_HELPER -S --noconfirm"
-            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
+            pkg_manager="sudo pacman -S --noconfirm"
+            pkg_manager_aur="$AUR_HELPER -S --noconfirm"
             ;;
         "Fedora")
             install_flatpak
             flatpak_cmd="flatpak install -y --noninteractive flathub"
-            pkg_manager="install_fedora_package"
+            pkg_manager="sudo dnf install -y"
             ;;
         "openSUSE")
             install_flatpak
             pkg_manager="sudo zypper install -y"
             flatpak_cmd="flatpak install -y --noninteractive flathub"
-            get_version() { rpm -q "$1"; }
             ;;
         *)
-            echo -e "${RED}:: Unsupported system. Exiting.${NC}"
-            return
+            exit 1
             ;;
     esac
 
@@ -40,17 +38,12 @@ install_communication() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager discord
-                        version=$(pacman -Qi discord | grep Version | awk '{print $3}')
-                        echo "Discord installed successfully! Version: $version"
                         ;;
                     "Fedora")
                         $pkg_manager "discord" "com.discordapp.Discord"
-                        echo "Discord installed successfully!"
                         ;;
                     "openSUSE")
                         $pkg_manager discord
-                        version=$(get_version discord)
-                        echo "Discord installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -59,8 +52,7 @@ install_communication() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager betterdiscord-installer-bin
-                        echo "Better Discord installed successfully!"
+                        $pkg_manager_aur betterdiscord-installer-bin
                         ;;
                     *)
                         echo -e "${YELLOW}:: Better Discord requires manual installation.${NC}"
@@ -75,17 +67,12 @@ install_communication() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager signal-desktop
-                        version=$(pacman -Qi signal-desktop | grep Version | awk '{print $3}')
-                        echo "Signal installed successfully! Version: $version"
                         ;;
                     "Fedora")
                         $pkg_manager "signal-desktop" "org.signal.Signal"
-                        echo "Signal installed successfully!"
                         ;;
                     "openSUSE")
                         $flatpak_cmd org.signal.Signal
-                        version="(Flatpak version installed)"
-                        echo "Signal installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -95,13 +82,9 @@ install_communication() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager element-desktop
-                        version=$(get_version element-desktop)
-                        echo "Element installed successfully! Version: $version"
                         ;;
                     *)
                         $flatpak_cmd im.riot.Riot
-                        version="(Flatpak version installed)"
-                        echo "Element installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -110,14 +93,10 @@ install_communication() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager slack-desktop
-                        version=$(get_version slack-desktop)
-                        echo "Slack installed successfully! Version: $version"
+                        $pkg_manager_aur slack-desktop
                         ;;
                     *)
                         $flatpak_cmd com.slack.Slack
-                        version="(Flatpak version installed)"
-                        echo "Slack installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -126,9 +105,7 @@ install_communication() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager teams
-                        version=$(get_version teams)
-                        echo "Teams installed successfully! Version: $version"
+                        $pkg_manager_aur teams
                         ;;
                     *)
                         echo "Microsoft Teams is not available in the repositories. Use the web version instead: https://teams.microsoft.com"
@@ -140,14 +117,10 @@ install_communication() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager zoom
-                        version=$(get_version zoom)
-                        echo "Zoom installed successfully! Version: $version"
+                        $pkg_manager_aur zoom
                         ;;
                     *)
                         $flatpak_cmd us.zoom.Zoom
-                        version="(Flatpak version installed)"
-                        echo "Zoom installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -157,17 +130,12 @@ install_communication() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager telegram-desktop
-                        version=$(pacman -Qi telegram-desktop | grep Version | awk '{print $3}')
-                        echo "Telegram installed successfully! Version: $version"
                         ;;
                     "Fedora")
-                        $pkg_manager "telegram-desktop" "org.telegram.desktop"
-                        echo "Telegram installed successfully!"
+                        $pkg_manager telegram-desktop
                         ;;
                     "openSUSE")
                         $flatpak_cmd org.telegram.desktop
-                        version="(Flatpak version installed)"
-                        echo "Telegram installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -176,18 +144,13 @@ install_communication() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager keybase-bin
-                        version=$(pacman -Qi keybase-bin | grep Version | awk '{print $3}')
-                        echo "Keybase installed successfully! Version: $version"
+                        $pkg_manager_aur keybase-bin
                         ;;
                     "Fedora")
-                        sudo dnf install -y https://prerelease.keybase.io/keybase_amd64.rpm
-                        echo "Keybase installed successfully!"
+                        $pkg_manager https://prerelease.keybase.io/keybase_amd64.rpm
                         ;;
                     "openSUSE")
                         $pkg_manager keybase-client
-                        version=$(get_version keybase-client)
-                        echo "Keybase installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -196,14 +159,10 @@ install_communication() {
                 clear
                 case "$DISTRO" in
                     "Arch")
-                        $pkg_manager zulip-desktop-bin
-                        version=$(pacman -Qi zulip-desktop-bin | grep Version | awk '{print $3}')
-                        echo "Zulip installed successfully! Version: $version"
+                        $pkg_manager_aur zulip-desktop-bin
                         ;;
                     *)
                         $flatpak_cmd org.zulip.Zulip
-                        version="(Flatpak version installed)"
-                        echo "Zulip installed successfully! Version: $version"
                         ;;
                 esac
                 ;;
@@ -213,8 +172,6 @@ install_communication() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager proton-vpn-gtk-app
-                        version=$(get_version proton-vpn-gtk-app)
-                        echo "ProtonVPN installed successfully! Version: $version"
                         ;;
                     "Fedora")
                         echo "Installing ProtonVPN for Fedora..."
@@ -231,8 +188,6 @@ install_communication() {
                         ;;
                     "openSUSE")
                         $pkg_manager protonvpn-gui
-                        version=$(get_version protonvpn-gui)
-                        echo "ProtonVPN installed successfully! Version: $version"
                         ;;
                 esac
                 ;;

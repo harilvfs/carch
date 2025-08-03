@@ -6,19 +6,15 @@ install_github() {
             install_aur_helper
             pkg_manager_aur="$AUR_HELPER -S --noconfirm"
             pkg_manager_pacman="sudo pacman -S --noconfirm"
-            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
             ;;
         "Fedora")
             pkg_manager="sudo dnf install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         "openSUSE")
             pkg_manager="sudo zypper install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         *)
-            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-            return
+            exit 1
             ;;
     esac
 
@@ -38,14 +34,11 @@ install_github() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur git
-                        version=$(get_version git)
                         ;;
                     *)
                         $pkg_manager git
-                        version=$(get_version git)
                         ;;
                 esac
-                echo "Git installed successfully! Version: $version"
                 ;;
 
             "GitHub Desktop")
@@ -53,7 +46,6 @@ install_github() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur github-desktop-bin
-                        version=$(get_version github-desktop-bin)
                         ;;
                     "Fedora" | "openSUSE")
                         echo "Downloading GitHub Desktop from latest release..."
@@ -95,13 +87,6 @@ install_github() {
                                 "Fedora") sudo dnf install -y "./$rpm_file" ;;
                                 "openSUSE") sudo zypper install -y --allow-unsigned-rpm "./$rpm_file" ;;
                             esac
-
-                            if [[ $? -eq 0 ]]; then
-                                version=$(get_version github-desktop 2> /dev/null || echo "Latest version installed")
-                                echo "GitHub Desktop installed successfully! Version: $version"
-                            else
-                                echo -e "${RED}:: Failed to install GitHub Desktop RPM.${NC}"
-                            fi
                         else
                             echo -e "${RED}:: Failed to download GitHub Desktop RPM.${NC}"
                         fi
@@ -117,14 +102,11 @@ install_github() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_pacman github-cli
-                        version=$(get_version github-cli)
                         ;;
                     *)
                         $pkg_manager gh
-                        version=$(get_version gh)
                         ;;
                 esac
-                echo "GitHub CLI installed successfully! Version: $version"
                 ;;
 
             "LazyGit")
@@ -132,14 +114,11 @@ install_github() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_pacman lazygit
-                        version=$(get_version lazygit)
                         ;;
                     *)
                         $pkg_manager lazygit
-                        version=$(get_version lazygit)
                         ;;
                 esac
-                echo "LazyGit installed successfully! Version: $version"
                 ;;
 
             "Git-Cliff")
@@ -147,8 +126,6 @@ install_github() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_pacman git-cliff
-                        version=$(get_version git-cliff)
-                        echo "Git-Cliff installed successfully! Version: $version"
                         ;;
                     *)
                         echo "Installing Git-Cliff from GitHub releases..."
@@ -186,8 +163,6 @@ install_github() {
 
                             cd /
                             rm -rf "$tmp_dir"
-
-                            echo "Git-Cliff installed successfully! Version: $latest_version"
                         else
                             echo -e "${RED}:: Failed to download git-cliff.${NC}"
                             rm -rf "$tmp_dir"

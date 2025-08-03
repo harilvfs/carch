@@ -196,7 +196,7 @@ install_pokemon_colorscripts() {
 
                 local TEMP_DIR
                 TEMP_DIR=$(mktemp -d)
-                (
+                (   
                     cd "$TEMP_DIR"
                     git clone https://aur.archlinux.org/yay.git
                     cd yay

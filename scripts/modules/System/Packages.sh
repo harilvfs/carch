@@ -57,11 +57,6 @@ get_choice() {
     done
 }
 
-if [ "$(id -u)" = 0 ]; then
-    echo -e "${RED}This script should not be run as root.${NC}"
-    exit 1
-fi
-
 AUR_HELPER=""
 
 detect_aur_helper() {
@@ -119,8 +114,7 @@ install_flatpak() {
             "openSUSE") sudo zypper install -y flatpak ;;
             "Arch") sudo pacman -S --noconfirm flatpak ;;
             *)
-                echo -e "${RED}:: Flatpak installation not supported for this distribution${NC}"
-                return 1
+                exit 1
                 ;;
         esac
     fi

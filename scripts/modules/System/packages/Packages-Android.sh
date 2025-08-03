@@ -5,19 +5,15 @@ install_android() {
         "Arch")
             install_aur_helper
             pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
             ;;
         "Fedora")
             pkg_manager="sudo dnf install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         "openSUSE")
             pkg_manager="sudo zypper install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         *)
-            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-            return
+            exit 1
             ;;
     esac
 
@@ -42,18 +38,14 @@ install_android() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur gvfs-mtp
-                        version=$(get_version gvfs-mtp)
                         ;;
                     "Fedora")
                         $pkg_manager gvfs-mtp
-                        version=$(get_version gvfs-mtp)
                         ;;
                     "openSUSE")
                         $pkg_manager mtp-tools
-                        version=$(get_version mtp-tools)
                         ;;
                 esac
-                echo "Gvfs-MTP installed successfully! Version: $version"
                 ;;
 
             "ADB")
@@ -61,10 +53,8 @@ install_android() {
                 case "$DISTRO" in
                     "Arch" | "Fedora" | "openSUSE")
                         $pkg_manager_aur android-tools
-                        version=$(get_version android-tools)
                         ;;
                 esac
-                echo "ADB installed successfully! Version: $version"
                 ;;
 
             "JDK (OpenJDK)")
@@ -72,18 +62,14 @@ install_android() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur jdk-openjdk
-                        version=$(get_version jdk-openjdk)
                         ;;
                     "Fedora")
                         $pkg_manager java-latest-openjdk.x86_64
-                        version=$(get_version java-latest-openjdk)
                         ;;
                     "openSUSE")
                         $pkg_manager java-17-openjdk
-                        version=$(get_version java-17-openjdk)
                         ;;
                 esac
-                echo "OpenJDK installed successfully! Version: $version"
                 ;;
 
             "Universal Android Debloater (UAD-NG)")
@@ -91,8 +77,6 @@ install_android() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur uad-ng-bin
-                        version=$(get_version uad-ng-bin)
-                        echo "UAD installed successfully. Version: $version"
                         ;;
                     "Fedora" | "openSUSE")
                         echo ":: Downloading UAD binary..."

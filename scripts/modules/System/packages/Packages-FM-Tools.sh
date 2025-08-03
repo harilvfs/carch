@@ -4,19 +4,15 @@ install_fm_tools() {
     case "$DISTRO" in
         "Arch")
             pkg_manager="sudo pacman -S --noconfirm"
-            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
             ;;
         "Fedora")
             pkg_manager="sudo dnf install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         "openSUSE")
             pkg_manager="sudo zypper install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         *)
-            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-            return
+            exit 1
             ;;
     esac
 
@@ -34,15 +30,11 @@ install_fm_tools() {
             "Tumbler [Thumbnail Viewer]")
                 clear
                 $pkg_manager tumbler
-                version=$(get_version tumbler)
-                echo "Tumbler installed successfully! Version: $version"
                 ;;
 
             "Trash-Cli")
                 clear
                 $pkg_manager trash-cli
-                version=$(get_version trash-cli)
-                echo "Trash-Cli installed successfully! Version: $version"
                 ;;
             "Back to Main Menu")
                 return

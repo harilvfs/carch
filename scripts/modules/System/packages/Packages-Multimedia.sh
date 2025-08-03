@@ -6,19 +6,15 @@ install_multimedia() {
             install_aur_helper
             pkg_manager="sudo pacman -S --noconfirm"
             pkg_manager_aur="$AUR_HELPER -S --noconfirm"
-            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
             ;;
         "Fedora")
             pkg_manager="sudo dnf install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         "openSUSE")
             pkg_manager="sudo zypper install -y"
-            get_version() { rpm -q "$1"; }
             ;;
         *)
-            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-            return
+            exit 1
             ;;
     esac
 
@@ -43,21 +39,16 @@ install_multimedia() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur vlc
-                        version=$(get_version vlc)
                         ;;
                     *)
                         $pkg_manager vlc
-                        version=$(get_version vlc)
                         ;;
                 esac
-                echo "VLC installed successfully! Version: $version"
                 ;;
 
             "MPV")
                 clear
                 $pkg_manager mpv
-                version=$(get_version mpv)
-                echo "MPV installed successfully! Version: $version"
                 ;;
 
             "Netflix [Unofficial]")
@@ -65,7 +56,6 @@ install_multimedia() {
                 case "$DISTRO" in
                     "Arch")
                         $pkg_manager_aur netflix
-                        version=$(get_version netflix)
                         ;;
                     "Fedora")
                         echo "Netflix Unofficial requires manual installation on Fedora"
@@ -76,10 +66,8 @@ install_multimedia() {
                         echo "Installing Wine Silverlight & Netflix Desktop:"
                         sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/wine-silverligh-1.7.2-1.fc19.x86_64.rpm
                         sudo yum -y install http://sourceforge.net/projects/postinstaller/files/fedora/releases/19/x86_64/updates/netflix-desktop-0.7.0-7.fc19.noarch.rpm
-                        version="(Manual installation required)"
                         ;;
                 esac
-                echo "Netflix [Unofficial] installed successfully! Version: $version"
                 ;;
             "Back to Main Menu")
                 return

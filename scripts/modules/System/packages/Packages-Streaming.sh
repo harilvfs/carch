@@ -4,22 +4,18 @@ install_streaming() {
     case "$DISTRO" in
         "Arch")
             pkg_manager_pacman="sudo pacman -S --noconfirm"
-            get_version() { pacman -Qi "$1" | grep Version | awk '{print $3}'; }
             ;;
         "Fedora")
             install_flatpak
             pkg_manager="sudo dnf install -y"
             flatpak_cmd="flatpak install -y --noninteractive flathub"
-            get_version() { rpm -q "$1"; }
             ;;
         "openSUSE")
             install_flatpak
             flatpak_cmd="flatpak install -y --noninteractive flathub"
-            get_version() { rpm -q "$1"; }
             ;;
         *)
-            echo -e "${RED}:: Unsupported distribution. Exiting.${NC}"
-            return
+            exit 1
             ;;
     esac
 
@@ -39,14 +35,11 @@ install_streaming() {
                 case "$DISTRO" in
                     "Arch" | "Fedora")
                         $pkg_manager_pacman obs-studio
-                        version=$(get_version obs-studio)
                         ;;
                     "openSUSE")
                         $flatpak_cmd com.obsproject.Studio
-                        version="Flatpak Version"
                         ;;
                 esac
-                echo "OBS Studio installed successfully! Version: $version"
                 ;;
 
             "SimpleScreenRecorder [Git]")
@@ -84,12 +77,7 @@ install_streaming() {
                                     }
 
                                     echo ":: Building and installing SimpleScreenRecorder from source..."
-                                    if makepkg -si --noconfirm; then
-                                        version=$(get_version simplescreenrecorder)
-                                        echo -e "${GREEN}SimpleScreenRecorder installed! Version: $version${NC}"
-                                    else
-                                        echo -e "${RED}!! Build failed. Please check the error above.${NC}"
-                                    fi
+                                    makepkg -si --noconfirm
                                     rm -rf "$CACHE_DIR"
                                     ;;
                                 "Fedora")
@@ -156,8 +144,6 @@ install_streaming() {
                     flatpak_cmd="flatpak install -y --noninteractive flathub"
                 fi
                 $flatpak_cmd sa.sy.bluerecorder
-                version="Flatpak Version"
-                echo "Blue Recorder installed successfully! Version: $version"
                 ;;
 
             "Kooha")
@@ -167,8 +153,6 @@ install_streaming() {
                     flatpak_cmd="flatpak install -y --noninteractive flathub"
                 fi
                 $flatpak_cmd io.github.seadve.Kooha
-                version="Flatpak Version"
-                echo "Kooha installed successfully! Version: $version"
                 ;;
 
             "Back to Main Menu")
