@@ -60,7 +60,7 @@ install_communication() {
 
             "Zoom")
                 clear
-                install_package "zoom" "us.zoom.Zoom" "zoom"
+                install_package "zoom" "us.zoom.Zoom"
                 ;;
 
             "Telegram")
