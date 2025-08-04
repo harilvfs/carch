@@ -32,7 +32,7 @@ install_packages() {
                 ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
                 feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
                 thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
-                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst|| {
+                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst || {
                 print_message "$RED" "Failed to install some packages via pacman."
                 exit 1
             }
