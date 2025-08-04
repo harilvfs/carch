@@ -74,6 +74,7 @@ install_paru() {
     if command -v paru &> /dev/null; then
         print_message "$GREEN" "Paru is already installed on this system."
         print_message "$CYAN" "$(paru --version | head -n 1)"
+        read -p "Press Enter to continue..."
         return
     fi
 
@@ -81,6 +82,7 @@ install_paru() {
     sudo pacman -S --needed --noconfirm base-devel git
     if [ $? -ne 0 ]; then
         print_message "$RED" "Failed to install dependencies."
+        read -p "Press Enter to continue..."
         return
     fi
 
@@ -99,12 +101,14 @@ install_paru() {
     else
         print_message "$RED" "Paru installation failed."
     fi
+      read -p "Press Enter to continue..."
 }
 
 install_yay() {
     if command -v yay &> /dev/null; then
         print_message "$GREEN" "Yay is already installed on this system."
         print_message "$CYAN" "$(yay --version | head -n 1)"
+        read -p "Press Enter to continue..."
         return
     fi
 
