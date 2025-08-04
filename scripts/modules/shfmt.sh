@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
+
 # Options for shfmt:
 # -i 4:  indent with 4 spaces
 # -ci:   indent case statements
