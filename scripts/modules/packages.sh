@@ -6,10 +6,22 @@ source "$(dirname "$0")/detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "${NC}"
+    printf "%b:: %s%b\n" "$color" "$message" "${NC}"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 show_menu() {
+
     local title="$1"
     shift
     local options=("$@")
@@ -29,7 +41,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "${NC}")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "${NC}")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -49,7 +61,7 @@ detect_aur_helper() {
         fi
     done
 
-    echo -e "${YELLOW}:: No AUR helper found.${NC}"
+    print_message "$YELLOW" "No AUR helper found."
     return 1
 }
 
@@ -63,7 +75,7 @@ install_aur_helper() {
         return
     fi
 
-    echo -e "${RED}:: No AUR helper found. Installing yay...${NC}"
+    print_message "$RED" "No AUR helper found. Installing yay..."
 
     sudo pacman -S --needed --noconfirm git base-devel
 
@@ -79,17 +91,17 @@ install_aur_helper() {
     rm -rf "$temp_dir"
 
     if [ $exit_code -ne 0 ]; then
-        echo -e "${RED}Failed to install yay.${NC}"
+        print_message "$RED" "Failed to install yay."
         exit 1
     fi
 
     AUR_HELPER="yay"
-    echo -e "${GREEN}:: Yay installed successfully and set as AUR helper.${NC}"
+    print_message "$GREEN" "Yay installed successfully and set as AUR helper."
 }
 
 install_flatpak() {
     if ! command -v flatpak &> /dev/null; then
-        echo -e "${YELLOW}:: Flatpak not found. Installing...${NC}"
+        print_message "$YELLOW" "Flatpak not found. Installing..."
 
         case "$DISTRO" in
             "Fedora") sudo dnf install -y flatpak ;;

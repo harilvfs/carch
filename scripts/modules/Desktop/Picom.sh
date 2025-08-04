@@ -9,13 +9,13 @@ aur_helper=""
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -34,7 +34,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -44,7 +44,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -58,7 +58,7 @@ install_aur_helper() {
     local aur_helpers=("yay" "paru")
     for helper in "${aur_helpers[@]}"; do
         if command -v "$helper" &> /dev/null; then
-            print_message "$GREEN" ":: AUR helper '$helper' is already installed. Using it."
+            print_message "$GREEN" "AUR helper '$helper' is already installed. Using it."
             aur_helper="$helper"
             return
         fi
@@ -80,12 +80,12 @@ install_aur_helper() {
 }
 
 print_source_message() {
-    print_message "$TEAL" ":: This Picom build is from FT-Labs."
-    print_message "$TEAL" ":: Check out here: https://github.com/FT-Labs/picom"
+    print_message "$TEAL" "This Picom build is from FT-Labs."
+    print_message "$TEAL" "Check out here: https://github.com/FT-Labs/picom"
 }
 
 install_dependencies_normal() {
-    print_message "$GREEN" ":: Installing Picom..."
+    print_message "$GREEN" "Installing Picom..."
     case "$DISTRO" in
         "Arch") sudo pacman -S --needed --noconfirm picom ;;
         "Fedora") sudo dnf install -y picom ;;
@@ -94,26 +94,26 @@ install_dependencies_normal() {
 }
 
 setup_picom_ftlabs() {
-    print_message "$GREEN" ":: Installing Picom FT-Labs (picom-ftlabs-git) via $aur_helper..."
+    print_message "$GREEN" "Installing Picom FT-Labs (picom-ftlabs-git) via $aur_helper..."
     "$aur_helper" -S --noconfirm picom-ftlabs-git
 }
 
 install_picom_ftlabs_fedora() {
-    print_message "$GREEN" ":: Installing dependencies for Picom FT-Labs (Fedora)..."
+    print_message "$GREEN" "Installing dependencies for Picom FT-Labs (Fedora)..."
     sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel libepoxy-devel meson pcre2-devel pixman-devel uthash-devel xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel cmake
 
-    print_message "$GREEN" ":: Cloning Picom FT-Labs repository..."
+    print_message "$GREEN" "Cloning Picom FT-Labs repository..."
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
     cd ~/.cache/picom || {
         print_message "$RED" "Failed to clone Picom repo."
         exit 1
     }
 
-    print_message "$GREEN" ":: Building Picom with meson and ninja..."
+    print_message "$GREEN" "Building Picom with meson and ninja..."
     meson setup --buildtype=release build
     ninja -C build
 
-    print_message "$GREEN" ":: Installing the built Picom binary..."
+    print_message "$GREEN" "Installing the built Picom binary..."
     sudo cp build/src/picom /usr/local/bin
     sudo ldconfig
 
@@ -121,24 +121,24 @@ install_picom_ftlabs_fedora() {
 }
 
 install_picom_ftlabs_opensuse() {
-    print_message "$GREEN" ":: Installing dependencies for Picom FT-Labs (OpenSUSE)..."
+    print_message "$GREEN" "Installing dependencies for Picom FT-Labs (OpenSUSE)..."
     sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
-            libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
-            libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
-            xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
+        libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
+        libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
+        xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
 
-    print_message "$GREEN" ":: Cloning Picom FT-Labs repository..."
+    print_message "$GREEN" "Cloning Picom FT-Labs repository..."
     git clone https://github.com/FT-Labs/picom ~/.cache/picom
     cd ~/.cache/picom || {
         print_message "$RED" "Failed to clone Picom repo."
         exit 1
     }
 
-    print_message "$GREEN" ":: Building Picom with meson and ninja..."
+    print_message "$GREEN" "Building Picom with meson and ninja..."
     meson setup --buildtype=release build
     ninja -C build
 
-    print_message "$GREEN" ":: Installing the built Picom binary..."
+    print_message "$GREEN" "Installing the built Picom binary..."
     sudo cp build/src/picom /usr/local/bin
     sudo ldconfig
 
@@ -152,19 +152,19 @@ download_config() {
 
     if [ -f "$config_path" ]; then
         if confirm "Overwrite existing picom.conf?"; then
-            print_message "$GREEN" ":: Backing up existing picom.conf..."
+            print_message "$GREEN" "Backing up existing picom.conf..."
             mkdir -p "$backup_dir"
             local backup_path="$backup_dir/picom.conf.bak.$RANDOM"
             mv "$config_path" "$backup_path"
-            print_message "$GREEN" ":: Backup created: $backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
         else
-            print_message "$RED" ":: Skipping picom.conf download..."
+            print_message "$RED" "Skipping picom.conf download..."
             return
         fi
     fi
 
     mkdir -p ~/.config
-    print_message "$GREEN" ":: Downloading Picom configuration..."
+    print_message "$GREEN" "Downloading Picom configuration..."
     wget -O "$config_path" "$config_url"
 }
 
@@ -193,12 +193,12 @@ main() {
                     ;;
             esac
             download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
-            print_message "$GREEN" ":: Picom setup completed with animations from FT-Labs!"
+            print_message "$GREEN" "Picom setup completed with animations from FT-Labs!"
             ;;
         "Picom normal")
             install_dependencies_normal
             download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
-            print_message "$GREEN" ":: Picom setup completed without animations!"
+            print_message "$GREEN" "Picom setup completed without animations!"
             ;;
         "Exit")
             exit 0

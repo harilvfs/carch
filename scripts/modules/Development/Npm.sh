@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$NC"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;

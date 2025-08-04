@@ -22,8 +22,7 @@ install_simplescreenrecorder() {
             return
             ;;
         *)
-            read -rp "This will clone and build SimpleScreenRecorder from source. Continue? (y/N): " confirm
-            if [[ $confirm =~ ^[Yy]$ ]]; then
+            if confirm "This will clone and build SimpleScreenRecorder from source. Continue?"; then
                 CACHE_DIR="$HOME/.cache/ssr"
                 rm -rf "$CACHE_DIR"
                 mkdir -p "$CACHE_DIR"

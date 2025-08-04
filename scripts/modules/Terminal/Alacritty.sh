@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -46,17 +46,17 @@ setupAlacrittyConfig() {
     local alacritty_config_dir="$HOME/.config/alacritty"
     local backup_dir="$HOME/.config/carch/backups"
 
-    print_message "$CYAN" ":: Setting up Alacritty configuration..."
+    print_message "$CYAN" "Setting up Alacritty configuration..."
 
     if [ -d "$alacritty_config_dir" ]; then
-        print_message "$YELLOW" ":: Existing Alacritty configuration detected."
+        print_message "$YELLOW" "Existing Alacritty configuration detected."
         if confirm "Do you want to backup the existing configuration?"; then
             mkdir -p "$backup_dir"
             local backup_path="$backup_dir/alacritty.bak.$RANDOM"
             mv "$alacritty_config_dir" "$backup_path"
-            print_message "$GREEN" ":: Existing Alacritty configuration backed up to $backup_path."
+            print_message "$GREEN" "Existing Alacritty configuration backed up to $backup_path."
         else
-            print_message "$CYAN" ":: Skipping backup. Your existing configuration will be overwritten."
+            print_message "$CYAN" "Skipping backup. Your existing configuration will be overwritten."
         fi
     fi
 
@@ -67,16 +67,16 @@ setupAlacrittyConfig() {
         curl -sSLo "$alacritty_config_dir/$file" "$base_url/$file"
     done
 
-    print_message "$CYAN" ":: Running 'alacritty migrate' to update the config..."
+    print_message "$CYAN" "Running 'alacritty migrate' to update the config..."
     (cd "$alacritty_config_dir" && alacritty migrate)
 
-    print_message "$GREEN" ":: Alacritty configuration files copied and migrated."
+    print_message "$GREEN" "Alacritty configuration files copied and migrated."
 }
 
 main() {
     installAlacritty
     setupAlacrittyConfig
-    print_message "$GREEN" ":: Alacritty setup complete."
+    print_message "$GREEN" "Alacritty setup complete."
 }
 
 main

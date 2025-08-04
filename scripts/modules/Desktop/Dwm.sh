@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -26,34 +26,34 @@ install_packages() {
     case "$DISTRO" in
         "Arch")
             check_aur_helper
-            print_message "$CYAN" ":: Installing required packages using pacman and AUR..."
+            print_message "$CYAN" "Installing required packages using pacman and AUR..."
 
             sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd \
                 ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
                 feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
                 thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
-                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
+                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst || {
                 print_message "$RED" "Failed to install some packages via pacman."
                 exit 1
             }
 
-            print_message "$CYAN" ":: Installing xautolock from AUR..."
+            print_message "$CYAN" "Installing xautolock from AUR..."
             $aur_helper -S --noconfirm xautolock || {
                 print_message "$RED" "Failed to install xautolock from AUR."
                 exit 1
             }
             ;;
         "Fedora")
-            print_message "$CYAN" ":: Installing required packages using dnf..."
+            print_message "$CYAN" "Installing required packages using dnf..."
 
-            print_message "$CYAN" ":: Enabling RPM Fusion repositories..."
+            print_message "$CYAN" "Enabling RPM Fusion repositories..."
             sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
-                                https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm || {
+                https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm || {
                 print_message "$RED" "Failed to enable RPM Fusion repositories."
                 exit 1
             }
 
-            print_message "$CYAN" ":: Enabling lihaohong/yazi COPR repository..."
+            print_message "$CYAN" "Enabling lihaohong/yazi COPR repository..."
             sudo dnf copr enable -y lihaohong/yazi || {
                 print_message "$RED" "Failed to enable lihaohong/yazi COPR repository."
                 exit 1
@@ -63,19 +63,19 @@ install_packages() {
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
                 google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
                 trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
-                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock || {
+                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock dunst || {
                 print_message "$RED" "Failed to install some packages via dnf."
                 exit 1
             }
             ;;
         "openSUSE")
-            print_message "$CYAN" ":: Installing required packages using zypper..."
+            print_message "$CYAN" "Installing required packages using zypper..."
 
             sudo zypper install -y libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
                 google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
                 trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
-                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock || {
+                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock dunst || {
                 print_message "${RED}" "Failed to install some packages via zypper."
                 exit 1
             }
@@ -97,7 +97,7 @@ check_aur_helper() {
         return 0
     fi
 
-    print_message "$CYAN" ":: No AUR helper found. Installing yay..."
+    print_message "$CYAN" "No AUR helper found. Installing yay..."
 
     sudo pacman -S --needed --noconfirm git base-devel
 
@@ -143,7 +143,7 @@ install_dwm() {
 }
 
 install_slstatus() {
-    print_message "$CYAN" ":: Installing slstatus..."
+    print_message "$CYAN" "Installing slstatus..."
     if confirm "Do you want to install slstatus (recommended)?"; then
         cd "$HOME/dwm/slstatus" || exit 1
         sudo make clean install || exit 1
@@ -191,14 +191,14 @@ install_picom() {
         "Arch")
             check_aur_helper
 
-            print_message "$CYAN" ":: Installing Picom with $aur_helper..."
+            print_message "$CYAN" "Installing Picom with $aur_helper..."
             $aur_helper -S --noconfirm picom-ftlabs-git || {
                 print_message "$RED" "Failed to install Picom via $aur_helper. Please install manually."
                 exit 1
             }
             ;;
         "Fedora")
-            print_message "$CYAN" ":: Installing Picom manually on Fedora..."
+            print_message "$CYAN" "Installing Picom manually on Fedora..."
             sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel \
                 libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel \
                 libepoxy-devel meson pcre2-devel pixman-devel uthash-devel \
@@ -211,7 +211,7 @@ install_picom() {
             sudo cp build/src/picom /usr/bin/
             ;;
         "openSUSE")
-            print_message "$CYAN" ":: Installing Picom manually on openSUSE..."
+            print_message "$CYAN" "Installing Picom manually on openSUSE..."
             sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
                 libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
                 libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
@@ -261,7 +261,7 @@ configure_wallpapers() {
     fi
 
     if confirm "Do you want to download wallpapers? (Note: The wallpaper collection is large in size but recommended)"; then
-        print_message "$CYAN" ":: Downloading wallpapers..."
+        print_message "$CYAN" "Downloading wallpapers..."
         git clone https://github.com/harilvfs/wallpapers "$BG_DIR" || exit 1
         print_message "$GREEN" "Wallpapers downloaded successfully."
     else
@@ -282,14 +282,14 @@ setup_xinitrc() {
         fi
     fi
 
-    print_message "$CYAN" ":: Creating .xinitrc file for DWM..."
+    print_message "$CYAN" "Creating .xinitrc file for DWM..."
 
     case "$DISTRO" in
         "openSUSE")
             cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 
-pgrep dunst > /dev/null || /usr/bin/dunst &
+pgrep dunst >/dev/null || /usr/bin/dunst &
 
 xautolock \
   -time 10 \
@@ -304,7 +304,7 @@ EOF
             cat > "$XINITRC" << 'EOF'
 #!/bin/sh
 
-pgrep dunst > /dev/null || /usr/bin/dunst &
+pgrep dunst >/dev/null || /usr/bin/dunst &
 
 xautolock \
   -time 10 \
@@ -331,12 +331,12 @@ setup_startx() {
 }
 
 setup_numlock() {
-    echo -e "${GREEN}Setting up NumLock on login...${ENDCOLOR}"
+    print_message "$GREEN" "Setting up NumLock on login..."
 
     sudo tee "/usr/local/bin/numlock" > /dev/null << 'EOF'
 #!/bin/bash
 for tty in /dev/tty{1..6}; do
-    /usr/bin/setleds -D +num < "$tty"
+    /usr/bin/setleds -D +num <"$tty"
 done
 EOF
     sudo chmod +x /usr/local/bin/numlock
@@ -354,9 +354,9 @@ EOF
 
     if confirm "Enable NumLock on boot?"; then
         sudo systemctl enable numlock.service
-        echo -e "${GREEN}NumLock will be enabled on boot.${ENDCOLOR}"
+        print_message "$GREEN" "NumLock will be enabled on boot."
     else
-        echo -e "${GREEN}NumLock setup skipped.${ENDCOLOR}"
+        print_message "$YELLOW" "NumLock setup skipped."
     fi
 }
 

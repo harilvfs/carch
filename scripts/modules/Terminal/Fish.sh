@@ -9,13 +9,13 @@ distro=""
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;

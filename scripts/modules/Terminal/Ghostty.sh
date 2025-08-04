@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -69,7 +69,7 @@ setup_config() {
     local backup_path=""
 
     if [ -d "$CONFIG_DIR" ]; then
-        print_message "$CYAN" ":: Existing Ghostty configuration detected."
+        print_message "$CYAN" "Existing Ghostty configuration detected."
 
         if confirm "Do you want to backup the existing configuration?"; then
             mkdir -p "$BACKUP_DIR_BASE"
@@ -85,7 +85,7 @@ setup_config() {
         mkdir -p "$CONFIG_DIR"
     fi
 
-    print_message "$CYAN" ":: Downloading Ghostty configuration..."
+    print_message "$CYAN" "Downloading Ghostty configuration..."
 
     wget -q -O "$CONFIG_DIR/config" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/ghostty/config"
 

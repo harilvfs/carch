@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$NC"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -42,7 +42,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -84,7 +84,7 @@ handle_existing_config() {
     local backup_dir="$HOME/.config/carch/backups"
 
     if [ ! -d "$nvim_config_dir" ]; then
-        print_message "$GREEN" ":: Creating Neovim configuration directory..."
+        print_message "$GREEN" "Creating Neovim configuration directory..."
         mkdir -p "$nvim_config_dir"
         return
     fi
@@ -92,14 +92,14 @@ handle_existing_config() {
     print_message "$YELLOW" "Existing Neovim configuration found."
 
     if confirm "Backup existing config?"; then
-        print_message "$RED" ":: Backing up existing config..."
+        print_message "$RED" "Backing up existing config..."
         mkdir -p "$backup_dir"
         local backup_path="$backup_dir/nvim.bak"
         mv "$nvim_config_dir" "$backup_path"
         mkdir -p "$nvim_config_dir"
-        print_message "$GREEN" ":: Backup created at $backup_path."
+        print_message "$GREEN" "Backup created at $backup_path."
     else
-        print_message "$YELLOW" ":: Removing existing Neovim configuration..."
+        print_message "$YELLOW" "Removing existing Neovim configuration..."
         rm -rf "$nvim_config_dir"
         mkdir -p "$nvim_config_dir"
     fi
@@ -110,13 +110,13 @@ setup_neovim() {
 
     handle_existing_config
 
-    print_message "$GREEN" ":: Cloning Neovim configuration from GitHub..."
+    print_message "$GREEN" "Cloning Neovim configuration from GitHub..."
     if ! git clone https://github.com/harilvfs/nvim "$nvim_config_dir"; then
         print_message "$RED" "Failed to clone the Neovim configuration repository."
         exit 1
     fi
 
-    print_message "$GREEN" ":: Cleaning up unnecessary files..."
+    print_message "$GREEN" "Cleaning up unnecessary files..."
     cd "$nvim_config_dir" || exit 1
     rm -rf .git README.md LICENSE
 
@@ -129,19 +129,19 @@ setup_nvchad() {
 
     handle_existing_config
 
-    print_message "$GREEN" ":: Cloning NvChad configuration from GitHub..."
+    print_message "$GREEN" "Cloning NvChad configuration from GitHub..."
     if ! git clone https://github.com/harilvfs/chadnvim "$nvchad_dir"; then
         print_message "$RED" "Failed to clone the NvChad repository."
         return 1
     fi
 
-    print_message "$GREEN" ":: Moving NvChad configuration..."
+    print_message "$GREEN" "Moving NvChad configuration..."
     cp -r "$nvchad_dir/nvim/"* "$nvim_config_dir/"
 
-    print_message "$GREEN" ":: Cleaning up temporary files..."
+    print_message "$GREEN" "Cleaning up temporary files..."
     rm -rf "$nvchad_dir"
 
-    print_message "$GREEN" ":: Cleaning up unnecessary files..."
+    print_message "$GREEN" "Cleaning up unnecessary files..."
     cd "$nvim_config_dir" || return 1
     rm -rf LICENSE README.md
 

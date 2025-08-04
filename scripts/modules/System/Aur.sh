@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -32,7 +32,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -42,7 +42,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -60,7 +60,7 @@ check_dependencies() {
         if ! command -v "$dep" &> /dev/null; then
             print_message "$RED" "Error: ${dep} is not installed."
             print_message "$YELLOW" "Please install ${dep} before running this script:"
-            echo -e "${CYAN}  • Arch Linux: ${ENDCOLOR}sudo pacman -S ${dep}"
+            print_message "$CYAN" "  • Arch Linux: sudo pacman -S ${dep}"
             failed=1
         fi
     done
@@ -73,12 +73,12 @@ check_dependencies() {
 install_paru() {
     if command -v paru &> /dev/null; then
         print_message "$GREEN" "Paru is already installed on this system."
-        echo -e "$(paru --version | head -n 1)"
+        print_message "$CYAN" "$(paru --version | head -n 1)"
         read -p "Press Enter to continue..."
         return
     fi
 
-    print_message "$CYAN" ":: Installing Paru..."
+    print_message "$CYAN" "Installing Paru..."
     sudo pacman -S --needed --noconfirm base-devel git
     if [ $? -ne 0 ]; then
         print_message "$RED" "Failed to install dependencies."
@@ -101,18 +101,18 @@ install_paru() {
     else
         print_message "$RED" "Paru installation failed."
     fi
-    read -p "Press Enter to continue..."
+      read -p "Press Enter to continue..."
 }
 
 install_yay() {
     if command -v yay &> /dev/null; then
         print_message "$GREEN" "Yay is already installed on this system."
-        echo -e "$(yay --version | head -n 1)"
+        print_message "$CYAN" "$(yay --version | head -n 1)"
         read -p "Press Enter to continue..."
         return
     fi
 
-    print_message "$CYAN" ":: Installing Yay..."
+    print_message "$CYAN" "Installing Yay..."
     sudo pacman -S --needed --noconfirm git base-devel
     if [ $? -ne 0 ]; then
         print_message "$RED" "Failed to install dependencies."
@@ -156,7 +156,7 @@ check_existing_helpers() {
 
     if $helpers_found; then
         print_message "$GREEN" "AUR helper(s) already installed on this system:"
-        echo -e "$helper_list"
+        printf "%b" "$helper_list"
     else
         print_message "$YELLOW" "No AUR helpers detected on this system."
     fi
@@ -174,7 +174,7 @@ main() {
 
     while true; do
         clear
-        print_message "$CYAN" ":: AUR Setup Menu [ For Arch Only ] ::"
+        print_message "$CYAN" "AUR Setup Menu [ For Arch Only ]"
         echo
         check_existing_helpers
         echo

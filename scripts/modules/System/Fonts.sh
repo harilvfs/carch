@@ -11,12 +11,12 @@ aur_helper=""
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -35,7 +35,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -45,7 +45,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -83,7 +83,7 @@ check_aur_helper() {
     local aur_helpers=("yay" "paru")
     for helper in "${aur_helpers[@]}"; do
         if command -v "$helper" &> /dev/null; then
-            print_message "$GREEN" ":: AUR helper '$helper' is already installed. Using it."
+            print_message "$GREEN" "AUR helper '$helper' is already installed. Using it."
             aur_helper="$helper"
             return
         fi
@@ -106,7 +106,7 @@ check_aur_helper() {
 
 install_font_arch() {
     local font_pkg="$@"
-    print_message "$GREEN" ":: Installing $font_pkg via pacman..."
+    print_message "$GREEN" "Installing $font_pkg via pacman..."
     sudo pacman -S --noconfirm $font_pkg
     print_message "$GREEN" "$font_pkg installed successfully!"
 }
@@ -117,17 +117,17 @@ install_font_fedora() {
     local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/${font_name}.zip"
     local zip_file="/tmp/${font_name}.zip"
 
-    print_message "$GREEN" ":: Downloading $font_name version ${latest_version} to /tmp..."
+    print_message "$GREEN" "Downloading $font_name version ${latest_version} to /tmp..."
     curl -L "$font_url" -o "$zip_file"
 
-    print_message "$GREEN" ":: Extracting $font_name..."
+    print_message "$GREEN" "Extracting $font_name..."
     mkdir -p "$FONTS_DIR"
     unzip -q "$zip_file" -d "$FONTS_DIR"
 
-    print_message "$GREEN" ":: Cleaning up temporary files..."
+    print_message "$GREEN" "Cleaning up temporary files..."
     rm -f "$zip_file"
 
-    print_message "$GREEN" ":: Refreshing font cache..."
+    print_message "$GREEN" "Refreshing font cache..."
     fc-cache -vf
 
     print_message "$GREEN" "$font_name installed successfully in $FONTS_DIR!"
@@ -135,7 +135,7 @@ install_font_fedora() {
 
 install_fedora_system_fonts() {
     local font_pkg="$@"
-    print_message "$GREEN" ":: Installing $font_pkg via dnf..."
+    print_message "$GREEN" "Installing $font_pkg via dnf..."
     sudo dnf install -y $font_pkg
     print_message "$GREEN" "$font_pkg installed successfully!"
 }
@@ -146,17 +146,17 @@ install_font_opensuse() {
     local font_url="https://github.com/ryanoasis/nerd-fonts/releases/download/v${latest_version}/${font_name}.zip"
     local zip_file="/tmp/${font_name}.zip"
 
-    print_message "$GREEN" ":: Downloading $font_name version ${latest_version} to /tmp..."
+    print_message "$GREEN" "Downloading $font_name version ${latest_version} to /tmp..."
     curl -L "$font_url" -o "$zip_file"
 
-    print_message "$GREEN" ":: Extracting $font_name..."
+    print_message "$GREEN" "Extracting $font_name..."
     mkdir -p "$FONTS_DIR"
     unzip -q "$zip_file" -d "$FONTS_DIR"
 
-    print_message "$GREEN" ":: Cleaning up temporary files..."
+    print_message "$GREEN" "Cleaning up temporary files..."
     rm -f "$zip_file"
 
-    print_message "$GREEN" ":: Refreshing font cache..."
+    print_message "$GREEN" "Refreshing font cache..."
     fc-cache -vf
 
     print_message "$GREEN" "$font_name installed successfully in $FONTS_DIR!"
@@ -164,7 +164,7 @@ install_font_opensuse() {
 
 install_opensuse_system_fonts() {
     local font_pkg="$@"
-    print_message "$GREEN" ":: Installing $font_pkg via zypper..."
+    print_message "$GREEN" "Installing $font_pkg via zypper..."
     sudo zypper install -y $font_pkg
     print_message "$GREEN" "$font_pkg installed successfully!"
 }
@@ -241,15 +241,15 @@ install_font() {
             case "$DISTRO" in
                 "Arch")
                     check_aur_helper
-                    print_message "$GREEN" ":: Installing JoyPixels (ttf-joypixels) via $aur_helper..."
+                    print_message "$GREEN" "Installing JoyPixels (ttf-joypixels) via $aur_helper..."
                     $aur_helper -S --noconfirm ttf-joypixels
                     print_message "$GREEN" "JoyPixels installed successfully!"
                     ;;
                 "openSUSE" | "Fedora")
-                    print_message "$GREEN" ":: Downloading JoyPixels font..."
+                    print_message "$GREEN" "Downloading JoyPixels font..."
                     mkdir -p "$HOME/.fonts"
                     curl -L "https://cdn.joypixels.com/arch-linux/font/8.0.0/joypixels-android.ttf" -o "$HOME/.fonts/joypixels-android.ttf"
-                    print_message "$GREEN" ":: Refreshing font cache..."
+                    print_message "$GREEN" "Refreshing font cache..."
                     fc-cache -vf "$HOME/.fonts"
                     print_message "$GREEN" "JoyPixels installed successfully to ~/.fonts!"
                     ;;
@@ -260,7 +260,7 @@ install_font() {
             case "$DISTRO" in
                 "Arch")
                     check_aur_helper
-                    print_message "$GREEN" ":: Installing Font Awesome (ttf-font-awesome) via $aur_helper..."
+                    print_message "$GREEN" "Installing Font Awesome (ttf-font-awesome) via $aur_helper..."
                     $aur_helper -S --noconfirm ttf-font-awesome
                     print_message "$GREEN" "Font Awesome installed successfully!"
                     ;;
@@ -314,7 +314,7 @@ choose_fonts() {
 
 main() {
     check_dependencies
-    print_message "$TEAL" ":: Detected OS: $DISTRO"
+    print_message "$TEAL" "Detected OS: $DISTRO"
     echo
     choose_fonts
 }

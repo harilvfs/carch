@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -32,7 +32,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -42,7 +42,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -101,7 +101,7 @@ display_brightness() {
     progress+="]"
 
     print_message "$TEAL" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo -e "${CYAN}Current brightness: ${YELLOW}$current%${ENDCOLOR} $progress"
+    printf "%bCurrent brightness: %b%s%%%b %s\n" "$CYAN" "$YELLOW" "$current" "$NC" "$progress"
     print_message "$TEAL" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 }
 
@@ -137,7 +137,7 @@ set_specific_brightness() {
     while true; do
         clear
         display_brightness
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter desired brightness (5-100) or 'q' to return: " "$ENDCOLOR")" input
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter desired brightness (5-100) or 'q' to return: " "$NC")" input
 
         if [[ "$input" == "q" || "$input" == "Q" ]]; then
             return

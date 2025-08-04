@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -42,20 +42,20 @@ setup_kitty() {
     local BACKUP_DIR_BASE="$HOME/.config/carch/backups"
 
     if [ -d "$CONFIG_DIR" ]; then
-        print_message "$CYAN" ":: Existing Kitty configuration detected."
+        print_message "$CYAN" "Existing Kitty configuration detected."
         if confirm "Do you want to backup the existing configuration?"; then
             mkdir -p "$BACKUP_DIR_BASE"
             local backup_path="$BACKUP_DIR_BASE/kitty.bak.$RANDOM"
             mv "$CONFIG_DIR" "$backup_path"
-            print_message "$GREEN" ":: Existing Kitty configuration backed up to $backup_path."
+            print_message "$GREEN" "Existing Kitty configuration backed up to $backup_path."
         else
-            print_message "$CYAN" ":: Skipping backup. Your existing configuration will be overwritten."
+            print_message "$CYAN" "Skipping backup. Your existing configuration will be overwritten."
         fi
     fi
 
     mkdir -p "$CONFIG_DIR"
 
-    print_message "$CYAN" ":: Downloading Kitty configuration files..."
+    print_message "$CYAN" "Downloading Kitty configuration files..."
 
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/kitty.conf"
     wget -q -P "$CONFIG_DIR" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/kitty/theme.conf"

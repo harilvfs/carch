@@ -8,23 +8,34 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
 }
 
 install_bluetooth() {
-    print_message "$TEAL" ":: Installing Bluetooth packages..."
+    print_message "$TEAL" "Installing Bluetooth packages..."
 
     case "$DISTRO" in
         "Arch")
-            print_message "$CYAN" ":: Installing Bluetooth packages for Arch Linux..."
+            print_message "$CYAN" "Installing Bluetooth packages for Arch Linux..."
             sudo pacman -S --noconfirm bluez bluez-utils blueman
             ;;
         "Fedora")
-            print_message "$CYAN" ":: Installing Bluetooth packages for Fedora..."
+            print_message "$CYAN" "Installing Bluetooth packages for Fedora..."
             sudo dnf install -y bluez bluez-tools blueman
             ;;
         "openSUSE")
-            print_message "$CYAN" ":: Installing Bluetooth packages for openSUSE..."
+            print_message "$CYAN" "Installing Bluetooth packages for openSUSE..."
             sudo zypper install -y bluez blueman
             ;;
         *)
@@ -33,40 +44,40 @@ install_bluetooth() {
     esac
 
     if [ $? -ne 0 ]; then
-        print_message "$RED" ":: Failed to install Bluetooth packages on ${DISTRO}."
+        print_message "$RED" "Failed to install Bluetooth packages on ${DISTRO}."
         exit 1
     fi
 
-    print_message "$GREEN" ":: Bluetooth packages installed successfully."
+    print_message "$GREEN" "Bluetooth packages installed successfully."
 }
 
 enable_bluetooth() {
-    print_message "$TEAL" ":: Enabling Bluetooth service..."
+    print_message "$TEAL" "Enabling Bluetooth service..."
     sudo systemctl enable --now bluetooth.service
     if [ $? -ne 0 ]; then
-        print_message "$RED" ":: Failed to enable Bluetooth service."
+        print_message "$RED" "Failed to enable Bluetooth service."
         exit 1
     fi
-    print_message "$GREEN" ":: Bluetooth service enabled successfully."
+    print_message "$GREEN" "Bluetooth service enabled successfully."
 }
 
 provide_additional_info() {
-    print_message "$TEAL" ":: Additional Information:"
-    echo -e "${CYAN}:: • To pair a device: Use the Blueman applet or 'bluetoothctl' in terminal${ENDCOLOR}"
-    echo -e "${CYAN}:: • To access Bluetooth settings: Use the Blueman application${ENDCOLOR}"
-    echo -e "${CYAN}:: • To pair via terminal: Run 'bluetoothctl', then 'power on', 'scan on', 'pair MAC_ADDRESS'${ENDCOLOR}"
+    print_message "$TEAL" "Additional Information:"
+    print_message "$CYAN" "• To pair a device: Use the Blueman applet or 'bluetoothctl' in terminal"
+    print_message "$CYAN" "• To access Bluetooth settings: Use the Blueman application"
+    print_message "$CYAN" "• To pair via terminal: Run 'bluetoothctl', then 'power on', 'scan on', 'pair MAC_ADDRESS'"
 }
 
 main() {
     install_bluetooth
     enable_bluetooth
-    print_message "$GREEN" ":: Bluetooth setup completed successfully!"
+    print_message "$GREEN" "Bluetooth setup completed successfully!"
     provide_additional_info
 
     if confirm "Do you want to restart the Bluetooth service now?"; then
-        print_message "$TEAL" ":: Restarting Bluetooth service..."
+        print_message "$TEAL" "Restarting Bluetooth service..."
         sudo systemctl restart bluetooth.service
-        print_message "$GREEN" ":: Bluetooth service restarted."
+        print_message "$GREEN" "Bluetooth service restarted."
     fi
 }
 

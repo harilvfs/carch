@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -32,7 +32,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -42,7 +42,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -53,48 +53,48 @@ get_choice() {
 }
 
 install_dependencies() {
-    print_message "$CYAN" ":: Installing dependencies..."
+    print_message "$CYAN" "Installing dependencies..."
 
     case "$DISTRO" in
         "Arch")
             sudo pacman -S --needed --noconfirm git lxappearance gtk3 gtk4 qt5ct qt6ct nwg-look kvantum papirus-icon-theme adwaita-icon-theme || {
-                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                print_message "$RED" "Failed to install dependencies. Exiting..."
                 exit 1
             }
             ;;
         "Fedora")
             sudo dnf install -y git lxappearance gtk3 gtk4 qt5ct qt6ct kvantum papirus-icon-theme adwaita-icon-theme || {
-                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                print_message "$RED" "Failed to install dependencies. Exiting..."
                 exit 1
             }
 
             if ! command -v nwg-look &> /dev/null; then
-                print_message "$CYAN" ":: Installing nwg-look for Fedora..."
+                print_message "$CYAN" "Installing nwg-look for Fedora..."
                 sudo dnf copr enable -y solopasha/hyprland || {
-                    print_message "$RED" ":: Failed to enable solopasha/hyprland COPR repository."
+                    print_message "$RED" "Failed to enable solopasha/hyprland COPR repository."
                     exit 1
                 }
                 sudo dnf install -y nwg-look || {
-                    print_message "$RED" ":: Failed to install nwg-look. Exiting..."
+                    print_message "$RED" "Failed to install nwg-look. Exiting..."
                     exit 1
                 }
             fi
             ;;
         "openSUSE")
             sudo zypper install -y git lxappearance nwg-look gtk3-tools gtk4-tools qt5ct qt6ct kvantum-manager papirus-icon-theme adwaita-icon-theme || {
-                print_message "$RED" ":: Failed to install dependencies. Exiting..."
+                print_message "$RED" "Failed to install dependencies. Exiting..."
                 exit 1
             }
             ;;
     esac
 
-    print_message "$GREEN" ":: Dependencies installed successfully."
+    print_message "$GREEN" "Dependencies installed successfully."
 }
 
 check_and_create_dir() {
     if [ ! -d "$1" ]; then
         mkdir -p "$1"
-        print_message "$TEAL" ":: Created directory: $1"
+        print_message "$TEAL" "Created directory: $1"
     fi
 }
 
@@ -103,10 +103,10 @@ clone_repo() {
     local target_dir=$2
 
     if [ -d "$target_dir" ]; then
-        print_message "$YELLOW" ":: $target_dir already exists. Skipping clone."
+        print_message "$YELLOW" "$target_dir already exists. Skipping clone."
     else
         git clone "$repo_url" "$target_dir" || {
-            print_message "$RED" ":: Failed to clone $repo_url. Exiting..."
+            print_message "$RED" "Failed to clone $repo_url. Exiting..."
             exit 1
         }
     fi
@@ -118,7 +118,7 @@ cleanup_files() {
 }
 
 setup_themes() {
-    print_message "$CYAN" ":: Setting up Themes..."
+    print_message "$CYAN" "Setting up Themes..."
     local tmp_dir="/tmp/themes"
     clone_repo "https://github.com/harilvfs/themes" "$tmp_dir"
 
@@ -129,11 +129,11 @@ setup_themes() {
 
     rm -rf "$tmp_dir"
 
-    print_message "$GREEN" ":: Themes have been set up successfully."
+    print_message "$GREEN" "Themes have been set up successfully."
 }
 
 setup_icons() {
-    print_message "$CYAN" ":: Setting up Icons..."
+    print_message "$CYAN" "Setting up Icons..."
     local tmp_dir="/tmp/icons"
     clone_repo "https://github.com/harilvfs/icons" "$tmp_dir"
 
@@ -144,11 +144,11 @@ setup_icons() {
 
     rm -rf "$tmp_dir"
 
-    print_message "$GREEN" ":: Icons have been set up successfully."
+    print_message "$GREEN" "Icons have been set up successfully."
 }
 
 confirm_and_proceed() {
-    print_message "$YELLOW" ":: This will install themes and icons, but you must select them manually using lxappearance (X11) or nwg-look (Wayland)."
+    print_message "$YELLOW" "This will install themes and icons, but you must select them manually using lxappearance (X11) or nwg-look (Wayland)."
 
     if ! confirm "Do you want to continue?"; then
         print_message "$YELLOW" "Operation canceled."
@@ -168,20 +168,20 @@ main() {
             install_dependencies
             confirm_and_proceed
             setup_themes
-            print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme."
+            print_message "$TEAL" "Use lxappearance for X11 or nwg-look for Wayland to select the theme."
             ;;
         "Icons")
             install_dependencies
             confirm_and_proceed
             setup_icons
-            print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the icons."
+            print_message "$TEAL" "Use lxappearance for X11 or nwg-look for Wayland to select the icons."
             ;;
         "Both")
             install_dependencies
             confirm_and_proceed
             setup_themes
             setup_icons
-            print_message "$TEAL" ":: Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons."
+            print_message "$TEAL" "Use lxappearance for X11 or nwg-look for Wayland to select the theme and icons."
             ;;
         "Exit")
             exit 0

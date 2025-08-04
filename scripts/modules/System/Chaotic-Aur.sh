@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    shift
-    echo -e "${color}$*${NC}"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -92,7 +92,7 @@ install_chaotic_aur() {
     }
 
     print_message "$GREEN" "Chaotic AUR has been installed successfully!"
-    echo -e "${GREEN}You can now install packages from Chaotic AUR using pacman.${ENDCOLOR}"
+    print_message "$GREEN" "You can now install packages from Chaotic AUR using pacman."
 }
 
 main() {
