@@ -22,7 +22,7 @@ include_dir = "0.7.3"
 ratatui = { version = "0.29", default-features = false, features = ["crossterm"] }
 crossterm = "0.29"
 syntect = "5.2.0"
-clap = { version = "4.5.41", features = ["derive"] }
+clap = { version = "4.5.42", features = ["derive"] }
 reqwest = { version = "0.12.22", default-features = false, features = ["blocking", "json", "rustls-tls"] }
 serde = { version = "1.0.219", default-features = false, features = ["derive"] }
 fuzzy-matcher = "0.3.7"
