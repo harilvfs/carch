@@ -4,6 +4,11 @@ source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
 
+install_electrum() {
+    clear
+    install_package "electrum" "org.electrum.electrum"
+}
+
 main() {
     while true; do
         clear
@@ -16,8 +21,7 @@ main() {
 
         case "$selection" in
             "Electrum")
-                clear
-                install_package "electrum" "org.electrum.electrum"
+                install_electrum
                 ;;
             "Exit")
                 exit 0

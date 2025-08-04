@@ -245,15 +245,7 @@ install_pokemon_colorscripts() {
     esac
 }
 
-main() {
-    check_essential_dependencies
-    install_distro_packages
-    install_eza
-
-    clear
-    print_message "$TEAL" "Nerd Fonts are recommended for the best experience."
-    print_message "$CYAN" "Detected distribution: $DISTRO"
-
+setup_starship() {
     local options=("Catppuccin" "Nord" "Tokyo Night" "Exit")
     show_menu "Select a theme for Starship:" "${options[@]}"
     get_choice "${#options[@]}"
@@ -261,7 +253,7 @@ main() {
     local THEME="${options[$((choice_index - 1))]}"
 
     if [[ -z "$THEME" || "$THEME" == "Exit" ]]; then
-        exit 0
+        return
     fi
 
     print_message "$GREEN" "You selected $THEME theme."
@@ -286,7 +278,7 @@ main() {
     if ! command -v starship &> /dev/null; then
         print_message "$CYAN" "Starship not found. Installing..."
         if ! curl -sS https://starship.rs/install.sh | sh -s -- -y; then
-             print_message "$RED" "Failed to install Starship. Please try installing it manually."
+            print_message "$RED" "Failed to install Starship. Please try installing it manually."
         fi
     fi
 
@@ -304,7 +296,9 @@ main() {
     print_message "$CYAN" "Applying $THEME theme for Starship..."
     curl -fsSL "$STARSHIP_CONFIG_URL" -o "$STARSHIP_CONFIG"
     print_message "$GREEN" "Applied $THEME theme for Starship."
+}
 
+setup_zoxide() {
     if ! command -v zoxide &> /dev/null; then
         print_message "$CYAN" "Installing zoxide..."
         case "$DISTRO" in
@@ -313,20 +307,34 @@ main() {
             "openSUSE") sudo zypper install -y zoxide ;;
         esac
     fi
+}
 
+setup_bashrc() {
     local BASHRC="$HOME/.bashrc"
+    local backup_dir="$HOME/.config/carch/backups"
     if [[ -f "$BASHRC" ]]; then
         if confirm ".bashrc already exists. Use the recommended version?"; then
+            mkdir -p "$backup_dir"
             mv "$BASHRC" "$backup_dir/.bashrc.bak"
             print_message "$GREEN" "Backup created: $backup_dir/.bashrc.bak"
             curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
             print_message "$GREEN" "Applied recommended .bashrc."
         fi
     fi
+}
 
+main() {
+    check_essential_dependencies
+    install_distro_packages
+    install_eza
+    clear
+    print_message "$TEAL" "Nerd Fonts are recommended for the best experience."
+    print_message "$CYAN" "Detected distribution: $DISTRO"
+    setup_starship
+    setup_zoxide
+    setup_bashrc
     install_pokemon_colorscripts
     check_default_shell
-
     print_message "$TEAL" "Setup completed successfully!"
 }
 

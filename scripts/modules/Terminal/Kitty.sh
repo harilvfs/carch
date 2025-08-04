@@ -83,5 +83,9 @@ install_font() {
     fi
 }
 
-setup_kitty
-install_font
+main() {
+    setup_kitty
+    install_font
+}
+
+main

@@ -60,4 +60,8 @@ check_and_install_npm() {
     fi
 }
 
-check_and_install_npm
+main() {
+    check_and_install_npm
+}
+
+main

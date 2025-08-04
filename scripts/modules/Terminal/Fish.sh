@@ -103,9 +103,7 @@ install_zoxide() {
     esac
 }
 
-main() {
-    install_fish_packages
-
+setup_fish_config() {
     local FISH_CONFIG="$HOME/.config/fish"
     local backup_dir="$HOME/.config/carch/backups"
     if [[ -d "$FISH_CONFIG" ]]; then
@@ -133,7 +131,9 @@ main() {
         rm -rf "$HOME/dwm"
         exit 1
     fi
+}
 
+set_fish_as_default_shell() {
     local CURRENT_SHELL
     CURRENT_SHELL=$(getent passwd "$USER" | cut -d: -f7)
     local FISH_PATH
@@ -148,7 +148,12 @@ main() {
             print_message "$GREEN" "Fish is now set as your default shell!"
         fi
     fi
+}
 
+main() {
+    install_fish_packages
+    setup_fish_config
+    set_fish_as_default_shell
     install_zoxide
     print_message "$GREEN" "Zoxide initialized in Fish!"
     print_message "$CYAN" "Fish setup complete! Restart your shell to apply changes."
