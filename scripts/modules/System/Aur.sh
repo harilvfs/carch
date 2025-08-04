@@ -131,6 +131,7 @@ install_yay() {
     else
         print_message "$RED" "Yay installation failed."
     fi
+    read -p "Press Enter to continue..."
 }
 
 check_existing_helpers() {
