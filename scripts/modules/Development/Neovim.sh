@@ -52,23 +52,6 @@ get_choice() {
     done
 }
 
-echo -e "${TEAL}"
-cat << "EOF"
-
-This script helps you set up Neovim or NvChad.
-
-:: 'Neovim' will install and configure the standard Neovim setup.
-:: 'NvChad' will install and configure the NvChad setup.
-:: 'Exit' to exit the script at any time.
-
-For either option:
-- 'Yes': Will check for an existing Neovim configuration and back it up before applying the new configuration.
-- 'No': Will create a new Neovim configuration directory.
-
--------------------------------------------------------------------------------------------------
-EOF
-echo -e "${NC}"
-
 install_dependencies() {
     print_message "$GREEN" "Installing required dependencies..."
 
@@ -166,7 +149,7 @@ setup_nvchad() {
 }
 
 main() {
-    local options=("Neovim" "NvChad" "Exit")
+    local options=("Kickstart-Neovim" "NvChad" "Exit")
     show_menu "Choose the setup option:" "${options[@]}"
 
     get_choice "${#options[@]}"
@@ -174,7 +157,7 @@ main() {
     local choice="${options[$((choice_index - 1))]}"
 
     case "$choice" in
-        "Neovim")
+        "Kickstart-Neovim")
             setup_neovim
             install_dependencies
             ;;
