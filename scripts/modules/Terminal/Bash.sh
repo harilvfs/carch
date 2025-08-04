@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -287,8 +287,9 @@ setup_starship() {
     if [[ -f "$STARSHIP_CONFIG" ]]; then
         if confirm "Starship configuration found. Do you want to back it up?"; then
             mkdir -p "$backup_dir"
-            mv "$STARSHIP_CONFIG" "$backup_dir/starship.toml.bak"
-            print_message "$GREEN" "Backup created: $backup_dir/starship.toml.bak"
+            local backup_path="$backup_dir/starship.toml.bak.$RANDOM"
+            mv "$STARSHIP_CONFIG" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
         fi
     fi
 
@@ -315,8 +316,9 @@ setup_bashrc() {
     if [[ -f "$BASHRC" ]]; then
         if confirm ".bashrc already exists. Use the recommended version?"; then
             mkdir -p "$backup_dir"
-            mv "$BASHRC" "$backup_dir/.bashrc.bak"
-            print_message "$GREEN" "Backup created: $backup_dir/.bashrc.bak"
+            local backup_path="$backup_dir/.bashrc.bak.$RANDOM"
+            mv "$BASHRC" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
             curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.bashrc" -o "$BASHRC"
             print_message "$GREEN" "Applied recommended .bashrc."
         fi

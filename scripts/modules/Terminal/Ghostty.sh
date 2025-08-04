@@ -5,20 +5,26 @@ clear
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
+print_message() {
+    local color="$1"
+    shift
+    echo -e "${color}$*${NC}"
+}
+
 confirm() {
     while true; do
-        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
-            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
 }
 
 install_ghostty() {
     if ! command -v ghostty &> /dev/null; then
-        echo -e "${CYAN}Ghostty is not installed. :: Installing...${NC}"
+        print_message "$CYAN" "Ghostty is not installed. :: Installing..."
 
         case "$DISTRO" in
             "Arch") sudo pacman -S --needed ghostty ;;
@@ -32,7 +38,7 @@ install_ghostty() {
                 ;;
         esac
     else
-        echo -e "${GREEN}Ghostty is already installed.${NC}"
+        print_message "$GREEN" "Ghostty is already installed."
     fi
 }
 
@@ -53,66 +59,48 @@ install_fonts() {
                 ;;
         esac
     else
-        echo -e "${CYAN}Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering.${NC}"
+        print_message "$CYAN" "Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering."
     fi
 }
 
 setup_config() {
-    CONFIG_DIR="$HOME/.config/ghostty"
-    BACKUP_DIR="$HOME/.config/carch/backups/ghostty.bak"
+    local CONFIG_DIR="$HOME/.config/ghostty"
+    local BACKUP_DIR_BASE="$HOME/.config/carch/backups"
+    local backup_path=""
 
     if [ -d "$CONFIG_DIR" ]; then
-        echo -e "${CYAN}:: Existing Ghostty configuration detected.${NC}"
+        print_message "$CYAN" ":: Existing Ghostty configuration detected."
 
         if confirm "Do you want to backup the existing configuration?"; then
-            mkdir -p "$(dirname "$BACKUP_DIR")"
-            if [ -d "$BACKUP_DIR" ]; then
-                echo -e "${YELLOW}Backup already exists.${NC}"
-                if confirm "Do you want to overwrite the backup?"; then
-                    rm -rf "$BACKUP_DIR"
-                else
-                    echo -e "${RED}Exiting to prevent data loss.${NC}"
-                    exit 0
-                fi
-            fi
-            mv "$CONFIG_DIR" "$BACKUP_DIR"
+            mkdir -p "$BACKUP_DIR_BASE"
+            backup_path="$BACKUP_DIR_BASE/ghostty.bak.$RANDOM"
+            mv "$CONFIG_DIR" "$backup_path"
             mkdir -p "$CONFIG_DIR"
         else
-            echo -e "${RED}Exiting to avoid overwriting existing config.${NC}"
+            print_message "$RED" "Exiting to avoid overwriting existing config."
             exit 0
         fi
     else
-        echo -e "${GREEN}No existing Ghostty configuration found. Creating directory...${NC}"
+        print_message "$GREEN" "No existing Ghostty configuration found. Creating directory..."
         mkdir -p "$CONFIG_DIR"
     fi
 
-    echo -e "${CYAN}:: Downloading Ghostty configuration...${NC}"
+    print_message "$CYAN" ":: Downloading Ghostty configuration..."
 
     wget -q -O "$CONFIG_DIR/config" "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/ghostty/config"
 
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Ghostty configuration downloaded successfully!${NC}"
-        echo -e "${CYAN}Note: The default theme is set to 'catppuccin-mocha'. You can change this in the config file.${NC}"
-        echo -e "${GREEN}Ghostty setup completed!${NC}"
-        if [ -d "$BACKUP_DIR" ]; then
-            echo -e "${GREEN}Check your backup directory for previous configs at $BACKUP_DIR.${NC}"
-        fi
-    else
-        echo -e "${RED}Failed to download Ghostty configuration.${NC}"
-        echo -e "${YELLOW}Please check your internet connection and try again.${NC}"
-        if [ -d "$BACKUP_DIR" ]; then
-            echo -e "${YELLOW}Restoring backup...${NC}"
-            rm -rf "$CONFIG_DIR"
-            mv "$BACKUP_DIR" "$CONFIG_DIR"
-            echo -e "${GREEN}Backup restored.${NC}"
-        fi
+    print_message "$GREEN" "Ghostty configuration downloaded successfully!"
+    print_message "$CYAN" "Note: The default theme is set to 'catppuccin-mocha'. You can change this in the config file."
+    print_message "$GREEN" "Ghostty setup completed!"
+    if [ -n "$backup_path" ]; then
+        print_message "$GREEN" "Check your backup directory for previous configs at $backup_path."
     fi
 }
 
 main() {
-    echo -e "${YELLOW}NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default.${NC}"
-    echo -e "${YELLOW}You can change themes and other settings in ~/.config/ghostty/config${NC}"
-    echo -e "${YELLOW}For more configuration options, check the Ghostty docs at: https://ghostty.org/docs${NC}"
+    print_message "$YELLOW" "NOTE: This Ghostty configuration uses JetBrains Mono Nerd Font by default."
+    print_message "$YELLOW" "You can change themes and other settings in ~/.config/ghostty/config"
+    print_message "$YELLOW" "For more configuration options, check the Ghostty docs at: https://ghostty.org/docs"
     echo
 
     install_ghostty

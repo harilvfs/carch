@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -85,15 +85,11 @@ handle_existing_config() {
         print_message "$YELLOW" "Existing Fastfetch configuration found."
         if confirm "Do you want to back up your existing Fastfetch configuration?"; then
             local backup_dir="$HOME/.config/carch/backups"
-            local backup_path="$backup_dir/fastfetch.bak"
+            local backup_path="$backup_dir/fastfetch.bak.$RANDOM"
 
             mkdir -p "$backup_dir"
 
             print_message "$CYAN" "Backing up existing Fastfetch configuration to $backup_path..."
-
-            if [ -d "$backup_path" ]; then
-                rm -rf "$backup_path"
-            fi
 
             mv "$FASTFETCH_DIR" "$backup_path"
             print_message "$GREEN" "Backup completed."

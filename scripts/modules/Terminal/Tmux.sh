@@ -5,13 +5,19 @@ clear
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
+print_message() {
+    local color="$1"
+    shift
+    echo -e "${color}$*${NC}"
+}
+
 confirm() {
     while true; do
-        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
-            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
 }
@@ -27,7 +33,7 @@ check_essential_dependencies() {
     done
 
     if [[ ${#missing[@]} -ne 0 ]]; then
-        echo "Please wait, installing required dependencies..."
+        print_message "$YELLOW" "Please wait, installing required dependencies..."
 
         case "$DISTRO" in
             "Arch") sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
@@ -42,24 +48,17 @@ check_essential_dependencies() {
 
 backup_tmux_config() {
     local config_dir="$HOME/.config/tmux"
-    local backup_dir="$HOME/.config/carch/backups/tmux.bak"
+    local backup_dir_base="$HOME/.config/carch/backups"
 
     if [[ -d "$config_dir" ]]; then
-        echo -e "${YELLOW}Existing tmux configuration detected.${NC}"
+        print_message "$YELLOW" "Existing tmux configuration detected."
         if confirm "Do you want to backup the existing configuration?"; then
-            mkdir -p "$(dirname "$backup_dir")"
-            if [[ -d "$backup_dir" ]]; then
-                echo -e "${YELLOW}Backup already exists.${NC}"
-                if confirm "Do you want to overwrite the backup?"; then
-                    rm -rf "$backup_dir"
-                else
-                    echo -e "${RED}Exiting to prevent data loss.${NC}"
-                    exit 0
-                fi
-            fi
-            mv "$config_dir" "$backup_dir"
+            mkdir -p "$backup_dir_base"
+            local backup_path="$backup_dir_base/tmux.bak.$RANDOM"
+            mv "$config_dir" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
         else
-            echo -e "${RED}Exiting to avoid overwriting existing config.${NC}"
+            print_message "$RED" "Exiting to avoid overwriting existing config."
             exit 0
         fi
     fi
@@ -69,16 +68,16 @@ install_tpm() {
     local tpm_dir="$HOME/.tmux/plugins/tpm"
 
     if [[ -d "$tpm_dir" ]]; then
-        echo -e "${YELLOW}TPM is already installed.${NC}"
+        print_message "$YELLOW" "TPM is already installed."
         if confirm "Do you want to overwrite TPM?"; then
             rm -rf "$tpm_dir"
         else
-            echo -e "${RED}Skipping TPM installation.${NC}"
+            print_message "$RED" "Skipping TPM installation."
             return
         fi
     fi
 
-    echo -e "${GREEN}Cloning TPM...${NC}"
+    print_message "$GREEN" "Cloning TPM..."
     git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
 }
 
@@ -87,7 +86,7 @@ setup_tmux_config() {
     mkdir -p "$config_dir"
 
     local config_url="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/tmux/tmux.conf"
-    echo -e "${GREEN}Downloading tmux configuration...${NC}"
+    print_message "$GREEN" "Downloading tmux configuration..."
     wget -O "$config_dir/tmux.conf" "$config_url"
 }
 
@@ -96,16 +95,16 @@ install_tmux_plugins() {
     local plugin_script_dir="$tpm_dir/scripts"
 
     if [[ -d "$plugin_script_dir" ]]; then
-        echo -e "${GREEN}Installing tmux plugins...${NC}"
+        print_message "$GREEN" "Installing tmux plugins..."
         cd "$plugin_script_dir" || exit
         chmod +x install_plugins.sh
         ./install_plugins.sh
 
-        echo -e "${GREEN}Updating tmux plugins...${NC}"
+        print_message "$GREEN" "Updating tmux plugins..."
         chmod +x update_plugin.sh
         ./update_plugin.sh
     else
-        echo -e "${RED}TPM scripts not found. Skipping plugin installation.${NC}"
+        print_message "$RED" "TPM scripts not found. Skipping plugin installation."
     fi
 }
 
@@ -115,7 +114,7 @@ main() {
     install_tpm
     setup_tmux_config
     install_tmux_plugins
-    echo -e "${GREEN}Tmux setup complete!${NC}"
+    print_message "$GREEN" "Tmux setup complete!"
 }
 
 main

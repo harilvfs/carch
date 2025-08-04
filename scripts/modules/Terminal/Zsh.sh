@@ -7,17 +7,17 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    local message="$2"
-    echo -e "${color}${message}${NC}"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 confirm() {
     while true; do
-        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
-            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
 }
@@ -173,8 +173,9 @@ config_zsh() {
     P10K_CONFIG="$HOME/.p10k.zsh"
     if [[ -f "$P10K_CONFIG" ]]; then
         if confirm ".p10k.zsh found. Do you want to back it up?"; then
-            mv "$P10K_CONFIG" "$backup_dir/.p10k.zsh.bak"
-            print_message "$GREEN" "Backup created: $backup_dir/.p10k.zsh.bak"
+            local backup_path="$backup_dir/.p10k.zsh.bak.$RANDOM"
+            mv "$P10K_CONFIG" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
         fi
     fi
 
@@ -184,8 +185,9 @@ config_zsh() {
     ZSHRC="$HOME/.zshrc"
     if [[ -f "$ZSHRC" ]]; then
         if confirm ".zshrc already exists. Use the recommended version?"; then
-            mv "$ZSHRC" "$backup_dir/.zshrc.bak"
-            print_message "$GREEN" "Backup created: $backup_dir/.zshrc.bak"
+            local backup_path="$backup_dir/.zshrc.bak.$RANDOM"
+            mv "$ZSHRC" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
             curl -fsSL "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/.zshrc" -o "$ZSHRC"
             print_message "$GREEN" "Applied recommended .zshrc."
         fi

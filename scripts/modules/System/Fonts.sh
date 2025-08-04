@@ -193,7 +193,7 @@ install_font() {
             case "$DISTRO" in
                 "Arch") install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono ;;
                 "openSUSE") install_opensuse_system_fonts "jetbrains-mono-fonts" ;;
-                "Fedora") install_font_fedora "JetBrainsMono" ;;
+                "Fedora") install_fedora_system_fonts "jetbrains-mono-fonts-all" ;;
             esac
             ;;
 

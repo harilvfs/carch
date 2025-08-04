@@ -45,11 +45,9 @@ setup_rofi_config() {
     if [ -d "$ROFI_CONFIG_DIR" ]; then
         print_message "$CYAN" ":: Rofi configuration directory exists. Backing up the current configuration..."
         mkdir -p "$BACKUP_DIR"
-        if [ -d "$BACKUP_DIR/rofi.bak" ]; then
-            rm -rf "$BACKUP_DIR/rofi.bak"
-        fi
-        mv "$ROFI_CONFIG_DIR" "$BACKUP_DIR/rofi.bak"
-        print_message "$GREEN" ":: Existing Rofi configuration backed up to $BACKUP_DIR/rofi.bak."
+        local backup_path="$BACKUP_DIR/rofi.bak.$RANDOM"
+        mv "$ROFI_CONFIG_DIR" "$backup_path"
+        print_message "$GREEN" ":: Existing Rofi configuration backed up to $backup_path."
     fi
     mkdir -p "$ROFI_CONFIG_DIR"
 

@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -73,9 +73,11 @@ install_chaotic_aur() {
     }
 
     print_message "$TEAL" "Backing up /etc/pacman.conf..."
-    mkdir -p "$HOME/.config/carch/backups"
-    sudo cp -r /etc/pacman.conf "$HOME/.config/carch/backups/pacman.conf.bak"
-    print_message "$GREEN" "Backup of pacman.conf created at ~/.config/carch/backups/pacman.conf.bak"
+    local backup_dir="$HOME/.config/carch/backups"
+    mkdir -p "$backup_dir"
+    local backup_path="$backup_dir/pacman.conf.bak.$RANDOM"
+    sudo cp -r /etc/pacman.conf "$backup_path"
+    print_message "$GREEN" "Backup of pacman.conf created at $backup_path"
 
     print_message "$TEAL" "Adding Chaotic AUR to pacman.conf..."
     echo -e "\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist" | sudo tee -a /etc/pacman.conf > /dev/null || {

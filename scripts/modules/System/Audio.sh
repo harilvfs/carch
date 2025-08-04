@@ -7,8 +7,8 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 check_multilib() {
@@ -20,9 +20,11 @@ check_multilib() {
     elif grep -q '^\#\[multilib\]' /etc/pacman.conf; then
         print_message "$YELLOW" ":: Multilib repository found but is commented out."
 
-        print_message "$CYAN" "Backing up /etc/pacman.conf to ~/.config/carch/backups/pacman.conf.bak..."
-        mkdir -p "$HOME/.config/carch/backups"
-        sudo cp -r /etc/pacman.conf "$HOME/.config/carch/backups/pacman.conf.bak"
+        local backup_dir="$HOME/.config/carch/backups"
+        local backup_path="$backup_dir/pacman.conf.bak.$RANDOM"
+        print_message "$CYAN" "Backing up /etc/pacman.conf to $backup_path..."
+        mkdir -p "$backup_dir"
+        sudo cp -r /etc/pacman.conf "$backup_path"
         sudo sed -i '/^\#\[multilib\]/,+1 s/^\#//' /etc/pacman.conf
         print_message "$GREEN" ":: Multilib repository has been enabled."
         print_message "$CYAN" ":: Updating package databases..."

@@ -5,29 +5,35 @@ clear
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
+print_message() {
+    local color="$1"
+    shift
+    echo -e "${color}$*${NC}"
+}
+
 confirm() {
     while true; do
-        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
-            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
 }
 
 install_foot() {
     if ! command -v foot &> /dev/null; then
-        echo -e "${CYAN}Foot is not installed. :: Installing...${NC}"
+        print_message "$CYAN" "Foot is not installed. :: Installing..."
 
         case "$DISTRO" in
             "Arch") sudo pacman -S --needed foot ;;
             "Fedora")
-                echo -e "${CYAN}Installing Foot on Fedora...${NC}"
+                print_message "$CYAN" "Installing Foot on Fedora..."
                 sudo dnf install foot -y
                 ;;
             "openSUSE")
-                echo -e "${CYAN}Installing Foot on openSuse...${NC}"
+                print_message "$CYAN" "Installing Foot on openSuse..."
                 sudo zypper install -y foot
                 ;;
             *)
@@ -35,7 +41,7 @@ install_foot() {
                 ;;
         esac
     else
-        echo -e "${GREEN}Foot is already installed.${NC}"
+        print_message "$GREEN" "Foot is already installed."
     fi
 }
 
@@ -43,15 +49,15 @@ install_fonts() {
     if confirm "Do you want to install JetBrains Mono Nerd Font?"; then
         case "$DISTRO" in
             "Arch")
-                echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Arch-based systems...${NC}"
+                print_message "$CYAN" "Installing JetBrains Mono Nerd Font on Arch-based systems..."
                 sudo pacman -S --needed ttf-jetbrains-mono-nerd
                 ;;
             "Fedora")
-                echo -e "${CYAN}Installing JetBrains Mono Nerd Font on Fedora...${NC}"
+                print_message "$CYAN" "Installing JetBrains Mono Nerd Font on Fedora..."
                 sudo dnf install -y jetbrains-mono-fonts-all
                 ;;
             "openSUSE")
-                echo -e "${CYAN}Installing JetBrains Mono Font on openSUSE...${NC}"
+                print_message "$CYAN" "Installing JetBrains Mono Font on openSUSE..."
                 sudo zypper install -y jetbrains-mono-fonts
                 ;;
             *)
@@ -59,65 +65,47 @@ install_fonts() {
                 ;;
         esac
     else
-        echo -e "${CYAN}Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering.${NC}"
+        print_message "$CYAN" "Skipping font installation. Make sure to install JetBrains Mono Nerd Font manually for proper rendering."
     fi
 }
 
 setup_config() {
-    CONFIG_DIR="$HOME/.config/foot"
-    BACKUP_DIR="$HOME/.config/carch/backups/foot.bak"
+    local CONFIG_DIR="$HOME/.config/foot"
+    local BACKUP_DIR_BASE="$HOME/.config/carch/backups"
+    local backup_path=""
 
     if [ -d "$CONFIG_DIR" ]; then
-        echo -e "${CYAN}:: Existing Foot configuration detected.${NC}"
+        print_message "$CYAN" ":: Existing Foot configuration detected."
 
         if confirm "Do you want to backup the existing configuration?"; then
-            mkdir -p "$(dirname "$BACKUP_DIR")"
-            if [ -d "$BACKUP_DIR" ]; then
-                echo -e "${YELLOW}Backup already exists.${NC}"
-                if confirm "Do you want to overwrite the backup?"; then
-                    rm -rf "$BACKUP_DIR"
-                else
-                    echo -e "${RED}Exiting to prevent data loss.${NC}"
-                    exit 0
-                fi
-            fi
-            mv "$CONFIG_DIR" "$BACKUP_DIR"
+            mkdir -p "$BACKUP_DIR_BASE"
+            backup_path="$BACKUP_DIR_BASE/foot.bak.$RANDOM"
+            mv "$CONFIG_DIR" "$backup_path"
             mkdir -p "$CONFIG_DIR"
         else
-            echo -e "${RED}Exiting to avoid overwriting existing config.${NC}"
+            print_message "$RED" "Exiting to avoid overwriting existing config."
             exit 0
         fi
     else
-        echo -e "${GREEN}No existing Foot configuration found. Creating directory...${NC}"
+        print_message "$GREEN" "No existing Foot configuration found. Creating directory..."
         mkdir -p "$CONFIG_DIR"
     fi
 
-    echo -e "${CYAN}:: Downloading Foot configuration...${NC}"
+    print_message "$CYAN" ":: Downloading Foot configuration..."
 
     wget -q -O "$CONFIG_DIR/foot.ini" "https://raw.githubusercontent.com/harilvfs/swaydotfiles/refs/heads/main/foot/foot.ini"
 
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Foot configuration downloaded successfully!${NC}"
-        echo -e "${GREEN}Foot setup completed!${NC}"
-        if [ -d "$BACKUP_DIR" ]; then
-            echo -e "${GREEN}Check your backup directory for previous configs at $BACKUP_DIR.${NC}"
-        fi
-    else
-        echo -e "${RED}Failed to download Foot configuration.${NC}"
-        echo -e "${YELLOW}Please check your internet connection and try again.${NC}"
-        if [ -d "$BACKUP_DIR" ]; then
-            echo -e "${YELLOW}Restoring backup...${NC}"
-            rm -rf "$CONFIG_DIR"
-            mv "$BACKUP_DIR" "$CONFIG_DIR"
-            echo -e "${GREEN}Backup restored.${NC}"
-        fi
+    print_message "$GREEN" "Foot configuration downloaded successfully!"
+    print_message "$GREEN" "Foot setup completed!"
+    if [ -n "$backup_path" ]; then
+        print_message "$GREEN" "Check your backup directory for previous configs at $backup_path."
     fi
 }
 
 main() {
-    echo -e "${YELLOW}NOTE: This foot configuration uses Fish shell by default.${NC}"
-    echo -e "${YELLOW}If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini${NC}"
-    echo -e "${YELLOW}Also, JetBrains Mono Nerd Font is required for this configuration.${NC}"
+    print_message "$YELLOW" "NOTE: This foot configuration uses Fish shell by default."
+    print_message "$YELLOW" "If you're using Bash or Zsh, make sure to change it in ~/.config/foot/foot.ini"
+    print_message "$YELLOW" "Also, JetBrains Mono Nerd Font is required for this configuration."
     echo
 
     install_foot

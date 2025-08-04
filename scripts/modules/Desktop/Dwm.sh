@@ -7,13 +7,13 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
 print_message() {
     local color="$1"
-    local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$RC"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -236,7 +236,9 @@ configure_picom() {
     mkdir -p "$CONFIG_DIR"
     if [ -f "$DESTINATION" ]; then
         if confirm "Existing picom.conf detected. Do you want to replace it?"; then
-            mv "$DESTINATION" "$DESTINATION.bak"
+            local backup_path="$DESTINATION.bak.$RANDOM"
+            mv "$DESTINATION" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
         else
             return
         fi
@@ -272,7 +274,9 @@ setup_xinitrc() {
 
     if [ -f "$XINITRC" ]; then
         if confirm "Existing .xinitrc detected. Do you want to replace it?"; then
-            mv "$XINITRC" "$XINITRC.bak"
+            local backup_path="$XINITRC.bak.$RANDOM"
+            mv "$XINITRC" "$backup_path"
+            print_message "$GREEN" "Backup created: $backup_path"
         else
             return
         fi

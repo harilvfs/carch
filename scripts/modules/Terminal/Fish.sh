@@ -9,13 +9,13 @@ distro=""
 
 print_message() {
     local color="$1"
-    local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    shift
+    echo -e "${color}$*${NC}"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -109,12 +109,9 @@ setup_fish_config() {
     if [[ -d "$FISH_CONFIG" ]]; then
         if confirm "Existing Fish config found. Do you want to back it up?"; then
             mkdir -p "$backup_dir"
-            local BACKUP_PATH="$backup_dir/fish.bak"
-            if [ -d "$BACKUP_PATH" ]; then
-                rm -rf "$BACKUP_PATH"
-            fi
-            mv "$FISH_CONFIG" "$BACKUP_PATH"
-            print_message "$GREEN" "Backup created at $BACKUP_PATH"
+            local backup_path="$backup_dir/fish.bak.$RANDOM"
+            mv "$FISH_CONFIG" "$backup_path"
+            print_message "$GREEN" "Backup created at $backup_path"
         fi
     fi
 

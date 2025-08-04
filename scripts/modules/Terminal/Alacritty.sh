@@ -5,13 +5,30 @@ clear
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 
+print_message() {
+    local color="$1"
+    shift
+    echo -e "${color}$*${NC}"
+}
+
+confirm() {
+    while true; do
+        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        case ${answer,,} in
+            y | yes) return 0 ;;
+            n | no | "") return 1 ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
+        esac
+    done
+}
+
 installAlacritty() {
     if command -v alacritty &> /dev/null; then
-        echo -e "${GREEN}Alacritty is already installed.${NC}"
+        print_message "$GREEN" "Alacritty is already installed."
         return
     fi
 
-    echo -e "${YELLOW}Alacritty is not installed. Installing now...${NC}"
+    print_message "$YELLOW" "Alacritty is not installed. Installing now..."
 
     case "$DISTRO" in
         "Arch") sudo pacman -S alacritty --noconfirm ;;
@@ -22,28 +39,24 @@ installAlacritty() {
             ;;
     esac
 
-    echo -e "${GREEN}Alacritty has been installed.${NC}"
+    print_message "$GREEN" "Alacritty has been installed."
 }
 
 setupAlacrittyConfig() {
     local alacritty_config_dir="$HOME/.config/alacritty"
     local backup_dir="$HOME/.config/carch/backups"
 
-    echo -e "${CYAN}:: Setting up Alacritty configuration...${NC}"
+    print_message "$CYAN" ":: Setting up Alacritty configuration..."
 
     if [ -d "$alacritty_config_dir" ]; then
-        echo -e "${YELLOW}:: Existing Alacritty configuration detected.${NC}"
+        print_message "$YELLOW" ":: Existing Alacritty configuration detected."
         if confirm "Do you want to backup the existing configuration?"; then
             mkdir -p "$backup_dir"
-            local backup_path="$backup_dir/alacritty.bak"
-            if [ -d "$backup_path" ]; then
-                echo -e "${YELLOW}Backup already exists. Overwriting...${NC}"
-                rm -rf "$backup_path"
-            fi
+            local backup_path="$backup_dir/alacritty.bak.$RANDOM"
             mv "$alacritty_config_dir" "$backup_path"
-            echo -e "${GREEN}:: Existing Alacritty configuration backed up to $backup_path.${NC}"
+            print_message "$GREEN" ":: Existing Alacritty configuration backed up to $backup_path."
         else
-            echo -e "${CYAN}:: Skipping backup. Your existing configuration will be overwritten.${NC}"
+            print_message "$CYAN" ":: Skipping backup. Your existing configuration will be overwritten."
         fi
     fi
 
@@ -54,27 +67,16 @@ setupAlacrittyConfig() {
         curl -sSLo "$alacritty_config_dir/$file" "$base_url/$file"
     done
 
-    echo -e "${CYAN}:: Running 'alacritty migrate' to update the config...${NC}"
+    print_message "$CYAN" ":: Running 'alacritty migrate' to update the config..."
     (cd "$alacritty_config_dir" && alacritty migrate)
 
-    echo -e "${GREEN}:: Alacritty configuration files copied and migrated.${NC}"
-}
-
-confirm() {
-    while true; do
-        read -p "$(echo -e "${CYAN}$1 [y/N]: ${NC}")" answer
-        case ${answer,,} in
-            y | yes) return 0 ;;
-            n | no | "") return 1 ;;
-            *) echo -e "${YELLOW}Please answer with y/yes or n/no.${NC}" ;;
-        esac
-    done
+    print_message "$GREEN" ":: Alacritty configuration files copied and migrated."
 }
 
 main() {
     installAlacritty
     setupAlacrittyConfig
-    echo -e "${GREEN}:: Alacritty setup complete.${NC}"
+    print_message "$GREEN" ":: Alacritty setup complete."
 }
 
 main

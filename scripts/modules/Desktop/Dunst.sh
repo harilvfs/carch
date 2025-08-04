@@ -41,8 +41,9 @@ backup_dunst_config() {
     if [[ -d "$dunst_dir" ]]; then
         print_message "${TEAL}" "Backing up existing Dunst directory..."
         mkdir -p "$backup_dir"
-        mv "$dunst_dir" "$backup_dir/dunst.bak"
-        print_message "$GREEN" "Backup created: $backup_dir/dunst.bak"
+        local backup_path="$backup_dir/dunst.bak.$RANDOM"
+        mv "$dunst_dir" "$backup_path"
+        print_message "$GREEN" "Backup created: $backup_path"
     fi
 }
 
