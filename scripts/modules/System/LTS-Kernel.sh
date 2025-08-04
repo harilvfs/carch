@@ -24,7 +24,7 @@ confirm() {
 
 check_current_kernel() {
     CURRENT_KERNEL=$(uname -r)
-    print_message "$TEAL" "Current kernel version: ${GREEN}$CURRENT_KERNEL"
+    print_message "$TEAL" "Current kernel version: $CURRENT_KERNEL"
     if [[ "$CURRENT_KERNEL" == *"lts"* ]]; then
         print_message "$GREEN" "You are already using the LTS kernel. Skipping the installation."
         exit 0
