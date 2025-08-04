@@ -4,6 +4,61 @@ source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../packages.sh" > /dev/null 2>&1
 
+install_qemu_kvm() {
+    clear
+    case "$DISTRO" in
+        "Arch")
+            install_package "qemu-base" ""
+            install_package "virt-manager" ""
+            install_package "virt-viewer" ""
+            install_package "dnsmasq" ""
+            install_package "vde2" ""
+            install_package "bridge-utils" ""
+            install_package "openbsd-netcat" ""
+            install_package "ebtables" ""
+            install_package "iptables-nft" ""
+            install_package "libguestfs" ""
+            sudo systemctl enable --now libvirtd.service
+            sudo usermod -aG libvirt "$USER"
+            ;;
+        "Fedora")
+            install_package "@virtualization" ""
+            sudo systemctl enable --now libvirtd
+            sudo usermod -aG libvirt "$USER"
+            ;;
+        "openSUSE")
+            sudo zypper addrepo https://download.opensuse.org/repositories/Virtualization/openSUSE_Tumbleweed/Virtualization.repo
+            sudo zypper refresh
+            install_package "qemu" ""
+            sudo systemctl enable --now libvirtd
+            sudo usermod -aG libvirt "$USER"
+            ;;
+    esac
+}
+
+install_virtualbox() {
+    clear
+    case "$DISTRO" in
+        "Arch")
+            install_package "virtualbox" ""
+            install_package "virtualbox-host-dkms" ""
+            sudo usermod -aG vboxusers "$USER"
+            sudo modprobe vboxdrv
+            ;;
+        *)
+            install_package "virtualbox" ""
+            sudo usermod -aG vboxusers "$USER"
+            ;;
+    esac
+    echo "Note: You may need to log out and back in for group changes to take effect."
+}
+
+install_distrobox() {
+    clear
+    install_package "distrobox" ""
+    install_package "podman" ""
+}
+
 main() {
     while true; do
         clear
@@ -15,63 +70,10 @@ main() {
         local selection="${options[$((choice_index - 1))]}"
 
         case "$selection" in
-            "QEMU/KVM")
-                clear
-                case "$DISTRO" in
-                    "Arch")
-                        install_package "qemu-base" ""
-                        install_package "virt-manager" ""
-                        install_package "virt-viewer" ""
-                        install_package "dnsmasq" ""
-                        install_package "vde2" ""
-                        install_package "bridge-utils" ""
-                        install_package "openbsd-netcat" ""
-                        install_package "ebtables" ""
-                        install_package "iptables-nft" ""
-                        install_package "libguestfs" ""
-                        sudo systemctl enable --now libvirtd.service
-                        sudo usermod -aG libvirt "$USER"
-                        ;;
-                    "Fedora")
-                        install_package "@virtualization" ""
-                        sudo systemctl enable --now libvirtd
-                        sudo usermod -aG libvirt "$USER"
-                        ;;
-                    "openSUSE")
-                        sudo zypper addrepo https://download.opensuse.org/repositories/Virtualization/openSUSE_Tumbleweed/Virtualization.repo
-                        sudo zypper refresh
-                        install_package "qemu" ""
-                        sudo systemctl enable --now libvirtd
-                        sudo usermod -aG libvirt "$USER"
-                        ;;
-                esac
-                ;;
-
-            "VirtualBox")
-                clear
-                case "$DISTRO" in
-                    "Arch")
-                        install_package "virtualbox" ""
-                        install_package "virtualbox-host-dkms" ""
-                        sudo usermod -aG vboxusers "$USER"
-                        sudo modprobe vboxdrv
-                        ;;
-                    *)
-                        install_package "virtualbox" ""
-                        sudo usermod -aG vboxusers "$USER"
-                        ;;
-                esac
-                echo "Note: You may need to log out and back in for group changes to take effect."
-                ;;
-
-            "Distrobox")
-                clear
-                install_package "distrobox" ""
-                install_package "podman" ""
-                ;;
-            "Exit")
-                exit 0
-                ;;
+            "QEMU/KVM") install_qemu_kvm ;;
+            "VirtualBox") install_virtualbox ;;
+            "Distrobox") install_distrobox ;;
+            "Exit") exit 0 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
     done

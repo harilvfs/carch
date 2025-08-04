@@ -82,12 +82,6 @@ check_default_shell() {
     fi
 }
 
-check_essential_dependencies
-
-if [[ "$DISTRO" == "Arch" ]]; then
-    check_aur_helper
-fi
-
 install_zsh_dependencies() {
     print_message "$CYAN" "Installing Zsh dependencies..."
     case "$DISTRO" in
@@ -234,14 +228,20 @@ install_zoxide() {
     esac
 }
 
-install_zsh_dependencies
-install_powerlevel10k
-install_ohmyzsh
-install_ohmyzsh_plugins
-config_zsh
-install_pokemon_colorscripts
-install_zoxide
+main() {
+    check_essential_dependencies
+    if [[ "$DISTRO" == "Arch" ]]; then
+        check_aur_helper
+    fi
+    install_zsh_dependencies
+    install_powerlevel10k
+    install_ohmyzsh
+    install_ohmyzsh_plugins
+    config_zsh
+    install_pokemon_colorscripts
+    install_zoxide
+    check_default_shell
+    print_message "${TEAL}" "Zsh setup completed successfully!"
+}
 
-check_default_shell
-
-print_message "${TEAL}" "Zsh setup completed successfully!"
+main

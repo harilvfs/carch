@@ -46,7 +46,11 @@ install_theme() {
     sudo ./install.sh
 }
 
-print_message
-check_existing_dir
-clone_repo
-install_theme
+main() {
+    print_message
+    check_existing_dir
+    clone_repo
+    install_theme
+}
+
+main
