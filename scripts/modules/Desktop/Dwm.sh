@@ -32,7 +32,7 @@ install_packages() {
                 ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
                 feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
                 thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
-                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi || {
+                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst|| {
                 print_message "$RED" "Failed to install some packages via pacman."
                 exit 1
             }
@@ -63,7 +63,7 @@ install_packages() {
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
                 google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
                 trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
-                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock || {
+                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock dunst || {
                 print_message "$RED" "Failed to install some packages via dnf."
                 exit 1
             }
@@ -75,7 +75,7 @@ install_packages() {
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
                 google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
                 trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
-                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock || {
+                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock dunst || {
                 print_message "${RED}" "Failed to install some packages via zypper."
                 exit 1
             }
