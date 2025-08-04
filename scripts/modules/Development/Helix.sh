@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$NC"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -rp "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
+        read -rp "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case "${answer,,}" in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -23,7 +23,7 @@ confirm() {
 }
 
 install_helix() {
-    echo -e "${CYAN}Installing Helix editor...${NC}"
+    print_message "$CYAN" "Installing Helix editor..."
     case "$DISTRO" in
         "Arch") sudo pacman -S --noconfirm helix noto-fonts-emoji git ;;
         "Fedora") sudo dnf install -y helix google-noto-color-emoji-fonts google-noto-emoji-fonts git ;;
@@ -42,26 +42,26 @@ setup_config() {
             mkdir -p "$BACKUP_DIR"
             BACKUP_PATH="$BACKUP_DIR/helix.bak"
             mv "$HELIX_CONFIG" "$BACKUP_PATH"
-            echo -e "${GREEN}Backup created at $BACKUP_PATH${NC}"
+            print_message "$GREEN" "Backup created at $BACKUP_PATH"
         fi
     fi
 
     if [[ -d "$HOME/dwm" ]]; then
-        echo -e "${YELLOW}Removing existing dwm directory...${NC}"
+        print_message "$YELLOW" "Removing existing dwm directory..."
         rm -rf "$HOME/dwm"
     fi
 
-    echo -e "${CYAN}Cloning Helix configuration...${NC}"
+    print_message "$CYAN" "Cloning Helix configuration..."
     git clone --depth=1 https://github.com/harilvfs/dwm "$HOME/dwm"
 
     if [[ -d "$HOME/dwm/config/helix" ]]; then
-        echo -e "${CYAN}Applying Helix configuration...${NC}"
+        print_message "$CYAN" "Applying Helix configuration..."
         mkdir -p "$HELIX_CONFIG"
         cp -r "$HOME/dwm/config/helix/"* "$HELIX_CONFIG/"
-        echo -e "${GREEN}Helix configuration applied!${NC}"
+        print_message "$GREEN" "Helix configuration applied!"
         rm -rf "$HOME/dwm"
     else
-        echo -e "${RED}Failed to apply Helix configuration!${NC}"
+        print_message "$RED" "Failed to apply Helix configuration!"
         rm -rf "$HOME/dwm"
         exit 1
     fi
@@ -70,7 +70,7 @@ setup_config() {
 main() {
     install_helix
     setup_config
-    echo -e "${CYAN}Helix setup complete! Restart your editor to apply changes.${NC}"
+    print_message "$CYAN" "Helix setup complete! Restart your editor to apply changes."
 }
 
 main

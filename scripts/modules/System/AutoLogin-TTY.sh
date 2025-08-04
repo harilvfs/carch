@@ -7,12 +7,12 @@ source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$RC")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -31,7 +31,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -41,7 +41,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: %s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -82,11 +82,11 @@ enable_autologin() {
     print_security_warning
 
     if ! confirm "Do you want to continue and enable autologin for user '$username'?"; then
-        print_message "$GREEN" ":: Autologin setup cancelled."
+        print_message "$GREEN" "Autologin setup cancelled."
         return
     fi
 
-    print_message "$GREEN" ":: Creating autologin configuration..."
+    print_message "$GREEN" "Creating autologin configuration..."
 
     if ! sudo mkdir -p /etc/systemd/system/getty@tty1.service.d; then
         print_message "$RED" "Failed to create autologin directory."
@@ -100,12 +100,12 @@ ExecStart=-/sbin/agetty --autologin $username --noclear %I 38400 linux
 EOF
 
     if [ $? -eq 0 ]; then
-        print_message "$GREEN" ":: Autologin configuration created successfully."
-        print_message "$GREEN" ":: Reloading systemd daemon..."
+        print_message "$GREEN" "Autologin configuration created successfully."
+        print_message "$GREEN" "Reloading systemd daemon..."
 
         if sudo systemctl daemon-reload; then
-            print_message "$GREEN" ":: Autologin enabled for user '$username' on tty1."
-            print_message "$TEAL" ":: Changes will take effect after next reboot."
+            print_message "$GREEN" "Autologin enabled for user '$username' on tty1."
+            print_message "$TEAL" "Changes will take effect after next reboot."
         else
             print_message "$RED" "Failed to reload systemd daemon."
             return 1
@@ -118,23 +118,23 @@ EOF
 
 remove_autologin() {
     if ! check_autologin_enabled; then
-        print_message "$RED" ":: Autologin is not currently enabled."
-        print_message "$YELLOW" ":: Nothing to remove."
+        print_message "$RED" "Autologin is not currently enabled."
+        print_message "$YELLOW" "Nothing to remove."
         return
     fi
 
-    print_message "$GREEN" ":: Autologin configuration found."
+    print_message "$GREEN" "Autologin configuration found."
 
     if confirm "Remove autologin configuration?"; then
-        print_message "$GREEN" ":: Removing autologin configuration..."
+        print_message "$GREEN" "Removing autologin configuration..."
 
         if sudo rm -rf /etc/systemd/system/getty@tty1.service.d; then
-            print_message "$GREEN" ":: Autologin configuration removed successfully."
-            print_message "$GREEN" ":: Reloading systemd daemon..."
+            print_message "$GREEN" "Autologin configuration removed successfully."
+            print_message "$GREEN" "Reloading systemd daemon..."
 
             if sudo systemctl daemon-reload; then
-                print_message "$GREEN" ":: Autologin disabled successfully."
-                print_message "$TEAL" ":: Changes will take effect after next reboot."
+                print_message "$GREEN" "Autologin disabled successfully."
+                print_message "$TEAL" "Changes will take effect after next reboot."
             else
                 print_message "$RED" "Failed to reload systemd daemon."
                 return 1
@@ -144,7 +144,7 @@ remove_autologin() {
             return 1
         fi
     else
-        print_message "$GREEN" ":: Autologin removal cancelled."
+        print_message "$GREEN" "Autologin removal cancelled."
     fi
 }
 
@@ -159,14 +159,14 @@ print_current_status() {
     echo
     print_message "$CYAN" "=== Current Autologin Status ==="
     if check_autologin_enabled; then
-        print_message "$GREEN" ":: Autologin is currently ENABLED"
+        print_message "$GREEN" "Autologin is currently ENABLED"
         local current_user
         current_user=$(grep "autologin" /etc/systemd/system/getty@tty1.service.d/autologin.conf 2> /dev/null | sed 's/.*--autologin \([^ ]*\).*/\1/')
         if [ -n "$current_user" ]; then
-            print_message "$TEAL" ":: Configured for user: $current_user"
+            print_message "$TEAL" "Configured for user: $current_user"
         fi
     else
-        print_message "$RED" ":: Autologin is currently DISABLED"
+        print_message "$RED" "Autologin is currently DISABLED"
     fi
     echo
 }

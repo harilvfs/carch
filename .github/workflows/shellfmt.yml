@@ -26,6 +26,5 @@ jobs:
 
     - name: Check formatting
       run: |
-        find . -name "*.sh" -o -name "*.bash" | \
-        grep -v "./scripts/modules/Browser/Extensions.sh" | \
-        xargs shfmt -i 4 -ci -sr -kp -d
+        bash scripts/modules/shfmt.sh
+        git diff --exit-code

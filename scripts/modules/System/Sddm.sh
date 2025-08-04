@@ -8,12 +8,12 @@ source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -23,36 +23,32 @@ confirm() {
 }
 
 print_banner() {
-    echo -e "${GREEN}"
-    cat << "EOF"
-Catppuccin SDDM Theme
-https://github.com/catppuccin/sddm
-EOF
-    echo -e "${ENDCOLOR}"
+    print_message "$GREEN" "Catppuccin SDDM Theme"
+    print_message "$GREEN" "https://github.com/catppuccin/sddm"
 }
 
 disable_other_dms() {
-    echo -e "${GREEN}:: Disabling any other active display manager...${ENDCOLOR}"
+    print_message "$GREEN" "Disabling any other active display manager..."
     local dms=("gdm" "lightdm" "lxdm" "xdm" "greetd")
     for dm in "${dms[@]}"; do
         if systemctl is-enabled "$dm" &> /dev/null; then
-            echo -e "${RED}:: Disabling $dm...${ENDCOLOR}"
-            sudo systemctl disable "$dm" --now || echo -e "${RED}Failed to disable $dm. Continuing...${ENDCOLOR}"
+            print_message "$RED" "Disabling $dm..."
+            sudo systemctl disable "$dm" --now || print_message "$RED" "Failed to disable $dm. Continuing..."
         fi
     done
 }
 
 enable_sddm() {
-    echo -e "${GREEN}:: Enabling SDDM...${ENDCOLOR}"
+    print_message "$GREEN" "Enabling SDDM..."
     if ! sudo systemctl enable sddm --now; then
-        echo -e "${RED}Failed to enable SDDM. Exiting...${ENDCOLOR}"
+        print_message "$RED" "Failed to enable SDDM. Exiting..."
         exit 1
     fi
 }
 
 install_sddm() {
     if ! command -v sddm &> /dev/null; then
-        echo -e "${GREEN}:: Installing SDDM...${ENDCOLOR}"
+        print_message "$GREEN" "Installing SDDM..."
 
         case "$DISTRO" in
             "Arch") sudo pacman -S --noconfirm sddm ;;
@@ -63,7 +59,7 @@ install_sddm() {
                 ;;
         esac
     else
-        echo -e "${GREEN}SDDM is already installed.${ENDCOLOR}"
+        print_message "$GREEN" "SDDM is already installed."
     fi
 }
 
@@ -72,31 +68,31 @@ install_theme() {
     local theme_url="https://github.com/catppuccin/sddm/releases/download/v1.0.0/catppuccin-mocha.zip"
 
     if [ -d "$theme_dir/catppuccin-mocha" ]; then
-        echo -e "${RED}:: Catppuccin theme already exists.${ENDCOLOR}"
+        print_message "$RED" "Catppuccin theme already exists."
         if confirm "Do you want to remove the existing theme and install a new one?"; then
-            echo -e "${GREEN}:: Removing the existing theme...${ENDCOLOR}"
+            print_message "$GREEN" "Removing the existing theme..."
             sudo rm -rf "$theme_dir/catppuccin-mocha"
         else
-            echo -e "${RED}:: Keeping the existing theme. Exiting...${ENDCOLOR}"
+            print_message "$RED" "Keeping the existing theme. Exiting..."
             exit 1
         fi
     fi
-    echo -e "${GREEN}:: Downloading Catppuccin SDDM theme...${ENDCOLOR}"
+    print_message "$GREEN" "Downloading Catppuccin SDDM theme..."
     sudo mkdir -p "$theme_dir"
     if ! sudo wget -O /tmp/catppuccin-mocha.zip "$theme_url"; then
-        echo -e "${RED}Failed to download the theme. Exiting...${ENDCOLOR}"
+        print_message "$RED" "Failed to download the theme. Exiting..."
         exit 1
     fi
     if ! sudo unzip -o /tmp/catppuccin-mocha.zip -d "$theme_dir"; then
-        echo -e "${RED}Failed to unzip the theme. Exiting...${ENDCOLOR}"
+        print_message "$RED" "Failed to unzip the theme. Exiting..."
         exit 1
     fi
     sudo rm /tmp/catppuccin-mocha.zip
-    echo -e "${GREEN}Catppuccin SDDM theme installed.${ENDCOLOR}"
+    print_message "$GREEN" "Catppuccin SDDM theme installed."
 }
 
 set_theme() {
-    echo -e "${GREEN}:: Setting Catppuccin as the SDDM theme...${ENDCOLOR}"
+    print_message "$GREEN" "Setting Catppuccin as the SDDM theme..."
     sudo bash -c 'cat > /etc/sddm.conf <<EOF
 [Theme]
 Current=catppuccin-mocha
@@ -109,14 +105,14 @@ EOF'
 
 main() {
     print_banner
-    echo -e "${GREEN}:: Proceeding with installation...${ENDCOLOR}"
+    print_message "$GREEN" "Proceeding with installation..."
     install_sddm
     install_theme
     set_theme
     disable_other_dms
     enable_sddm
 
-    echo -e "${GREEN}:: Setup complete. Please reboot your system to see the changes.${ENDCOLOR}"
+    print_message "$GREEN" "Setup complete. Please reboot your system to see the changes."
 }
 
 main

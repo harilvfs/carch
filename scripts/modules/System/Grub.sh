@@ -6,48 +6,50 @@ source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 
 GRUB_THEME_DIR="$HOME/.local/share/Top-5-Bootloader-Themes"
 
+print_message() {
+    local color="$1"
+    local message="$2"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
+}
+
 confirm() {
     while true; do
-        read -p "$(echo -e "${CYAN}:: $1 [y/N]: ${ENDCOLOR}")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
-            *) echo -e "${YELLOW}:: Please answer with y/yes or n/no.${ENDCOLOR}" ;;
+            *) print_message "$YELLOW" "Please answer with y/yes or n/no." ;;
         esac
     done
 }
 
-print_message() {
-    echo -e "${TEAL}:: This Grub Theme Script is from Chris Titus Tech.${ENDCOLOR}"
-    echo -e "${TEAL}:: Check out the source code here: ${GREEN}httpshttps://github.com/harilvfs/Top-5-Bootloader-Themes${ENDCOLOR}"
-}
-
 check_existing_dir() {
     if [[ -d "$GRUB_THEME_DIR" ]]; then
-        echo -e "${RED}:: Directory $GRUB_THEME_DIR already exists.${ENDCOLOR}"
+        print_message "$RED" "Directory $GRUB_THEME_DIR already exists."
         if confirm "Do you want to overwrite it?"; then
-            echo -e "${TEAL}:: Removing existing directory...${ENDCOLOR}"
+            print_message "$TEAL" "Removing existing directory..."
             rm -rf "$GRUB_THEME_DIR"
         else
-            echo -e "${RED}:: Aborting installation.${ENDCOLOR}"
+            print_message "$RED" "Aborting installation."
             exit 1
         fi
     fi
 }
 
 clone_repo() {
-    echo -e "${TEAL}:: Cloning GRUB themes repository...${ENDCOLOR}"
+    print_message "$TEAL" "Cloning GRUB themes repository..."
     git clone https://github.com/harilvfs/Top-5-Bootloader-Themes "$GRUB_THEME_DIR"
 }
 
 install_theme() {
-    echo -e "${TEAL}:: Running the installation script...${ENDCOLOR}"
+    print_message "$TEAL" "Running the installation script..."
     cd "$GRUB_THEME_DIR" || exit
     sudo ./install.sh
 }
 
 main() {
-    print_message
+    print_message "$TEAL" "This Grub Theme Script is from Chris Titus Tech."
+    print_message "$TEAL" "Check out the source code here: https://github.com/harilvfs/Top-5-Bootloader-Themes"
     check_existing_dir
     clone_repo
     install_theme
