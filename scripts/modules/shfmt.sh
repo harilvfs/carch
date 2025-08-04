@@ -9,6 +9,6 @@
 
 echo "Formatting shell scripts..."
 
-find . -type f -name "*.sh" | grep -v '^./Browser/' | xargs shfmt -i 4 -ci -sr -kp -w
+find . -type f -name "*.sh" | grep -v './scripts/modules/Browser/Extensions.sh' | xargs shfmt -i 4 -ci -sr -kp -w
 
 echo "Formatting complete."
