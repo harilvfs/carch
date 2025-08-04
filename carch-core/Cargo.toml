@@ -35,3 +35,4 @@ toml = { workspace = true, default-features = false, features = ["parse", "serde
 log = { workspace = true }
 env_logger = { workspace = true }
 tempfile = { workspace = true }
+chrono = { version = "0.4.41", default-features = false, features = ["clock"] }

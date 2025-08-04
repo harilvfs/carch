@@ -1,3 +1,4 @@
+use chrono::Local;
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Rect};
 use ratatui::style::{Modifier, Style};
@@ -17,7 +18,11 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
 
     let chunks = ratatui::layout::Layout::default()
         .direction(ratatui::layout::Direction::Horizontal)
-        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
+        .constraints([
+            Constraint::Percentage(33),
+            Constraint::Percentage(34),
+            Constraint::Percentage(33),
+        ])
         .split(inner_area);
 
     let total_scripts = app.all_scripts.values().map(Vec::len).sum::<usize>();
@@ -26,6 +31,13 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
         Span::raw(format!(" | Total Scripts: {total_scripts}")),
     ]));
     f.render_widget(Paragraph::new(left_text).alignment(Alignment::Left), chunks[0]);
+
+    let time_str = Local::now().format("%H:%M:%S").to_string();
+    let time_text = Text::from(Line::from(vec![Span::styled(
+        time_str,
+        Style::default().fg(app.theme.secondary),
+    )]));
+    f.render_widget(Paragraph::new(time_text).alignment(Alignment::Center), chunks[1]);
 
     let breadcrumb = if let Some(script_idx) = app.scripts.state.selected() {
         let script = &app.scripts.items[script_idx];
@@ -53,5 +65,5 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
     } else {
         Text::from(Span::styled("Select a category", Style::default().fg(app.theme.secondary)))
     };
-    f.render_widget(Paragraph::new(breadcrumb).alignment(Alignment::Right), chunks[1]);
+    f.render_widget(Paragraph::new(breadcrumb).alignment(Alignment::Right), chunks[2]);
 }
