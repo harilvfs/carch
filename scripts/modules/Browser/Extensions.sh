@@ -5,12 +5,12 @@ source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 print_message() {
     local color="$1"
     local message="$2"
-    printf "%b%s%b\n" "$color" "$message" "$ENDCOLOR"
+    printf "%b:: %s%b\n" "$color" "$message" "$NC"
 }
 
 confirm() {
     while true; do
-        read -p "$(printf "%b%s%b" "$CYAN" "$1 [y/N]: " "$ENDCOLOR")" answer
+        read -p "$(printf "%b:: %s%b" "$CYAN" "$1 [y/N]: " "$NC")" answer
         case ${answer,,} in
             y | yes) return 0 ;;
             n | no | "") return 1 ;;
@@ -29,7 +29,7 @@ show_menu() {
     echo
 
     for i in "${!options[@]}"; do
-        printf "%b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$ENDCOLOR" "${options[$i]}"
+        printf "  %b[%d]%b %s\n" "$GREEN" "$((i + 1))" "$NC" "${options[$i]}"
     done
     echo
 }
@@ -39,7 +39,7 @@ get_choice() {
     local choice
 
     while true; do
-        read -p "$(printf "%b%s%b" "$YELLOW" "Enter your choice (1-$max_option): " "$ENDCOLOR")" choice
+        read -p "$(printf "%b:: Enter your choice (1-$max_option): %b" "$YELLOW" "$NC")" choice
 
         if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "$max_option" ]; then
             return "$choice"
@@ -123,7 +123,7 @@ select_extensions() {
         local title="Available $(echo "$browser_type" | tr '[:lower:]' '[:upper:]') extensions"
         show_menu "$title" "${extension_names[@]}"
 
-        echo -ne "${CYAN}Enter number(s) to install (e.g., 1 3 5), 'a' for all, or 'b' to go back: ${ENDCOLOR}"
+        printf "%b:: Enter number(s) to install (e.g., 1 3 5), 'a' for all, or 'b' to go back: %b" "$CYAN" "$NC"
         read -r -a choices
 
         if [[ " ${choices[*]} " =~ " b " ]]; then
@@ -152,10 +152,9 @@ select_extensions() {
             continue
         fi
 
-        print_message "$GREEN" ""
         print_message "$GREEN" "The following extensions will be opened:"
         for name in "${selected_for_install[@]}"; do
-            printf "  %b• %s%b\n" "$CYAN" "$name" "$ENDCOLOR"
+            printf "    %b• %s%b\n" "$CYAN" "$name" "$NC"
         done
         echo
 
@@ -168,7 +167,7 @@ select_extensions() {
             echo
             print_message "$GREEN" "All selected extensions have been opened in your browser."
             print_message "$YELLOW" "Note: You still need to complete the installation in the browser."
-            read -rp "$(echo -e "\n${CYAN}Press ENTER to return to the main menu...${ENDCOLOR}")"
+            read -rp "$(printf "\n%b:: Press ENTER to return to the main menu...%b" "$CYAN" "$NC")"
             clear
             return
         else
