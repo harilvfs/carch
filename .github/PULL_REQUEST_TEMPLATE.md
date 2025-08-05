@@ -11,16 +11,8 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] Fixes <!-- Fixes Scripts/Other -->
 - [ ] Feature <!-- Added -->
 - [ ] UI/UX <!-- Enhancement -->
-- [ ] Rust Code Update <!-- Updated or improved Rust-related code -->
-- [ ] Rust Bug Fix <!-- Fixed Rust-related issues -->
-- [ ] Rust Feature <!-- Added a new Rust-based feature -->
 - [ ] CI/CD <!-- Changes related to GitHub Actions, workflows, or automation -->
 - [ ] Documentation <!-- changes related to the readme.md or any other markdown files -->
-
-### Context
-
-<!-- Why is this change necessary? What problem does it solve or what new feature does it add? -->
-[Provide the reason for the change or new feature. Mention if it addresses a bug, adds a new feature, or improves existing functionality.]
 
 ### How Has This Been Tested?
 
@@ -31,7 +23,7 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 
 ### Checklist
 
-Please ensure your pull request meets the following requirements:
+Do not delete this section. Please ensure your pull request meets the following requirements:
 
 - [ ] My code follows the style guidelines of this project.
 - [ ] I have performed a self-review of my code.
@@ -39,6 +31,12 @@ Please ensure your pull request meets the following requirements:
 - [ ] My changes do not introduce new warnings.
 - [ ] I have added tests that prove my fix is effective or that my feature works.
 - [ ] New and existing unit tests pass locally with my changes.
+- [ ] My PR title follows the conventional commit style, like `feat:`, `fix:`, or `chore:`.
+
+### Documentation Note
+
+- [ ] If this PR introduces a new feature, I have also updated the documentation site:  
+      🔗 https://github.com/carch-org/docs
 
 ### Screenshots 
 
@@ -47,8 +45,4 @@ Please ensure your pull request meets the following requirements:
 ### Related Issues
 
 <!-- If this PR fixes an issue, include the relevant issue number here (e.g., "Fixes #123") -->
-
-### Additional Notes
-
-<!-- Add any other context, technical details, or considerations you'd like to share. -->
 
