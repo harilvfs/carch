@@ -11,7 +11,7 @@
 
 [Quick Run/Test](https://carch.chalisehari.com.np/#how-to-use) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) •
-[Overview](../docs/overview-scripts.md) •
+[Overview](https://github.com/harilvfs/carch/blob/main/docs/overview-scripts.md) •
 [Contributing](https://carch.chalisehari.com.np/project/contributing) •
 [Changelog ⇢](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md)
 
