@@ -8,7 +8,7 @@ pub mod error;
 pub mod ui;
 pub mod version;
 
-static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/../scripts/modules");
+static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 
 const EXECUTABLE_MODE: u32 = 0o755;
 

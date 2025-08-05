@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
+cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." || exit 1
 
 # Options for shfmt:
 # -i 4:  indent with 4 spaces
@@ -11,6 +11,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")/../.." || exit 1
 
 echo "Formatting shell scripts..."
 
-find . -type f -name "*.sh" | grep -v './scripts/modules/Browser/Extensions.sh' | xargs shfmt -i 4 -ci -sr -kp -w
+find . -type f -name "*.sh" | grep -v './carch-core/src/modules/Browser/Extensions.sh' | xargs shfmt -i 4 -ci -sr -kp -w
 
 echo "Formatting complete."
