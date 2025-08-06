@@ -20,7 +20,7 @@ include = [
 
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
-carch-core = { path = "../carch-core" }
+carch-core = { path = "../carch-core", version = "5.2.7" }
 log = { workspace = true }
 env_logger = { workspace = true }
 tempfile = { workspace = true }
