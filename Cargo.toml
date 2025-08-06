@@ -4,7 +4,7 @@ resolver = "2"
 default-members = ["carch-cli"]
 
 [workspace.package]
-version = "5.2.6"
+version = "5.2.7"
 edition = "2024"
 description = "A simple CLI tool to automate Linux system setup 🧩"
 documentation = "https://carch.chalisehari.com.np"
