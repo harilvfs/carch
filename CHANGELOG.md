@@ -1,5 +1,134 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.2.7](https://github.com/harilvfs/carch/compare/v5.2.6...v5.2.7) - 2025-08-06
+
+
+### 🚀 Features
+
+
+- [e65d772](https://github.com/harilvfs/carch/commit/e65d7724de04ac69cfc38e2208c0c32a56882c94)  *(tui)* Remove highlight symbol by @harilvfs
+
+- [dbdadcb](https://github.com/harilvfs/carch/commit/dbdadcb72d882c534bcad6d45ffc43a903608d8f)  *(tui)* Change multiselect indicator icon by @harilvfs
+
+- [20244a2](https://github.com/harilvfs/carch/commit/20244a20f27e348693e32d403080cd5c8dcd8e1a)  *(script)* Add tty autologin script by @harilvfs
+
+- [d7f1754](https://github.com/harilvfs/carch/commit/d7f175411695ebde4aee1d864f4b5c993c94f881)  *(cli)* Add colored help output by @harilvfs
+
+- [bf510b7](https://github.com/harilvfs/carch/commit/bf510b705d10c86fe343a2ca9dd9fefbb987efb5) Display carch version with -v flag by @harilvfs
+
+- [8342c35](https://github.com/harilvfs/carch/commit/8342c353e2bef9e9a534b5b2ff325b8b3a4310c7) Improve repetitive logic on themes by @harilvfs
+
+- [d02a11d](https://github.com/harilvfs/carch/commit/d02a11d1f1f28abd6d7d004209182e48ec605d15) Correct file structure by @harilvfs
+
+- [c7a3b9a](https://github.com/harilvfs/carch/commit/c7a3b9affd6e65eba766c9a68e573e6e61a7e172)  *(xtask)* Generate script overview documentation by @harilvfs
+
+- [7aa8e52](https://github.com/harilvfs/carch/commit/7aa8e5278055ba26f0f9270d7c9caa2260a0e170)  *(tui)* Add clock time to header by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [fe1a611](https://github.com/harilvfs/carch/commit/fe1a6114f508f7a69d74d5b3e0270788c00ac75d)  *(tape)* Remove extra command by @harilvfs
+
+- [c04c086](https://github.com/harilvfs/carch/commit/c04c0868086ab55eddf6a857e1ff53cec178487e)  *(cargo)* Set carch-cli as default workspace package by @harilvfs
+
+- [7d00049](https://github.com/harilvfs/carch/commit/7d00049c312db09e8a0686325b48ae3bd8452dcd)  *(tui)* Correct alphabetical order by @harilvfs
+
+- [81581b1](https://github.com/harilvfs/carch/commit/81581b1536df14092d4fc7138c7663b438768e7c)  *(readme)* Overview dir by @harilvfs
+
+- [8917865](https://github.com/harilvfs/carch/commit/8917865f40e9121be8f2b0d772dc939ef9b0f96e)  *(deps)* Correct workspace dependencies by @harilvfs
+
+- [d60b40d](https://github.com/harilvfs/carch/commit/d60b40d0380286d17d3cfba4942348d170babc48)  *(build)* Relocate scripts to fix cargo publish error (#554) by @harilvfs in [#554](https://github.com/harilvfs/carch/pull/554)
+
+
+
+### 🚜 Refactor
+
+
+- [53091fe](https://github.com/harilvfs/carch/commit/53091fe231842b3ea675f1838bf2484896d89f27)  *(project)* Restructure into a multi-crate workspace (#547) by @harilvfs in [#547](https://github.com/harilvfs/carch/pull/547)
+
+- [1dc0f92](https://github.com/harilvfs/carch/commit/1dc0f92bced6a5c58c38f18fa92167fc0f4caca8)  *(deps)* Optimize crate dependencies by @harilvfs
+
+- [8a97ac6](https://github.com/harilvfs/carch/commit/8a97ac6a606e0cd538cb568d3d84b66d282153c0)  *(core)* Replace insecure curl|bash with http download by @harilvfs
+
+- [3251117](https://github.com/harilvfs/carch/commit/32511175c94124418c6669d922ac81e7d158d38c)  *(script)* Make dev/stable in one setup run by @harilvfs
+
+- [ae5cf99](https://github.com/harilvfs/carch/commit/ae5cf995dcb86af8869add79c5fc9f3360178e55)  *(scripts)* Centralize distro detection and simplify scripts (#548) by @harilvfs in [#548](https://github.com/harilvfs/carch/pull/548)
+
+- [843debf](https://github.com/harilvfs/carch/commit/843debf9f6d14eb5f39d455454ca20d79bea24d6) Re-structure packages scripts (#549) by @harilvfs in [#549](https://github.com/harilvfs/carch/pull/549)
+
+- [beff939](https://github.com/harilvfs/carch/commit/beff9399cf9a7a97d756fe31e53778cba3ce7ba9)  *(scripts)* Using function call (#552) by @harilvfs in [#552](https://github.com/harilvfs/carch/pull/552)
+
+- [9d30d35](https://github.com/harilvfs/carch/commit/9d30d35700561a921da5bef100f92f2a51cfc75a) Improve backup logic and simplify scripts by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [ef7a972](https://github.com/harilvfs/carch/commit/ef7a972be646852b3b474e5989d9768a4eea54da)  *(readme)* Using direct link overview-scripts by @harilvfs
+
+- [114b42d](https://github.com/harilvfs/carch/commit/114b42d1074bf49c989f7802d69e031e6225a645) Add documentation checklist by @harilvfs
+
+- [6ac9268](https://github.com/harilvfs/carch/commit/6ac926839bce4cd7bf8cfc05c30afccdfae7f364) Cleanup issue template by @harilvfs
+
+
+
+### 🎨 Styling
+
+
+- [3d00131](https://github.com/harilvfs/carch/commit/3d00131476f247eecaec3d449e3a1a0a6a827ec4)  *(lint)* Correct toml formatting by @harilvfs
+
+- [b4ea7ea](https://github.com/harilvfs/carch/commit/b4ea7eaff8010a32c0e2c4dcd8ee9e78131e64a5)  *(script)* Using same styling across all scripts (#553) by @harilvfs in [#553](https://github.com/harilvfs/carch/pull/553)
+
+- [f9b3813](https://github.com/harilvfs/carch/commit/f9b381381b1dff675db278857475d720aa924eaf) Using same styling on extensions script by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [4510e51](https://github.com/harilvfs/carch/commit/4510e516b678c60fece5cd9f2662bbc1cb8b15ea) Correct uppercase by @harilvfs
+
+- [5993e13](https://github.com/harilvfs/carch/commit/5993e1304eeefa112ca61d1763d3df59b39418f9)  *(script)* Move to root by @harilvfs
+
+- [d20e6f2](https://github.com/harilvfs/carch/commit/d20e6f232c7e4d833a39b36d1d399c035f60ba75)  *(script)* Remove curl progress bar by @harilvfs
+
+- [e861753](https://github.com/harilvfs/carch/commit/e861753352ba2429de09465550e8e62296e2e5db) Revert from pr #536 by @harilvfs
+
+- [17d436a](https://github.com/harilvfs/carch/commit/17d436a3ea2ad4ae25c5db86f6e7643434382077)  *(tui)* Remove extra typos by @harilvfs
+
+- [f3c5943](https://github.com/harilvfs/carch/commit/f3c5943e0813328ae0d4a1723c7f72a3aa0d3733) Add Rust dependency caching by @harilvfs
+
+- [9418691](https://github.com/harilvfs/carch/commit/94186912baadebc14ac14795af6f092bb0d9af9f) Add toolchain components by @harilvfs
+
+- [087e29d](https://github.com/harilvfs/carch/commit/087e29dfad42e70fb6cd984909e81b9cd2e28e03)  *(lint)* Cleanup shell formatting check by @harilvfs
+
+- [d1fbf81](https://github.com/harilvfs/carch/commit/d1fbf8150b794a75b9198c58124e6394d81b665d)  *(dwm)* Remove TTY autologin and display manager checking by @harilvfs
+
+- [eb0b1f1](https://github.com/harilvfs/carch/commit/eb0b1f1e3fcdc10a944e4adc5f1b4e3e82d17c06) Use license workspace by @harilvfs
+
+- [5164ef5](https://github.com/harilvfs/carch/commit/5164ef558efa1595e5e8b17b2cc8442bf2190c73)  *(crate)* Define workspace by @harilvfs
+
+- [186b908](https://github.com/harilvfs/carch/commit/186b908ef529b0664abaa5ae82030b7d996020d6) Add autologin tty script description by @harilvfs
+
+- [95a4943](https://github.com/harilvfs/carch/commit/95a49437b33d56ca08020cd03cb7e316800ec436) Remove old packages description by @harilvfs
+
+- [b3484c3](https://github.com/harilvfs/carch/commit/b3484c31b52bcba8131632a1ab9772f0c7322adc)  *(xtask)* Remove old description by @harilvfs
+
+- [d0aa6e0](https://github.com/harilvfs/carch/commit/d0aa6e0a0429b43ab40729fb44d1d3855f52785a)  *(script)* Correct neovim options by @harilvfs
+
+- [df0004c](https://github.com/harilvfs/carch/commit/df0004cf95806729c8fccb41d2e21527e9284c5c)  *(release)* Strip version from commit message by @harilvfs
+
+- [bb4922f](https://github.com/harilvfs/carch/commit/bb4922fbb99261b028e7e9fbf9015ed172699ba4)  *(man)* Update dev version command by @harilvfs
+
+- [4508906](https://github.com/harilvfs/carch/commit/45089062915b88984c00f016f96c729f2e439f07) Update cli version by @harilvfs
+
+- [cc06c25](https://github.com/harilvfs/carch/commit/cc06c254f73cf96e7bd82abc40b827cfc7ffdacd) Make updating version to manual by @harilvfs
+
+
+
 ## [5.2.6](https://github.com/harilvfs/carch/compare/v5.2.5...v5.2.6) - 2025-07-31
 
 
