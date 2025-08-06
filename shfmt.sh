@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." || exit 1
+cd "$(dirname "$0")" || exit 1
 
 # Options for shfmt:
 # -i 4:  indent with 4 spaces

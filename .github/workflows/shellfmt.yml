@@ -26,5 +26,5 @@ jobs:
 
     - name: Check formatting
       run: |
-        bash carch-core/src/modules/shfmt.sh
+        bash shfmt.sh
         git diff --exit-code
