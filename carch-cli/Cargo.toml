@@ -18,6 +18,10 @@ include = [
   "../man/carch.1",
 ]
 
+[lib]
+name = "carch_cli"
+path = "src/lib.rs"
+
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
 carch-core = { path = "../carch-core", version = "5.2.7" }

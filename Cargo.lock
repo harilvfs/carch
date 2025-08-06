@@ -2713,6 +2713,7 @@ name = "xtask"
 version = "5.2.7"
 dependencies = [
  "anyhow",
+ "carch-cli",
  "clap",
  "clap_complete",
  "pico-args",

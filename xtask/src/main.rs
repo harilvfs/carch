@@ -1,3 +1,4 @@
+use carch_cli::args::Cli;
 use clap::CommandFactory;
 use clap_complete::{Shell, generate};
 use pico_args::Arguments;
@@ -5,8 +6,6 @@ use std::collections::BTreeMap;
 use std::io::Cursor;
 use toml::Value;
 use xshell::{Shell as XShell, cmd};
-
-mod args;
 
 const HELP: &str = r#"
 Usage: cargo xtask <COMMAND>
@@ -41,7 +40,7 @@ fn main() -> Result<(), anyhow::Error> {
         "completions" => {
             println!("Generating completions...");
 
-            let mut cmd = crate::args::Cli::command();
+            let mut cmd = Cli::command();
             let mut buffer = Vec::new();
 
             // completions for Bash

@@ -32,10 +32,10 @@ _carch() {
 '-h[Print help]' \
 '--help[Print help]' \
 ":: :_carch_commands" \
-"*::: :->xtask" \
+"*::: :->carch-cli" \
 && ret=0
     case $state in
-    (xtask)
+    (carch-cli)
         words=($line[1] "${words[@]}")
         (( CURRENT += 1 ))
         curcontext="${curcontext%:*:*}:carch-command-$line[1]:"

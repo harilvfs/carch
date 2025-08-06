@@ -6,6 +6,7 @@ license.workspace = true
 publish = false
 
 [dependencies]
+carch-cli = { path = "../carch-cli" }
 pico-args = "0.5.0"
 xshell = "0.2.0"
 anyhow = "1.0.75"
