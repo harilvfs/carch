@@ -11,6 +11,11 @@ on:
         description: 'Release title (e.g., v1.1.1@Y-M-D)'
         required: true
         type: string
+      update_version:
+        description: 'Do you want to update the version in the repository?'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -35,14 +40,17 @@ jobs:
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
 
       - name: Update man page version
+        if: github.event.inputs.update_version == true
         run: |
           sed -i "s/\.TH \"carch\" \"1\" \"[^\"]*\" \"Carch [^\"]*\" \"Carch Manual\"/.TH \"carch\" \"1\" \"$CURRENT_MONTH $CURRENT_YEAR\" \"Carch $VERSION\" \"Carch Manual\"/" ./man/carch.1
 
       - name: Update Cargo.toml version
+        if: github.event.inputs.update_version == true
         run: |
           sed -i "/\[workspace.package\]/,/^\[/ s/^version = \".*\"/version = \"$VERSION\"/" Cargo.toml
 
       - name: Update carch-core version in carch-cli
+        if: github.event.inputs.update_version == true
         run: |
           sed -i "s/carch-core = { path = \"..\/carch-core\", version = \".*\" }/carch-core = { path = \"..\/carch-core\", version = \"$VERSION\" }/" ./carch-cli/Cargo.toml
 
@@ -69,9 +77,11 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-index-
 
       - name: Run cargo build to update Cargo.lock
+        if: github.event.inputs.update_version == true
         run: cargo build --release
 
       - name: Commit version changes
+        if: github.event.inputs.update_version == true
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
