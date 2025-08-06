@@ -89,6 +89,10 @@ Type@200ms "Extensions" Sleep 2s Enter
 
 Sleep 2s
 
+Enter
+
+Sleep 2s
+
 Type "y"
 
 Sleep 2s
