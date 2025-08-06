@@ -14,7 +14,7 @@ Usage: cargo xtask <COMMAND>
 Commands:
   ci                  Run all CI checks
   completions         Generate shell completion scripts
-  ogen                Generate overview-scripts.md (alias: generate-overview)
+  ogen                Generate overview.md (alias: generate-overview)
 "#;
 
 fn main() -> Result<(), anyhow::Error> {
@@ -62,7 +62,7 @@ fn main() -> Result<(), anyhow::Error> {
             Ok(())
         }
         "generate-overview" | "ogen" => {
-            println!("Generating overview-scripts.md...");
+            println!("Generating overview.md...");
 
             let mut markdown = String::from("## Scripts Descriptions:\n\n");
             let mut categories: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
@@ -104,8 +104,8 @@ fn main() -> Result<(), anyhow::Error> {
             }
 
             sh.create_dir("docs")?;
-            sh.write_file("docs/overview-scripts.md", &markdown)?;
-            println!("overview-scripts.md generated successfully in docs/.");
+            sh.write_file("docs/overview.md", &markdown)?;
+            println!("overview.md generated successfully in docs/.");
             Ok(())
         }
         _ => {
