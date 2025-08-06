@@ -115,7 +115,7 @@ pub fn update() -> Result<()> {
 
 fn update_via_cargo() -> Result<()> {
     info!("Updating via cargo...");
-    run_command(Command::new("cargo").arg("install").arg("carch").arg("--force"))?;
+    run_command(Command::new("cargo").arg("install").arg("carch-cli").arg("--force"))?;
     println!("Update done.");
     Ok(())
 }
@@ -149,7 +149,7 @@ pub fn uninstall() -> Result<()> {
 
 fn uninstall_via_cargo() -> Result<()> {
     info!("Uninstalling via cargo...");
-    run_command(Command::new("cargo").arg("uninstall").arg("carch"))?;
+    run_command(Command::new("cargo").arg("uninstall").arg("carch-cli"))?;
     println!("Uninstallation done.");
     Ok(())
 }
