@@ -10,13 +10,7 @@ categories.workspace = true
 license.workspace = true
 edition.workspace = true
 readme.workspace = true
-include = [
-  "src",
-  "Cargo.toml",
-  "../LICENSE",
-  "../.github/README.md",
-  "../scripts",
-]
+include = ["src", "Cargo.toml", "../LICENSE", "../.github/README.md"]
 
 [dependencies]
 include_dir = "0.7.3"

@@ -67,7 +67,7 @@ fn main() -> Result<(), anyhow::Error> {
             let mut markdown = String::from("## Scripts Descriptions:\n\n");
             let mut categories: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
 
-            let desc_files = sh.read_dir("scripts/modules")?;
+            let desc_files = sh.read_dir("carch-core/src/modules")?;
             for entry in desc_files {
                 let path = entry.as_path();
                 if path.is_dir() {

@@ -26,5 +26,5 @@ jobs:
 
     - name: Check formatting
       run: |
-        bash scripts/modules/shfmt.sh
+        bash shfmt.sh
         git diff --exit-code
