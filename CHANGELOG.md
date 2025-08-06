@@ -1,5 +1,55 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.3.1](https://github.com/harilvfs/carch/compare/v5.2.7...v5.3.1) - 2025-08-06
+
+
+### 🚀 Features
+
+
+- [ea27694](https://github.com/harilvfs/carch/commit/ea2769436ff8e362dfedda99490557a485480390)  *(cargo)* Refine crate metadata by @harilvfs
+
+- [1af33db](https://github.com/harilvfs/carch/commit/1af33db9fff7ab6538c373ff5eb55e5cc485060e)  *(ui)* Remove time display from header by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [8973d7a](https://github.com/harilvfs/carch/commit/8973d7adf457ab15b95d0ea74f4e818d7d548040)  *(command)* Carch cargo crate name by @harilvfs
+
+- [c2f3c10](https://github.com/harilvfs/carch/commit/c2f3c1027f79346218337268fff4630e4925cdbe)  *(tape)* Missing commands on vhs by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [d3d55bf](https://github.com/harilvfs/carch/commit/d3d55bf58ca94537f4ba1c06d2573022595e419a)  *(xtask)* Use args from carch-cli by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [3cd9a62](https://github.com/harilvfs/carch/commit/3cd9a6277e9651a4f13b2165d50661b8abfe50fe)  *(overview)* Rename the file by @harilvfs
+
+- [3651c36](https://github.com/harilvfs/carch/commit/3651c36fc6c1a4b2b643943b7d5f6cd238e5bfb7)  *(readme)* Correct carch crate name by @harilvfs
+
+- [d58da51](https://github.com/harilvfs/carch/commit/d58da518cef72bc58aee7eb1b7c170916c41d75c)  *(readme)* Use mainstream ImgShield Ratatui badge (#557) by @nissxnix in [#557](https://github.com/harilvfs/carch/pull/557)
+
+- [b59674f](https://github.com/harilvfs/carch/commit/b59674fdc3430d4c5ddd6fac4c1e4787cf1a4b74)  *(readme)* Use same style badge as Ratatui (#558) by @nissxnix in [#558](https://github.com/harilvfs/carch/pull/558)
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [df6e398](https://github.com/harilvfs/carch/commit/df6e398eb7b3f8ea0d73b701923ea10966cbc705)  *(install)* Fix typo by @harilvfs
+
+- [0c6bcd6](https://github.com/harilvfs/carch/commit/0c6bcd6aa7f57fdac8d25e922e981b7fbfd45372)  *(scripts)* Direct exit if distro is unknown by @harilvfs
+
+
+
 ## [5.2.7](https://github.com/harilvfs/carch/compare/v5.2.6...v5.2.7) - 2025-08-06
 
 
