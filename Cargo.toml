@@ -6,13 +6,10 @@ default-members = ["carch-cli"]
 [workspace.package]
 version = "5.2.7"
 edition = "2024"
-description = "A simple CLI tool to automate Linux system setup 🧩"
 documentation = "https://carch.chalisehari.com.np"
 homepage = "https://github.com/harilvfs/carch"
 readme = "./.github/README.md"
-repository = "https://github.com/harilvfs/carch"
 license = "MIT"
-license-file = "LICENSE"
 categories = ["command-line-utilities"]
 keywords = ["system", "cli", "rust", "bash"]
 

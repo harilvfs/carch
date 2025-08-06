@@ -1,22 +1,16 @@
 [package]
 name = "carch-cli"
 version.workspace = true
-description.workspace = true
+description = "A simple CLI tool to automate Linux system setup 🧩"
 documentation.workspace = true
-repository.workspace = true
+repository = "https://github.com/harilvfs/carch/tree/main/carch-cli"
 homepage.workspace = true
 keywords.workspace = true
 categories.workspace = true
 license.workspace = true
 edition.workspace = true
 readme.workspace = true
-include = [
-  "src",
-  "Cargo.toml",
-  "../LICENSE",
-  "../.github/README.md",
-  "../man/carch.1",
-]
+include = ["src", "Cargo.toml", "../man/carch.1"]
 
 [lib]
 name = "carch_cli"
