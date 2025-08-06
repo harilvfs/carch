@@ -28,7 +28,7 @@ detect_distro() {
 }
 
 install_arch() {
-    printf "${GREEN}==> ${NC}Cloning pkgbuild repo\n"
+    printf "${GREEN}==> ${NC}Cloning PGKBUILD\n"
     rm -rf ~/pkgs
     git clone https://github.com/carch-org/pkgs ~/pkgs > /dev/null 2>&1
     cd ~/pkgs/carch-bin || exit 1
