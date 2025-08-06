@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -eu
-
 YELLOW='\033[1;33m'
 GREEN='\033[1;32m'
 RED='\033[1;31m'
@@ -24,6 +22,7 @@ detect_distro() {
         echo "opensuse"
     else
         echo "unsupported"
+        exit 1
     fi
 }
 

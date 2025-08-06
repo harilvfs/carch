@@ -9,6 +9,7 @@ detect_distro() {
         DISTRO="openSUSE"
     else
         DISTRO="Unknown"
+        exit 1
     fi
 }
 
