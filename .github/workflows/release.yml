@@ -39,18 +39,23 @@ jobs:
           echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
           echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
 
+      - name: Debug input values
+        run: |
+          echo "Update version input: '${{ github.event.inputs.update_version }}'"
+          echo "Update version type: $(echo '${{ github.event.inputs.update_version }}' | wc -c)"
+
       - name: Update man page version
-        if: github.event.inputs.update_version == true
+        if: ${{ github.event.inputs.update_version == 'true' }}
         run: |
           sed -i "s/\.TH \"carch\" \"1\" \"[^\"]*\" \"Carch [^\"]*\" \"Carch Manual\"/.TH \"carch\" \"1\" \"$CURRENT_MONTH $CURRENT_YEAR\" \"Carch $VERSION\" \"Carch Manual\"/" ./man/carch.1
 
       - name: Update Cargo.toml version
-        if: github.event.inputs.update_version == true
+        if: ${{ github.event.inputs.update_version == 'true' }}
         run: |
           sed -i "/\[workspace.package\]/,/^\[/ s/^version = \".*\"/version = \"$VERSION\"/" Cargo.toml
 
       - name: Update carch-core version in carch-cli
-        if: github.event.inputs.update_version == true
+        if: ${{ github.event.inputs.update_version == 'true' }}
         run: |
           sed -i "s/carch-core = { path = \"..\/carch-core\", version = \".*\" }/carch-core = { path = \"..\/carch-core\", version = \"$VERSION\" }/" ./carch-cli/Cargo.toml
 
@@ -77,11 +82,11 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-index-
 
       - name: Run cargo build to update Cargo.lock
-        if: github.event.inputs.update_version == true
+        if: ${{ github.event.inputs.update_version == 'true' }}
         run: cargo build --release
 
       - name: Commit version changes
-        if: github.event.inputs.update_version == true
+        if: ${{ github.event.inputs.update_version == 'true' }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
