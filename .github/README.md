@@ -37,8 +37,8 @@ For more, see the [documentation](https://carch.chalisehari.com.np). You can als
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
 [downloads]: https://img.shields.io/github/downloads/harilvfs/carch/total?style=flat&color=1c1c29&logoColor=white&labelColor=black&logo=github
 [downloads-link]: https://github.com/harilvfs/carch/releases/latest
-[crates]: https://img.shields.io/crates/v/carch?style=flat&logo=rust&color=1c1c29&logoColor=white&labelColor=black
-[crates-link]: https://crates.io/crates/carch
+[crates]: https://img.shields.io/crates/v/carch-cli?style=flat&logo=rust&color=1c1c29&logoColor=white&labelColor=black
+[crates-link]: https://crates.io/crates/carch-cli
 [deps-badge]: https://deps.rs/repo/github/harilvfs/carch/status.svg?path=%2F&subject=deps%3Acore&style=flat
 [deps]: https://deps.rs/repo/github/harilvfs/carch?path=%2F
 [license]: https://img.shields.io/github/license/harilvfs/carch?color=1c1c29&labelColor=black&style=flat&logo=github&logoColor=white
