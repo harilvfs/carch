@@ -31,7 +31,7 @@ For more, see the [documentation](https://carch.chalisehari.com.np). You can als
 
 <!-- Badges -->
 
-[ratatui]: https://ratatui.rs/built-with-ratatui/badge.svg
+[ratatui]: https://img.shields.io/badge/Built_With-Ratatui-000?logo=ratatui&logoColor=fff&labelColor=000&color=fff
 [ratatui-link]: https://ratatui.rs/
 [check]: https://img.shields.io/github/actions/workflow/status/harilvfs/carch/ci.yml?branch=main&style=flat&color=1c1c29&labelColor=black&logo=GitHub%20Actions&logoColor=white&label=CI
 [check-link]: https://github.com/harilvfs/carch/actions/workflows/ci.yml
