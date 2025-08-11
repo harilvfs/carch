@@ -24,7 +24,7 @@ tui-term = { version = "0.2.0", default-features = false }
 vt100-ctt = "0.16.0"
 oneshot = { version = "0.1.8", features = ["std"], default-features = false }
 thiserror = "2.0.12"
-toml = { version = "0.9.4", default-features = false, features = ["parse", "serde"] }
+toml = { version = "0.9.5", default-features = false, features = ["parse", "serde"] }
 log = { workspace = true }
 env_logger = { workspace = true }
 tempfile = { workspace = true }
