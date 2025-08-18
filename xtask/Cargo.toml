@@ -9,7 +9,7 @@ publish = false
 carch-cli = { path = "../carch-cli" }
 pico-args = "0.5.0"
 xshell = "0.2.0"
-anyhow = "1.0.75"
+anyhow = "1.0.99"
 clap = { workspace = true }
 clap_complete = "4.5.56"
 toml = { workspace = true }
