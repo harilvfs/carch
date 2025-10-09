@@ -59,7 +59,7 @@ main_menu() {
 
     case "$DISTRO" in
         "Arch")
-            options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland"  "Exit")
+            options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "Exit")
             ;;
         "Fedora")
             options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
