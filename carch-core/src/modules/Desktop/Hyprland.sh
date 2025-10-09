@@ -59,7 +59,7 @@ main_menu() {
 
     case "$DISTRO" in
         "Arch")
-            options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland" "basecamp/omarchy" "Exit")
+            options=("prasanthrangan/hyprdots" "mylinuxforwork/dotfiles" "end-4/dots-hyprland" "jakoolit/Arch-Hyprland"  "Exit")
             ;;
         "Fedora")
             options=("mylinuxforwork/dotfiles" "jakoolit/Fedora-Hyprland" "Exit")
@@ -93,7 +93,6 @@ main_menu() {
     repos["jakoolit/Arch-Hyprland"]="https://github.com/JaKooLit/Arch-Hyprland"
     repos["jakoolit/Fedora-Hyprland"]="https://github.com/JaKooLit/Fedora-Hyprland"
     repos["jakoolit/OpenSUSE-Hyprland"]="https://github.com/JaKooLit/OpenSUSE-Hyprland"
-    repos["basecamp/omarchy"]="https://github.com/basecamp/omarchy"
 
     print_message "$CYAN" "Sourcing from: ${repos[$choice]}"
     echo
@@ -163,10 +162,6 @@ install_config() {
             cd ~/OpenSUSE-Hyprland || exit
             chmod +x install.sh
             ./install.sh
-            ;;
-        "basecamp/omarchy")
-            print_message "$CYAN" "Installing Omarchy configuration..."
-            wget -qO- https://omarchy.org/install | bash
             ;;
     esac
 }
