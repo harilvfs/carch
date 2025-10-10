@@ -1,5 +1,42 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.3.2](https://github.com/harilvfs/carch/compare/v5.3.1...v5.3.2) - 2025-10-10
+
+
+### 🚀 Features
+
+
+- [623a1af](https://github.com/harilvfs/carch/commit/623a1af842c6ce7bddece5f1d7072d96c115fa01)  *(hyprland)* Remove Omarchy setup option by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [8e17a60](https://github.com/harilvfs/carch/commit/8e17a60b154e2317c431cd6ce25d13a3fb1c402f)  *(crate)* Carch-core repository url by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [e156f14](https://github.com/harilvfs/carch/commit/e156f14c92d3b405b5b0ab98802ec46005b2da73)  *(hyprland)* Remove omarchy option by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [fc4c99a](https://github.com/harilvfs/carch/commit/fc4c99aec9d27b9517bfa7fe3de8255af1235967)  *(lint)* Correct formatting with shfmt by @harilvfs
+
+- [dba5acf](https://github.com/harilvfs/carch/commit/dba5acfc28b71aa759310513bc6fc6d52afc182d) Bump golang version by @harilvfs
+
+- [5afd09c](https://github.com/harilvfs/carch/commit/5afd09ce093ff8ca1363a965434e77def8f57e2b) Bump version thiserror by @harilvfs
+
+- [5c9b483](https://github.com/harilvfs/carch/commit/5c9b483dac04bda06c5ab09127fb1edf403805cb)  *(release)* Remove build-std for binary build by @harilvfs
+
+
+
 ## [5.3.1](https://github.com/harilvfs/carch/compare/v5.2.7...v5.3.1) - 2025-08-06
 
 
