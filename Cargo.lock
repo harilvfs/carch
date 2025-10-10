@@ -156,7 +156,7 @@ checksum = "d71b6127be86fdcfddb610f7182ac57211d4b18a3e9c82eb2d17662f2227ad6a"
 
 [[package]]
 name = "carch-cli"
-version = "5.3.1"
+version = "5.3.2"
 dependencies = [
  "carch-core",
  "clap",
@@ -169,7 +169,7 @@ dependencies = [
 
 [[package]]
 name = "carch-core"
-version = "5.3.1"
+version = "5.3.2"
 dependencies = [
  "crossterm 0.29.0",
  "env_logger",
@@ -2593,7 +2593,7 @@ checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
 
 [[package]]
 name = "xtask"
-version = "5.3.1"
+version = "5.3.2"
 dependencies = [
  "anyhow",
  "carch-cli",
