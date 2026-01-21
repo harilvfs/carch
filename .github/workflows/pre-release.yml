@@ -73,7 +73,7 @@ jobs:
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
 
       - name: Upload binaries as artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: compiled-binaries
           path: |
