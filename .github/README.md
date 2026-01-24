@@ -1,5 +1,3 @@
-<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif"/>
-
 <div align="center">
 
 [![Built Wit Ratatui][ratatui]][ratatui-link]
@@ -8,16 +6,35 @@
 [![Downloads][downloads]][downloads-link]
 [![License][license]][license-link]
 
-[Quick Run/Test](https://carch.chalisehari.com.np/#how-to-use) •
+</div>
+
+_[Carch](https://carch.chalisehari.com.np)_ is **a collection** of modular Bash scripts with a beautiful TUI (_built with_ [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
+It’s especially useful if you want to quickly set up and start using your _favorite apps_ on a clean, ready-to-use system. (_Currently supports Arch, Fedora, and openSUSE-based distros_)
+
+<div align="center">
+
+[Overview](https://carch.chalisehari.com.np/reference/overview-scripts) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) •
-[Overview](https://github.com/harilvfs/carch/blob/main/docs/overview.md) •
 [Contributing](https://carch.chalisehari.com.np/project/contributing) •
 [Changelog ⇢](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md)
 
 </div>
 
-_[Carch](https://carch.chalisehari.com.np)_ is **a collection** of modular Bash scripts with a beautiful TUI (_built with_ [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
-It’s especially useful if you want to quickly set up and start using your _favorite apps_ on a clean, ready-to-use system. (_Currently supports Arch, Fedora, and openSUSE-based distros_)
+<img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif"/>
+
+<h3> Quick Run/Test </h3>
+
+<h4> Stable Release </h4>
+
+```sh
+bash -c "$(curl -fsSL chalisehari.com.np/carch)"
+```
+
+<h4> Dev Release </h4>
+
+```sh
+bash -c "$(curl -fsSL chalisehari.com.np/carch)" -- --dev
+```
 
 For more, see the [documentation](https://carch.chalisehari.com.np). You can also join us on [Discord](https://discord.com/invite/8NJWstnUHd) or [Telegram](https://t.me/carchx) for help and discussions.
 
