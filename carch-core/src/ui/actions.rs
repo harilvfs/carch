@@ -185,7 +185,7 @@ impl<'a> App<'a> {
             }
         }
 
-        results.sort_by(|a, b| b.score.cmp(&a.score));
+        results.sort_by_key(|b| std::cmp::Reverse(b.score));
         self.search.results = results;
     }
 
