@@ -20,7 +20,7 @@ reqwest = { workspace = true, default-features = false, features = ["blocking", 
 serde = { workspace = true, default-features = false, features = ["derive"] }
 fuzzy-matcher = "0.3.7"
 portable-pty = "0.9.0"
-tui-term = { version = "0.2.0", default-features = false }
+tui-term = { version = "0.3.1", default-features = false }
 vt100-ctt = "0.16.0"
 oneshot = { version = "0.1.13", features = ["std"], default-features = false }
 thiserror = "2.0.18"
