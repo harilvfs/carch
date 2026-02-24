@@ -28,7 +28,7 @@ jobs:
       - name: Install Rust (nightly) with MUSL targets
         uses: dtolnay/rust-toolchain@nightly
         with:
-          targets: x86_64-unknown-linux-musl,aarch64-unknown-linux-musl
+          targets: x86_64-unknown-linux-musl
 
       - name: Install rust-src
         run: rustup component add rust-src --toolchain nightly
@@ -54,22 +54,11 @@ jobs:
         run: cargo install cross
 
       - name: Build x86_64 binary
-        run: |
-          cargo build \
-            --release \
-            --verbose \
-            --target-dir=build \
-            --target=x86_64-unknown-linux-musl \
-            --all-features
+        run: cargo build --target-dir=build --release --verbose --target=x86_64-unknown-linux-musl --all-features
 
       - name: Build aarch64 binary (with cross)
         run: |
-          cross build \
-            --release \
-            --verbose \
-            --target-dir=build \
-            --target=aarch64-unknown-linux-musl \
-            --all-features
+          cross build --target-dir=build --release --verbose --target=aarch64-unknown-linux-musl --all-features
           mv ./build/aarch64-unknown-linux-musl/release/carch ./build/aarch64-unknown-linux-musl/release/carch-aarch64
 
       - name: Upload binaries as artifacts
