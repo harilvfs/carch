@@ -130,20 +130,12 @@ install_config() {
             ./install.sh
             ;;
         "mylinuxforwork/dotfiles")
-            case "$distro" in
-                "Arch")
-                    bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-arch.sh)"
-                    ;;
-                "Fedora")
-                    bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
-                    ;;
-                "openSUSE")
-                    bash -c "$(curl -s https://raw.githubusercontent.com/mylinuxforwork/dotfiles/refs/heads/main/setup/setup-fedora.sh)"
-                    ;;
-            esac
+            print_message "$YELLOW" "Installing ML4W dotfiles..."
+            bash -c "$(curl -s https://ml4w.com/os/stable)"
             ;;
         "end-4/dots-hyprland")
-            bash -c "$(curl -s https://end-4.github.io/dots-hyprland-wiki/setup.sh)"
+            print_message "$YELLOW" "Installing end-4 dotfiles..."
+            bash -c "$(curl -s https://ii.clsty.link/get)"
             ;;
         "jakoolit/Arch-Hyprland")
             git clone --depth=1 https://github.com/JaKooLit/Arch-Hyprland.git ~/Arch-Hyprland
