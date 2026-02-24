@@ -16,6 +16,9 @@ description = "A highly customizable Firefox-based browser with unique UI featur
 [Google-chrome]
 description = "Cross-platform browser developed by Google."
 
+[Helium-browser]
+description = "A lightweight, privacy-focused browser (currently in Beta)."
+
 [Chromium]
 description = "The open-source web project that powers Google Chrome and Edge."
 
