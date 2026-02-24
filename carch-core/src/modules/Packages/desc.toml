@@ -1,5 +1,5 @@
 ["Android-Tools"]
-description = "Provides options to install various Android-related tools, including Gvfs-MTP for USB file transfers, ADB for debugging, JDK (OpenJDK) for Java development, and the Universal Android Debloater for removing bloatware."
+description = "Install essential Android tools for development and device management."
 
 [Browsers]
 description = "Offers a selection of web browsers for installation, such as Brave, Firefox, Google Chrome, and others, allowing you to choose the one that best fits your needs."
