@@ -29,8 +29,6 @@ Do not delete this section. Please ensure your pull request meets the following 
 - [ ] I have performed a self-review of my code.
 - [ ] I have commented on my code, particularly in hard-to-understand areas.
 - [ ] My changes do not introduce new warnings.
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] New and existing unit tests pass locally with my changes.
 - [ ] My PR title follows the conventional commit style, like `feat:`, `fix:`, or `chore:`.
 
 ### Documentation Note
