@@ -73,6 +73,91 @@ install_uad() {
     esac
 }
 
+install_apkstudio() {
+    clear
+    print_message "$YELLOW" "Fetching latest APK Studio release..."
+
+    local appimage_dir="$HOME/Applications"
+    mkdir -p "$appimage_dir"
+
+    local api_url="https://api.github.com/repos/vaibhavpandeyvpz/apkstudio/releases/latest"
+    local appimage_url
+    appimage_url=$(curl -s $api_url | jq -r '.assets[] | select(.name | endswith(".AppImage")) | .browser_download_url' | head -1)
+
+    if [[ -z "$appimage_url" ]]; then
+        print_message "$RED" "Failed to fetch latest release URL"
+        print_message "$YELLOW" "Falling back to hardcoded URL..."
+        appimage_url="https://github.com/vaibhavpandeyvpz/apkstudio/releases/latest/download/ApkStudio-v6.3.0-x86_64.AppImage"
+    fi
+
+    local filename=$(basename "$appimage_url")
+    local appimage_path="$appimage_dir/$filename"
+
+    print_message "$YELLOW" "Downloading $filename..."
+
+    curl -L "$appimage_url" -o "$appimage_path"
+
+    if [[ $? -eq 0 ]]; then
+        chmod +x "$appimage_path"
+
+        if [[ -d "/usr/local/bin" && -w "/usr/local/bin" ]]; then
+            sudo ln -sf "$appimage_path" /usr/local/bin/apkstudio 2> /dev/null
+        else
+            mkdir -p "$HOME/.local/bin"
+            ln -sf "$appimage_path" "$HOME/.local/bin/apkstudio" 2> /dev/null
+
+            if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+                # for bash
+                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+                # for zsh
+                echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc" 2> /dev/null
+                # for fish
+                mkdir -p "$HOME/.config/fish"
+                echo 'set -gx PATH $HOME/.local/bin $PATH' >> "$HOME/.config/fish/config.fish" 2> /dev/null
+            fi
+        fi
+
+        print_message "$GREEN" "APK Studio downloaded successfully"
+        print_message "$GREEN" "Location: $appimage_path"
+
+        create_apkstudio_desktop_entry "$appimage_path"
+
+        print_message "$CYAN" "Run APK Studio by typing: apkstudio"
+        print_message "$CYAN" "Or run directly: $appimage_path"
+        print_message "$CYAN" "If you encounter issues, check: https://github.com/vaibhavpandeyvpz/apkstudio"
+
+    else
+        print_message "$RED" "Failed to download APK Studio AppImage"
+        print_message "$YELLOW" "Download manually from: https://github.com/vaibhavpandeyvpz/apkstudio/releases"
+    fi
+}
+
+create_apkstudio_desktop_entry() {
+    local appimage_path="$1"
+    local desktop_entry="$HOME/.local/share/applications/apkstudio.desktop"
+
+    mkdir -p "$HOME/.local/share/applications"
+    mkdir -p "$HOME/.local/share/icons"
+
+    local icon_path="$HOME/.local/share/icons/apkstudio.png"
+    curl -s "https://raw.githubusercontent.com/vaibhavpandeyvpz/apkstudio/refs/heads/master/resources/icon.png" -o "$icon_path"
+
+    cat > "$desktop_entry" << EOF
+[Desktop Entry]
+Name=APK Studio
+Comment=IDE for reverse-engineering Android applications
+Exec=$appimage_path
+Icon=$icon_path
+Terminal=false
+Type=Application
+Categories=Development;IDE;Android;
+MimeType=application/vnd.android.package-archive;
+EOF
+
+    chmod +x "$desktop_entry"
+    print_message "$GREEN" "Desktop entry created"
+}
+
 main() {
     while true; do
         clear
@@ -81,6 +166,7 @@ main() {
             "ADB"
             "JDK (OpenJDK)"
             "Universal Android Debloater (UAD-NG)"
+            "APK Studio [Android Reverse Engineering IDE]"
             "Exit"
         )
 
@@ -101,6 +187,9 @@ main() {
                 ;;
             "Universal Android Debloater (UAD-NG)")
                 install_uad
+                ;;
+            "APK Studio [Android Reverse Engineering IDE]")
+                install_apkstudio
                 ;;
             "Exit")
                 exit 0
