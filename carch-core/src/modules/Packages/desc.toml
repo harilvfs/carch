@@ -1,9 +1,6 @@
 ["Android-Tools"]
 description = "Install essential Android tools for development and device management."
 
-[Browsers]
-description = "Offers a selection of web browsers for installation, such as Brave, Firefox, Google Chrome, and others, allowing you to choose the one that best fits your needs."
-
 [Communication]
 description = "Installs popular communication applications like Discord, Signal, Slack, and Telegram to help you stay connected with your teams and communities."
 

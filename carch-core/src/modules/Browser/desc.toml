@@ -1,2 +1,47 @@
+[Brave]
+description = "Privacy-focused Chromium-based browser with built-in ad blocking."
+
+[Firefox]
+description = "Fast, independent browser backed by the non-profit Mozilla Foundation."
+
+[Lynx]
+description = "Lightweight text-based web browser for terminal environments."
+
+[Librewolf]
+description = "A hardened fork of Firefox focused on privacy and security."
+
+[Floorp]
+description = "A highly customizable Firefox-based browser with unique UI features."
+
+[Google-chrome]
+description = "Cross-platform browser developed by Google."
+
+[Helium-browser]
+description = "A lightweight, privacy-focused browser (currently in Beta)."
+
+[Chromium]
+description = "The open-source web project that powers Google Chrome and Edge."
+
+[Ungoogled-chromium]
+description = "Chromium without the Google services for maximum privacy."
+
+[Vivaldi]
+description = "A feature-rich browser designed for power users and deep customization."
+
+[Qutebrowser]
+description = "A keyboard-focused, Vim-like browser based on Python and Qt."
+
+[Zen-browser]
+description = "A modern, design-focused Firefox fork with a workspace-centric layout."
+
+[Thorium-browser]
+description = "A high-performance Chromium fork optimized for modern processors."
+
+[Opera]
+description = "A versatile browser featuring a built-in VPN and social media sidebar."
+
+[Tor-browser]
+description = "Extreme privacy browser that routes traffic through the Tor network."
+
 [Extensions]
 description = "Recommends useful extensions for Chromium and Firefox-based browsers."
