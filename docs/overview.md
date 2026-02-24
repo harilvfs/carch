@@ -2,7 +2,22 @@
 
 ### Browser
 
+- **Brave**: *Privacy-focused Chromium-based browser with built-in ad blocking.*
+- **Chromium**: *The open-source web project that powers Google Chrome and Edge.*
 - **Extensions**: *Recommends useful extensions for Chromium and Firefox-based browsers.*
+- **Firefox**: *Fast, independent browser backed by the non-profit Mozilla Foundation.*
+- **Floorp**: *A highly customizable Firefox-based browser with unique UI features.*
+- **Google-chrome**: *Cross-platform browser developed by Google.*
+- **Helium-browser**: *A lightweight, privacy-focused browser (currently in Beta).*
+- **Librewolf**: *A hardened fork of Firefox focused on privacy and security.*
+- **Lynx**: *Lightweight text-based web browser for terminal environments.*
+- **Opera**: *A versatile browser featuring a built-in VPN and social media sidebar.*
+- **Qutebrowser**: *A keyboard-focused, Vim-like browser based on Python and Qt.*
+- **Thorium-browser**: *A high-performance Chromium fork optimized for modern processors.*
+- **Tor-browser**: *Extreme privacy browser that routes traffic through the Tor network.*
+- **Ungoogled-chromium**: *Chromium without the Google services for maximum privacy.*
+- **Vivaldi**: *A feature-rich browser designed for power users and deep customization.*
+- **Zen-browser**: *A modern, design-focused Firefox fork with a workspace-centric layout.*
 
 ### Desktop
 
@@ -25,7 +40,6 @@
 ### Packages
 
 - **Android-Tools**: *Provides options to install various Android-related tools, including Gvfs-MTP for USB file transfers, ADB for debugging, JDK (OpenJDK) for Java development, and the Universal Android Debloater for removing bloatware.*
-- **Browsers**: *Offers a selection of web browsers for installation, such as Brave, Firefox, Google Chrome, and others, allowing you to choose the one that best fits your needs.*
 - **Communication**: *Installs popular communication applications like Discord, Signal, Slack, and Telegram to help you stay connected with your teams and communities.*
 - **Crypto-Tools**: *Installs essential cryptocurrency tools, such as the Electrum Bitcoin wallet, to manage your digital assets securely.*
 - **Development-Tools**: *Sets up your development environment with a choice of languages and tools, including Node.js, Python, Rust, Go, and Docker, to support your coding projects.*
