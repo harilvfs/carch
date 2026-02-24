@@ -13,7 +13,7 @@ It’s especially useful if you want to quickly set up and start using your _fav
 
 <div align="center">
 
-[Overview](https://carch.chalisehari.com.np/reference/overview-scripts) •
+[Overview](https://github.com/harilvfs/carch/blob/main/docs/overview.md) •
 [Installation](https://carch.chalisehari.com.np/getting-started/installation) •
 [Contributing](https://carch.chalisehari.com.np/project/contributing) •
 [Changelog ⇢](https://github.com/harilvfs/carch/blob/main/CHANGELOG.md)
