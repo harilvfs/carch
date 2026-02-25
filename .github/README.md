@@ -1,3 +1,5 @@
+<h1 align="center">Carch</h1>
+
 <div align="center">
 
 [![Built Wit Ratatui][ratatui]][ratatui-link]
