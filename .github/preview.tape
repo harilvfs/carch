@@ -79,6 +79,18 @@ Down Sleep 1s
 
 Down Sleep 1s
 
+Type "t"
+
+Sleep 1s
+
+Type "t"
+
+Sleep 1
+
+Type "t"
+
+Sleep 1
+
 Type "l"
 
 Sleep 1s
@@ -97,15 +109,15 @@ Type "y"
 
 Sleep 2s
 
+Type "1" Sleep 2s Enter
+
+Sleep 3s
+
+Type "b" Sleep 2s Enter
+
+Sleep 2s
+
 Type "3" Sleep 2s Enter
-
-Sleep 2s
-
-Enter
-
-Sleep 2s
-
-Type "p" Sleep 2s
 
 Sleep 2s
 
