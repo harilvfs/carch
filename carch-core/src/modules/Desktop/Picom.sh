@@ -197,7 +197,7 @@ main() {
             ;;
         "Picom normal")
             install_dependencies_normal
-            download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
+            download_config "https://raw.githubusercontent.com/harilvfs/i3wmdotfiles/refs/heads/main/picom/picom-transparency/picom.conf"
             print_message "$GREEN" "Picom setup completed without animations!"
             ;;
         "Exit")
