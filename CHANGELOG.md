@@ -1,5 +1,57 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.3.3](https://github.com/harilvfs/carch/compare/v5.3.2...v5.3.3) - 2026-02-25
+
+
+### 🚀 Features
+
+
+- [2207b2f](https://github.com/harilvfs/carch/commit/2207b2f3088867c027644f7b4035f5bb4fb5bf71)  *(android)* Add APK Studio installer (#647) by @harilvfs in [#647](https://github.com/harilvfs/carch/pull/647)
+
+
+
+### 🐛 Bug Fixes
+
+
+- [4e97b15](https://github.com/harilvfs/carch/commit/4e97b15dfb10b6dcc3f191c9858de102a5a12c1a) Correct typo PKGBUILD filename by @harilvfs
+
+- [3ac9ee3](https://github.com/harilvfs/carch/commit/3ac9ee3270a27fddc4056a5e732610d57bca5d37)  *(crate)* Failing CI due to unmaintain crate by @harilvfs
+
+- [0d22d5b](https://github.com/harilvfs/carch/commit/0d22d5bfd585801d1e14022f897bd355592aba11) Resolve clippy warnings (#639) by @harilvfs in [#639](https://github.com/harilvfs/carch/pull/639)
+
+- [f1c06f7](https://github.com/harilvfs/carch/commit/f1c06f72308d1c6b221de39754eeb470b9f7f948)  *(hyprland)* Correct installation script URLs for ML4W and end4 by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [e7ab96f](https://github.com/harilvfs/carch/commit/e7ab96f6d390ef2cf51b7e44f6a0cfc4d9396ae2) Separate browser installation scripts (#648) by @harilvfs in [#648](https://github.com/harilvfs/carch/pull/648)
+
+
+
+### 📚 Documentation
+
+
+- [288c236](https://github.com/harilvfs/carch/commit/288c23629d2920f4c8ae8d23ffc72190d8c2331a)  *(readme)* Redesign layout and update structure (#626) by @harilvfs in [#626](https://github.com/harilvfs/carch/pull/626)
+
+- [8c59477](https://github.com/harilvfs/carch/commit/8c59477f5d80511262ffebe946c986060dd1b3e8)  *(readme)* Correct overview-scripts url by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [35240e2](https://github.com/harilvfs/carch/commit/35240e298aaf1ed216e84d9c01aefbaf093bb4dc) Test release by @harilvfs
+
+- [f522b9b](https://github.com/harilvfs/carch/commit/f522b9b3805329822e2ed87d7228be439c3ee467) Use std for binary build by @harilvfs
+
+- [ab8d420](https://github.com/harilvfs/carch/commit/ab8d4208a09f80fc8d9e936eaf0e0b10c72b4632) Idk testing release by @harilvfs
+
+- [cc52073](https://github.com/harilvfs/carch/commit/cc520731c9796c64e319d749be7a9576aaa05e02)  *(preview)* Add some flair by @harilvfs
+
+
+
 ## [5.3.2](https://github.com/harilvfs/carch/compare/v5.3.1...v5.3.2) - 2025-10-10
 
 
