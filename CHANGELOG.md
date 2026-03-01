@@ -1,5 +1,22 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.3.4](https://github.com/harilvfs/carch/compare/v5.3.3...v5.3.4) - 2026-03-01
+
+
+### 🐛 Bug Fixes
+
+
+- [b8d2182](https://github.com/harilvfs/carch/commit/b8d2182973be4516ee8136b5bf035168ef2836f2)  *(picom)* Correct URL normal-picom-config by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [8e13f45](https://github.com/harilvfs/carch/commit/8e13f45c8b908ab4bf40fdc62ac89985ee77415c)  *(readme)* Add carch header by @harilvfs
+
+
+
 ## [5.3.3](https://github.com/harilvfs/carch/compare/v5.3.2...v5.3.3) - 2026-02-25
 
 
