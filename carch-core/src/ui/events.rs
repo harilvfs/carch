@@ -8,52 +8,43 @@ impl<'a> App<'a> {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc => self.toggle_search_mode(),
-            KeyCode::Enter => {
-                if !self.search.results.is_empty() {
-                    let selected_item = self.search.results[self.search.selected_idx].clone();
-                    if self.log_mode {
-                        info!(
-                            "Selected script from search: {}/{}",
-                            selected_item.item.category, selected_item.item.name
-                        );
-                    }
+            KeyCode::Enter if !self.search.results.is_empty() => {
+                let selected_item = self.search.results[self.search.selected_idx].clone();
+                if self.log_mode {
+                    info!(
+                        "Selected script from search: {}/{}",
+                        selected_item.item.category, selected_item.item.name
+                    );
+                }
 
-                    if let Some(category_idx) =
-                        self.categories.items.iter().position(|c| *c == selected_item.item.category)
+                if let Some(category_idx) =
+                    self.categories.items.iter().position(|c| *c == selected_item.item.category)
+                {
+                    self.categories.state.select(Some(category_idx));
+                    self.update_script_list();
+
+                    if let Some(script_idx) =
+                        self.scripts.items.iter().position(|s| s.name == selected_item.item.name)
                     {
-                        self.categories.state.select(Some(category_idx));
-                        self.update_script_list();
-
-                        if let Some(script_idx) = self
-                            .scripts
-                            .items
-                            .iter()
-                            .position(|s| s.name == selected_item.item.name)
-                        {
-                            self.scripts.state.select(Some(script_idx));
-                        }
+                        self.scripts.state.select(Some(script_idx));
                     }
+                }
 
-                    self.update_preview();
-                    self.toggle_search_mode();
-                    self.focused_panel = FocusedPanel::Scripts;
-                    self.mode = AppMode::Normal;
-                }
+                self.update_preview();
+                self.toggle_search_mode();
+                self.focused_panel = FocusedPanel::Scripts;
+                self.mode = AppMode::Normal;
             }
-            KeyCode::Down => {
-                if !self.search.results.is_empty() {
-                    self.search.selected_idx =
-                        (self.search.selected_idx + 1) % self.search.results.len();
-                }
+            KeyCode::Down if !self.search.results.is_empty() => {
+                self.search.selected_idx =
+                    (self.search.selected_idx + 1) % self.search.results.len();
             }
-            KeyCode::Up => {
-                if !self.search.results.is_empty() {
-                    self.search.selected_idx = if self.search.selected_idx > 0 {
-                        self.search.selected_idx - 1
-                    } else {
-                        self.search.results.len() - 1
-                    };
-                }
+            KeyCode::Up if !self.search.results.is_empty() => {
+                self.search.selected_idx = if self.search.selected_idx > 0 {
+                    self.search.selected_idx - 1
+                } else {
+                    self.search.results.len() - 1
+                };
             }
             KeyCode::Tab => {
                 if let Some(autocomplete) = self.search.autocomplete.take() {
@@ -70,14 +61,12 @@ impl<'a> App<'a> {
                 self.update_autocomplete();
                 self.search.selected_idx = 0;
             }
-            KeyCode::Backspace => {
-                if self.search.cursor_position > 0 {
-                    self.search.input.remove(self.search.cursor_position - 1);
-                    self.search.cursor_position -= 1;
-                    self.perform_search();
-                    self.update_autocomplete();
-                    self.search.selected_idx = 0;
-                }
+            KeyCode::Backspace if self.search.cursor_position > 0 => {
+                self.search.input.remove(self.search.cursor_position - 1);
+                self.search.cursor_position -= 1;
+                self.perform_search();
+                self.update_autocomplete();
+                self.search.selected_idx = 0;
             }
             KeyCode::Left => {
                 if self.search.cursor_position > 0 {
@@ -110,10 +99,8 @@ impl<'a> App<'a> {
                     self.quit = true;
                 }
             }
-            KeyCode::Esc => {
-                if self.multi_select.enabled {
-                    self.toggle_multi_select_mode();
-                }
+            KeyCode::Esc if self.multi_select.enabled => {
+                self.toggle_multi_select_mode();
             }
             KeyCode::Char('j') | KeyCode::Down => {
                 self.next();
@@ -160,23 +147,18 @@ impl<'a> App<'a> {
             KeyCode::Char('d') => {
                 self.toggle_description_popup();
             }
-            KeyCode::Char('t') => {
-                if !self.theme_locked {
-                    self.cycle_theme();
-                }
+            KeyCode::Char('t') if !self.theme_locked => {
+                self.cycle_theme();
             }
-            KeyCode::Enter => {
+            KeyCode::Enter
                 if self.focused_panel == FocusedPanel::Scripts
                     && self.scripts.state.selected().is_some()
-                    && !(self.multi_select.enabled && self.multi_select.scripts.is_empty())
-                {
-                    self.mode = AppMode::Confirm;
-                }
+                    && !(self.multi_select.enabled && self.multi_select.scripts.is_empty()) =>
+            {
+                self.mode = AppMode::Confirm;
             }
-            KeyCode::Char(' ') => {
-                if self.multi_select.enabled {
-                    self.toggle_script_selection();
-                }
+            KeyCode::Char(' ') if self.multi_select.enabled => {
+                self.toggle_script_selection();
             }
             _ => {}
         }
