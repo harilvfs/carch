@@ -14,30 +14,6 @@ This pull request adds/updates/fixes [describe the main goal or feature].
 - [ ] CI/CD <!-- Changes related to GitHub Actions, workflows, or automation -->
 - [ ] Documentation <!-- changes related to the readme.md or any other markdown files -->
 
-### How Has This Been Tested?
-
-<!-- Describe the steps you followed to test the changes. If applicable, mention the specific environment where the testing took place. -->
-- [ ] Tested on Arch Linux/Based Distro.
-- [ ] Tested on Fedora Linux/Based Distro.
-- [ ] Tested on openSUSE.
-
-### Checklist
-
-Do not delete this section. Please ensure your pull request meets the following requirements:
-
-- [ ] My code follows the style guidelines of this project.
-- [ ] I have performed a self-review of my code.
-- [ ] I have commented on my code, particularly in hard-to-understand areas.
-- [ ] My changes do not introduce new warnings.
-- [ ] My PR title follows the conventional commit style, like `feat:`, `fix:`, or `chore:`.
-
-### Documentation Note
-
-- [ ] If this PR introduces a new feature, I have also updated the documentation site:  
-      🔗 https://github.com/carch-org/docs
-
-### Screenshots 
-
 <!-- Add any screenshots to help explain your changes or to demonstrate the new feature. -->
 
 ### Related Issues
