@@ -99,7 +99,7 @@ jobs:
           printf "%s\n\n%s\n\n## What's Changed\n\n%s\n" "$BANNER" "$BADGES" "$(cat BODY.md)" > BODY.md
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
