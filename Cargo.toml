@@ -14,7 +14,7 @@ categories = ["command-line-utilities"]
 keywords = ["system", "cli", "rust", "bash"]
 
 [workspace.dependencies]
-clap = { version = "4.6.0", features = ["derive"] }
+clap = { version = "4.6.1", features = ["derive"] }
 log = "0.4.29"
 env_logger = "0.11.10"
 tempfile = "3.27.0"
