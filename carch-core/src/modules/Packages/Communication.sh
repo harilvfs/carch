@@ -35,7 +35,7 @@ install_element() {
 
 install_slack() {
     clear
-    install_package "slack-desktop" "com.slack.Slack" "slack-desktop"
+    install_package "slack-desktop" "com.slack.Slack"
 }
 
 install_teams() {
@@ -77,7 +77,7 @@ install_keybase() {
 
 install_zulip() {
     clear
-    install_package "zulip-desktop-bin" "org.zulip.Zulip" "zulip-desktop"
+    install_package "zulip-desktop-bin" "org.zulip.Zulip"
 }
 
 install_protonvpn() {
@@ -106,10 +106,15 @@ install_protonvpn() {
     esac
 }
 
+install_localsend() {
+    clear
+    install_package "localsend-bin" "org.localsend.localsend_app"
+}
+
 main() {
     while true; do
         clear
-        local options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Zulip" "ProtonVPN" "Exit")
+        local options=("Discord" "Better Discord" "Signal" "Element (Matrix)" "Slack" "Teams" "Zoom" "Telegram" "Keybase" "Zulip" "ProtonVPN" "Localsend" "Exit")
 
         show_menu "Communication Apps Selection" "${options[@]}"
         get_choice "${#options[@]}"
@@ -128,6 +133,7 @@ main() {
             "Keybase") install_keybase ;;
             "Zulip") install_zulip ;;
             "ProtonVPN") install_protonvpn ;;
+            "Localsend") install_localsend ;;
             "Exit") exit 0 ;;
         esac
         read -p "$(printf "\n%bPress Enter to continue...%b" "$GREEN" "$NC")"
