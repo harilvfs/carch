@@ -1,5 +1,32 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.3.5](https://github.com/harilvfs/carch/compare/v5.3.4...v5.3.5) - 2026-05-10
+
+
+### 🚀 Features
+
+
+- [13d2946](https://github.com/harilvfs/carch/commit/13d2946bd89e59972675cfa3ca9bcced7a19d4bb)  *(picom)* Switch from transparency to normal by @harilvfs
+
+- [cfea246](https://github.com/harilvfs/carch/commit/cfea2465e5863dd8f29fceff01aa2d9527f27cf3)  *(package)* Add localsend & cleanup by @harilvfs
+
+- [ac78108](https://github.com/harilvfs/carch/commit/ac78108fe63122a7a576941e79ae44295dcec569)  *(nvim)* Remove nvim-kickstart using only chadrc one by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [dac430d](https://github.com/harilvfs/carch/commit/dac430d92f4f4852815d6f3e2f28b4f561d32175) Cleanup pr template by @harilvfs
+
+- [dbf1a8a](https://github.com/harilvfs/carch/commit/dbf1a8a045d16308e871730f2c885cfb8753b6e6)  *(lints)* Fix some clippy shenanigans by @harilvfs
+
+- [c3fab5c](https://github.com/harilvfs/carch/commit/c3fab5c10d8de0b3d401f312c196ebf10376ee09)  *(dependabot)* Remove `go` package eco-system by @harilvfs
+
+- [fd93677](https://github.com/harilvfs/carch/commit/fd9367777796ad9a5c05363f626a2376fbf747c5)  *(shellfmt)* Use actions version to stable by @harilvfs
+
+
+
 ## [5.3.4](https://github.com/harilvfs/carch/compare/v5.3.3...v5.3.4) - 2026-03-01
 
 
