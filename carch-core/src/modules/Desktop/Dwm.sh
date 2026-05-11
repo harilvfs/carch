@@ -32,7 +32,8 @@ install_packages() {
                 ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
                 feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
                 thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
-                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst || {
+                gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst \
+                picom || {
                 print_message "$RED" "Failed to install some packages via pacman."
                 exit 1
             }
@@ -63,7 +64,8 @@ install_packages() {
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
                 google-noto-color-emoji-fonts network-manager-applet blueman pasystray google-noto-emoji-fonts thunar flameshot \
                 trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum gtk3 gtk4 qt5ct qt6ct man man-db pamixer \
-                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock dunst || {
+                pavucontrol pavucontrol-qt ffmpeg-devel ffmpegthumbnailer yazi xautolock dunst \
+                picom || {
                 print_message "$RED" "Failed to install some packages via dnf."
                 exit 1
             }
@@ -75,7 +77,8 @@ install_packages() {
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja jetbrains-mono-fonts \
                 google-noto-fonts noto-coloremoji-fonts NetworkManager-applet blueman pasystray thunar flameshot \
                 trash-cli tumbler mtp-tools fzf vim neovim i3lock nwg-look swappy kvantum-manager libgtk-3-0 libgtk-4-1 qt5ct qt6ct man man-pages pamixer \
-                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock dunst || {
+                pavucontrol pavucontrol-qt ffmpeg-7 ffmpegthumbnailer yazi xautolock dunst \
+                picom || {
                 print_message "${RED}" "Failed to install some packages via zypper."
                 exit 1
             }
@@ -186,52 +189,10 @@ install_nerd_font() {
     print_message "$GREEN" "Nerd Fonts installed successfully!"
 }
 
-install_picom() {
-    case "$DISTRO" in
-        "Arch")
-            check_aur_helper
-
-            print_message "$CYAN" "Installing Picom with $aur_helper..."
-            $aur_helper -S --noconfirm picom-ftlabs-git || {
-                print_message "$RED" "Failed to install Picom via $aur_helper. Please install manually."
-                exit 1
-            }
-            ;;
-        "Fedora")
-            print_message "$CYAN" "Installing Picom manually on Fedora..."
-            sudo dnf install -y dbus-devel gcc git libconfig-devel libdrm-devel libev-devel \
-                libX11-devel libX11-xcb libXext-devel libxcb-devel libGL-devel libEGL-devel \
-                libepoxy-devel meson pcre2-devel pixman-devel uthash-devel \
-                xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
-
-            git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
-            cd "$HOME/picom" || exit 1
-            meson setup --buildtype=release build
-            ninja -C build
-            sudo cp build/src/picom /usr/bin/
-            ;;
-        "openSUSE")
-            print_message "$CYAN" "Installing Picom manually on openSUSE..."
-            sudo zypper install -y dbus-1-devel gcc git libconfig-devel libdrm-devel libev-devel \
-                libX11-devel libXext-devel libxcb-devel Mesa-libGL-devel Mesa-libEGL1 \
-                libepoxy-devel meson pcre2-devel libpixman-1-0-devel pkgconf uthash-devel cmake libev-devel \
-                xcb-util-image-devel xcb-util-renderutil-devel xorg-x11-proto-devel xcb-util-devel
-
-            git clone https://github.com/FT-Labs/picom.git "$HOME/picom"
-            cd "$HOME/picom" || exit 1
-            meson setup --buildtype=release build
-            ninja -C build
-            sudo cp build/src/picom /usr/bin/
-            ;;
-    esac
-
-    configure_picom
-}
-
 configure_picom() {
     local CONFIG_DIR="$HOME/.config"
     local DESTINATION="$CONFIG_DIR/picom.conf"
-    local URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
+    local URL="https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom-no-animation/picom.conf"
 
     mkdir -p "$CONFIG_DIR"
     if [ -f "$DESTINATION" ]; then
@@ -244,8 +205,9 @@ configure_picom() {
         fi
     fi
 
+    print_message "$CYAN" "Downloading picom configuration..."
     wget -q -O "$DESTINATION" "$URL" || exit 1
-    print_message "$GREEN" "Picom configuration updated."
+    print_message "$GREEN" "Picom configuration installed."
 }
 
 configure_wallpapers() {
@@ -367,7 +329,7 @@ main() {
     install_dwm
     install_slstatus
     install_nerd_font
-    install_picom
+    configure_picom
     configure_wallpapers
     setup_startx
     setup_numlock
