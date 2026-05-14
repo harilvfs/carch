@@ -10,10 +10,20 @@ rustflags = ["-C", "target-cpu=x86-64"]
 rustflags = ["-C", "target-cpu=generic"]
 
 [target.aarch64-linux-android]
-rustflags = ["-C", "target-cpu=generic", "-C", "link-arg=-Wl,--allow-shlib-undefined"]
+rustflags = [
+  "-C",
+  "target-cpu=generic",
+  "-C",
+  "link-arg=-Wl,--allow-shlib-undefined",
+]
 
 [target.armv7-linux-androideabi]
-rustflags = ["-C", "target-cpu=generic", "-C", "link-arg=-Wl,--allow-shlib-undefined"]
+rustflags = [
+  "-C",
+  "target-cpu=generic",
+  "-C",
+  "link-arg=-Wl,--allow-shlib-undefined",
+]
 
 [build]
 target-dir = "build"
