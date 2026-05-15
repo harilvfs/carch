@@ -35,7 +35,7 @@ setup_storage() {
 
 install_packages() {
     print_message "$CYAN" "Updating packages and installing dependencies..."
-    pkg update -y && pkg upgrade -y && pkg install -y git zsh curl eza gh neovim
+    pkg update -y && pkg upgrade -y && pkg install -y git zsh curl eza gh neovim zoxide
 }
 
 setup_termux_config() {
