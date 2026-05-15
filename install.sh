@@ -27,9 +27,6 @@ detect_termux_arch() {
         armv7* | armv8l | arm | armeabi-v7a)
             printf "armv7-android"
             ;;
-        x86_64)
-            printf "x86_64-android"
-            ;;
         *)
             printf "${RED}Error:${NC} Unsupported architecture for Termux: %s\n" "$(uname -m)" >&2
             exit 1
@@ -90,15 +87,8 @@ install_termux() {
     termux_arch=$(detect_termux_arch)
 
     case "$termux_arch" in
-        aarch64-android)
-            asset="carch-aarch64-android"
-            ;;
-        armv7-android)
-            asset="carch-armv7-android"
-            ;;
-        x86_64-android)
-            asset="carch-x86_64-android"
-            ;;
+        aarch64-android) asset="carch-aarch64-android" ;;
+        armv7-android)   asset="carch-armv7-android" ;;
     esac
 
     printf "${GREEN}==> ${NC}Detected Termux architecture: %s\n" "$(uname -m)"
@@ -112,7 +102,6 @@ install_termux() {
     fi
 
     printf "${GREEN}==> ${NC}Downloading %s...\n" "$asset"
-
     download_and_install_binary "$bin_url"
 
     printf "${GREEN}==> ${NC}carch installed to %s/bin/carch\n" "$PREFIX"
