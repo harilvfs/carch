@@ -51,7 +51,6 @@ detect_distro() {
 
 get_latest_release_url() {
     asset_name="$1"
-
     curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
         grep browser_download_url |
         grep "$asset_name" |
@@ -61,11 +60,9 @@ get_latest_release_url() {
 
 download_and_install_binary() {
     bin_url="$1"
-
     tmp_file="$(mktemp)"
 
     curl -sL "$bin_url" -o "$tmp_file"
-
     if [ $? -ne 0 ]; then
         rm -f "$tmp_file"
         printf "${RED}Error:${NC} Download failed\n" >&2
@@ -73,14 +70,19 @@ download_and_install_binary() {
     fi
 
     chmod +x "$tmp_file"
-
     mv "$tmp_file" "$PREFIX/bin/carch"
-
     if [ $? -ne 0 ]; then
         rm -f "$tmp_file"
         printf "${RED}Error:${NC} Failed to install binary\n" >&2
         exit 1
     fi
+}
+
+get_rpm_url() {
+    curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
+        grep browser_download_url |
+        grep '\.rpm"' |
+        cut -d '"' -f 4
 }
 
 install_termux() {
@@ -95,7 +97,6 @@ install_termux() {
     printf "${GREEN}==> ${NC}Fetching latest release asset: %s\n" "$asset"
 
     bin_url=$(get_latest_release_url "$asset")
-
     if [ -z "$bin_url" ]; then
         printf "${RED}Error:${NC} Could not find download URL for asset '%s'\n" "$asset" >&2
         exit 1
@@ -110,50 +111,28 @@ install_termux() {
 
 install_arch() {
     printf "${GREEN}==> ${NC}Cloning PKGBUILD\n"
-
     rm -rf ~/pkgs
-
     git clone https://github.com/carch-org/pkgs ~/pkgs > /dev/null 2>&1
-
     cd ~/pkgs/carch-bin || exit 1
-
     makepkg -si --noconfirm
 }
 
-install_fedora() {
-    printf "${YELLOW}:: ${NC}downloading carch rpm\n"
+install_rpm() {
+    distro="$1"
+    printf "${YELLOW}:: ${NC}Downloading carch rpm\n"
 
-    rpm_url=$(curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
-        grep browser_download_url |
-        grep '\.rpm"' |
-        cut -d '"' -f 4)
-
+    rpm_url=$(get_rpm_url)
     if [ -z "$rpm_url" ]; then
-        printf "${RED}Error:${NC} Could not find RPM package URL\n"
+        printf "${RED}Error:${NC} Could not find RPM package URL\n" >&2
         exit 1
     fi
 
     curl -sL "$rpm_url" -o /tmp/carch.rpm > /dev/null 2>&1
 
-    sudo dnf install -y /tmp/carch.rpm
-}
-
-install_opensuse() {
-    printf "${YELLOW}:: ${NC}downloading carch rpm\n"
-
-    rpm_url=$(curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
-        grep browser_download_url |
-        grep '\.rpm"' |
-        cut -d '"' -f 4)
-
-    if [ -z "$rpm_url" ]; then
-        printf "${RED}Error:${NC} Could not find RPM package URL\n"
-        exit 1
-    fi
-
-    curl -sL "$rpm_url" -o /tmp/carch.rpm > /dev/null 2>&1
-
-    sudo zypper install -y /tmp/carch.rpm
+    case "$distro" in
+        fedora)   sudo dnf install -y /tmp/carch.rpm ;;
+        opensuse) sudo zypper install -y /tmp/carch.rpm ;;
+    esac
 }
 
 uninstall_termux() {
@@ -169,40 +148,19 @@ uninstall_arch() {
     sudo pacman -R carch-bin carch-bin-debug --noconfirm
 }
 
-uninstall_fedora() {
-    sudo dnf remove carch -y
-}
-
-uninstall_opensuse() {
-    sudo zypper remove -y carch
-}
-
-update_termux() {
-    printf "${GREEN}==> ${NC}Updating carch...\n"
-    install_termux
-}
-
-update_arch() {
-    printf "${GREEN}==> ${NC}Updating carch...\n"
-    install_arch
-}
-
-update_fedora() {
-    printf "${GREEN}==> ${NC}Updating carch...\n"
-    install_fedora
-}
-
-update_opensuse() {
-    printf "${GREEN}==> ${NC}Updating carch...\n"
-    install_opensuse
+uninstall_rpm() {
+    distro="$1"
+    case "$distro" in
+        fedora)   sudo dnf remove carch -y ;;
+        opensuse) sudo zypper remove -y carch ;;
+    esac
 }
 
 main() {
     action="${1:-install}"
 
     case "$action" in
-        install | uninstall | update)
-            ;;
+        install | uninstall | update) ;;
         *)
             printf "${RED}Error:${NC} Invalid action '%s'\n" "$action"
             show_usage
@@ -219,26 +177,24 @@ main() {
     case "$action" in
         install)
             case "$distro" in
-                termux)   install_termux ;;
-                arch)     install_arch ;;
-                fedora)   install_fedora ;;
-                opensuse) install_opensuse ;;
+                termux)            install_termux ;;
+                arch)              install_arch ;;
+                fedora | opensuse) install_rpm "$distro" ;;
             esac
             ;;
         uninstall)
             case "$distro" in
-                termux)   uninstall_termux ;;
-                arch)     uninstall_arch ;;
-                fedora)   uninstall_fedora ;;
-                opensuse) uninstall_opensuse ;;
+                termux)            uninstall_termux ;;
+                arch)              uninstall_arch ;;
+                fedora | opensuse) uninstall_rpm "$distro" ;;
             esac
             ;;
         update)
+            printf "${GREEN}==> ${NC}Updating carch...\n"
             case "$distro" in
-                termux)   update_termux ;;
-                arch)     update_arch ;;
-                fedora)   update_fedora ;;
-                opensuse) update_opensuse ;;
+                termux)            install_termux ;;
+                arch)              install_arch ;;
+                fedora | opensuse) install_rpm "$distro" ;;
             esac
             ;;
     esac
