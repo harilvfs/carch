@@ -13,17 +13,100 @@ show_usage() {
     exit 1
 }
 
+is_termux() {
+    [ -n "$TERMUX_VERSION" ] ||
+        [ -d "/data/data/com.termux" ] ||
+        [ "$(uname -o 2> /dev/null)" = "Android" ]
+}
+
+detect_termux_arch() {
+    case "$(uname -m)" in
+        aarch64 | arm64)
+            printf "aarch64-android"
+            ;;
+        armv7* | armv8l | arm | armeabi-v7a)
+            printf "armv7-android"
+            ;;
+        *)
+            printf "${RED}Error:${NC} Unsupported architecture for Termux: %s\n" "$(uname -m)" >&2
+            exit 1
+            ;;
+    esac
+}
+
 detect_distro() {
-    if command -v pacman > /dev/null 2>&1; then
-        echo "arch"
+    if is_termux; then
+        printf "termux"
+    elif command -v pacman > /dev/null 2>&1; then
+        printf "arch"
     elif command -v dnf > /dev/null 2>&1; then
-        echo "fedora"
+        printf "fedora"
     elif command -v zypper > /dev/null 2>&1; then
-        echo "opensuse"
+        printf "opensuse"
     else
-        echo "unsupported"
+        printf "unsupported"
         exit 1
     fi
+}
+
+get_latest_release_url() {
+    asset_name="$1"
+    curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
+        grep browser_download_url |
+        grep "$asset_name" |
+        cut -d '"' -f 4 |
+        head -n1
+}
+
+download_and_install_binary() {
+    bin_url="$1"
+    tmp_file="$(mktemp)"
+
+    curl -sL "$bin_url" -o "$tmp_file"
+    if [ $? -ne 0 ]; then
+        rm -f "$tmp_file"
+        printf "${RED}Error:${NC} Download failed\n" >&2
+        exit 1
+    fi
+
+    chmod +x "$tmp_file"
+    mv "$tmp_file" "$PREFIX/bin/carch"
+    if [ $? -ne 0 ]; then
+        rm -f "$tmp_file"
+        printf "${RED}Error:${NC} Failed to install binary\n" >&2
+        exit 1
+    fi
+}
+
+get_rpm_url() {
+    curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
+        grep browser_download_url |
+        grep '\.rpm"' |
+        cut -d '"' -f 4
+}
+
+install_termux() {
+    termux_arch=$(detect_termux_arch)
+
+    case "$termux_arch" in
+        aarch64-android) asset="carch-aarch64-android" ;;
+        armv7-android)   asset="carch-armv7-android" ;;
+    esac
+
+    printf "${GREEN}==> ${NC}Detected Termux architecture: %s\n" "$(uname -m)"
+    printf "${GREEN}==> ${NC}Fetching latest release asset: %s\n" "$asset"
+
+    bin_url=$(get_latest_release_url "$asset")
+    if [ -z "$bin_url" ]; then
+        printf "${RED}Error:${NC} Could not find download URL for asset '%s'\n" "$asset" >&2
+        exit 1
+    fi
+
+    printf "${GREEN}==> ${NC}Downloading %s...\n" "$asset"
+    download_and_install_binary "$bin_url"
+
+    printf "${GREEN}==> ${NC}carch installed to %s/bin/carch\n" "$PREFIX"
+    printf "${GREEN}==> ${NC}Run 'carch' to get started\n"
 }
 
 install_arch() {
@@ -34,50 +117,43 @@ install_arch() {
     makepkg -si --noconfirm
 }
 
-install_fedora() {
-    printf "${YELLOW}:: ${NC}downloading carch rpm\n"
-    rpm_url=$(curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest | grep browser_download_url | grep '\.rpm"' | cut -d '"' -f 4)
+install_rpm() {
+    distro="$1"
+    printf "${YELLOW}:: ${NC}Downloading carch rpm\n"
+
+    rpm_url=$(get_rpm_url)
     if [ -z "$rpm_url" ]; then
-        printf "Error: Could not find RPM package URL\n"
+        printf "${RED}Error:${NC} Could not find RPM package URL\n" >&2
         exit 1
     fi
+
     curl -sL "$rpm_url" -o /tmp/carch.rpm > /dev/null 2>&1
-    sudo dnf install -y /tmp/carch.rpm
+
+    case "$distro" in
+        fedora)   sudo dnf install -y /tmp/carch.rpm ;;
+        opensuse) sudo zypper install -y /tmp/carch.rpm ;;
+    esac
 }
 
-install_opensuse() {
-    printf "${YELLOW}:: ${NC}downloading carch rpm\n"
-    rpm_url=$(curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest | grep browser_download_url | grep '\.rpm"' | cut -d '"' -f 4)
-    if [ -z "$rpm_url" ]; then
-        printf "Error: Could not find RPM package URL\n"
-        exit 1
+uninstall_termux() {
+    if [ -f "$PREFIX/bin/carch" ]; then
+        rm -f "$PREFIX/bin/carch"
+        printf "${GREEN}==> ${NC}carch removed from %s/bin\n" "$PREFIX"
+    else
+        printf "${YELLOW}==> ${NC}carch is not installed in %s/bin\n" "$PREFIX"
     fi
-    curl -sL "$rpm_url" -o /tmp/carch.rpm > /dev/null 2>&1
-    sudo zypper install -y /tmp/carch.rpm
 }
 
 uninstall_arch() {
     sudo pacman -R carch-bin carch-bin-debug --noconfirm
 }
 
-uninstall_fedora() {
-    sudo dnf remove carch -y
-}
-
-uninstall_opensuse() {
-    sudo zypper remove -y carch
-}
-
-update_arch() {
-    install_arch
-}
-
-update_fedora() {
-    install_fedora
-}
-
-update_opensuse() {
-    install_opensuse
+uninstall_rpm() {
+    distro="$1"
+    case "$distro" in
+        fedora)   sudo dnf remove carch -y ;;
+        opensuse) sudo zypper remove -y carch ;;
+    esac
 }
 
 main() {
@@ -86,7 +162,7 @@ main() {
     case "$action" in
         install | uninstall | update) ;;
         *)
-            printf "Error: Invalid action '%s'\n" "$action"
+            printf "${RED}Error:${NC} Invalid action '%s'\n" "$action"
             show_usage
             ;;
     esac
@@ -94,30 +170,31 @@ main() {
     distro=$(detect_distro)
 
     if [ "$distro" = "unsupported" ]; then
-        printf "Error: carch is not supported on this distribution.\n"
+        printf "${RED}Error:${NC} carch is not supported on this distribution.\n"
         exit 1
     fi
 
     case "$action" in
         install)
             case "$distro" in
-                arch) install_arch ;;
-                fedora) install_fedora ;;
-                opensuse) install_opensuse ;;
+                termux)            install_termux ;;
+                arch)              install_arch ;;
+                fedora | opensuse) install_rpm "$distro" ;;
             esac
             ;;
         uninstall)
             case "$distro" in
-                arch) uninstall_arch ;;
-                fedora) uninstall_fedora ;;
-                opensuse) uninstall_opensuse ;;
+                termux)            uninstall_termux ;;
+                arch)              uninstall_arch ;;
+                fedora | opensuse) uninstall_rpm "$distro" ;;
             esac
             ;;
         update)
+            printf "${GREEN}==> ${NC}Updating carch...\n"
             case "$distro" in
-                arch) update_arch ;;
-                fedora) update_fedora ;;
-                opensuse) update_opensuse ;;
+                termux)            install_termux ;;
+                arch)              install_arch ;;
+                fedora | opensuse) install_rpm "$distro" ;;
             esac
             ;;
     esac

@@ -2,7 +2,6 @@
 
 red='\033[0;31m'
 rc='\033[0m'
-
 mode="stable"
 
 while [ $# -gt 0 ]; do
@@ -28,18 +27,49 @@ check() {
     fi
 }
 
+isAndroid() {
+    [ -n "$TERMUX_VERSION" ] || [ -d "/data/data/com.termux" ] || [ "$(uname -o 2> /dev/null)" = "Android" ]
+}
+
 findArch() {
     case "$(uname -m)" in
-        x86_64 | amd64) arch="x86_64" ;;
-        aarch64 | arm64) arch="aarch64" ;;
-        *) check 1 "Unsupported architecture" ;;
+        x86_64 | amd64)
+            arch="x86_64"
+            ;;
+        aarch64 | arm64)
+            if isAndroid; then
+                arch="aarch64-android"
+            else
+                arch="aarch64"
+            fi
+            ;;
+        armv7* | armv8l | arm)
+            if isAndroid; then
+                arch="armv7-android"
+            else
+                check 1 "Unsupported architecture: 32-bit ARM is only supported on Android/Termux"
+            fi
+            ;;
+        *)
+            check 1 "Unsupported architecture: $(uname -m)"
+            ;;
     esac
 }
 
 getStableUrl() {
     case "${arch}" in
-        x86_64) printf "https://github.com/harilvfs/carch/releases/latest/download/carch\n" ;;
-        *) printf "https://github.com/harilvfs/carch/releases/latest/download/carch-%s\n" "${arch}" ;;
+        x86_64)
+            printf "https://github.com/harilvfs/carch/releases/latest/download/carch\n"
+            ;;
+        aarch64)
+            printf "https://github.com/harilvfs/carch/releases/latest/download/carch-aarch64\n"
+            ;;
+        aarch64-android)
+            printf "https://github.com/harilvfs/carch/releases/latest/download/carch-aarch64-android\n"
+            ;;
+        armv7-android)
+            printf "https://github.com/harilvfs/carch/releases/latest/download/carch-armv7-android\n"
+            ;;
     esac
 }
 
@@ -48,29 +78,44 @@ get_latest_release() {
         grep "tag_name" |
         head -n 1 |
         sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+
     if [ -z "$latest_release" ]; then
         printf '%bERROR: Failed to fetch release data%b\n' "$red" "$rc" >&2
         return 1
     fi
+
     printf "%s\n" "$latest_release"
 }
 
-addArch() {
+getDevUrl() {
+    base_url="https://github.com/harilvfs/carch/releases/download/$1/carch"
+
     case "${arch}" in
-        x86_64) ;;
-        *) url="${url}-${arch}" ;;
+        x86_64)
+            printf "%s\n" "$base_url"
+            ;;
+        aarch64)
+            printf "%s-aarch64\n" "$base_url"
+            ;;
+        aarch64-android)
+            printf "%s-aarch64-android\n" "$base_url"
+            ;;
+        armv7-android)
+            printf "%s-armv7-android\n" "$base_url"
+            ;;
     esac
 }
 
 set_dev_url() {
     latest_release=$(get_latest_release)
+
     if [ -n "$latest_release" ]; then
-        url="https://github.com/harilvfs/carch/releases/download/$latest_release/carch"
+        url="$(getDevUrl "$latest_release")"
     else
         printf '%bWARNING: Unable to determine latest release version. Falling back to latest.%b\n' "$red" "$rc"
-        url="https://github.com/harilvfs/carch/releases/latest/download/carch"
+        url="$(getStableUrl)"
     fi
-    addArch
+
     printf "Using URL: %s\n" "$url"
 }
 

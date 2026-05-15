@@ -71,7 +71,7 @@ impl RunScriptPopup {
                     let mut mutex = command_buffer.lock().unwrap();
                     let data = &buf[0..size];
                     if log_mode {
-                        info!("{}", &String::from_utf8_lossy(data));
+                        info!("{}", String::from_utf8_lossy(data));
                     }
                     mutex.extend_from_slice(data);
                 }

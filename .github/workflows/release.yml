@@ -142,7 +142,7 @@ jobs:
         run: |
           sed -i '/^## \[unreleased\]/d' BODY.md
           BANNER="![Carch Banner](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)"
-          BADGES="![RPM Downloads](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-$VERSION-1.fc42.x86_64.rpm?color=%235E81AC&style=for-the-badge&label=RPM%20Downloads&logoColor=85e185&labelColor=1c1c29) ![Binary x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&label=x86_64%20Binary&logoColor=85e185&labelColor=1c1c29) ![Binary aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&label=aarch64%20Binary&logoColor=85e185&labelColor=1c1c29)"
+          BADGES="![RPM Downloads](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-$VERSION-1.fc42.x86_64.rpm?color=%235E81AC&style=for-the-badge&label=RPM%20Downloads&logoColor=85e185&labelColor=1c1c29) ![Binary x86_64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch?color=%235E81AC&style=for-the-badge&label=x86_64%20Binary&logoColor=85e185&labelColor=1c1c29) ![Binary aarch64](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64?color=%235E81AC&style=for-the-badge&label=aarch64%20Binary&logoColor=85e185&labelColor=1c1c29) ![Binary aarch64 Android](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-aarch64-android?color=%235E81AC&style=for-the-badge&label=aarch64%20Android&logoColor=85e185&labelColor=1c1c29) ![Binary armv7 Android](https://img.shields.io/github/downloads/harilvfs/carch/${{ github.event.inputs.tag_version }}/carch-armv7-android?color=%235E81AC&style=for-the-badge&label=armv7%20Android&logoColor=85e185&labelColor=1c1c29)"
           printf "%s\n\n%s\n\n## What's Changed\n\n%s\n" "$BANNER" "$BADGES" "$(cat BODY.md)" > BODY.md
 
       - name: Create GitHub Release
@@ -155,10 +155,81 @@ jobs:
           generate_release_notes: false
           body_path: BODY.md
 
-      - name: Upload binaries
+      - name: Upload Linux binaries to release
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
             ./build/x86_64-unknown-linux-musl/release/carch \
-            ./build/aarch64-unknown-linux-musl/release/carch-aarch64 \
+            ./build/aarch64-unknown-linux-musl/release/carch-aarch64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  android:
+    runs-on: ubuntu-latest
+    needs: release
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Install Rust (nightly) with Android targets
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          toolchain: nightly-2025-12-31
+          targets: aarch64-linux-android,armv7-linux-androideabi
+
+      - name: Install rust-src
+        run: rustup component add rust-src --toolchain nightly-2025-12-31
+
+      - name: Cache Cargo registry
+        uses: actions/cache@v5
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-android-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-registry-android-
+
+      - name: Cache Cargo index
+        uses: actions/cache@v5
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-android-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-index-android-
+
+      - name: Install cross
+        run: cargo install cross
+
+      - name: Build aarch64 Android binary
+        run: |
+          cross build \
+            --release \
+            --target-dir=build \
+            --target=aarch64-linux-android \
+            --all-features
+          mv ./build/aarch64-linux-android/release/carch \
+             ./build/aarch64-linux-android/release/carch-aarch64-android
+
+      - name: Build armv7 Android binary
+        run: |
+          cross build \
+            --release \
+            --target-dir=build \
+            --target=armv7-linux-androideabi \
+            --all-features
+          mv ./build/armv7-linux-androideabi/release/carch \
+             ./build/armv7-linux-androideabi/release/carch-armv7-android
+
+      - name: Upload Android binaries as artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-binaries
+          path: |
+            ./build/aarch64-linux-android/release/carch-aarch64-android
+            ./build/armv7-linux-androideabi/release/carch-armv7-android
+          retention-days: 1
+
+      - name: Upload Android binaries to release
+        run: |
+          gh release upload ${{ github.event.inputs.tag_version }} \
+            ./build/aarch64-linux-android/release/carch-aarch64-android \
+            ./build/armv7-linux-androideabi/release/carch-armv7-android
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
