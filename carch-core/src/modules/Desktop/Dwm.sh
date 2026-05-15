@@ -31,7 +31,7 @@ install_packages() {
             sudo pacman -S --needed git base-devel libx11 libxinerama libxft gnome-keyring ttf-cascadia-mono-nerd \
                 ttf-cascadia-code-nerd ttf-jetbrains-mono-nerd ttf-jetbrains-mono imlib2 libxcb git unzip lxappearance \
                 feh mate-polkit meson ninja xorg-xinit xorg-server network-manager-applet blueman pasystray bluez-utils \
-                thunar flameshot trash-cli tumbler fzf gvfs-mtp vim neovim slock nwg-look swappy kvantum \
+                thunar flameshot trash-cli tumbler fzf gvfs-mtp neovim slock nwg-look swappy kvantum \
                 gtk3 gtk4 qt5ct qt6ct man man-db pamixer pavucontrol pavucontrol-qt ffmpeg ffmpegthumbnailer yazi dunst \
                 picom || {
                 print_message "$RED" "Failed to install some packages via pacman."

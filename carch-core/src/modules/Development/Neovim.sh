@@ -27,17 +27,17 @@ install_dependencies() {
 
     case "$DISTRO" in
         "Arch")
-            sudo pacman -S --needed --noconfirm ripgrep neovim vim fzf python-virtualenv luarocks go npm shellcheck \
+            sudo pacman -S --needed --noconfirm ripgrep neovim fzf python-virtualenv luarocks go npm shellcheck \
                 xclip wl-clipboard lua-language-server shfmt python3 meson ninja \
                 make gcc ttf-jetbrains-mono ttf-jetbrains-mono-nerd git tree-sitter-cli
             ;;
         "Fedora")
-            sudo dnf install -y ripgrep neovim vim fzf python3-virtualenv luarocks go nodejs shellcheck xclip \
+            sudo dnf install -y ripgrep neovim fzf python3-virtualenv luarocks go nodejs shellcheck xclip \
                 wl-clipboard lua-language-server shfmt python3 meson ninja-build tree-sitter-cli \
                 make gcc jetbrains-mono-fonts-all jetbrains-mono-fonts jetbrains-mono-nl-fonts git
             ;;
         "openSUSE")
-            sudo zypper install -y ripgrep neovim vim fzf python313-virtualenv lua53-luarocks go nodejs ShellCheck xclip \
+            sudo zypper install -y ripgrep neovim fzf python313-virtualenv lua53-luarocks go nodejs ShellCheck xclip \
                 wl-clipboard lua-language-server shfmt python313 meson ninja \
                 make gcc jetbrains-mono-fonts git tree-sitter
             ;;
