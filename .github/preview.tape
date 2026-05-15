@@ -69,9 +69,9 @@ Set TypingSpeed 100ms
 
 Sleep 1s
 
-Type "carch" Sleep 2s  Enter
+Type "carch" Sleep 1s  Enter
 
-Sleep 2s
+Sleep 1s
 
 Down Sleep 1s
 
@@ -123,8 +123,8 @@ Sleep 2s
 
 Type "q"
 
-Sleep 2s
+Sleep 1s
 
 Type "q"
 
-Sleep 2s
+Sleep 1s
