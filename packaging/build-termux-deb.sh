@@ -74,7 +74,7 @@ echo ""
 echo "  Carch installed successfully!"
 echo ""
 echo "  Run it with: carch"
-echo "  Docs: https://github.com/harilvfs/carch"
+echo "  Docs: https://carch.chalisehari.com.np"
 echo ""
 POSTINST
 chmod 0755 "$PKGDIR/DEBIAN/postinst"
