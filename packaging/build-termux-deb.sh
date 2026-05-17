@@ -16,10 +16,7 @@ URL_RELEASE="https://github.com/harilvfs/carch/releases/download/v${PKGVER}"
 case "$ARCH" in
     aarch64) BINARY="carch-aarch64-android" ;;
     arm)     BINARY="carch-armv7-android" ;;
-    *)
-             echo "Unknown arch: $ARCH (use aarch64 or arm)"
-                                                              exit 1
-                                                                     ;;
+    *) echo "Unknown arch: $ARCH (use aarch64 or arm)"; exit 1 ;;
 esac
 
 echo "==> Building Termux .deb for carch ${PKGVER} [${ARCH}] (binary: ${BINARY})"
