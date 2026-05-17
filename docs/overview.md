@@ -39,7 +39,7 @@
 
 ### Packages
 
-- **Android-Tools**: *Provides options to install various Android-related tools, including Gvfs-MTP for USB file transfers, ADB for debugging, JDK (OpenJDK) for Java development, and the Universal Android Debloater for removing bloatware.*
+- **Android-Tools**: *Install essential Android tools for development and device management.*
 - **Communication**: *Installs popular communication applications like Discord, Signal, Slack, and Telegram to help you stay connected with your teams and communities.*
 - **Crypto-Tools**: *Installs essential cryptocurrency tools, such as the Electrum Bitcoin wallet, to manage your digital assets securely.*
 - **Development-Tools**: *Sets up your development environment with a choice of languages and tools, including Node.js, Python, Rust, Go, and Docker, to support your coding projects.*
@@ -80,4 +80,8 @@
 - **Kitty**: *Kitty is a fast, GPU-accelerated terminal emulator with modern features like ligatures, tabs, tiling layouts, and image support. The script applies my pre-configured Kitty config.*
 - **Tmux**: *Tmux is a terminal multiplexer that lets you manage multiple terminal sessions within one window. The script applies my pre-configured tmux config.*
 - **Zsh**: *Zsh (Z shell) is an advanced Unix shell with features like improved tab completion, better scripting, and powerful customization. The script installs all required dependencies and applies my custom theme.*
+
+### Termux-Android
+
+- **Termux-Setup**: *Termux is an Android terminal emulator and Linux environment. This script automates the setup of a Termux environment workflow by installing/setting up Zsh, Zsh plugins, and essential packages to make your favorite Android terminal emulator ready to use.*
 

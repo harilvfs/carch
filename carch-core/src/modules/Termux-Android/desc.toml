@@ -1,0 +1,2 @@
+[Termux-Setup]
+description = "Termux is an Android terminal emulator and Linux environment. This script automates the setup of a Termux environment workflow by installing/setting up Zsh, Zsh plugins, and essential packages to make your favorite Android terminal emulator ready to use."
