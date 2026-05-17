@@ -26,7 +26,7 @@ jobs:
       - name: Build .deb for ${{ matrix.arch }}
         run: bash packaging/build-termux-deb.sh ${{ matrix.arch }}
         env:
-          PKGVER: ${{ github.event.release.tag_name || github.event.inputs.tag }
+          PKGVER: ${{ github.event.release.tag_name || github.event.inputs.tag }}
 
       - name: Upload .deb to release
         uses: softprops/action-gh-release@v2
