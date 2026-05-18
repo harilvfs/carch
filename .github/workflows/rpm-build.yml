@@ -1,0 +1,65 @@
+name: Build Carch RPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v1.1.1)'
+        required: true
+
+jobs:
+  build-rpm:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+      options: --privileged
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          dnf -y update
+          dnf -y install \
+            git curl rpmdevtools rpmlint \
+            rust cargo gcc glibc
+
+      - name: Setup RPM build environment
+        run: rpmdev-setuptree
+
+      - name: Download spec file
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/carch-org/pkgs/refs/heads/main/carch.spec" \
+            -o ~/rpmbuild/SPECS/carch.spec
+
+      - name: Download sources
+        run: |
+          cd ~/rpmbuild/SPECS
+          spectool -g -R carch.spec
+
+      - name: Build RPM
+        run: |
+          cd ~/rpmbuild/SPECS
+          rpmbuild -ba carch.spec
+
+      - name: Find built RPM
+        id: find_rpm
+        run: |
+          RPM_PATH=$(find ~/rpmbuild/RPMS -name "carch-*.x86_64.rpm" | grep -v "debug" | head -n 1)
+          if [ -z "$RPM_PATH" ]; then
+            echo "Error: Could not find built RPM"
+            exit 1
+          fi
+          mkdir -p ./artifacts
+          cp "$RPM_PATH" ./artifacts/
+
+      - name: Upload RPM to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./artifacts/*.rpm
+          tag_name: ${{ github.event.release.tag_name || github.event.inputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
