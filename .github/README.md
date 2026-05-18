@@ -24,6 +24,8 @@ It’s especially useful if you want to quickly set up and start using your _fav
 
 <img src="https://raw.githubusercontent.com/harilvfs/carch/refs/heads/main/.github/preview.gif"/>
 
+> Preview by: [vhs](https://github.com/charmbracelet/vhs)
+
 <h3> Quick Run/Test </h3>
 
 <h4> Stable Release </h4>
