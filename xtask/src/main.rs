@@ -63,7 +63,7 @@ fn main() -> Result<(), anyhow::Error> {
         "generate-overview" | "ogen" => {
             println!("Generating overview.md...");
 
-            let mut markdown = String::from("## Scripts Descriptions:\n\n");
+            let mut markdown = String::from("## Overview:\n\n");
             let mut categories: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
 
             let desc_files = sh.read_dir("carch-core/src/modules")?;
