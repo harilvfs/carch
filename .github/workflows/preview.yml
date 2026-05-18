@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Release tag to use for Carch binary'
+        description: 'Release tag (e.g. v1.1.1)'
         required: true
 
 jobs:
