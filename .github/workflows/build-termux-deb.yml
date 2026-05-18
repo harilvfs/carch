@@ -1,12 +1,10 @@
 name: Build Termux Deb
 
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag (e.g. v1.1.1)'
+        description: 'Release tag (e.g. v5.3.5)'
         required: true
 
 jobs:
@@ -19,19 +17,21 @@ jobs:
         arch: [aarch64, arm]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Install dpkg tools
         run: sudo apt-get install -y dpkg
 
+      - name: Download build script
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/carch-org/pkgs/refs/heads/main/build-termux-deb.sh" \
+            -o build-termux-deb.sh
+
       - name: Build .deb for ${{ matrix.arch }}
-        run: bash packaging/build-termux-deb.sh ${{ matrix.arch }}
+        run: bash build-termux-deb.sh ${{ matrix.arch }}
         env:
-          PKGVER: ${{ github.event.release.tag_name || github.event.inputs.tag }}
+          PKGVER: ${{ github.event.inputs.tag }}
 
       - name: Upload .deb to release
         uses: softprops/action-gh-release@v2
         with:
           files: "*.deb"
-          tag_name: ${{ github.event.release.tag_name || github.event.inputs.tag }}
+          tag_name: ${{ github.event.inputs.tag }}
