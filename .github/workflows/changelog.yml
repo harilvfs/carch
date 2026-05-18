@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number (e.g., 1.1.1)'
+        description: 'Release tag (e.g. v1.1.1)'
         required: true
       target_branch:
         description: 'Target branch for the PR'

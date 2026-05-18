@@ -1,11 +1,10 @@
 name: Release Notified
+
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number without v prefix (e.g. 1.1.1)'
+        description: 'Release tag without v prefix (e.g. 1.1.1)'
         required: true
 
 jobs:
@@ -15,24 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Get release info
-        id: release_info
-        run: |
-          if [ "${{ github.event_name }}" == "release" ]; then
-            VERSION="${{ github.event.release.tag_name }}"
-          else
-            VERSION="v${{ github.event.inputs.version }}"
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Prepare release message
         id: release_message
         run: |
-          VERSION="${{ steps.release_info.outputs.version }}"
-          RELEASE_TAG="$VERSION"
-
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\n\nRelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG"
-
+          VERSION="v${{ github.event.inputs.version }}"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨\n\nRelease: https://github.com/harilvfs/carch/releases/tag/$VERSION"
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -40,11 +26,8 @@ jobs:
       - name: Prepare Telegram message
         id: telegram_message
         run: |
-          VERSION="${{ steps.release_info.outputs.version }}"
-          RELEASE_TAG="$VERSION"
-
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$RELEASE_TAG"
-
+          VERSION="v${{ github.event.inputs.version }}"
+          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$VERSION"
           echo "text<<EOF" >> $GITHUB_OUTPUT
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
