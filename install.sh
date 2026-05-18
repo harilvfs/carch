@@ -71,13 +71,13 @@ install_termux() {
     printf "${GREEN}==> ${NC}Detected Termux architecture: %s\n" "$(uname -m)"
     printf "${GREEN}==> ${NC}Fetching latest .deb package for %s...\n" "$deb_arch"
 
-    deb_url=$(get_latest_release_url "carch_.*_${deb_arch}\.deb")
+    deb_url=$(get_latest_release_url "_${deb_arch}\.deb")
     if [ -z "$deb_url" ]; then
         printf "${RED}Error:${NC} Could not find .deb package for '%s'\n" "$deb_arch" >&2
         exit 1
     fi
 
-    tmp_deb="$(mktemp /tmp/carch_XXXXXX.deb)"
+    tmp_deb="$(mktemp "$PREFIX/tmp/carch_XXXXXX.deb")"
     printf "${GREEN}==> ${NC}Downloading .deb package...\n"
     curl -sL "$deb_url" -o "$tmp_deb"
     if [ $? -ne 0 ]; then
