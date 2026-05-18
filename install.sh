@@ -22,10 +22,10 @@ is_termux() {
 detect_termux_arch() {
     case "$(uname -m)" in
         aarch64 | arm64)
-            printf "aarch64-android"
+            printf "aarch64"
             ;;
         armv7* | armv8l | arm | armeabi-v7a)
-            printf "armv7-android"
+            printf "arm"
             ;;
         *)
             printf "${RED}Error:${NC} Unsupported architecture for Termux: %s\n" "$(uname -m)" >&2
@@ -58,26 +58,6 @@ get_latest_release_url() {
         head -n1
 }
 
-download_and_install_binary() {
-    bin_url="$1"
-    tmp_file="$(mktemp)"
-
-    curl -sL "$bin_url" -o "$tmp_file"
-    if [ $? -ne 0 ]; then
-        rm -f "$tmp_file"
-        printf "${RED}Error:${NC} Download failed\n" >&2
-        exit 1
-    fi
-
-    chmod +x "$tmp_file"
-    mv "$tmp_file" "$PREFIX/bin/carch"
-    if [ $? -ne 0 ]; then
-        rm -f "$tmp_file"
-        printf "${RED}Error:${NC} Failed to install binary\n" >&2
-        exit 1
-    fi
-}
-
 get_rpm_url() {
     curl -sL https://api.github.com/repos/harilvfs/carch/releases/latest |
         grep browser_download_url |
@@ -86,26 +66,30 @@ get_rpm_url() {
 }
 
 install_termux() {
-    termux_arch=$(detect_termux_arch)
-
-    case "$termux_arch" in
-        aarch64-android) asset="carch-aarch64-android" ;;
-        armv7-android)   asset="carch-armv7-android" ;;
-    esac
+    deb_arch=$(detect_termux_arch)
 
     printf "${GREEN}==> ${NC}Detected Termux architecture: %s\n" "$(uname -m)"
-    printf "${GREEN}==> ${NC}Fetching latest release asset: %s\n" "$asset"
+    printf "${GREEN}==> ${NC}Fetching latest .deb package for %s...\n" "$deb_arch"
 
-    bin_url=$(get_latest_release_url "$asset")
-    if [ -z "$bin_url" ]; then
-        printf "${RED}Error:${NC} Could not find download URL for asset '%s'\n" "$asset" >&2
+    deb_url=$(get_latest_release_url "carch_.*_${deb_arch}\.deb")
+    if [ -z "$deb_url" ]; then
+        printf "${RED}Error:${NC} Could not find .deb package for '%s'\n" "$deb_arch" >&2
         exit 1
     fi
 
-    printf "${GREEN}==> ${NC}Downloading %s...\n" "$asset"
-    download_and_install_binary "$bin_url"
+    tmp_deb="$(mktemp /tmp/carch_XXXXXX.deb)"
+    printf "${GREEN}==> ${NC}Downloading .deb package...\n"
+    curl -sL "$deb_url" -o "$tmp_deb"
+    if [ $? -ne 0 ]; then
+        rm -f "$tmp_deb"
+        printf "${RED}Error:${NC} Download failed\n" >&2
+        exit 1
+    fi
 
-    printf "${GREEN}==> ${NC}carch installed to %s/bin/carch\n" "$PREFIX"
+    printf "${GREEN}==> ${NC}Installing .deb package...\n"
+    dpkg -i "$tmp_deb"
+    rm -f "$tmp_deb"
+
     printf "${GREEN}==> ${NC}Run 'carch' to get started\n"
 }
 
@@ -131,16 +115,16 @@ install_rpm() {
 
     case "$distro" in
         fedora)   sudo dnf install -y /tmp/carch.rpm ;;
-        opensuse) sudo zypper install -y /tmp/carch.rpm ;;
+        opensuse) sudo zypper install -y --allow-unsigned-rpm /tmp/carch.rpm ;;
     esac
 }
 
 uninstall_termux() {
-    if [ -f "$PREFIX/bin/carch" ]; then
-        rm -f "$PREFIX/bin/carch"
-        printf "${GREEN}==> ${NC}carch removed from %s/bin\n" "$PREFIX"
+    if dpkg -s carch > /dev/null 2>&1; then
+        dpkg -r carch
+        printf "${GREEN}==> ${NC}carch has been removed\n"
     else
-        printf "${YELLOW}==> ${NC}carch is not installed in %s/bin\n" "$PREFIX"
+        printf "${YELLOW}==> ${NC}carch is not installed\n"
     fi
 }
 
