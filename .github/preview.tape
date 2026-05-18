@@ -81,33 +81,33 @@ Down Sleep 1s
 
 Type "t"
 
-Sleep 1s
+Sleep 0.5s
 
 Type "t"
 
-Sleep 1
+Sleep 0.5s
 
 Type "t"
 
-Sleep 1
+Sleep 0.5s
 
 Type "l"
 
+Sleep 0.5s
+
+Type "/" Sleep 0.5s
+
+Type@200ms "Extensions" Sleep 1s Enter
+
 Sleep 1s
-
-Type "/" Sleep 1s
-
-Type@200ms "Extensions" Sleep 2s Enter
-
-Sleep 2s
 
 Enter
 
-Sleep 2s
+Sleep 1s
 
 Type "y"
 
-Sleep 2s
+Sleep 1s
 
 Type "1" Sleep 2s Enter
 
@@ -119,7 +119,7 @@ Sleep 2s
 
 Type "3" Sleep 2s Enter
 
-Sleep 2s
+Sleep 1s
 
 Type "q"
 
