@@ -1,5 +1,77 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.3.6](https://github.com/harilvfs/carch/compare/v5.3.5...v5.3.6) - 2026-05-19
+
+
+### 🚀 Features
+
+
+- [7b6adaa](https://github.com/harilvfs/carch/commit/7b6adaac07d9bb44d23ace5c88fe7ce57d652b0d)  *(android)* Add Termux binary install/run support (#687) by @harilvfs in [#687](https://github.com/harilvfs/carch/pull/687)
+
+- [b04f97e](https://github.com/harilvfs/carch/commit/b04f97ee9d9b53167bb577c0f5a05f68ec3d55dd)  *(termux)* Add shell setup script (#688) by @harilvfs in [#688](https://github.com/harilvfs/carch/pull/688)
+
+- [c30e878](https://github.com/harilvfs/carch/commit/c30e87846e5e94a4b02722c16dd9a02b519b656e)  *(build)* Add .deb build for termux by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [1d0da52](https://github.com/harilvfs/carch/commit/1d0da52190c8f83c8354c5cb9b16a6bca5332eb1)  *(install)* Use deb file method for termux by @harilvfs
+
+- [0e66204](https://github.com/harilvfs/carch/commit/0e662046333fcf84c885325816213688dbef561f)  *(commands)* Re-write update/uninstall in rust (#691) by @harilvfs in [#691](https://github.com/harilvfs/carch/pull/691)
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [8454153](https://github.com/harilvfs/carch/commit/84541532161d1aa318d28fa71ab6e588b25049d1)  *(dwm)* Remove ft-lab-picom & use default picom by @harilvfs
+
+- [b336394](https://github.com/harilvfs/carch/commit/b33639448bddaa851ccdb6edf5c45af8deeb173b)  *(preview)* Decrease sleep time by @harilvfs
+
+- [b61d0ab](https://github.com/harilvfs/carch/commit/b61d0abf43415ecf9448819e473e9b5e47f59cd0)  *(docs)* Add termux-setup script description by @harilvfs
+
+- [4d21cf1](https://github.com/harilvfs/carch/commit/4d21cf1681650260c1ee7c7148aa1368cb6ed301)  *(man-page)* Clean up emojis by @harilvfs
+
+- [dafcb5f](https://github.com/harilvfs/carch/commit/dafcb5f9f2ecf731c7df2508efca60d6840b2df2)  *(build)* Fix closing tag by @harilvfs
+
+- [e7c0ae8](https://github.com/harilvfs/carch/commit/e7c0ae84a1881599cc7441d47e2403336b205a62)  *(script)* Correct some shfmt by @harilvfs
+
+- [12e52fb](https://github.com/harilvfs/carch/commit/12e52fbe6942fe4061fb56a989103b707bc946cf)  *(build)* Fix tag name input for upload by @harilvfs
+
+- [a61965f](https://github.com/harilvfs/carch/commit/a61965f74a636d0125d8418a0a406bc029d3a40f)  *(build)* Fix permission error by @harilvfs
+
+- [9d3305a](https://github.com/harilvfs/carch/commit/9d3305a8bc496b14af41cbb69faa87e2bee2031c)  *(script)* Correct docs url by @harilvfs
+
+- [173bab1](https://github.com/harilvfs/carch/commit/173bab1013155745cb3835bc5d6add3ab8c712f4)  *(shfmt)* Ignore build-termux-deb script by @harilvfs
+
+- [1066adb](https://github.com/harilvfs/carch/commit/1066adb7773762be9d9aa122014a60af5a9f48ee)  *(man-page)* Remove usage & correct some typos by @harilvfs
+
+- [1de5958](https://github.com/harilvfs/carch/commit/1de59585db50bb8116716062ed354d4ea799e58e)  *(build)* Use build script from carch-org/pkgs repo by @harilvfs
+
+- [857dd75](https://github.com/harilvfs/carch/commit/857dd75b0aba39f581a8efe6a0767514d42d3965)  *(build)* Add rpm-builder workflow by @harilvfs
+
+- [28a52db](https://github.com/harilvfs/carch/commit/28a52dbb7234bd16ea14e37b9b91671a558ae1ff)  *(typo)* Correct overview header by @harilvfs
+
+- [6e2c782](https://github.com/harilvfs/carch/commit/6e2c78265c68f97438bbdae0d85c632f978b3410)  *(preview)* Strip some not needed jobs by @harilvfs
+
+- [0c61380](https://github.com/harilvfs/carch/commit/0c61380e2b2befb341188a26df27469fe35e6ab5)  *(build)* Use a example version for input tag by @harilvfs
+
+- [546553c](https://github.com/harilvfs/carch/commit/546553c46e3fb72f0d0ecc968097a67e9e80fb5a)  *(preview)* Fix timing by @harilvfs
+
+- [cfd1eb5](https://github.com/harilvfs/carch/commit/cfd1eb5c3f2aa1a19465f511c1d45e4fae199a33)  *(readme)* Add preview credit to vhs by @harilvfs
+
+- [9ef7953](https://github.com/harilvfs/carch/commit/9ef7953d1d8bb867e502d6c692a5bcf5f3729ec9)  *(ci)* Simplify & clean up workflows by @harilvfs
+
+- [2b2b73f](https://github.com/harilvfs/carch/commit/2b2b73fcd78f02abe9178f3f5d8b114d2ae6bf4c)  *(install)* Fix getting deb file by @harilvfs
+
+- [280e023](https://github.com/harilvfs/carch/commit/280e023c9adbf7a067d330704268420729f4909b)  *(tui)* Removing hyprland script (#690) by @harilvfs in [#690](https://github.com/harilvfs/carch/pull/690)
+
+- [b72f737](https://github.com/harilvfs/carch/commit/b72f73731e89c0945add78939cc5cf0455b6c57a)  *(typo)* Remove redundant text by @harilvfs
+
+
+
 ## [5.3.5](https://github.com/harilvfs/carch/compare/v5.3.4...v5.3.5) - 2026-05-10
 
 
