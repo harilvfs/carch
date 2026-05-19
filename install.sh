@@ -5,14 +5,6 @@ GREEN='\033[1;32m'
 RED='\033[1;31m'
 NC='\033[0m'
 
-show_usage() {
-    printf "Usage: carch [install|uninstall|update]\n"
-    printf "  install   - Install carch (default)\n"
-    printf "  uninstall - Remove carch from system\n"
-    printf "  update    - Update carch to latest version\n"
-    exit 1
-}
-
 is_termux() {
     [ -n "$TERMUX_VERSION" ] ||
         [ -d "/data/data/com.termux" ] ||
@@ -119,38 +111,7 @@ install_rpm() {
     esac
 }
 
-uninstall_termux() {
-    if dpkg -s carch > /dev/null 2>&1; then
-        dpkg -r carch
-        printf "${GREEN}==> ${NC}carch has been removed\n"
-    else
-        printf "${YELLOW}==> ${NC}carch is not installed\n"
-    fi
-}
-
-uninstall_arch() {
-    sudo pacman -R carch-bin carch-bin-debug --noconfirm
-}
-
-uninstall_rpm() {
-    distro="$1"
-    case "$distro" in
-        fedora)   sudo dnf remove carch -y ;;
-        opensuse) sudo zypper remove -y carch ;;
-    esac
-}
-
 main() {
-    action="${1:-install}"
-
-    case "$action" in
-        install | uninstall | update) ;;
-        *)
-            printf "${RED}Error:${NC} Invalid action '%s'\n" "$action"
-            show_usage
-            ;;
-    esac
-
     distro=$(detect_distro)
 
     if [ "$distro" = "unsupported" ]; then
@@ -158,29 +119,10 @@ main() {
         exit 1
     fi
 
-    case "$action" in
-        install)
-            case "$distro" in
-                termux)            install_termux ;;
-                arch)              install_arch ;;
-                fedora | opensuse) install_rpm "$distro" ;;
-            esac
-            ;;
-        uninstall)
-            case "$distro" in
-                termux)            uninstall_termux ;;
-                arch)              uninstall_arch ;;
-                fedora | opensuse) uninstall_rpm "$distro" ;;
-            esac
-            ;;
-        update)
-            printf "${GREEN}==> ${NC}Updating carch...\n"
-            case "$distro" in
-                termux)            install_termux ;;
-                arch)              install_arch ;;
-                fedora | opensuse) install_rpm "$distro" ;;
-            esac
-            ;;
+    case "$distro" in
+        termux)            install_termux ;;
+        arch)              install_arch ;;
+        fedora | opensuse) install_rpm "$distro" ;;
     esac
 }
 
