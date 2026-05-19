@@ -73,11 +73,11 @@ Type "carch" Sleep 1s  Enter
 
 Sleep 1s
 
-Down Sleep 1s
+Down Sleep 0.5s
 
-Down Sleep 1s
+Down Sleep 0.5s
 
-Down Sleep 1s
+Down Sleep 0.5s
 
 Type "t"
 
@@ -109,15 +109,15 @@ Type "y"
 
 Sleep 1s
 
-Type "1" Sleep 2s Enter
-
-Sleep 3s
-
-Type "b" Sleep 2s Enter
+Type "1" Sleep 1s Enter
 
 Sleep 2s
 
-Type "3" Sleep 2s Enter
+Type "b" Sleep 1s Enter
+
+Sleep 2s
+
+Type "3" Sleep 1s Enter
 
 Sleep 1s
 
