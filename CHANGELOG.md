@@ -1,6 +1,16 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
-## [5.3.6](https://github.com/harilvfs/carch/compare/v5.3.5...v5.3.6) - 2026-05-19
+## [unreleased]
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [fc7bf5b](https://github.com/harilvfs/carch/commit/fc7bf5b1b797bfb2299d9c2e69331e047dd22c9a)  *(ci)* Remove type for workflow tigger by @harilvfs
+
+
+
+## [5.3.6](https://github.com/harilvfs/carch/compare/v5.3.5...v5.3.6) - 2026-05-20
 
 
 ### 🚀 Features
@@ -69,6 +79,12 @@
 - [280e023](https://github.com/harilvfs/carch/commit/280e023c9adbf7a067d330704268420729f4909b)  *(tui)* Removing hyprland script (#690) by @harilvfs in [#690](https://github.com/harilvfs/carch/pull/690)
 
 - [b72f737](https://github.com/harilvfs/carch/commit/b72f73731e89c0945add78939cc5cf0455b6c57a)  *(typo)* Remove redundant text by @harilvfs
+
+- [fcec0ff](https://github.com/harilvfs/carch/commit/fcec0ffa19e42eb2dd168066e8dd0683c35922f3)  *(preview)* Decrease step time by @harilvfs
+
+- [8f1e660](https://github.com/harilvfs/carch/commit/8f1e660899caf7ec27bc475b3ce68d3d8de01f44)  *(ci)* Fix v prefix for tag by @harilvfs
+
+- [23fdfdd](https://github.com/harilvfs/carch/commit/23fdfdd9a4c276bcd271c6846a675d39991a024d)  *(ci)* Add fetch to grab latest repo changes by @harilvfs
 
 
 
