@@ -6,8 +6,6 @@ on:
       tag:
         description: 'Release tag (e.g. v1.1.1)'
         required: true
-  release:
-    types: [prereleased]
 
 jobs:
   build-deb:
@@ -30,10 +28,10 @@ jobs:
       - name: Build .deb for ${{ matrix.arch }}
         run: bash build-termux-deb.sh ${{ matrix.arch }}
         env:
-          PKGVER: ${{ github.event.inputs.tag || github.event.release.tag_name }}
+          PKGVER: ${{ github.event.inputs.tag }}
 
       - name: Upload .deb to release
         uses: softprops/action-gh-release@v2
         with:
           files: "*.deb"
-          tag_name: ${{ github.event.inputs.tag || github.event.release.tag_name }}
+          tag_name: ${{ github.event.inputs.tag }}
