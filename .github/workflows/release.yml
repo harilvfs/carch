@@ -169,6 +169,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
 
       - name: Install Rust (nightly) with Android targets
         uses: dtolnay/rust-toolchain@nightly
