@@ -1,12 +1,23 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
-## [unreleased]
+## [5.3.7](https://github.com/harilvfs/carch/compare/v5.3.6...v5.3.7) - 2026-05-31
+
+
+### 🚀 Features
+
+
+- [2188f86](https://github.com/harilvfs/carch/commit/2188f868bc7e537964d1bb98c8eccc6a2674bfa0)  *(rust)* Cleanup code and rename functions (#702) by @harilvfs in [#702](https://github.com/harilvfs/carch/pull/702)
+
 
 
 ### ⚙️ Miscellaneous Tasks
 
 
 - [fc7bf5b](https://github.com/harilvfs/carch/commit/fc7bf5b1b797bfb2299d9c2e69331e047dd22c9a)  *(ci)* Remove type for workflow tigger by @harilvfs
+
+- [282a213](https://github.com/harilvfs/carch/commit/282a213c24020cc3421490a7de3ecf7fcf5d65c1)  *(script)* Remove direct distro detect for termux for all scripts by @harilvfs
+
+- [52a1b31](https://github.com/harilvfs/carch/commit/52a1b31a0d2164d260efdb1160e0bd902b898113)  *(ci)* Downgrade setup-go version by @harilvfs
 
 
 
