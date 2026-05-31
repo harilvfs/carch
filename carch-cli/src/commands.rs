@@ -18,7 +18,7 @@ pub fn check_for_updates() -> Result<()> {
             println!("Latest version: {latest_version}");
 
             if latest_version != current_version {
-                println!("\nA new version of Carch is available!");
+                println!("\nUpdate available!");
                 println!("Run 'carch update' to update to the latest version.");
             } else {
                 println!("\nYou are using the latest version of Carch.");
@@ -236,17 +236,17 @@ fn uninstall_for_distro(distro: &Distro) -> Result<()> {
 
 enum InstallMethod {
     Cargo,
-    PackageManager,
+    InstallScript,
 }
 
 fn get_install_method() -> Result<InstallMethod> {
-    print!("Installed via (c)argo or (p)ackage manager? ");
+    print!("Installed via (c)argo or (i)nstall script? ");
     io::stdout().flush()?;
     let mut choice = String::new();
     io::stdin().read_line(&mut choice)?;
     match choice.trim().to_lowercase().as_str() {
         "c" | "cargo" => Ok(InstallMethod::Cargo),
-        "p" | "package manager" => Ok(InstallMethod::PackageManager),
+        "i" | "install script" => Ok(InstallMethod::InstallScript),
         _ => Err(CarchError::Command("Invalid choice. Please run the command again.".into())),
     }
 }
@@ -264,7 +264,7 @@ pub fn update() -> Result<()> {
         InstallMethod::Cargo => {
             run_command(Command::new("cargo").arg("install").arg("carch-cli").arg("--force"))?;
         }
-        InstallMethod::PackageManager => {
+        InstallMethod::InstallScript => {
             let distro = detect_distro()?;
             install_for_distro(&distro)?;
         }
@@ -286,7 +286,7 @@ pub fn uninstall() -> Result<()> {
         InstallMethod::Cargo => {
             run_command(Command::new("cargo").arg("uninstall").arg("carch-cli"))?;
         }
-        InstallMethod::PackageManager => {
+        InstallMethod::InstallScript => {
             let distro = detect_distro()?;
             uninstall_for_distro(&distro)?;
         }
