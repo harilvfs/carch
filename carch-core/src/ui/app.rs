@@ -43,6 +43,9 @@ impl<'a> App<'a> {
             description: DescriptionState::default(),
             run_script_popup: None,
             script_execution_queue: Vec::new(),
+
+            needs_redraw: true,
+            last_size: Rect::default(),
         }
     }
 

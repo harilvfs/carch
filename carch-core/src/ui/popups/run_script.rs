@@ -12,9 +12,12 @@ use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
-use vt100_ctt::{Parser, Screen};
+use vt100_ctt::Parser;
 
 use crate::ui::theme::Theme;
+
+const SCROLLBACK_LEN: usize = 1000;
+const PAGE_STEP: usize = 10;
 
 pub enum PopupEvent {
     Close,
@@ -29,8 +32,16 @@ pub struct RunScriptPopup {
     pty_master:     Box<dyn MasterPty + Send>,
     writer:         Box<dyn Write + Send>,
     status:         Option<ExitStatus>,
+    parser:         Option<Parser>,
+    parser_size:    (u16, u16),
+    pty_size:       (u16, u16),
+    processed_len:  usize,
+    last_max_check: usize,
     scroll_offset:  usize,
+    actual_max:     usize,
+    auto_scroll:    bool,
     theme:          Theme,
+    was_finished:   bool,
 }
 
 impl RunScriptPopup {
@@ -87,25 +98,71 @@ impl RunScriptPopup {
             pty_master: pair.master,
             writer,
             status: None,
+            parser: None,
+            parser_size: (0, 0),
+            pty_size: (0, 0),
+            processed_len: 0,
+            last_max_check: 0,
             scroll_offset: 0,
+            actual_max: 0,
+            auto_scroll: true,
             theme,
+            was_finished: false,
         }
     }
 
+    pub fn has_new_data(&mut self) -> bool {
+        let now_finished = self.is_finished();
+        if now_finished != self.was_finished {
+            return true;
+        }
+        if self.auto_scroll
+            && let Ok(buf) = self.buffer.try_lock()
+            && buf.len() > self.processed_len
+        {
+            return true;
+        }
+        false
+    }
+
+    pub fn acknowledge_data(&mut self) {
+        self.was_finished = self.is_finished();
+    }
+
     pub fn handle_key_event(&mut self, key: KeyEvent) -> PopupEvent {
+        let ctrl = key.modifiers.contains(KeyModifiers::CONTROL);
+        let shift = key.modifiers.contains(KeyModifiers::SHIFT);
+
         match key.code {
-            KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+            KeyCode::Char('c') if ctrl => {
                 let _ = self.writer.write_all(&[3]);
                 PopupEvent::None
             }
+            KeyCode::Char('q') if self.is_finished() => PopupEvent::Close,
             KeyCode::Enter if self.is_finished() => PopupEvent::Close,
             KeyCode::Esc if self.is_finished() => PopupEvent::Close,
+            KeyCode::Up if shift => {
+                self.scroll_up(1);
+                PopupEvent::None
+            }
+            KeyCode::Down if shift => {
+                self.scroll_down(1);
+                PopupEvent::None
+            }
             KeyCode::PageUp => {
-                self.scroll_offset = self.scroll_offset.saturating_add(10);
+                self.scroll_up(PAGE_STEP);
                 PopupEvent::None
             }
             KeyCode::PageDown => {
-                self.scroll_offset = self.scroll_offset.saturating_sub(10);
+                self.scroll_down(PAGE_STEP);
+                PopupEvent::None
+            }
+            KeyCode::Char('g') if !ctrl => {
+                self.scroll_to_top();
+                PopupEvent::None
+            }
+            KeyCode::Char('G') => {
+                self.scroll_to_bottom();
                 PopupEvent::None
             }
             _ => {
@@ -115,29 +172,89 @@ impl RunScriptPopup {
         }
     }
 
-    fn is_finished(&self) -> bool {
-        if let Some(command_thread) = &self.command_thread {
-            command_thread.is_finished()
-        } else {
-            true
+    fn scroll_up(&mut self, n: usize) {
+        if n == 0 {
+            return;
         }
+        let max = self.max_scrollback();
+        let next = self.scroll_offset.saturating_add(n).min(max);
+        self.scroll_offset = next;
+        self.auto_scroll = next == 0;
     }
 
-    fn screen(&mut self, size: Size) -> Screen {
-        self.pty_master
-            .resize(PtySize {
-                rows:         size.height,
-                cols:         size.width,
-                pixel_width:  0,
-                pixel_height: 0,
-            })
-            .unwrap();
+    fn scroll_down(&mut self, n: usize) {
+        if n == 0 {
+            return;
+        }
+        if self.scroll_offset > n {
+            self.scroll_offset -= n;
+        } else {
+            self.scroll_offset = 0;
+        }
+        self.auto_scroll = self.scroll_offset == 0;
+    }
 
-        let mut parser = Parser::new(size.height, size.width, 1000);
-        let mutex = self.buffer.lock().unwrap();
-        parser.process(&mutex);
+    fn scroll_to_top(&mut self) {
+        let max = self.max_scrollback();
+        self.scroll_offset = max;
+        self.auto_scroll = max == 0;
+    }
+
+    fn scroll_to_bottom(&mut self) {
+        self.scroll_offset = 0;
+        self.auto_scroll = true;
+    }
+
+    fn max_scrollback(&self) -> usize {
+        self.actual_max
+    }
+
+    fn is_finished(&self) -> bool {
+        self.command_thread.as_ref().is_none_or(|h| h.is_finished())
+    }
+
+    fn sync_parser(&mut self, size: Size) {
+        let (cols, rows) = (size.width, size.height);
+
+        if self.pty_size != (cols, rows) {
+            let _ = self.pty_master.resize(PtySize { rows, cols, pixel_width: 0, pixel_height: 0 });
+            self.pty_size = (cols, rows);
+        }
+
+        let parser = self.parser.get_or_insert_with(|| Parser::new(rows, cols, SCROLLBACK_LEN));
+
+        if self.parser_size != (cols, rows) {
+            parser.screen_mut().set_size(rows, cols);
+            self.parser_size = (cols, rows);
+        }
+
+        let new_bytes: Vec<u8> = {
+            let buf = self.buffer.lock().unwrap();
+            if self.processed_len <= buf.len() {
+                buf[self.processed_len..].to_vec()
+            } else {
+                self.processed_len = 0;
+                buf[..].to_vec()
+            }
+        };
+        let got_new = !new_bytes.is_empty();
+        if got_new {
+            parser.process(&new_bytes);
+            self.processed_len += new_bytes.len();
+        }
+
+        if got_new || self.last_max_check == 0 {
+            parser.screen_mut().set_scrollback(usize::MAX);
+            self.actual_max = parser.screen().scrollback();
+            self.last_max_check = self.processed_len;
+        }
+
+        if self.scroll_offset > self.actual_max {
+            self.scroll_offset = self.actual_max;
+            self.auto_scroll = self.actual_max == 0;
+        }
+
         parser.screen_mut().set_scrollback(self.scroll_offset);
-        parser.screen().clone()
     }
 
     fn get_exit_status(&mut self) -> ExitStatus {
@@ -151,6 +268,17 @@ impl RunScriptPopup {
         }
     }
 
+    fn exit_success(&mut self) -> Option<bool> {
+        if self.command_thread.is_some() {
+            let handle = self.command_thread.take()?;
+            let exit_status = handle.join().ok()?;
+            self.status = Some(exit_status.clone());
+            Some(exit_status.success())
+        } else {
+            self.status.as_ref().map(|s| s.success())
+        }
+    }
+
     pub fn kill_child(&mut self) {
         if !self.is_finished()
             && let Some(killer_rx) = self.child_killer.take()
@@ -158,6 +286,19 @@ impl RunScriptPopup {
         {
             let _ = killer.kill();
         }
+    }
+
+    fn title_line(&mut self) -> Line<'static> {
+        if self.is_finished() {
+            let (text, color) = match self.exit_success() {
+                Some(true) => ("Success! Press <Enter> to close", self.theme.success),
+                Some(false) => ("Failed! Press <Enter> to close", self.theme.error),
+                None => ("Finished. Press <Enter> to close", self.theme.primary),
+            };
+            return Line::styled(text, Style::default().fg(color).reversed());
+        }
+
+        Line::raw("")
     }
 
     fn handle_passthrough_key_event(&mut self, key: KeyEvent) {
@@ -184,12 +325,17 @@ impl RunScriptPopup {
 
 impl Widget for &mut RunScriptPopup {
     fn render(self, area: Rect, buf: &mut Buffer) {
-        let block = if !self.is_finished() {
+        let running = !self.is_finished();
+
+        let block = if running {
             Block::bordered()
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(self.theme.primary))
                 .title_style(Style::default().fg(self.theme.primary).reversed())
-                .title_bottom(Line::from("Press Ctrl-C to kill"))
+                .title_top(self.title_line().centered())
+                .title_bottom(Line::from(
+                    "Shift+↑/↓: scroll   PgUp/PgDn: page   g/G: top/bottom   Ctrl-C: kill",
+                ))
         } else {
             let (title_text, style_color) = if self.get_exit_status().success() {
                 (
@@ -197,7 +343,7 @@ impl Widget for &mut RunScriptPopup {
                         "Success! Press <Enter> to close",
                         Style::default().fg(self.theme.success).reversed(),
                     ),
-                    self.theme.primary,
+                    self.theme.success,
                 )
             } else {
                 (
@@ -205,7 +351,7 @@ impl Widget for &mut RunScriptPopup {
                         "Failed! Press <Enter> to close",
                         Style::default().fg(self.theme.error).reversed(),
                     ),
-                    self.theme.primary,
+                    self.theme.error,
                 )
             };
 
@@ -216,11 +362,14 @@ impl Widget for &mut RunScriptPopup {
         };
 
         let inner_area = block.inner(area);
-        let screen = self.screen(inner_area.as_size());
-        let pseudo_term = PseudoTerminal::new(&screen);
+        self.sync_parser(inner_area.as_size());
 
         Clear.render(area, buf);
         block.render(area, buf);
-        pseudo_term.render(inner_area, buf);
+
+        if let Some(parser) = self.parser.as_ref() {
+            let pseudo_term = PseudoTerminal::new(parser.screen());
+            pseudo_term.render(inner_area, buf);
+        }
     }
 }

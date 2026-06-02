@@ -160,4 +160,7 @@ pub struct App<'a> {
     pub description:            DescriptionState,
     pub run_script_popup:       Option<RunScriptPopup>,
     pub script_execution_queue: Vec<PathBuf>,
+
+    pub needs_redraw: bool,
+    pub last_size:    Rect,
 }

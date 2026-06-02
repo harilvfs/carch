@@ -4,7 +4,7 @@ use std::io::{self, Stdout};
 use std::path::Path;
 use std::time::Duration;
 
-use crossterm::event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode};
+use crossterm::event::{self, Event, KeyCode};
 use crossterm::execute;
 use crossterm::terminal::{
     Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
@@ -142,14 +142,14 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
 fn setup_terminal() -> Result<Terminal<CrosstermBackend<Stdout>>> {
     enable_raw_mode()?;
     let mut stdout = io::stdout();
-    execute!(stdout, EnterAlternateScreen, EnableMouseCapture, Clear(ClearType::All))?;
+    execute!(stdout, EnterAlternateScreen, Clear(ClearType::All))?;
     let backend = CrosstermBackend::new(stdout);
     Terminal::new(backend).map_err(Into::into)
 }
 
 fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Result<()> {
     disable_raw_mode()?;
-    execute!(terminal.backend_mut(), LeaveAlternateScreen, DisableMouseCapture)?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
     terminal.show_cursor()?;
     Ok(())
 }
@@ -179,8 +179,22 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
     }
 
     while !app.quit {
-        terminal.autoresize()?;
-        terminal.draw(|f| ui(f, &mut app, &options))?;
+        let popup_has_new_data =
+            app.run_script_popup.as_mut().map(|p| p.has_new_data()).unwrap_or(false);
+
+        if app.needs_redraw || popup_has_new_data {
+            if app.last_size == Rect::default() {
+                terminal.autoresize()?;
+            }
+
+            terminal.draw(|f| ui(f, &mut app, &options))?;
+            app.last_size = terminal.get_frame().area();
+            app.needs_redraw = false;
+
+            if let Some(popup) = app.run_script_popup.as_mut() {
+                popup.acknowledge_data();
+            }
+        }
 
         let poll_duration = if app.mode == AppMode::RunScript {
             Duration::from_millis(16)
@@ -191,6 +205,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
         if event::poll(poll_duration)?
             && let Ok(event) = event::read()
         {
+            app.needs_redraw = true;
             handle_event(&mut app, event, &options)?;
         }
     }
@@ -249,11 +264,8 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                 }
             }
         }
-        Event::Mouse(mouse_event) => {
-            if options.log_mode {
-                debug!("Mouse event: {mouse_event:?}");
-            }
-            app.handle_mouse(mouse_event);
+        Event::Resize(_, _) => {
+            app.needs_redraw = true;
         }
         _ => {}
     }
