@@ -31,6 +31,9 @@ description = "Installs multimedia players like VLC and MPV, ensuring you have t
 [Music]
 description = "Offers a selection of music applications, including Spotify, Spotube, and YouTube Music, so you can listen to your favorite tracks and discover new artists."
 
+[Networking]
+description = "Installs essential networking utilities for managing network interfaces and devices."
+
 [Productivity]
 description = "Boosts your productivity with a choice of office suites like LibreOffice and OnlyOffice, as well as note-taking apps like Obsidian and Joplin."
 
