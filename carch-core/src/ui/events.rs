@@ -1,4 +1,4 @@
-use crossterm::event::{KeyCode, KeyEvent, MouseEvent, MouseEventKind};
+use crossterm::event::{KeyCode, KeyEvent};
 use log::info;
 
 use super::popups::run_script::RunScriptPopup;
@@ -187,57 +187,6 @@ impl<'a> App<'a> {
             KeyCode::End => {
                 self.preview.scroll = self.preview.max_scroll;
             }
-            _ => {}
-        }
-    }
-
-    pub fn handle_mouse(&mut self, event: MouseEvent) {
-        match event.kind {
-            MouseEventKind::ScrollDown => match self.mode {
-                AppMode::Normal => self.next(),
-                AppMode::Preview => {
-                    for _ in 0..2 {
-                        self.scroll_preview_down();
-                    }
-                }
-                AppMode::Search => {
-                    if !self.search.results.is_empty() {
-                        self.search.selected_idx =
-                            (self.search.selected_idx + 1) % self.search.results.len();
-                    }
-                }
-                AppMode::Confirm => {}
-                AppMode::Help => {
-                    self.help.scroll = self.help.scroll.saturating_add(2).min(self.help.max_scroll);
-                }
-                AppMode::Description => {}
-                AppMode::RunScript => {}
-                AppMode::RootWarning => {}
-            },
-            MouseEventKind::ScrollUp => match self.mode {
-                AppMode::Normal => self.previous(),
-                AppMode::Preview => {
-                    for _ in 0..2 {
-                        self.scroll_preview_up();
-                    }
-                }
-                AppMode::Search => {
-                    if !self.search.results.is_empty() {
-                        self.search.selected_idx = if self.search.selected_idx > 0 {
-                            self.search.selected_idx - 1
-                        } else {
-                            self.search.results.len() - 1
-                        };
-                    }
-                }
-                AppMode::Confirm => {}
-                AppMode::Help => {
-                    self.help.scroll = self.help.scroll.saturating_sub(2);
-                }
-                AppMode::Description => {}
-                AppMode::RunScript => {}
-                AppMode::RootWarning => {}
-            },
             _ => {}
         }
     }
