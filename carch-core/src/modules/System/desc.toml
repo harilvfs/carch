@@ -30,3 +30,6 @@ description = "This script installs the LTS kernel for Arch-based distros only (
 
 [Sddm]
 description = "SDDM (Simple Desktop Display Manager) is a modern, Qt-based graphical login manager. The script installs a Catppuccin-based theme for SDDM from the Catppuccin community."
+
+["Wifi-Blockage"]
+description = "Fixes wireless hard blocks caused by shitty platform drivers (Dell, HP, Lenovo IdeaPad, Acer, Asus). Identifies, removes, and blacklists the offending module, then unblocks and restores wireless connectivity."
