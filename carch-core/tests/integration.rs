@@ -1,15 +1,4 @@
-//! End-to-end-ish tests for the TUI App that don't require a real terminal.
-//!
-//! These exercise:
-//! - The `extract_scripts` + `load_scripts` pipeline against the embedded modules that ship with
-//!   the crate.
-//! - Key handlers (`handle_key_normal_mode`, `handle_search_input`, etc.) and their state
-//!   transitions.
-//! - Cross-cutting concerns like the preview cache, the description popup, the multi-select queue,
-//!   and the theme cycle.
-//!
-//! No ratatui backend is touched, so the tests run in a plain CI environment
-//! without a TTY.
+//! Integration tests for the TUI app. No real terminal required.
 
 use std::path::PathBuf;
 
@@ -74,7 +63,6 @@ fn extract_scripts_populates_modules() {
             while let Some(Ok(ok)) = sub.next() {
                 if ok.path().extension().is_some_and(|e| e == "sh") {
                     found_script = true;
-                    // Executable bit should be set.
                     #[cfg(unix)]
                     {
                         use std::os::unix::fs::PermissionsExt;
@@ -134,7 +122,7 @@ fn j_k_navigates_within_focused_panel() {
     fx.app.handle_key_normal_mode(key(KeyCode::Char('l')));
     let total = fx.app.scripts.items.len();
     if total < 2 {
-        return; // not enough scripts to test navigation
+        return;
     }
     let start = fx.app.scripts.state.selected();
     fx.app.handle_key_normal_mode(key(KeyCode::Char('j')));
@@ -205,7 +193,6 @@ fn preview_popup_opens_and_closes() {
     assert_eq!(fx.app.mode, AppMode::Preview);
     fx.app.handle_key_preview_mode(key(KeyCode::Esc));
     assert_eq!(fx.app.mode, AppMode::Normal);
-    // The preview content should still match the previously-selected script.
     let _ = before_content;
 }
 
@@ -217,10 +204,6 @@ fn update_preview_loads_script_content() {
         return;
     }
     fx.app.update_preview();
-    // update_preview loads the raw text into `preview.content`.
-    // The highlight cache is populated later by the preview popup render
-    // path (see popups/preview.rs); see `preview_cache_populated_by_render`
-    // for that invariant.
     assert!(!fx.app.preview.content.is_empty());
     assert_ne!(fx.app.preview.content, "No script selected");
     assert_ne!(fx.app.preview.content, "Error loading script content");
@@ -236,7 +219,6 @@ fn description_popup_loads_from_desc_toml() {
     fx.app.toggle_description_popup();
     assert_eq!(fx.app.mode, AppMode::Description);
     let content = fx.app.description.content.as_deref().unwrap_or("");
-    // Real desc.toml exists in every embedded category.
     assert!(
         !content.contains("No description available"),
         "expected real description, got fallback: {content:?}",
@@ -247,11 +229,9 @@ fn description_popup_loads_from_desc_toml() {
 
 #[test]
 fn description_popup_falls_back_when_desc_missing() {
-    // Build a fixture with no desc.toml files.
     let tmp = TempDir::new().unwrap();
     extract_scripts(tmp.path()).unwrap();
     let modules_dir = tmp.path().join("modules");
-    // Remove all desc.toml files.
     for entry in walkdir(&modules_dir) {
         if entry.file_name().and_then(|n| n.to_str()) == Some("desc.toml") {
             let _ = std::fs::remove_file(&entry);
@@ -295,7 +275,6 @@ fn search_opens_with_slash_and_closes_with_esc() {
 
 #[test]
 fn esc_preserves_in_progress_query() {
-    // Typing something then pressing Esc should not throw the query away.
     let mut fx = fixture();
     fx.app.handle_key_normal_mode(key(KeyCode::Char('/')));
     for ch in "git".chars() {
@@ -316,7 +295,6 @@ fn search_history_records_submitted_queries() {
     if !fx.app.search.results.is_empty() {
         fx.app.handle_search_input(key(KeyCode::Enter));
     }
-    // Now exit, then reopen, type something else, exit again.
     fx.app.handle_search_input(key(KeyCode::Esc));
     fx.app.handle_key_normal_mode(key(KeyCode::Char('/')));
     for ch in "vim".chars() {
@@ -327,7 +305,6 @@ fn search_history_records_submitted_queries() {
     let hist: Vec<String> = fx.app.search.history.iter().cloned().collect();
     assert!(hist.contains(&"git".to_string()));
     assert!(hist.contains(&"vim".to_string()));
-    // Most recent first.
     assert_eq!(hist.first().map(String::as_str), Some("vim"));
 }
 
@@ -343,7 +320,6 @@ fn search_history_is_capped_at_five() {
         fx.app.handle_search_input(key(KeyCode::Esc));
     }
     assert!(fx.app.search.history.len() <= 5);
-    // Most recent should be "q7".
     assert_eq!(fx.app.search.history.front().map(String::as_str), Some("q7"));
 }
 
@@ -357,7 +333,6 @@ fn search_history_deduplicates() {
         }
         fx.app.handle_search_input(key(KeyCode::Esc));
     }
-    // Even after 3 submissions, only one entry remains.
     assert_eq!(fx.app.search.history.len(), 1);
     assert_eq!(fx.app.search.history.front().map(String::as_str), Some("git"));
 }
@@ -365,15 +340,12 @@ fn search_history_deduplicates() {
 #[test]
 fn up_arrow_with_empty_input_recalls_history() {
     let mut fx = fixture();
-    // Seed history.
     fx.app.handle_key_normal_mode(key(KeyCode::Char('/')));
     for ch in "git".chars() {
         fx.app.handle_search_input(key(KeyCode::Char(ch)));
     }
     fx.app.handle_search_input(key(KeyCode::Esc));
-    // Clear input but keep history by reopening fresh.
     fx.app.handle_key_normal_mode(key(KeyCode::Char('/')));
-    // Now input is empty; press Up to recall.
     fx.app.handle_search_input(key(KeyCode::Up));
     assert_eq!(fx.app.search.input, "git");
     assert_eq!(fx.app.search.history_idx, Some(0));
@@ -420,11 +392,9 @@ fn search_finds_matching_script() {
 fn search_handles_utf8_query_safely() {
     let mut fx = fixture();
     fx.app.handle_key_normal_mode(key(KeyCode::Char('/')));
-    // Multi-byte query must not panic.
     for ch in "café😀".chars() {
         fx.app.handle_search_input(key(KeyCode::Char(ch)));
     }
-    // Esc out so the next test isn't affected.
     fx.app.handle_search_input(key(KeyCode::Esc));
 }
 
@@ -459,7 +429,6 @@ fn confirmation_popup_for_single_script() {
 
 #[test]
 fn root_warning_popup_when_is_root_true() {
-    // Build the app with is_root = true so it starts in RootWarning mode.
     let tmp = TempDir::new().unwrap();
     extract_scripts(tmp.path()).unwrap();
     let modules_dir = tmp.path().join("modules");
@@ -473,7 +442,6 @@ fn root_warning_popup_when_is_root_true() {
     app.modules_dir = modules_dir.clone();
     app.load_scripts(&modules_dir).unwrap();
     assert_eq!(app.mode, AppMode::RootWarning);
-    // y = accept the risk and proceed; n = quit
     app.handle_key_root_warning_mode(key(KeyCode::Char('y')));
     assert_eq!(app.mode, AppMode::Normal);
 }
@@ -506,8 +474,6 @@ fn theme_name_round_trips_through_options() {
 #[test]
 fn has_description_matches_desc_toml() {
     let fx = fixture();
-    // Every embedded category ships with a real desc.toml covering all scripts.
-    // Pick any script and verify has_description returns true.
     let (cat, name) = fx
         .app
         .all_scripts
@@ -521,7 +487,6 @@ fn has_description_matches_desc_toml() {
 
 #[test]
 fn has_description_false_when_no_desc_toml() {
-    // Build a fixture with desc.toml files removed.
     let tmp = TempDir::new().unwrap();
     extract_scripts(tmp.path()).unwrap();
     let modules_dir = tmp.path().join("modules");

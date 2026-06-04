@@ -12,14 +12,11 @@ static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 
 const EXECUTABLE_MODE: u32 = 0o755;
 
-/// Returns `true` when the current process effective UID is 0.
-///
-/// Unlike `$USER == "root"`, this is the canonical POSIX check and is not
-/// affected by `sudo -E`, broken login shells or unusual `su` configurations.
+/// True when the current process is running as root.
 #[must_use]
 #[cfg(unix)]
 pub fn is_running_as_root() -> bool {
-    // SAFETY: `geteuid` is a thread-safe POSIX call with no preconditions.
+    // SAFETY: geteuid has no preconditions.
     unsafe { libc::geteuid() == 0 }
 }
 

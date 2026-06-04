@@ -92,7 +92,7 @@ fn run_command(command: &mut Command) -> Result<()> {
     Ok(())
 }
 
-/// Find the first release asset whose `name` ends with `asset_pattern`.
+// Find the first release asset whose name ends with `asset_pattern`.
 fn get_latest_release_url(asset_pattern: &str) -> Result<String> {
     let client = reqwest::blocking::Client::builder().user_agent("carch-cli").build()?;
     let body: Value =

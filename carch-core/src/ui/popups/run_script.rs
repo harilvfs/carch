@@ -349,8 +349,7 @@ impl RunScriptPopup {
 
 impl Drop for RunScriptPopup {
     fn drop(&mut self) {
-        // Best-effort kill so a child isn't left orphaned if the popup is
-        // dropped before the script finishes.
+        // Make sure the child process is killed if the popup is dropped early.
         if !self.is_finished()
             && let Some(rx) = self.child_killer.take()
             && let Ok(Some(mut killer)) = rx.recv()

@@ -16,9 +16,9 @@ fn create_block<'a>(title: &'a str, is_focused: bool, app: &App) -> Block<'a> {
         .style(Style::default().bg(Color::Reset))
 }
 
-/// Marker shown next to a selected script in multi-select mode.
-const SELECTED_MARKER: &str = "\u{2713} "; // ✓
-/// Marker shown next to a script that has a description in `desc.toml`.
+// Marker for a multi-selected script.
+const SELECTED_MARKER: &str = "\u{2713} ";
+// Marker for a script that has a description.
 const DESC_MARKER: &str = " (d)";
 
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {

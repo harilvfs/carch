@@ -1,7 +1,4 @@
 //! Persistent CLI state at `~/.config/carch/state.toml`.
-//!
-//! Currently stores only the user's favorite theme. The format is TOML so we
-//! can grow it without breaking older versions.
 
 use carch_core::error::{CarchError, Result};
 use std::path::PathBuf;
@@ -22,8 +19,6 @@ fn ensure_parent_dir(path: &std::path::Path) -> Result<()> {
     Ok(())
 }
 
-/// Save the given theme as the user's favorite. Writes the state file
-/// atomically by writing to a temp file and renaming.
 pub fn save_favorite_theme(theme: &str) -> Result<()> {
     if theme.is_empty() {
         return Err(CarchError::Command("Theme name must not be empty".to_string()));
@@ -37,8 +32,7 @@ pub fn save_favorite_theme(theme: &str) -> Result<()> {
     Ok(())
 }
 
-/// Returns the saved favorite theme, or `None` if the state file doesn't
-/// exist, is unreadable, or doesn't contain a `theme` key.
+/// Returns the saved favorite theme, or `None` if it isn't set.
 pub fn load_favorite_theme() -> Option<String> {
     let path = state_path().ok()?;
     let content = fs::read_to_string(&path).ok()?;
@@ -46,8 +40,6 @@ pub fn load_favorite_theme() -> Option<String> {
     table.get("theme")?.as_str().map(str::to_string)
 }
 
-/// Remove the state file. Returns `Ok(true)` if a file was removed, `Ok(false)`
-/// if no state file existed.
 pub fn clear_favorite_theme() -> Result<bool> {
     let path = state_path()?;
     match fs::remove_file(&path) {
@@ -70,8 +62,7 @@ mod tests {
     use super::*;
     use std::sync::Mutex;
 
-    /// Tests in this module mutate the process-wide `HOME` env var, so they
-    /// must run serially.
+    // Tests mutate the process-wide HOME env, so run serially.
     static HOME_LOCK: Mutex<()> = Mutex::new(());
 
     struct ScopedHome {
@@ -93,8 +84,7 @@ mod tests {
             ));
             std::fs::create_dir_all(&tmp).unwrap();
             let prev = std::env::var("HOME").ok();
-            // SAFETY: this is a single-process test, no other threads should
-            // be reading HOME concurrently.
+            // SAFETY: tests are single-threaded for HOME.
             unsafe {
                 std::env::set_var("HOME", &tmp);
             }
@@ -126,7 +116,6 @@ mod tests {
     #[test]
     fn load_returns_none_when_no_state_file() {
         let _h = ScopedHome::new();
-        // No save performed.
         assert_eq!(load_favorite_theme(), None);
     }
 
@@ -141,8 +130,6 @@ mod tests {
     fn save_escapes_special_chars_in_theme_name() {
         let _h = ScopedHome::new();
         save_favorite_theme(r#"a"b"#).unwrap();
-        // Reading it back goes through TOML parsing, so escaped chars come
-        // back as the original string.
         assert_eq!(load_favorite_theme().as_deref(), Some(r#"a"b"#));
     }
 

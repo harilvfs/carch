@@ -183,9 +183,6 @@ description = "x"
 
     #[test]
     fn script_queue_is_fifo() {
-        // Regression: queue used to be Vec, with .push() + .pop() (LIFO) in the
-        // popup chain and .push() + .remove(0) (FIFO) on first kick, so
-        // multi-select ran scripts in reverse order.
         let mut q: VecDeque<PathBuf> = VecDeque::new();
         for i in 0..3 {
             q.push_back(PathBuf::from(format!("/tmp/script{i}.sh")));

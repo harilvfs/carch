@@ -44,17 +44,14 @@ fn main() -> Result<(), anyhow::Error> {
             let mut cmd = Cli::command();
             let mut buffer = Vec::new();
 
-            // completions for Bash
             generate(Shell::Bash, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/bash/carch", &buffer)?;
             buffer.clear();
 
-            // completions for Fish
             generate(Shell::Fish, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/fish/carch.fish", &buffer)?;
             buffer.clear();
 
-            // completions for Zsh
             generate(Shell::Zsh, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/zsh/_carch", &buffer)?;
 

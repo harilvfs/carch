@@ -8,13 +8,9 @@ impl App {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc => {
-                // Remember the query before exiting so the user can recall it
-                // next time they open the popup.
                 let snapshot = self.search.input.clone();
                 self.toggle_search_mode();
                 if !snapshot.is_empty() {
-                    // After toggle, the SearchState was reset, so push via
-                    // the live state. `input` is preserved across toggles.
                     self.search.push_history(snapshot);
                 }
             }
@@ -52,7 +48,7 @@ impl App {
                     (self.search.selected_idx + 1) % self.search.results.len();
             }
             KeyCode::Up if self.search.input.is_empty() && !self.search.history.is_empty() => {
-                // Browse history backwards (older entries).
+                // Step backwards through history.
                 let next = match self.search.history_idx {
                     None => 0,
                     Some(i) => (i + 1).min(self.search.history.len() - 1),
@@ -73,8 +69,7 @@ impl App {
                 };
             }
             KeyCode::Down if self.search.input.is_empty() && self.search.history_idx.is_some() => {
-                // Browse history forwards (newer entries). When we step past
-                // the newest entry, clear the input.
+                // Step forwards through history; past newest clears the input.
                 let cur = self.search.history_idx.expect("checked is_some above");
                 if cur == 0 {
                     self.search.history_idx = None;

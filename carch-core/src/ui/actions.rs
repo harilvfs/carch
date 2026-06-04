@@ -155,15 +155,11 @@ impl App {
         }
 
         if self.mode == AppMode::Search {
-            // Fresh input on entry, but keep history across re-opens.
             let history = std::mem::take(&mut self.search.history);
             let history_idx = std::mem::take(&mut self.search.history_idx);
             self.search = SearchState { history, history_idx, ..SearchState::default() };
             self.perform_search();
         } else {
-            // Leaving search mode: keep `input` so re-opening shows the last
-            // query (the user can `Backspace` it away if they want a fresh
-            // search). `history_idx` is invalidated.
             self.search.history_idx = None;
         }
     }
@@ -288,8 +284,6 @@ impl App {
         self.multi_select.scripts.contains(&script_path.to_path_buf())
     }
 
-    /// Returns `true` if the script's category has a `desc.toml` entry
-    /// describing it. Used to render a status indicator in the script list.
     #[must_use]
     pub fn has_description(&self, category: &str, script_name: &str) -> bool {
         let desc_path = self.modules_dir.join(category).join("desc.toml");

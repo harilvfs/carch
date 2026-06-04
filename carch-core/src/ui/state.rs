@@ -167,23 +167,20 @@ pub struct SearchState {
     pub selected_idx:    usize,
     pub autocomplete:    Option<String>,
     pub matcher:         SkimMatcherV2,
-    /// Last N queries the user submitted, most recent first.
+    /// Recent queries, newest first.
     pub history:         VecDeque<String>,
-    /// Index into `history` of the entry currently shown in the input.
-    /// `None` means we are not currently browsing history.
+    /// Index into `history` of the entry currently being browsed.
     pub history_idx:     Option<usize>,
 }
 
-/// Maximum number of queries retained in search history.
+/// Max number of queries kept in search history.
 pub const SEARCH_HISTORY_MAX: usize = 5;
 
 impl SearchState {
-    /// Push a query onto the history, deduplicating and capping at the max.
     pub fn push_history(&mut self, query: String) {
         if query.is_empty() {
             return;
         }
-        // Move-to-front: if already present, remove the old entry first.
         self.history.retain(|q| q != &query);
         self.history.push_front(query);
         while self.history.len() > SEARCH_HISTORY_MAX {

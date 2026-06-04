@@ -129,9 +129,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
             let popup_area = centered_rect(80, 80, area);
             popups::description::render_description_popup(f, &mut *app, popup_area);
         }
-        AppMode::Normal => {
-            // no pop-up
-        }
+        AppMode::Normal => {}
         AppMode::RootWarning => {
             let area = app.script_panel_area;
             let popup_area = centered_rect(80, 50, area);
@@ -299,9 +297,7 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     AppMode::Help => app.handle_key_help_mode(key),
                     AppMode::Description => app.handle_key_description_mode(key),
                     AppMode::RootWarning => app.handle_key_root_warning_mode(key),
-                    AppMode::RunScript => {
-                        // already handled above
-                    }
+                    AppMode::RunScript => {}
                 }
             }
         }

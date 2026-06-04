@@ -14,7 +14,6 @@ pub struct Theme {
 }
 
 impl Theme {
-    // our beloved catppuccin_mocha
     pub fn catppuccin_mocha() -> Self {
         Self {
             name:       "Catppuccin Mocha".to_string(),
@@ -29,7 +28,6 @@ impl Theme {
         }
     }
 
-    // for some vampire peoples
     pub fn dracula() -> Self {
         Self {
             name:       "Dracula".to_string(),
@@ -44,7 +42,6 @@ impl Theme {
         }
     }
 
-    // for some people who *really* care about eyes
     pub fn gruvbox() -> Self {
         Self {
             name:       "Gruvbox".to_string(),
@@ -59,7 +56,6 @@ impl Theme {
         }
     }
 
-    // our most soothing theme
     pub fn nord() -> Self {
         Self {
             name:       "Nord".to_string(),
@@ -74,7 +70,6 @@ impl Theme {
         }
     }
 
-    // just some fancy name lovers
     pub fn rose_pine() -> Self {
         Self {
             name:       "Rosé Pine".to_string(),

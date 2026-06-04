@@ -224,18 +224,15 @@ mod tests {
 
     #[test]
     fn utf8_does_not_panic_on_multibyte_char() {
-        // "café" -> "c"(0) "a"(1) "f"(2) "é"(3..=4) (é is 2 bytes)
         let text = "café";
         let spans = highlight_match(text, &[3], &test_theme());
         assert!(!spans.is_empty());
-        // The matched span must contain the full "é" (2 bytes)
         let matched: String = spans.iter().map(|s| s.content.as_ref()).collect();
         assert_eq!(matched, text);
     }
 
     #[test]
     fn utf8_emoji_does_not_split_codepoint() {
-        // "😀" is 4 bytes; index 0 is byte 0
         let text = "a😀b";
         let spans = highlight_match(text, &[0], &test_theme());
         let joined: String = spans.iter().map(|s| s.content.as_ref()).collect();
@@ -245,7 +242,6 @@ mod tests {
     #[test]
     fn out_of_range_index_is_ignored() {
         let spans = highlight_match("abc", &[100], &test_theme());
-        // Falls through to "no indices" branch since the loop breaks immediately
         assert_eq!(spans.len(), 1);
         assert_eq!(spans[0].content, "abc");
     }

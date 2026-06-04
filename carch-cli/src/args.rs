@@ -42,13 +42,10 @@ pub struct Cli {
     pub nord:             bool,
     #[arg(short = 'r', long, global = true, help = "Set theme to Rosé Pine")]
     pub rose_pine:        bool,
-    /// Save the given theme as your favorite and exit. It will be applied on
-    /// future launches (and `t` will be locked so you don't lose it by
-    /// accident). Use `--unfav` to clear.
+    /// Save the given theme as your favorite and exit. Use `--unfav` to clear.
     #[arg(long, global = true, value_name = "THEME")]
     pub fav:              Option<String>,
-    /// Clear the saved favorite theme. After this, `carch` will start with the
-    /// default theme.
+    /// Clear the saved favorite theme.
     #[arg(long, global = true, conflicts_with = "fav")]
     pub unfav:            bool,
 }
@@ -78,8 +75,7 @@ pub fn parse_args() -> Result<()> {
         return Ok(());
     }
 
-    // --fav and --unfav are one-shot operations: handle them before anything
-    // else (including the TUI / subcommands) and exit.
+    // --fav and --unfav are one-shot; handle them first and exit.
     if let Some(theme) = cli.fav.as_deref() {
         return save_favorite_theme(theme).map(|()| {
             println!("Favorite theme set to '{theme}'. It will be used on future launches.");
@@ -126,7 +122,7 @@ pub fn parse_args() -> Result<()> {
     } else if cli.rose_pine {
         "rose-pine".to_string()
     } else if let Some(fav) = load_favorite_theme() {
-        // Use the saved favorite, locked so the user can't lose it via `t`.
+        // Saved favorite is locked so `t` can't overwrite it.
         settings.theme_locked = true;
         fav
     } else {

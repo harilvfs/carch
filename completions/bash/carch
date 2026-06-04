@@ -17,28 +17,28 @@ _carch() {
                 cmd="carch"
                 ;;
             carch,check-update)
-                cmd="carch__check__update"
+                cmd="carch__subcmd__check__subcmd__update"
                 ;;
             carch,help)
-                cmd="carch__help"
+                cmd="carch__subcmd__help"
                 ;;
             carch,uninstall)
-                cmd="carch__uninstall"
+                cmd="carch__subcmd__uninstall"
                 ;;
             carch,update)
-                cmd="carch__update"
+                cmd="carch__subcmd__update"
                 ;;
-            carch__help,check-update)
-                cmd="carch__help__check__update"
+            carch__subcmd__help,check-update)
+                cmd="carch__subcmd__help__subcmd__check__subcmd__update"
                 ;;
-            carch__help,help)
-                cmd="carch__help__help"
+            carch__subcmd__help,help)
+                cmd="carch__subcmd__help__subcmd__help"
                 ;;
-            carch__help,uninstall)
-                cmd="carch__help__uninstall"
+            carch__subcmd__help,uninstall)
+                cmd="carch__subcmd__help__subcmd__uninstall"
                 ;;
-            carch__help,update)
-                cmd="carch__help__update"
+            carch__subcmd__help,update)
+                cmd="carch__subcmd__help__subcmd__update"
                 ;;
             *)
                 ;;
@@ -47,12 +47,16 @@ _carch() {
 
     case "${cmd}" in
         carch)
-            opts="-l -v -c -d -g -n -r -h --log --version --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help check-update update uninstall help"
+            opts="-l -v -c -d -g -n -r -h --log --version --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --fav --unfav --help check-update update uninstall help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 1 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
+                --fav)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 *)
                     COMPREPLY=()
                     ;;
@@ -60,13 +64,17 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__check__update)
-            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
+        carch__subcmd__check__subcmd__update)
+            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --fav --unfav --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
+                --fav)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 *)
                     COMPREPLY=()
                     ;;
@@ -74,7 +82,7 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__help)
+        carch__subcmd__help)
             opts="check-update update uninstall help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -88,7 +96,7 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__help__check__update)
+        carch__subcmd__help__subcmd__check__subcmd__update)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -102,7 +110,7 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__help__help)
+        carch__subcmd__help__subcmd__help)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -116,7 +124,7 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__help__uninstall)
+        carch__subcmd__help__subcmd__uninstall)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -130,7 +138,7 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__help__update)
+        carch__subcmd__help__subcmd__update)
             opts=""
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 3 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
@@ -144,13 +152,17 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__uninstall)
-            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
+        carch__subcmd__uninstall)
+            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --fav --unfav --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
+                --fav)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 *)
                     COMPREPLY=()
                     ;;
@@ -158,13 +170,17 @@ _carch() {
             COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
             return 0
             ;;
-        carch__update)
-            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --help"
+        carch__subcmd__update)
+            opts="-l -c -d -g -n -r -h --log --catppuccin-mocha --dracula --gruvbox --nord --rose-pine --fav --unfav --help"
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
                 COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
                 return 0
             fi
             case "${prev}" in
+                --fav)
+                    COMPREPLY=($(compgen -f "${cur}"))
+                    return 0
+                    ;;
                 *)
                     COMPREPLY=()
                     ;;
