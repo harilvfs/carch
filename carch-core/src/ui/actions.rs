@@ -155,12 +155,8 @@ impl App {
         }
 
         if self.mode == AppMode::Search {
-            let history = std::mem::take(&mut self.search.history);
-            let history_idx = std::mem::take(&mut self.search.history_idx);
-            self.search = SearchState { history, history_idx, ..SearchState::default() };
+            self.search = SearchState::default();
             self.perform_search();
-        } else {
-            self.search.history_idx = None;
         }
     }
 

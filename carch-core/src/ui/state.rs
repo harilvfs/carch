@@ -167,27 +167,6 @@ pub struct SearchState {
     pub selected_idx:    usize,
     pub autocomplete:    Option<String>,
     pub matcher:         SkimMatcherV2,
-    /// Recent queries, newest first.
-    pub history:         VecDeque<String>,
-    /// Index into `history` of the entry currently being browsed.
-    pub history_idx:     Option<usize>,
-}
-
-/// Max number of queries kept in search history.
-pub const SEARCH_HISTORY_MAX: usize = 5;
-
-impl SearchState {
-    pub fn push_history(&mut self, query: String) {
-        if query.is_empty() {
-            return;
-        }
-        self.history.retain(|q| q != &query);
-        self.history.push_front(query);
-        while self.history.len() > SEARCH_HISTORY_MAX {
-            self.history.pop_back();
-        }
-        self.history_idx = None;
-    }
 }
 
 #[derive(Default)]

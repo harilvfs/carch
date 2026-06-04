@@ -8,14 +8,9 @@ impl App {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc => {
-                let snapshot = self.search.input.clone();
                 self.toggle_search_mode();
-                if !snapshot.is_empty() {
-                    self.search.push_history(snapshot);
-                }
             }
             KeyCode::Enter if !self.search.results.is_empty() => {
-                let query = self.search.input.clone();
                 let selected_item = self.search.results[self.search.selected_idx].clone();
                 if self.log_mode {
                     info!(
@@ -38,7 +33,6 @@ impl App {
                 }
 
                 self.update_preview();
-                self.search.push_history(query);
                 self.toggle_search_mode();
                 self.focused_panel = FocusedPanel::Scripts;
                 self.mode = AppMode::Normal;
@@ -47,19 +41,6 @@ impl App {
                 self.search.selected_idx =
                     (self.search.selected_idx + 1) % self.search.results.len();
             }
-            KeyCode::Up if self.search.input.is_empty() && !self.search.history.is_empty() => {
-                let next = match self.search.history_idx {
-                    None => 0,
-                    Some(i) => (i + 1).min(self.search.history.len() - 1),
-                };
-                self.search.history_idx = Some(next);
-                let recalled = self.search.history[next].clone();
-                self.search.input = recalled;
-                self.search.cursor_position = self.search.input.len();
-                self.search.autocomplete = None;
-                self.perform_search();
-                self.update_autocomplete();
-            }
             KeyCode::Up if !self.search.results.is_empty() => {
                 self.search.selected_idx = if self.search.selected_idx > 0 {
                     self.search.selected_idx - 1
@@ -67,30 +48,10 @@ impl App {
                     self.search.results.len() - 1
                 };
             }
-            KeyCode::Down if self.search.input.is_empty() && self.search.history_idx.is_some() => {
-                // Step forwards through history; past newest clears the input.
-                let cur = self.search.history_idx.expect("checked is_some above");
-                if cur == 0 {
-                    self.search.history_idx = None;
-                    self.search.input.clear();
-                    self.search.cursor_position = 0;
-                    self.perform_search();
-                } else {
-                    let next = cur - 1;
-                    self.search.history_idx = Some(next);
-                    let recalled = self.search.history[next].clone();
-                    self.search.input = recalled;
-                    self.search.cursor_position = self.search.input.len();
-                    self.search.autocomplete = None;
-                    self.perform_search();
-                    self.update_autocomplete();
-                }
-            }
             KeyCode::Tab => {
                 if let Some(autocomplete) = self.search.autocomplete.take() {
                     self.search.input = autocomplete;
                     self.search.cursor_position = self.search.input.len();
-                    self.search.history_idx = None;
                     self.perform_search();
                     self.update_autocomplete();
                 }
@@ -98,7 +59,6 @@ impl App {
             KeyCode::Char(c) => {
                 self.search.input.push(c);
                 self.search.cursor_position += 1;
-                self.search.history_idx = None;
                 self.perform_search();
                 self.update_autocomplete();
                 self.search.selected_idx = 0;
@@ -106,7 +66,6 @@ impl App {
             KeyCode::Backspace if self.search.cursor_position > 0 => {
                 self.search.input.remove(self.search.cursor_position - 1);
                 self.search.cursor_position -= 1;
-                self.search.history_idx = None;
                 self.perform_search();
                 self.update_autocomplete();
                 self.search.selected_idx = 0;
@@ -126,7 +85,6 @@ impl App {
                 {
                     self.search.input = self.search.autocomplete.take().unwrap();
                     self.search.cursor_position = self.search.input.len();
-                    self.search.history_idx = None;
                     self.perform_search();
                 }
             }

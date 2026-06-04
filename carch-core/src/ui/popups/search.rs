@@ -125,29 +125,12 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         height: popup_layout[2].height.saturating_sub(1),
     };
 
-    let help_spans = if app.search.input.is_empty() && !app.search.history.is_empty() {
-        let recent = app.search.history.iter().take(3).cloned().collect::<Vec<_>>().join(", ");
-        vec![
-            Span::styled(
-                format!("Recent: {recent}  "),
-                Style::default().fg(app.theme.secondary).add_modifier(Modifier::DIM),
-            ),
-            Span::styled("\u{2191}: Recall  ", Style::default().fg(app.theme.foreground)),
-            Span::styled("Tab: Complete  ", Style::default().fg(app.theme.foreground)),
-            Span::styled("Enter: Select  ", Style::default().fg(app.theme.foreground)),
-            Span::styled("Esc: Cancel", Style::default().fg(app.theme.foreground)),
-        ]
-    } else {
-        vec![
-            Span::styled(
-                "\u{2191}/\u{2193}: Navigate  ",
-                Style::default().fg(app.theme.foreground),
-            ),
-            Span::styled("Tab: Complete  ", Style::default().fg(app.theme.foreground)),
-            Span::styled("Enter: Select  ", Style::default().fg(app.theme.foreground)),
-            Span::styled("Esc: Cancel", Style::default().fg(app.theme.foreground)),
-        ]
-    };
+    let help_spans = vec![
+        Span::styled("\u{2191}/\u{2193}: Navigate  ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Tab: Complete  ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Enter: Select  ", Style::default().fg(app.theme.foreground)),
+        Span::styled("Esc: Cancel", Style::default().fg(app.theme.foreground)),
+    ];
 
     let help_text = Paragraph::new(Line::from(help_spans)).alignment(Alignment::Center);
 
