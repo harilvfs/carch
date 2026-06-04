@@ -9,12 +9,15 @@ use crate::ui::widgets::paint_rounded_highlight;
 
 fn create_block<'a>(title: &'a str, is_focused: bool, app: &App) -> Block<'a> {
     let border_color = if is_focused { app.theme.primary } else { app.theme.secondary };
-    Block::default()
+    let mut block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title(title)
         .border_style(Style::default().fg(border_color))
-        .style(Style::default().bg(Color::Reset))
+        .style(Style::default().bg(Color::Reset));
+    if !title.is_empty() {
+        block = block.title(title);
+    }
+    block
 }
 
 // Marker for a multi-selected script.
@@ -27,7 +30,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let title = if app.multi_select.enabled {
         format!("[{} Selected]", app.multi_select.scripts.len())
     } else {
-        "Scripts (p for preview)".to_string()
+        String::new()
     };
     let block = create_block(&title, is_focused, app);
 
