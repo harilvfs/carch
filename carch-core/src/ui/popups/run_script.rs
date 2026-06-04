@@ -1,23 +1,27 @@
+use std::io::Write;
+use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
+
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use log::info;
-use oneshot::Receiver;
 use portable_pty::{
     ChildKiller, CommandBuilder, ExitStatus, MasterPty, NativePtySystem, PtySize, PtySystem,
 };
 use ratatui::prelude::*;
 use ratatui::symbols::border;
 use ratatui::widgets::{Block, Clear, Widget};
-use std::io::Write;
-use std::path::PathBuf;
-use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
 use vt100_ctt::Parser;
 
+use crate::error::{CarchError, Result};
 use crate::ui::theme::Theme;
 
 const SCROLLBACK_LEN: usize = 1000;
 const PAGE_STEP: usize = 10;
+
+type ChildKillerSender = oneshot::Sender<Option<Box<dyn ChildKiller + Send + Sync>>>;
+type ChildKillerReceiver = oneshot::Receiver<Option<Box<dyn ChildKiller + Send + Sync>>>;
 
 pub enum PopupEvent {
     Close,
@@ -27,7 +31,7 @@ pub enum PopupEvent {
 pub struct RunScriptPopup {
     buffer:         Arc<Mutex<Vec<u8>>>,
     command_thread: Option<JoinHandle<ExitStatus>>,
-    child_killer:   Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
+    child_killer:   Option<ChildKillerReceiver>,
     _reader_thread: JoinHandle<()>,
     pty_master:     Box<dyn MasterPty + Send>,
     writer:         Box<dyn Write + Send>,
@@ -45,7 +49,7 @@ pub struct RunScriptPopup {
 }
 
 impl RunScriptPopup {
-    pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Self {
+    pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Result<Self> {
         let pty_system = NativePtySystem::default();
 
         let mut cmd = CommandBuilder::new("bash");
@@ -58,17 +62,32 @@ impl RunScriptPopup {
                 pixel_width:  0,
                 pixel_height: 0,
             })
-            .unwrap();
+            .map_err(|e| CarchError::Pty(format!("openpty: {e}")))?;
 
-        let (tx, rx) = oneshot::channel();
-        let command_handle = std::thread::spawn(move || {
-            let mut child = pair.slave.spawn_command(cmd).unwrap();
-            let killer = child.clone_killer();
-            tx.send(killer).unwrap();
-            child.wait().unwrap()
+        let (tx, rx): (ChildKillerSender, ChildKillerReceiver) = oneshot::channel();
+        let pair_slave = pair.slave;
+        let command_handle = std::thread::spawn(move || -> ExitStatus {
+            match pair_slave.spawn_command(cmd) {
+                Ok(mut child) => {
+                    let killer = child.clone_killer();
+                    let _ = tx.send(Some(killer));
+                    child.wait().unwrap_or_else(|e| {
+                        log::error!("child.wait failed: {e}");
+                        ExitStatus::with_exit_code(1)
+                    })
+                }
+                Err(e) => {
+                    log::error!("spawn_command failed: {e}");
+                    let _ = tx.send(None);
+                    ExitStatus::with_exit_code(1)
+                }
+            }
         });
 
-        let mut reader = pair.master.try_clone_reader().unwrap();
+        let mut reader = pair
+            .master
+            .try_clone_reader()
+            .map_err(|e| CarchError::Pty(format!("try_clone_reader: {e}")))?;
 
         let command_buffer: Arc<Mutex<Vec<u8>>> = Arc::new(Mutex::new(Vec::new()));
         let reader_handle = {
@@ -79,7 +98,10 @@ impl RunScriptPopup {
                     if size == 0 {
                         break;
                     }
-                    let mut mutex = command_buffer.lock().unwrap();
+                    let mut mutex = match command_buffer.lock() {
+                        Ok(g) => g,
+                        Err(p) => p.into_inner(),
+                    };
                     let data = &buf[0..size];
                     if log_mode {
                         info!("{}", String::from_utf8_lossy(data));
@@ -89,8 +111,10 @@ impl RunScriptPopup {
             })
         };
 
-        let writer = pair.master.take_writer().unwrap();
-        Self {
+        let writer =
+            pair.master.take_writer().map_err(|e| CarchError::Pty(format!("take_writer: {e}")))?;
+
+        Ok(Self {
             buffer: command_buffer,
             command_thread: Some(command_handle),
             child_killer: Some(rx),
@@ -108,7 +132,7 @@ impl RunScriptPopup {
             auto_scroll: true,
             theme,
             was_finished: false,
-        }
+        })
     }
 
     pub fn has_new_data(&mut self) -> bool {
@@ -229,7 +253,7 @@ impl RunScriptPopup {
         }
 
         let new_bytes: Vec<u8> = {
-            let buf = self.buffer.lock().unwrap();
+            let buf = self.buffer.lock().unwrap_or_else(|p| p.into_inner());
             if self.processed_len <= buf.len() {
                 buf[self.processed_len..].to_vec()
             } else {
@@ -260,11 +284,11 @@ impl RunScriptPopup {
     fn get_exit_status(&mut self) -> ExitStatus {
         if self.command_thread.is_some() {
             let handle = self.command_thread.take().unwrap();
-            let exit_status = handle.join().unwrap();
+            let exit_status = handle.join().unwrap_or_else(|_| ExitStatus::with_exit_code(1));
             self.status = Some(exit_status.clone());
             exit_status
         } else {
-            self.status.as_ref().unwrap().clone()
+            self.status.clone().unwrap_or_else(|| ExitStatus::with_exit_code(1))
         }
     }
 
@@ -282,7 +306,7 @@ impl RunScriptPopup {
     pub fn kill_child(&mut self) {
         if !self.is_finished()
             && let Some(killer_rx) = self.child_killer.take()
-            && let Ok(mut killer) = killer_rx.recv()
+            && let Ok(Some(mut killer)) = killer_rx.recv()
         {
             let _ = killer.kill();
         }
@@ -320,6 +344,19 @@ impl RunScriptPopup {
             _ => return,
         };
         let _ = self.writer.write_all(&input_bytes);
+    }
+}
+
+impl Drop for RunScriptPopup {
+    fn drop(&mut self) {
+        // Best-effort kill so a child isn't left orphaned if the popup is
+        // dropped before the script finishes.
+        if !self.is_finished()
+            && let Some(rx) = self.child_killer.take()
+            && let Ok(Some(mut killer)) = rx.recv()
+        {
+            let _ = killer.kill();
+        }
     }
 }
 

@@ -1,27 +1,27 @@
 use carch_core::error::{CarchError, Result};
+use carch_core::version;
 use log::info;
+use serde_json::Value;
 use std::fs;
 use std::io::{self, Write};
 use std::process::{Command, Stdio};
 use tempfile::Builder;
 
-use carch_core::version;
-
 pub fn check_for_updates() -> Result<()> {
     println!("Checking for updates...");
 
-    let current_version = env!("CARGO_PKG_VERSION");
+    let current_version = version::current_version();
 
     match version::get_latest_version() {
         Ok(latest_version) => {
             println!("Current version: {current_version}");
             println!("Latest version: {latest_version}");
 
-            if latest_version != current_version {
+            if latest_version == current_version {
+                println!("\nYou are using the latest version of Carch.");
+            } else {
                 println!("\nUpdate available!");
                 println!("Run 'carch update' to update to the latest version.");
-            } else {
-                println!("\nYou are using the latest version of Carch.");
             }
         }
         Err(e) => {
@@ -92,22 +92,22 @@ fn run_command(command: &mut Command) -> Result<()> {
     Ok(())
 }
 
+/// Find the first release asset whose `name` ends with `asset_pattern`.
 fn get_latest_release_url(asset_pattern: &str) -> Result<String> {
-    let client = reqwest::blocking::Client::new();
-    let body = client
-        .get("https://api.github.com/repos/harilvfs/carch/releases/latest")
-        .header("User-Agent", "carch-cli")
-        .send()?
-        .text()?;
+    let client = reqwest::blocking::Client::builder().user_agent("carch-cli").build()?;
+    let body: Value =
+        client.get("https://api.github.com/repos/harilvfs/carch/releases/latest").send()?.json()?;
 
-    for line in body.lines() {
-        if !line.contains("browser_download_url") {
-            continue;
-        }
-        for token in line.split('"') {
-            if token.starts_with("https://") && token.ends_with(asset_pattern) {
-                return Ok(token.to_string());
-            }
+    let assets = body
+        .get("assets")
+        .and_then(Value::as_array)
+        .ok_or_else(|| CarchError::Command("Latest release has no 'assets' field".to_string()))?;
+
+    for asset in assets {
+        let name = asset.get("name").and_then(Value::as_str).unwrap_or("");
+        let url = asset.get("browser_download_url").and_then(Value::as_str).unwrap_or("");
+        if !url.is_empty() && name.ends_with(asset_pattern) {
+            return Ok(url.to_string());
         }
     }
 
@@ -124,8 +124,7 @@ fn termux_install_deb(deb_arch: &str) -> Result<()> {
     let pattern = format!("_{deb_arch}.deb");
     let deb_url = get_latest_release_url(&pattern)?;
 
-    let tmp_dir =
-        std::env::var("PREFIX").map(|p| format!("{p}/tmp")).unwrap_or_else(|_| "/tmp".into());
+    let tmp_dir = std::env::var("PREFIX").map_or_else(|_| "/tmp".into(), |p| format!("{p}/tmp"));
 
     let mut tmp_deb = Builder::new().prefix("carch_").suffix(".deb").tempfile_in(&tmp_dir)?;
 
@@ -138,7 +137,7 @@ fn termux_install_deb(deb_arch: &str) -> Result<()> {
     println!("==> Installing .deb package...");
     run_command(Command::new("dpkg").arg("-i").arg(&tmp_path))?;
 
-    fs::remove_file(&tmp_path).ok();
+    let _ = fs::remove_file(&tmp_path);
     Ok(())
 }
 

@@ -12,6 +12,23 @@ static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 
 const EXECUTABLE_MODE: u32 = 0o755;
 
+/// Returns `true` when the current process effective UID is 0.
+///
+/// Unlike `$USER == "root"`, this is the canonical POSIX check and is not
+/// affected by `sudo -E`, broken login shells or unusual `su` configurations.
+#[must_use]
+#[cfg(unix)]
+pub fn is_running_as_root() -> bool {
+    // SAFETY: `geteuid` is a thread-safe POSIX call with no preconditions.
+    unsafe { libc::geteuid() == 0 }
+}
+
+#[must_use]
+#[cfg(not(unix))]
+pub fn is_running_as_root() -> bool {
+    false
+}
+
 pub fn extract_scripts(temp_path: &Path) -> Result<()> {
     let modules_dir = temp_path.join("modules");
     fs::create_dir_all(&modules_dir)
@@ -20,9 +37,7 @@ pub fn extract_scripts(temp_path: &Path) -> Result<()> {
     extract_dir_recursive(&EMBEDDED_DIR, &modules_dir)?;
 
     let preview_link = temp_path.join("preview_scripts");
-    if fs::remove_file(&preview_link).is_err() {
-        // ignore if the link doesn't exist yet
-    }
+    let _ = fs::remove_file(&preview_link);
 
     std::os::unix::fs::symlink(&modules_dir, &preview_link)
         .map_err(|e| CarchError::Symlink(e.to_string()))?;

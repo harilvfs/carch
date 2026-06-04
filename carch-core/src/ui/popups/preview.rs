@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
@@ -9,6 +11,9 @@ use syntect::parsing::SyntaxSet;
 use syntect::util::LinesWithEndings;
 
 use crate::ui::state::App;
+
+static SYNTAX_SET: LazyLock<SyntaxSet> = LazyLock::new(SyntaxSet::load_defaults_newlines);
+static THEME_SET: LazyLock<ThemeSet> = LazyLock::new(ThemeSet::load_defaults);
 
 fn div_ceil(a: u16, b: u16) -> u16 {
     if b == 0 { 0 } else { a.div_ceil(b) }
@@ -57,31 +62,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         if let Some(cached) = app.preview.cache.get(script_path) {
             cached.clone()
         } else {
-            let ps = SyntaxSet::load_defaults_newlines();
-            let ts = ThemeSet::load_defaults();
-            let syntax = ps.find_syntax_by_extension("sh").unwrap();
-            let theme = &ts.themes["base16-ocean.dark"];
-
-            let mut highlighter = HighlightLines::new(syntax, theme);
-            let mut lines = Vec::new();
-
-            for line in LinesWithEndings::from(&app.preview.content) {
-                let ranges: Vec<(syntect::highlighting::Style, &str)> =
-                    highlighter.highlight_line(line, &ps).unwrap();
-                let mut spans = Vec::new();
-                for (style, text) in ranges {
-                    spans.push(Span::styled(
-                        text.to_string(),
-                        Style::default().fg(Color::Rgb(
-                            style.foreground.r,
-                            style.foreground.g,
-                            style.foreground.b,
-                        )),
-                    ));
-                }
-                lines.push(Line::from(spans));
-            }
-            let text = Text::from(lines);
+            let text = highlight_script(&app.preview.content, &SYNTAX_SET, &THEME_SET);
             app.preview.cache.insert(script_path.clone(), text.clone());
             text
         }
@@ -128,4 +109,36 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     .alignment(Alignment::Center);
 
     f.render_widget(help_text, chunks[1]);
+}
+
+fn highlight_script(content: &str, ps: &SyntaxSet, ts: &ThemeSet) -> Text<'static> {
+    let syntax = ps.find_syntax_by_extension("sh").unwrap_or_else(|| ps.find_syntax_plain_text());
+    let theme = ts
+        .themes
+        .get("base16-ocean.dark")
+        .or_else(|| ts.themes.values().next())
+        .expect("syntect theme set is non-empty");
+
+    let mut highlighter = HighlightLines::new(syntax, theme);
+    let mut lines = Vec::new();
+
+    for line in LinesWithEndings::from(content) {
+        let ranges = highlighter.highlight_line(line, ps).unwrap_or_default();
+        let spans: Vec<_> = ranges
+            .into_iter()
+            .map(|(style, text)| {
+                Span::styled(
+                    text.to_string(),
+                    Style::default().fg(Color::Rgb(
+                        style.foreground.r,
+                        style.foreground.g,
+                        style.foreground.b,
+                    )),
+                )
+            })
+            .collect();
+        lines.push(Line::from(spans));
+    }
+
+    Text::from(lines)
 }

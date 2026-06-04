@@ -7,7 +7,7 @@ use super::state::{
 };
 use fuzzy_matcher::FuzzyMatcher;
 
-impl<'a> App<'a> {
+impl App {
     pub fn load_scripts(&mut self, modules_dir: &Path) -> io::Result<()> {
         let mut categories = Vec::new();
         let mut all_scripts = std::collections::HashMap::new();
@@ -155,8 +155,16 @@ impl<'a> App<'a> {
         }
 
         if self.mode == AppMode::Search {
-            self.search = SearchState::default();
+            // Fresh input on entry, but keep history across re-opens.
+            let history = std::mem::take(&mut self.search.history);
+            let history_idx = std::mem::take(&mut self.search.history_idx);
+            self.search = SearchState { history, history_idx, ..SearchState::default() };
             self.perform_search();
+        } else {
+            // Leaving search mode: keep `input` so re-opening shows the last
+            // query (the user can `Backspace` it away if they want a fresh
+            // search). `history_idx` is invalidated.
+            self.search.history_idx = None;
         }
     }
 
@@ -280,6 +288,29 @@ impl<'a> App<'a> {
         self.multi_select.scripts.contains(&script_path.to_path_buf())
     }
 
+    /// Returns `true` if the script's category has a `desc.toml` entry
+    /// describing it. Used to render a status indicator in the script list.
+    #[must_use]
+    pub fn has_description(&self, category: &str, script_name: &str) -> bool {
+        let desc_path = self.modules_dir.join(category).join("desc.toml");
+        let Ok(content) = std::fs::read_to_string(&desc_path) else {
+            return false;
+        };
+        let Ok(table) = content.parse::<toml::Table>() else {
+            return false;
+        };
+        let Some(stem) = std::path::Path::new(script_name).file_stem().and_then(|s| s.to_str())
+        else {
+            return false;
+        };
+        table
+            .get(stem)
+            .and_then(|v| v.as_table())
+            .and_then(|t| t.get("description"))
+            .and_then(|v| v.as_str())
+            .is_some()
+    }
+
     pub fn toggle_help_mode(&mut self) {
         self.mode = if self.mode == AppMode::Help { AppMode::Normal } else { AppMode::Help };
     }
@@ -301,15 +332,17 @@ impl<'a> App<'a> {
     pub fn bottom(&mut self) {
         match self.focused_panel {
             FocusedPanel::Categories => {
-                let last_idx = self.categories.items.len() - 1;
-                self.categories.state.select(Some(last_idx));
-                self.update_script_list();
-                self.update_preview();
+                if let Some(last_idx) = self.categories.items.len().checked_sub(1) {
+                    self.categories.state.select(Some(last_idx));
+                    self.update_script_list();
+                    self.update_preview();
+                }
             }
             FocusedPanel::Scripts => {
-                let last_idx = self.scripts.items.len() - 1;
-                self.scripts.state.select(Some(last_idx));
-                self.update_preview();
+                if let Some(last_idx) = self.scripts.items.len().checked_sub(1) {
+                    self.scripts.state.select(Some(last_idx));
+                    self.update_preview();
+                }
             }
         }
     }

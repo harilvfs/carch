@@ -4,11 +4,22 @@ use log::info;
 use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
 
-impl<'a> App<'a> {
+impl App {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
-            KeyCode::Esc => self.toggle_search_mode(),
+            KeyCode::Esc => {
+                // Remember the query before exiting so the user can recall it
+                // next time they open the popup.
+                let snapshot = self.search.input.clone();
+                self.toggle_search_mode();
+                if !snapshot.is_empty() {
+                    // After toggle, the SearchState was reset, so push via
+                    // the live state. `input` is preserved across toggles.
+                    self.search.push_history(snapshot);
+                }
+            }
             KeyCode::Enter if !self.search.results.is_empty() => {
+                let query = self.search.input.clone();
                 let selected_item = self.search.results[self.search.selected_idx].clone();
                 if self.log_mode {
                     info!(
@@ -31,6 +42,7 @@ impl<'a> App<'a> {
                 }
 
                 self.update_preview();
+                self.search.push_history(query);
                 self.toggle_search_mode();
                 self.focused_panel = FocusedPanel::Scripts;
                 self.mode = AppMode::Normal;
@@ -39,6 +51,20 @@ impl<'a> App<'a> {
                 self.search.selected_idx =
                     (self.search.selected_idx + 1) % self.search.results.len();
             }
+            KeyCode::Up if self.search.input.is_empty() && !self.search.history.is_empty() => {
+                // Browse history backwards (older entries).
+                let next = match self.search.history_idx {
+                    None => 0,
+                    Some(i) => (i + 1).min(self.search.history.len() - 1),
+                };
+                self.search.history_idx = Some(next);
+                let recalled = self.search.history[next].clone();
+                self.search.input = recalled;
+                self.search.cursor_position = self.search.input.len();
+                self.search.autocomplete = None;
+                self.perform_search();
+                self.update_autocomplete();
+            }
             KeyCode::Up if !self.search.results.is_empty() => {
                 self.search.selected_idx = if self.search.selected_idx > 0 {
                     self.search.selected_idx - 1
@@ -46,10 +72,31 @@ impl<'a> App<'a> {
                     self.search.results.len() - 1
                 };
             }
+            KeyCode::Down if self.search.input.is_empty() && self.search.history_idx.is_some() => {
+                // Browse history forwards (newer entries). When we step past
+                // the newest entry, clear the input.
+                let cur = self.search.history_idx.expect("checked is_some above");
+                if cur == 0 {
+                    self.search.history_idx = None;
+                    self.search.input.clear();
+                    self.search.cursor_position = 0;
+                    self.perform_search();
+                } else {
+                    let next = cur - 1;
+                    self.search.history_idx = Some(next);
+                    let recalled = self.search.history[next].clone();
+                    self.search.input = recalled;
+                    self.search.cursor_position = self.search.input.len();
+                    self.search.autocomplete = None;
+                    self.perform_search();
+                    self.update_autocomplete();
+                }
+            }
             KeyCode::Tab => {
                 if let Some(autocomplete) = self.search.autocomplete.take() {
                     self.search.input = autocomplete;
                     self.search.cursor_position = self.search.input.len();
+                    self.search.history_idx = None;
                     self.perform_search();
                     self.update_autocomplete();
                 }
@@ -57,6 +104,7 @@ impl<'a> App<'a> {
             KeyCode::Char(c) => {
                 self.search.input.push(c);
                 self.search.cursor_position += 1;
+                self.search.history_idx = None;
                 self.perform_search();
                 self.update_autocomplete();
                 self.search.selected_idx = 0;
@@ -64,6 +112,7 @@ impl<'a> App<'a> {
             KeyCode::Backspace if self.search.cursor_position > 0 => {
                 self.search.input.remove(self.search.cursor_position - 1);
                 self.search.cursor_position -= 1;
+                self.search.history_idx = None;
                 self.perform_search();
                 self.update_autocomplete();
                 self.search.selected_idx = 0;
@@ -83,6 +132,7 @@ impl<'a> App<'a> {
                 {
                     self.search.input = self.search.autocomplete.take().unwrap();
                     self.search.cursor_position = self.search.input.len();
+                    self.search.history_idx = None;
                     self.perform_search();
                 }
             }
@@ -206,16 +256,27 @@ impl<'a> App<'a> {
                 }
 
                 if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
-                    self.script_execution_queue = self.multi_select.scripts.clone();
+                    self.script_execution_queue = self.multi_select.scripts.clone().into();
                 } else if let Some(script_path) = self.get_script_path() {
-                    self.script_execution_queue.push(script_path);
+                    self.script_execution_queue.push_back(script_path);
                 }
 
                 if !self.script_execution_queue.is_empty() {
-                    let script_path = self.script_execution_queue.remove(0);
-                    let popup = RunScriptPopup::new(script_path, self.log_mode, self.theme.clone());
-                    self.run_script_popup = Some(popup);
-                    self.mode = AppMode::RunScript;
+                    let script_path = self
+                        .script_execution_queue
+                        .pop_front()
+                        .expect("queue checked is_empty above");
+                    match RunScriptPopup::new(script_path, self.log_mode, self.theme.clone()) {
+                        Ok(popup) => {
+                            self.run_script_popup = Some(popup);
+                            self.mode = AppMode::RunScript;
+                        }
+                        Err(e) => {
+                            log::error!("Failed to start script popup: {e}");
+                            self.run_script_popup = None;
+                            self.mode = AppMode::Normal;
+                        }
+                    }
                 } else {
                     self.mode = AppMode::Normal;
                 }

@@ -33,6 +33,7 @@ fn main() -> Result<(), anyhow::Error> {
             cmd!(sh, "cargo +nightly check --workspace --locked").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --no-default-features").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --all-features").run()?;
+            cmd!(sh, "cargo +nightly test --workspace --locked").run()?;
             cmd!(sh, "taplo fmt --check").run()?;
             cmd!(sh, "cargo deny check").run()?;
             Ok(())

@@ -1,16 +1,22 @@
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
+use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
-use crate::ui::state::App;
+use crate::ui::state::{App, FocusedPanel};
 
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
+    let border_color = if app.focused_panel == FocusedPanel::Categories {
+        app.theme.primary
+    } else {
+        app.theme.secondary
+    };
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title("Categories")
-        .border_style(Style::default().fg(app.theme.primary))
+        .border_style(Style::default().fg(border_color))
         .style(Style::default().bg(Color::Reset));
 
     let items: Vec<ListItem> = app
@@ -18,14 +24,10 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
         .items
         .iter()
         .map(|category_name| {
-            let icon = " 󰉋 ";
-            let colored_icon =
-                ratatui::text::Span::styled(icon, Style::default().fg(app.theme.primary));
-            let text = ratatui::text::Span::styled(
-                category_name.as_str(),
-                Style::default().fg(app.theme.primary),
-            );
-            let line = ratatui::text::Line::from(vec![colored_icon, text]);
+            let line = Line::from(vec![
+                Span::styled("  ", Style::default().fg(app.theme.primary)),
+                Span::styled(category_name.as_str(), Style::default().fg(app.theme.primary)),
+            ]);
             ListItem::new(line)
         })
         .collect();

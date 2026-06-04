@@ -1,18 +1,25 @@
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
+use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::{App, FocusedPanel};
 
-fn create_block<'a>(title: &'a str, _is_focused: bool, app: &App) -> Block<'a> {
+fn create_block<'a>(title: &'a str, is_focused: bool, app: &App) -> Block<'a> {
+    let border_color = if is_focused { app.theme.primary } else { app.theme.secondary };
     Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
         .title(title)
-        .border_style(Style::default().fg(app.theme.primary))
+        .border_style(Style::default().fg(border_color))
         .style(Style::default().bg(Color::Reset))
 }
+
+/// Marker shown next to a selected script in multi-select mode.
+const SELECTED_MARKER: &str = "\u{2022} "; // •
+/// Marker shown next to a script that has a description in `desc.toml`.
+const DESC_MARKER: &str = " (d)";
 
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Scripts;
@@ -28,36 +35,34 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
         .items
         .iter()
         .map(|item| {
-            let icon = " ";
-            let script_name_style = Style::default().fg(app.theme.secondary);
-            let script_name = ratatui::text::Span::styled(&item.name, script_name_style);
+            let is_selected = app.multi_select.enabled && app.is_script_selected(&item.path);
+            let has_desc = app.has_description(&item.category, &item.name);
 
-            if app.multi_select.enabled {
-                let is_selected = app.is_script_selected(&item.path);
-                let (suffix, script_name_style) = if is_selected {
-                    (" ", Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD))
-                } else {
-                    ("", Style::default().fg(app.theme.secondary))
-                };
+            let prefix = if is_selected { SELECTED_MARKER } else { "  " };
+            let suffix = if has_desc { DESC_MARKER } else { "" };
 
-                let icon_style =
-                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
-
-                let line = ratatui::text::Line::from(vec![
-                    ratatui::text::Span::styled(icon, icon_style),
-                    ratatui::text::Span::styled(&item.name, script_name_style),
-                    ratatui::text::Span::styled(suffix, script_name_style),
-                ]);
-                ListItem::new(line)
+            let marker_color = if is_selected { app.theme.warning } else { app.theme.secondary };
+            let name_color = if is_selected {
+                app.theme.secondary
+            } else if has_desc {
+                app.theme.foreground
             } else {
-                let icon_style =
-                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
-                let line = ratatui::text::Line::from(vec![
-                    ratatui::text::Span::styled(icon, icon_style),
-                    script_name,
-                ]);
-                ListItem::new(line)
-            }
+                app.theme.secondary
+            };
+            let name_modifier = if is_selected { Modifier::BOLD } else { Modifier::empty() };
+
+            let line = Line::from(vec![
+                Span::styled(prefix, Style::default().fg(marker_color)),
+                Span::styled(
+                    &item.name,
+                    Style::default().fg(name_color).add_modifier(name_modifier),
+                ),
+                Span::styled(
+                    suffix,
+                    Style::default().fg(app.theme.accent).add_modifier(Modifier::DIM),
+                ),
+            ]);
+            ListItem::new(line)
         })
         .collect();
 

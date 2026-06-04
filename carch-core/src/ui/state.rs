@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 use std::path::PathBuf;
 
 use fuzzy_matcher::skim::SkimMatcherV2;
@@ -8,7 +8,7 @@ use ratatui::text::Text;
 use super::popups::run_script::RunScriptPopup;
 use super::theme::Theme;
 
-#[derive(PartialEq, Debug, Clone, Copy)]
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum AppMode {
     Normal,
     Search,
@@ -20,7 +20,7 @@ pub enum AppMode {
     RootWarning,
 }
 
-#[derive(PartialEq, Debug, Clone, Copy)]
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
 pub enum FocusedPanel {
     Categories,
     Scripts,
@@ -52,31 +52,80 @@ impl<T> StatefulList<T> {
     }
 
     pub fn next(&mut self) {
+        if self.items.is_empty() {
+            self.state.select(None);
+            return;
+        }
         let i = match self.state.selected() {
-            Some(i) => {
-                if i >= self.items.len() - 1 {
-                    0
-                } else {
-                    i + 1
-                }
-            }
-            None => 0,
+            Some(i) if i + 1 < self.items.len() => i + 1,
+            _ => 0,
         };
         self.state.select(Some(i));
     }
 
     pub fn previous(&mut self) {
+        if self.items.is_empty() {
+            self.state.select(None);
+            return;
+        }
+        let last = self.items.len() - 1;
         let i = match self.state.selected() {
-            Some(i) => {
-                if i == 0 {
-                    self.items.len() - 1
-                } else {
-                    i - 1
-                }
-            }
-            None => 0,
+            Some(0) | None => last,
+            Some(i) => i - 1,
         };
         self.state.select(Some(i));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn next_on_empty_does_not_panic() {
+        let mut list: StatefulList<u32> = StatefulList::new();
+        list.next();
+        list.next();
+        list.next();
+        assert_eq!(list.state.selected(), None);
+    }
+
+    #[test]
+    fn previous_on_empty_does_not_panic() {
+        let mut list: StatefulList<u32> = StatefulList::new();
+        list.previous();
+        list.previous();
+        assert_eq!(list.state.selected(), None);
+    }
+
+    #[test]
+    fn next_wraps_to_start() {
+        let mut list = StatefulList::with_items(vec!["a", "b", "c"]);
+        assert_eq!(list.state.selected(), Some(0));
+        list.next();
+        assert_eq!(list.state.selected(), Some(1));
+        list.next();
+        assert_eq!(list.state.selected(), Some(2));
+        list.next();
+        assert_eq!(list.state.selected(), Some(0));
+    }
+
+    #[test]
+    fn previous_wraps_to_end() {
+        let mut list = StatefulList::with_items(vec!["a", "b", "c"]);
+        list.previous();
+        assert_eq!(list.state.selected(), Some(2));
+        list.previous();
+        assert_eq!(list.state.selected(), Some(1));
+    }
+
+    #[test]
+    fn single_item_next_keeps_selection() {
+        let mut list = StatefulList::with_items(vec!["only"]);
+        list.next();
+        assert_eq!(list.state.selected(), Some(0));
+        list.previous();
+        assert_eq!(list.state.selected(), Some(0));
     }
 }
 
@@ -96,11 +145,11 @@ pub struct UiOptions {
 }
 
 #[derive(Default)]
-pub struct PreviewState<'a> {
+pub struct PreviewState {
     pub content:    String,
     pub scroll:     u16,
     pub max_scroll: u16,
-    pub cache:      HashMap<PathBuf, Text<'a>>,
+    pub cache:      HashMap<PathBuf, Text<'static>>,
 }
 
 #[derive(Clone, Debug)]
@@ -118,6 +167,30 @@ pub struct SearchState {
     pub selected_idx:    usize,
     pub autocomplete:    Option<String>,
     pub matcher:         SkimMatcherV2,
+    /// Last N queries the user submitted, most recent first.
+    pub history:         VecDeque<String>,
+    /// Index into `history` of the entry currently shown in the input.
+    /// `None` means we are not currently browsing history.
+    pub history_idx:     Option<usize>,
+}
+
+/// Maximum number of queries retained in search history.
+pub const SEARCH_HISTORY_MAX: usize = 5;
+
+impl SearchState {
+    /// Push a query onto the history, deduplicating and capping at the max.
+    pub fn push_history(&mut self, query: String) {
+        if query.is_empty() {
+            return;
+        }
+        // Move-to-front: if already present, remove the old entry first.
+        self.history.retain(|q| q != &query);
+        self.history.push_front(query);
+        while self.history.len() > SEARCH_HISTORY_MAX {
+            self.history.pop_back();
+        }
+        self.history_idx = None;
+    }
 }
 
 #[derive(Default)]
@@ -139,7 +212,7 @@ pub struct DescriptionState {
     pub max_scroll: u16,
 }
 
-pub struct App<'a> {
+pub struct App {
     pub mode:          AppMode,
     pub quit:          bool,
     pub focused_panel: FocusedPanel,
@@ -153,13 +226,13 @@ pub struct App<'a> {
     pub all_scripts: HashMap<String, Vec<ScriptItem>>,
 
     pub script_panel_area:      Rect,
-    pub preview:                PreviewState<'a>,
+    pub preview:                PreviewState,
     pub search:                 SearchState,
     pub multi_select:           MultiSelectState,
     pub help:                   HelpState,
     pub description:            DescriptionState,
     pub run_script_popup:       Option<RunScriptPopup>,
-    pub script_execution_queue: Vec<PathBuf>,
+    pub script_execution_queue: VecDeque<PathBuf>,
 
     pub needs_redraw: bool,
     pub last_size:    Rect,

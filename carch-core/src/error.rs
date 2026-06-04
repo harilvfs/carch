@@ -8,10 +8,6 @@ pub enum CarchError {
     Reqwest(#[from] reqwest::Error),
     #[error("Command failed: {0}")]
     Command(String),
-    #[error("No RPM found in the latest release")]
-    NoRpmFound,
-    #[error("Unsupported package manager")]
-    UnsupportedPackageManager,
     #[error("Home directory not found")]
     HomeDirNotFound,
     #[error("Failed to create temp directory: {0}")]
@@ -28,6 +24,8 @@ pub enum CarchError {
     Metadata(String, std::io::Error),
     #[error("Failed to set permissions for {0}: {1}")]
     SetPermissions(String, std::io::Error),
+    #[error("Failed to open PTY: {0}")]
+    Pty(String),
 }
 
 pub type Result<T> = std::result::Result<T, CarchError>;

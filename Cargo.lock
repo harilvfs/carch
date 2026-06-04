@@ -163,8 +163,9 @@ dependencies = [
  "env_logger",
  "log",
  "reqwest",
- "serde",
+ "serde_json",
  "tempfile",
+ "toml",
 ]
 
 [[package]]
@@ -172,9 +173,9 @@ name = "carch-core"
 version = "5.3.7"
 dependencies = [
  "crossterm 0.29.0",
- "env_logger",
  "fuzzy-matcher",
  "include_dir",
+ "libc",
  "log",
  "oneshot",
  "portable-pty",

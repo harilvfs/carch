@@ -1,10 +1,11 @@
-use log::{debug, info};
-use ratatui::prelude::*;
 use std::io::{self, Stdout};
 use std::path::Path;
 use std::time::Duration;
 
-use crossterm::event::{self, Event, KeyCode};
+use log::{debug, info};
+use ratatui::prelude::*;
+
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use crossterm::execute;
 use crossterm::terminal::{
     Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
@@ -154,13 +155,34 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Re
     Ok(())
 }
 
-pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()> {
+pub fn run_ui_with_options(modules_dir: &Path, options: &UiOptions) -> Result<()> {
     if options.log_mode {
         info!("UI initialization started");
     }
 
     let mut terminal = setup_terminal()?;
-    let mut app = App::new(&options);
+    install_panic_hook();
+
+    let result = run_ui_loop(modules_dir, options, &mut terminal);
+
+    cleanup_terminal(&mut terminal)?;
+
+    if options.log_mode {
+        match &result {
+            Ok(()) => info!("UI terminated normally"),
+            Err(e) => log::error!("UI terminated with error: {e}"),
+        }
+    }
+
+    result
+}
+
+fn run_ui_loop(
+    modules_dir: &Path,
+    options: &UiOptions,
+    terminal: &mut Terminal<CrosstermBackend<Stdout>>,
+) -> Result<()> {
+    let mut app = App::new(options);
     app.log_mode = options.log_mode;
     app.modules_dir = modules_dir.to_path_buf();
 
@@ -187,7 +209,7 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
                 terminal.autoresize()?;
             }
 
-            terminal.draw(|f| ui(f, &mut app, &options))?;
+            terminal.draw(|f| ui(f, &mut app, options))?;
             app.last_size = terminal.get_frame().area();
             app.needs_redraw = false;
 
@@ -206,22 +228,33 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
             && let Ok(event) = event::read()
         {
             app.needs_redraw = true;
-            handle_event(&mut app, event, &options)?;
+            handle_event(&mut app, event, options)?;
         }
-    }
-
-    cleanup_terminal(&mut terminal)?;
-
-    if options.log_mode {
-        info!("UI terminated normally");
     }
 
     Ok(())
 }
 
+fn install_panic_hook() {
+    use std::sync::Once;
+    static ONCE: Once = Once::new();
+    ONCE.call_once(|| {
+        let original = std::panic::take_hook();
+        std::panic::set_hook(Box::new(move |info| {
+            let _ = disable_raw_mode();
+            let _ = execute!(io::stdout(), LeaveAlternateScreen);
+            original(info);
+        }));
+    });
+}
+
 fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> {
     match event {
         Event::Key(key) => {
+            if matches!(key.kind, KeyEventKind::Release | KeyEventKind::Repeat) {
+                return Ok(());
+            }
+
             if options.log_mode {
                 let key_name = match key.code {
                     KeyCode::Char(c) => format!("Char('{c}')"),
@@ -235,13 +268,21 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     match popup.handle_key_event(key) {
                         crate::ui::popups::run_script::PopupEvent::Close => {
                             app.run_script_popup = None;
-                            if let Some(script_path) = app.script_execution_queue.pop() {
-                                let next_popup = RunScriptPopup::new(
+                            if let Some(script_path) = app.script_execution_queue.pop_front() {
+                                match RunScriptPopup::new(
                                     script_path,
                                     app.log_mode,
                                     app.theme.clone(),
-                                );
-                                app.run_script_popup = Some(next_popup);
+                                ) {
+                                    Ok(next_popup) => {
+                                        app.run_script_popup = Some(next_popup);
+                                    }
+                                    Err(e) => {
+                                        log::error!("Failed to start next script popup: {e}");
+                                        app.run_script_popup = None;
+                                        app.mode = AppMode::Normal;
+                                    }
+                                }
                             } else {
                                 app.mode = AppMode::Normal;
                             }
