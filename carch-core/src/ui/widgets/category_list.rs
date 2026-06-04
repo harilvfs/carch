@@ -55,7 +55,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
             }
         })
         .collect();
-    let list = List::new(items).block(block).highlight_symbol(" ").highlight_style(
+    let list = List::new(items).block(block).highlight_style(
         Style::default()
             .bg(app.theme.primary)
             .fg(app.theme.background)
