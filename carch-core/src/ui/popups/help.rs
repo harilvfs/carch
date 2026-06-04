@@ -66,13 +66,12 @@ const HELP_LINES: &[(&[&str], &[Kind])] = &[
     (&[], &[]),
     (&["Legend"], &[Kind::Header]),
     (&[], &[]),
-    (
-        &[" \u{2713} ", " ", "Script is selected (multi-select)"],
-        &[Kind::NavKey, Kind::Body, Kind::Body],
-    ),
+    (&[" [C] ", " ", "Category"], &[Kind::NavKey, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&[" [S] ", " ", "Script"], &[Kind::NavKey, Kind::Body, Kind::Body]),
     (&[], &[]),
     (
-        &[" (d) ", " ", "Script has a description (press d to view)"],
+        &[" \u{2713} ", " ", "Script is selected (multi-select)"],
         &[Kind::NavKey, Kind::Body, Kind::Body],
     ),
 ];
