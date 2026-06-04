@@ -20,10 +20,8 @@ fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
     block
 }
 
-// Marker for a multi-selected script.
-const SELECTED_MARKER: &str = " \u{2713} ";
-// Marker for a script that has a description.
-const DESC_MARKER: &str = " (d)";
+const SCRIPT_TAG: &str = " [S] ";
+const TICK_SUFFIX: &str = " \u{2713}";
 
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let title = if app.multi_select.enabled {
@@ -41,10 +39,6 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let is_selected = app.multi_select.enabled && app.is_script_selected(&item.path);
             let has_desc = app.has_description(&item.category, &item.name);
 
-            let prefix = if is_selected { SELECTED_MARKER } else { "   " };
-            let suffix = if has_desc { DESC_MARKER } else { "" };
-
-            let marker_color = if is_selected { app.theme.success } else { app.theme.secondary };
             let name_color = if is_selected {
                 app.theme.success
             } else if has_desc {
@@ -55,18 +49,21 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let name_modifier =
                 if is_selected { Modifier::BOLD | Modifier::UNDERLINED } else { Modifier::empty() };
 
-            let line = Line::from(vec![
-                Span::styled(prefix, Style::default().fg(marker_color)),
+            let mut spans = vec![
+                Span::styled(SCRIPT_TAG, Style::default().fg(app.theme.secondary)),
                 Span::styled(
                     &item.name,
                     Style::default().fg(name_color).add_modifier(name_modifier),
                 ),
-                Span::styled(
-                    suffix,
-                    Style::default().fg(app.theme.accent).add_modifier(Modifier::DIM),
-                ),
-            ]);
-            ListItem::new(line)
+            ];
+            if is_selected {
+                spans.push(Span::styled(
+                    TICK_SUFFIX,
+                    Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
+                ));
+            }
+
+            ListItem::new(Line::from(spans))
         })
         .collect();
 

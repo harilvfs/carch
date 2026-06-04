@@ -7,6 +7,8 @@ use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 use crate::ui::state::App;
 use crate::ui::widgets::paint_rounded_highlight;
 
+const CATEGORY_TAG: &str = " [C] ";
+
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let border_color = app.theme.primary;
     let block = Block::default()
@@ -28,10 +30,12 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 })
                 .unwrap_or(0);
 
+            let tag_span = Span::styled(CATEGORY_TAG, Style::default().fg(app.theme.primary));
+
             if selected_in_category > 0 {
                 let label = format!("{} (\u{2713} {})", category_name, selected_in_category);
                 let line = Line::from(vec![
-                    Span::styled("   ", Style::default().fg(app.theme.success)),
+                    tag_span,
                     Span::styled(
                         label,
                         Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
@@ -40,7 +44,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 ListItem::new(line)
             } else {
                 let line = Line::from(vec![
-                    Span::styled("   ", Style::default().fg(app.theme.primary)),
+                    tag_span,
                     Span::styled(category_name.as_str(), Style::default().fg(app.theme.primary)),
                 ]);
                 ListItem::new(line)
