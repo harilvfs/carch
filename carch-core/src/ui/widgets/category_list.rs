@@ -4,15 +4,11 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
-use crate::ui::state::{App, FocusedPanel};
+use crate::ui::state::App;
 use crate::ui::widgets::paint_rounded_highlight;
 
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
-    let border_color = if app.focused_panel == FocusedPanel::Categories {
-        app.theme.primary
-    } else {
-        app.theme.secondary
-    };
+    let border_color = app.theme.primary;
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)

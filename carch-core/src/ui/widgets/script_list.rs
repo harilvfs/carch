@@ -4,11 +4,11 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
-use crate::ui::state::{App, FocusedPanel};
+use crate::ui::state::App;
 use crate::ui::widgets::paint_rounded_highlight;
 
-fn create_block<'a>(title: &'a str, is_focused: bool, app: &App) -> Block<'a> {
-    let border_color = if is_focused { app.theme.primary } else { app.theme.secondary };
+fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
+    let border_color = app.theme.secondary;
     let mut block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
@@ -26,13 +26,12 @@ const SELECTED_MARKER: &str = "\u{2713} ";
 const DESC_MARKER: &str = " (d)";
 
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
-    let is_focused = app.focused_panel == FocusedPanel::Scripts;
     let title = if app.multi_select.enabled {
         format!("[{} Selected]", app.multi_select.scripts.len())
     } else {
         String::new()
     };
-    let block = create_block(&title, is_focused, app);
+    let block = create_block(&title, app);
 
     let items: Vec<ListItem> = app
         .scripts
