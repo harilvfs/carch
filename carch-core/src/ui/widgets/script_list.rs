@@ -17,7 +17,7 @@ fn create_block<'a>(title: &'a str, is_focused: bool, app: &App) -> Block<'a> {
 }
 
 /// Marker shown next to a selected script in multi-select mode.
-const SELECTED_MARKER: &str = "\u{2022} "; // •
+const SELECTED_MARKER: &str = "\u{2713} "; // ✓
 /// Marker shown next to a script that has a description in `desc.toml`.
 const DESC_MARKER: &str = " (d)";
 
@@ -41,15 +41,19 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let prefix = if is_selected { SELECTED_MARKER } else { "  " };
             let suffix = if has_desc { DESC_MARKER } else { "" };
 
-            let marker_color = if is_selected { app.theme.warning } else { app.theme.secondary };
+            let marker_color = if is_selected { app.theme.success } else { app.theme.secondary };
             let name_color = if is_selected {
-                app.theme.secondary
+                app.theme.success
             } else if has_desc {
                 app.theme.foreground
             } else {
                 app.theme.secondary
             };
-            let name_modifier = if is_selected { Modifier::BOLD } else { Modifier::empty() };
+            let name_modifier = if is_selected {
+                Modifier::BOLD | Modifier::UNDERLINED
+            } else {
+                Modifier::empty()
+            };
 
             let line = Line::from(vec![
                 Span::styled(prefix, Style::default().fg(marker_color)),
