@@ -5,6 +5,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::{App, FocusedPanel};
+use crate::ui::widgets::paint_rounded_highlight;
 
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let border_color = if app.focused_panel == FocusedPanel::Categories {
@@ -54,11 +55,12 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
             }
         })
         .collect();
-    let list = List::new(items).block(block).highlight_style(
+    let list = List::new(items).block(block).highlight_symbol(" ").highlight_style(
         Style::default()
             .bg(app.theme.primary)
             .fg(app.theme.background)
             .add_modifier(Modifier::BOLD),
     );
     f.render_stateful_widget(list, area, &mut app.categories.state);
+    paint_rounded_highlight(f, area, &app.categories.state, app.theme.primary);
 }

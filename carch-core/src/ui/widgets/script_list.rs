@@ -5,6 +5,7 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::{App, FocusedPanel};
+use crate::ui::widgets::paint_rounded_highlight;
 
 fn create_block<'a>(title: &'a str, is_focused: bool, app: &App) -> Block<'a> {
     let border_color = if is_focused { app.theme.primary } else { app.theme.secondary };
@@ -67,7 +68,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
         })
         .collect();
 
-    let list = List::new(items).block(block).highlight_style(
+    let list = List::new(items).block(block).highlight_symbol(" ").highlight_style(
         Style::default()
             .bg(app.theme.secondary)
             .fg(app.theme.background)
@@ -75,4 +76,5 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     );
 
     f.render_stateful_widget(list, area, &mut app.scripts.state);
+    paint_rounded_highlight(f, area, &app.scripts.state, app.theme.secondary);
 }
