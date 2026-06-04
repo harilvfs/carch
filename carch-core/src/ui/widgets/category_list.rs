@@ -28,10 +28,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 .all_scripts
                 .get(category_name)
                 .map(|scripts| {
-                    scripts
-                        .iter()
-                        .filter(|item| app.is_script_selected(&item.path))
-                        .count()
+                    scripts.iter().filter(|item| app.is_script_selected(&item.path)).count()
                 })
                 .unwrap_or(0);
 

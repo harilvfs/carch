@@ -49,11 +49,8 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             } else {
                 app.theme.secondary
             };
-            let name_modifier = if is_selected {
-                Modifier::BOLD | Modifier::UNDERLINED
-            } else {
-                Modifier::empty()
-            };
+            let name_modifier =
+                if is_selected { Modifier::BOLD | Modifier::UNDERLINED } else { Modifier::empty() };
 
             let line = Line::from(vec![
                 Span::styled(prefix, Style::default().fg(marker_color)),

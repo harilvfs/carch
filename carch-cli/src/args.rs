@@ -42,7 +42,7 @@ pub struct Cli {
     pub nord:             bool,
     #[arg(short = 'r', long, global = true, help = "Set theme to Rosé Pine")]
     pub rose_pine:        bool,
-    /// Save the given theme as your favorite and exit. Use `--unfav` to clear.
+    /// Save the given theme as favorite and exit.
     #[arg(long, global = true, value_name = "THEME")]
     pub fav:              Option<String>,
     /// Clear the saved favorite theme.
@@ -75,7 +75,6 @@ pub fn parse_args() -> Result<()> {
         return Ok(());
     }
 
-    // --fav and --unfav are one-shot; handle them first and exit.
     if let Some(theme) = cli.fav.as_deref() {
         return save_favorite_theme(theme).map(|()| {
             println!("Favorite theme set to '{theme}'. It will be used on future launches.");

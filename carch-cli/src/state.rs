@@ -62,7 +62,6 @@ mod tests {
     use super::*;
     use std::sync::Mutex;
 
-    // Tests mutate the process-wide HOME env, so run serially.
     static HOME_LOCK: Mutex<()> = Mutex::new(());
 
     struct ScopedHome {

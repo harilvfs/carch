@@ -48,7 +48,6 @@ impl App {
                     (self.search.selected_idx + 1) % self.search.results.len();
             }
             KeyCode::Up if self.search.input.is_empty() && !self.search.history.is_empty() => {
-                // Step backwards through history.
                 let next = match self.search.history_idx {
                     None => 0,
                     Some(i) => (i + 1).min(self.search.history.len() - 1),
