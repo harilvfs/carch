@@ -31,10 +31,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
             if selected_in_category > 0 {
                 let label = format!("{} (\u{2713} {})", category_name, selected_in_category);
                 let line = Line::from(vec![
-                    Span::styled(
-                        "\u{2713} ",
-                        Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
-                    ),
+                    Span::styled("  ", Style::default().fg(app.theme.success)),
                     Span::styled(
                         label,
                         Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
