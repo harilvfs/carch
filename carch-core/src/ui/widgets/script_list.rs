@@ -21,7 +21,7 @@ fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
 }
 
 // Marker for a multi-selected script.
-const SELECTED_MARKER: &str = "\u{2713} ";
+const SELECTED_MARKER: &str = " \u{2713} ";
 // Marker for a script that has a description.
 const DESC_MARKER: &str = " (d)";
 
@@ -41,7 +41,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             let is_selected = app.multi_select.enabled && app.is_script_selected(&item.path);
             let has_desc = app.has_description(&item.category, &item.name);
 
-            let prefix = if is_selected { SELECTED_MARKER } else { "  " };
+            let prefix = if is_selected { SELECTED_MARKER } else { "   " };
             let suffix = if has_desc { DESC_MARKER } else { "" };
 
             let marker_color = if is_selected { app.theme.success } else { app.theme.secondary };

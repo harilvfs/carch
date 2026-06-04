@@ -31,7 +31,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
             if selected_in_category > 0 {
                 let label = format!("{} (\u{2713} {})", category_name, selected_in_category);
                 let line = Line::from(vec![
-                    Span::styled("  ", Style::default().fg(app.theme.success)),
+                    Span::styled("   ", Style::default().fg(app.theme.success)),
                     Span::styled(
                         label,
                         Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
@@ -40,7 +40,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 ListItem::new(line)
             } else {
                 let line = Line::from(vec![
-                    Span::styled("  ", Style::default().fg(app.theme.primary)),
+                    Span::styled("   ", Style::default().fg(app.theme.primary)),
                     Span::styled(category_name.as_str(), Style::default().fg(app.theme.primary)),
                 ]);
                 ListItem::new(line)
