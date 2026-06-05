@@ -15,9 +15,8 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
         .title("Search")
         .border_style(Style::default().fg(app.theme.primary));
 
-    f.render_widget(popup_block.clone(), area);
-
     let inner_area = popup_block.inner(area);
+    f.render_widget(popup_block, area);
 
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)

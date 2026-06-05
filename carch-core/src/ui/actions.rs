@@ -277,7 +277,7 @@ impl App {
     }
 
     pub fn is_script_selected(&self, script_path: &Path) -> bool {
-        self.multi_select.scripts.contains(&script_path.to_path_buf())
+        self.multi_select.scripts.iter().any(|p| p == script_path)
     }
 
     #[must_use]

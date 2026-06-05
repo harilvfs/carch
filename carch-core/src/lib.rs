@@ -36,8 +36,14 @@ pub fn extract_scripts(temp_path: &Path) -> Result<()> {
     let preview_link = temp_path.join("preview_scripts");
     let _ = fs::remove_file(&preview_link);
 
-    std::os::unix::fs::symlink(&modules_dir, &preview_link)
-        .map_err(|e| CarchError::Symlink(e.to_string()))?;
+    std::os::unix::fs::symlink(&modules_dir, &preview_link).map_err(|e| {
+        CarchError::Symlink(format!(
+            "{} -> {}: {}",
+            modules_dir.display(),
+            preview_link.display(),
+            e
+        ))
+    })?;
 
     Ok(())
 }

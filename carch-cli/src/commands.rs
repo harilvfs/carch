@@ -114,10 +114,6 @@ fn get_latest_release_url(asset_pattern: &str) -> Result<String> {
     Err(CarchError::Command(format!("Could not find release asset matching '{asset_pattern}'")))
 }
 
-fn get_rpm_url() -> Result<String> {
-    get_latest_release_url(".rpm")
-}
-
 fn termux_install_deb(deb_arch: &str) -> Result<()> {
     println!("==> Fetching latest .deb package for {deb_arch}...");
 
@@ -174,7 +170,7 @@ fn install_for_distro(distro: &Distro) -> Result<()> {
         }
         Distro::Fedora | Distro::OpenSuse => {
             println!("==> Downloading carch RPM...");
-            let rpm_url = get_rpm_url()?;
+            let rpm_url = get_latest_release_url(".rpm")?;
 
             let bytes = reqwest::blocking::get(&rpm_url)?.bytes()?;
             let rpm_path = std::path::PathBuf::from("/tmp/carch.rpm");

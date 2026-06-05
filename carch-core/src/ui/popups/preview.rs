@@ -49,13 +49,14 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         ))
         .border_style(Style::default().fg(app.theme.primary));
 
-    f.render_widget(popup_block.clone(), area);
+    let inner = popup_block.inner(area);
+    f.render_widget(popup_block, area);
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
         .constraints([Constraint::Min(1), Constraint::Length(1)])
-        .split(popup_block.inner(area));
+        .split(inner);
 
     let preview_text = if let Some(selected) = app.scripts.state.selected() {
         let script_path = &app.scripts.items[selected].path;

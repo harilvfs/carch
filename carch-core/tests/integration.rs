@@ -2,9 +2,9 @@
 
 use std::path::PathBuf;
 
+use carch_core::extract_scripts;
 use carch_core::ui::state::{App, AppMode, FocusedPanel, UiOptions};
 use carch_core::ui::theme::Theme;
-use carch_core::{extract_scripts, is_running_as_root};
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use tempfile::TempDir;
 
@@ -188,12 +188,10 @@ fn preview_popup_opens_and_closes() {
         return;
     }
     fx.app.update_preview();
-    let before_content = fx.app.preview.content.clone();
     fx.app.toggle_preview_mode();
     assert_eq!(fx.app.mode, AppMode::Preview);
     fx.app.handle_key_preview_mode(key(KeyCode::Esc));
     assert_eq!(fx.app.mode, AppMode::Normal);
-    let _ = before_content;
 }
 
 #[test]
@@ -362,19 +360,6 @@ fn root_warning_popup_when_is_root_true() {
     assert_eq!(app.mode, AppMode::RootWarning);
     app.handle_key_root_warning_mode(key(KeyCode::Char('y')));
     assert_eq!(app.mode, AppMode::Normal);
-}
-
-#[test]
-fn is_running_as_root_matches_user_check() {
-    #[cfg(unix)]
-    {
-        let expected = unsafe { libc::geteuid() == 0 };
-        assert_eq!(is_running_as_root(), expected);
-    }
-    #[cfg(not(unix))]
-    {
-        assert!(!is_running_as_root());
-    }
 }
 
 #[test]

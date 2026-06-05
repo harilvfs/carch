@@ -43,7 +43,7 @@ fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
         .split(popup_layout[1])[1]
 }
 
-fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
+fn render_normal_ui(f: &mut Frame, app: &mut App) {
     let area = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
@@ -70,8 +70,8 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
     render_status_bar(f, app, chunks[2]);
 }
 
-fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
-    render_normal_ui(f, app, options);
+fn ui(f: &mut Frame, app: &mut App) {
+    render_normal_ui(f, app);
 
     match app.mode {
         AppMode::RunScript => {
@@ -127,7 +127,7 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::Description => {
             let area = app.script_panel_area;
             let popup_area = centered_rect(80, 80, area);
-            popups::description::render_description_popup(f, &mut *app, popup_area);
+            popups::description::render_description_popup(f, app, popup_area);
         }
         AppMode::Normal => {}
         AppMode::RootWarning => {
@@ -181,7 +181,6 @@ fn run_ui_loop(
     terminal: &mut Terminal<CrosstermBackend<Stdout>>,
 ) -> Result<()> {
     let mut app = App::new(options);
-    app.log_mode = options.log_mode;
     app.modules_dir = modules_dir.to_path_buf();
 
     if options.log_mode {
@@ -207,7 +206,7 @@ fn run_ui_loop(
                 terminal.autoresize()?;
             }
 
-            terminal.draw(|f| ui(f, &mut app, options))?;
+            terminal.draw(|f| ui(f, &mut app))?;
             app.last_size = terminal.get_frame().area();
             app.needs_redraw = false;
 

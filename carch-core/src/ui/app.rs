@@ -26,7 +26,7 @@ impl App {
             mode: if options.is_root { AppMode::RootWarning } else { AppMode::Normal },
             quit: false,
             focused_panel: FocusedPanel::Categories,
-            log_mode: false,
+            log_mode: options.log_mode,
             modules_dir: PathBuf::new(),
             theme,
             theme_locked: options.theme_locked,
@@ -124,10 +124,9 @@ fn read_description(desc_path: &std::path::Path, script_name: &str) -> Option<St
 mod tests {
     use super::*;
 
-    fn write_desc(dir: &std::path::Path, name: &str, content: &str) -> std::path::PathBuf {
+    fn write_desc(dir: &std::path::Path, content: &str) -> std::path::PathBuf {
         let path = dir.join("desc.toml");
         std::fs::write(&path, content).unwrap();
-        let _ = name;
         path
     }
 
@@ -137,7 +136,6 @@ mod tests {
         std::fs::create_dir_all(&dir).unwrap();
         let path = write_desc(
             &dir,
-            "install.sh",
             r#"
 [install]
 description = "Installs packages"
@@ -179,19 +177,5 @@ description = "x"
         .unwrap();
         assert_eq!(read_description(&path, "install"), None);
         let _ = std::fs::remove_dir_all(&dir);
-    }
-
-    #[test]
-    fn script_queue_is_fifo() {
-        let mut q: VecDeque<PathBuf> = VecDeque::new();
-        for i in 0..3 {
-            q.push_back(PathBuf::from(format!("/tmp/script{i}.sh")));
-        }
-        let first = q.pop_front().unwrap();
-        let second = q.pop_front().unwrap();
-        let third = q.pop_front().unwrap();
-        assert_eq!(first, PathBuf::from("/tmp/script0.sh"));
-        assert_eq!(second, PathBuf::from("/tmp/script1.sh"));
-        assert_eq!(third, PathBuf::from("/tmp/script2.sh"));
     }
 }

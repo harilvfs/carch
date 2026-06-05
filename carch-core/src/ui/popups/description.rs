@@ -18,7 +18,7 @@ pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
         .border_style(Style::default().fg(app.theme.primary));
 
     f.render_widget(Clear, area);
-    f.render_widget(popup_block.clone(), area);
+    f.render_widget(popup_block, area);
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)

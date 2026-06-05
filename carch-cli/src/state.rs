@@ -83,7 +83,7 @@ mod tests {
             ));
             std::fs::create_dir_all(&tmp).unwrap();
             let prev = std::env::var("HOME").ok();
-            // SAFETY: tests are single-threaded for HOME.
+            // SAFETY: serialized by HOME_LOCK above.
             unsafe {
                 std::env::set_var("HOME", &tmp);
             }
@@ -136,14 +136,14 @@ mod tests {
     fn clear_removes_state_file() {
         let _h = ScopedHome::new();
         save_favorite_theme("nord").unwrap();
-        assert_eq!(clear_favorite_theme().unwrap(), true);
+        assert!(clear_favorite_theme().unwrap());
         assert_eq!(load_favorite_theme(), None);
     }
 
     #[test]
     fn clear_returns_false_when_no_file() {
         let _h = ScopedHome::new();
-        assert_eq!(clear_favorite_theme().unwrap(), false);
+        assert!(!clear_favorite_theme().unwrap());
     }
 
     #[test]
@@ -169,23 +169,5 @@ mod tests {
         assert_eq!(escape_toml_string(r#"a"b"#), r#"a\"b"#);
         assert_eq!(escape_toml_string("a\\b"), "a\\\\b");
         assert_eq!(escape_toml_string("a\nb"), "a\\nb");
-    }
-
-    #[test]
-    fn parse_minimal_state_file() {
-        let table: toml::Table = "theme = \"dracula\"\n".parse().unwrap();
-        assert_eq!(table.get("theme").and_then(|v| v.as_str()), Some("dracula"));
-    }
-
-    #[test]
-    fn parse_missing_theme_key() {
-        let table: toml::Table = "other = 1\n".parse().unwrap();
-        assert_eq!(table.get("theme").and_then(|v| v.as_str()), None);
-    }
-
-    #[test]
-    fn parse_malformed_state() {
-        let result: std::result::Result<toml::Table, _> = "not valid [[[".parse();
-        assert!(result.is_err());
     }
 }

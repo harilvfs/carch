@@ -32,7 +32,6 @@ pub struct RunScriptPopup {
     buffer:         Arc<Mutex<Vec<u8>>>,
     command_thread: Option<JoinHandle<ExitStatus>>,
     child_killer:   Option<ChildKillerReceiver>,
-    _reader_thread: JoinHandle<()>,
     pty_master:     Box<dyn MasterPty + Send>,
     writer:         Box<dyn Write + Send>,
     status:         Option<ExitStatus>,
@@ -70,7 +69,9 @@ impl RunScriptPopup {
             match pair_slave.spawn_command(cmd) {
                 Ok(mut child) => {
                     let killer = child.clone_killer();
-                    let _ = tx.send(Some(killer));
+                    if tx.send(Some(killer)).is_err() {
+                        log::warn!("child_killer receiver dropped before killer was sent");
+                    }
                     child.wait().unwrap_or_else(|e| {
                         log::error!("child.wait failed: {e}");
                         ExitStatus::with_exit_code(1)
@@ -78,7 +79,9 @@ impl RunScriptPopup {
                 }
                 Err(e) => {
                     log::error!("spawn_command failed: {e}");
-                    let _ = tx.send(None);
+                    if tx.send(None).is_err() {
+                        log::warn!("child_killer receiver dropped before None was sent");
+                    }
                     ExitStatus::with_exit_code(1)
                 }
             }
@@ -90,7 +93,7 @@ impl RunScriptPopup {
             .map_err(|e| CarchError::Pty(format!("try_clone_reader: {e}")))?;
 
         let command_buffer: Arc<Mutex<Vec<u8>>> = Arc::new(Mutex::new(Vec::new()));
-        let reader_handle = {
+        {
             let command_buffer = command_buffer.clone();
             std::thread::spawn(move || {
                 let mut buf = [0u8; 16384];
@@ -108,8 +111,8 @@ impl RunScriptPopup {
                     }
                     mutex.extend_from_slice(data);
                 }
-            })
-        };
+            });
+        }
 
         let writer =
             pair.master.take_writer().map_err(|e| CarchError::Pty(format!("take_writer: {e}")))?;
@@ -118,7 +121,6 @@ impl RunScriptPopup {
             buffer: command_buffer,
             command_thread: Some(command_handle),
             child_killer: Some(rx),
-            _reader_thread: reader_handle,
             pty_master: pair.master,
             writer,
             status: None,
@@ -292,17 +294,6 @@ impl RunScriptPopup {
         }
     }
 
-    fn exit_success(&mut self) -> Option<bool> {
-        if self.command_thread.is_some() {
-            let handle = self.command_thread.take()?;
-            let exit_status = handle.join().ok()?;
-            self.status = Some(exit_status.clone());
-            Some(exit_status.success())
-        } else {
-            self.status.as_ref().map(|s| s.success())
-        }
-    }
-
     pub fn kill_child(&mut self) {
         if !self.is_finished()
             && let Some(killer_rx) = self.child_killer.take()
@@ -310,19 +301,6 @@ impl RunScriptPopup {
         {
             let _ = killer.kill();
         }
-    }
-
-    fn title_line(&mut self) -> Line<'static> {
-        if self.is_finished() {
-            let (text, color) = match self.exit_success() {
-                Some(true) => ("Success! Press <Enter> to close", self.theme.success),
-                Some(false) => ("Failed! Press <Enter> to close", self.theme.error),
-                None => ("Finished. Press <Enter> to close", self.theme.primary),
-            };
-            return Line::styled(text, Style::default().fg(color).reversed());
-        }
-
-        Line::raw("")
     }
 
     fn handle_passthrough_key_event(&mut self, key: KeyEvent) {
@@ -349,7 +327,6 @@ impl RunScriptPopup {
 
 impl Drop for RunScriptPopup {
     fn drop(&mut self) {
-        // Make sure the child process is killed if the popup is dropped early.
         if !self.is_finished()
             && let Some(rx) = self.child_killer.take()
             && let Ok(Some(mut killer)) = rx.recv()
@@ -368,7 +345,6 @@ impl Widget for &mut RunScriptPopup {
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(self.theme.primary))
                 .title_style(Style::default().fg(self.theme.primary).reversed())
-                .title_top(self.title_line().centered())
                 .title_bottom(Line::from(
                     "Shift+↑/↓: scroll   PgUp/PgDn: page   g/G: top/bottom   Ctrl-C: kill",
                 ))

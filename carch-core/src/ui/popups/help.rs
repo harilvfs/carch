@@ -114,9 +114,8 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         .title("Keyboard Shortcuts")
         .border_style(Style::default().fg(app.theme.primary));
 
-    f.render_widget(popup_block.clone(), area);
-
     let inner = popup_block.inner(area);
+    f.render_widget(popup_block, area);
     let content_area = Rect {
         x:      inner.x + 1,
         y:      inner.y,
