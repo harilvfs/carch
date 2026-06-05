@@ -6,9 +6,16 @@ struct Release {
     tag_name: String,
 }
 
+/// Raw Cargo.toml version, no `v` prefix.
+#[must_use]
+pub fn current_version() -> &'static str {
+    env!("CARGO_PKG_VERSION")
+}
+
+/// Version string with `v` prefix.
+#[must_use]
 pub fn get_current_version() -> String {
-    let version = env!("CARGO_PKG_VERSION");
-    format!("v{version}")
+    format!("v{}", current_version())
 }
 
 pub fn get_latest_version() -> Result<String> {
@@ -21,6 +28,29 @@ pub fn get_latest_version() -> Result<String> {
     }
 
     let release: Release = response.json()?;
-    let version = release.tag_name.trim_start_matches('v').to_string();
-    Ok(version)
+    Ok(release.tag_name.trim_start_matches('v').to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn current_version_is_nonempty() {
+        assert!(!current_version().is_empty());
+    }
+
+    #[test]
+    fn current_version_is_valid_semver_shape() {
+        let v = current_version();
+        let first = v.split('.').next().unwrap_or("");
+        assert!(first.chars().all(|c| c.is_ascii_digit()), "expected digit prefix, got {v:?}");
+    }
+
+    #[test]
+    fn get_current_version_has_v_prefix() {
+        let v = get_current_version();
+        assert!(v.starts_with('v'), "expected 'v' prefix, got {v:?}");
+        assert_eq!(&v[1..], current_version());
+    }
 }

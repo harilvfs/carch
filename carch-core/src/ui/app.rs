@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, VecDeque};
 use std::path::PathBuf;
 
 use log::info;
@@ -11,10 +11,9 @@ use super::state::{
 use crate::ui::state::{ScriptItem, UiOptions};
 use crate::ui::theme::Theme;
 
-impl<'a> App<'a> {
-    pub fn new(options: &UiOptions) -> App<'a> {
+impl App {
+    pub fn new(options: &UiOptions) -> App {
         let theme = match options.theme.as_str() {
-            "catppuccin-mocha" => Theme::catppuccin_mocha(),
             "dracula" => Theme::dracula(),
             "gruvbox" => Theme::gruvbox(),
             "nord" => Theme::nord(),
@@ -26,7 +25,7 @@ impl<'a> App<'a> {
             mode: if options.is_root { AppMode::RootWarning } else { AppMode::Normal },
             quit: false,
             focused_panel: FocusedPanel::Categories,
-            log_mode: false,
+            log_mode: options.log_mode,
             modules_dir: PathBuf::new(),
             theme,
             theme_locked: options.theme_locked,
@@ -42,7 +41,7 @@ impl<'a> App<'a> {
             help: HelpState::default(),
             description: DescriptionState::default(),
             run_script_popup: None,
-            script_execution_queue: Vec::new(),
+            script_execution_queue: VecDeque::new(),
 
             needs_redraw: true,
             last_size: Rect::default(),
@@ -55,7 +54,6 @@ impl<'a> App<'a> {
             "Dracula" => Theme::gruvbox(),
             "Gruvbox" => Theme::nord(),
             "Nord" => Theme::rose_pine(),
-            "Rosé Pine" => Theme::catppuccin_mocha(),
             _ => Theme::catppuccin_mocha(),
         }
     }
@@ -78,47 +76,104 @@ impl<'a> App<'a> {
                 info!("Description file path: {}", desc_path.display());
             }
 
-            if desc_path.exists() {
-                if let Ok(content) = std::fs::read_to_string(&desc_path) {
-                    if let Ok(table) = content.parse::<toml::Table>() {
-                        let script_path = PathBuf::from(&selected_script.name);
-                        let script_name_without_ext =
-                            script_path.file_stem().and_then(|s| s.to_str());
+            let desc = read_description(&desc_path, &selected_script.name);
 
-                        if let Some(name) = script_name_without_ext {
-                            if let Some(desc) = table
-                                .get(name)
-                                .and_then(|v| v.as_table())
-                                .and_then(|t| t.get("description"))
-                                .and_then(|v| v.as_str())
-                            {
-                                self.description.content = Some(desc.to_string());
-                                self.mode = AppMode::Description;
-                                if self.log_mode {
-                                    info!(
-                                        "Successfully loaded description and entered description mode."
-                                    );
-                                }
-                            } else if self.log_mode {
-                                info!(
-                                    "No description found for script '{}' in desc.toml",
-                                    selected_script.name
-                                );
-                            }
-                        }
-                    } else if self.log_mode {
-                        info!("Failed to parse desc.toml at {}", desc_path.display());
+            if self.log_mode {
+                match &desc {
+                    Some(_) => {
+                        info!("Successfully loaded description and entered description mode.");
                     }
-                } else if self.log_mode {
-                    info!("Failed to read desc.toml at {}", desc_path.display());
+                    None => info!(
+                        "No description available for script '{}/{}'",
+                        selected_script.category, selected_script.name
+                    ),
                 }
-            } else if self.log_mode {
-                info!("desc.toml not found at {}", desc_path.display());
             }
+
+            self.description.content = Some(desc.unwrap_or_else(|| {
+                format!(
+                    "No description available for '{}/{}'.",
+                    selected_script.category, selected_script.name
+                )
+            }));
+            self.description.scroll = 0;
+            self.mode = AppMode::Description;
         }
     }
 
     pub fn get_selected_script(&self) -> Option<&ScriptItem> {
         self.scripts.state.selected().map(|i| &self.scripts.items[i])
+    }
+}
+
+fn read_description(desc_path: &std::path::Path, script_name: &str) -> Option<String> {
+    let content = std::fs::read_to_string(desc_path).ok()?;
+    let table: toml::Table = content.parse().ok()?;
+    let stem = std::path::Path::new(script_name).file_stem().and_then(|s| s.to_str())?;
+    table
+        .get(stem)
+        .and_then(|v| v.as_table())
+        .and_then(|t| t.get("description"))
+        .and_then(|v| v.as_str())
+        .map(str::to_string)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn write_desc(dir: &std::path::Path, content: &str) -> std::path::PathBuf {
+        let path = dir.join("desc.toml");
+        std::fs::write(&path, content).unwrap();
+        path
+    }
+
+    #[test]
+    fn read_description_found() {
+        let dir = std::env::temp_dir().join(format!("carch_test_{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = write_desc(
+            &dir,
+            r#"
+[install]
+description = "Installs packages"
+"#,
+        );
+        let desc = read_description(&path, "install.sh");
+        assert_eq!(desc.as_deref(), Some("Installs packages"));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn read_description_missing_file() {
+        let path = std::path::Path::new("/tmp/this_file_should_not_exist_carch.toml");
+        let _ = std::fs::remove_file(path);
+        assert_eq!(read_description(path, "x"), None);
+    }
+
+    #[test]
+    fn read_description_malformed_toml() {
+        let dir = std::env::temp_dir().join(format!("carch_test_bad_{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("desc.toml");
+        std::fs::write(&path, "this is = not valid toml [[[").unwrap();
+        assert_eq!(read_description(&path, "install"), None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn read_description_missing_key() {
+        let dir = std::env::temp_dir().join(format!("carch_test_k_{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("desc.toml");
+        std::fs::write(
+            &path,
+            r#"[other]
+description = "x"
+"#,
+        )
+        .unwrap();
+        assert_eq!(read_description(&path, "install"), None);
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

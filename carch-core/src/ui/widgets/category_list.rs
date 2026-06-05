@@ -1,16 +1,20 @@
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
+use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
 use crate::ui::state::App;
+use crate::ui::widgets::paint_rounded_highlight;
+
+const CATEGORY_TAG: &str = " [C] ";
 
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
+    let border_color = app.theme.primary;
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title("Categories")
-        .border_style(Style::default().fg(app.theme.primary))
+        .border_style(Style::default().fg(border_color))
         .style(Style::default().bg(Color::Reset));
 
     let items: Vec<ListItem> = app
@@ -18,15 +22,29 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
         .items
         .iter()
         .map(|category_name| {
-            let icon = " 󰉋 ";
-            let colored_icon =
-                ratatui::text::Span::styled(icon, Style::default().fg(app.theme.primary));
-            let text = ratatui::text::Span::styled(
-                category_name.as_str(),
-                Style::default().fg(app.theme.primary),
-            );
-            let line = ratatui::text::Line::from(vec![colored_icon, text]);
-            ListItem::new(line)
+            let selected_in_category = app.all_scripts.get(category_name).map_or(0, |scripts| {
+                scripts.iter().filter(|item| app.is_script_selected(&item.path)).count()
+            });
+
+            let tag_span = Span::styled(CATEGORY_TAG, Style::default().fg(app.theme.primary));
+
+            if selected_in_category > 0 {
+                let label = format!("{category_name} (\u{2713} {selected_in_category})");
+                let line = Line::from(vec![
+                    tag_span,
+                    Span::styled(
+                        label,
+                        Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
+                    ),
+                ]);
+                ListItem::new(line)
+            } else {
+                let line = Line::from(vec![
+                    tag_span,
+                    Span::styled(category_name.as_str(), Style::default().fg(app.theme.primary)),
+                ]);
+                ListItem::new(line)
+            }
         })
         .collect();
     let list = List::new(items).block(block).highlight_style(
@@ -36,4 +54,5 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
             .add_modifier(Modifier::BOLD),
     );
     f.render_stateful_widget(list, area, &mut app.categories.state);
+    paint_rounded_highlight(f, area, &app.categories.state, app.theme.primary);
 }

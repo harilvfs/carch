@@ -1,10 +1,11 @@
-use log::{debug, info};
-use ratatui::prelude::*;
 use std::io::{self, Stdout};
 use std::path::Path;
 use std::time::Duration;
 
-use crossterm::event::{self, Event, KeyCode};
+use log::{debug, info};
+use ratatui::prelude::*;
+
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use crossterm::execute;
 use crossterm::terminal::{
     Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
@@ -42,7 +43,7 @@ fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
         .split(popup_layout[1])[1]
 }
 
-fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
+fn render_normal_ui(f: &mut Frame, app: &mut App) {
     let area = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
@@ -69,8 +70,8 @@ fn render_normal_ui(f: &mut Frame, app: &mut App, _options: &UiOptions) {
     render_status_bar(f, app, chunks[2]);
 }
 
-fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
-    render_normal_ui(f, app, options);
+fn ui(f: &mut Frame, app: &mut App) {
+    render_normal_ui(f, app);
 
     match app.mode {
         AppMode::RunScript => {
@@ -126,11 +127,9 @@ fn ui(f: &mut Frame, app: &mut App, options: &UiOptions) {
         AppMode::Description => {
             let area = app.script_panel_area;
             let popup_area = centered_rect(80, 80, area);
-            popups::description::render_description_popup(f, &mut *app, popup_area);
+            popups::description::render_description_popup(f, app, popup_area);
         }
-        AppMode::Normal => {
-            // no pop-up
-        }
+        AppMode::Normal => {}
         AppMode::RootWarning => {
             let area = app.script_panel_area;
             let popup_area = centered_rect(80, 50, area);
@@ -154,14 +153,34 @@ fn cleanup_terminal(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>) -> Re
     Ok(())
 }
 
-pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()> {
+pub fn run_ui_with_options(modules_dir: &Path, options: &UiOptions) -> Result<()> {
     if options.log_mode {
         info!("UI initialization started");
     }
 
     let mut terminal = setup_terminal()?;
-    let mut app = App::new(&options);
-    app.log_mode = options.log_mode;
+    install_panic_hook();
+
+    let result = run_ui_loop(modules_dir, options, &mut terminal);
+
+    cleanup_terminal(&mut terminal)?;
+
+    if options.log_mode {
+        match &result {
+            Ok(()) => info!("UI terminated normally"),
+            Err(e) => log::error!("UI terminated with error: {e}"),
+        }
+    }
+
+    result
+}
+
+fn run_ui_loop(
+    modules_dir: &Path,
+    options: &UiOptions,
+    terminal: &mut Terminal<CrosstermBackend<Stdout>>,
+) -> Result<()> {
+    let mut app = App::new(options);
     app.modules_dir = modules_dir.to_path_buf();
 
     if options.log_mode {
@@ -173,21 +192,21 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
     if options.log_mode {
         info!(
             "Loaded {} scripts in {} categories",
-            app.all_scripts.values().map(|v| v.len()).sum::<usize>(),
+            app.all_scripts.values().map(Vec::len).sum::<usize>(),
             app.categories.items.len()
         );
     }
 
     while !app.quit {
         let popup_has_new_data =
-            app.run_script_popup.as_mut().map(|p| p.has_new_data()).unwrap_or(false);
+            app.run_script_popup.as_mut().is_some_and(RunScriptPopup::has_new_data);
 
         if app.needs_redraw || popup_has_new_data {
             if app.last_size == Rect::default() {
                 terminal.autoresize()?;
             }
 
-            terminal.draw(|f| ui(f, &mut app, &options))?;
+            terminal.draw(|f| ui(f, &mut app))?;
             app.last_size = terminal.get_frame().area();
             app.needs_redraw = false;
 
@@ -206,22 +225,33 @@ pub fn run_ui_with_options(modules_dir: &Path, options: UiOptions) -> Result<()>
             && let Ok(event) = event::read()
         {
             app.needs_redraw = true;
-            handle_event(&mut app, event, &options)?;
+            handle_event(&mut app, event, options)?;
         }
-    }
-
-    cleanup_terminal(&mut terminal)?;
-
-    if options.log_mode {
-        info!("UI terminated normally");
     }
 
     Ok(())
 }
 
+fn install_panic_hook() {
+    use std::sync::Once;
+    static ONCE: Once = Once::new();
+    ONCE.call_once(|| {
+        let original = std::panic::take_hook();
+        std::panic::set_hook(Box::new(move |info| {
+            let _ = disable_raw_mode();
+            let _ = execute!(io::stdout(), LeaveAlternateScreen);
+            original(info);
+        }));
+    });
+}
+
 fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> {
     match event {
         Event::Key(key) => {
+            if matches!(key.kind, KeyEventKind::Release | KeyEventKind::Repeat) {
+                return Ok(());
+            }
+
             if options.log_mode {
                 let key_name = match key.code {
                     KeyCode::Char(c) => format!("Char('{c}')"),
@@ -235,13 +265,21 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     match popup.handle_key_event(key) {
                         crate::ui::popups::run_script::PopupEvent::Close => {
                             app.run_script_popup = None;
-                            if let Some(script_path) = app.script_execution_queue.pop() {
-                                let next_popup = RunScriptPopup::new(
+                            if let Some(script_path) = app.script_execution_queue.pop_front() {
+                                match RunScriptPopup::new(
                                     script_path,
                                     app.log_mode,
                                     app.theme.clone(),
-                                );
-                                app.run_script_popup = Some(next_popup);
+                                ) {
+                                    Ok(next_popup) => {
+                                        app.run_script_popup = Some(next_popup);
+                                    }
+                                    Err(e) => {
+                                        log::error!("Failed to start next script popup: {e}");
+                                        app.run_script_popup = None;
+                                        app.mode = AppMode::Normal;
+                                    }
+                                }
                             } else {
                                 app.mode = AppMode::Normal;
                             }
@@ -258,9 +296,7 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     AppMode::Help => app.handle_key_help_mode(key),
                     AppMode::Description => app.handle_key_description_mode(key),
                     AppMode::RootWarning => app.handle_key_root_warning_mode(key),
-                    AppMode::RunScript => {
-                        // already handled above
-                    }
+                    AppMode::RunScript => {}
                 }
             }
         }

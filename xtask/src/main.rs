@@ -1,20 +1,22 @@
+use std::collections::BTreeMap;
+use std::fmt::Write as _;
+use std::io::Cursor;
+
 use carch_cli::args::Cli;
 use clap::CommandFactory;
 use clap_complete::{Shell, generate};
 use pico_args::Arguments;
-use std::collections::BTreeMap;
-use std::io::Cursor;
 use toml::Value;
 use xshell::{Shell as XShell, cmd};
 
-const HELP: &str = r#"
+const HELP: &str = r"
 Usage: cargo xtask <COMMAND>
 
 Commands:
   ci                  Run all CI checks
   completions         Generate shell completion scripts
   ogen                Generate overview.md (alias: generate-overview)
-"#;
+";
 
 fn main() -> Result<(), anyhow::Error> {
     let mut args = Arguments::from_env();
@@ -33,6 +35,7 @@ fn main() -> Result<(), anyhow::Error> {
             cmd!(sh, "cargo +nightly check --workspace --locked").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --no-default-features").run()?;
             cmd!(sh, "cargo +nightly check --workspace --locked --all-features").run()?;
+            cmd!(sh, "cargo +nightly test --workspace --locked").run()?;
             cmd!(sh, "taplo fmt --check").run()?;
             cmd!(sh, "cargo deny check").run()?;
             Ok(())
@@ -43,17 +46,14 @@ fn main() -> Result<(), anyhow::Error> {
             let mut cmd = Cli::command();
             let mut buffer = Vec::new();
 
-            // completions for Bash
             generate(Shell::Bash, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/bash/carch", &buffer)?;
             buffer.clear();
 
-            // completions for Fish
             generate(Shell::Fish, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/fish/carch.fish", &buffer)?;
             buffer.clear();
 
-            // completions for Zsh
             generate(Shell::Zsh, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
             sh.write_file("completions/zsh/_carch", &buffer)?;
 
@@ -81,12 +81,10 @@ fn main() -> Result<(), anyhow::Error> {
                                     && let Some(description) =
                                         inner_table.get("description").and_then(|v| v.as_str())
                                 {
-                                    let script_name = key.to_string();
-                                    let script_description = description.to_string();
                                     categories
                                         .entry(dir_name.to_string())
                                         .or_default()
-                                        .push((script_name, script_description));
+                                        .push((key.clone(), description.to_string()));
                                 }
                             }
                         }
@@ -95,9 +93,9 @@ fn main() -> Result<(), anyhow::Error> {
             }
 
             for (category, scripts) in categories {
-                markdown.push_str(&format!("### {category}\n\n"));
+                let _ = writeln!(markdown, "### {category}\n");
                 for (name, description) in scripts {
-                    markdown.push_str(&format!("- **{name}**: *{description}*\n"));
+                    let _ = writeln!(markdown, "- **{name}**: *{description}*");
                 }
                 markdown.push('\n');
             }

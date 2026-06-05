@@ -1,23 +1,27 @@
+use std::io::Write;
+use std::path::PathBuf;
+use std::sync::{Arc, Mutex, PoisonError};
+use std::thread::JoinHandle;
+
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use log::info;
-use oneshot::Receiver;
 use portable_pty::{
     ChildKiller, CommandBuilder, ExitStatus, MasterPty, NativePtySystem, PtySize, PtySystem,
 };
 use ratatui::prelude::*;
 use ratatui::symbols::border;
 use ratatui::widgets::{Block, Clear, Widget};
-use std::io::Write;
-use std::path::PathBuf;
-use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
 use tui_term::widget::PseudoTerminal;
 use vt100_ctt::Parser;
 
+use crate::error::{CarchError, Result};
 use crate::ui::theme::Theme;
 
 const SCROLLBACK_LEN: usize = 1000;
 const PAGE_STEP: usize = 10;
+
+type ChildKillerSender = oneshot::Sender<Option<Box<dyn ChildKiller + Send + Sync>>>;
+type ChildKillerReceiver = oneshot::Receiver<Option<Box<dyn ChildKiller + Send + Sync>>>;
 
 pub enum PopupEvent {
     Close,
@@ -27,8 +31,7 @@ pub enum PopupEvent {
 pub struct RunScriptPopup {
     buffer:         Arc<Mutex<Vec<u8>>>,
     command_thread: Option<JoinHandle<ExitStatus>>,
-    child_killer:   Option<Receiver<Box<dyn ChildKiller + Send + Sync>>>,
-    _reader_thread: JoinHandle<()>,
+    child_killer:   Option<ChildKillerReceiver>,
     pty_master:     Box<dyn MasterPty + Send>,
     writer:         Box<dyn Write + Send>,
     status:         Option<ExitStatus>,
@@ -45,7 +48,7 @@ pub struct RunScriptPopup {
 }
 
 impl RunScriptPopup {
-    pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Self {
+    pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Result<Self> {
         let pty_system = NativePtySystem::default();
 
         let mut cmd = CommandBuilder::new("bash");
@@ -58,20 +61,39 @@ impl RunScriptPopup {
                 pixel_width:  0,
                 pixel_height: 0,
             })
-            .unwrap();
+            .map_err(|e| CarchError::Pty(format!("openpty: {e}")))?;
 
-        let (tx, rx) = oneshot::channel();
-        let command_handle = std::thread::spawn(move || {
-            let mut child = pair.slave.spawn_command(cmd).unwrap();
-            let killer = child.clone_killer();
-            tx.send(killer).unwrap();
-            child.wait().unwrap()
+        let (tx, rx): (ChildKillerSender, ChildKillerReceiver) = oneshot::channel();
+        let pair_slave = pair.slave;
+        let command_handle = std::thread::spawn(move || -> ExitStatus {
+            match pair_slave.spawn_command(cmd) {
+                Ok(mut child) => {
+                    let killer = child.clone_killer();
+                    if tx.send(Some(killer)).is_err() {
+                        log::warn!("child_killer receiver dropped before killer was sent");
+                    }
+                    child.wait().unwrap_or_else(|e| {
+                        log::error!("child.wait failed: {e}");
+                        ExitStatus::with_exit_code(1)
+                    })
+                }
+                Err(e) => {
+                    log::error!("spawn_command failed: {e}");
+                    if tx.send(None).is_err() {
+                        log::warn!("child_killer receiver dropped before None was sent");
+                    }
+                    ExitStatus::with_exit_code(1)
+                }
+            }
         });
 
-        let mut reader = pair.master.try_clone_reader().unwrap();
+        let mut reader = pair
+            .master
+            .try_clone_reader()
+            .map_err(|e| CarchError::Pty(format!("try_clone_reader: {e}")))?;
 
         let command_buffer: Arc<Mutex<Vec<u8>>> = Arc::new(Mutex::new(Vec::new()));
-        let reader_handle = {
+        {
             let command_buffer = command_buffer.clone();
             std::thread::spawn(move || {
                 let mut buf = [0u8; 16384];
@@ -79,22 +101,26 @@ impl RunScriptPopup {
                     if size == 0 {
                         break;
                     }
-                    let mut mutex = command_buffer.lock().unwrap();
+                    let mut mutex = match command_buffer.lock() {
+                        Ok(g) => g,
+                        Err(p) => p.into_inner(),
+                    };
                     let data = &buf[0..size];
                     if log_mode {
                         info!("{}", String::from_utf8_lossy(data));
                     }
                     mutex.extend_from_slice(data);
                 }
-            })
-        };
+            });
+        }
 
-        let writer = pair.master.take_writer().unwrap();
-        Self {
+        let writer =
+            pair.master.take_writer().map_err(|e| CarchError::Pty(format!("take_writer: {e}")))?;
+
+        Ok(Self {
             buffer: command_buffer,
             command_thread: Some(command_handle),
             child_killer: Some(rx),
-            _reader_thread: reader_handle,
             pty_master: pair.master,
             writer,
             status: None,
@@ -108,7 +134,7 @@ impl RunScriptPopup {
             auto_scroll: true,
             theme,
             was_finished: false,
-        }
+        })
     }
 
     pub fn has_new_data(&mut self) -> bool {
@@ -138,9 +164,9 @@ impl RunScriptPopup {
                 let _ = self.writer.write_all(&[3]);
                 PopupEvent::None
             }
-            KeyCode::Char('q') if self.is_finished() => PopupEvent::Close,
-            KeyCode::Enter if self.is_finished() => PopupEvent::Close,
-            KeyCode::Esc if self.is_finished() => PopupEvent::Close,
+            KeyCode::Char('q') | KeyCode::Enter | KeyCode::Esc if self.is_finished() => {
+                PopupEvent::Close
+            }
             KeyCode::Up if shift => {
                 self.scroll_up(1);
                 PopupEvent::None
@@ -210,7 +236,7 @@ impl RunScriptPopup {
     }
 
     fn is_finished(&self) -> bool {
-        self.command_thread.as_ref().is_none_or(|h| h.is_finished())
+        self.command_thread.as_ref().is_none_or(JoinHandle::is_finished)
     }
 
     fn sync_parser(&mut self, size: Size) {
@@ -229,7 +255,7 @@ impl RunScriptPopup {
         }
 
         let new_bytes: Vec<u8> = {
-            let buf = self.buffer.lock().unwrap();
+            let buf = self.buffer.lock().unwrap_or_else(PoisonError::into_inner);
             if self.processed_len <= buf.len() {
                 buf[self.processed_len..].to_vec()
             } else {
@@ -260,45 +286,21 @@ impl RunScriptPopup {
     fn get_exit_status(&mut self) -> ExitStatus {
         if self.command_thread.is_some() {
             let handle = self.command_thread.take().unwrap();
-            let exit_status = handle.join().unwrap();
+            let exit_status = handle.join().unwrap_or_else(|_| ExitStatus::with_exit_code(1));
             self.status = Some(exit_status.clone());
             exit_status
         } else {
-            self.status.as_ref().unwrap().clone()
-        }
-    }
-
-    fn exit_success(&mut self) -> Option<bool> {
-        if self.command_thread.is_some() {
-            let handle = self.command_thread.take()?;
-            let exit_status = handle.join().ok()?;
-            self.status = Some(exit_status.clone());
-            Some(exit_status.success())
-        } else {
-            self.status.as_ref().map(|s| s.success())
+            self.status.clone().unwrap_or_else(|| ExitStatus::with_exit_code(1))
         }
     }
 
     pub fn kill_child(&mut self) {
         if !self.is_finished()
             && let Some(killer_rx) = self.child_killer.take()
-            && let Ok(mut killer) = killer_rx.recv()
+            && let Ok(Some(mut killer)) = killer_rx.recv()
         {
             let _ = killer.kill();
         }
-    }
-
-    fn title_line(&mut self) -> Line<'static> {
-        if self.is_finished() {
-            let (text, color) = match self.exit_success() {
-                Some(true) => ("Success! Press <Enter> to close", self.theme.success),
-                Some(false) => ("Failed! Press <Enter> to close", self.theme.error),
-                None => ("Finished. Press <Enter> to close", self.theme.primary),
-            };
-            return Line::styled(text, Style::default().fg(color).reversed());
-        }
-
-        Line::raw("")
     }
 
     fn handle_passthrough_key_event(&mut self, key: KeyEvent) {
@@ -323,6 +325,17 @@ impl RunScriptPopup {
     }
 }
 
+impl Drop for RunScriptPopup {
+    fn drop(&mut self) {
+        if !self.is_finished()
+            && let Some(rx) = self.child_killer.take()
+            && let Ok(Some(mut killer)) = rx.recv()
+        {
+            let _ = killer.kill();
+        }
+    }
+}
+
 impl Widget for &mut RunScriptPopup {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let running = !self.is_finished();
@@ -332,7 +345,6 @@ impl Widget for &mut RunScriptPopup {
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(self.theme.primary))
                 .title_style(Style::default().fg(self.theme.primary).reversed())
-                .title_top(self.title_line().centered())
                 .title_bottom(Line::from(
                     "Shift+↑/↓: scroll   PgUp/PgDn: page   g/G: top/bottom   Ctrl-C: kill",
                 ))

@@ -4,10 +4,12 @@ use log::info;
 use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
 
-impl<'a> App<'a> {
+impl App {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
-            KeyCode::Esc => self.toggle_search_mode(),
+            KeyCode::Esc => {
+                self.toggle_search_mode();
+            }
             KeyCode::Enter if !self.search.results.is_empty() => {
                 let selected_item = self.search.results[self.search.selected_idx].clone();
                 if self.log_mode {
@@ -79,9 +81,9 @@ impl<'a> App<'a> {
                     self.search.cursor_position += 1;
                 }
                 if self.search.cursor_position == self.search.input.len()
-                    && self.search.autocomplete.is_some()
+                    && let Some(autocomplete) = self.search.autocomplete.take()
                 {
-                    self.search.input = self.search.autocomplete.take().unwrap();
+                    self.search.input = autocomplete;
                     self.search.cursor_position = self.search.input.len();
                     self.perform_search();
                 }
@@ -206,16 +208,27 @@ impl<'a> App<'a> {
                 }
 
                 if self.multi_select.enabled && !self.multi_select.scripts.is_empty() {
-                    self.script_execution_queue = self.multi_select.scripts.clone();
+                    self.script_execution_queue = self.multi_select.scripts.clone().into();
                 } else if let Some(script_path) = self.get_script_path() {
-                    self.script_execution_queue.push(script_path);
+                    self.script_execution_queue.push_back(script_path);
                 }
 
                 if !self.script_execution_queue.is_empty() {
-                    let script_path = self.script_execution_queue.remove(0);
-                    let popup = RunScriptPopup::new(script_path, self.log_mode, self.theme.clone());
-                    self.run_script_popup = Some(popup);
-                    self.mode = AppMode::RunScript;
+                    let script_path = self
+                        .script_execution_queue
+                        .pop_front()
+                        .expect("queue checked is_empty above");
+                    match RunScriptPopup::new(script_path, self.log_mode, self.theme.clone()) {
+                        Ok(popup) => {
+                            self.run_script_popup = Some(popup);
+                            self.mode = AppMode::RunScript;
+                        }
+                        Err(e) => {
+                            log::error!("Failed to start script popup: {e}");
+                            self.run_script_popup = None;
+                            self.mode = AppMode::Normal;
+                        }
+                    }
                 } else {
                     self.mode = AppMode::Normal;
                 }

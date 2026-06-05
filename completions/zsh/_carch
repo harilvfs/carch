@@ -15,6 +15,7 @@ _carch() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" : \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-v[Print version information]' \
@@ -29,6 +30,7 @@ _carch() {
 '--nord[Set theme to Nord]' \
 '-r[Set theme to Rosé Pine]' \
 '--rose-pine[Set theme to Rosé Pine]' \
+'(--fav)--unfav[Clear the saved favorite theme]' \
 '-h[Print help]' \
 '--help[Print help]' \
 ":: :_carch_commands" \
@@ -42,6 +44,7 @@ _carch() {
         case $line[1] in
             (check-update)
 _arguments "${_arguments_options[@]}" : \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
@@ -54,12 +57,14 @@ _arguments "${_arguments_options[@]}" : \
 '--nord[Set theme to Nord]' \
 '-r[Set theme to Rosé Pine]' \
 '--rose-pine[Set theme to Rosé Pine]' \
+'(--fav)--unfav[Clear the saved favorite theme]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (update)
 _arguments "${_arguments_options[@]}" : \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
@@ -72,12 +77,14 @@ _arguments "${_arguments_options[@]}" : \
 '--nord[Set theme to Nord]' \
 '-r[Set theme to Rosé Pine]' \
 '--rose-pine[Set theme to Rosé Pine]' \
+'(--fav)--unfav[Clear the saved favorite theme]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (uninstall)
 _arguments "${_arguments_options[@]}" : \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
@@ -90,13 +97,14 @@ _arguments "${_arguments_options[@]}" : \
 '--nord[Set theme to Nord]' \
 '-r[Set theme to Rosé Pine]' \
 '--rose-pine[Set theme to Rosé Pine]' \
+'(--fav)--unfav[Clear the saved favorite theme]' \
 '-h[Print help]' \
 '--help[Print help]' \
 && ret=0
 ;;
 (help)
 _arguments "${_arguments_options[@]}" : \
-":: :_carch__help_commands" \
+":: :_carch__subcmd__help_commands" \
 "*::: :->help" \
 && ret=0
 
@@ -141,13 +149,13 @@ _carch_commands() {
     )
     _describe -t commands 'carch commands' commands "$@"
 }
-(( $+functions[_carch__check-update_commands] )) ||
-_carch__check-update_commands() {
+(( $+functions[_carch__subcmd__check-update_commands] )) ||
+_carch__subcmd__check-update_commands() {
     local commands; commands=()
     _describe -t commands 'carch check-update commands' commands "$@"
 }
-(( $+functions[_carch__help_commands] )) ||
-_carch__help_commands() {
+(( $+functions[_carch__subcmd__help_commands] )) ||
+_carch__subcmd__help_commands() {
     local commands; commands=(
 'check-update:Check for updates' \
 'update:Update the application' \
@@ -156,33 +164,33 @@ _carch__help_commands() {
     )
     _describe -t commands 'carch help commands' commands "$@"
 }
-(( $+functions[_carch__help__check-update_commands] )) ||
-_carch__help__check-update_commands() {
+(( $+functions[_carch__subcmd__help__subcmd__check-update_commands] )) ||
+_carch__subcmd__help__subcmd__check-update_commands() {
     local commands; commands=()
     _describe -t commands 'carch help check-update commands' commands "$@"
 }
-(( $+functions[_carch__help__help_commands] )) ||
-_carch__help__help_commands() {
+(( $+functions[_carch__subcmd__help__subcmd__help_commands] )) ||
+_carch__subcmd__help__subcmd__help_commands() {
     local commands; commands=()
     _describe -t commands 'carch help help commands' commands "$@"
 }
-(( $+functions[_carch__help__uninstall_commands] )) ||
-_carch__help__uninstall_commands() {
+(( $+functions[_carch__subcmd__help__subcmd__uninstall_commands] )) ||
+_carch__subcmd__help__subcmd__uninstall_commands() {
     local commands; commands=()
     _describe -t commands 'carch help uninstall commands' commands "$@"
 }
-(( $+functions[_carch__help__update_commands] )) ||
-_carch__help__update_commands() {
+(( $+functions[_carch__subcmd__help__subcmd__update_commands] )) ||
+_carch__subcmd__help__subcmd__update_commands() {
     local commands; commands=()
     _describe -t commands 'carch help update commands' commands "$@"
 }
-(( $+functions[_carch__uninstall_commands] )) ||
-_carch__uninstall_commands() {
+(( $+functions[_carch__subcmd__uninstall_commands] )) ||
+_carch__subcmd__uninstall_commands() {
     local commands; commands=()
     _describe -t commands 'carch uninstall commands' commands "$@"
 }
-(( $+functions[_carch__update_commands] )) ||
-_carch__update_commands() {
+(( $+functions[_carch__subcmd__update_commands] )) ||
+_carch__subcmd__update_commands() {
     local commands; commands=()
     _describe -t commands 'carch update commands' commands "$@"
 }

@@ -5,6 +5,103 @@ use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
 
 use crate::ui::state::App;
+use crate::ui::theme::Theme;
+
+#[derive(Clone, Copy)]
+enum Kind {
+    Header,
+    Key,
+    NavKey,
+    Body,
+}
+
+const HELP_LINES: &[(&[&str], &[Kind])] = &[
+    (&["Navigation"], &[Kind::Header]),
+    (&[], &[]),
+    (
+        &[" \u{2191}/\u{2193} ", " ", "Move up/down in the script list"],
+        &[Kind::NavKey, Kind::Body, Kind::Body],
+    ),
+    (&[], &[]),
+    (
+        &[" h/l ", " ", "Switch between categories and scripts"],
+        &[Kind::NavKey, Kind::Body, Kind::Body],
+    ),
+    (&[], &[]),
+    (&[" Home/End ", " ", "Jump to top/bottom of list"], &[Kind::NavKey, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&["Actions"], &[Kind::Header]),
+    (&[], &[]),
+    (&[" Enter ", " ", "Run selected script"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (
+        &[" Space ", " ", "Toggle script selection in multi-select mode"],
+        &[Kind::Key, Kind::Body, Kind::Body],
+    ),
+    (&[], &[]),
+    (&[" p ", " ", "Toggle preview for scripts"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&[" d ", " ", "Show script description"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&[" q, Esc ", " ", "Quit | Go back"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&["Modes"], &[Kind::Header]),
+    (&[], &[]),
+    (&[" / ", " ", "Search mode"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (
+        &[" m ", " ", "Toggle multi-select mode", " | ", " Esc ", " ", "Exit multi-select mode"],
+        &[Kind::Key, Kind::Body, Kind::Body, Kind::Body, Kind::Key, Kind::Body, Kind::Body],
+    ),
+    (&[], &[]),
+    (&[" t ", " ", "Cycle themes"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&[" ? ", " ", "Show this help"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&["Quick Actions"], &[Kind::Header]),
+    (&[], &[]),
+    (&[" l/-> ", " ", "Confirm selection (same as Enter)"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&[" h/<- ", " ", "Cancel selection (same as Esc)"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&["Legend"], &[Kind::Header]),
+    (&[], &[]),
+    (&[" [C] ", " ", "Category"], &[Kind::NavKey, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (&[" [S] ", " ", "Script"], &[Kind::NavKey, Kind::Body, Kind::Body]),
+    (&[], &[]),
+    (
+        &[" \u{2713} ", " ", "Script is selected (multi-select)"],
+        &[Kind::NavKey, Kind::Body, Kind::Body],
+    ),
+];
+
+fn style_for(kind: Kind, theme: &Theme) -> Style {
+    match kind {
+        Kind::Header => Style::default().fg(theme.warning).add_modifier(Modifier::BOLD),
+        Kind::NavKey => Style::default().bg(theme.primary).fg(theme.background),
+        Kind::Key => Style::default().bg(theme.success).fg(theme.background),
+        Kind::Body => Style::default(),
+    }
+}
+
+fn build_help_content(theme: &Theme) -> Vec<Line<'static>> {
+    HELP_LINES
+        .iter()
+        .map(|(texts, kinds)| {
+            if texts.is_empty() {
+                Line::from("")
+            } else {
+                let spans: Vec<_> = texts
+                    .iter()
+                    .zip(kinds.iter())
+                    .map(|(t, k)| Span::styled((*t).to_string(), style_for(*k, theme)))
+                    .collect();
+                Line::from(spans)
+            }
+        })
+        .collect()
+}
 
 fn create_rounded_block() -> Block<'static> {
     Block::default().borders(Borders::ALL).border_type(BorderType::Rounded)
@@ -17,162 +114,18 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         .title("Keyboard Shortcuts")
         .border_style(Style::default().fg(app.theme.primary));
 
-    f.render_widget(popup_block.clone(), area);
-
+    let inner = popup_block.inner(area);
+    f.render_widget(popup_block, area);
     let content_area = Rect {
-        x:      popup_block.inner(area).x + 1,
-        y:      popup_block.inner(area).y,
-        width:  popup_block.inner(area).width.saturating_sub(2),
-        height: popup_block.inner(area).height.saturating_sub(2),
+        x:      inner.x + 1,
+        y:      inner.y,
+        width:  inner.width.saturating_sub(2),
+        height: inner.height.saturating_sub(2),
     };
 
-    let mut help_content = Vec::new();
-
-    help_content.push(Line::from(vec![Span::styled(
-        "Navigation",
-        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
-    )]));
-    help_content.push(Line::from(""));
-
-    let nav_color = app.theme.primary;
-    help_content.push(Line::from(vec![
-        Span::styled(" ↑/↓ ", Style::default().bg(nav_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Move up/down in the script list", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" h/l ", Style::default().bg(nav_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled(
-            "Switch between categories and scripts",
-            Style::default().fg(app.theme.foreground),
-        ),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" Home/End ", Style::default().bg(nav_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Jump to top/bottom of list", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![Span::styled(
-        "Actions",
-        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
-    )]));
-    help_content.push(Line::from(""));
-
-    let action_color = app.theme.success;
-    help_content.push(Line::from(vec![
-        Span::styled(" Enter ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Run selected script", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" Space ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled(
-            "Toggle script selection in multi-select mode",
-            Style::default().fg(app.theme.foreground),
-        ),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" p ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Toggle preview for scripts", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" d ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Show script description", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" q, Esc ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Quit | Go back", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![Span::styled(
-        "Modes",
-        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
-    )]));
-    help_content.push(Line::from(""));
-
-    let mode_color = app.theme.accent;
-    help_content.push(Line::from(vec![
-        Span::styled(" / ", Style::default().bg(mode_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Search mode", Style::default().fg(app.theme.foreground)),
-    ]));
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" m ", Style::default().bg(mode_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Toggle multi-select mode", Style::default().fg(app.theme.foreground)),
-        Span::raw(" | "),
-        Span::styled(" Esc ", Style::default().bg(mode_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Exit multi-select mode", Style::default().fg(app.theme.foreground)),
-    ]));
-
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" t ", Style::default().bg(mode_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Cycle themes", Style::default().fg(app.theme.foreground)),
-    ]));
-
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" ? ", Style::default().bg(mode_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Show this help", Style::default().fg(app.theme.foreground)),
-    ]));
-
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![Span::styled(
-        "Quick Actions",
-        Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
-    )]));
-
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" l/-> ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled(
-            "Confirm selection (same as Enter)",
-            Style::default().fg(app.theme.foreground),
-        ),
-    ]));
-
-    help_content.push(Line::from(""));
-
-    help_content.push(Line::from(vec![
-        Span::styled(" h/<- ", Style::default().bg(action_color).fg(app.theme.background)),
-        Span::raw(" "),
-        Span::styled("Cancel selection (same as Esc)", Style::default().fg(app.theme.foreground)),
-    ]));
-
+    let help_content = build_help_content(&app.theme);
     let content_height = help_content.len() as u16;
-    let visible_height = content_area.height;
-    let max_scroll = content_height.saturating_sub(visible_height);
+    let max_scroll = content_height.saturating_sub(content_area.height);
 
     let help_paragraph =
         Paragraph::new(help_content).block(Block::default()).scroll((app.help.scroll, 0));
@@ -181,8 +134,8 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
 
     let footer_area = Rect {
         x:      area.x + 1,
-        y:      area.y + area.height - 2,
-        width:  area.width - 2,
+        y:      area.y + area.height.saturating_sub(2),
+        width:  area.width.saturating_sub(2),
         height: 1,
     };
 
@@ -193,7 +146,7 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
     };
 
     let footer = Paragraph::new(Line::from(vec![
-        Span::styled("↑/↓/j/k: ", Style::default().fg(app.theme.foreground)),
+        Span::styled("\u{2191}/\u{2193}/j/k: ", Style::default().fg(app.theme.foreground)),
         Span::styled("Scroll  ", Style::default().fg(app.theme.primary)),
         Span::styled("Esc/q: ", Style::default().fg(app.theme.foreground)),
         Span::styled("Close", Style::default().fg(app.theme.primary)),

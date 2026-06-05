@@ -1,4 +1,5 @@
 use crate::commands;
+use crate::state::{clear_favorite_theme, load_favorite_theme, save_favorite_theme};
 use carch_core::error::{CarchError, Result};
 use carch_core::version;
 use clap::builder::styling::{AnsiColor, Style};
@@ -29,7 +30,6 @@ pub struct Cli {
         help = "Enable logging, output is on ~/.config/carch/carch.log"
     )]
     pub log:              bool,
-    #[arg(short = 'v', long = "version", action = ArgAction::Version, help = "Print version information")]
     #[arg(short = 'v', long = "version", action = ArgAction::SetTrue, help = "Print version information")]
     version:              bool,
     #[arg(short = 'c', long, global = true, help = "Set theme to Catppuccin Mocha")]
@@ -42,6 +42,12 @@ pub struct Cli {
     pub nord:             bool,
     #[arg(short = 'r', long, global = true, help = "Set theme to Rosé Pine")]
     pub rose_pine:        bool,
+    /// Save the given theme as favorite and exit.
+    #[arg(long, global = true, value_name = "THEME")]
+    pub fav:              Option<String>,
+    /// Clear the saved favorite theme.
+    #[arg(long, global = true, conflicts_with = "fav")]
+    pub unfav:            bool,
 }
 
 #[derive(Subcommand)]
@@ -69,7 +75,21 @@ pub fn parse_args() -> Result<()> {
         return Ok(());
     }
 
-    let mut settings = Settings { ..Default::default() };
+    if let Some(theme) = cli.fav.as_deref() {
+        return save_favorite_theme(theme).map(|()| {
+            println!("Favorite theme set to '{theme}'. It will be used on future launches.");
+        });
+    }
+    if cli.unfav {
+        match clear_favorite_theme() {
+            Ok(true) => println!("Favorite theme cleared."),
+            Ok(false) => println!("No favorite theme was set."),
+            Err(e) => return Err(e),
+        }
+        return Ok(());
+    }
+
+    let mut settings = Settings::default();
 
     if cli.log {
         settings.log_mode = true;
@@ -87,23 +107,30 @@ pub fn parse_args() -> Result<()> {
         info!("Carch TUI started");
     }
 
-    settings.theme = if cli.catppuccin_mocha {
-        "catppuccin-mocha"
-    } else if cli.dracula {
-        "dracula"
-    } else if cli.gruvbox {
-        "gruvbox"
-    } else if cli.nord {
-        "nord"
-    } else if cli.rose_pine {
-        "rose-pine"
-    } else {
-        "catppuccin-mocha"
-    }
-    .to_string();
-
-    settings.theme_locked =
+    let explicit_theme =
         cli.catppuccin_mocha || cli.dracula || cli.gruvbox || cli.nord || cli.rose_pine;
+
+    settings.theme = if cli.catppuccin_mocha {
+        "catppuccin-mocha".to_string()
+    } else if cli.dracula {
+        "dracula".to_string()
+    } else if cli.gruvbox {
+        "gruvbox".to_string()
+    } else if cli.nord {
+        "nord".to_string()
+    } else if cli.rose_pine {
+        "rose-pine".to_string()
+    } else if let Some(fav) = load_favorite_theme() {
+        // Saved favorite is locked so `t` can't overwrite it.
+        settings.theme_locked = true;
+        fav
+    } else {
+        "catppuccin-mocha".to_string()
+    };
+
+    if explicit_theme {
+        settings.theme_locked = true;
+    }
 
     match cli.command {
         Some(Commands::CheckUpdate) => {

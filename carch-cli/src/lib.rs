@@ -1,12 +1,13 @@
 use carch_core::error::{CarchError, Result};
-use carch_core::extract_scripts;
 use carch_core::ui::render::run_ui_with_options;
 use carch_core::ui::state::UiOptions;
+use carch_core::{extract_scripts, is_running_as_root};
 use log::{error, info};
 use tempfile::TempDir;
 
 pub mod args;
 pub mod commands;
+pub mod state;
 
 use crate::args::Settings;
 
@@ -34,14 +35,14 @@ pub fn run_tui(settings: Settings) -> Result<()> {
         log_mode:     settings.log_mode,
         theme:        settings.theme,
         theme_locked: settings.theme_locked,
-        is_root:      std::env::var("USER").unwrap_or_default() == "root",
+        is_root:      is_running_as_root(),
     };
 
     if settings.log_mode {
         info!("TUI initialized with settings: log_mode={}", settings.log_mode);
     }
 
-    let result = run_ui_with_options(&modules_dir, ui_options);
+    let result = run_ui_with_options(&modules_dir, &ui_options);
 
     if settings.log_mode {
         info!("Carch application exiting normally");

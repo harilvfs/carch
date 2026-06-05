@@ -1,63 +1,69 @@
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::style::{Color, Modifier, Style};
+use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
 
-use crate::ui::state::{App, FocusedPanel};
+use crate::ui::state::App;
+use crate::ui::widgets::paint_rounded_highlight;
 
-fn create_block<'a>(title: &'a str, _is_focused: bool, app: &App) -> Block<'a> {
-    Block::default()
+fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
+    let border_color = app.theme.secondary;
+    let mut block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .title(title)
-        .border_style(Style::default().fg(app.theme.primary))
-        .style(Style::default().bg(Color::Reset))
+        .border_style(Style::default().fg(border_color))
+        .style(Style::default().bg(Color::Reset));
+    if !title.is_empty() {
+        block = block.title(title);
+    }
+    block
 }
 
+const SCRIPT_TAG: &str = " [S] ";
+const TICK_SUFFIX: &str = " \u{2713}";
+
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
-    let is_focused = app.focused_panel == FocusedPanel::Scripts;
     let title = if app.multi_select.enabled {
         format!("[{} Selected]", app.multi_select.scripts.len())
     } else {
-        "Scripts (p for preview)".to_string()
+        String::new()
     };
-    let block = create_block(&title, is_focused, app);
+    let block = create_block(&title, app);
 
     let items: Vec<ListItem> = app
         .scripts
         .items
         .iter()
         .map(|item| {
-            let icon = " ";
-            let script_name_style = Style::default().fg(app.theme.secondary);
-            let script_name = ratatui::text::Span::styled(&item.name, script_name_style);
+            let is_selected = app.multi_select.enabled && app.is_script_selected(&item.path);
+            let has_desc = app.has_description(&item.category, &item.name);
 
-            if app.multi_select.enabled {
-                let is_selected = app.is_script_selected(&item.path);
-                let (suffix, script_name_style) = if is_selected {
-                    (" ", Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD))
-                } else {
-                    ("", Style::default().fg(app.theme.secondary))
-                };
-
-                let icon_style =
-                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
-
-                let line = ratatui::text::Line::from(vec![
-                    ratatui::text::Span::styled(icon, icon_style),
-                    ratatui::text::Span::styled(&item.name, script_name_style),
-                    ratatui::text::Span::styled(suffix, script_name_style),
-                ]);
-                ListItem::new(line)
+            let name_color = if is_selected {
+                app.theme.success
+            } else if has_desc {
+                app.theme.foreground
             } else {
-                let icon_style =
-                    Style::default().fg(app.theme.secondary).add_modifier(Modifier::BOLD);
-                let line = ratatui::text::Line::from(vec![
-                    ratatui::text::Span::styled(icon, icon_style),
-                    script_name,
-                ]);
-                ListItem::new(line)
+                app.theme.secondary
+            };
+            let name_modifier =
+                if is_selected { Modifier::BOLD | Modifier::UNDERLINED } else { Modifier::empty() };
+
+            let mut spans = vec![
+                Span::styled(SCRIPT_TAG, Style::default().fg(app.theme.secondary)),
+                Span::styled(
+                    &item.name,
+                    Style::default().fg(name_color).add_modifier(name_modifier),
+                ),
+            ];
+            if is_selected {
+                spans.push(Span::styled(
+                    TICK_SUFFIX,
+                    Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD),
+                ));
             }
+
+            ListItem::new(Line::from(spans))
         })
         .collect();
 
@@ -69,4 +75,5 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     );
 
     f.render_stateful_widget(list, area, &mut app.scripts.state);
+    paint_rounded_highlight(f, area, &app.scripts.state, app.theme.secondary);
 }

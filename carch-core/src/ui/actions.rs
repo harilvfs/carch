@@ -7,7 +7,7 @@ use super::state::{
 };
 use fuzzy_matcher::FuzzyMatcher;
 
-impl<'a> App<'a> {
+impl App {
     pub fn load_scripts(&mut self, modules_dir: &Path) -> io::Result<()> {
         let mut categories = Vec::new();
         let mut all_scripts = std::collections::HashMap::new();
@@ -98,7 +98,6 @@ impl<'a> App<'a> {
             let prev_mode = self.mode;
             self.mode = match self.mode {
                 AppMode::Normal => AppMode::Preview,
-                AppMode::Preview => AppMode::Normal,
                 _ => AppMode::Normal,
             };
 
@@ -277,7 +276,28 @@ impl<'a> App<'a> {
     }
 
     pub fn is_script_selected(&self, script_path: &Path) -> bool {
-        self.multi_select.scripts.contains(&script_path.to_path_buf())
+        self.multi_select.scripts.iter().any(|p| p == script_path)
+    }
+
+    #[must_use]
+    pub fn has_description(&self, category: &str, script_name: &str) -> bool {
+        let desc_path = self.modules_dir.join(category).join("desc.toml");
+        let Ok(content) = std::fs::read_to_string(&desc_path) else {
+            return false;
+        };
+        let Ok(table) = content.parse::<toml::Table>() else {
+            return false;
+        };
+        let Some(stem) = std::path::Path::new(script_name).file_stem().and_then(|s| s.to_str())
+        else {
+            return false;
+        };
+        table
+            .get(stem)
+            .and_then(|v| v.as_table())
+            .and_then(|t| t.get("description"))
+            .and_then(|v| v.as_str())
+            .is_some()
     }
 
     pub fn toggle_help_mode(&mut self) {
@@ -301,15 +321,17 @@ impl<'a> App<'a> {
     pub fn bottom(&mut self) {
         match self.focused_panel {
             FocusedPanel::Categories => {
-                let last_idx = self.categories.items.len() - 1;
-                self.categories.state.select(Some(last_idx));
-                self.update_script_list();
-                self.update_preview();
+                if let Some(last_idx) = self.categories.items.len().checked_sub(1) {
+                    self.categories.state.select(Some(last_idx));
+                    self.update_script_list();
+                    self.update_preview();
+                }
             }
             FocusedPanel::Scripts => {
-                let last_idx = self.scripts.items.len() - 1;
-                self.scripts.state.select(Some(last_idx));
-                self.update_preview();
+                if let Some(last_idx) = self.scripts.items.len().checked_sub(1) {
+                    self.scripts.state.select(Some(last_idx));
+                    self.update_preview();
+                }
             }
         }
     }
