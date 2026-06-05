@@ -1,5 +1,3 @@
-//! Integration tests for the TUI app. No real terminal required.
-
 use std::path::PathBuf;
 
 use carch_core::extract_scripts;
@@ -53,7 +51,6 @@ fn extract_scripts_populates_modules() {
     let modules_dir = tmp.path().join("modules");
     assert!(modules_dir.is_dir(), "modules/ should be created");
 
-    // At least one category and one .sh file should be extracted.
     let mut found_script = false;
     for entry in std::fs::read_dir(&modules_dir).unwrap() {
         let entry = entry.unwrap();
