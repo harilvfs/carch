@@ -15,7 +15,7 @@ _carch() {
 
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" : \
-'--fav=[Save the given theme as your favorite and exit. Use \`--unfav\` to clear]:THEME:_default' \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-v[Print version information]' \
@@ -44,7 +44,7 @@ _carch() {
         case $line[1] in
             (check-update)
 _arguments "${_arguments_options[@]}" : \
-'--fav=[Save the given theme as your favorite and exit. Use \`--unfav\` to clear]:THEME:_default' \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
@@ -64,7 +64,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (update)
 _arguments "${_arguments_options[@]}" : \
-'--fav=[Save the given theme as your favorite and exit. Use \`--unfav\` to clear]:THEME:_default' \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
@@ -84,7 +84,7 @@ _arguments "${_arguments_options[@]}" : \
 ;;
 (uninstall)
 _arguments "${_arguments_options[@]}" : \
-'--fav=[Save the given theme as your favorite and exit. Use \`--unfav\` to clear]:THEME:_default' \
+'--fav=[Save the given theme as favorite and exit]:THEME:_default' \
 '-l[Enable logging, output is on ~/.config/carch/carch.log]' \
 '--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \

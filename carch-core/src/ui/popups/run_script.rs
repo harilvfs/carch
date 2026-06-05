@@ -1,6 +1,6 @@
 use std::io::Write;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, PoisonError};
 use std::thread::JoinHandle;
 
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
@@ -164,9 +164,9 @@ impl RunScriptPopup {
                 let _ = self.writer.write_all(&[3]);
                 PopupEvent::None
             }
-            KeyCode::Char('q') if self.is_finished() => PopupEvent::Close,
-            KeyCode::Enter if self.is_finished() => PopupEvent::Close,
-            KeyCode::Esc if self.is_finished() => PopupEvent::Close,
+            KeyCode::Char('q') | KeyCode::Enter | KeyCode::Esc if self.is_finished() => {
+                PopupEvent::Close
+            }
             KeyCode::Up if shift => {
                 self.scroll_up(1);
                 PopupEvent::None
@@ -236,7 +236,7 @@ impl RunScriptPopup {
     }
 
     fn is_finished(&self) -> bool {
-        self.command_thread.as_ref().is_none_or(|h| h.is_finished())
+        self.command_thread.as_ref().is_none_or(JoinHandle::is_finished)
     }
 
     fn sync_parser(&mut self, size: Size) {
@@ -255,7 +255,7 @@ impl RunScriptPopup {
         }
 
         let new_bytes: Vec<u8> = {
-            let buf = self.buffer.lock().unwrap_or_else(|p| p.into_inner());
+            let buf = self.buffer.lock().unwrap_or_else(PoisonError::into_inner);
             if self.processed_len <= buf.len() {
                 buf[self.processed_len..].to_vec()
             } else {

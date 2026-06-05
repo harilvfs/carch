@@ -14,7 +14,6 @@ use crate::ui::theme::Theme;
 impl App {
     pub fn new(options: &UiOptions) -> App {
         let theme = match options.theme.as_str() {
-            "catppuccin-mocha" => Theme::catppuccin_mocha(),
             "dracula" => Theme::dracula(),
             "gruvbox" => Theme::gruvbox(),
             "nord" => Theme::nord(),
@@ -55,7 +54,6 @@ impl App {
             "Dracula" => Theme::gruvbox(),
             "Gruvbox" => Theme::nord(),
             "Nord" => Theme::rose_pine(),
-            "Rosé Pine" => Theme::catppuccin_mocha(),
             _ => Theme::catppuccin_mocha(),
         }
     }
@@ -83,7 +81,7 @@ impl App {
             if self.log_mode {
                 match &desc {
                     Some(_) => {
-                        info!("Successfully loaded description and entered description mode.")
+                        info!("Successfully loaded description and entered description mode.");
                     }
                     None => info!(
                         "No description available for script '{}/{}'",

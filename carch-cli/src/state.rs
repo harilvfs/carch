@@ -60,7 +60,7 @@ fn escape_toml_string(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::sync::Mutex;
+    use std::sync::{Mutex, PoisonError};
 
     static HOME_LOCK: Mutex<()> = Mutex::new(());
 
@@ -72,7 +72,7 @@ mod tests {
 
     impl ScopedHome {
         fn new() -> Self {
-            let guard = HOME_LOCK.lock().unwrap_or_else(|p| p.into_inner());
+            let guard = HOME_LOCK.lock().unwrap_or_else(PoisonError::into_inner);
             let tmp = std::env::temp_dir().join(format!(
                 "carch_state_test_{}_{}",
                 std::process::id(),

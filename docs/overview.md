@@ -49,6 +49,7 @@
 - **GitHub**: *Equips you with essential Git and GitHub tools, including the GitHub CLI, GitHub Desktop, and LazyGit, to streamline your version control workflow.*
 - **Multimedia**: *Installs multimedia players like VLC and MPV, ensuring you have the right tools to enjoy your favorite movies and videos.*
 - **Music**: *Offers a selection of music applications, including Spotify, Spotube, and YouTube Music, so you can listen to your favorite tracks and discover new artists.*
+- **Networking**: *Installs essential networking utilities for managing network interfaces and devices.*
 - **Productivity**: *Boosts your productivity with a choice of office suites like LibreOffice and OnlyOffice, as well as note-taking apps like Obsidian and Joplin.*
 - **Streaming**: *Provides streaming and screen recording software, such as OBS Studio and SimpleScreenRecorder, to help you capture and share your screen content.*
 - **Terminals**: *Offers a wide range of terminal emulators, from modern options like Alacritty and Kitty to classic choices like GNOME Terminal and Konsole.*
@@ -68,6 +69,7 @@
 - **Grub**: *GRUB (GNU GRand Unified Bootloader) is a bootloader that lets you choose and load operating systems or kernels on startup. The script offers various themes and applies necessary GRUB configurations. Credit to chrisTitusTech/Top-5-Bootloader-Themes for the themes and script assistance.*
 - **LTS-Kernel**: *This script installs the LTS kernel for Arch-based distros only (not for Fedora or openSUSE).*
 - **Sddm**: *SDDM (Simple Desktop Display Manager) is a modern, Qt-based graphical login manager. The script installs a Catppuccin-based theme for SDDM from the Catppuccin community.*
+- **Wifi-Blockage**: *Fixes wireless hard blocks caused by shitty platform drivers (Dell, HP, Lenovo IdeaPad, Acer, Asus). Identifies, removes, and blacklists the offending module, then unblocks and restores wireless connectivity.*
 
 ### Terminal
 

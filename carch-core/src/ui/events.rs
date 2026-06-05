@@ -81,9 +81,9 @@ impl App {
                     self.search.cursor_position += 1;
                 }
                 if self.search.cursor_position == self.search.input.len()
-                    && self.search.autocomplete.is_some()
+                    && let Some(autocomplete) = self.search.autocomplete.take()
                 {
-                    self.search.input = self.search.autocomplete.take().unwrap();
+                    self.search.input = autocomplete;
                     self.search.cursor_position = self.search.input.len();
                     self.perform_search();
                 }

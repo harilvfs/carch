@@ -42,7 +42,7 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
         ]))
     } else if let Some(category_idx) = app.categories.state.selected() {
         let category = &app.categories.items[category_idx];
-        let category_scripts = app.all_scripts.get(category).map_or(0, |s| s.len());
+        let category_scripts = app.all_scripts.get(category).map_or(0, Vec::len);
         Text::from(Line::from(vec![
             Span::styled(
                 category,

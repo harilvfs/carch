@@ -98,7 +98,6 @@ impl App {
             let prev_mode = self.mode;
             self.mode = match self.mode {
                 AppMode::Normal => AppMode::Preview,
-                AppMode::Preview => AppMode::Normal,
                 _ => AppMode::Normal,
             };
 

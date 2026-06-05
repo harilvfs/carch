@@ -107,7 +107,7 @@ fn scripts_panel_lists_filtered_by_category() {
     fx.app.categories.state.select(Some(0));
     fx.app.update_script_list();
     let first_cat = fx.app.categories.items[0].clone();
-    let expected = fx.app.all_scripts.get(&first_cat).map(Vec::len).unwrap_or(0);
+    let expected = fx.app.all_scripts.get(&first_cat).map_or(0, Vec::len);
     assert_eq!(fx.app.scripts.items.len(), expected);
     if expected > 0 {
         for item in &fx.app.scripts.items {

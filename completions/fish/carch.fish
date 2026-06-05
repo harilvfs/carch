@@ -24,7 +24,7 @@ function __fish_carch_using_subcommand
 	contains -- $cmd[1] $argv
 end
 
-complete -c carch -n "__fish_carch_needs_command" -l fav -d 'Save the given theme as your favorite and exit. Use `--unfav` to clear' -r
+complete -c carch -n "__fish_carch_needs_command" -l fav -d 'Save the given theme as favorite and exit' -r
 complete -c carch -n "__fish_carch_needs_command" -s l -l log -d 'Enable logging, output is on ~/.config/carch/carch.log'
 complete -c carch -n "__fish_carch_needs_command" -s v -l version -d 'Print version information'
 complete -c carch -n "__fish_carch_needs_command" -s c -l catppuccin-mocha -d 'Set theme to Catppuccin Mocha'
@@ -38,7 +38,7 @@ complete -c carch -n "__fish_carch_needs_command" -f -a "check-update" -d 'Check
 complete -c carch -n "__fish_carch_needs_command" -f -a "update" -d 'Update the application'
 complete -c carch -n "__fish_carch_needs_command" -f -a "uninstall" -d 'Uninstall the application'
 complete -c carch -n "__fish_carch_needs_command" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
-complete -c carch -n "__fish_carch_using_subcommand check-update" -l fav -d 'Save the given theme as your favorite and exit. Use `--unfav` to clear' -r
+complete -c carch -n "__fish_carch_using_subcommand check-update" -l fav -d 'Save the given theme as favorite and exit' -r
 complete -c carch -n "__fish_carch_using_subcommand check-update" -s l -l log -d 'Enable logging, output is on ~/.config/carch/carch.log'
 complete -c carch -n "__fish_carch_using_subcommand check-update" -s c -l catppuccin-mocha -d 'Set theme to Catppuccin Mocha'
 complete -c carch -n "__fish_carch_using_subcommand check-update" -s d -l dracula -d 'Set theme to Dracula'
@@ -47,7 +47,7 @@ complete -c carch -n "__fish_carch_using_subcommand check-update" -s n -l nord -
 complete -c carch -n "__fish_carch_using_subcommand check-update" -s r -l rose-pine -d 'Set theme to Rosé Pine'
 complete -c carch -n "__fish_carch_using_subcommand check-update" -l unfav -d 'Clear the saved favorite theme'
 complete -c carch -n "__fish_carch_using_subcommand check-update" -s h -l help -d 'Print help'
-complete -c carch -n "__fish_carch_using_subcommand update" -l fav -d 'Save the given theme as your favorite and exit. Use `--unfav` to clear' -r
+complete -c carch -n "__fish_carch_using_subcommand update" -l fav -d 'Save the given theme as favorite and exit' -r
 complete -c carch -n "__fish_carch_using_subcommand update" -s l -l log -d 'Enable logging, output is on ~/.config/carch/carch.log'
 complete -c carch -n "__fish_carch_using_subcommand update" -s c -l catppuccin-mocha -d 'Set theme to Catppuccin Mocha'
 complete -c carch -n "__fish_carch_using_subcommand update" -s d -l dracula -d 'Set theme to Dracula'
@@ -56,7 +56,7 @@ complete -c carch -n "__fish_carch_using_subcommand update" -s n -l nord -d 'Set
 complete -c carch -n "__fish_carch_using_subcommand update" -s r -l rose-pine -d 'Set theme to Rosé Pine'
 complete -c carch -n "__fish_carch_using_subcommand update" -l unfav -d 'Clear the saved favorite theme'
 complete -c carch -n "__fish_carch_using_subcommand update" -s h -l help -d 'Print help'
-complete -c carch -n "__fish_carch_using_subcommand uninstall" -l fav -d 'Save the given theme as your favorite and exit. Use `--unfav` to clear' -r
+complete -c carch -n "__fish_carch_using_subcommand uninstall" -l fav -d 'Save the given theme as favorite and exit' -r
 complete -c carch -n "__fish_carch_using_subcommand uninstall" -s l -l log -d 'Enable logging, output is on ~/.config/carch/carch.log'
 complete -c carch -n "__fish_carch_using_subcommand uninstall" -s c -l catppuccin-mocha -d 'Set theme to Catppuccin Mocha'
 complete -c carch -n "__fish_carch_using_subcommand uninstall" -s d -l dracula -d 'Set theme to Dracula'

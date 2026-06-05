@@ -192,14 +192,14 @@ fn run_ui_loop(
     if options.log_mode {
         info!(
             "Loaded {} scripts in {} categories",
-            app.all_scripts.values().map(|v| v.len()).sum::<usize>(),
+            app.all_scripts.values().map(Vec::len).sum::<usize>(),
             app.categories.items.len()
         );
     }
 
     while !app.quit {
         let popup_has_new_data =
-            app.run_script_popup.as_mut().map(|p| p.has_new_data()).unwrap_or(false);
+            app.run_script_popup.as_mut().is_some_and(RunScriptPopup::has_new_data);
 
         if app.needs_redraw || popup_has_new_data {
             if app.last_size == Rect::default() {
