@@ -1,7 +1,7 @@
 use crate::commands;
 use crate::state::{clear_favorite_theme, load_favorite_theme, save_favorite_theme};
 use carch_core::error::{CarchError, Result};
-use carch_core::version;
+use carch_core::{VALID_THEMES, is_valid_theme, version};
 use clap::builder::styling::{AnsiColor, Style};
 use clap::{ArgAction, Parser, Subcommand};
 use env_logger::{Builder, Target};
@@ -76,6 +76,12 @@ pub fn parse_args() -> Result<()> {
     }
 
     if let Some(theme) = cli.fav.as_deref() {
+        if !is_valid_theme(theme) {
+            return Err(CarchError::Command(format!(
+                "Unknown theme '{theme}'. Valid themes: {}",
+                VALID_THEMES.join(", ")
+            )));
+        }
         return save_favorite_theme(theme).map(|()| {
             println!("Favorite theme set to '{theme}'. It will be used on future launches.");
         });

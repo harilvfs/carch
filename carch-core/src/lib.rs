@@ -10,6 +10,13 @@ pub mod version;
 
 static EMBEDDED_DIR: Dir = include_dir!("$CARGO_MANIFEST_DIR/src/modules");
 
+pub const VALID_THEMES: &[&str] = &["catppuccin-mocha", "dracula", "gruvbox", "nord", "rose-pine"];
+
+#[must_use]
+pub fn is_valid_theme(theme: &str) -> bool {
+    VALID_THEMES.contains(&theme)
+}
+
 const EXECUTABLE_MODE: u32 = 0o755;
 
 /// True when the current process is running as root.
