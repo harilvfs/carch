@@ -13,15 +13,15 @@ include = ["src", "Cargo.toml"]
 
 [dependencies]
 include_dir = "0.7.3"
-ratatui = { version = "0.29", default-features = false, features = ["crossterm"] }
+ratatui = { version = "0.30", default-features = false, features = ["crossterm"] }
 crossterm = "0.29"
 syntect = "5.3.0"
 reqwest = { workspace = true, default-features = false, features = ["blocking", "json", "rustls-tls"] }
 serde = { workspace = true, default-features = false, features = ["derive"] }
 fuzzy-matcher = "0.3.7"
 portable-pty = "0.9.0"
-tui-term = { version = "0.2.0", default-features = false }
-vt100-ctt = "0.16.0"
+tui-term = { version = "0.3.4", default-features = false }
+vt100-ctt = "0.17.1"
 oneshot = { version = "0.2.1", features = ["std"], default-features = false }
 thiserror = "2.0.18"
 toml = { version = "1.1.2", default-features = false, features = ["parse", "serde"] }
