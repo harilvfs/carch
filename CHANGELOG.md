@@ -1,5 +1,39 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.4.1](https://github.com/harilvfs/carch/compare/v5.3.7...v5.4.1) - 2026-06-06
+
+
+### 🚀 Features
+
+
+- [775e80a](https://github.com/harilvfs/carch/commit/775e80af8167f29e59e2d7b0cbad2e9e5e0e9130)  *(script)* Add networking tools installation by @harilvfs
+
+- [425182f](https://github.com/harilvfs/carch/commit/425182f2087e91ef39256e28fea5b04b1619d34a)  *(script)* Add wifi-blockage script to fix hard-blocked wireless-cards (#705) by @harilvfs in [#705](https://github.com/harilvfs/carch/pull/705)
+
+- [7665a1a](https://github.com/harilvfs/carch/commit/7665a1a318137907b67fecb5d20ab7249c542a76)  *(tui)* Refactor to add unit tests & improve codebase (#709) by @harilvfs in [#709](https://github.com/harilvfs/carch/pull/709)
+
+- [9117754](https://github.com/harilvfs/carch/commit/91177544870e38b5b5f9be6eef7c31f9f5fb21e1)  *(cli)* Add const check for valid themes names by @harilvfs
+
+- [b515ac0](https://github.com/harilvfs/carch/commit/b515ac097a5793bf55316e36786a3d51f3597f93)  *(tui)* Make log permanent by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [c83c13e](https://github.com/harilvfs/carch/commit/c83c13ea79078ad2264551094ad65dc9d8510cc9)  *(tui)* Add scrolling for run script popup (#706) by @harilvfs in [#706](https://github.com/harilvfs/carch/pull/706)
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [e20b3e2](https://github.com/harilvfs/carch/commit/e20b3e26d3f877982ce521a2c41814e2aa3da182)  *(cli)* Show log info after exit by @harilvfs
+
+- [a48a5e9](https://github.com/harilvfs/carch/commit/a48a5e90309b7d5ee3cb93c057ebd1c07d860331)  *(docs)* Switch install command to curl | sh by @harilvfs
+
+
+
 ## [5.3.7](https://github.com/harilvfs/carch/compare/v5.3.6...v5.3.7) - 2026-05-31
 
 
