@@ -157,7 +157,8 @@ pub fn parse_args() -> Result<()> {
             fs::create_dir_all(&log_dir)?;
             let log_file = log_dir.join(timestamped_log_filename());
 
-            let file = OpenOptions::new().create(true).write(true).truncate(true).open(log_file)?;
+            let file =
+                OpenOptions::new().create(true).write(true).truncate(true).open(&log_file)?;
 
             Builder::new()
                 .target(Target::Pipe(Box::new(file)))
@@ -165,7 +166,11 @@ pub fn parse_args() -> Result<()> {
                 .init();
             info!("Carch TUI started");
 
-            crate::run_tui(settings)
+            let result = crate::run_tui(settings);
+
+            println!("Log saved: {}", log_file.display());
+
+            result
         }
     }
 }
