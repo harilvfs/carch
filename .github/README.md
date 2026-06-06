@@ -31,13 +31,13 @@ It’s especially useful if you want to quickly set up and start using your _fav
 <h4> Stable Release </h4>
 
 ```sh
-bash -c "$(curl -fsSL chalisehari.com.np/carch)"
+curl -fsSL chalisehari.com.np/carch | sh
 ```
 
 <h4> Dev Release </h4>
 
 ```sh
-bash -c "$(curl -fsSL chalisehari.com.np/carch)" -- --dev
+curl -fsSL chalisehari.com.np/carch | sh -s -- --dev
 ```
 
 For more, see the [documentation](https://carch.chalisehari.com.np). You can also join us on [Discord](https://discord.com/invite/8NJWstnUHd) or [Telegram](https://t.me/carchx) for help and discussions.
