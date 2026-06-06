@@ -73,6 +73,10 @@ Type "carch" Sleep 1s  Enter
 
 Sleep 1s
 
+Type "y"
+
+Sleep 0.5s
+
 Down Sleep 0.5s
 
 Down Sleep 0.5s
