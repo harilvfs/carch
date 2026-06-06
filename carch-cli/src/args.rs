@@ -9,6 +9,29 @@ use log::info;
 use std::env;
 use std::fs::{self, OpenOptions};
 use std::path::PathBuf;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+fn timestamped_log_filename() -> String {
+    let secs = SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+
+    let days = (secs / 86400) as i64 + 719468;
+    let era = days.div_euclid(146097);
+    let doe = (days - era * 146097) as u64;
+    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    let year_era = yoe as i64 + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let day = (doy - (153 * mp + 2) / 5 + 1) as u32;
+    let month = if mp < 10 { mp + 3 } else { mp - 9 } as u32;
+    let year = (year_era + if month <= 2 { 1 } else { 0 }) as u32;
+
+    let tod = secs % 86400;
+    let hour = (tod / 3600) as u32;
+    let minute = ((tod % 3600) / 60) as u32;
+    let second = (tod % 60) as u32;
+
+    format!("carch-{year:04}{month:02}{day:02}-{hour:02}{minute:02}{second:02}.log")
+}
 
 fn styles() -> clap::builder::Styles {
     clap::builder::Styles::styled()
@@ -23,13 +46,6 @@ fn styles() -> clap::builder::Styles {
 pub struct Cli {
     #[command(subcommand)]
     pub command:          Option<Commands>,
-    #[arg(
-        short = 'l',
-        long,
-        global = true,
-        help = "Enable logging, output is on ~/.config/carch/carch.log"
-    )]
-    pub log:              bool,
     #[arg(short = 'v', long = "version", action = ArgAction::SetTrue, help = "Print version information")]
     version:              bool,
     #[arg(short = 'c', long, global = true, help = "Set theme to Catppuccin Mocha")]
@@ -95,23 +111,7 @@ pub fn parse_args() -> Result<()> {
         return Ok(());
     }
 
-    let mut settings = Settings::default();
-
-    if cli.log {
-        settings.log_mode = true;
-        let home_dir = env::var("HOME").map_err(|_| CarchError::HomeDirNotFound)?;
-        let log_dir = PathBuf::from(home_dir).join(".config/carch");
-        fs::create_dir_all(&log_dir)?;
-        let log_file = log_dir.join("carch.log");
-
-        let file = OpenOptions::new().create(true).append(true).open(log_file)?;
-
-        Builder::new()
-            .target(Target::Pipe(Box::new(file)))
-            .filter(None, log::LevelFilter::Info)
-            .init();
-        info!("Carch TUI started");
-    }
+    let mut settings = Settings { log_mode: true, ..Default::default() };
 
     let explicit_theme =
         cli.catppuccin_mocha || cli.dracula || cli.gruvbox || cli.nord || cli.rose_pine;
@@ -151,6 +151,21 @@ pub fn parse_args() -> Result<()> {
             info!("Running uninstall process");
             commands::uninstall()
         }
-        None => crate::run_tui(settings),
+        None => {
+            let home_dir = env::var("HOME").map_err(|_| CarchError::HomeDirNotFound)?;
+            let log_dir = PathBuf::from(home_dir).join(".config/carch");
+            fs::create_dir_all(&log_dir)?;
+            let log_file = log_dir.join(timestamped_log_filename());
+
+            let file = OpenOptions::new().create(true).write(true).truncate(true).open(log_file)?;
+
+            Builder::new()
+                .target(Target::Pipe(Box::new(file)))
+                .filter(None, log::LevelFilter::Info)
+                .init();
+            info!("Carch TUI started");
+
+            crate::run_tui(settings)
+        }
     }
 }

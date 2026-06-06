@@ -16,8 +16,6 @@ _carch() {
     local context curcontext="$curcontext" state line
     _arguments "${_arguments_options[@]}" : \
 '--fav=[Save the given theme as favorite and exit]:THEME:_default' \
-'-l[Enable logging, output is on ~/.config/carch/carch.log]' \
-'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-v[Print version information]' \
 '--version[Print version information]' \
 '-c[Set theme to Catppuccin Mocha]' \
@@ -45,8 +43,6 @@ _carch() {
             (check-update)
 _arguments "${_arguments_options[@]}" : \
 '--fav=[Save the given theme as favorite and exit]:THEME:_default' \
-'-l[Enable logging, output is on ~/.config/carch/carch.log]' \
-'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
 '--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
 '-d[Set theme to Dracula]' \
@@ -65,8 +61,6 @@ _arguments "${_arguments_options[@]}" : \
 (update)
 _arguments "${_arguments_options[@]}" : \
 '--fav=[Save the given theme as favorite and exit]:THEME:_default' \
-'-l[Enable logging, output is on ~/.config/carch/carch.log]' \
-'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
 '--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
 '-d[Set theme to Dracula]' \
@@ -85,8 +79,6 @@ _arguments "${_arguments_options[@]}" : \
 (uninstall)
 _arguments "${_arguments_options[@]}" : \
 '--fav=[Save the given theme as favorite and exit]:THEME:_default' \
-'-l[Enable logging, output is on ~/.config/carch/carch.log]' \
-'--log[Enable logging, output is on ~/.config/carch/carch.log]' \
 '-c[Set theme to Catppuccin Mocha]' \
 '--catppuccin-mocha[Set theme to Catppuccin Mocha]' \
 '-d[Set theme to Dracula]' \
