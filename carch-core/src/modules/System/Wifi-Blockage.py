@@ -10,19 +10,13 @@ from carch_lib import (
     GREEN,
     NC,
     RED,
-    TEAL,
     YELLOW,
     command_exists,
     confirm,
-    detect_distro,
     print_error,
-    print_info,
     print_msg,
-    print_success,
     print_teal,
-    print_warning,
     run,
-    show_menu,
 )
 
 os.environ["PATH"] = os.environ.get("PATH", "") + ":/usr/sbin"
@@ -47,11 +41,27 @@ def detect_wireless_hardware():
 
     if command_exists("lspci"):
         result = subprocess.run(
-            ["lspci", "-nn"], capture_output=True, text=True, check=False,
+            ["lspci", "-nn"],
+            capture_output=True,
+            text=True,
+            check=False,
         )
         wireless = [
-            line for line in result.stdout.splitlines()
-            if any(k in line.lower() for k in ("network", "wireless", "wifi", "atheros", "qualcomm", "broadcom", "intel", "realtek"))
+            line
+            for line in result.stdout.splitlines()
+            if any(
+                k in line.lower()
+                for k in (
+                    "network",
+                    "wireless",
+                    "wifi",
+                    "atheros",
+                    "qualcomm",
+                    "broadcom",
+                    "intel",
+                    "realtek",
+                )
+            )
         ]
         if wireless:
             print_msg(CYAN, "PCI Wireless devices detected:")
@@ -62,11 +72,25 @@ def detect_wireless_hardware():
 
     if command_exists("lsusb"):
         result = subprocess.run(
-            ["lsusb"], capture_output=True, text=True, check=False,
+            ["lsusb"],
+            capture_output=True,
+            text=True,
+            check=False,
         )
         wireless = [
-            line for line in result.stdout.splitlines()
-            if any(k in line.lower() for k in ("wireless", "wifi", "bluetooth", "atheros", "qualcomm", "broadcom"))
+            line
+            for line in result.stdout.splitlines()
+            if any(
+                k in line.lower()
+                for k in (
+                    "wireless",
+                    "wifi",
+                    "bluetooth",
+                    "atheros",
+                    "qualcomm",
+                    "broadcom",
+                )
+            )
         ]
         if wireless:
             print_msg(CYAN, "USB wireless devices detected:")
@@ -76,7 +100,10 @@ def detect_wireless_hardware():
     print_teal("Checking for loaded wireless drivers...")
     result = subprocess.run(["lsmod"], capture_output=True, text=True, check=False)
     for line in result.stdout.splitlines():
-        if any(k in line.lower() for k in ("ath", "iwl", "b43", "brcm", "rtl", "wil621", "wl")):
+        if any(
+            k in line.lower()
+            for k in ("ath", "iwl", "b43", "brcm", "rtl", "wil621", "wl")
+        ):
             print(f"  {GREEN}{line}{NC}")
 
 
@@ -87,7 +114,9 @@ def check_rfkill_status():
         print_msg(YELLOW, "rfkill not found. Ensure util-linux is installed.")
         return -1
 
-    result = subprocess.run(["rfkill", "list"], capture_output=True, text=True, check=False)
+    result = subprocess.run(
+        ["rfkill", "list"], capture_output=True, text=True, check=False
+    )
     output = result.stdout
 
     if not output.strip():
@@ -121,7 +150,10 @@ def check_platform_blockage():
 
     for vendor, module, conf in PLATFORM_MODULES:
         if is_module_loaded(module):
-            print_msg(YELLOW, f"{vendor}: '{module}' module is currently loaded (known to falsely block wireless).")
+            print_msg(
+                YELLOW,
+                f"{vendor}: '{module}' module is currently loaded (known to falsely block wireless).",
+            )
             detected.append((module, conf))
 
     if not detected:
@@ -152,7 +184,14 @@ def fix_wifi_blockage(detected):
 
         if not os.path.isfile(blacklist_path):
             print_msg(CYAN, f"Blacklisting {module} to prevent loading on boot...")
-            if run(["sudo", "tee", blacklist_path], input=f"blacklist {module}\n".encode(), check=False).returncode != 0:
+            if (
+                run(
+                    ["sudo", "tee", blacklist_path],
+                    input=f"blacklist {module}\n".encode(),
+                    check=False,
+                ).returncode
+                != 0
+            ):
                 print_error(f"Failed to create {blacklist_path}")
                 sys.exit(1)
             print_msg(GREEN, f"{module} blacklisted in {blacklist_path}")
@@ -171,10 +210,17 @@ def fix_wifi_blockage(detected):
             if os.path.isdir(iface_dir):
                 name = os.path.basename(iface_dir)
                 print_msg(CYAN, f"  Bringing up {name}...")
-                if run(["sudo", "ip", "link", "set", name, "up"], check=False).returncode == 0:
+                if (
+                    run(
+                        ["sudo", "ip", "link", "set", name, "up"], check=False
+                    ).returncode
+                    == 0
+                ):
                     print_msg(GREEN, f"  {name} is now up.")
                 else:
-                    print_msg(YELLOW, f"  Could not bring {name} up (may not exist yet).")
+                    print_msg(
+                        YELLOW, f"  Could not bring {name} up (may not exist yet)."
+                    )
 
     print_msg(GREEN, "Fix applied successfully!")
 
@@ -193,7 +239,10 @@ def main():
     print()
 
     if rfkill_result == 0 and not platform_detected:
-        print_msg(GREEN, "No wireless blockage detected. Your wireless should be working correctly.")
+        print_msg(
+            GREEN,
+            "No wireless blockage detected. Your wireless should be working correctly.",
+        )
         print()
 
         if confirm("Run rfkill unblock and bring interfaces up as a safety measure?"):
@@ -203,13 +252,25 @@ def main():
             for pattern in ("/sys/class/net/wl*", "/sys/class/net/wlan*"):
                 for iface_dir in glob.glob(pattern):
                     if os.path.isdir(iface_dir):
-                        run(["sudo", "ip", "link", "set", os.path.basename(iface_dir), "up"], check=False)
+                        run(
+                            [
+                                "sudo",
+                                "ip",
+                                "link",
+                                "set",
+                                os.path.basename(iface_dir),
+                                "up",
+                            ],
+                            check=False,
+                        )
             print_msg(GREEN, "Done.")
         else:
             print_msg(GREEN, "No changes made.")
     else:
         if platform_detected:
-            print_msg(YELLOW, "Detected platform module(s) known to falsely block wireless.")
+            print_msg(
+                YELLOW, "Detected platform module(s) known to falsely block wireless."
+            )
         print()
         if confirm("Do you want to apply the fix for wireless blockage?"):
             detected = []
@@ -218,7 +279,10 @@ def main():
                     detected.append((module, conf))
             fix_wifi_blockage(detected)
             print()
-            print_msg(GREEN, "Fix completed. Please restart your network manager or reboot for changes to take full effect.")
+            print_msg(
+                GREEN,
+                "Fix completed. Please restart your network manager or reboot for changes to take full effect.",
+            )
 
             if command_exists("systemctl"):
                 if confirm("Do you want to restart NetworkManager now?"):

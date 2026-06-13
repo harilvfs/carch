@@ -247,7 +247,9 @@ def main():
     if len(sys.argv) < 2:
         print(f"\n{CYAN}carch module manager{NC}\n")
         print(f"  {GREEN}list{NC}          List all modules by category")
-        print(f"  {GREEN}validate{NC}      Validate scripts (shebangs, imports, desc.toml)")
+        print(
+            f"  {GREEN}validate{NC}      Validate scripts (shebangs, imports, desc.toml)"
+        )
         print(f"  {GREEN}overview{NC}      Generate docs/overview.md from desc.toml")
         print(f"  {GREEN}add <category>{NC}  Create a new module from template\n")
         return 0
