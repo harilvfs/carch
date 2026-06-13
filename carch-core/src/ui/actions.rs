@@ -19,6 +19,11 @@ impl App {
             if category_path.is_dir() {
                 let category_name =
                     category_path.file_name().unwrap_or_default().to_string_lossy().into_owned();
+
+                if category_name == "carch_lib" || category_name == "__pycache__" {
+                    continue;
+                }
+
                 categories.push(category_name.clone());
 
                 let mut scripts_in_category = Vec::new();
@@ -26,20 +31,27 @@ impl App {
                     let script_entry = script_entry?;
                     let script_path = script_entry.path();
 
-                    if script_path.is_file() && script_path.extension().unwrap_or_default() == "sh"
-                    {
-                        let script_name = script_path
-                            .file_stem()
+                    if script_path.is_file() {
+                        let ext = script_path
+                            .extension()
                             .unwrap_or_default()
                             .to_string_lossy()
                             .into_owned();
+                        if ext == "sh" || ext == "py" {
+                            let script_name = script_path
+                                .file_stem()
+                                .unwrap_or_default()
+                                .to_string_lossy()
+                                .into_owned();
 
-                        let script_item = ScriptItem {
-                            category: category_name.clone(),
-                            name:     script_name,
-                            path:     script_path,
-                        };
-                        scripts_in_category.push(script_item);
+                            let script_item = ScriptItem {
+                                category:  category_name.clone(),
+                                name:      script_name,
+                                path:      script_path,
+                                extension: ext,
+                            };
+                            scripts_in_category.push(script_item);
+                        }
                     }
                 }
                 scripts_in_category.sort_by(|a, b| a.name.cmp(&b.name));

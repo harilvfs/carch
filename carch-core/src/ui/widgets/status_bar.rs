@@ -35,37 +35,37 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let mut spans = vec![
         Span::styled(
             format!(" Mode: {mode_text} "),
-            Style::default().bg(mode_color).fg(app.theme.background).add_modifier(Modifier::BOLD),
+            Style::default().fg(mode_color).add_modifier(Modifier::BOLD),
         ),
         Span::raw(" "),
     ];
     if has_selected {
         spans.push(Span::styled(
             selected_count,
-            Style::default()
-                .bg(app.theme.warning)
-                .fg(app.theme.background)
-                .add_modifier(Modifier::BOLD),
+            Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
         ));
         spans.push(Span::raw(" "));
     }
     spans.extend([
         Span::styled(
             format!(" Theme: {} ", app.theme.name),
-            Style::default().bg(app.theme.secondary).fg(app.theme.background),
+            Style::default().fg(app.theme.secondary),
         ),
+        Span::raw(" "),
+        Span::styled(" [", Style::default().fg(app.theme.foreground)),
+        Span::styled("P", Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD)),
+        Span::styled("]py [", Style::default().fg(app.theme.foreground)),
+        Span::styled("S", Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD)),
+        Span::styled("]sh ", Style::default().fg(app.theme.foreground)),
         Span::raw(" "),
         Span::styled(
             " ?: Help | q: Quit | h/l: Switch panels",
-            Style::default().bg(app.theme.accent).fg(app.theme.background),
+            Style::default().fg(app.theme.accent),
         ),
         Span::raw(" "),
         Span::styled(
             format!(" {version} "),
-            Style::default()
-                .bg(app.theme.primary)
-                .fg(app.theme.background)
-                .add_modifier(Modifier::BOLD),
+            Style::default().fg(app.theme.primary).add_modifier(Modifier::BOLD),
         ),
     ]);
 

@@ -2945,7 +2945,6 @@ dependencies = [
  "clap",
  "clap_complete",
  "pico-args",
- "toml",
  "xshell",
 ]
 

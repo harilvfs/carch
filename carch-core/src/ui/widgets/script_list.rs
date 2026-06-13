@@ -20,7 +20,12 @@ fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
     block
 }
 
-const SCRIPT_TAG: &str = " [S] ";
+fn script_tag(extension: &str) -> &'static str {
+    match extension {
+        "py" => " [P] ",
+        _ => " [S] ",
+    }
+}
 const TICK_SUFFIX: &str = " \u{2713}";
 
 pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
@@ -50,7 +55,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
                 if is_selected { Modifier::BOLD | Modifier::UNDERLINED } else { Modifier::empty() };
 
             let mut spans = vec![
-                Span::styled(SCRIPT_TAG, Style::default().fg(app.theme.secondary)),
+                Span::styled(script_tag(&item.extension), Style::default().fg(app.theme.secondary)),
                 Span::styled(
                     &item.name,
                     Style::default().fg(name_color).add_modifier(name_modifier),

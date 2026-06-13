@@ -2,3 +2,5 @@ build/
 site/node_modules
 target/
 tui/target
+__pycache__/
+*.pyc

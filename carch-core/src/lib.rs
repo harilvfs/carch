@@ -66,7 +66,7 @@ fn extract_dir_recursive(dir: &Dir, target_path: &Path) -> Result<()> {
                 fs::write(&file_path, file.contents())
                     .map_err(|e| CarchError::WriteFile(file_path.display().to_string(), e))?;
 
-                if file_path.extension().is_some_and(|ext| ext == "sh") {
+                if file_path.extension().is_some_and(|ext| ext == "sh" || ext == "py") {
                     set_executable(&file_path)?;
                 }
             }

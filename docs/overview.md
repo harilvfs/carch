@@ -3,21 +3,21 @@
 ### Browser
 
 - **Brave**: *Privacy-focused Chromium-based browser with built-in ad blocking.*
-- **Chromium**: *The open-source web project that powers Google Chrome and Edge.*
-- **Extensions**: *Recommends useful extensions for Chromium and Firefox-based browsers.*
 - **Firefox**: *Fast, independent browser backed by the non-profit Mozilla Foundation.*
+- **Lynx**: *Lightweight text-based web browser for terminal environments.*
+- **Librewolf**: *A hardened fork of Firefox focused on privacy and security.*
 - **Floorp**: *A highly customizable Firefox-based browser with unique UI features.*
 - **Google-chrome**: *Cross-platform browser developed by Google.*
 - **Helium-browser**: *A lightweight, privacy-focused browser (currently in Beta).*
-- **Librewolf**: *A hardened fork of Firefox focused on privacy and security.*
-- **Lynx**: *Lightweight text-based web browser for terminal environments.*
-- **Opera**: *A versatile browser featuring a built-in VPN and social media sidebar.*
-- **Qutebrowser**: *A keyboard-focused, Vim-like browser based on Python and Qt.*
-- **Thorium-browser**: *A high-performance Chromium fork optimized for modern processors.*
-- **Tor-browser**: *Extreme privacy browser that routes traffic through the Tor network.*
+- **Chromium**: *The open-source web project that powers Google Chrome and Edge.*
 - **Ungoogled-chromium**: *Chromium without the Google services for maximum privacy.*
 - **Vivaldi**: *A feature-rich browser designed for power users and deep customization.*
+- **Qutebrowser**: *A keyboard-focused, Vim-like browser based on Python and Qt.*
 - **Zen-browser**: *A modern, design-focused Firefox fork with a workspace-centric layout.*
+- **Thorium-browser**: *A high-performance Chromium fork optimized for modern processors.*
+- **Opera**: *A versatile browser featuring a built-in VPN and social media sidebar.*
+- **Tor-browser**: *Extreme privacy browser that routes traffic through the Tor network.*
+- **Extensions**: *Recommends useful extensions for Chromium and Firefox-based browsers.*
 
 ### Desktop
 
@@ -43,8 +43,8 @@
 - **Crypto-Tools**: *Installs essential cryptocurrency tools, such as the Electrum Bitcoin wallet, to manage your digital assets securely.*
 - **Development-Tools**: *Sets up your development environment with a choice of languages and tools, including Node.js, Python, Rust, Go, and Docker, to support your coding projects.*
 - **Editing**: *Provides a suite of editing software for various media types, such as GIMP for images, Kdenlive for videos, and Audacity for audio, to cover all your creative needs.*
-- **FM-Tools**: *Installs useful file manager utilities, including Tumbler for thumbnail previews and Trash-Cli for managing your trash from the command line.*
 - **FileManagers**: *Offers a variety of file managers, from graphical options like Thunar and Dolphin to terminal-based ones like LF and Ranger, so you can manage your files your way.*
+- **FM-Tools**: *Installs useful file manager utilities, including Tumbler for thumbnail previews and Trash-Cli for managing your trash from the command line.*
 - **Gaming**: *Enhances your gaming experience by installing essential tools like Steam, Lutris, and Heroic Games Launcher, along with performance utilities like MangoHud and GameMode.*
 - **GitHub**: *Equips you with essential Git and GitHub tools, including the GitHub CLI, GitHub Desktop, and LazyGit, to streamline your version control workflow.*
 - **Multimedia**: *Installs multimedia players like VLC and MPV, ensuring you have the right tools to enjoy your favorite movies and videos.*
@@ -85,4 +85,3 @@
 ### Termux-Android
 
 - **Termux-Setup**: *Termux is an Android terminal emulator and Linux environment. This script automates the setup of a Termux environment workflow by installing/setting up Zsh, Zsh plugins, and essential packages to make your favorite Android terminal emulator ready to use.*
-
