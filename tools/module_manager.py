@@ -245,8 +245,12 @@ def add_module(category):
 
 def main():
     if len(sys.argv) < 2:
-        print(__doc__)
-        return 1
+        print(f"\n{CYAN}carch module manager{NC}\n")
+        print(f"  {GREEN}list{NC}          List all modules by category")
+        print(f"  {GREEN}validate{NC}      Validate scripts (shebangs, imports, desc.toml)")
+        print(f"  {GREEN}overview{NC}      Generate docs/overview.md from desc.toml")
+        print(f"  {GREEN}add <category>{NC}  Create a new module from template\n")
+        return 0
 
     cmd = sys.argv[1]
     if cmd == "list":
@@ -257,7 +261,7 @@ def main():
         generate_overview()
     elif cmd == "add":
         if len(sys.argv) < 3:
-            print(f"{RED}Usage: module_manager.py add <category>{NC}")
+            print(f"{RED}Usage: python3 module_manager.py add <category>{NC}")
             return 1
         return add_module(sys.argv[2])
     else:
