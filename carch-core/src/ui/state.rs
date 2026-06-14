@@ -131,10 +131,9 @@ mod tests {
 
 #[derive(Clone, Debug)]
 pub struct ScriptItem {
-    pub category:  String,
-    pub name:      String,
-    pub path:      PathBuf,
-    pub extension: String,
+    pub category: String,
+    pub name:     String,
+    pub path:     PathBuf,
 }
 
 #[derive(Default, Clone)]

@@ -52,12 +52,6 @@ pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
             Style::default().fg(app.theme.secondary),
         ),
         Span::raw(" "),
-        Span::styled(" [", Style::default().fg(app.theme.foreground)),
-        Span::styled("P", Style::default().fg(app.theme.success).add_modifier(Modifier::BOLD)),
-        Span::styled("]py [", Style::default().fg(app.theme.foreground)),
-        Span::styled("S", Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD)),
-        Span::styled("]sh ", Style::default().fg(app.theme.foreground)),
-        Span::raw(" "),
         Span::styled(
             " ?: Help | q: Quit | h/l: Switch panels",
             Style::default().fg(app.theme.accent),

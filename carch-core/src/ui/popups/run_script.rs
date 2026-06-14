@@ -51,11 +51,7 @@ impl RunScriptPopup {
     pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Result<Self> {
         let pty_system = NativePtySystem::default();
 
-        let interpreter = match script_path.extension().and_then(|e| e.to_str()) {
-            Some("py") => "python3",
-            _ => "bash",
-        };
-        let mut cmd = CommandBuilder::new(interpreter);
+        let mut cmd = CommandBuilder::new("bash");
         cmd.arg(script_path);
 
         let pair = pty_system

@@ -20,10 +20,6 @@ impl App {
                 let category_name =
                     category_path.file_name().unwrap_or_default().to_string_lossy().into_owned();
 
-                if category_name == "carch_lib" || category_name == "__pycache__" {
-                    continue;
-                }
-
                 categories.push(category_name.clone());
 
                 let mut scripts_in_category = Vec::new();
@@ -37,7 +33,7 @@ impl App {
                             .unwrap_or_default()
                             .to_string_lossy()
                             .into_owned();
-                        if ext == "sh" || ext == "py" {
+                        if ext == "sh" {
                             let script_name = script_path
                                 .file_stem()
                                 .unwrap_or_default()
@@ -45,10 +41,9 @@ impl App {
                                 .into_owned();
 
                             let script_item = ScriptItem {
-                                category:  category_name.clone(),
-                                name:      script_name,
-                                path:      script_path,
-                                extension: ext,
+                                category: category_name.clone(),
+                                name:     script_name,
+                                path:     script_path,
                             };
                             scripts_in_category.push(script_item);
                         }
