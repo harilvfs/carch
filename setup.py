@@ -149,7 +149,8 @@ def install_termux():
             f"{RED}Error:{NC} Could not find .deb package for {arch}", file=sys.stderr
         )
         sys.exit(1)
-    tmp = tempfile.mktemp(suffix=".deb")
+    fd, tmp = tempfile.mkstemp(suffix=".deb")
+    os.close(fd)
     subprocess.run(["curl", "-sL", deb_url, "-o", tmp], check=True)
     run(f"dpkg -i {tmp}", check=True)
     os.remove(tmp)
@@ -179,7 +180,8 @@ def cmd_run(mode):
     else:
         url = get_stable_url(arch)
     print(f"{GREEN}==> {NC}Using URL: {url}")
-    tmp = tempfile.mktemp()
+    fd, tmp = tempfile.mkstemp()
+    os.close(fd)
     subprocess.run(
         [
             "curl",
