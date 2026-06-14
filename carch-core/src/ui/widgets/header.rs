@@ -20,10 +20,12 @@ pub fn render_header(f: &mut Frame, app: &App, area: Rect) {
         .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
         .split(inner_area);
 
-    let total_scripts = app.all_scripts.values().map(Vec::len).sum::<usize>();
     let left_text = Text::from(Line::from(vec![
-        Span::styled("Carch", Style::default().fg(app.theme.accent).add_modifier(Modifier::BOLD)),
-        Span::raw(format!(" | Total Scripts: {total_scripts}")),
+        Span::styled(
+            " Carch  󰏗 ",
+            Style::default().fg(app.theme.accent).add_modifier(Modifier::BOLD),
+        ),
+        Span::raw(format!(" │ {}", app.distro)),
     ]));
     f.render_widget(Paragraph::new(left_text).alignment(Alignment::Left), chunks[0]);
 
