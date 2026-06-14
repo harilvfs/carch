@@ -87,9 +87,10 @@ install_termux() {
 
 install_arch() {
     printf "${GREEN}==> ${NC}Cloning PKGBUILD\n"
-    rm -rf ~/pkgs
-    git clone https://github.com/carch-org/pkgs ~/pkgs > /dev/null 2>&1
-    cd ~/pkgs/carch-bin || exit 1
+    tmpdir=$(mktemp -d)
+    trap 'rm -rf "$tmpdir"' EXIT
+    git clone https://github.com/carch-org/pkgs "$tmpdir" > /dev/null 2>&1
+    cd "$tmpdir/carch-bin" || exit 1
     makepkg -si --noconfirm
 }
 
