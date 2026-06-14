@@ -9,15 +9,15 @@ use crate::version;
 
 fn mode_info(app: &App) -> (&'static str, Color) {
     match app.mode {
-        AppMode::Normal if app.multi_select.enabled => ("Multi-select", app.theme.accent),
-        AppMode::Normal => ("Normal", app.theme.success),
-        AppMode::Preview => ("Preview", app.theme.primary),
-        AppMode::Search => ("Search", app.theme.warning),
-        AppMode::Confirm => ("Confirm", app.theme.error),
-        AppMode::Help => ("Help", app.theme.primary),
-        AppMode::Description => ("Description", app.theme.primary),
-        AppMode::RunScript => ("Running", app.theme.warning),
-        AppMode::RootWarning => ("Root Warning", app.theme.error),
+        AppMode::Normal if app.multi_select.enabled => ("[Multi-select]", app.theme.accent),
+        AppMode::Normal => ("[Normal]", app.theme.success),
+        AppMode::Preview => ("[Preview]", app.theme.primary),
+        AppMode::Search => ("[Search]", app.theme.warning),
+        AppMode::Confirm => ("[Confirm]", app.theme.error),
+        AppMode::Help => ("[Help]", app.theme.primary),
+        AppMode::Description => ("[Description]", app.theme.primary),
+        AppMode::RunScript => ("[Running]", app.theme.warning),
+        AppMode::RootWarning => ("[Root Warning]", app.theme.error),
     }
 }
 
