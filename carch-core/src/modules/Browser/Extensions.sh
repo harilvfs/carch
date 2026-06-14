@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034,SC2207,SC2155
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 

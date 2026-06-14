@@ -195,9 +195,9 @@ install_pokemon_colorscripts() {
                 local TEMP_DIR
                 TEMP_DIR=$(mktemp -d)
                 (   
-                    cd "$TEMP_DIR"
+                    cd "$TEMP_DIR" || exit
                     git clone https://aur.archlinux.org/yay.git
-                    cd yay
+                    cd yay || exit
                     makepkg -si --noconfirm
                 )
                 local exit_code=$?

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
 NC='\e[0m'
 ENDCOLOR="\e[0m"
