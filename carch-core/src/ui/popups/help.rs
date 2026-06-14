@@ -66,10 +66,6 @@ const HELP_LINES: &[(&[&str], &[Kind])] = &[
     (&[], &[]),
     (&["Legend"], &[Kind::Header]),
     (&[], &[]),
-    (&[" [C] ", " ", "Category"], &[Kind::NavKey, Kind::Body, Kind::Body]),
-    (&[], &[]),
-    (&[" [S] ", " ", "Script"], &[Kind::NavKey, Kind::Body, Kind::Body]),
-    (&[], &[]),
     (
         &[" \u{2713} ", " ", "Script is selected (multi-select)"],
         &[Kind::NavKey, Kind::Body, Kind::Body],

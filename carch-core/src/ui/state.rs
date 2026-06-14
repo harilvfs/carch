@@ -196,6 +196,7 @@ pub struct App {
     pub modules_dir:   PathBuf,
     pub theme:         Theme,
     pub theme_locked:  bool,
+    pub distro:        String,
 
     pub scripts:     StatefulList<ScriptItem>,
     pub categories:  StatefulList<String>,

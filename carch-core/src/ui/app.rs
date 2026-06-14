@@ -1,5 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 use std::path::PathBuf;
+use std::process::Command;
 
 use log::info;
 use ratatui::layout::Rect;
@@ -10,6 +11,60 @@ use super::state::{
 };
 use crate::ui::state::{ScriptItem, UiOptions};
 use crate::ui::theme::Theme;
+
+fn detect_distro() -> String {
+    if let Ok(content) = std::fs::read_to_string("/etc/os-release") {
+        for line in content.lines() {
+            if let Some(value) = line.strip_prefix("ID=") {
+                let id = value.trim_matches('"');
+                let name = match id {
+                    "arch" | "manjaro" | "endeavouros" => "Arch",
+                    "fedora" => "Fedora",
+                    "opensuse-tumbleweed" | "opensuse-leap" | "opensuse" => "openSUSE",
+                    "debian" | "ubuntu" | "linuxmint" | "pop" | "zorin" => "Debian",
+                    "alpine" => "Alpine",
+                    "void" => "Void",
+                    "gentoo" => "Gentoo",
+                    "nixos" => "NixOS",
+                    "termux" => "Termux",
+                    _ => "",
+                };
+                if !name.is_empty() {
+                    return name.to_string();
+                }
+            }
+        }
+        for line in content.lines() {
+            if let Some(value) = line.strip_prefix("PRETTY_NAME=") {
+                return value.trim_matches('"').to_string();
+            }
+        }
+    }
+
+    if std::env::var("TERMUX_VERSION").is_ok() {
+        return "Termux".to_string();
+    }
+
+    let checks: &[(&str, &str)] = &[
+        ("dnf", "Fedora"),
+        ("zypper", "openSUSE"),
+        ("apt", "Debian"),
+        ("pacman", "Arch"),
+        ("apk", "Alpine"),
+        ("xbps-install", "Void"),
+        ("emerge", "Gentoo"),
+        ("nix", "NixOS"),
+        ("pkg", "Termux"),
+    ];
+
+    for (cmd, name) in checks {
+        if Command::new("command").args(["-v", cmd]).output().is_ok() {
+            return name.to_string();
+        }
+    }
+
+    "Linux".to_string()
+}
 
 impl App {
     pub fn new(options: &UiOptions) -> App {
@@ -29,6 +84,7 @@ impl App {
             modules_dir: PathBuf::new(),
             theme,
             theme_locked: options.theme_locked,
+            distro: detect_distro(),
 
             scripts: StatefulList::new(),
             categories: StatefulList::new(),
