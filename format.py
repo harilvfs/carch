@@ -6,6 +6,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 IGNORED = {"build", ".git", "target"}
+IGNORED_FILES = {"Extensions.sh"}
 
 
 def find_files(ext):
@@ -13,7 +14,7 @@ def find_files(ext):
     for dirpath, dirs, files in os.walk(ROOT):
         dirs[:] = [d for d in dirs if d not in IGNORED]
         for f in files:
-            if f.endswith(ext):
+            if f.endswith(ext) and f not in IGNORED_FILES:
                 result.append(os.path.join(dirpath, f))
     return sorted(result)
 
