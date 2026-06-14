@@ -33,6 +33,26 @@ fn timestamped_log_filename() -> String {
     format!("carch-{year:04}{month:02}{day:02}-{hour:02}{minute:02}{second:02}.log")
 }
 
+const MAX_LOG_FILES: usize = 5;
+
+fn rotate_logs(log_dir: &std::path::Path) {
+    let mut logs: Vec<PathBuf> = fs::read_dir(log_dir)
+        .into_iter()
+        .flatten()
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .filter(|p| p.extension().is_some_and(|ext| ext == "log"))
+        .collect();
+
+    logs.sort();
+
+    if logs.len() > MAX_LOG_FILES {
+        for old in &logs[..logs.len() - MAX_LOG_FILES] {
+            let _ = fs::remove_file(old);
+        }
+    }
+}
+
 fn styles() -> clap::builder::Styles {
     clap::builder::Styles::styled()
         .header(Style::new().fg_color(Some(AnsiColor::Green.into())).bold())
@@ -165,6 +185,8 @@ pub fn parse_args() -> Result<()> {
                 .filter(None, log::LevelFilter::Info)
                 .init();
             info!("Carch TUI started");
+
+            rotate_logs(&log_dir);
 
             let result = crate::run_tui(settings);
 
