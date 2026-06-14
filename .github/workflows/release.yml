@@ -44,11 +44,6 @@ jobs:
           echo "Update version input: '${{ github.event.inputs.update_version }}'"
           echo "Update version type: $(echo '${{ github.event.inputs.update_version }}' | wc -c)"
 
-      - name: Update man page version
-        if: ${{ github.event.inputs.update_version == 'true' }}
-        run: |
-          sed -i "s/\.TH \"carch\" \"1\" \"[^\"]*\" \"Carch [^\"]*\" \"Carch Manual\"/.TH \"carch\" \"1\" \"$CURRENT_MONTH $CURRENT_YEAR\" \"Carch $VERSION\" \"Carch Manual\"/" ./man/carch.1
-
       - name: Update Cargo.toml version
         if: ${{ github.event.inputs.update_version == 'true' }}
         run: |
@@ -91,7 +86,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add ./man/carch.1 Cargo.toml ./carch-cli/Cargo.toml Cargo.lock
+          git add Cargo.toml ./carch-cli/Cargo.toml Cargo.lock
           git commit -m "chore(release): bump version"
           git push
 
