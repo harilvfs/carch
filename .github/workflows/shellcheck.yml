@@ -23,7 +23,7 @@ jobs:
       - name: Install ShellCheck
         run: sudo apt-get install -y shellcheck
 
-      - name: Run ShellCheck (errors only)
+      - name: Run ShellCheck
         run: |
-          find . -type f -name "*.sh" -o -name "*.bash" -o -name "*.ksh" -o -name "*.bashrc" | \
-          xargs shellcheck --severity=error
+          find . -type f -name "*.sh" -not -path "./target/*" -not -path "./.git/*" | \
+          xargs shellcheck --severity=warning
