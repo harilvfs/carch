@@ -63,7 +63,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         if let Some(cached) = app.preview.cache.get(script_path) {
             cached.clone()
         } else {
-            let text = highlight_script(&app.preview.content, script_path, &SYNTAX_SET, &THEME_SET);
+            let text = highlight_script(&app.preview.content, &SYNTAX_SET, &THEME_SET);
             app.preview.cache.insert(script_path.clone(), text.clone());
             text
         }
@@ -112,14 +112,8 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     f.render_widget(help_text, chunks[1]);
 }
 
-fn highlight_script(
-    content: &str,
-    script_path: &std::path::Path,
-    ps: &SyntaxSet,
-    ts: &ThemeSet,
-) -> Text<'static> {
-    let ext = script_path.extension().and_then(|e| e.to_str()).unwrap_or("sh");
-    let syntax = ps.find_syntax_by_extension(ext).unwrap_or_else(|| ps.find_syntax_plain_text());
+fn highlight_script(content: &str, ps: &SyntaxSet, ts: &ThemeSet) -> Text<'static> {
+    let syntax = ps.find_syntax_by_extension("sh").unwrap_or_else(|| ps.find_syntax_plain_text());
     let theme = ts
         .themes
         .get("base16-ocean.dark")
