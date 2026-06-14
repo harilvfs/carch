@@ -118,7 +118,7 @@ setup_png_fastfetch() {
     print_message "$CYAN" "Setting up Fastfetch with custom PNG support..."
     print_message "$CYAN" "Cloning Fastfetch repository directly..."
 
-    rm -rf "$FASTFETCH_DIR"/* 2> /dev/null
+    rm -rf "${FASTFETCH_DIR:?}"/* 2> /dev/null
     mkdir -p "$FASTFETCH_DIR"
 
     git clone https://github.com/harilvfs/fastfetch "$FASTFETCH_DIR"

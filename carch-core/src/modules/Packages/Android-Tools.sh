@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2155
 
 source "$(dirname "$0")/../colors.sh" > /dev/null 2>&1
 source "$(dirname "$0")/../detect-distro.sh" > /dev/null 2>&1
