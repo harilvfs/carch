@@ -82,9 +82,9 @@ install_aur_helper() {
     local temp_dir
     temp_dir=$(mktemp -d)
     (   
-        cd "$temp_dir"
+        cd "$temp_dir" || exit
         git clone https://aur.archlinux.org/yay.git
-        cd yay
+        cd yay || exit
         makepkg -si --noconfirm
     )
     local exit_code=$?

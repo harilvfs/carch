@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2034
 
 detect_distro() {
     if [ -x "$(command -v pacman)" ]; then
