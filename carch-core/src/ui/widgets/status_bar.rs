@@ -18,6 +18,7 @@ fn mode_info(app: &App) -> (&'static str, Color) {
         AppMode::Description => ("Description", app.theme.primary),
         AppMode::RunScript => ("Running", app.theme.warning),
         AppMode::RootWarning => ("Root Warn", app.theme.error),
+        AppMode::TermuxWarning => ("Note", app.theme.warning),
     }
 }
 

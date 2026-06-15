@@ -347,4 +347,15 @@ impl App {
             _ => {}
         }
     }
+
+    pub fn handle_key_termux_warning_mode(&mut self, key: crossterm::event::KeyEvent) {
+        match key.code {
+            crossterm::event::KeyCode::Char('o')
+            | crossterm::event::KeyCode::Char('O')
+            | crossterm::event::KeyCode::Enter => {
+                self.mode = AppMode::Normal;
+            }
+            _ => {}
+        }
+    }
 }

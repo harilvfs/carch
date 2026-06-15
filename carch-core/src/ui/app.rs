@@ -76,15 +76,25 @@ impl App {
             _ => Theme::catppuccin_mocha(),
         };
 
+        let distro = detect_distro();
+
+        let mode = if options.is_root {
+            AppMode::RootWarning
+        } else if distro == "Termux" {
+            AppMode::TermuxWarning
+        } else {
+            AppMode::Normal
+        };
+
         App {
-            mode: if options.is_root { AppMode::RootWarning } else { AppMode::Normal },
+            mode,
             quit: false,
             focused_panel: FocusedPanel::Categories,
             log_mode: options.log_mode,
             modules_dir: PathBuf::new(),
             theme,
             theme_locked: options.theme_locked,
-            distro: detect_distro(),
+            distro,
 
             scripts: StatefulList::new(),
             categories: StatefulList::new(),

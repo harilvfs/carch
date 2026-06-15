@@ -5,3 +5,4 @@ pub mod preview;
 pub mod root_warning;
 pub mod run_script;
 pub mod search;
+pub mod termux_warning;

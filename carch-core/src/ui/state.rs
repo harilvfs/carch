@@ -18,6 +18,7 @@ pub enum AppMode {
     RunScript,
     Description,
     RootWarning,
+    TermuxWarning,
 }
 
 #[derive(PartialEq, Eq, Debug, Clone, Copy)]

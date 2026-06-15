@@ -135,6 +135,11 @@ fn ui(f: &mut Frame, app: &mut App) {
             let popup_area = centered_rect(80, 50, area);
             popups::root_warning::render_root_warning_popup(f, app, popup_area);
         }
+        AppMode::TermuxWarning => {
+            let area = app.script_panel_area;
+            let popup_area = centered_rect(80, 50, area);
+            popups::termux_warning::render_termux_warning_popup(f, app, popup_area);
+        }
     }
 }
 
@@ -296,6 +301,7 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     AppMode::Help => app.handle_key_help_mode(key),
                     AppMode::Description => app.handle_key_description_mode(key),
                     AppMode::RootWarning => app.handle_key_root_warning_mode(key),
+                    AppMode::TermuxWarning => app.handle_key_termux_warning_mode(key),
                     AppMode::RunScript => {}
                 }
             }
