@@ -1,4 +1,4 @@
-use crossterm::event::{KeyCode, KeyEvent};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use log::info;
 
 use super::popups::run_script::RunScriptPopup;
@@ -93,6 +93,10 @@ impl App {
     }
 
     pub fn handle_key_normal_mode(&mut self, key: KeyEvent) {
+        if key.modifiers.contains(KeyModifiers::CONTROL) && key.code == KeyCode::Char('c') {
+            self.quit = true;
+            return;
+        }
         match key.code {
             KeyCode::Char('q') => {
                 if self.multi_select.enabled {

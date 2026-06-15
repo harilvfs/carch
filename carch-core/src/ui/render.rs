@@ -26,20 +26,15 @@ use crate::ui::popups;
 fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
     let mut popup_w = r.width * percent_x / 100;
     let mut popup_h = r.height * percent_y / 100;
-    if (r.width - popup_w) % 2 != 0 {
+    if !(r.width - popup_w).is_multiple_of(2) {
         popup_w += 1;
     }
-    if (r.height - popup_h) % 2 != 0 {
+    if !(r.height - popup_h).is_multiple_of(2) {
         popup_h += 1;
     }
     let offset_x = (r.width - popup_w) / 2;
     let offset_y = (r.height - popup_h) / 2;
-    Rect {
-        x: r.x + offset_x,
-        y: r.y + offset_y,
-        width: popup_w,
-        height: popup_h,
-    }
+    Rect { x: r.x + offset_x, y: r.y + offset_y, width: popup_w, height: popup_h }
 }
 
 fn render_normal_ui(f: &mut Frame, app: &mut App) {

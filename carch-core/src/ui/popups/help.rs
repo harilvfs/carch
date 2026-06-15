@@ -45,6 +45,8 @@ const HELP_LINES: &[(&[&str], &[Kind])] = &[
     (&[], &[]),
     (&[" q, Esc ", " ", "Quit | Go back"], &[Kind::Key, Kind::Body, Kind::Body]),
     (&[], &[]),
+    (&[" Ctrl+C/q ", " ", "Quit TUI (normal mode)"], &[Kind::Key, Kind::Body, Kind::Body]),
+    (&[], &[]),
     (&["Modes"], &[Kind::Header]),
     (&[], &[]),
     (&[" / ", " ", "Search mode"], &[Kind::Key, Kind::Body, Kind::Body]),
