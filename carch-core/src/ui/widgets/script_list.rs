@@ -9,7 +9,7 @@ use crate::ui::widgets::paint_rounded_highlight;
 
 fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
     let is_focused = app.focused_panel == FocusedPanel::Scripts;
-    let border_color = if is_focused { app.theme.secondary } else { Color::DarkGray };
+    let border_color = if is_focused { app.theme.primary } else { Color::DarkGray };
     let border_modifier = if is_focused { Modifier::BOLD } else { Modifier::empty() };
 
     let mut block = Block::default()
@@ -47,7 +47,7 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
             } else if has_desc {
                 app.theme.foreground
             } else if is_focused {
-                app.theme.secondary
+                app.theme.primary
             } else {
                 Color::DarkGray
             };
@@ -70,11 +70,11 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
 
     let list = List::new(items).block(block).highlight_style(
         Style::default()
-            .bg(app.theme.secondary)
+            .bg(app.theme.primary)
             .fg(app.theme.background)
             .add_modifier(Modifier::BOLD),
     );
 
     f.render_stateful_widget(list, area, &mut app.scripts.state);
-    paint_rounded_highlight(f, area, &app.scripts.state, app.theme.secondary);
+    paint_rounded_highlight(f, area, &app.scripts.state, app.theme.primary);
 }
