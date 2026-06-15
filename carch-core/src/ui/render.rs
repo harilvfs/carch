@@ -24,23 +24,22 @@ use crate::error::Result;
 use crate::ui::popups;
 
 fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
-    let popup_layout = Layout::default()
-        .direction(Direction::Vertical)
-        .constraints([
-            Constraint::Percentage((100 - percent_y) / 2),
-            Constraint::Percentage(percent_y),
-            Constraint::Percentage((100 - percent_y) / 2),
-        ])
-        .split(r);
-
-    Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints([
-            Constraint::Percentage((100 - percent_x) / 2),
-            Constraint::Percentage(percent_x),
-            Constraint::Percentage((100 - percent_x) / 2),
-        ])
-        .split(popup_layout[1])[1]
+    let mut popup_w = r.width * percent_x / 100;
+    let mut popup_h = r.height * percent_y / 100;
+    if (r.width - popup_w) % 2 != 0 {
+        popup_w += 1;
+    }
+    if (r.height - popup_h) % 2 != 0 {
+        popup_h += 1;
+    }
+    let offset_x = (r.width - popup_w) / 2;
+    let offset_y = (r.height - popup_h) / 2;
+    Rect {
+        x: r.x + offset_x,
+        y: r.y + offset_y,
+        width: popup_w,
+        height: popup_h,
+    }
 }
 
 fn render_normal_ui(f: &mut Frame, app: &mut App) {
@@ -77,7 +76,7 @@ fn ui(f: &mut Frame, app: &mut App) {
         AppMode::RunScript => {
             if let Some(popup) = &mut app.run_script_popup {
                 let area = app.script_panel_area;
-                let popup_area = centered_rect(83, 80, area);
+                let popup_area = centered_rect(98, 96, area);
                 f.render_widget(popup, popup_area);
             }
         }
@@ -109,35 +108,29 @@ fn ui(f: &mut Frame, app: &mut App) {
         }
         AppMode::Help => {
             let area = app.script_panel_area;
-            let popup_width = std::cmp::min(80, area.width.saturating_sub(4));
-            let popup_height = std::cmp::min(20, area.height.saturating_sub(4));
-
-            let percent_x = (popup_width * 100).checked_div(area.width).unwrap_or(100);
-            let percent_y = (popup_height * 100).checked_div(area.height).unwrap_or(100);
-
-            let popup_area = centered_rect(percent_x, percent_y, area);
+            let popup_area = centered_rect(98, 96, area);
             let max_scroll = popups::help::render_help_popup(f, app, popup_area);
             app.help.max_scroll = max_scroll;
         }
         AppMode::Preview => {
             let area = app.script_panel_area;
-            let popup_area = centered_rect(83, 80, area);
+            let popup_area = centered_rect(98, 96, area);
             popups::preview::render_preview_popup(f, app, popup_area);
         }
         AppMode::Description => {
             let area = app.script_panel_area;
-            let popup_area = centered_rect(80, 80, area);
+            let popup_area = centered_rect(98, 96, area);
             popups::description::render_description_popup(f, app, popup_area);
         }
         AppMode::Normal => {}
         AppMode::RootWarning => {
             let area = app.script_panel_area;
-            let popup_area = centered_rect(80, 50, area);
+            let popup_area = centered_rect(98, 96, area);
             popups::root_warning::render_root_warning_popup(f, app, popup_area);
         }
         AppMode::TermuxWarning => {
             let area = app.script_panel_area;
-            let popup_area = centered_rect(80, 50, area);
+            let popup_area = centered_rect(98, 96, area);
             popups::termux_warning::render_termux_warning_popup(f, app, popup_area);
         }
     }
