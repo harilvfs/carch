@@ -104,7 +104,7 @@ install_arch() {
 
 install_rpm() {
     distro="$1"
-    printf "%b:: %bDownloading carch rpm\n" "$yellow" "$nc"
+    printf "%b==>%b Downloading carch rpm\n" "$green" "$nc"
 
     rpm_url=$(get_rpm_url)
     if [ -z "$rpm_url" ]; then
@@ -112,7 +112,7 @@ install_rpm() {
         exit 1
     fi
 
-    curl -sL "$rpm_url" -o /tmp/carch.rpm > /dev/null 2>&1
+    curl -L "$rpm_url" -o /tmp/carch.rpm
 
     case "$distro" in
         fedora)   sudo dnf install -y /tmp/carch.rpm ;;
