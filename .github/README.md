@@ -31,7 +31,7 @@ It’s especially useful if you want to quickly set up and start using your _fav
 <h4> Stable Release </h4>
 
 ```sh
-curl -fsSL chalisehari.com.np/carch | sh
+curl -fsSL chalisehari.com.np/carch | sh -s -- --stable
 ```
 
 <h4> Dev Release </h4>
