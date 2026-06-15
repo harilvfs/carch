@@ -1,7 +1,7 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Modifier, Style};
-use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph};
+use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
 
 use crate::ui::state::App;
 
@@ -34,7 +34,8 @@ pub fn render_termux_warning_popup(f: &mut Frame, app: &App, area: Rect) {
             warning_text,
             Style::default().fg(app.theme.warning).add_modifier(Modifier::BOLD),
         )]))
-        .alignment(Alignment::Center);
+        .alignment(Alignment::Center)
+        .wrap(Wrap { trim: true });
 
     f.render_widget(warning_paragraph, content_layout[0]);
 
@@ -44,7 +45,8 @@ pub fn render_termux_warning_popup(f: &mut Frame, app: &App, area: Rect) {
             detail_text,
             Style::default().fg(app.theme.foreground),
         )]))
-        .alignment(Alignment::Center);
+        .alignment(Alignment::Center)
+        .wrap(Wrap { trim: true });
 
     f.render_widget(detail_paragraph, content_layout[1]);
 
@@ -52,7 +54,8 @@ pub fn render_termux_warning_popup(f: &mut Frame, app: &App, area: Rect) {
         ratatui::text::Span::styled("(O)", Style::default().fg(app.theme.success)),
         ratatui::text::Span::styled("k", Style::default().fg(app.theme.foreground)),
     ]))
-    .alignment(Alignment::Center);
+    .alignment(Alignment::Center)
+    .wrap(Wrap { trim: true });
 
     f.render_widget(options_text, content_layout[3]);
 }
