@@ -39,7 +39,7 @@ pub fn render_termux_warning_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(warning_paragraph, content_layout[0]);
 
-    let detail_text = "carch scripts are not compatible with Termux.\nOnly the Terminal/Termux script can be used.";
+    let detail_text = "carch scripts are not compatible with Termux.\nOnly the Terminal/Termux script can be used.\n\nThe TUI is designed for larger screens and may not\nbe fully compatible with the Termux environment.";
     let detail_paragraph =
         Paragraph::new(ratatui::text::Line::from(vec![ratatui::text::Span::styled(
             detail_text,
