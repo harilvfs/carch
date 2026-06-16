@@ -22,27 +22,43 @@ fn mode_info(app: &App) -> (&'static str, Color) {
     }
 }
 
+fn contextual_hints(app: &App) -> &'static str {
+    match app.mode {
+        AppMode::Normal if app.multi_select.enabled => {
+            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  Esc:Exit Multi  /:Search  ?:Help  q:Quit"
+        }
+        AppMode::Normal => {
+            "j/k:Move  h/l:Panel  Enter:Run  d:Desc  /:Search  p:Preview  m:Multi  t:Theme  ?:Help  q:Quit"
+        }
+        AppMode::Search => "Type:Search  Tab:Complete  Enter:Select  Esc:Close",
+        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Home/End:Top/Bot  q:Close",
+        AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
+        AppMode::Confirm => "y:Confirm  n:Cancel",
+        AppMode::Description => "j/k:Scroll  Esc:Close",
+        AppMode::RunScript => "Ctrl+C:Kill  g/G:Top/Bot  Shift+Up/Down:Scroll  q:Close",
+        AppMode::RootWarning => "y:Continue  n:Quit",
+        AppMode::TermuxWarning => "o:Acknowledge",
+    }
+}
+
 pub fn render_status_bar(f: &mut Frame, app: &App, area: Rect) {
     let (mode_text, mode_color) = mode_info(app);
     let version = version::get_current_version();
+    let hints = contextual_hints(app);
     let sep = Span::styled(" │ ", Style::default().fg(Color::DarkGray));
 
-    let mut spans = vec![
+    let left = Line::from(vec![
         Span::styled(mode_text, Style::default().fg(mode_color).add_modifier(Modifier::BOLD)),
         sep.clone(),
-    ];
+        Span::styled(hints, Style::default().fg(app.theme.secondary)),
+    ]);
 
-    spans.push(Span::styled(app.theme.name.as_str(), Style::default().fg(app.theme.secondary)));
-    spans.push(sep.clone());
-    spans.push(Span::styled("?:Help  q:Quit", Style::default().fg(app.theme.accent)));
-    spans.push(Span::raw("  "));
-    spans.push(Span::styled(
-        version,
-        Style::default().fg(app.theme.primary).add_modifier(Modifier::BOLD),
-    ));
+    let right = Line::from(vec![
+        Span::styled(app.theme.name.as_str(), Style::default().fg(app.theme.accent)),
+        sep.clone(),
+        Span::styled(version, Style::default().fg(app.theme.primary).add_modifier(Modifier::BOLD)),
+    ]);
 
-    let status = Line::from(spans);
-    let status_widget = Paragraph::new(status);
-
-    f.render_widget(status_widget, area);
+    f.render_widget(Paragraph::new(left), area);
+    f.render_widget(Paragraph::new(right).alignment(ratatui::layout::Alignment::Right), area);
 }

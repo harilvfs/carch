@@ -20,7 +20,7 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let popup_layout = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(3), Constraint::Min(3), Constraint::Length(2)])
+        .constraints([Constraint::Length(3), Constraint::Min(3)])
         .split(inner_area);
 
     let display_text = if let Some(ref autocomplete) = app.search.autocomplete {
@@ -109,31 +109,6 @@ pub fn render_search_popup(f: &mut Frame, app: &App, area: Rect) {
     search_list_state.select(Some(app.search.selected_idx.saturating_sub(start_idx)));
 
     f.render_stateful_widget(search_results, popup_layout[1], &mut search_list_state);
-
-    let help_block = Block::default()
-        .border_type(BorderType::Plain)
-        .borders(Borders::TOP)
-        .border_style(Style::default().fg(app.theme.secondary));
-
-    f.render_widget(help_block, popup_layout[2]);
-
-    let help_inner_area = Rect {
-        x:      popup_layout[2].x,
-        y:      popup_layout[2].y + 1,
-        width:  popup_layout[2].width,
-        height: popup_layout[2].height.saturating_sub(1),
-    };
-
-    let help_spans = vec![
-        Span::styled("\u{2191}/\u{2193}: Navigate  ", Style::default().fg(app.theme.foreground)),
-        Span::styled("Tab: Complete  ", Style::default().fg(app.theme.foreground)),
-        Span::styled("Enter: Select  ", Style::default().fg(app.theme.foreground)),
-        Span::styled("Esc: Cancel", Style::default().fg(app.theme.foreground)),
-    ];
-
-    let help_text = Paragraph::new(Line::from(help_spans)).alignment(Alignment::Center);
-
-    f.render_widget(help_text, help_inner_area);
 }
 
 fn highlight_match(

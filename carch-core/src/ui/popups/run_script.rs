@@ -345,9 +345,6 @@ impl Widget for &mut RunScriptPopup {
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(self.theme.primary))
                 .title_style(Style::default().fg(self.theme.primary).reversed())
-                .title_bottom(Line::from(
-                    "Shift+↑/↓: scroll   PgUp/PgDn: page   g/G: top/bottom   Ctrl-C: kill",
-                ))
         } else {
             let (title_text, style_color) = if self.get_exit_status().success() {
                 (

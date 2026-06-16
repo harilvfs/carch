@@ -1,7 +1,7 @@
 use std::sync::LazyLock;
 
 use ratatui::Frame;
-use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
+use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span, Text};
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
@@ -55,7 +55,7 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
-        .constraints([Constraint::Min(1), Constraint::Length(1)])
+        .constraints([Constraint::Min(1)])
         .split(inner);
 
     let preview_text = if let Some(selected) = app.scripts.state.selected() {
@@ -84,32 +84,6 @@ pub fn render_preview_popup(f: &mut Frame, app: &mut App, area: Rect) {
         .wrap(Wrap { trim: false });
 
     f.render_widget(preview, chunks[0]);
-
-    let help_text = Paragraph::new(Line::from(vec![
-        Span::styled(" Scroll: ", Style::default().fg(app.theme.secondary)),
-        Span::styled(
-            "↑/↓/j/k",
-            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
-        ),
-        Span::styled("  Page: ", Style::default().fg(app.theme.secondary)),
-        Span::styled(
-            "Pgup/Pgdown",
-            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
-        ),
-        Span::styled("  Jump: ", Style::default().fg(app.theme.secondary)),
-        Span::styled(
-            "Home/End",
-            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
-        ),
-        Span::styled("  Close: ", Style::default().fg(app.theme.secondary)),
-        Span::styled(
-            "Esc/q",
-            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
-        ),
-    ]))
-    .alignment(Alignment::Center);
-
-    f.render_widget(help_text, chunks[1]);
 }
 
 fn highlight_script(content: &str, ps: &SyntaxSet, ts: &ThemeSet) -> Text<'static> {

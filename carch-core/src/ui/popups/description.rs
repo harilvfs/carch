@@ -1,7 +1,7 @@
 use ratatui::Frame;
-use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use ratatui::style::{Modifier, Style};
-use ratatui::text::{Line, Span, Text};
+use ratatui::layout::{Constraint, Direction, Layout, Rect};
+use ratatui::style::Style;
+use ratatui::text::Text;
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
 
 use crate::ui::state::App;
@@ -23,7 +23,7 @@ pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(1)
-        .constraints([Constraint::Min(1), Constraint::Length(1)])
+        .constraints([Constraint::Min(1)])
         .split(area);
 
     let text = Text::from(description);
@@ -44,20 +44,4 @@ pub fn render_description_popup(f: &mut Frame, app: &mut App, area: Rect) {
     app.description.max_scroll = total_lines.saturating_sub(visible_height);
 
     f.render_widget(paragraph, chunks[0]);
-
-    let help_text = Paragraph::new(Line::from(vec![
-        Span::styled(" Scroll: ", Style::default().fg(app.theme.secondary)),
-        Span::styled(
-            "\u{2191}/\u{2193}/j/k",
-            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
-        ),
-        Span::styled("  Close: ", Style::default().fg(app.theme.secondary)),
-        Span::styled(
-            "Esc/q/d",
-            Style::default().fg(app.theme.foreground).add_modifier(Modifier::BOLD),
-        ),
-    ]))
-    .alignment(Alignment::Center);
-
-    f.render_widget(help_text, chunks[1]);
 }

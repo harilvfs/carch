@@ -1,15 +1,15 @@
 use ratatui::Frame;
-use ratatui::layout::Rect;
+use ratatui::layout::{Alignment, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
+use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
 
 use crate::ui::state::{App, FocusedPanel};
 use crate::ui::widgets::paint_rounded_highlight;
 
 fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
     let is_focused = app.focused_panel == FocusedPanel::Scripts;
-    let border_color = if is_focused { app.theme.primary } else { Color::DarkGray };
+    let border_color = if is_focused { app.theme.primary } else { Color::Gray };
     let border_modifier = if is_focused { Modifier::BOLD } else { Modifier::empty() };
 
     let mut block = Block::default()
@@ -17,7 +17,7 @@ fn create_block<'a>(title: &'a str, app: &App) -> Block<'a> {
         .border_type(BorderType::Rounded)
         .border_style(Style::default().fg(border_color).add_modifier(border_modifier));
     if !title.is_empty() {
-        block = block.title(title);
+        block = block.title(Span::styled(title.to_string(), Style::default().fg(app.theme.accent)));
     }
     block
 }
@@ -28,11 +28,27 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Scripts;
 
     let title = if app.multi_select.enabled {
-        format!("[{} Selected]", app.multi_select.scripts.len())
+        let count = app.multi_select.scripts.len();
+        format!(" Scripts [{count} Selected] ")
     } else {
-        String::new()
+        " Scripts ".to_string()
     };
     let block = create_block(&title, app);
+
+    if app.scripts.items.is_empty() {
+        let inner = block.inner(area);
+        f.render_widget(block, area);
+        let hint = if app.categories.items.is_empty() {
+            "No categories found"
+        } else {
+            "No scripts in this category"
+        };
+        let empty = Paragraph::new(hint)
+            .style(Style::default().fg(Color::Gray))
+            .alignment(Alignment::Center);
+        f.render_widget(empty, inner);
+        return;
+    }
 
     let items: Vec<ListItem> = app
         .scripts
@@ -44,12 +60,10 @@ pub fn render_script_list(f: &mut Frame, app: &mut App, area: Rect) {
 
             let name_color = if is_selected {
                 app.theme.success
-            } else if has_desc {
-                app.theme.foreground
             } else if is_focused {
-                app.theme.primary
+                if has_desc { app.theme.foreground } else { app.theme.primary }
             } else {
-                Color::DarkGray
+                Color::Gray
             };
             let name_modifier = if is_selected { Modifier::BOLD } else { Modifier::empty() };
 

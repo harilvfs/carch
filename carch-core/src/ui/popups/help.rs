@@ -143,14 +143,10 @@ pub fn render_help_popup(f: &mut Frame, app: &App, area: Rect) -> u16 {
         "No scroll needed".to_string()
     };
 
-    let footer = Paragraph::new(Line::from(vec![
-        Span::styled("\u{2191}/\u{2193}/j/k: ", Style::default().fg(app.theme.foreground)),
-        Span::styled("Scroll  ", Style::default().fg(app.theme.primary)),
-        Span::styled("Esc/q: ", Style::default().fg(app.theme.foreground)),
-        Span::styled("Close", Style::default().fg(app.theme.primary)),
-        Span::raw("  "),
-        Span::styled(scroll_status, Style::default().fg(app.theme.secondary)),
-    ]))
+    let footer = Paragraph::new(Line::from(vec![Span::styled(
+        scroll_status,
+        Style::default().fg(app.theme.secondary),
+    )]))
     .alignment(Alignment::Center);
 
     f.render_widget(footer, footer_area);

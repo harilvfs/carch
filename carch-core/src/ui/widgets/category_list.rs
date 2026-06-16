@@ -1,21 +1,34 @@
 use ratatui::Frame;
-use ratatui::layout::Rect;
+use ratatui::layout::{Alignment, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
-use ratatui::widgets::{Block, BorderType, Borders, List, ListItem};
+use ratatui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
 
 use crate::ui::state::{App, FocusedPanel};
 use crate::ui::widgets::paint_rounded_highlight;
 
 pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
     let is_focused = app.focused_panel == FocusedPanel::Categories;
-    let border_color = if is_focused { app.theme.primary } else { Color::DarkGray };
+    let border_color = if is_focused { app.theme.primary } else { Color::Gray };
     let border_modifier = if is_focused { Modifier::BOLD } else { Modifier::empty() };
+
+    let title = Span::styled(" Categories ", Style::default().fg(app.theme.accent));
 
     let block = Block::default()
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded)
-        .border_style(Style::default().fg(border_color).add_modifier(border_modifier));
+        .border_style(Style::default().fg(border_color).add_modifier(border_modifier))
+        .title(title);
+
+    if app.categories.items.is_empty() {
+        let inner = block.inner(area);
+        f.render_widget(block, area);
+        let empty = Paragraph::new("No categories found")
+            .style(Style::default().fg(Color::Gray))
+            .alignment(Alignment::Center);
+        f.render_widget(empty, inner);
+        return;
+    }
 
     let items: Vec<ListItem> = app
         .categories
@@ -26,8 +39,6 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 scripts.iter().filter(|item| app.is_script_selected(&item.path)).count()
             });
 
-            let text_color = if is_focused { app.theme.primary } else { Color::DarkGray };
-
             if selected_in_category > 0 {
                 let label = format!(" {category_name} (\u{2713} {selected_in_category})");
                 let line = Line::from(Span::styled(
@@ -36,6 +47,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 ));
                 ListItem::new(line)
             } else {
+                let text_color = if is_focused { app.theme.primary } else { Color::Gray };
                 let label = format!(" {category_name}");
                 let line = Line::from(Span::styled(label, Style::default().fg(text_color)));
                 ListItem::new(line)
