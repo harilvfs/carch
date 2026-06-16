@@ -47,7 +47,7 @@ pub fn render_category_list(f: &mut Frame, app: &mut App, area: Rect) {
                 ));
                 ListItem::new(line)
             } else {
-                let text_color = if is_focused { app.theme.primary } else { Color::Gray };
+                let text_color = if is_focused { app.theme.foreground } else { Color::Gray };
                 let label = format!(" {category_name}");
                 let line = Line::from(Span::styled(label, Style::default().fg(text_color)));
                 ListItem::new(line)
