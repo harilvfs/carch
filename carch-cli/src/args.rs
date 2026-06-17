@@ -3,7 +3,7 @@ use crate::state::{clear_favorite_theme, load_favorite_theme, save_favorite_them
 use carch_core::error::{CarchError, Result};
 use carch_core::{VALID_THEMES, is_valid_theme, version};
 use clap::builder::styling::{AnsiColor, Style};
-use clap::{ArgAction, Parser, Subcommand};
+use clap::{ArgAction, CommandFactory, Parser, Subcommand};
 use env_logger::{Builder, Target};
 use log::info;
 use std::env;
@@ -94,6 +94,11 @@ pub enum Commands {
     Update,
     #[command(about = "Uninstall the application")]
     Uninstall,
+    #[command(about = "Generate shell completions")]
+    Completions {
+        #[arg(value_enum, help = "Shell to generate completions for")]
+        shell: clap_complete::Shell,
+    },
 }
 
 #[derive(Clone, Default)]
@@ -170,6 +175,11 @@ pub fn parse_args() -> Result<()> {
         Some(Commands::Uninstall) => {
             info!("Running uninstall process");
             commands::uninstall()
+        }
+        Some(Commands::Completions { shell }) => {
+            let mut cmd = Cli::command();
+            clap_complete::generate(shell, &mut cmd, "carch", &mut std::io::stdout());
+            Ok(())
         }
         None => {
             let home_dir = env::var("HOME").map_err(|_| CarchError::HomeDirNotFound)?;

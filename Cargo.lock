@@ -157,6 +157,7 @@ version = "5.4.1"
 dependencies = [
  "carch-core",
  "clap",
+ "clap_complete",
  "env_logger",
  "log",
  "reqwest",
