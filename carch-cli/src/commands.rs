@@ -52,12 +52,32 @@ fn run_command(command: &mut Command) -> Result<()> {
 
 fn run_install_script() -> Result<()> {
     println!("==> Downloading and running install script...");
-    let status = Command::new("sh")
-        .arg("-c")
-        .arg(
-            "curl -fsSL https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh | sh",
-        )
-        .status()?;
+
+    let response = reqwest::blocking::get(
+        "https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh",
+    )
+    .map_err(|e| CarchError::Command(format!("Failed to download install script: {e}")))?;
+
+    let script = response
+        .text()
+        .map_err(|e| CarchError::Command(format!("Failed to read install script: {e}")))?;
+
+    let mut child = Command::new("sh")
+        .stdin(Stdio::piped())
+        .spawn()
+        .map_err(|e| CarchError::Command(format!("Failed to run install script: {e}")))?;
+
+    use std::io::Write;
+    child
+        .stdin
+        .take()
+        .ok_or_else(|| CarchError::Command("Failed to pipe install script".into()))?
+        .write_all(script.as_bytes())
+        .map_err(|e| CarchError::Command(format!("Failed to pipe install script: {e}")))?;
+
+    let status =
+        child.wait().map_err(|e| CarchError::Command(format!("Install script failed: {e}")))?;
+
     if !status.success() {
         return Err(CarchError::Command(
             "Install script failed. Try manually: curl -fsSL https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh | sh".into(),
