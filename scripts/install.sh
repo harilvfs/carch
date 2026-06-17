@@ -38,7 +38,7 @@ detect_target() {
 }
 
 get_latest_version() {
-    curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2>/dev/null |
+    curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2> /dev/null |
         grep '"tag_name"' | cut -d'"' -f4
 }
 
@@ -69,7 +69,7 @@ tar xzf "$ARCHIVE"
 RELEASE_DIR=$(basename "$ARCHIVE" .tar.gz)
 cd "$RELEASE_DIR"
 
-if [ -d "$PREFIX/bin" ] 2>/dev/null; then
+if [ -d "$PREFIX/bin" ] 2> /dev/null; then
     printf "==> Installing to Termux prefix...\n"
     install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
     IS_ANDROID=true
@@ -97,7 +97,7 @@ if [ -f "man/carch.1" ]; then
     else
         sudo install -Dm644 "man/carch.1" "/usr/share/man/man1/carch.1"
     fi
-    mandb -q 2>/dev/null || true
+    mandb -q 2> /dev/null || true
 fi
 
 if [ "$IS_ANDROID" = "false" ] && [ -f "carch.desktop" ]; then

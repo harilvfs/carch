@@ -38,7 +38,7 @@ detect_target() {
 }
 
 get_latest_version() {
-    curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2>/dev/null |
+    curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2> /dev/null |
         grep '"tag_name"' | cut -d'"' -f4
 }
 
@@ -57,7 +57,7 @@ printf "==> Version:  %s\n" "$VERSION"
 printf "==> Downloading %s...\n" "${BINARY}${SUFFIX}"
 
 curl -fsL "$BINARY_URL" -o "$TMPDIR/$BINARY"
-curl -fsL "$CHECKSUM_URL" -o "$TMPDIR/$BINARY.sha256" 2>/dev/null ||
+curl -fsL "$CHECKSUM_URL" -o "$TMPDIR/$BINARY.sha256" 2> /dev/null ||
     printf "Warning: No checksum file found, skipping verification.\n"
 
 if [ -f "$TMPDIR/$BINARY.sha256" ]; then
