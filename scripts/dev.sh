@@ -67,7 +67,7 @@ printf "==> Platform: %s\n" "$(uname -m)"
 printf "==> Version:  %s\n" "$VERSION"
 printf "==> Downloading %s...\n" "${BINARY}${SUFFIX}"
 
-curl -fsL "$BINARY_URL" -o "$TMPDIR/$BINARY"
+curl -fsSL "$BINARY_URL" -o "$TMPDIR/$BINARY"
 curl -fsL "$CHECKSUM_URL" -o "$TMPDIR/$BINARY.sha256" 2> /dev/null ||
     printf "Warning: No checksum file found, skipping verification.\n"
 

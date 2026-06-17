@@ -58,8 +58,8 @@ printf "==> Platform: %s\n" "$TARGET"
 printf "==> Version:  %s\n" "$VERSION"
 printf "==> Downloading %s...\n" "$ARCHIVE"
 
-curl -fsL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
-curl -fsL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
+curl -fsSL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
+curl -fsSL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
 
 printf "==> Verifying checksum...\n"
 cd "$TMPDIR"

@@ -17,13 +17,13 @@ usage() {
 
 case "$1" in
     install)
-        curl -fsL "$SCRIPTS_URL/install.sh" | sh
+        curl -fsSL "$SCRIPTS_URL/install.sh" | sh
         ;;
     --stable)
-        curl -fsL "$SCRIPTS_URL/stable.sh" | sh
+        curl -fsSL "$SCRIPTS_URL/stable.sh" | sh
         ;;
     --dev)
-        curl -fsL "$SCRIPTS_URL/dev.sh" | sh
+        curl -fsSL "$SCRIPTS_URL/dev.sh" | sh
         ;;
     -h | --help)
         usage
