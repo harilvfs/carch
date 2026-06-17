@@ -114,7 +114,7 @@ jobs:
             --target=aarch64-unknown-linux-musl \
             --all-features
 
-      - name: Generate completions from x86_64 binary
+      - name: Generate completions
         run: |
           mkdir -p completions
           ./build/x86_64-unknown-linux-musl/release/carch completions bash > completions/carch.bash
@@ -160,7 +160,7 @@ jobs:
             build/aarch64-unknown-linux-musl/release/carch
           retention-days: 1
 
-      - name: Generate a changelog
+      - name: Generate changelog
         uses: orhun/git-cliff-action@v4
         with:
           version: "v2.9.1"
@@ -185,14 +185,14 @@ jobs:
           generate_release_notes: false
           body_path: BODY.md
 
-      - name: Prepare raw binaries for upload
+      - name: Copy raw binaries
         run: |
           cp build/x86_64-unknown-linux-musl/release/carch ./carch
           cp build/aarch64-unknown-linux-musl/release/carch ./carch-aarch64
           sha256sum ./carch > ./carch.sha256
           sha256sum ./carch-aarch64 > ./carch-aarch64.sha256
 
-      - name: Upload Linux assets to release
+      - name: Upload Linux assets
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
             ${{ env.ARCHIVE_X86_64 }} \
@@ -292,14 +292,14 @@ jobs:
             carch-*.tar.gz.sha256
           retention-days: 1
 
-      - name: Prepare raw Android binaries for upload
+      - name: Copy raw Android binaries
         run: |
           cp build/aarch64-linux-android/release/carch ./carch-aarch64-android
           cp build/armv7-linux-androideabi/release/carch ./carch-armv7-android
           sha256sum ./carch-aarch64-android > ./carch-aarch64-android.sha256
           sha256sum ./carch-armv7-android > ./carch-armv7-android.sha256
 
-      - name: Upload Android assets to release
+      - name: Upload Android assets
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
             ${{ env.ARCHIVE_AARCH64_ANDROID }} \
