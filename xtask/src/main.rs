@@ -1,10 +1,6 @@
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
-use std::io::Cursor;
 
-use carch_cli::args::Cli;
-use clap::CommandFactory;
-use clap_complete::{Shell, generate};
 use pico_args::Arguments;
 use toml::Value;
 use xshell::{Shell as XShell, cmd};
@@ -14,7 +10,6 @@ Usage: cargo xtask <COMMAND>
 
 Commands:
   ci                  Run all CI checks
-  completions         Generate shell completion scripts
   ogen                Generate overview.md (alias: generate-overview)
 ";
 
@@ -38,26 +33,6 @@ fn main() -> Result<(), anyhow::Error> {
             cmd!(sh, "cargo +nightly test --workspace --locked").run()?;
             cmd!(sh, "taplo fmt --check").run()?;
             cmd!(sh, "cargo deny check").run()?;
-            Ok(())
-        }
-        "completions" => {
-            println!("Generating completions...");
-
-            let mut cmd = Cli::command();
-            let mut buffer = Vec::new();
-
-            generate(Shell::Bash, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
-            sh.write_file("completions/bash/carch", &buffer)?;
-            buffer.clear();
-
-            generate(Shell::Fish, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
-            sh.write_file("completions/fish/carch.fish", &buffer)?;
-            buffer.clear();
-
-            generate(Shell::Zsh, &mut cmd, "carch", &mut Cursor::new(&mut buffer));
-            sh.write_file("completions/zsh/_carch", &buffer)?;
-
-            println!("Completions generated successfully.");
             Ok(())
         }
         "generate-overview" | "ogen" => {

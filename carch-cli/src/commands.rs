@@ -1,11 +1,10 @@
 use carch_core::error::{CarchError, Result};
 use carch_core::version;
 use log::info;
-use serde_json::Value;
 use std::fs;
 use std::io::{self, Write};
+use std::path::Path;
 use std::process::{Command, Stdio};
-use tempfile::Builder;
 
 pub fn check_for_updates() -> Result<()> {
     println!("Checking for updates...");
@@ -33,47 +32,6 @@ pub fn check_for_updates() -> Result<()> {
     Ok(())
 }
 
-enum Distro {
-    Termux,
-    Arch,
-    Fedora,
-    OpenSuse,
-}
-
-fn is_termux() -> bool {
-    std::env::var("TERMUX_VERSION").is_ok()
-        || std::path::Path::new("/data/data/com.termux").exists()
-}
-
-fn detect_distro() -> Result<Distro> {
-    if is_termux() {
-        return Ok(Distro::Termux);
-    }
-    if command_exists("pacman") {
-        return Ok(Distro::Arch);
-    }
-    if command_exists("dnf") {
-        return Ok(Distro::Fedora);
-    }
-    if command_exists("zypper") {
-        return Ok(Distro::OpenSuse);
-    }
-    Err(CarchError::Command(
-        "Unsupported distribution. Carch supports Arch, Fedora, openSUSE, and Termux.".into(),
-    ))
-}
-
-fn detect_termux_arch() -> Result<&'static str> {
-    let out = Command::new("uname").arg("-m").output()?;
-    let arch = String::from_utf8_lossy(&out.stdout);
-    let arch = arch.trim();
-    match arch {
-        "aarch64" | "arm64" => Ok("aarch64"),
-        a if a.starts_with("armv7") || a == "armv8l" || a == "arm" => Ok("arm"),
-        other => Err(CarchError::Command(format!("Unsupported Termux architecture: {other}"))),
-    }
-}
-
 fn command_exists(command: &str) -> bool {
     Command::new("sh")
         .arg("-c")
@@ -92,141 +50,20 @@ fn run_command(command: &mut Command) -> Result<()> {
     Ok(())
 }
 
-// Find the first release asset whose name ends with `asset_pattern`.
-fn get_latest_release_url(asset_pattern: &str) -> Result<String> {
-    let client = reqwest::blocking::Client::builder().user_agent("carch-cli").build()?;
-    let body: Value =
-        client.get("https://api.github.com/repos/harilvfs/carch/releases/latest").send()?.json()?;
-
-    let assets = body
-        .get("assets")
-        .and_then(Value::as_array)
-        .ok_or_else(|| CarchError::Command("Latest release has no 'assets' field".to_string()))?;
-
-    for asset in assets {
-        let name = asset.get("name").and_then(Value::as_str).unwrap_or("");
-        let url = asset.get("browser_download_url").and_then(Value::as_str).unwrap_or("");
-        if !url.is_empty() && name.ends_with(asset_pattern) {
-            return Ok(url.to_string());
-        }
+fn run_install_script() -> Result<()> {
+    println!("==> Downloading and running install script...");
+    let status = Command::new("sh")
+        .arg("-c")
+        .arg(
+            "curl -fsSL https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh | sh",
+        )
+        .status()?;
+    if !status.success() {
+        return Err(CarchError::Command(
+            "Install script failed. Try manually: curl -fsSL https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh | sh".into(),
+        ));
     }
-
-    Err(CarchError::Command(format!("Could not find release asset matching '{asset_pattern}'")))
-}
-
-fn termux_install_deb(deb_arch: &str) -> Result<()> {
-    println!("==> Fetching latest .deb package for {deb_arch}...");
-
-    let pattern = format!("_{deb_arch}.deb");
-    let deb_url = get_latest_release_url(&pattern)?;
-
-    let tmp_dir = std::env::var("PREFIX").map_or_else(|_| "/tmp".into(), |p| format!("{p}/tmp"));
-
-    let mut tmp_deb = Builder::new().prefix("carch_").suffix(".deb").tempfile_in(&tmp_dir)?;
-
-    println!("==> Downloading .deb package...");
-    let bytes = reqwest::blocking::get(&deb_url)?.bytes()?;
-    tmp_deb.write_all(&bytes)?;
-
-    let tmp_path = tmp_deb.path().to_path_buf();
-
-    println!("==> Installing .deb package...");
-    run_command(Command::new("dpkg").arg("-i").arg(&tmp_path))?;
-
-    let _ = fs::remove_file(&tmp_path);
     Ok(())
-}
-
-fn install_for_distro(distro: &Distro) -> Result<()> {
-    match distro {
-        Distro::Termux => {
-            let arch = detect_termux_arch()?;
-            println!("==> Detected Termux architecture: {arch}");
-            termux_install_deb(arch)
-        }
-        Distro::Arch => {
-            println!("==> Cloning PKGBUILD...");
-            let home = std::env::var("HOME")
-                .map_err(|_| CarchError::Command("$HOME is not set".into()))?;
-            let pkgs_dir = std::path::PathBuf::from(home).join("pkgs");
-
-            if pkgs_dir.exists() {
-                fs::remove_dir_all(&pkgs_dir)?;
-            }
-
-            run_command(
-                Command::new("git")
-                    .arg("clone")
-                    .arg("https://github.com/carch-org/pkgs")
-                    .arg(&pkgs_dir)
-                    .stdout(Stdio::null())
-                    .stderr(Stdio::null()),
-            )?;
-
-            let carch_bin_dir = pkgs_dir.join("carch-bin");
-            run_command(
-                Command::new("makepkg").arg("-si").arg("--noconfirm").current_dir(&carch_bin_dir),
-            )
-        }
-        Distro::Fedora | Distro::OpenSuse => {
-            println!("==> Downloading carch RPM...");
-            let rpm_url = get_latest_release_url(".rpm")?;
-
-            let bytes = reqwest::blocking::get(&rpm_url)?.bytes()?;
-            let rpm_path = std::path::PathBuf::from("/tmp/carch.rpm");
-            fs::write(&rpm_path, &bytes)?;
-
-            match distro {
-                Distro::Fedora => run_command(
-                    Command::new("sudo").arg("dnf").arg("install").arg("-y").arg(&rpm_path),
-                ),
-                Distro::OpenSuse => run_command(
-                    Command::new("sudo")
-                        .arg("zypper")
-                        .arg("install")
-                        .arg("-y")
-                        .arg("--allow-unsigned-rpm")
-                        .arg(&rpm_path),
-                ),
-                _ => unreachable!(),
-            }
-        }
-    }
-}
-
-fn uninstall_for_distro(distro: &Distro) -> Result<()> {
-    match distro {
-        Distro::Termux => {
-            let installed = Command::new("dpkg")
-                .args(["-s", "carch"])
-                .stdout(Stdio::null())
-                .stderr(Stdio::null())
-                .status()
-                .is_ok_and(|s| s.success());
-
-            if installed {
-                run_command(Command::new("dpkg").arg("-r").arg("carch"))?;
-                println!("==> carch has been removed.");
-            } else {
-                println!("==> carch is not installed.");
-            }
-            Ok(())
-        }
-        Distro::Arch => run_command(
-            Command::new("sudo")
-                .arg("pacman")
-                .arg("-R")
-                .arg("carch-bin")
-                .arg("carch-bin-debug")
-                .arg("--noconfirm"),
-        ),
-        Distro::Fedora => {
-            run_command(Command::new("sudo").arg("dnf").arg("remove").arg("carch").arg("-y"))
-        }
-        Distro::OpenSuse => {
-            run_command(Command::new("sudo").arg("zypper").arg("remove").arg("-y").arg("carch"))
-        }
-    }
 }
 
 enum InstallMethod {
@@ -260,8 +97,7 @@ pub fn update() -> Result<()> {
             run_command(Command::new("cargo").arg("install").arg("carch-cli").arg("--force"))?;
         }
         InstallMethod::InstallScript => {
-            let distro = detect_distro()?;
-            install_for_distro(&distro)?;
+            run_install_script()?;
         }
     }
 
@@ -282,8 +118,41 @@ pub fn uninstall() -> Result<()> {
             run_command(Command::new("cargo").arg("uninstall").arg("carch-cli"))?;
         }
         InstallMethod::InstallScript => {
-            let distro = detect_distro()?;
-            uninstall_for_distro(&distro)?;
+            println!("==> Removing carch...");
+
+            let binary_paths = if std::env::var("TERMUX_VERSION").is_ok()
+                || Path::new("/data/data/com.termux").exists()
+            {
+                let prefix =
+                    std::env::var("PREFIX").unwrap_or("/data/data/com.termux/files/usr".into());
+                vec![format!("{prefix}/bin/carch"), format!("{prefix}/share/man/man1/carch.1")]
+            } else {
+                vec![
+                    "/usr/local/bin/carch".into(),
+                    "/usr/share/bash-completion/completions/carch".into(),
+                    "/usr/share/zsh/site-functions/_carch".into(),
+                    "/usr/share/fish/vendor_completions.d/carch.fish".into(),
+                    "/usr/share/man/man1/carch.1".into(),
+                    "/usr/share/applications/carch.desktop".into(),
+                ]
+            };
+
+            for path in &binary_paths {
+                if Path::new(path).exists() {
+                    run_command(Command::new("sudo").arg("rm").arg("-f").arg(path))?;
+                    println!("  Removed {path}");
+                }
+            }
+
+            if let Ok(home) = std::env::var("HOME") {
+                let config_dir = Path::new(&home).join(".config/carch");
+                if config_dir.exists() {
+                    fs::remove_dir_all(&config_dir)?;
+                    println!("  Removed {config_dir:?}");
+                }
+            }
+
+            println!("==> carch has been removed.");
         }
     }
 
