@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Carch
-Comment=A simple Rust-based CLI tool (built with Ratatui) to streamline and automate your Linux system’s initial setup
+Comment=A Rust-based CLI tool to streamline and automate your Linux system’s initial setup
 Exec=carch
 Icon=utilities-terminal
 Type=Application
