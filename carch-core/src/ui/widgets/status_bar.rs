@@ -4,7 +4,7 @@ use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::Paragraph;
 
-use crate::ui::state::{App, AppMode};
+use crate::ui::state::{App, AppMode, FocusedPanel};
 use crate::version;
 
 fn mode_info(app: &App) -> (&'static str, Color) {
@@ -25,11 +25,12 @@ fn mode_info(app: &App) -> (&'static str, Color) {
 fn contextual_hints(app: &App) -> &'static str {
     match app.mode {
         AppMode::Normal if app.multi_select.enabled => {
-            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  Esc:Exit Multi  /:Search  ?:Help  q:Quit"
+            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  Esc:Exit Multi  /:Search  ?:Help"
         }
-        AppMode::Normal => {
+        AppMode::Normal if app.focused_panel == FocusedPanel::Scripts => {
             "j/k:Move  h/l:Panel  Enter:Run  d:Desc  /:Search  p:Preview  m:Multi  t:Theme  ?:Help  q:Quit"
         }
+        AppMode::Normal => "j/k:Move  h/l:Panel  m:Multi  t:Theme  /:Search  ?:Help  q:Quit",
         AppMode::Search => "Type:Search  Tab:Complete  Enter:Select  Esc:Close",
         AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Home/End:Top/Bot  q:Close",
         AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
