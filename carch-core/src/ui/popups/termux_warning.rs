@@ -1,6 +1,7 @@
 use ratatui::Frame;
 use ratatui::layout::{Alignment, Constraint, Direction, Layout, Rect};
 use ratatui::style::{Modifier, Style};
+use ratatui::text::Text;
 use ratatui::widgets::{Block, BorderType, Borders, Clear, Paragraph, Wrap};
 
 use crate::ui::state::App;
@@ -16,11 +17,23 @@ pub fn render_termux_warning_popup(f: &mut Frame, app: &App, area: Rect) {
 
     let inner_area = popup_block.inner(area);
 
+    let detail_text = "carch scripts are not compatible with Termux.\nOnly the Terminal/Termux script can be used.\n\nThe TUI is designed for larger screens and may not\nbe fully compatible with the Termux environment.";
+
+    let visible_width = inner_area.width;
+    let detail_line_count: u16 = Text::from(detail_text)
+        .lines
+        .iter()
+        .map(|line| {
+            let w = line.width() as u16;
+            if w == 0 || visible_width == 0 { 1 } else { w.div_ceil(visible_width) }
+        })
+        .sum();
+
     let content_layout = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
             Constraint::Length(2),
-            Constraint::Length(2),
+            Constraint::Length(detail_line_count),
             Constraint::Length(1),
             Constraint::Length(2),
         ])
@@ -39,14 +52,9 @@ pub fn render_termux_warning_popup(f: &mut Frame, app: &App, area: Rect) {
 
     f.render_widget(warning_paragraph, content_layout[0]);
 
-    let detail_text = "carch scripts are not compatible with Termux.\nOnly the Terminal/Termux script can be used.\n\nThe TUI is designed for larger screens and may not\nbe fully compatible with the Termux environment.";
-    let detail_paragraph =
-        Paragraph::new(ratatui::text::Line::from(vec![ratatui::text::Span::styled(
-            detail_text,
-            Style::default().fg(app.theme.foreground),
-        )]))
-        .alignment(Alignment::Center)
-        .wrap(Wrap { trim: true });
+    let detail_paragraph = Paragraph::new(Text::from(detail_text))
+        .wrap(Wrap { trim: true })
+        .alignment(Alignment::Center);
 
     f.render_widget(detail_paragraph, content_layout[1]);
 
