@@ -24,17 +24,22 @@ fn mode_info(app: &App) -> (&'static str, Color) {
 
 fn contextual_hints(app: &App) -> &'static str {
     match app.mode {
+        AppMode::Normal
+            if app.multi_select.enabled && app.focused_panel == FocusedPanel::Scripts =>
+        {
+            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  d:Desc  p:Preview  Esc:Exit Multi  /:Search  ?:Help"
+        }
         AppMode::Normal if app.multi_select.enabled => {
-            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  Esc:Exit Multi  /:Search  ?:Help"
+            "j/k:Move  h/l:Panel  Esc:Exit Multi  /:Search  ?:Help"
         }
         AppMode::Normal if app.focused_panel == FocusedPanel::Scripts => {
             "j/k:Move  h/l:Panel  Enter:Run  d:Desc  /:Search  p:Preview  m:Multi  t:Theme  ?:Help  q:Quit"
         }
         AppMode::Normal => "j/k:Move  h/l:Panel  m:Multi  t:Theme  /:Search  ?:Help  q:Quit",
         AppMode::Search => "Type:Search  Tab:Complete  Enter:Select  Esc:Close",
-        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Home/End:Top/Bot  q:Close",
+        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Home/End:Top/Bot  Esc:Close",
         AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
-        AppMode::Confirm => "y:Confirm  n:Cancel",
+        AppMode::Confirm => "y:Confirm  n/Esc:Cancel",
         AppMode::Description => "j/k:Scroll  Esc:Close",
         AppMode::RunScript => "Ctrl+C:Kill  g/G:Top/Bot  Shift+Up/Down:Scroll  q:Close",
         AppMode::RootWarning => "y:Continue  n:Quit",
