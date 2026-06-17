@@ -123,8 +123,7 @@ jobs:
 
       - name: Package x86_64 release archive
         run: |
-          TAG="${{ github.event.inputs.tag_version }}"
-          DIR="carch-${TAG}-x86_64-unknown-linux-musl"
+          DIR="carch-x86_64-unknown-linux-musl"
           mkdir -p "$DIR/completions" "$DIR/man"
           cp build/x86_64-unknown-linux-musl/release/carch "$DIR/"
           cp completions/* "$DIR/completions/"
@@ -137,8 +136,7 @@ jobs:
 
       - name: Package aarch64 release archive
         run: |
-          TAG="${{ github.event.inputs.tag_version }}"
-          DIR="carch-${TAG}-aarch64-unknown-linux-musl"
+          DIR="carch-aarch64-unknown-linux-musl"
           mkdir -p "$DIR/completions" "$DIR/man"
           cp build/aarch64-unknown-linux-musl/release/carch "$DIR/"
           cp completions/* "$DIR/completions/"
@@ -261,8 +259,7 @@ jobs:
 
       - name: Package aarch64 Android archive
         run: |
-          TAG="${{ github.event.inputs.tag_version }}"
-          DIR="carch-${TAG}-aarch64-linux-android"
+          DIR="carch-aarch64-linux-android"
           mkdir -p "$DIR/man"
           cp build/aarch64-linux-android/release/carch "$DIR/"
           cp man/carch.1 "$DIR/man/"
@@ -273,8 +270,7 @@ jobs:
 
       - name: Package armv7 Android archive
         run: |
-          TAG="${{ github.event.inputs.tag_version }}"
-          DIR="carch-${TAG}-armv7-linux-androideabi"
+          DIR="carch-armv7-linux-androideabi"
           mkdir -p "$DIR/man"
           cp build/armv7-linux-androideabi/release/carch "$DIR/"
           cp man/carch.1 "$DIR/man/"

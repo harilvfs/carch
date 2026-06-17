@@ -50,7 +50,7 @@ if [ "$VERSION" = "latest" ]; then
 fi
 
 GITHUB="https://github.com/$REPO/releases/download"
-ARCHIVE="carch-${VERSION}-${TARGET}.tar.gz"
+ARCHIVE="carch-${TARGET}.tar.gz"
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
