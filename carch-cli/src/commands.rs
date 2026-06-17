@@ -145,7 +145,13 @@ pub fn uninstall() -> Result<()> {
             {
                 let prefix =
                     std::env::var("PREFIX").unwrap_or("/data/data/com.termux/files/usr".into());
-                vec![format!("{prefix}/bin/carch"), format!("{prefix}/share/man/man1/carch.1")]
+                vec![
+                    format!("{prefix}/bin/carch"),
+                    format!("{prefix}/share/bash-completion/completions/carch"),
+                    format!("{prefix}/share/zsh/site-functions/_carch"),
+                    format!("{prefix}/share/fish/vendor_completions.d/carch.fish"),
+                    format!("{prefix}/share/man/man1/carch.1"),
+                ]
             } else {
                 vec![
                     "/usr/local/bin/carch".into(),

@@ -79,15 +79,23 @@ else
     IS_ANDROID=false
 fi
 
-if [ "$IS_ANDROID" = "false" ] && [ -d "completions" ]; then
+if [ -d "completions" ]; then
     printf "==> Installing shell completions...\n"
-    sudo mkdir -p /usr/share/bash-completion/completions
-    sudo mkdir -p /usr/share/zsh/site-functions
-    sudo mkdir -p /usr/share/fish/vendor_completions.d
-
-    [ -f "completions/carch.bash" ] && sudo install -Dm644 "completions/carch.bash" /usr/share/bash-completion/completions/carch
-    [ -f "completions/carch.zsh" ]  && sudo install -Dm644 "completions/carch.zsh" /usr/share/zsh/site-functions/_carch
-    [ -f "completions/carch.fish" ] && sudo install -Dm644 "completions/carch.fish" /usr/share/fish/vendor_completions.d/carch.fish
+    if [ "$IS_ANDROID" = "true" ]; then
+        mkdir -p "$PREFIX/share/bash-completion/completions"
+        mkdir -p "$PREFIX/share/zsh/site-functions"
+        mkdir -p "$PREFIX/share/fish/vendor_completions.d"
+        [ -f "completions/carch.bash" ] && install -Dm644 "completions/carch.bash" "$PREFIX/share/bash-completion/completions/carch"
+        [ -f "completions/carch.zsh" ]  && install -Dm644 "completions/carch.zsh" "$PREFIX/share/zsh/site-functions/_carch"
+        [ -f "completions/carch.fish" ] && install -Dm644 "completions/carch.fish" "$PREFIX/share/fish/vendor_completions.d/carch.fish"
+    else
+        sudo mkdir -p /usr/share/bash-completion/completions
+        sudo mkdir -p /usr/share/zsh/site-functions
+        sudo mkdir -p /usr/share/fish/vendor_completions.d
+        [ -f "completions/carch.bash" ] && sudo install -Dm644 "completions/carch.bash" /usr/share/bash-completion/completions/carch
+        [ -f "completions/carch.zsh" ]  && sudo install -Dm644 "completions/carch.zsh" /usr/share/zsh/site-functions/_carch
+        [ -f "completions/carch.fish" ] && sudo install -Dm644 "completions/carch.fish" /usr/share/fish/vendor_completions.d/carch.fish
+    fi
 fi
 
 if [ -f "man/carch.1" ]; then

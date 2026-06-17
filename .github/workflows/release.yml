@@ -121,6 +121,13 @@ jobs:
           ./build/x86_64-unknown-linux-musl/release/carch completions zsh > completions/carch.zsh
           ./build/x86_64-unknown-linux-musl/release/carch completions fish > completions/carch.fish
 
+      - name: Upload completions as artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: completions
+          path: completions/
+          retention-days: 1
+
       - name: Package x86_64 release archive
         run: |
           DIR="carch-x86_64-unknown-linux-musl"
@@ -241,6 +248,12 @@ jobs:
       - name: Install cross
         run: cargo install cross
 
+      - name: Download completions
+        uses: actions/download-artifact@v7
+        with:
+          name: completions
+          path: completions/
+
       - name: Build aarch64 Android binary
         run: |
           cross build \
@@ -260,8 +273,9 @@ jobs:
       - name: Package aarch64 Android archive
         run: |
           DIR="carch-aarch64-linux-android"
-          mkdir -p "$DIR/man"
+          mkdir -p "$DIR/completions" "$DIR/man"
           cp build/aarch64-linux-android/release/carch "$DIR/"
+          cp completions/* "$DIR/completions/"
           cp man/carch.1 "$DIR/man/"
           tar -czf "${DIR}.tar.gz" "$DIR"
           sha256sum "${DIR}.tar.gz" > "${DIR}.tar.gz.sha256"
@@ -271,8 +285,9 @@ jobs:
       - name: Package armv7 Android archive
         run: |
           DIR="carch-armv7-linux-androideabi"
-          mkdir -p "$DIR/man"
+          mkdir -p "$DIR/completions" "$DIR/man"
           cp build/armv7-linux-androideabi/release/carch "$DIR/"
+          cp completions/* "$DIR/completions/"
           cp man/carch.1 "$DIR/man/"
           tar -czf "${DIR}.tar.gz" "$DIR"
           sha256sum "${DIR}.tar.gz" > "${DIR}.tar.gz.sha256"
