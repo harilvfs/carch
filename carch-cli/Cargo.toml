@@ -19,7 +19,7 @@ path = "src/lib.rs"
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
 clap_complete = "4.6.5"
-carch-core = { path = "../carch-core", version = "5.4.1" }
+carch-core = { path = "../carch-core", version = "5.4.2" }
 log = { workspace = true }
 env_logger = { workspace = true }
 tempfile = { workspace = true }
