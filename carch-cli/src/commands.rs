@@ -56,6 +56,7 @@ fn run_install_script() -> Result<()> {
     let response = reqwest::blocking::get(
         "https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh",
     )
+    .and_then(|r| r.error_for_status())
     .map_err(|e| CarchError::Command(format!("Failed to download install script: {e}")))?;
 
     let script = response
@@ -140,9 +141,10 @@ pub fn uninstall() -> Result<()> {
         InstallMethod::InstallScript => {
             println!("==> Removing carch...");
 
-            let binary_paths = if std::env::var("TERMUX_VERSION").is_ok()
-                || Path::new("/data/data/com.termux").exists()
-            {
+            let is_termux = std::env::var("TERMUX_VERSION").is_ok()
+                || Path::new("/data/data/com.termux").exists();
+
+            let binary_paths = if is_termux {
                 let prefix =
                     std::env::var("PREFIX").unwrap_or("/data/data/com.termux/files/usr".into());
                 vec![
@@ -165,7 +167,11 @@ pub fn uninstall() -> Result<()> {
 
             for path in &binary_paths {
                 if Path::new(path).exists() {
-                    run_command(Command::new("sudo").arg("rm").arg("-f").arg(path))?;
+                    if is_termux {
+                        run_command(Command::new("rm").arg("-f").arg(path))?;
+                    } else {
+                        run_command(Command::new("sudo").arg("rm").arg("-f").arg(path))?;
+                    }
                     println!("  Removed {path}");
                 }
             }

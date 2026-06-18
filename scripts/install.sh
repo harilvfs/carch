@@ -4,13 +4,18 @@ set -e
 REPO="harilvfs/carch"
 BINARY="carch"
 
+if [ -n "$TERMUX_VERSION" ] || [ -d "/data/data/com.termux" ]; then
+    IS_ANDROID=true
+else
+    IS_ANDROID=false
+fi
+
 detect_target() {
     ARCH=$(uname -m)
     OS=$(uname -s)
-
     case "$OS" in
         Linux)
-            if [ -n "$TERMUX_VERSION" ] || [ -d "/data/data/com.termux" ]; then
+            if [ "$IS_ANDROID" = "true" ]; then
                 case "$ARCH" in
                     aarch64 | arm64) echo "aarch64-linux-android" ;;
                     armv7* | armv8l | arm) echo "armv7-linux-androideabi" ;;
@@ -39,25 +44,29 @@ detect_target() {
 
 get_latest_version() {
     curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2> /dev/null |
-        grep '"tag_name"' | cut -d'"' -f4
+        grep '"tag_name"' | head -1 | cut -d'"' -f4
 }
 
 VERSION="${CARCH_VERSION:-latest}"
 TARGET=$(detect_target)
-
 if [ "$VERSION" = "latest" ]; then
     VERSION=$(get_latest_version)
 fi
 
+if [ -z "$VERSION" ]; then
+    printf "Error: could not determine a release version.\n" >&2
+    exit 1
+fi
+
 GITHUB="https://github.com/$REPO/releases/download"
 ARCHIVE="carch-${TARGET}.tar.gz"
+
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
 printf "==> Platform: %s\n" "$TARGET"
 printf "==> Version:  %s\n" "$VERSION"
 printf "==> Downloading %s...\n" "$ARCHIVE"
-
 curl -fsSL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
 curl -fsSL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
 
@@ -69,14 +78,12 @@ tar xzf "$ARCHIVE"
 RELEASE_DIR=$(basename "$ARCHIVE" .tar.gz)
 cd "$RELEASE_DIR"
 
-if [ -d "$PREFIX/bin" ] 2> /dev/null; then
+if [ "$IS_ANDROID" = "true" ]; then
     printf "==> Installing to Termux prefix...\n"
     install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
-    IS_ANDROID=true
 else
     printf "==> Installing to /usr/local...\n"
     sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"
-    IS_ANDROID=false
 fi
 
 if [ -d "completions" ]; then
