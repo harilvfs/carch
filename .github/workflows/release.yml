@@ -121,6 +121,9 @@ jobs:
           ./build/x86_64-unknown-linux-musl/release/carch completions zsh > completions/carch.zsh
           ./build/x86_64-unknown-linux-musl/release/carch completions fish > completions/carch.fish
 
+      - name: Generate manpage
+        run: cargo xtask man
+
       - name: Upload completions as artifact
         uses: actions/upload-artifact@v7
         with:

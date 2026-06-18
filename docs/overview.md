@@ -79,10 +79,7 @@
 - **Foot**: *Foot is a lightweight, fast, minimal Wayland-native terminal emulator designed for simplicity and performance. The script applies my pre-configured Foot config.*
 - **Ghostty**: *Ghostty is a fast, feature-rich, cross-platform terminal emulator using native UI and GPU acceleration. The script applies my pre-configured Ghostty config.*
 - **Kitty**: *Kitty is a fast, GPU-accelerated terminal emulator with modern features like ligatures, tabs, tiling layouts, and image support. The script applies my pre-configured Kitty config.*
+- **Termux**: *Termux is an Android terminal emulator and Linux environment. This script automates the setup of a Termux environment workflow by installing/setting up Zsh, Zsh plugins, and essential packages to make your favorite Android terminal emulator ready to use.*
 - **Tmux**: *Tmux is a terminal multiplexer that lets you manage multiple terminal sessions within one window. The script applies my pre-configured tmux config.*
 - **Zsh**: *Zsh (Z shell) is an advanced Unix shell with features like improved tab completion, better scripting, and powerful customization. The script installs all required dependencies and applies my custom theme.*
-
-### Termux-Android
-
-- **Termux-Setup**: *Termux is an Android terminal emulator and Linux environment. This script automates the setup of a Termux environment workflow by installing/setting up Zsh, Zsh plugins, and essential packages to make your favorite Android terminal emulator ready to use.*
 

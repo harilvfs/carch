@@ -12,4 +12,5 @@ xshell = "0.2.0"
 anyhow = "1.0.102"
 clap = { workspace = true }
 clap_complete = "4.6.5"
+clap_mangen = "0.3"
 toml = { workspace = true }

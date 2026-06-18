@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 use std::fmt::Write as _;
 
+use clap::CommandFactory;
 use pico_args::Arguments;
 use toml::Value;
 use xshell::{Shell as XShell, cmd};
@@ -11,6 +12,7 @@ Usage: cargo xtask <COMMAND>
 Commands:
   ci                  Run all CI checks
   ogen                Generate overview.md (alias: generate-overview)
+  man                 Generate manpage from clap definitions
 ";
 
 fn main() -> Result<(), anyhow::Error> {
@@ -78,6 +80,65 @@ fn main() -> Result<(), anyhow::Error> {
             sh.create_dir("docs")?;
             sh.write_file("docs/overview.md", &markdown)?;
             println!("overview.md generated successfully in docs/.");
+            Ok(())
+        }
+        "man" => {
+            let mut cmd = carch_cli::args::Cli::command();
+            cmd = cmd.name("carch");
+
+            let date = std::process::Command::new("date")
+                .arg("+%B %d, %Y")
+                .output()
+                .ok()
+                .and_then(|o| String::from_utf8(o.stdout).ok())
+                .map(|s| s.trim().to_string())
+                .unwrap_or_else(|| "June 18, 2026".into());
+
+            let man = clap_mangen::Man::new(cmd.clone())
+                .title("carch")
+                .section("1")
+                .date(&date)
+                .source("Carch")
+                .manual("Carch");
+
+            let out_dir = sh.current_dir();
+            let man_path = out_dir.join("man/carch.1");
+            sh.create_dir("man")?;
+
+            use std::io::Write;
+            let mut buf = Vec::new();
+            man.render(&mut buf)?;
+            let mut content = String::from_utf8(buf)?;
+
+            for sub in cmd.get_subcommands() {
+                let name = sub.get_name();
+                let escaped = name.replace('-', "\\-");
+                let old = format!("carch\\-{escaped}(1)");
+                let new = format!("\\fB{name}\\fR");
+                content = content.replace(&old, &new);
+            }
+            content = content.replace("carch\\-help(1)", "\\fBhelp\\fR");
+
+            let mut file = std::fs::File::create(&man_path)?;
+            file.write_all(content.as_bytes())?;
+            writeln!(
+                file,
+                r#".SH DOCUMENTATION
+Comprehensive documentation for Carch is available at:
+.br
+https://carch.chalisehari.com.np
+
+.SH AUTHOR
+Hari Chalise <harilvfs@chalisehari.com.np>
+
+.SH REPORTING BUGS
+If you encounter bugs or issues, please report them at:
+.br
+https://github.com/harilvfs/carch/issues
+"#
+            )?;
+
+            println!("Manpage generated at {}", man_path.display());
             Ok(())
         }
         _ => {

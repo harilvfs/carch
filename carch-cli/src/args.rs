@@ -62,7 +62,12 @@ fn styles() -> clap::builder::Styles {
 }
 
 #[derive(Parser)]
-#[command(author, about, long_about = None, styles = styles())]
+#[command(
+    author,
+    about = "A CLI tool to automate Linux system setup",
+    long_about = "A Rust-based CLI tool to streamline and automate your Linux system's initial setup.\nIt offers automated scripts that save users time setting up their Linux environment.",
+    styles = styles()
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command:          Option<Commands>,
