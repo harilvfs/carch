@@ -41,7 +41,7 @@ fn contextual_hints(app: &App) -> &'static str {
         AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
         AppMode::Confirm => "y:Confirm  n/Esc:Cancel",
         AppMode::Description => "j/k:Scroll  Esc:Close",
-        AppMode::RunScript => "Ctrl+C:Kill  g/G:Top/Bot  Shift+Up/Down:Scroll  q:Close",
+        AppMode::RunScript => "Ctrl+C:Kill  PgUp/PgDn:Scroll",
         AppMode::RootWarning => "y:Continue  n:Quit",
         AppMode::TermuxWarning => "o:Acknowledge",
     }

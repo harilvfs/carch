@@ -157,7 +157,7 @@ impl RunScriptPopup {
 
     pub fn handle_key_event(&mut self, key: KeyEvent) -> PopupEvent {
         let ctrl = key.modifiers.contains(KeyModifiers::CONTROL);
-        let shift = key.modifiers.contains(KeyModifiers::SHIFT);
+        let _shift = key.modifiers.contains(KeyModifiers::SHIFT);
 
         match key.code {
             KeyCode::Char('c') if ctrl => {
@@ -167,28 +167,12 @@ impl RunScriptPopup {
             KeyCode::Char('q') | KeyCode::Enter | KeyCode::Esc if self.is_finished() => {
                 PopupEvent::Close
             }
-            KeyCode::Up if shift => {
-                self.scroll_up(1);
-                PopupEvent::None
-            }
-            KeyCode::Down if shift => {
-                self.scroll_down(1);
-                PopupEvent::None
-            }
             KeyCode::PageUp => {
                 self.scroll_up(PAGE_STEP);
                 PopupEvent::None
             }
             KeyCode::PageDown => {
                 self.scroll_down(PAGE_STEP);
-                PopupEvent::None
-            }
-            KeyCode::Char('g') if !ctrl => {
-                self.scroll_to_top();
-                PopupEvent::None
-            }
-            KeyCode::Char('G') => {
-                self.scroll_to_bottom();
                 PopupEvent::None
             }
             _ => {
@@ -218,17 +202,6 @@ impl RunScriptPopup {
             self.scroll_offset = 0;
         }
         self.auto_scroll = self.scroll_offset == 0;
-    }
-
-    fn scroll_to_top(&mut self) {
-        let max = self.max_scrollback();
-        self.scroll_offset = max;
-        self.auto_scroll = max == 0;
-    }
-
-    fn scroll_to_bottom(&mut self) {
-        self.scroll_offset = 0;
-        self.auto_scroll = true;
     }
 
     fn max_scrollback(&self) -> usize {
