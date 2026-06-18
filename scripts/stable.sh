@@ -57,16 +57,16 @@ CHECKSUM_URL="${BINARY_URL}.sha256"
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
-printf "==> Platform: %s\n" "$(uname -m)"
-printf "==> Version:  %s\n" "$VERSION"
-printf "==> Downloading %s...\n" "$ARTIFACT"
+printf "Platform: %s\n" "$(uname -m)"
+printf "Version:  %s\n" "$VERSION"
+printf "Downloading %s...\n" "$ARTIFACT"
 curl -fsSL "$BINARY_URL" -o "$TMPDIR/$ARTIFACT"
 
 curl -fsL "$CHECKSUM_URL" -o "$TMPDIR/$ARTIFACT.sha256" 2> /dev/null ||
     printf "Warning: No checksum file found, skipping verification.\n"
 
 if [ -f "$TMPDIR/$ARTIFACT.sha256" ]; then
-    printf "==> Verifying checksum...\n"
+    printf "Verifying checksum...\n"
     (cd "$TMPDIR" && sha256sum -c "$ARTIFACT.sha256")
 fi
 

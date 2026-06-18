@@ -64,13 +64,13 @@ ARCHIVE="carch-${TARGET}.tar.gz"
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
-printf "==> Platform: %s\n" "$TARGET"
-printf "==> Version:  %s\n" "$VERSION"
-printf "==> Downloading %s...\n" "$ARCHIVE"
+printf "Platform: %s\n" "$TARGET"
+printf "Version:  %s\n" "$VERSION"
+printf "Downloading %s...\n" "$ARCHIVE"
 curl -fsSL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
 curl -fsSL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
 
-printf "==> Verifying checksum...\n"
+printf "Verifying checksum...\n"
 cd "$TMPDIR"
 sha256sum -c "$ARCHIVE.sha256"
 
@@ -79,15 +79,15 @@ RELEASE_DIR=$(basename "$ARCHIVE" .tar.gz)
 cd "$RELEASE_DIR"
 
 if [ "$IS_ANDROID" = "true" ]; then
-    printf "==> Installing to Termux prefix...\n"
+    printf "Installing to Termux prefix...\n"
     install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
 else
-    printf "==> Installing to /usr/local...\n"
+    printf "Installing to /usr/local...\n"
     sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"
 fi
 
 if [ -d "completions" ]; then
-    printf "==> Installing shell completions...\n"
+    printf "Installing shell completions...\n"
     if [ "$IS_ANDROID" = "true" ]; then
         mkdir -p "$PREFIX/share/bash-completion/completions"
         mkdir -p "$PREFIX/share/zsh/site-functions"
@@ -106,7 +106,7 @@ if [ -d "completions" ]; then
 fi
 
 if [ -f "man/carch.1" ]; then
-    printf "==> Installing man page...\n"
+    printf "Installing man page...\n"
     if [ "$IS_ANDROID" = "true" ]; then
         install -Dm644 "man/carch.1" "$PREFIX/share/man/man1/carch.1"
     else
@@ -116,7 +116,7 @@ if [ -f "man/carch.1" ]; then
 fi
 
 if [ "$IS_ANDROID" = "false" ] && [ -f "carch.desktop" ]; then
-    printf "==> Installing desktop entry...\n"
+    printf "Installing desktop entry...\n"
     sudo install -Dm644 "carch.desktop" "/usr/share/applications/carch.desktop"
 fi
 

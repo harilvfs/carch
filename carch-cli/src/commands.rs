@@ -51,7 +51,7 @@ fn run_command(command: &mut Command) -> Result<()> {
 }
 
 fn run_install_script() -> Result<()> {
-    println!("==> Downloading and running install script...");
+
 
     let response = reqwest::blocking::get(
         "https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh",
@@ -81,7 +81,7 @@ fn run_install_script() -> Result<()> {
 
     if !status.success() {
         return Err(CarchError::Command(
-            "Install script failed. Try manually: curl -fsSL https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh | sh".into(),
+            "Install script failed. Try manually: curl -fsSL chalisehari.com.np/carch | sh -s -- install".into(),
         ));
     }
     Ok(())
@@ -111,7 +111,7 @@ pub fn update() -> Result<()> {
     }
 
     info!("Starting update...");
-    println!("==> Updating carch...");
+    println!("Updating carch...");
 
     match get_install_method()? {
         InstallMethod::Cargo => {
@@ -139,7 +139,7 @@ pub fn uninstall() -> Result<()> {
             run_command(Command::new("cargo").arg("uninstall").arg("carch-cli"))?;
         }
         InstallMethod::InstallScript => {
-            println!("==> Removing carch...");
+            println!("Removing carch...");
 
             let is_termux = std::env::var("TERMUX_VERSION").is_ok()
                 || Path::new("/data/data/com.termux").exists();
@@ -184,7 +184,7 @@ pub fn uninstall() -> Result<()> {
                 }
             }
 
-            println!("==> carch has been removed.");
+            println!("carch has been removed.");
         }
     }
 
