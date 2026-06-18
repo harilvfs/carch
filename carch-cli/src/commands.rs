@@ -51,8 +51,6 @@ fn run_command(command: &mut Command) -> Result<()> {
 }
 
 fn run_install_script() -> Result<()> {
-
-
     let response = reqwest::blocking::get(
         "https://raw.githubusercontent.com/harilvfs/carch/main/scripts/install.sh",
     )
