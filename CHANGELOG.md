@@ -1,5 +1,98 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.4.2](https://github.com/harilvfs/carch/compare/v5.4.1...v5.4.2) - 2026-06-18
+
+
+### 🚀 Features
+
+
+- [aac22ec](https://github.com/harilvfs/carch/commit/aac22ecda50082a40c12ecd6b2426e99444e6030)  *(tui)* Add `note` popup for termux env by @harilvfs
+
+- [51504d6](https://github.com/harilvfs/carch/commit/51504d6b9768665c7cd27fd84694f8d663b71898)  *(tui)* Increase popup area size by @harilvfs
+
+- [74c25c9](https://github.com/harilvfs/carch/commit/74c25c9d401d1cbf389a33d612cc25bcd6a169d4)  *(tui)* Add ctrlc along for qutting tui by @harilvfs
+
+- [70b7a1f](https://github.com/harilvfs/carch/commit/70b7a1fed23affc50282d559931167fd5a7b4431)  *(android)* Add completions by @harilvfs
+
+- [19f060e](https://github.com/harilvfs/carch/commit/19f060ed65494947c0e3217162375acc9db21ef4)  *(cli)* Add clap_mangen to auto generate manpages by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [54f3e71](https://github.com/harilvfs/carch/commit/54f3e71e58cb0ce0008405f9af1b05d5459520b8) Shellcheck improvements and status bar foreground colors (#715) by @harilvfs in [#715](https://github.com/harilvfs/carch/pull/715)
+
+- [887d2e2](https://github.com/harilvfs/carch/commit/887d2e2a7c59351f598fa79514a9f1f23197a292)  *(tui)* Use warp trim for note in small size terminal like termux by @harilvfs
+
+- [2ee8ebc](https://github.com/harilvfs/carch/commit/2ee8ebcfa38fac6aec43b435bf7d38b158eee67f)  *(termux)* Correct note line count for proper text visibility by @harilvfs
+
+- [0a17742](https://github.com/harilvfs/carch/commit/0a177426f3bd3e6540d51a29b34151b32330b174)  *(cli)* Use reqwest to grab/run install script by @harilvfs
+
+- [a5dd332](https://github.com/harilvfs/carch/commit/a5dd33250d0ebbf4c3c7273cc27cf2110885ed90) Resolve Termux install/uninstall issues and checksum verification by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [ff23d8e](https://github.com/harilvfs/carch/commit/ff23d8ef32ce62ef2f03afeb7eea972e47f703dd)  *(ui)* Clean up frontend look and feel (#716) by @harilvfs in [#716](https://github.com/harilvfs/carch/pull/716)
+
+- [a8db54c](https://github.com/harilvfs/carch/commit/a8db54cc4aaed025cdef0bb5a6939ca53857196f)  *(tui)* Add panel titles, empty states, contextual status bar, and dim unfocused panels by @harilvfs
+
+- [38594cc](https://github.com/harilvfs/carch/commit/38594cc1484af5ccdeaa260b3997c90c7c694d3b) Simplify release and install process (#717) by @harilvfs in [#717](https://github.com/harilvfs/carch/pull/717)
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [c8cc882](https://github.com/harilvfs/carch/commit/c8cc882aaceee5ce78d1a395f8f8a24c736b8727)  *(preview)* Short fix for root warning by @harilvfs
+
+- [f439197](https://github.com/harilvfs/carch/commit/f4391974ee86d7a2276239e7c1b3f359b62c7d2d)  *(script)* Use tmp dir for pkgbuild cloning by @harilvfs
+
+- [ec2fb29](https://github.com/harilvfs/carch/commit/ec2fb2955ff645378820057e21021e60ad3abdfb)  *(tui)* Only keep logs up to max 5 by @harilvfs
+
+- [fe8dc3f](https://github.com/harilvfs/carch/commit/fe8dc3fb70f79181cba2d328fc53e44a9c41bc96) Update man-pages & release workflow by @harilvfs
+
+- [25e6e65](https://github.com/harilvfs/carch/commit/25e6e65dd2f89e63d5ae1dc414bdd370a675694e)  *(script)* Move termux script to terminal by @harilvfs
+
+- [8aa62f2](https://github.com/harilvfs/carch/commit/8aa62f2a9db5cbcaaf410bf108669f3729a2d1c9)  *(script)* Combine setup/install in one by @harilvfs
+
+- [65901f5](https://github.com/harilvfs/carch/commit/65901f5e582a9873b253e9d70aed4727bed6c365)  *(readme)* Update stable running url by @harilvfs
+
+- [2814ad7](https://github.com/harilvfs/carch/commit/2814ad78416c524487181fddb442205ab2250b21)  *(script)* Remove silent for curl download by @harilvfs
+
+- [582578c](https://github.com/harilvfs/carch/commit/582578c7e7e413644219c0ff786ae87deec643e3)  *(tui)* Only use primary border color across tui by @harilvfs
+
+- [80ff6a8](https://github.com/harilvfs/carch/commit/80ff6a86b72520d2253896f7d23a45c97da47c73)  *(script)* Rename carch.sh to setup.sh by @harilvfs
+
+- [07a6c3b](https://github.com/harilvfs/carch/commit/07a6c3bf2bf625d38e890da42ab5b135f8c94d6a)  *(redirect)* Add cloudflare worker reference by @harilvfs
+
+- [225299c](https://github.com/harilvfs/carch/commit/225299c44d228dcfe5df01b81a4213077f48123d)  *(termux)* Add tui screen size compatibility note to warning popup by @harilvfs
+
+- [5ddd724](https://github.com/harilvfs/carch/commit/5ddd724b1bbe7f4f6f6dd1e9533b645de87d572e)  *(tui)* Use same foreground for cateogory side tui by @harilvfs
+
+- [16db080](https://github.com/harilvfs/carch/commit/16db0802d02971c522f43abdbd35350cf4feaca8)  *(tui)* Show keybinds as on specific mode by @harilvfs
+
+- [98ce3b3](https://github.com/harilvfs/carch/commit/98ce3b3d718df05403b3ba284cbefb9d686492cc)  *(ci)* Fix typo by @harilvfs
+
+- [6d66576](https://github.com/harilvfs/carch/commit/6d665760b7dab056054c785118dae013349a5191)  *(curl)* Use show error `S` subcommand for curl by @harilvfs
+
+- [e6972a6](https://github.com/harilvfs/carch/commit/e6972a6b4132c99375c7d0375443f0f5a7da4b28)  *(tag)* Not using version tag for release assets by @harilvfs
+
+- [1d9c632](https://github.com/harilvfs/carch/commit/1d9c6328af5e8f6ad51d91d5bfc6724e43ffe69e)  *(desktop)* Correct description typo by @harilvfs
+
+- [2825f6a](https://github.com/harilvfs/carch/commit/2825f6aea524b26f6f8536393ac31133d19016b9)  *(tui)* Correct typo for esc by @harilvfs
+
+- [8c36b9e](https://github.com/harilvfs/carch/commit/8c36b9e167a57166f37230de7839d85b2b9c45b7)  *(cli)* Add shell info for completions by @harilvfs
+
+- [624d8bd](https://github.com/harilvfs/carch/commit/624d8bd8d11d38be65672304f03a73bfb8a86476)  *(cli)* Cleanup arrows and white spaces by @harilvfs
+
+- [9f4dcbe](https://github.com/harilvfs/carch/commit/9f4dcbe8b2027a7e119588671eb0b29596f601e9)  *(rust)* Correct with rust fmt by @harilvfs
+
+
+
 ## [5.4.1](https://github.com/harilvfs/carch/compare/v5.3.7...v5.4.1) - 2026-06-06
 
 
