@@ -94,7 +94,7 @@ pub enum Commands {
     Update,
     #[command(about = "Uninstall the application")]
     Uninstall,
-    #[command(about = "Generate shell completions")]
+    #[command(about = "Generate shell completions (bash, zsh, fish)")]
     Completions {
         #[arg(value_enum, help = "Shell to generate completions for")]
         shell: clap_complete::Shell,
