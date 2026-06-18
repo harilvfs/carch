@@ -37,7 +37,7 @@ fn contextual_hints(app: &App) -> &'static str {
         }
         AppMode::Normal => "j/k:Move  h/l:Panel  m:Multi  t:Theme  /:Search  ?:Help  q:Quit",
         AppMode::Search => "Type:Search  Tab:Complete  Enter:Select  Esc:Close",
-        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Home/End:Top/Bot  Esc:Close",
+        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
         AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
         AppMode::Confirm => "y:Confirm  n/Esc:Cancel",
         AppMode::Description => "j/k:Scroll  Esc:Close",

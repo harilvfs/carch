@@ -187,12 +187,6 @@ impl App {
             KeyCode::PageUp => {
                 self.scroll_preview_page_up();
             }
-            KeyCode::Home => {
-                self.preview.scroll = 0;
-            }
-            KeyCode::End => {
-                self.preview.scroll = self.preview.max_scroll;
-            }
             _ => {}
         }
     }
