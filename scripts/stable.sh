@@ -59,14 +59,19 @@ trap 'rm -rf "$TMPDIR"' EXIT
 
 printf "Platform: %s\n" "$(uname -m)"
 printf "Version:  %s\n" "$VERSION"
-printf "Downloading %s...\n" "$ARTIFACT"
-curl -fsSL "$BINARY_URL" -o "$TMPDIR/$ARTIFACT"
+printf "Downloading %s... " "$ARTIFACT"
+if curl -fsSL "$BINARY_URL" -o "$TMPDIR/$ARTIFACT"; then
+    printf "done\n"
+else
+    printf "failed\n"
+    exit 1
+fi
 
 curl -fsL "$CHECKSUM_URL" -o "$TMPDIR/$ARTIFACT.sha256" 2> /dev/null ||
-    printf "Warning: No checksum file found, skipping verification.\n"
+    printf "Warning: No checksum file found, skipping verification\n"
 
 if [ -f "$TMPDIR/$ARTIFACT.sha256" ]; then
-    printf "Verifying checksum...\n"
+    printf "Verifying checksum... "
     (cd "$TMPDIR" && sha256sum -c "$ARTIFACT.sha256")
 fi
 

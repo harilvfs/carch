@@ -66,11 +66,23 @@ trap 'rm -rf "$TMPDIR"' EXIT
 
 printf "Platform: %s\n" "$TARGET"
 printf "Version:  %s\n" "$VERSION"
-printf "Downloading %s...\n" "$ARCHIVE"
-curl -fsSL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
-curl -fsSL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
+printf "Downloading %s... " "$ARCHIVE"
+if curl -fsSL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"; then
+    printf "done\n"
+else
+    printf "failed\n"
+    exit 1
+fi
 
-printf "Verifying checksum...\n"
+printf "Downloading checksum... "
+if curl -fsSL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"; then
+    printf "done\n"
+else
+    printf "failed\n"
+    exit 1
+fi
+
+printf "Verifying checksum... "
 cd "$TMPDIR"
 sha256sum -c "$ARCHIVE.sha256"
 
@@ -79,45 +91,71 @@ RELEASE_DIR=$(basename "$ARCHIVE" .tar.gz)
 cd "$RELEASE_DIR"
 
 if [ "$IS_ANDROID" = "true" ]; then
-    printf "Installing to Termux prefix...\n"
-    install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
+    printf "Installing to Termux prefix... "
+    if install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"; then
+        printf "done\n"
+    else
+        printf "failed\n"
+        exit 1
+    fi
 else
-    printf "Installing to /usr/local...\n"
-    sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"
+    printf "Installing to /usr/local/bin... "
+    if sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"; then
+        printf "done\n"
+    else
+        printf "failed\n"
+        exit 1
+    fi
 fi
 
 if [ -d "completions" ]; then
-    printf "Installing shell completions...\n"
+    printf "Installing shell completions... "
     if [ "$IS_ANDROID" = "true" ]; then
         mkdir -p "$PREFIX/share/bash-completion/completions"
         mkdir -p "$PREFIX/share/zsh/site-functions"
         mkdir -p "$PREFIX/share/fish/vendor_completions.d"
         [ -f "completions/carch.bash" ] && install -Dm644 "completions/carch.bash" "$PREFIX/share/bash-completion/completions/carch"
-        [ -f "completions/carch.zsh" ]  && install -Dm644 "completions/carch.zsh" "$PREFIX/share/zsh/site-functions/_carch"
+        [ -f "completions/carch.zsh" ] && install -Dm644 "completions/carch.zsh" "$PREFIX/share/zsh/site-functions/_carch"
         [ -f "completions/carch.fish" ] && install -Dm644 "completions/carch.fish" "$PREFIX/share/fish/vendor_completions.d/carch.fish"
     else
         sudo mkdir -p /usr/share/bash-completion/completions
         sudo mkdir -p /usr/share/zsh/site-functions
         sudo mkdir -p /usr/share/fish/vendor_completions.d
         [ -f "completions/carch.bash" ] && sudo install -Dm644 "completions/carch.bash" /usr/share/bash-completion/completions/carch
-        [ -f "completions/carch.zsh" ]  && sudo install -Dm644 "completions/carch.zsh" /usr/share/zsh/site-functions/_carch
+        [ -f "completions/carch.zsh" ] && sudo install -Dm644 "completions/carch.zsh" /usr/share/zsh/site-functions/_carch
         [ -f "completions/carch.fish" ] && sudo install -Dm644 "completions/carch.fish" /usr/share/fish/vendor_completions.d/carch.fish
     fi
+    printf "done\n"
 fi
 
 if [ -f "man/carch.1" ]; then
-    printf "Installing man page...\n"
+    printf "Installing man page... "
     if [ "$IS_ANDROID" = "true" ]; then
-        install -Dm644 "man/carch.1" "$PREFIX/share/man/man1/carch.1"
+        if install -Dm644 "man/carch.1" "$PREFIX/share/man/man1/carch.1"; then
+            printf "done\n"
+        else
+            printf "failed\n"
+            exit 1
+        fi
     else
-        sudo install -Dm644 "man/carch.1" "/usr/share/man/man1/carch.1"
+        if sudo install -Dm644 "man/carch.1" "/usr/share/man/man1/carch.1"; then
+            printf "done\n"
+        else
+            printf "failed\n"
+            exit 1
+        fi
     fi
     mandb -q 2> /dev/null || true
 fi
 
 if [ "$IS_ANDROID" = "false" ] && [ -f "carch.desktop" ]; then
-    printf "Installing desktop entry...\n"
-    sudo install -Dm644 "carch.desktop" "/usr/share/applications/carch.desktop"
+    printf "Installing desktop entry... "
+    if sudo install -Dm644 "carch.desktop" "/usr/share/applications/carch.desktop"; then
+        printf "done\n"
+    else
+        printf "failed\n"
+        exit 1
+    fi
 fi
 
 printf "Carch %s installed successfully!\n" "$VERSION"
