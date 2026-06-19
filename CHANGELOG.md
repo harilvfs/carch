@@ -1,5 +1,21 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.4.3](https://github.com/harilvfs/carch/compare/v5.4.2...v5.4.3) - 2026-06-19
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [50f5a03](https://github.com/harilvfs/carch/commit/50f5a03896002be5efe8729ff764eb61880a6232)  *(tui)* Simplify keybinds for run script tui by @harilvfs
+
+- [0711925](https://github.com/harilvfs/carch/commit/0711925e65fbb8c796b53db08d52711e5b4838cb)  *(tui)* Remove top/bottom bind for preview tui by @harilvfs
+
+- [931511a](https://github.com/harilvfs/carch/commit/931511a1500842737a5245ad60db424d44e4fd63) Remove cloudflare workers refrence script by @harilvfs
+
+- [9ba2158](https://github.com/harilvfs/carch/commit/9ba2158b2d807b16d7edab43fa683d0a1ba8b7a6)  *(script)* Some touch up for error handling by @harilvfs
+
+
+
 ## [5.4.2](https://github.com/harilvfs/carch/compare/v5.4.1...v5.4.2) - 2026-06-18
 
 
