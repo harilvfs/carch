@@ -268,6 +268,7 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                                     script_path,
                                     app.log_mode,
                                     app.theme.clone(),
+                                    app.log_path.clone(),
                                 ) {
                                     Ok(next_popup) => {
                                         app.run_script_popup = Some(next_popup);

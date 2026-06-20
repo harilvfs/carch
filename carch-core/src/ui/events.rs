@@ -12,6 +12,9 @@ impl App {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc => {
+                if self.log_mode {
+                    info!("Closed search.");
+                }
                 self.toggle_search_mode();
             }
             KeyCode::Enter if !self.search.results.is_empty() => {
@@ -98,18 +101,30 @@ impl App {
 
     pub fn handle_key_normal_mode(&mut self, key: KeyEvent) {
         if key.modifiers.contains(KeyModifiers::CONTROL) && key.code == KeyCode::Char('c') {
+            if self.log_mode {
+                info!("Quit TUI.");
+            }
             self.quit = true;
             return;
         }
         match key.code {
             KeyCode::Char('q') => {
                 if self.multi_select.enabled {
+                    if self.log_mode {
+                        info!("Disabled multi-select mode.");
+                    }
                     self.toggle_multi_select_mode();
                 } else {
+                    if self.log_mode {
+                        info!("Quit TUI.");
+                    }
                     self.quit = true;
                 }
             }
             KeyCode::Esc if self.multi_select.enabled => {
+                if self.log_mode {
+                    info!("Disabled multi-select mode.");
+                }
                 self.toggle_multi_select_mode();
             }
             KeyCode::Char('j') | KeyCode::Down => {
@@ -127,6 +142,9 @@ impl App {
                     if self.scripts.state.selected().is_some()
                         && !(self.multi_select.enabled && self.multi_select.scripts.is_empty())
                     {
+                        if self.log_mode {
+                            info!("Entered confirmation mode.");
+                        }
                         self.mode = AppMode::Confirm;
                     }
                 } else {
@@ -143,21 +161,39 @@ impl App {
                 self.bottom();
             }
             KeyCode::Char('/') => {
+                if self.log_mode {
+                    info!("Opened search.");
+                }
                 self.toggle_search_mode();
             }
             KeyCode::Char('p') => {
+                if self.log_mode {
+                    info!("Opened preview.");
+                }
                 self.toggle_preview_mode();
             }
             KeyCode::Char('m') => {
+                if self.log_mode {
+                    info!("Toggled multi-select mode.");
+                }
                 self.toggle_multi_select_mode();
             }
             KeyCode::Char('?') => {
+                if self.log_mode {
+                    info!("Opened help.");
+                }
                 self.toggle_help_mode();
             }
             KeyCode::Char('d') => {
+                if self.log_mode {
+                    info!("Opened description.");
+                }
                 self.toggle_description_popup();
             }
             KeyCode::Char('t') => {
+                if self.log_mode {
+                    info!("Opened theme selector.");
+                }
                 self.toggle_theme_selector();
             }
             KeyCode::Enter
@@ -165,9 +201,15 @@ impl App {
                     && self.scripts.state.selected().is_some()
                     && !(self.multi_select.enabled && self.multi_select.scripts.is_empty()) =>
             {
+                if self.log_mode {
+                    info!("Entered confirmation mode.");
+                }
                 self.mode = AppMode::Confirm;
             }
             KeyCode::Char(' ') if self.multi_select.enabled => {
+                if self.log_mode {
+                    info!("Toggled script selection in multi-select mode.");
+                }
                 self.toggle_script_selection();
             }
             _ => {}
@@ -177,6 +219,9 @@ impl App {
     pub fn handle_key_preview_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Char('q') | KeyCode::Esc | KeyCode::Char('p') | KeyCode::Char('h') => {
+                if self.log_mode {
+                    info!("Closed preview.");
+                }
                 self.mode = AppMode::Normal;
             }
             KeyCode::Char('j') | KeyCode::Down => {
@@ -220,7 +265,12 @@ impl App {
                         .script_execution_queue
                         .pop_front()
                         .expect("queue checked is_empty above");
-                    match RunScriptPopup::new(script_path, self.log_mode, self.theme.clone()) {
+                    match RunScriptPopup::new(
+                        script_path,
+                        self.log_mode,
+                        self.theme.clone(),
+                        self.log_path.clone(),
+                    ) {
                         Ok(popup) => {
                             self.run_script_popup = Some(popup);
                             self.mode = AppMode::RunScript;
@@ -253,6 +303,9 @@ impl App {
     pub fn handle_key_help_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('?') => {
+                if self.log_mode {
+                    info!("Closed help.");
+                }
                 self.mode = AppMode::Normal;
                 self.help.scroll = 0;
             }
@@ -281,6 +334,9 @@ impl App {
     pub fn handle_key_description_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('d') => {
+                if self.log_mode {
+                    info!("Closed description.");
+                }
                 self.mode = AppMode::Normal;
                 self.description.content = None;
                 self.description.scroll = 0;
@@ -305,10 +361,16 @@ impl App {
     pub fn handle_key_theme_selector_mode(&mut self, key: KeyEvent) {
         match key.code {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('t') => {
+                if self.log_mode {
+                    info!("Cancelled theme selection.");
+                }
                 self.mode = AppMode::Normal;
             }
             KeyCode::Enter => {
                 if let Some(theme) = VALID_THEMES.get(self.theme_selector.selected) {
+                    if self.log_mode {
+                        info!("Set default theme to: {}", theme_display_name(theme));
+                    }
                     save_theme_state(theme);
                     self.theme = match *theme {
                         "dracula" => super::theme::Theme::dracula(),

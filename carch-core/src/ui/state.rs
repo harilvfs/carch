@@ -144,6 +144,7 @@ pub struct UiOptions {
     pub theme:        String,
     pub theme_locked: bool,
     pub is_root:      bool,
+    pub log_path:     Option<String>,
 }
 
 #[derive(Default)]
@@ -221,4 +222,5 @@ pub struct App {
 
     pub needs_redraw: bool,
     pub last_size:    Rect,
+    pub log_path:     Option<String>,
 }

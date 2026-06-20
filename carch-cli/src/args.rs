@@ -101,6 +101,7 @@ pub struct Settings {
     pub log_mode:     bool,
     pub theme:        String,
     pub theme_locked: bool,
+    pub log_path:     Option<String>,
 }
 
 pub fn parse_args() -> Result<()> {
@@ -169,9 +170,20 @@ pub fn parse_args() -> Result<()> {
 
             rotate_logs(&log_dir);
 
+            settings.log_path = Some(log_file.display().to_string());
             let result = crate::run_tui(settings);
 
-            println!("Log saved: {}", log_file.display());
+            let has_issues = fs::read_to_string(&log_file)
+                .map(|content| {
+                    content.lines().any(|line| {
+                        line.contains("error") || line.contains("failed") || line.contains("Failed")
+                    })
+                })
+                .unwrap_or(false);
+
+            if has_issues || result.is_err() {
+                println!("Log saved: {}", log_file.display());
+            }
 
             result
         }

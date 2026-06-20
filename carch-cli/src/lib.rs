@@ -36,6 +36,7 @@ pub fn run_tui(settings: Settings) -> Result<()> {
         theme:        settings.theme,
         theme_locked: settings.theme_locked,
         is_root:      is_running_as_root(),
+        log_path:     settings.log_path.clone(),
     };
 
     if settings.log_mode {

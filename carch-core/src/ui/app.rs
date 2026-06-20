@@ -112,6 +112,7 @@ impl App {
 
             needs_redraw: true,
             last_size: Rect::default(),
+            log_path: options.log_path.clone(),
         }
     }
 

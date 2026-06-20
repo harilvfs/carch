@@ -21,6 +21,7 @@ fn make_app(modules_dir: &std::path::Path) -> App {
         theme:        "catppuccin-mocha".to_string(),
         theme_locked: false,
         is_root:      false,
+        log_path:     None,
     });
     let mut app = app;
     app.modules_dir = modules_dir.to_path_buf();
@@ -349,6 +350,7 @@ fn root_warning_popup_when_is_root_true() {
         theme:        "catppuccin-mocha".into(),
         theme_locked: false,
         is_root:      true,
+        log_path:     None,
     };
     let mut app = App::new(&opts);
     app.modules_dir = modules_dir.clone();
@@ -365,6 +367,7 @@ fn theme_name_round_trips_through_options() {
         theme:        "dracula".into(),
         theme_locked: false,
         is_root:      false,
+        log_path:     None,
     };
     let app = App::new(&opts);
     assert_eq!(app.theme.name, Theme::dracula().name);

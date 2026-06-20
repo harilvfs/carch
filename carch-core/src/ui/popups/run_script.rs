@@ -45,10 +45,17 @@ pub struct RunScriptPopup {
     auto_scroll:    bool,
     theme:          Theme,
     was_finished:   bool,
+    log_mode:       bool,
+    log_path:       Option<String>,
 }
 
 impl RunScriptPopup {
-    pub fn new(script_path: PathBuf, log_mode: bool, theme: Theme) -> Result<Self> {
+    pub fn new(
+        script_path: PathBuf,
+        log_mode: bool,
+        theme: Theme,
+        log_path: Option<String>,
+    ) -> Result<Self> {
         let pty_system = NativePtySystem::default();
 
         let mut cmd = CommandBuilder::new("bash");
@@ -134,6 +141,8 @@ impl RunScriptPopup {
             auto_scroll: true,
             theme,
             was_finished: false,
+            log_mode,
+            log_path,
         })
     }
 
@@ -161,10 +170,16 @@ impl RunScriptPopup {
 
         match key.code {
             KeyCode::Char('c') if ctrl => {
+                if self.log_mode {
+                    info!("Sent Ctrl+C to running script.");
+                }
                 let _ = self.writer.write_all(&[3]);
                 PopupEvent::None
             }
             KeyCode::Char('q') | KeyCode::Enter | KeyCode::Esc if self.is_finished() => {
+                if self.log_mode {
+                    info!("Closed script output popup.");
+                }
                 PopupEvent::Close
             }
             KeyCode::PageUp => {
@@ -319,7 +334,8 @@ impl Widget for &mut RunScriptPopup {
                 .border_style(Style::default().fg(self.theme.primary))
                 .title_style(Style::default().fg(self.theme.primary).reversed())
         } else {
-            let (title_text, style_color) = if self.get_exit_status().success() {
+            let success = self.get_exit_status().success();
+            let (title_text, style_color) = if success {
                 (
                     Line::styled(
                         "Success! Press <Enter> to close",
@@ -337,10 +353,22 @@ impl Widget for &mut RunScriptPopup {
                 )
             };
 
-            Block::bordered()
+            let mut block = Block::bordered()
                 .border_set(border::ROUNDED)
                 .border_style(Style::default().fg(style_color))
-                .title_top(title_text.centered())
+                .title_top(title_text.centered());
+
+            if let Some(ref path) = self.log_path {
+                block = block.title_bottom(
+                    Line::styled(
+                        format!(" Log saved: {path} "),
+                        Style::default().fg(self.theme.warning),
+                    )
+                    .centered(),
+                );
+            }
+
+            block
         };
 
         let inner_area = block.inner(area);

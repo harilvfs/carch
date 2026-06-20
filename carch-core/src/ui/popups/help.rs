@@ -63,6 +63,10 @@ const HELP_LINES: &[(&[&str], &[Kind])] = &[
     (&[], &[]),
     (&[" h/<- ", " ", "Cancel selection (same as Esc)"], &[Kind::Key, Kind::Body, Kind::Body]),
     (&[], &[]),
+    (&["Logging"], &[Kind::Header]),
+    (&[], &[]),
+    (&[" ", " ", "Logs saved at: ~/.config/carch/"], &[Kind::Body, Kind::Body, Kind::Body]),
+    (&[], &[]),
     (&["Legend"], &[Kind::Header]),
     (&[], &[]),
     (
