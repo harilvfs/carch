@@ -77,33 +77,21 @@ Type "y"
 
 Sleep 0.5s
 
-Down Sleep 0.5s
+Down Sleep 0.2s
 
-Down Sleep 0.5s
+Down Sleep 0.2s
 
-Down Sleep 0.5s
-
-Type "t"
-
-Sleep 0.5s
-
-Type "t"
-
-Sleep 0.5s
-
-Type "t"
-
-Sleep 0.5s
+Down Sleep 0.2s
 
 Type "l"
 
 Sleep 0.5s
 
-Type "/" Sleep 0.5s
+Type "/" Sleep 0.2s
 
-Type@200ms "Extensions" Sleep 1s Enter
+Type@200ms "Extensions" Sleep 0.5s Enter
 
-Sleep 1s
+Sleep 0.5s
 
 Enter
 
@@ -115,20 +103,30 @@ Sleep 1s
 
 Type "1" Sleep 1s Enter
 
-Sleep 2s
+Sleep 1s
 
 Type "b" Sleep 1s Enter
 
-Sleep 2s
+Sleep 1s
 
 Type "3" Sleep 1s Enter
 
-Sleep 1s
+Sleep 0.5s
 
 Type "q"
 
 Sleep 1s
 
-Type "q"
+Type "t" Sleep 0.5s
 
-Sleep 1s
+Type "j" Sleep 0.5s
+
+Type "j" Sleep 0.5s
+
+Type "j" Sleep 0.5s
+
+Enter
+
+Sleep 0.5s
+
+Type "q"
