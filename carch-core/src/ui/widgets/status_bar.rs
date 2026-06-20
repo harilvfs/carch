@@ -19,6 +19,7 @@ fn mode_info(app: &App) -> (&'static str, Color) {
         AppMode::RunScript => ("Running", app.theme.warning),
         AppMode::RootWarning => ("Root Warn", app.theme.error),
         AppMode::TermuxWarning => ("Note", app.theme.warning),
+        AppMode::ThemeSelector => ("Theme", app.theme.primary),
     }
 }
 
@@ -27,23 +28,24 @@ fn contextual_hints(app: &App) -> &'static str {
         AppMode::Normal
             if app.multi_select.enabled && app.focused_panel == FocusedPanel::Scripts =>
         {
-            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  d:Desc  p:Preview  Esc:Exit Multi  /:Search  ?:Help"
+            "j/k:Move  h/l:Panel  Space:Select  Enter:Run  d:Desc  p:Preview  Esc/q:Exit Multi  /:Search  ?:Help"
         }
         AppMode::Normal if app.multi_select.enabled => {
-            "j/k:Move  h/l:Panel  Esc:Exit Multi  /:Search  ?:Help"
+            "j/k:Move  h/l:Panel  Esc/q:Exit Multi  /:Search  ?:Help"
         }
         AppMode::Normal if app.focused_panel == FocusedPanel::Scripts => {
             "j/k:Move  h/l:Panel  Enter:Run  d:Desc  /:Search  p:Preview  m:Multi  t:Theme  ?:Help  q:Quit"
         }
         AppMode::Normal => "j/k:Move  h/l:Panel  m:Multi  t:Theme  /:Search  ?:Help  q:Quit",
         AppMode::Search => "Type:Search  Tab:Complete  Enter:Select  Esc:Close",
-        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
-        AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  Esc:Close",
-        AppMode::Confirm => "y:Confirm  n/Esc:Cancel",
-        AppMode::Description => "j/k:Scroll  Esc:Close",
+        AppMode::Preview => "j/k:Scroll  PgUp/PgDn:Page  q/Esc/p:Close",
+        AppMode::Help => "j/k:Scroll  PgUp/PgDn:Page  q/Esc/?:Close",
+        AppMode::Confirm => "y/l/→:Confirm  n/q/Esc/h/←:Cancel",
+        AppMode::Description => "j/k:Scroll  q/Esc/d:Close",
         AppMode::RunScript => "Ctrl+C:Kill  PgUp/PgDn:Scroll",
-        AppMode::RootWarning => "y:Continue  n:Quit",
-        AppMode::TermuxWarning => "o:Acknowledge",
+        AppMode::RootWarning => "y:Continue  n/q:Quit",
+        AppMode::TermuxWarning => "o/Enter:Acknowledge",
+        AppMode::ThemeSelector => "↑/↓:Navigate  Enter:Set default  q/Esc/t:Close",
     }
 }
 

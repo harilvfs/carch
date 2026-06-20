@@ -117,6 +117,11 @@ fn ui(f: &mut Frame, app: &mut App) {
             let popup_area = centered_rect(98, 96, area);
             popups::description::render_description_popup(f, app, popup_area);
         }
+        AppMode::ThemeSelector => {
+            let area = app.script_panel_area;
+            let popup_area = centered_rect(50, 40, area);
+            popups::theme_selector::render_theme_selector_popup(f, app, popup_area);
+        }
         AppMode::Normal => {}
         AppMode::RootWarning => {
             let area = app.script_panel_area;
@@ -288,6 +293,7 @@ fn handle_event(app: &mut App, event: Event, options: &UiOptions) -> Result<()> 
                     AppMode::Confirm => app.handle_key_confirmation_mode(key),
                     AppMode::Help => app.handle_key_help_mode(key),
                     AppMode::Description => app.handle_key_description_mode(key),
+                    AppMode::ThemeSelector => app.handle_key_theme_selector_mode(key),
                     AppMode::RootWarning => app.handle_key_root_warning_mode(key),
                     AppMode::TermuxWarning => app.handle_key_termux_warning_mode(key),
                     AppMode::RunScript => {}

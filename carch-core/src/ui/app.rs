@@ -7,7 +7,7 @@ use ratatui::layout::Rect;
 
 use super::state::{
     App, AppMode, DescriptionState, FocusedPanel, HelpState, MultiSelectState, PreviewState,
-    SearchState, StatefulList,
+    SearchState, StatefulList, ThemeSelectorState,
 };
 use crate::ui::state::{ScriptItem, UiOptions};
 use crate::ui::theme::Theme;
@@ -108,19 +108,10 @@ impl App {
             description: DescriptionState::default(),
             run_script_popup: None,
             script_execution_queue: VecDeque::new(),
+            theme_selector: ThemeSelectorState::default(),
 
             needs_redraw: true,
             last_size: Rect::default(),
-        }
-    }
-
-    pub fn cycle_theme(&mut self) {
-        self.theme = match self.theme.name.as_str() {
-            "Catppuccin Mocha" => Theme::dracula(),
-            "Dracula" => Theme::gruvbox(),
-            "Gruvbox" => Theme::nord(),
-            "Nord" => Theme::rose_pine(),
-            _ => Theme::catppuccin_mocha(),
         }
     }
 
