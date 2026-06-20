@@ -12,7 +12,7 @@ Usage: cargo xtask <COMMAND>
 Commands:
   ci                  Run all CI checks
   ogen                Generate overview.md (alias: generate-overview)
-  man                 Generate manpage from clap definitions
+  man-pages           Generate manpage from clap definitions
 ";
 
 fn main() -> Result<(), anyhow::Error> {
@@ -82,7 +82,7 @@ fn main() -> Result<(), anyhow::Error> {
             println!("overview.md generated successfully in docs/.");
             Ok(())
         }
-        "man" => {
+        "man-pages" | "man" => {
             let mut cmd = carch_cli::args::Cli::command();
             cmd = cmd.name("carch");
 
