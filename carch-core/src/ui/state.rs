@@ -17,6 +17,7 @@ pub enum AppMode {
     Preview,
     RunScript,
     Description,
+    ThemeSelector,
     RootWarning,
     TermuxWarning,
 }
@@ -189,6 +190,11 @@ pub struct DescriptionState {
     pub max_scroll: u16,
 }
 
+#[derive(Default)]
+pub struct ThemeSelectorState {
+    pub selected: usize,
+}
+
 pub struct App {
     pub mode:          AppMode,
     pub quit:          bool,
@@ -211,6 +217,7 @@ pub struct App {
     pub description:            DescriptionState,
     pub run_script_popup:       Option<RunScriptPopup>,
     pub script_execution_queue: VecDeque<PathBuf>,
+    pub theme_selector:         ThemeSelectorState,
 
     pub needs_redraw: bool,
     pub last_size:    Rect,

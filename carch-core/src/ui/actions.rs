@@ -341,7 +341,9 @@ impl App {
             crossterm::event::KeyCode::Char('y') | crossterm::event::KeyCode::Char('Y') => {
                 self.mode = AppMode::Normal;
             }
-            crossterm::event::KeyCode::Char('n') | crossterm::event::KeyCode::Char('N') => {
+            crossterm::event::KeyCode::Char('n')
+            | crossterm::event::KeyCode::Char('N')
+            | crossterm::event::KeyCode::Char('q') => {
                 self.quit = true;
             }
             _ => {}

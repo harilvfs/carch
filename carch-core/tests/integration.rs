@@ -144,12 +144,11 @@ fn home_and_end_jump_to_top_and_bottom() {
 }
 
 #[test]
-fn t_cycles_theme_and_updates_app_theme() {
+fn t_opens_theme_selector_popup() {
     let mut fx = fixture();
-    let original = fx.app.theme.name.clone();
+    assert_eq!(fx.app.mode, AppMode::Normal);
     fx.app.handle_key_normal_mode(key(KeyCode::Char('t')));
-    let new_name = fx.app.theme.name.clone();
-    assert_ne!(new_name, original, "theme should have changed");
+    assert_eq!(fx.app.mode, AppMode::ThemeSelector, "t should open theme selector");
 }
 
 #[test]

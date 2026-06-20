@@ -1,8 +1,12 @@
+use std::path::PathBuf;
+use std::{env, fs};
+
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use log::info;
 
 use super::popups::run_script::RunScriptPopup;
 use super::state::{App, AppMode, FocusedPanel};
+use crate::VALID_THEMES;
 
 impl App {
     pub fn handle_search_input(&mut self, key: KeyEvent) {
@@ -153,8 +157,8 @@ impl App {
             KeyCode::Char('d') => {
                 self.toggle_description_popup();
             }
-            KeyCode::Char('t') if !self.theme_locked => {
-                self.cycle_theme();
+            KeyCode::Char('t') => {
+                self.toggle_theme_selector();
             }
             KeyCode::Enter
                 if self.focused_panel == FocusedPanel::Scripts
@@ -291,4 +295,69 @@ impl App {
             _ => {}
         }
     }
+
+    pub fn toggle_theme_selector(&mut self) {
+        self.theme_selector.selected =
+            VALID_THEMES.iter().position(|t| theme_display_name(t) == self.theme.name).unwrap_or(0);
+        self.mode = AppMode::ThemeSelector;
+    }
+
+    pub fn handle_key_theme_selector_mode(&mut self, key: KeyEvent) {
+        match key.code {
+            KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('t') => {
+                self.mode = AppMode::Normal;
+            }
+            KeyCode::Enter => {
+                if let Some(theme) = VALID_THEMES.get(self.theme_selector.selected) {
+                    save_theme_state(theme);
+                    self.theme = match *theme {
+                        "dracula" => super::theme::Theme::dracula(),
+                        "gruvbox" => super::theme::Theme::gruvbox(),
+                        "nord" => super::theme::Theme::nord(),
+                        "rose-pine" => super::theme::Theme::rose_pine(),
+                        _ => super::theme::Theme::catppuccin_mocha(),
+                    };
+                    self.theme_locked = true;
+                }
+                self.mode = AppMode::Normal;
+            }
+            KeyCode::Char('j') | KeyCode::Down => {
+                let len = VALID_THEMES.len();
+                self.theme_selector.selected = (self.theme_selector.selected + 1) % len;
+            }
+            KeyCode::Char('k') | KeyCode::Up => {
+                let len = VALID_THEMES.len();
+                self.theme_selector.selected = (self.theme_selector.selected + len - 1) % len;
+            }
+            _ => {}
+        }
+    }
+}
+
+fn theme_display_name(name: &str) -> &str {
+    match name {
+        "catppuccin-mocha" => "Catppuccin Mocha",
+        "dracula" => "Dracula",
+        "gruvbox" => "Gruvbox",
+        "nord" => "Nord",
+        "rose-pine" => "Rosé Pine",
+        _ => name,
+    }
+}
+
+fn state_path() -> Option<PathBuf> {
+    let home = env::var("HOME").ok()?;
+    Some(PathBuf::from(home).join(".config/carch/state.toml"))
+}
+
+fn save_theme_state(theme: &str) {
+    let path = match state_path() {
+        Some(p) => p,
+        None => return,
+    };
+    if let Some(parent) = path.parent() {
+        let _ = fs::create_dir_all(parent);
+    }
+    let contents = format!("theme = \"{}\"\n", theme);
+    let _ = fs::write(&path, contents);
 }

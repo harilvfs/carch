@@ -65,30 +65,20 @@ fn styles() -> clap::builder::Styles {
 #[command(
     author,
     about = "A CLI tool to automate Linux system setup",
-    long_about = "A Rust-based CLI tool to streamline and automate your Linux system's initial setup.\nIt offers automated scripts that save users time setting up their Linux environment.",
     styles = styles()
 )]
 pub struct Cli {
     #[command(subcommand)]
-    pub command:          Option<Commands>,
+    pub command:   Option<Commands>,
     #[arg(short = 'v', long = "version", action = ArgAction::SetTrue, help = "Print version information")]
-    version:              bool,
-    #[arg(short = 'c', long, global = true, help = "Set theme to Catppuccin Mocha")]
-    pub catppuccin_mocha: bool,
-    #[arg(short = 'd', long, global = true, help = "Set theme to Dracula")]
-    pub dracula:          bool,
-    #[arg(short = 'g', long, global = true, help = "Set theme to Gruvbox")]
-    pub gruvbox:          bool,
-    #[arg(short = 'n', long, global = true, help = "Set theme to Nord")]
-    pub nord:             bool,
-    #[arg(short = 'r', long, global = true, help = "Set theme to Rosé Pine")]
-    pub rose_pine:        bool,
-    /// Save the given theme as favorite and exit.
-    #[arg(long, global = true, value_name = "THEME")]
-    pub fav:              Option<String>,
-    /// Clear the saved favorite theme.
-    #[arg(long, global = true, conflicts_with = "fav")]
-    pub unfav:            bool,
+    version:       bool,
+    #[arg(
+        long,
+        global = true,
+        value_name = "THEME",
+        help = "Set and persist theme (catppuccin-mocha, dracula, gruvbox, nord, rose-pine, or default to reset)"
+    )]
+    pub set_theme: Option<String>,
 }
 
 #[derive(Subcommand)]
@@ -121,51 +111,27 @@ pub fn parse_args() -> Result<()> {
         return Ok(());
     }
 
-    if let Some(theme) = cli.fav.as_deref() {
-        if !is_valid_theme(theme) {
+    let mut settings = Settings { log_mode: true, ..Default::default() };
+
+    if let Some(theme) = &cli.set_theme {
+        if theme == "default" {
+            let _ = clear_favorite_theme();
+            println!("Default theme restored.");
+        } else if is_valid_theme(theme) {
+            save_favorite_theme(theme)?;
+            println!("{theme} has been set as your default theme.");
+        } else {
             return Err(CarchError::Command(format!(
                 "Unknown theme '{theme}'. Valid themes: {}",
                 VALID_THEMES.join(", ")
             )));
         }
-        return save_favorite_theme(theme).map(|()| {
-            println!("Favorite theme set to '{theme}'. It will be used on future launches.");
-        });
-    }
-    if cli.unfav {
-        match clear_favorite_theme() {
-            Ok(true) => println!("Favorite theme cleared."),
-            Ok(false) => println!("No favorite theme was set."),
-            Err(e) => return Err(e),
-        }
         return Ok(());
-    }
-
-    let mut settings = Settings { log_mode: true, ..Default::default() };
-
-    let explicit_theme =
-        cli.catppuccin_mocha || cli.dracula || cli.gruvbox || cli.nord || cli.rose_pine;
-
-    settings.theme = if cli.catppuccin_mocha {
-        "catppuccin-mocha".to_string()
-    } else if cli.dracula {
-        "dracula".to_string()
-    } else if cli.gruvbox {
-        "gruvbox".to_string()
-    } else if cli.nord {
-        "nord".to_string()
-    } else if cli.rose_pine {
-        "rose-pine".to_string()
     } else if let Some(fav) = load_favorite_theme() {
-        // Saved favorite is locked so `t` can't overwrite it.
+        settings.theme = fav;
         settings.theme_locked = true;
-        fav
     } else {
-        "catppuccin-mocha".to_string()
-    };
-
-    if explicit_theme {
-        settings.theme_locked = true;
+        settings.theme = "catppuccin-mocha".to_string();
     }
 
     match cli.command {
