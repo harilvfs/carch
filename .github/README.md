@@ -40,7 +40,7 @@ curl -fsSL chalisehari.com.np/carch | sh -s -- --stable
 curl -fsSL chalisehari.com.np/carch | sh -s -- --dev
 ```
 
-For more, see the [documentation](https://carch.chalisehari.com.np). You can also join us on [Discord](https://discord.com/invite/8NJWstnUHd) or [Telegram](https://t.me/carchx) for help and discussions.
+For more, see the [documentation](https://carch.chalisehari.com.np). You can also join us on [Discord](https://discord.com/invite/8NJWstnUHd) for help and discussions.
 
 <!-- Catppuccin Footer -->
 <!-- Source: https://github.com/catppuccin/catppuccin -->

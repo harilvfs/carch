@@ -23,15 +23,6 @@ jobs:
           echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Prepare Telegram message
-        id: telegram_message
-        run: |
-          VERSION="v${{ github.event.inputs.version }}"
-          RELEASE_MESSAGE="✨ Carch version $VERSION is out! Check the release section for details. ✨%0A%0ARelease: https://github.com/harilvfs/carch/releases/tag/$VERSION"
-          echo "text<<EOF" >> $GITHUB_OUTPUT
-          echo "$RELEASE_MESSAGE" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Send to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -43,13 +34,3 @@ jobs:
             -d "{\"content\": \"$FORMATTED_MESSAGE\"}" \
             "$DISCORD_WEBHOOK_URL"
 
-      - name: Send to Telegram
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_THREAD_ID: ${{ secrets.TELEGRAM_THREAD_ID }}
-        run: |
-          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
-            -d chat_id="-$TELEGRAM_CHAT_ID" \
-            -d message_thread_id="$TELEGRAM_THREAD_ID" \
-            -d text="${{ steps.telegram_message.outputs.text }}"
