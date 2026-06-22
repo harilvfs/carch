@@ -102,8 +102,7 @@ jobs:
             --release \
             --verbose \
             --target-dir=build \
-            --target=x86_64-unknown-linux-musl \
-            --all-features
+            --target=x86_64-unknown-linux-musl
 
       - name: Build aarch64 binary (with cross)
         run: |
@@ -111,8 +110,7 @@ jobs:
             --release \
             --verbose \
             --target-dir=build \
-            --target=aarch64-unknown-linux-musl \
-            --all-features
+            --target=aarch64-unknown-linux-musl
 
       - name: Generate completions
         run: |
@@ -262,16 +260,14 @@ jobs:
           cross build \
             --release \
             --target-dir=build \
-            --target=aarch64-linux-android \
-            --all-features
+            --target=aarch64-linux-android
 
       - name: Build armv7 Android binary
         run: |
           cross build \
             --release \
             --target-dir=build \
-            --target=armv7-linux-androideabi \
-            --all-features
+            --target=armv7-linux-androideabi
 
       - name: Package aarch64 Android archive
         run: |
