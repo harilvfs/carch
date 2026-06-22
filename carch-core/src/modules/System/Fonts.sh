@@ -179,7 +179,7 @@ install_font() {
                 "Arch") install_font_arch "ttf-firacode-nerd" ;;
                 "openSUSE") install_opensuse_system_fonts "fira-code-fonts" ;;
                 "Fedora") install_font_fedora "FiraCode" ;;
-            esac
+        esac
             ;;
 
         "Meslo")
@@ -187,7 +187,7 @@ install_font() {
                 "Arch") install_font_arch "ttf-meslo-nerd" ;;
                 "openSUSE") install_opensuse_system_fonts "meslo-lg-fonts" ;;
                 "Fedora") install_font_fedora "Meslo" ;;
-            esac
+        esac
             ;;
 
         "JetBrainsMono")
@@ -195,7 +195,7 @@ install_font() {
                 "Arch") install_font_arch ttf-jetbrains-mono-nerd ttf-jetbrains-mono ;;
                 "openSUSE") install_opensuse_system_fonts "jetbrains-mono-fonts" ;;
                 "Fedora") install_fedora_system_fonts "jetbrains-mono-fonts-all" ;;
-            esac
+        esac
             ;;
 
         "Hack")
@@ -203,7 +203,7 @@ install_font() {
                 "Arch") install_font_arch "ttf-hack-nerd" ;;
                 "openSUSE") install_opensuse_system_fonts "hack-fonts" ;;
                 "Fedora") install_font_fedora "Hack" ;;
-            esac
+        esac
             ;;
 
         "CascadiaMono")
@@ -211,7 +211,7 @@ install_font() {
                 "Arch") install_font_arch ttf-cascadia-mono-nerd ttf-cascadia-code-nerd ;;
                 "openSUSE") install_font_opensuse "CascadiaMono" ;;
                 "Fedora") install_font_fedora "CascadiaMono" ;;
-            esac
+        esac
             ;;
 
         "Terminus")
@@ -219,7 +219,7 @@ install_font() {
                 "Arch") install_font_arch "terminus-font" ;;
                 "openSUSE") install_font_opensuse "Terminus" ;;
                 "Fedora") install_font_fedora "Terminus" ;;
-            esac
+        esac
             ;;
 
         "Noto")
@@ -227,7 +227,7 @@ install_font() {
                 "Arch") install_font_arch noto-fonts noto-fonts-emoji noto-fonts-cjk noto-fonts-extra ;;
                 "openSUSE") install_opensuse_system_fonts google-noto-fonts noto-coloremoji-fonts ;;
                 "Fedora") install_fedora_system_fonts google-noto-fonts google-noto-emoji-fonts ;;
-            esac
+        esac
             ;;
 
         "DejaVu")
@@ -235,7 +235,7 @@ install_font() {
                 "Arch") install_font_arch ttf-dejavu ;;
                 "openSUSE") install_opensuse_system_fonts "dejavu-fonts" ;;
                 "Fedora") install_fedora_system_fonts dejavu-sans-fonts ;;
-            esac
+        esac
             ;;
 
         "JoyPixels")
@@ -254,7 +254,7 @@ install_font() {
                     fc-cache -vf "$HOME/.fonts"
                     print_message "$GREEN" "JoyPixels installed successfully to ~/.fonts!"
                     ;;
-            esac
+        esac
             ;;
 
         "FontAwesome")
@@ -267,7 +267,7 @@ install_font() {
                     ;;
                 "openSUSE") install_opensuse_system_fonts "fontawesome-fonts" ;;
                 "Fedora") install_fedora_system_fonts fontawesome-fonts-all ;;
-            esac
+        esac
             ;;
     esac
 }
@@ -290,11 +290,11 @@ choose_fonts() {
                         print_message "$CYAN" "Installing $font..."
                         install_font "$font"
                         echo
-                    done
+                done
                     print_message "$GREEN" "All fonts installed successfully!"
-                else
+            else
                     print_message "$YELLOW" "Installation cancelled."
-                fi
+            fi
                 ;;
             "Exit")
                 exit 0
@@ -302,9 +302,9 @@ choose_fonts() {
             *)
                 if confirm "Install $choice font?"; then
                     install_font "$choice"
-                else
+            else
                     print_message "$YELLOW" "Installation cancelled."
-                fi
+            fi
                 ;;
         esac
 

@@ -207,9 +207,9 @@ install_package() {
                 print_message "$YELLOW" "Unsupported distribution for native packages. Falling back to Flatpak."
                 install_flatpak
                 flatpak install -y flathub "$flatpak_id"
-            else
+        else
                 print_message "$RED" "Cannot install $package_name. Unsupported distribution and no Flatpak ID provided."
-            fi
+        fi
             ;;
     esac
 }

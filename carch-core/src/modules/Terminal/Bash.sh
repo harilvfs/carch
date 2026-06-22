@@ -98,21 +98,21 @@ install_eza() {
             if [ -z "$latest_url" ]; then
                 print_message "$YELLOW" "Could not determine latest version, using fallback version..."
                 latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
-            fi
+        fi
             print_message "$CYAN" "Downloading eza from: $latest_url"
             if ! curl -L -o eza.zip "$latest_url"; then
                 print_message "$RED" "Failed to download eza. Continuing without it..."
                 cd "$HOME" || exit
                 rm -rf "$tmp_dir"
                 return 1
-            fi
+        fi
             print_message "$CYAN" "Extracting eza..."
             if ! unzip -q eza.zip; then
                 print_message "$RED" "Failed to extract eza. Continuing without it..."
                 cd "$HOME" || exit
                 rm -rf "$tmp_dir"
                 return 1
-            fi
+        fi
             print_message "$CYAN" "Installing eza to /usr/bin..."
             sudo cp eza /usr/bin/
             sudo chmod +x /usr/bin/eza
@@ -153,11 +153,11 @@ install_distro_packages() {
             if ! command -v bash &> /dev/null; then
                 print_message "$CYAN" "Installing Bash..."
                 sudo pacman -S --noconfirm bash
-            fi
+        fi
             if ! pacman -Q bash-completion &> /dev/null; then
                 print_message "$CYAN" "Installing bash-completion..."
                 sudo pacman -S --noconfirm bash-completion
-            fi
+        fi
             ;;
         "Fedora")
             print_message "$CYAN" "Reinstalling Bash and bash-completion to avoid errors..."
@@ -184,8 +184,8 @@ install_pokemon_colorscripts() {
                     AUR_HELPER="$helper"
                     print_message "$GREEN" "Found AUR helper: $AUR_HELPER"
                     break
-                fi
-            done
+            fi
+        done
 
             if [[ -z "$AUR_HELPER" ]]; then
                 print_message "$CYAN" "No AUR helper found. Installing yay..."
@@ -199,47 +199,47 @@ install_pokemon_colorscripts() {
                     git clone https://aur.archlinux.org/yay.git
                     cd yay || exit
                     makepkg -si --noconfirm
-                )
+            )
                 local exit_code=$?
                 rm -rf "$TEMP_DIR"
 
                 if [ $exit_code -ne 0 ]; then
                     print_message "$RED" "Failed to install yay."
                     exit 1
-                fi
+            fi
 
                 AUR_HELPER="yay"
                 print_message "$GREEN" "Successfully installed yay!"
-            fi
+        fi
 
             print_message "$CYAN" "Installing Pokémon Color Scripts (AUR)..."
             if ! "$AUR_HELPER" -S --noconfirm pokemon-colorscripts-git; then
                 print_message "$RED" "Failed to install pokemon-colorscripts-git"
                 exit 1
-            fi
+        fi
             ;;
 
         "Fedora" | "openSUSE")
             if [[ -d "$HOME/pokemon-colorscripts" ]]; then
                 print_message "$YELLOW" "Found existing Pokémon Color Scripts directory. Removing..."
                 rm -rf "$HOME/pokemon-colorscripts"
-            fi
+        fi
 
             print_message "$CYAN" "Installing dependencies..."
             if [[ "$DISTRO" == "Fedora" ]]; then
                 sudo dnf install -y git
-            elif [[ "$DISTRO" == "openSUSE" ]]; then
+        elif     [[ "$DISTRO" == "openSUSE" ]]; then
                 sudo zypper install -y git
-            fi
+        fi
 
             print_message "$CYAN" "Cloning Pokémon Color Scripts..."
             local POKEMON_DIR
             POKEMON_DIR=$(mktemp -d)
             if git clone https://gitlab.com/phoneybadger/pokemon-colorscripts.git "$POKEMON_DIR"; then
                 (cd "$POKEMON_DIR" && sudo ./install.sh)
-            else
+        else
                 print_message "$RED" "Failed to clone pokemon-colorscripts repository!"
-            fi
+        fi
             rm -rf "$POKEMON_DIR"
             ;;
     esac

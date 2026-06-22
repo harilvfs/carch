@@ -97,7 +97,7 @@ install_zsh_dependencies() {
 
             if command -v eza &> /dev/null; then
                 print_message "$GREEN" "eza is already installed."
-            else
+        else
                 local tmp_dir=$(mktemp -d)
                 cd "$tmp_dir" || exit 1
 
@@ -107,7 +107,7 @@ install_zsh_dependencies() {
                 if [ -z "$latest_url" ]; then
                     print_message "$YELLOW" "Could not determine latest version, using fallback version..."
                     latest_url="https://github.com/eza-community/eza/releases/download/v0.21.1/eza_x86_64-unknown-linux-gnu.zip"
-                fi
+            fi
 
                 print_message "$CYAN" "Downloading eza from: $latest_url"
                 if ! curl -L -o eza.zip "$latest_url"; then
@@ -115,7 +115,7 @@ install_zsh_dependencies() {
                     cd "$HOME" || exit
                     rm -rf "$tmp_dir"
                     exit 1
-                fi
+            fi
 
                 print_message "$CYAN" "Extracting eza..."
                 unzip -q eza.zip
@@ -128,7 +128,7 @@ install_zsh_dependencies() {
                 rm -rf "$tmp_dir"
 
                 print_message "$GREEN" "eza installed successfully!"
-            fi
+        fi
             ;;
         "openSUSE")
             sudo zypper install -y zsh trash-cli eza
@@ -214,10 +214,10 @@ install_pokemon_colorscripts() {
             if [[ -d "$POKEMON_DIR" ]]; then
                 (cd "$POKEMON_DIR" && sudo ./install.sh)
                 rm -rf "$POKEMON_DIR"
-            else
+        else
                 print_message "$RED" "Error: Pokémon Color Scripts failed to clone!"
                 exit 1
-            fi
+        fi
             ;;
     esac
 }

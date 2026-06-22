@@ -40,19 +40,19 @@ install_git_cliff() {
             if ! command -v tar &> /dev/null; then
                 print_message "$GREEN" "Installing tar..."
                 install_package "tar" ""
-            fi
+        fi
 
             if ! command -v wget &> /dev/null; then
                 print_message "$GREEN" "Installing wget..."
                 install_package "wget" ""
-            fi
+        fi
 
             latest_version=$(curl -s https://api.github.com/repos/orhun/git-cliff/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
 
             if [[ -z "$latest_version" ]]; then
                 print_message "$RED" "Failed to fetch latest version. Exiting."
                 return
-            fi
+        fi
 
             print_message "$GREEN" "Latest version: $latest_version"
 
@@ -70,10 +70,10 @@ install_git_cliff() {
 
                 cd /
                 rm -rf "$tmp_dir"
-            else
+        else
                 print_message "$RED" "Failed to download git-cliff."
                 rm -rf "$tmp_dir"
-            fi
+        fi
             ;;
     esac
 }

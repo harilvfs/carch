@@ -43,11 +43,11 @@ install_hyper() {
                 case "$DISTRO" in
                     "Fedora") sudo dnf install -y hyper-3.4.1.x86_64.rpm ;;
                     "openSUSE") sudo zypper install -y hyper-3.4.1.x86_64.rpm ;;
-                esac
+            esac
                 rm -f hyper-3.4.1.x86_64.rpm
-            else
+        else
                 print_message "$RED" "Failed to download Hyper RPM."
-            fi
+        fi
             ;;
     esac
 }

@@ -58,7 +58,7 @@ install_uad() {
             if [[ -z "$bin_url" ]]; then
                 print_message "$YELLOW" "Failed to get latest, falling back to v1.1.2"
                 bin_url="https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/download/v1.1.2/uad-ng-linux"
-            fi
+        fi
 
             curl -Lo "$tmp_path" "$bin_url" &&
                 chmod +x "$tmp_path" &&
@@ -67,9 +67,9 @@ install_uad() {
             if [[ $? -eq 0 ]]; then
                 print_message "$GREEN" "UAD has been installed to /usr/local/bin/uad-ng"
                 print_message "$GREEN" "⟹ Run it by typing: uad-ng"
-            else
+        else
                 print_message "$RED" "Failed to install UAD."
-            fi
+        fi
             ;;
     esac
 }

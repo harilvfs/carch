@@ -17,8 +17,8 @@ detect_target() {
                         echo "Unsupported architecture: $ARCH" >&2
                         exit 1
                         ;;
-                esac
-            else
+            esac
+        else
                 case "$ARCH" in
                     x86_64 | amd64) echo "" ;;
                     aarch64 | arm64) echo "-aarch64" ;;
@@ -26,8 +26,8 @@ detect_target() {
                         echo "Unsupported architecture: $ARCH" >&2
                         exit 1
                         ;;
-                esac
-            fi
+            esac
+        fi
             ;;
         *)
             echo "Unsupported OS: $OS" >&2

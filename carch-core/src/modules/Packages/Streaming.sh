@@ -34,13 +34,13 @@ install_simplescreenrecorder() {
                             print_message "$RED" "Failed to clone repository."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         cd "$CACHE_DIR/arch-aur/simplescreenrecorder" || {
                             print_message "$RED" "Failed to find simplescreenrecorder directory."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         print_message "$GREEN" "Building and installing SimpleScreenRecorder from source..."
                         makepkg -si --noconfirm
@@ -53,7 +53,7 @@ install_simplescreenrecorder() {
                             print_message "$RED" "Failed to install dependencies."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         print_message "$GREEN" "Enabling RPM Fusion repositories..."
                         sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-42.noarch.rpm \
@@ -61,7 +61,7 @@ install_simplescreenrecorder() {
                             print_message "$RED" "Failed to enable RPM Fusion."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         print_message "$GREEN" "Installing FFmpeg and 32-bit libraries..."
                         sudo dnf install -y ffmpeg-devel --allowerasing
@@ -70,35 +70,35 @@ install_simplescreenrecorder() {
                             print_message "$RED" "Failed to install FFmpeg or i686 libraries."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         print_message "$GREEN" "Cloning SimpleScreenRecorder (original repo)..."
                         git clone https://github.com/MaartenBaert/ssr "$CACHE_DIR" || {
                             print_message "$RED" "Failed to clone repository."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         cd "$CACHE_DIR" || {
                             print_message "$RED" "Failed to enter SSR directory."
                             rm -rf "$CACHE_DIR"
                             return
-                        }
+                }
 
                         chmod +x simple-build-and-install
 
                         print_message "$GREEN" "Building SimpleScreenRecorder..."
                         if ./simple-build-and-install; then
                             print_message "$GREEN" "SimpleScreenRecorder installed successfully."
-                        else
+                else
                             print_message "$RED" "Build failed. Check for errors above."
-                        fi
+                fi
                         rm -rf "$CACHE_DIR"
                         ;;
-                esac
-            else
+            esac
+        else
                 echo "Installation aborted."
-            fi
+        fi
             ;;
     esac
 }

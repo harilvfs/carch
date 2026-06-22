@@ -46,18 +46,18 @@ install_pipewire() {
             if ! check_multilib; then
                 multilib_enabled=false
                 print_message "$YELLOW" "Installing without 32-bit support..."
-            fi
+        fi
 
             if [ "$multilib_enabled" = true ]; then
                 sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-jack pipewire-pulse lib32-pipewire gst-plugin-pipewire wireplumber rtkit
-            else
+        else
                 sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-jack pipewire-pulse gst-plugin-pipewire wireplumber rtkit
-            fi
+        fi
 
             if [ $? -ne 0 ]; then
                 print_message "$RED" "Failed to install PipeWire packages on Arch."
                 exit 1
-            fi
+        fi
             ;;
         "Fedora")
             print_message "$CYAN" "Installing PipeWire packages for Fedora..."
@@ -65,7 +65,7 @@ install_pipewire() {
             if [ $? -ne 0 ]; then
                 print_message "$RED" "Failed to install PipeWire packages on Fedora."
                 exit 1
-            fi
+        fi
             ;;
         "openSUSE")
             print_message "$CYAN" "Installing PipeWire packages for openSUSE..."
@@ -73,7 +73,7 @@ install_pipewire() {
             if [ $? -ne 0 ]; then
                 print_message "$RED" "Failed to install PipeWire packages on openSUSE."
                 exit 1
-            fi
+        fi
             ;;
     esac
 

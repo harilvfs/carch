@@ -191,7 +191,7 @@ main() {
                 "openSUSE")
                     install_picom_ftlabs_opensuse
                     ;;
-            esac
+        esac
             download_config "https://raw.githubusercontent.com/harilvfs/dwm/refs/heads/main/config/picom/picom.conf"
             print_message "$GREEN" "Picom setup completed with animations from FT-Labs!"
             ;;

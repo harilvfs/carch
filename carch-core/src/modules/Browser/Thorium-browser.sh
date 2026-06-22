@@ -18,14 +18,14 @@ install_thorium_browser() {
                 case "$DISTRO" in
                     "Fedora") sudo dnf install -y wget ;;
                     "openSUSE") sudo zypper install -y wget ;;
-                esac
-            fi
+            esac
+        fi
 
             temp_dir=$(mktemp -d)
             cd "$temp_dir" || {
                 print_message "$RED" "Failed to create temp directory"
                 return
-            }
+        }
 
             print_message "$GREEN" "Fetching latest Thorium Browser release..."
             wget -q --show-progress https://github.com/Alex313031/thorium/releases/latest -O latest
@@ -43,10 +43,10 @@ install_thorium_browser() {
                 case "$DISTRO" in
                     "Fedora") sudo dnf install -y "./$rpm_file" ;;
                     "openSUSE") sudo zypper install -y "./$rpm_file" ;;
-                esac
-            else
+            esac
+        else
                 print_message "$RED" "Failed to download Thorium Browser. Please visit https://thorium.rocks/."
-            fi
+        fi
 
             cd - > /dev/null || return
             rm -rf "$temp_dir"

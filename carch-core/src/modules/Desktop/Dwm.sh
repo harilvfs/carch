@@ -37,13 +37,13 @@ install_packages() {
                 picom || {
                 print_message "$RED" "Failed to install some packages via pacman."
                 exit 1
-            }
+        }
 
             print_message "$CYAN" "Installing xautolock from AUR..."
             $aur_helper -S --noconfirm xautolock || {
                 print_message "$RED" "Failed to install xautolock from AUR."
                 exit 1
-            }
+        }
             ;;
         "Fedora")
             print_message "$CYAN" "Installing required packages using dnf..."
@@ -53,13 +53,13 @@ install_packages() {
                 https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-42.noarch.rpm || {
                 print_message "$RED" "Failed to enable RPM Fusion repositories."
                 exit 1
-            }
+        }
 
             print_message "$CYAN" "Enabling lihaohong/yazi COPR repository..."
             sudo dnf copr enable -y lihaohong/yazi || {
                 print_message "$RED" "Failed to enable lihaohong/yazi COPR repository."
                 exit 1
-            }
+        }
 
             sudo dnf install -y git libX11-devel libXinerama-devel libXft-devel imlib2-devel libxcb-devel \
                 gnome-keyring unzip lxappearance feh mate-polkit meson ninja-build jetbrains-mono-fonts-all \
@@ -69,7 +69,7 @@ install_packages() {
                 picom || {
                 print_message "$RED" "Failed to install some packages via dnf."
                 exit 1
-            }
+        }
             ;;
         "openSUSE")
             print_message "$CYAN" "Installing required packages using zypper..."
@@ -82,7 +82,7 @@ install_packages() {
                 picom || {
                 print_message "${RED}" "Failed to install some packages via zypper."
                 exit 1
-            }
+        }
 
             print_message "$YELLOW" "NOTE: openSUSE uses i3lock instead of slock (slock is not available in official repositories)."
             print_message "$YELLOW" "To manually lock your screen, run: i3lock"

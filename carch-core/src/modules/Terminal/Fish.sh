@@ -69,9 +69,9 @@ install_fish_packages() {
             sudo dnf install -y fish google-noto-color-emoji-fonts google-noto-emoji-fonts git trash-cli
             if ! command -v eza &> /dev/null; then
                 install_eza_manually
-            else
+        else
                 print_message "$GREEN" "eza is already installed."
-            fi
+        fi
             ;;
         "openSUSE")
             sudo zypper install -y fish google-noto-fonts noto-coloremoji-fonts git eza trash-cli

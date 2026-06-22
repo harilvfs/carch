@@ -96,7 +96,7 @@ install_protonvpn() {
                 sudo dnf install -y ./protonvpn-stable-release-1.0.3-1.noarch.rpm
                 sudo dnf check-update --refresh
                 sudo dnf install -y proton-vpn-gnome-desktop libappindicator-gtk3 gnome-shell-extension-appindicator gnome-extensions-app
-            )
+        )
             rm -rf "$temp_dir"
             print_message "$GREEN" "ProtonVPN installed successfully!"
             ;;
