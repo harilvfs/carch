@@ -249,6 +249,9 @@ jobs:
       - name: Install cross
         run: cargo install cross
 
+      - name: Generate manpage
+        run: cargo xtask man
+
       - name: Download completions
         uses: actions/download-artifact@v7
         with:
