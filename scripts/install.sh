@@ -54,109 +54,69 @@ if [ "$VERSION" = "latest" ]; then
 fi
 
 if [ -z "$VERSION" ]; then
-    printf "Error: could not determine a release version.\n" >&2
+    echo "Error: could not determine a release version." >&2
     exit 1
 fi
 
-GITHUB="https://github.com/$REPO/releases/download"
-ARCHIVE="carch-${TARGET}.tar.gz"
+echo "$BINARY $VERSION ($TARGET)"
 
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
-printf "Platform: %s\n" "$TARGET"
-printf "Version:  %s\n" "$VERSION"
-printf "Downloading %s... " "$ARCHIVE"
-if curl -fsSL "$GITHUB/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"; then
-    printf "done\n"
-else
-    printf "failed\n"
-    exit 1
-fi
+ARCHIVE="${BINARY}-${TARGET}.tar.gz"
 
-printf "Downloading checksum... "
-if curl -fsSL "$GITHUB/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"; then
-    printf "done\n"
-else
-    printf "failed\n"
-    exit 1
-fi
+curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
+curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
 
-printf "Verifying checksum... "
 cd "$TMPDIR"
 sha256sum -c "$ARCHIVE.sha256"
-
 tar xzf "$ARCHIVE"
-RELEASE_DIR=$(basename "$ARCHIVE" .tar.gz)
-cd "$RELEASE_DIR"
+cd "${BINARY}-${TARGET}"
 
 if [ "$IS_ANDROID" = "true" ]; then
-    printf "Installing to Termux prefix... "
-    if install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"; then
-        printf "done\n"
-    else
-        printf "failed\n"
-        exit 1
+    install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
+
+    if [ -d "completions" ]; then
+        mkdir -p "$PREFIX/share/bash-completion/completions" \
+            "$PREFIX/share/zsh/site-functions" \
+            "$PREFIX/share/fish/vendor_completions.d"
+
+        [ -f "completions/$BINARY.bash" ] && cp "completions/$BINARY.bash" \
+            "$PREFIX/share/bash-completion/completions/$BINARY"
+        [ -f "completions/$BINARY.zsh" ] && cp "completions/$BINARY.zsh" \
+            "$PREFIX/share/zsh/site-functions/_$BINARY"
+        [ -f "completions/$BINARY.fish" ] && cp "completions/$BINARY.fish" \
+            "$PREFIX/share/fish/vendor_completions.d/$BINARY.fish"
+    fi
+
+    if [ -f "man/$BINARY.1" ]; then
+        install -Dm644 "man/$BINARY.1" "$PREFIX/share/man/man1/$BINARY.1"
     fi
 else
-    printf "Installing to /usr/local/bin... "
-    if sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"; then
-        printf "done\n"
-    else
-        printf "failed\n"
-        exit 1
-    fi
-fi
+    sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"
 
-if [ -d "completions" ]; then
-    printf "Installing shell completions... "
-    if [ "$IS_ANDROID" = "true" ]; then
-        mkdir -p "$PREFIX/share/bash-completion/completions"
-        mkdir -p "$PREFIX/share/zsh/site-functions"
-        mkdir -p "$PREFIX/share/fish/vendor_completions.d"
-        [ -f "completions/carch.bash" ] && install -Dm644 "completions/carch.bash" "$PREFIX/share/bash-completion/completions/carch"
-        [ -f "completions/carch.zsh" ] && install -Dm644 "completions/carch.zsh" "$PREFIX/share/zsh/site-functions/_carch"
-        [ -f "completions/carch.fish" ] && install -Dm644 "completions/carch.fish" "$PREFIX/share/fish/vendor_completions.d/carch.fish"
-    else
-        sudo mkdir -p /usr/share/bash-completion/completions
-        sudo mkdir -p /usr/share/zsh/site-functions
-        sudo mkdir -p /usr/share/fish/vendor_completions.d
-        [ -f "completions/carch.bash" ] && sudo install -Dm644 "completions/carch.bash" /usr/share/bash-completion/completions/carch
-        [ -f "completions/carch.zsh" ] && sudo install -Dm644 "completions/carch.zsh" /usr/share/zsh/site-functions/_carch
-        [ -f "completions/carch.fish" ] && sudo install -Dm644 "completions/carch.fish" /usr/share/fish/vendor_completions.d/carch.fish
-    fi
-    printf "done\n"
-fi
+    if [ -d "completions" ]; then
+        sudo mkdir -p /usr/share/bash-completion/completions \
+            /usr/share/zsh/site-functions \
+            /usr/share/fish/vendor_completions.d
 
-if [ -f "man/carch.1" ]; then
-    printf "Installing man page... "
-    if [ "$IS_ANDROID" = "true" ]; then
-        if install -Dm644 "man/carch.1" "$PREFIX/share/man/man1/carch.1"; then
-            printf "done\n"
-        else
-            printf "failed\n"
-            exit 1
-        fi
-    else
-        if sudo install -Dm644 "man/carch.1" "/usr/share/man/man1/carch.1"; then
-            printf "done\n"
-        else
-            printf "failed\n"
-            exit 1
-        fi
+        [ -f "completions/$BINARY.bash" ] && sudo cp "completions/$BINARY.bash" \
+            /usr/share/bash-completion/completions/$BINARY
+        [ -f "completions/$BINARY.zsh" ] && sudo cp "completions/$BINARY.zsh" \
+            /usr/share/zsh/site-functions/_$BINARY
+        [ -f "completions/$BINARY.fish" ] && sudo cp "completions/$BINARY.fish" \
+            /usr/share/fish/vendor_completions.d/$BINARY.fish
     fi
+
+    if [ -f "man/$BINARY.1" ]; then
+        sudo install -Dm644 "man/$BINARY.1" /usr/share/man/man1/$BINARY.1
+    fi
+
+    if [ -f "$BINARY.desktop" ]; then
+        sudo install -Dm644 "$BINARY.desktop" /usr/share/applications/$BINARY.desktop
+    fi
+
     mandb -q 2> /dev/null || true
 fi
 
-if [ "$IS_ANDROID" = "false" ] && [ -f "carch.desktop" ]; then
-    printf "Installing desktop entry... "
-    if sudo install -Dm644 "carch.desktop" "/usr/share/applications/carch.desktop"; then
-        printf "done\n"
-    else
-        printf "failed\n"
-        exit 1
-    fi
-fi
-
-printf "Carch %s installed successfully!\n" "$VERSION"
-printf "Run carch to get started.\n"
+echo "$BINARY installed successfully"
