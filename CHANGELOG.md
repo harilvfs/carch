@@ -1,5 +1,47 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.4.4](https://github.com/harilvfs/carch/compare/v5.4.3...v5.4.4) - 2026-06-23
+
+
+### 💼 Other
+
+
+- [6780135](https://github.com/harilvfs/carch/commit/6780135941004ae7088d1cbe6456a358b814408a)  *(tui)* Improve tui logging and log path display by @harilvfs
+
+
+
+### 🚜 Refactor
+
+
+- [3c3bbcc](https://github.com/harilvfs/carch/commit/3c3bbcce68391ad0ef534712a1aa4ea922efc659)  *(cli, tui)* Replace theme flags with --set-theme and add TUI theme selector popup (#722) by @harilvfs in [#722](https://github.com/harilvfs/carch/pull/722)
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [66fc8ec](https://github.com/harilvfs/carch/commit/66fc8ec6be7c2a22544fb68166bb19095f30f818)  *(tape)* Fix instruction to match new carch updates by @harilvfs
+
+- [f9cc212](https://github.com/harilvfs/carch/commit/f9cc21238c5a69663a64274e3a1cdab9567a9b81) Fix coc redirect link by @harilvfs
+
+- [7da492f](https://github.com/harilvfs/carch/commit/7da492fac502682ffa8fb20482d214f210afd9ca)  *(docs)* Update security policy by @harilvfs
+
+- [2843884](https://github.com/harilvfs/carch/commit/28438840d97285fae73ec516fc06cd9603978215)  *(ci)* Remove --all-feature for binary build by @harilvfs
+
+- [29220ef](https://github.com/harilvfs/carch/commit/29220ef2b6cd6eadfe867ca090a6edf43a832844)  *(lints)* Remove -ci flag for shfmt by @harilvfs
+
+- [be4182d](https://github.com/harilvfs/carch/commit/be4182d55d2c49c031f7fffd090e2cdcab99ad80) Remove man-pages dir by @harilvfs
+
+- [6579c05](https://github.com/harilvfs/carch/commit/6579c052060e8a1c1959c5fdab551026085f26a9)  *(ci)* Fix manpage not found issue by @harilvfs
+
+- [0354717](https://github.com/harilvfs/carch/commit/0354717c85c046b48e70465fdf62ec0deabdebf1)  *(social)* Remove telegram by @harilvfs
+
+- [59f3036](https://github.com/harilvfs/carch/commit/59f303688e907c32eb267cb4b45eb53767cd0125)  *(lint)* Format with shfmt by @harilvfs
+
+- [1f508b4](https://github.com/harilvfs/carch/commit/1f508b43cac5d185f7a1ba4f3abbe22d84a50af6)  *(scripts)* Simplify script by @harilvfs
+
+
+
 ## [5.4.3](https://github.com/harilvfs/carch/compare/v5.4.2...v5.4.3) - 2026-06-19
 
 
