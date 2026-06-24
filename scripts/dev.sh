@@ -58,12 +58,16 @@ detect_suffix() {
 }
 
 get_latest_stable_version() {
-    curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2> /dev/null |
-        grep '"tag_name"' | head -1 | cut -d'"' -f4
+    tag=$(curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2> /dev/null |
+        grep '"tag_name"' | head -1 | cut -d'"' -f4)
+    case "$tag" in
+        v[0-9]*) echo "$tag" ;;
+        *) echo "" ;;
+    esac
 }
 
 get_latest_prerelease_version() {
-    curl -fsL "https://api.github.com/repos/$REPO/releases" 2> /dev/null |
+    tag=$(curl -fsL "https://api.github.com/repos/$REPO/releases" 2> /dev/null |
         awk '
             /"tag_name":/ {
                 tag = $0
@@ -74,7 +78,11 @@ get_latest_prerelease_version() {
                 print tag
                 exit
             }
-        '
+        ')
+    case "$tag" in
+        v[0-9]*) echo "$tag" ;;
+        *) echo "" ;;
+    esac
 }
 
 VERSION="${CARCH_VERSION:-latest}"
