@@ -10,6 +10,10 @@ else
     IS_ANDROID=false
 fi
 
+if [ "$IS_ANDROID" = "true" ] && [ -z "$PREFIX" ]; then
+    PREFIX="/data/data/com.termux/files/usr"
+fi
+
 detect_target() {
     ARCH=$(uname -m)
     OS=$(uname -s)
@@ -53,6 +57,7 @@ get_latest_version() {
 
 VERSION="${CARCH_VERSION:-latest}"
 TARGET=$(detect_target)
+
 if [ "$VERSION" = "latest" ]; then
     VERSION=$(get_latest_version)
 fi
