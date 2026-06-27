@@ -8,6 +8,7 @@ version = "5.4.4"
 edition = "2024"
 documentation = "https://carch.chalisehari.com.np"
 homepage = "https://github.com/harilvfs/carch"
+repository = "https://github.com/harilvfs/carch"
 readme = "./.github/README.md"
 license = "MIT"
 categories = ["command-line-utilities"]
