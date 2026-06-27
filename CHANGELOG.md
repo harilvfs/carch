@@ -1,5 +1,45 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.4.5](https://github.com/harilvfs/carch/compare/v5.4.4...v5.4.5) - 2026-06-27
+
+
+### 🚀 Features
+
+
+- [6e020ce](https://github.com/harilvfs/carch/commit/6e020ce59ece3c2a92f41b4a3d064de2df9c5df5) Add setup command, cargo-binstall and simplify release (#728) by @harilvfs in [#728](https://github.com/harilvfs/carch/pull/728)
+
+- [a9890c8](https://github.com/harilvfs/carch/commit/a9890c8e26c46e40ec1d28f2061530d0bd0ef6b6) Embed .desktop file into setup by @harilvfs
+
+- [d7c0d35](https://github.com/harilvfs/carch/commit/d7c0d35101ec7a6657fc2e976dfbc1dfc5a11b63) Add cargo-binstall for update cmd by @harilvfs
+
+
+
+### 🐛 Bug Fixes
+
+
+- [c83abb8](https://github.com/harilvfs/carch/commit/c83abb85471df9f3b8e88eda2e1e3652ffcba071)  *(scripts)* Check version tag before download to prevent 404 by @harilvfs
+
+- [bbd3691](https://github.com/harilvfs/carch/commit/bbd3691cfafc6bbaeb512f27c51677c6dceca1d7)  *(install)* Add perfix dir by @harilvfs
+
+- [5f19a9b](https://github.com/harilvfs/carch/commit/5f19a9b775c3cf861d2c2e4bbb4e906906f69cee)  *(dev)* Correct grabbing pre-release by @harilvfs
+
+- [d99970b](https://github.com/harilvfs/carch/commit/d99970bfe57a78336277e571bda7b3e8a2cbf40c)  *(script)* Correct binary-assets by @harilvfs
+
+- [93f8429](https://github.com/harilvfs/carch/commit/93f842926012b4d2c3b7d68c78e73c201e374c30) For .desktop make target os linux by @harilvfs
+
+- [38a8c56](https://github.com/harilvfs/carch/commit/38a8c56657536d14ad87656a8d9a901228d16ac7) Correct workspace repository by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [b25a951](https://github.com/harilvfs/carch/commit/b25a951a595724fe29d5cf8508ce5679dea255fa) Add repository metadate by @harilvfs
+
+- [e02ed4f](https://github.com/harilvfs/carch/commit/e02ed4f217b3b386625d293680e21eea23cf18aa)  *(man-pages)* Match the layout same as xtask by @harilvfs
+
+
+
 ## [5.4.4](https://github.com/harilvfs/carch/compare/v5.4.3...v5.4.4) - 2026-06-23
 
 
