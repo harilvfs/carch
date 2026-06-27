@@ -3,7 +3,7 @@ name = "carch-cli"
 version.workspace = true
 description = "A CLI tool to automate Linux system setup"
 documentation.workspace = true
-repository = "https://github.com/harilvfs/carch/tree/main/carch-cli"
+repository.workspace = true
 homepage.workspace = true
 keywords.workspace = true
 categories.workspace = true
@@ -13,7 +13,7 @@ readme.workspace = true
 include = ["src", "Cargo.toml"]
 
 [package.metadata.binstall]
-pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
+pkg-url = "{ repo }/releases/download/v{ version }/carch-{ target }{ archive-suffix }"
 bin-dir = "{ bin }{ binary-ext }"
 pkg-fmt = "bin"
 disabled-strategies = ["quick-install", "compile"]
