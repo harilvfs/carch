@@ -67,7 +67,7 @@ if [ -z "$VERSION" ]; then
     exit 1
 fi
 
-echo "$BINARY $VERSION ($TARGET)"
+echo "Installing $BINARY $VERSION ($TARGET)"
 
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT

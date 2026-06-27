@@ -105,10 +105,10 @@ jobs:
 
       - name: Copy raw binaries and checksums
         run: |
-          cp build/x86_64-unknown-linux-musl/release/carch ./carch-x86_64-unknown-linux-musl
-          cp build/aarch64-unknown-linux-musl/release/carch ./carch-aarch64-unknown-linux-musl
-          sha256sum ./carch-x86_64-unknown-linux-musl > ./carch-x86_64-unknown-linux-musl.sha256
-          sha256sum ./carch-aarch64-unknown-linux-musl > ./carch-aarch64-unknown-linux-musl.sha256
+          cp build/x86_64-unknown-linux-musl/release/carch carch-x86_64-unknown-linux-musl
+          cp build/aarch64-unknown-linux-musl/release/carch carch-aarch64-unknown-linux-musl
+          sha256sum carch-x86_64-unknown-linux-musl > carch-x86_64-unknown-linux-musl.sha256
+          sha256sum carch-aarch64-unknown-linux-musl > carch-aarch64-unknown-linux-musl.sha256
 
       - name: Generate changelog
         uses: orhun/git-cliff-action@v4
@@ -138,10 +138,10 @@ jobs:
       - name: Upload Linux assets
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
-            ./carch-x86_64-unknown-linux-musl \
-            ./carch-x86_64-unknown-linux-musl.sha256 \
-            ./carch-aarch64-unknown-linux-musl \
-            ./carch-aarch64-unknown-linux-musl.sha256
+            carch-x86_64-unknown-linux-musl \
+            carch-x86_64-unknown-linux-musl.sha256 \
+            carch-aarch64-unknown-linux-musl \
+            carch-aarch64-unknown-linux-musl.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -198,17 +198,17 @@ jobs:
 
       - name: Copy raw Android binaries and checksums
         run: |
-          cp build/aarch64-linux-android/release/carch ./carch-aarch64-linux-android
-          cp build/armv7-linux-androideabi/release/carch ./carch-armv7-linux-androideabi
-          sha256sum ./carch-aarch64-linux-android > ./carch-aarch64-linux-android.sha256
-          sha256sum ./carch-armv7-linux-androideabi > ./carch-armv7-linux-androideabi.sha256
+          cp build/aarch64-linux-android/release/carch carch-aarch64-linux-android
+          cp build/armv7-linux-androideabi/release/carch carch-armv7-linux-androideabi
+          sha256sum carch-aarch64-linux-android > carch-aarch64-linux-android.sha256
+          sha256sum carch-armv7-linux-androideabi > carch-armv7-linux-androideabi.sha256
 
       - name: Upload Android assets
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
-            ./carch-aarch64-linux-android \
-            ./carch-aarch64-linux-android.sha256 \
-            ./carch-armv7-linux-androideabi \
-            ./carch-armv7-linux-androideabi.sha256
+            carch-aarch64-linux-android \
+            carch-aarch64-linux-android.sha256 \
+            carch-armv7-linux-androideabi \
+            carch-armv7-linux-androideabi.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
