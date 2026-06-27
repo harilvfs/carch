@@ -176,6 +176,7 @@ https://github.com/harilvfs/carch/issues
     write_file(&man_path, content.as_bytes(), dry_run)?;
     installed.push(format!("man page → {}", man_path.display()));
 
+    #[cfg(target_os = "linux")]
     if !is_termux() {
         let desktop_dir = if is_root() {
             PathBuf::from("/usr/share/applications")
