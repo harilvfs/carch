@@ -87,10 +87,24 @@ fn run_install_script() -> Result<()> {
 
 enum InstallMethod {
     Cargo,
+    CargoBinstall,
     InstallScript,
 }
 
 fn get_install_method() -> Result<InstallMethod> {
+    print!("Installed via (c)argo, (b)install, or (i)nstall script? ");
+    io::stdout().flush()?;
+    let mut choice = String::new();
+    io::stdin().read_line(&mut choice)?;
+    match choice.trim().to_lowercase().as_str() {
+        "c" | "cargo" => Ok(InstallMethod::Cargo),
+        "b" | "binstall" | "cargo-binstall" => Ok(InstallMethod::CargoBinstall),
+        "i" | "install script" => Ok(InstallMethod::InstallScript),
+        _ => Err(CarchError::Command("Invalid choice. Please run the command again.".into())),
+    }
+}
+
+fn get_install_method_for_uninstall() -> Result<InstallMethod> {
     print!("Installed via (c)argo or (i)nstall script? ");
     io::stdout().flush()?;
     let mut choice = String::new();
@@ -115,6 +129,9 @@ pub fn update() -> Result<()> {
         InstallMethod::Cargo => {
             run_command(Command::new("cargo").arg("install").arg("carch-cli").arg("--force"))?;
         }
+        InstallMethod::CargoBinstall => {
+            run_command(Command::new("cargo").arg("binstall").arg("carch-cli").arg("--force"))?;
+        }
         InstallMethod::InstallScript => {
             run_install_script()?;
         }
@@ -132,8 +149,8 @@ pub fn uninstall() -> Result<()> {
 
     info!("Starting uninstall...");
 
-    match get_install_method()? {
-        InstallMethod::Cargo => {
+    match get_install_method_for_uninstall()? {
+        InstallMethod::Cargo | InstallMethod::CargoBinstall => {
             run_command(Command::new("cargo").arg("uninstall").arg("carch-cli"))?;
         }
         InstallMethod::InstallScript => {
