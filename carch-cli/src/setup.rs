@@ -90,6 +90,9 @@ fn write_file(path: &PathBuf, content: &[u8], dry_run: bool) -> Result<()> {
 pub fn run_setup(dry_run: bool) -> Result<()> {
     let mut cmd = Cli::command();
     cmd = cmd.name("carch");
+    cmd = cmd.long_about(
+        "A Rust-based CLI tool to streamline and automate your Linux system's initial setup.\nIt offers automated scripts that save users time setting up their Linux environment.",
+    );
 
     if dry_run {
         println!("(dry run) Would install:");
@@ -152,6 +155,22 @@ pub fn run_setup(dry_run: bool) -> Result<()> {
         content = content.replace(&old, &new);
     }
     content = content.replace("carch\\-help(1)", "\\fBhelp\\fR");
+
+    content.push_str(
+        r#".SH DOCUMENTATION
+Documentation and source code available at:
+.br
+https://github.com/harilvfs/carch
+
+.SH AUTHOR
+Hari Chalise <harilvfs@chalisehari.com.np>
+
+.SH REPORTING BUGS
+If you encounter bugs or issues, please report them at:
+.br
+https://github.com/harilvfs/carch/issues
+"#,
+    );
 
     let man_path = man_dir().join("carch.1");
     write_file(&man_path, content.as_bytes(), dry_run)?;
