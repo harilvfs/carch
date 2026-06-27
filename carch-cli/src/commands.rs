@@ -158,8 +158,9 @@ pub fn uninstall() -> Result<()> {
 
             let is_termux = std::env::var("TERMUX_VERSION").is_ok()
                 || Path::new("/data/data/com.termux").exists();
+            let is_root = std::env::var("EUID").is_ok_and(|v| v == "0");
 
-            let binary_paths = if is_termux {
+            let binary_paths: Vec<String> = if is_termux {
                 let prefix =
                     std::env::var("PREFIX").unwrap_or("/data/data/com.termux/files/usr".into());
                 vec![
@@ -169,20 +170,34 @@ pub fn uninstall() -> Result<()> {
                     format!("{prefix}/share/fish/vendor_completions.d/carch.fish"),
                     format!("{prefix}/share/man/man1/carch.1"),
                 ]
+            } else if let Ok(home) = std::env::var("HOME") {
+                if is_root {
+                    vec![
+                        "/usr/local/bin/carch".into(),
+                        "/usr/share/bash-completion/completions/carch".into(),
+                        "/usr/share/zsh/site-functions/_carch".into(),
+                        "/usr/share/fish/vendor_completions.d/carch.fish".into(),
+                        "/usr/share/man/man1/carch.1".into(),
+                        "/usr/share/applications/carch.desktop".into(),
+                    ]
+                } else {
+                    let data = format!("{home}/.local/share");
+                    vec![
+                        "/usr/local/bin/carch".into(),
+                        format!("{data}/bash-completion/completions/carch"),
+                        format!("{data}/zsh/site-functions/_carch"),
+                        format!("{data}/fish/vendor_completions.d/carch.fish"),
+                        format!("{data}/man/man1/carch.1"),
+                        format!("{data}/applications/carch.desktop"),
+                    ]
+                }
             } else {
-                vec![
-                    "/usr/local/bin/carch".into(),
-                    "/usr/share/bash-completion/completions/carch".into(),
-                    "/usr/share/zsh/site-functions/_carch".into(),
-                    "/usr/share/fish/vendor_completions.d/carch.fish".into(),
-                    "/usr/share/man/man1/carch.1".into(),
-                    "/usr/share/applications/carch.desktop".into(),
-                ]
+                vec![]
             };
 
             for path in &binary_paths {
                 if Path::new(path).exists() {
-                    if is_termux {
+                    if is_termux || is_root {
                         run_command(Command::new("rm").arg("-f").arg(path))?;
                     } else {
                         run_command(Command::new("sudo").arg("rm").arg("-f").arg(path))?;
