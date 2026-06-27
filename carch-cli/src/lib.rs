@@ -7,6 +7,7 @@ use tempfile::TempDir;
 
 pub mod args;
 pub mod commands;
+pub mod setup;
 pub mod state;
 
 use crate::args::Settings;

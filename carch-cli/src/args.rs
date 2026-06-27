@@ -83,6 +83,11 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
+    #[command(about = "Install shell completions, man page, and desktop file")]
+    Setup {
+        #[arg(long, help = "Preview what would be installed without writing files")]
+        dry_run: bool,
+    },
     #[command(about = "Check for updates")]
     CheckUpdate,
     #[command(about = "Update the application")]
@@ -136,6 +141,7 @@ pub fn parse_args() -> Result<()> {
     }
 
     match cli.command {
+        Some(Commands::Setup { dry_run }) => crate::setup::run_setup(dry_run),
         Some(Commands::CheckUpdate) => {
             info!("Checking for updates");
             commands::check_for_updates()

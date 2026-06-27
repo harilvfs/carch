@@ -10,7 +10,13 @@ categories.workspace = true
 license.workspace = true
 edition.workspace = true
 readme.workspace = true
-include = ["src", "Cargo.toml", "../man/carch.1"]
+include = ["src", "Cargo.toml", "../carch.desktop"]
+
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
+bin-dir = "{ bin }{ binary-ext }"
+pkg-fmt = "bin"
+disabled-strategies = ["quick-install", "compile"]
 
 [lib]
 name = "carch_cli"
@@ -19,7 +25,9 @@ path = "src/lib.rs"
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
 clap_complete = "4.6.5"
+clap_mangen = "0.3"
 carch-core = { path = "../carch-core", version = "5.4.4" }
+dirs = "6"
 log = { workspace = true }
 env_logger = { workspace = true }
 tempfile = { workspace = true }

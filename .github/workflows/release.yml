@@ -33,16 +33,7 @@ jobs:
       - name: Set up version variables
         run: |
           VERSION=$(echo "${{ github.event.inputs.tag_version }}" | sed 's/^v//')
-          CURRENT_MONTH=$(date +'%B')
-          CURRENT_YEAR=$(date +'%Y')
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "CURRENT_MONTH=$CURRENT_MONTH" >> $GITHUB_ENV
-          echo "CURRENT_YEAR=$CURRENT_YEAR" >> $GITHUB_ENV
-
-      - name: Debug input values
-        run: |
-          echo "Update version input: '${{ github.event.inputs.update_version }}'"
-          echo "Update version type: $(echo '${{ github.event.inputs.update_version }}' | wc -c)"
 
       - name: Update Cargo.toml version
         if: ${{ github.event.inputs.update_version == 'true' }}
@@ -112,59 +103,12 @@ jobs:
             --target-dir=build \
             --target=aarch64-unknown-linux-musl
 
-      - name: Generate completions
+      - name: Copy raw binaries and checksums
         run: |
-          mkdir -p completions
-          ./build/x86_64-unknown-linux-musl/release/carch completions bash > completions/carch.bash
-          ./build/x86_64-unknown-linux-musl/release/carch completions zsh > completions/carch.zsh
-          ./build/x86_64-unknown-linux-musl/release/carch completions fish > completions/carch.fish
-
-      - name: Generate manpage
-        run: cargo xtask man
-
-      - name: Upload completions as artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: completions
-          path: completions/
-          retention-days: 1
-
-      - name: Package x86_64 release archive
-        run: |
-          DIR="carch-x86_64-unknown-linux-musl"
-          mkdir -p "$DIR/completions" "$DIR/man"
-          cp build/x86_64-unknown-linux-musl/release/carch "$DIR/"
-          cp completions/* "$DIR/completions/"
-          cp man/carch.1 "$DIR/man/"
-          cp carch.desktop "$DIR/"
-          tar -czf "${DIR}.tar.gz" "$DIR"
-          sha256sum "${DIR}.tar.gz" > "${DIR}.tar.gz.sha256"
-          echo "ARCHIVE_X86_64=${DIR}.tar.gz" >> $GITHUB_ENV
-          echo "ARCHIVE_X86_64_SHA=${DIR}.tar.gz.sha256" >> $GITHUB_ENV
-
-      - name: Package aarch64 release archive
-        run: |
-          DIR="carch-aarch64-unknown-linux-musl"
-          mkdir -p "$DIR/completions" "$DIR/man"
-          cp build/aarch64-unknown-linux-musl/release/carch "$DIR/"
-          cp completions/* "$DIR/completions/"
-          cp man/carch.1 "$DIR/man/"
-          cp carch.desktop "$DIR/"
-          tar -czf "${DIR}.tar.gz" "$DIR"
-          sha256sum "${DIR}.tar.gz" > "${DIR}.tar.gz.sha256"
-          echo "ARCHIVE_AARCH64=${DIR}.tar.gz" >> $GITHUB_ENV
-          echo "ARCHIVE_AARCH64_SHA=${DIR}.tar.gz.sha256" >> $GITHUB_ENV
-
-      - name: Upload Linux artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: linux-archives
-          path: |
-            carch-*.tar.gz
-            carch-*.tar.gz.sha256
-            build/x86_64-unknown-linux-musl/release/carch
-            build/aarch64-unknown-linux-musl/release/carch
-          retention-days: 1
+          cp build/x86_64-unknown-linux-musl/release/carch ./carch-x86_64-unknown-linux-musl
+          cp build/aarch64-unknown-linux-musl/release/carch ./carch-aarch64-unknown-linux-musl
+          sha256sum ./carch-x86_64-unknown-linux-musl > ./carch-x86_64-unknown-linux-musl.sha256
+          sha256sum ./carch-aarch64-unknown-linux-musl > ./carch-aarch64-unknown-linux-musl.sha256
 
       - name: Generate changelog
         uses: orhun/git-cliff-action@v4
@@ -187,28 +131,17 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_version }}
           name: ${{ github.event.inputs.tag_title }}
           draft: false
-          prerelease: true
+          prerelease: ${{ github.event.inputs.update_version != 'true' }}
           generate_release_notes: false
           body_path: BODY.md
-
-      - name: Copy raw binaries
-        run: |
-          cp build/x86_64-unknown-linux-musl/release/carch ./carch
-          cp build/aarch64-unknown-linux-musl/release/carch ./carch-aarch64
-          sha256sum ./carch > ./carch.sha256
-          sha256sum ./carch-aarch64 > ./carch-aarch64.sha256
 
       - name: Upload Linux assets
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
-            ${{ env.ARCHIVE_X86_64 }} \
-            ${{ env.ARCHIVE_X86_64_SHA }} \
-            ${{ env.ARCHIVE_AARCH64 }} \
-            ${{ env.ARCHIVE_AARCH64_SHA }} \
-            ./carch \
-            ./carch.sha256 \
-            ./carch-aarch64 \
-            ./carch-aarch64.sha256
+            ./carch-x86_64-unknown-linux-musl \
+            ./carch-x86_64-unknown-linux-musl.sha256 \
+            ./carch-aarch64-unknown-linux-musl \
+            ./carch-aarch64-unknown-linux-musl.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -249,15 +182,6 @@ jobs:
       - name: Install cross
         run: cargo install cross
 
-      - name: Generate manpage
-        run: cargo xtask man
-
-      - name: Download completions
-        uses: actions/download-artifact@v7
-        with:
-          name: completions
-          path: completions/
-
       - name: Build aarch64 Android binary
         run: |
           cross build \
@@ -272,56 +196,19 @@ jobs:
             --target-dir=build \
             --target=armv7-linux-androideabi
 
-      - name: Package aarch64 Android archive
+      - name: Copy raw Android binaries and checksums
         run: |
-          DIR="carch-aarch64-linux-android"
-          mkdir -p "$DIR/completions" "$DIR/man"
-          cp build/aarch64-linux-android/release/carch "$DIR/"
-          cp completions/* "$DIR/completions/"
-          cp man/carch.1 "$DIR/man/"
-          tar -czf "${DIR}.tar.gz" "$DIR"
-          sha256sum "${DIR}.tar.gz" > "${DIR}.tar.gz.sha256"
-          echo "ARCHIVE_AARCH64_ANDROID=${DIR}.tar.gz" >> $GITHUB_ENV
-          echo "ARCHIVE_AARCH64_ANDROID_SHA=${DIR}.tar.gz.sha256" >> $GITHUB_ENV
-
-      - name: Package armv7 Android archive
-        run: |
-          DIR="carch-armv7-linux-androideabi"
-          mkdir -p "$DIR/completions" "$DIR/man"
-          cp build/armv7-linux-androideabi/release/carch "$DIR/"
-          cp completions/* "$DIR/completions/"
-          cp man/carch.1 "$DIR/man/"
-          tar -czf "${DIR}.tar.gz" "$DIR"
-          sha256sum "${DIR}.tar.gz" > "${DIR}.tar.gz.sha256"
-          echo "ARCHIVE_ARMV7_ANDROID=${DIR}.tar.gz" >> $GITHUB_ENV
-          echo "ARCHIVE_ARMV7_ANDROID_SHA=${DIR}.tar.gz.sha256" >> $GITHUB_ENV
-
-      - name: Upload Android archives as artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: android-archives
-          path: |
-            carch-*.tar.gz
-            carch-*.tar.gz.sha256
-          retention-days: 1
-
-      - name: Copy raw Android binaries
-        run: |
-          cp build/aarch64-linux-android/release/carch ./carch-aarch64-android
-          cp build/armv7-linux-androideabi/release/carch ./carch-armv7-android
-          sha256sum ./carch-aarch64-android > ./carch-aarch64-android.sha256
-          sha256sum ./carch-armv7-android > ./carch-armv7-android.sha256
+          cp build/aarch64-linux-android/release/carch ./carch-aarch64-linux-android
+          cp build/armv7-linux-androideabi/release/carch ./carch-armv7-linux-androideabi
+          sha256sum ./carch-aarch64-linux-android > ./carch-aarch64-linux-android.sha256
+          sha256sum ./carch-armv7-linux-androideabi > ./carch-armv7-linux-androideabi.sha256
 
       - name: Upload Android assets
         run: |
           gh release upload ${{ github.event.inputs.tag_version }} \
-            ${{ env.ARCHIVE_AARCH64_ANDROID }} \
-            ${{ env.ARCHIVE_AARCH64_ANDROID_SHA }} \
-            ${{ env.ARCHIVE_ARMV7_ANDROID }} \
-            ${{ env.ARCHIVE_ARMV7_ANDROID_SHA }} \
-            ./carch-aarch64-android \
-            ./carch-aarch64-android.sha256 \
-            ./carch-armv7-android \
-            ./carch-armv7-android.sha256
+            ./carch-aarch64-linux-android \
+            ./carch-aarch64-linux-android.sha256 \
+            ./carch-armv7-linux-androideabi \
+            ./carch-armv7-linux-androideabi.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
