@@ -10,7 +10,7 @@ categories.workspace = true
 license.workspace = true
 edition.workspace = true
 readme.workspace = true
-include = ["src", "Cargo.toml", "../man/carch.1", "../carch.desktop"]
+include = ["src", "Cargo.toml", "../carch.desktop"]
 
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
