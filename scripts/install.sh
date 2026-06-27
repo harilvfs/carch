@@ -72,60 +72,21 @@ echo "$BINARY $VERSION ($TARGET)"
 TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
-ARCHIVE="${BINARY}-${TARGET}.tar.gz"
-
-curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ARCHIVE" -o "$TMPDIR/$ARCHIVE"
-curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ARCHIVE.sha256" -o "$TMPDIR/$ARCHIVE.sha256"
+ASSET="$BINARY-$TARGET"
+curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ASSET" -o "$TMPDIR/$BINARY"
+curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ASSET.sha256" -o "$TMPDIR/$BINARY.sha256"
 
 cd "$TMPDIR"
-sha256sum -c "$ARCHIVE.sha256"
-tar xzf "$ARCHIVE"
-cd "${BINARY}-${TARGET}"
+sha256sum -c "$BINARY.sha256"
+chmod 755 "$BINARY"
 
 if [ "$IS_ANDROID" = "true" ]; then
     install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
-
-    if [ -d "completions" ]; then
-        mkdir -p "$PREFIX/share/bash-completion/completions" \
-            "$PREFIX/share/zsh/site-functions" \
-            "$PREFIX/share/fish/vendor_completions.d"
-
-        [ -f "completions/$BINARY.bash" ] && cp "completions/$BINARY.bash" \
-            "$PREFIX/share/bash-completion/completions/$BINARY"
-        [ -f "completions/$BINARY.zsh" ] && cp "completions/$BINARY.zsh" \
-            "$PREFIX/share/zsh/site-functions/_$BINARY"
-        [ -f "completions/$BINARY.fish" ] && cp "completions/$BINARY.fish" \
-            "$PREFIX/share/fish/vendor_completions.d/$BINARY.fish"
-    fi
-
-    if [ -f "man/$BINARY.1" ]; then
-        install -Dm644 "man/$BINARY.1" "$PREFIX/share/man/man1/$BINARY.1"
-    fi
 else
-    sudo install -Dm755 "$BINARY" "/usr/local/bin/$BINARY"
-
-    if [ -d "completions" ]; then
-        sudo mkdir -p /usr/share/bash-completion/completions \
-            /usr/share/zsh/site-functions \
-            /usr/share/fish/vendor_completions.d
-
-        [ -f "completions/$BINARY.bash" ] && sudo cp "completions/$BINARY.bash" \
-            /usr/share/bash-completion/completions/$BINARY
-        [ -f "completions/$BINARY.zsh" ] && sudo cp "completions/$BINARY.zsh" \
-            /usr/share/zsh/site-functions/_$BINARY
-        [ -f "completions/$BINARY.fish" ] && sudo cp "completions/$BINARY.fish" \
-            /usr/share/fish/vendor_completions.d/$BINARY.fish
-    fi
-
-    if [ -f "man/$BINARY.1" ]; then
-        sudo install -Dm644 "man/$BINARY.1" /usr/share/man/man1/$BINARY.1
-    fi
-
-    if [ -f "$BINARY.desktop" ]; then
-        sudo install -Dm644 "$BINARY.desktop" /usr/share/applications/$BINARY.desktop
-    fi
-
+    sudo mkdir -p /usr/local/bin
+    sudo install -m755 "$BINARY" "/usr/local/bin/$BINARY"
     mandb -q 2> /dev/null || true
 fi
 
 echo "$BINARY installed successfully"
+echo "Run 'carch setup' to install shell completions, man page, and desktop file."
