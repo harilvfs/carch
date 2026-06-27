@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Carch
-Comment=A Rust-based CLI tool to streamline and automate your Linux system’s initial setup
-Exec=carch
-Icon=utilities-terminal
-Type=Application
-Terminal=true
-Categories=Utility;
-Keywords=linux;setup;script;configuration;automate;system;

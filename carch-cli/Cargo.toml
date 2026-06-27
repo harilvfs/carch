@@ -10,7 +10,7 @@ categories.workspace = true
 license.workspace = true
 edition.workspace = true
 readme.workspace = true
-include = ["src", "Cargo.toml", "../carch.desktop"]
+include = ["src", "Cargo.toml"]
 
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }{ archive-suffix }"
@@ -26,7 +26,7 @@ path = "src/lib.rs"
 clap = { workspace = true, features = ["derive"] }
 clap_complete = "4.6.5"
 clap_mangen = "0.3"
-carch-core = { path = "../carch-core", version = "5.4.5" }
+carch-core = { path = "../carch-core", version = "5.4.4" }
 dirs = "6"
 log = { workspace = true }
 env_logger = { workspace = true }

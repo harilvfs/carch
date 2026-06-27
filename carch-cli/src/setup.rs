@@ -4,7 +4,17 @@ use clap::CommandFactory;
 use std::fs;
 use std::path::PathBuf;
 
-const DESKTOP_FILE: &str = include_str!("../../carch.desktop");
+#[cfg(target_os = "linux")]
+const DESKTOP_FILE: &str = "[Desktop Entry]
+Name=Carch
+Comment=A Rust-based CLI tool to streamline and automate your Linux system\u{2019}s initial setup
+Exec=carch
+Icon=utilities-terminal
+Type=Application
+Terminal=true
+Categories=Utility;
+Keywords=linux;setup;script;configuration;automate;system;
+";
 
 fn is_termux() -> bool {
     std::env::var("TERMUX_VERSION").is_ok() || std::env::var("PREFIX").is_ok()
