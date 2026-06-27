@@ -73,18 +73,18 @@ TMPDIR=$(mktemp -d)
 trap 'rm -rf "$TMPDIR"' EXIT
 
 ASSET="$BINARY-$TARGET"
-curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ASSET" -o "$TMPDIR/$BINARY"
-curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ASSET.sha256" -o "$TMPDIR/$BINARY.sha256"
+curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ASSET" -o "$TMPDIR/$ASSET"
+curl -fsSL "https://github.com/$REPO/releases/download/$VERSION/$ASSET.sha256" -o "$TMPDIR/$ASSET.sha256"
 
 cd "$TMPDIR"
-sha256sum -c "$BINARY.sha256"
-chmod 755 "$BINARY"
+sha256sum -c "$ASSET.sha256"
+chmod 755 "$ASSET"
 
 if [ "$IS_ANDROID" = "true" ]; then
-    install -Dm755 "$BINARY" "$PREFIX/bin/$BINARY"
+    install -Dm755 "$ASSET" "$PREFIX/bin/$BINARY"
 else
     sudo mkdir -p /usr/local/bin
-    sudo install -m755 "$BINARY" "/usr/local/bin/$BINARY"
+    sudo install -m755 "$ASSET" "/usr/local/bin/$BINARY"
     mandb -q 2> /dev/null || true
 fi
 
