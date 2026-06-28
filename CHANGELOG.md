@@ -1,5 +1,22 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [5.4.7](https://github.com/harilvfs/carch/compare/v5.4.6...v5.4.7) - 2026-06-28
+
+
+### 🐛 Bug Fixes
+
+
+- [f279112](https://github.com/harilvfs/carch/commit/f27911281a7589a7a1136f613c559edff98a2fc3) Remove completions, man pages, and desktop file during uninstall by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [15a924e](https://github.com/harilvfs/carch/commit/15a924e3cc14591cfa5638601a4579fe63472361) Correct binary with ./ executation by @harilvfs
+
+
+
 ## [5.4.5](https://github.com/harilvfs/carch/compare/v5.4.4...v5.4.5) - 2026-06-27
 
 
