@@ -23,7 +23,7 @@ jobs:
 
       - name: Download Carch binary
         run: |
-          curl -L "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/carch" -o carch
+          curl -L "https://github.com/${{ github.repository }}/releases/download/${{ env.TAG_NAME }}/carch-x86_64-unknown-linux-musl" -o carch
           chmod +x carch
           sudo mv carch /usr/local/bin/
 
