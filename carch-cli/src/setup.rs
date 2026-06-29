@@ -7,7 +7,7 @@ use std::path::PathBuf;
 #[cfg(target_os = "linux")]
 const DESKTOP_FILE: &str = "[Desktop Entry]
 Name=Carch
-Comment=A Rust-based CLI tool to streamline and automate your Linux system\u{2019}s initial setup
+Comment=A CLI tool to streamline and automate Linux system’s initial setup
 Exec=carch
 Icon=utilities-terminal
 Type=Application
@@ -91,7 +91,7 @@ pub fn run_setup(dry_run: bool) -> Result<()> {
     let mut cmd = Cli::command();
     cmd = cmd.name("carch");
     cmd = cmd.long_about(
-        "A Rust-based CLI tool to streamline and automate your Linux system's initial setup.\nIt offers automated scripts that save users time setting up their Linux environment.",
+        "A CLI tool to streamline and automate Linux system’s initial setup\nIt offers automated scripts that save users time setting up their Linux environment.",
     );
 
     if dry_run {

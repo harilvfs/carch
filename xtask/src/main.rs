@@ -95,7 +95,7 @@ fn main() -> Result<(), anyhow::Error> {
                 .unwrap_or_else(|| "June 18, 2026".into());
 
             cmd = cmd.long_about(
-                "A Rust-based CLI tool to streamline and automate your Linux system's initial setup.\nIt offers automated scripts that save users time setting up their Linux environment.",
+                "A CLI tool to streamline and automate Linux system’s initial setup\nIt offers automated scripts that save users time setting up their Linux environment.",
             );
 
             let man = clap_mangen::Man::new(cmd.clone())

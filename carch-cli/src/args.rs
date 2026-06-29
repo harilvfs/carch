@@ -64,7 +64,7 @@ fn styles() -> clap::builder::Styles {
 #[derive(Parser)]
 #[command(
     author,
-    about = "A CLI tool to automate Linux system setup",
+    about = "A CLI tool to streamline and automate Linux system’s initial setup",
     styles = styles()
 )]
 pub struct Cli {
