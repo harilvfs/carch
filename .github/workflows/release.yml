@@ -55,14 +55,14 @@ jobs:
         run: rustup component add rust-src --toolchain nightly-2025-12-31
 
       - name: Cache Cargo registry
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-registry-
 
       - name: Cache Cargo index
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
@@ -166,14 +166,14 @@ jobs:
         run: rustup component add rust-src --toolchain nightly-2025-12-31
 
       - name: Cache Cargo registry
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-android-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-registry-android-
 
       - name: Cache Cargo index
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-index-android-${{ hashFiles('**/Cargo.lock') }}
