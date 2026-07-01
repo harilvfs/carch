@@ -43,5 +43,8 @@ description = "A versatile browser featuring a built-in VPN and social media sid
 [Tor-browser]
 description = "Extreme privacy browser that routes traffic through the Tor network."
 
+[Ladybird-browser]
+description = "Truly independent web browser with its own engine. Nightly builds (pre-alpha)."
+
 [Extensions]
 description = "Recommends useful extensions for Chromium and Firefox-based browsers."
