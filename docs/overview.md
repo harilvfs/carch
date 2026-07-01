@@ -9,6 +9,7 @@
 - **Floorp**: *A highly customizable Firefox-based browser with unique UI features.*
 - **Google-chrome**: *Cross-platform browser developed by Google.*
 - **Helium-browser**: *A lightweight, privacy-focused browser (currently in Beta).*
+- **Ladybird-browser**: *Truly independent web browser with its own engine. Nightly builds (pre-alpha).*
 - **Librewolf**: *A hardened fork of Firefox focused on privacy and security.*
 - **Lynx**: *Lightweight text-based web browser for terminal environments.*
 - **Opera**: *A versatile browser featuring a built-in VPN and social media sidebar.*
@@ -68,6 +69,7 @@
 - **Fonts**: *Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications.*
 - **Grub**: *GRUB (GNU GRand Unified Bootloader) is a bootloader that lets you choose and load operating systems or kernels on startup. The script offers various themes and applies necessary GRUB configurations. Credit to chrisTitusTech/Top-5-Bootloader-Themes for the themes and script assistance.*
 - **LTS-Kernel**: *This script installs the LTS kernel for Arch-based distros only (not for Fedora or openSUSE).*
+- **Nitch**: *An incredibly fast system fetch written in Nim. Uses a maintained fork since the original repo (ssleert/nitch) is deprecated.*
 - **Sddm**: *SDDM (Simple Desktop Display Manager) is a modern, Qt-based graphical login manager. The script installs a Catppuccin-based theme for SDDM from the Catppuccin community.*
 - **Wifi-Blockage**: *Fixes wireless hard blocks caused by shitty platform drivers (Dell, HP, Lenovo IdeaPad, Acer, Asus). Identifies, removes, and blacklists the offending module, then unblocks and restores wireless connectivity.*
 
