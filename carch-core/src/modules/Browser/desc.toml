@@ -1,5 +1,11 @@
+[Zen-browser]
+description = "A modern, design-focused Firefox fork with a workspace-centric layout."
+
 [Brave]
 description = "Privacy-focused Chromium-based browser with built-in ad blocking."
+
+[Ladybird-browser]
+description = "Truly independent web browser with its own engine. Nightly builds (pre-alpha)."
 
 [Chromium]
 description = "The open-source web project that powers Google Chrome and Edge."
@@ -18,9 +24,6 @@ description = "Cross-platform browser developed by Google."
 
 [Helium-browser]
 description = "A lightweight, privacy-focused browser (currently in Beta)."
-
-[Ladybird-browser]
-description = "Truly independent web browser with its own engine. Nightly builds (pre-alpha)."
 
 [Librewolf]
 description = "A hardened fork of Firefox focused on privacy and security."
@@ -45,6 +48,3 @@ description = "Chromium without the Google services for maximum privacy."
 
 [Vivaldi]
 description = "A feature-rich browser designed for power users and deep customization."
-
-[Zen-browser]
-description = "A modern, design-focused Firefox fork with a workspace-centric layout."
