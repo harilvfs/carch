@@ -1,0 +1,53 @@
+name: Sort desc.toml
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'carch-core/src/modules/**/desc.toml'
+      - 'carch-core/src/modules/**/*.sh'
+
+  pull_request:
+    branches: [main]
+    paths:
+      - 'carch-core/src/modules/**/desc.toml'
+      - 'carch-core/src/modules/**/*.sh'
+
+  workflow_dispatch:
+
+jobs:
+  sort-desc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Install nightly Rust
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Sort desc.toml and regenerate overview
+        run: |
+          cargo xtask sort-desc
+          cargo xtask ogen
+
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v8.1.1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: "chore: sort desc.toml and update overview"
+          branch: auto/sort-desc
+          delete-branch: true
+          title: "chore: sort desc.toml and update overview"
+          body: |
+            Automated PR to sort desc.toml keys alphabetically and regenerate overview.md.
+
+            This PR was created by the Sort desc.toml workflow.
+          labels: automated
+
+      - name: Merge Pull Request
+        if: steps.create-pr.outputs.pull-request-number != ''
+        run: gh pr merge auto/sort-desc --squash --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_REPO: ${{ github.repository }}
