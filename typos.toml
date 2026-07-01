@@ -5,6 +5,7 @@
 ratatui = "ratatui"
 nstall = "nstall"
 wil = "wil"
+Nitch = "Nitch"
 
 [files]
 extend-exclude = ["CHANGELOG.md"]
