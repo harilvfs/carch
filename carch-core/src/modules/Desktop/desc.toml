@@ -13,7 +13,7 @@ description = "Picom is a lightweight compositor for X11 that adds window transp
 [Rofi]
 description = "Rofi is a lightweight application launcher, window switcher, and dmenu replacement for X11. The script applies my pre-configured Rofi config."
 
-["Themes-Icons"]
+[Themes-Icons]
 description = "Installs and applies a collection of themes and icons to enhance the desktop appearance."
 
 [Wallpapers]

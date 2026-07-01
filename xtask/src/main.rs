@@ -6,6 +6,40 @@ use pico_args::Arguments;
 use toml::Value;
 use xshell::{Shell as XShell, cmd};
 
+fn check_desc_sorted(sh: &XShell) -> Result<(), anyhow::Error> {
+    println!("Checking desc.toml files are sorted...");
+    let modules_dir = sh.current_dir().join("carch-core/src/modules");
+    let entries = sh.read_dir(&modules_dir)?;
+    let mut unsorted = Vec::new();
+
+    for entry in entries {
+        let path = entry.as_path();
+        if path.is_dir() {
+            let desc_path = path.join("desc.toml");
+            if desc_path.exists() {
+                let content = sh.read_file(&desc_path)?;
+                let value: Value = toml::from_str(&content)?;
+                let sorted = toml::to_string_pretty(&value)?;
+
+                if content != sorted {
+                    let dir_name = path.file_name().unwrap().to_str().unwrap();
+                    unsorted.push(dir_name.to_string());
+                }
+            }
+        }
+    }
+
+    if !unsorted.is_empty() {
+        anyhow::bail!(
+            "desc.toml files are not sorted in: {}. Run `cargo xtask sort-desc` to fix.",
+            unsorted.join(", ")
+        );
+    }
+
+    println!("All desc.toml files are sorted.");
+    Ok(())
+}
+
 const HELP: &str = r"
 Usage: cargo xtask <COMMAND>
 
@@ -13,6 +47,7 @@ Commands:
   ci                  Run all CI checks
   ogen                Generate overview.md (alias: generate-overview)
   man-pages           Generate manpage from clap definitions
+  sort-desc           Sort desc.toml keys alphabetically
 ";
 
 fn main() -> Result<(), anyhow::Error> {
@@ -35,6 +70,7 @@ fn main() -> Result<(), anyhow::Error> {
             cmd!(sh, "cargo +nightly test --workspace --locked").run()?;
             cmd!(sh, "taplo fmt --check").run()?;
             cmd!(sh, "cargo deny check").run()?;
+            check_desc_sorted(&sh)?;
             Ok(())
         }
         "generate-overview" | "ogen" => {
@@ -80,6 +116,30 @@ fn main() -> Result<(), anyhow::Error> {
             sh.create_dir("docs")?;
             sh.write_file("docs/overview.md", &markdown)?;
             println!("overview.md generated successfully in docs/.");
+            Ok(())
+        }
+        "sort-desc" => {
+            let modules_dir = sh.current_dir().join("carch-core/src/modules");
+            let entries = sh.read_dir(&modules_dir)?;
+
+            for entry in entries {
+                let path = entry.as_path();
+                if path.is_dir() {
+                    let desc_path = path.join("desc.toml");
+                    if desc_path.exists() {
+                        let content = sh.read_file(&desc_path)?;
+                        let value: Value = toml::from_str(&content)?;
+
+                        let sorted = toml::to_string_pretty(&value)?;
+                        sh.write_file(&desc_path, &sorted)?;
+
+                        let dir_name = path.file_name().unwrap().to_str().unwrap();
+                        println!("Sorted {dir_name}/desc.toml");
+                    }
+                }
+            }
+
+            println!("All desc.toml files sorted alphabetically.");
             Ok(())
         }
         "man-pages" | "man" => {

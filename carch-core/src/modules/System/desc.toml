@@ -13,14 +13,11 @@ description = "Installs Bluetooth packages and sets up Bluetooth functionality."
 [Brightness]
 description = "Sets screen brightness to your preference using Brightnessctl."
 
-["Chaotic-Aur"]
+[Chaotic-Aur]
 description = "Chaotic-AUR is a popular unofficial Arch User Repository (AUR) helper repository providing prebuilt binary packages. The script installs Chaotic-AUR and configures `pacman.conf` to use it."
 
 [Fastfetch]
 description = "Fastfetch is a lightweight system information tool displaying OS, hardware, and other details in a clean, customizable format. The script applies my fastfetch config from the harilvfs/fastfetch repo."
-
-[Nitch]
-description = "An incredibly fast system fetch written in Nim. Uses a maintained fork since the original repo (ssleert/nitch) is deprecated."
 
 [Fonts]
 description = "Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications."
@@ -28,11 +25,14 @@ description = "Downloads and installs a variety of Nerd Fonts for improved reada
 [Grub]
 description = "GRUB (GNU GRand Unified Bootloader) is a bootloader that lets you choose and load operating systems or kernels on startup. The script offers various themes and applies necessary GRUB configurations. Credit to chrisTitusTech/Top-5-Bootloader-Themes for the themes and script assistance."
 
-["LTS-Kernel"]
+[LTS-Kernel]
 description = "This script installs the LTS kernel for Arch-based distros only (not for Fedora or openSUSE)."
+
+[Nitch]
+description = "An incredibly fast system fetch written in Nim. Uses a maintained fork since the original repo (ssleert/nitch) is deprecated."
 
 [Sddm]
 description = "SDDM (Simple Desktop Display Manager) is a modern, Qt-based graphical login manager. The script installs a Catppuccin-based theme for SDDM from the Catppuccin community."
 
-["Wifi-Blockage"]
+[Wifi-Blockage]
 description = "Fixes wireless hard blocks caused by shitty platform drivers (Dell, HP, Lenovo IdeaPad, Acer, Asus). Identifies, removes, and blacklists the offending module, then unblocks and restores wireless connectivity."

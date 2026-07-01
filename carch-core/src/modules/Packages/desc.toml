@@ -1,23 +1,23 @@
-["Android-Tools"]
+[Android-Tools]
 description = "Install essential Android tools for development and device management."
 
 [Communication]
 description = "Installs popular communication applications like Discord, Signal, Slack, and Telegram to help you stay connected with your teams and communities."
 
-["Crypto-Tools"]
+[Crypto-Tools]
 description = "Installs essential cryptocurrency tools, such as the Electrum Bitcoin wallet, to manage your digital assets securely."
 
-["Development-Tools"]
+[Development-Tools]
 description = "Sets up your development environment with a choice of languages and tools, including Node.js, Python, Rust, Go, and Docker, to support your coding projects."
 
 [Editing]
 description = "Provides a suite of editing software for various media types, such as GIMP for images, Kdenlive for videos, and Audacity for audio, to cover all your creative needs."
 
+[FM-Tools]
+description = "Installs useful file manager utilities, including Tumbler for thumbnail previews and Trash-Cli for managing your trash from the command line."
+
 [FileManagers]
 description = "Offers a variety of file managers, from graphical options like Thunar and Dolphin to terminal-based ones like LF and Ranger, so you can manage your files your way."
-
-["FM-Tools"]
-description = "Installs useful file manager utilities, including Tumbler for thumbnail previews and Trash-Cli for managing your trash from the command line."
 
 [Gaming]
 description = "Enhances your gaming experience by installing essential tools like Steam, Lutris, and Heroic Games Launcher, along with performance utilities like MangoHud and GameMode."
