@@ -25,5 +25,5 @@ jobs:
 
       - name: Run ShellCheck
         run: |
-          find . -type f -name "*.sh" -not -path "./target/*" -not -path "./.git/*" | \
-          xargs shellcheck --severity=warning
+          find . -type f -name "*.sh" -not -path "./target/*" -not -path "./.git/*" -not -path "./build/*" -print0 | \
+          xargs -0 shellcheck --severity=warning
