@@ -19,6 +19,9 @@ description = "Chaotic-AUR is a popular unofficial Arch User Repository (AUR) he
 [Fastfetch]
 description = "Fastfetch is a lightweight system information tool displaying OS, hardware, and other details in a clean, customizable format. The script applies my fastfetch config from the harilvfs/fastfetch repo."
 
+[Nitch]
+description = "An incredibly fast system fetch written in Nim. Uses a maintained fork since the original repo (ssleert/nitch) is deprecated."
+
 [Fonts]
 description = "Downloads and installs a variety of Nerd Fonts for improved readability and aesthetics in terminal applications."
 
