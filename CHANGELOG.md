@@ -1,5 +1,51 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [6.0.0](https://github.com/harilvfs/carch/compare/v5.4.7...v6.0.0) - 2026-07-02
+
+
+### 🚀 Features
+
+
+- [93b2a87](https://github.com/harilvfs/carch/commit/93b2a87b46263f1bbf458c0f01ac6db037382270)  *(script)* Add ladybird browser nightly by @harilvfs
+
+- [94be8f1](https://github.com/harilvfs/carch/commit/94be8f14b7ed7703a9ca492105588e9c4c898dd2)  *(script)* Add nitch system fetch tool by @harilvfs
+
+- [5371399](https://github.com/harilvfs/carch/commit/5371399ca690ef63f4872e2e6afabd5ba647893a) Add sorting for description toml files desc.toml by @harilvfs
+
+- [6111da5](https://github.com/harilvfs/carch/commit/6111da5167983f98da9d216f8389cced04fe68c7) Add sort-desc CI workflow (#738) by @harilvfs in [#738](https://github.com/harilvfs/carch/pull/738)
+
+
+
+### 🐛 Bug Fixes
+
+
+- [9de2273](https://github.com/harilvfs/carch/commit/9de2273a826833125ef82adcb28ff22ddf71ccce)  *(ci)* Correct binary name on preview workflow by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [9eae56a](https://github.com/harilvfs/carch/commit/9eae56aa92ede95ffdfa474ed7a0e7dd58f0b9ad)  *(app)* Update description by @harilvfs
+
+- [3f2bead](https://github.com/harilvfs/carch/commit/3f2beadda5798e1c3890af1a1837fea4726faf8b)  *(deny)* Ignore anyhow unsoundness by @harilvfs
+
+- [1f83f99](https://github.com/harilvfs/carch/commit/1f83f99ea72439b7a5d84583207644fe0f7b7008) Add shellcheck script by @harilvfs
+
+- [8025fdf](https://github.com/harilvfs/carch/commit/8025fdfef54475b5459169d01db73f5528e75d7b)  *(ci)* Ignore build dir for shellcheck by @harilvfs
+
+- [34d5040](https://github.com/harilvfs/carch/commit/34d5040928eb3d1a892fe62749bbc30a0c1dcc08)  *(typo)* Ignore nitch typo check by @harilvfs
+
+- [9fa9e52](https://github.com/harilvfs/carch/commit/9fa9e527241d8c4f7203898f393f57e92610f5b9)  *(docs)* Add new scripts entry by @harilvfs
+
+- [7284e8b](https://github.com/harilvfs/carch/commit/7284e8bec380f3b8b6227527d7ada18944153fc0) Test sort-desc workflow by @harilvfs
+
+- [17487fd](https://github.com/harilvfs/carch/commit/17487fd38252621428b442ddd3dbba40207a71cc) Sort desc.toml and update overview (#739) by @harilvfs in [#739](https://github.com/harilvfs/carch/pull/739)
+
+- [6b781a8](https://github.com/harilvfs/carch/commit/6b781a871bade9b980d72196dc03e5d50a8d17e6)  *(xtask)* Remove check desc sorted from xtask by @harilvfs
+
+
+
 ## [5.4.7](https://github.com/harilvfs/carch/compare/v5.4.6...v5.4.7) - 2026-06-28
 
 
