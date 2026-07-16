@@ -1,5 +1,17 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [6.1.0](https://github.com/harilvfs/carch/compare/v6.0.0...v6.1.0) - 2026-07-16
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [0e29e2a](https://github.com/harilvfs/carch/commit/0e29e2ac72d8bf53b092dff4161e6cf391c12185)  *(rust)* Remove past advisory of anyhow unsoundness by @harilvfs
+
+- [37486bf](https://github.com/harilvfs/carch/commit/37486bf90002f7ed33b7b5cb7632483c90a284bc)  *(rust)* Cargo update/bump versions by @harilvfs
+
+
+
 ## [6.0.0](https://github.com/harilvfs/carch/compare/v5.4.7...v6.0.0) - 2026-07-02
 
 
