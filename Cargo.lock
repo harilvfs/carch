@@ -153,7 +153,7 @@ checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 
 [[package]]
 name = "carch-cli"
-version = "6.0.0"
+version = "6.1.0"
 dependencies = [
  "carch-core",
  "clap",
@@ -170,7 +170,7 @@ dependencies = [
 
 [[package]]
 name = "carch-core"
-version = "6.0.0"
+version = "6.1.0"
 dependencies = [
  "crossterm",
  "fuzzy-matcher",
@@ -2777,7 +2777,7 @@ checksum = "32ac00cd3f8ec9c1d33fb3e7958a82df6989c42d747bd326c822b1d625283547"
 
 [[package]]
 name = "xtask"
-version = "6.0.0"
+version = "6.1.0"
 dependencies = [
  "anyhow",
  "carch-cli",
