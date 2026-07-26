@@ -42,21 +42,6 @@ detect_target() {
     esac
 }
 
-detect_suffix() {
-    ARCH=$(uname -m)
-    case "$ARCH" in
-        x86_64 | amd64) echo "" ;;
-        aarch64 | arm64)
-            if [ "$IS_ANDROID" = "true" ]; then echo "-aarch64-android"; else echo "-aarch64"; fi
-            ;;
-        armv7* | armv8l | arm) echo "-armv7-android" ;;
-        *)
-            echo "Unsupported architecture: $ARCH" >&2
-            exit 1
-            ;;
-    esac
-}
-
 get_latest_stable_version() {
     tag=$(curl -fsL "https://api.github.com/repos/$REPO/releases/latest" 2> /dev/null |
         grep '"tag_name"' | head -1 | cut -d'"' -f4)
@@ -100,8 +85,7 @@ if [ -z "$VERSION" ]; then
 fi
 
 TARGET=$(detect_target)
-SUFFIX=$(detect_suffix)
-ARTIFACT="${BINARY}${SUFFIX}"
+ARTIFACT="${BINARY}-${TARGET}"
 
 echo "$BINARY $VERSION ($TARGET)"
 
