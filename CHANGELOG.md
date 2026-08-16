@@ -1,5 +1,15 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [6.1.1](https://github.com/harilvfs/carch/compare/v6.1.0...v6.1.1) - 2026-08-16
+
+
+### 🐛 Bug Fixes
+
+
+- [ca924b2](https://github.com/harilvfs/carch/commit/ca924b26de83fc0fde605f1b8383e7c29d3f3189) Correct artifact name separator by @harilvfs
+
+
+
 ## [6.1.0](https://github.com/harilvfs/carch/compare/v6.0.0...v6.1.0) - 2026-07-16
 
 
