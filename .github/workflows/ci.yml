@@ -38,7 +38,7 @@ jobs:
           cache-on-failure: true
 
       - name: Install tools
-        uses: taiki-e/install-action@v2.85.6
+        uses: taiki-e/install-action@v2.86.1
         with:
           tool: taplo-cli,cargo-deny
 
