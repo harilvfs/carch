@@ -1,5 +1,15 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [6.1.2](https://github.com/harilvfs/carch/compare/v6.1.1...v6.1.2) - 2026-09-19
+
+
+### 🚜 Refactor
+
+
+- [110672c](https://github.com/harilvfs/carch/commit/110672c262e5ac3c416d88bc7a780370cc599371)  *(uad)* Use GitHub binary for UAD on all distros by @harilvfs
+
+
+
 ## [6.1.1](https://github.com/harilvfs/carch/compare/v6.1.0...v6.1.1) - 2026-08-16
 
 
