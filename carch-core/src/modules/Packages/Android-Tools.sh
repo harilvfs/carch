@@ -43,35 +43,28 @@ install_jdk() {
 
 install_uad() {
     clear
-    case "$DISTRO" in
-        "Arch")
-            install_package "uad-ng-bin" ""
-            ;;
-        "Fedora" | "openSUSE")
-            print_message "$YELLOW" "Downloading UAD binary..."
-            local tmp_path="/tmp/uad-ng"
-            local bin_url
-            bin_url=$(curl -s https://api.github.com/repos/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/latest |
-                jq -r '.assets[] | select(.name | test("uad-ng-linux$")) | .browser_download_url')
+    print_message "$YELLOW" "Downloading UAD binary..."
+    local tmp_path="/tmp/uad-ng"
+    local bin_url
+    bin_url=$(curl -s https://api.github.com/repos/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/latest |
+        jq -r '.assets[] | select(.name | test("uad-ng-linux$")) | .browser_download_url')
 
-            # incase latest binary download fail fallback to v1.1.2
-            if [[ -z "$bin_url" ]]; then
-                print_message "$YELLOW" "Failed to get latest, falling back to v1.1.2"
-                bin_url="https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases/download/v1.1.2/uad-ng-linux"
-        fi
+    if [[ -z "$bin_url" ]]; then
+        print_message "$RED" "Failed to fetch latest UAD release URL."
+        print_message "$YELLOW" "Download manually from: https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/releases"
+        return 1
+    fi
 
-            curl -Lo "$tmp_path" "$bin_url" &&
-                chmod +x "$tmp_path" &&
-                sudo mv "$tmp_path" /usr/local/bin/uad-ng
+    curl -Lo "$tmp_path" "$bin_url" &&
+        chmod +x "$tmp_path" &&
+        sudo mv "$tmp_path" /usr/local/bin/uad-ng
 
-            if [[ $? -eq 0 ]]; then
-                print_message "$GREEN" "UAD has been installed to /usr/local/bin/uad-ng"
-                print_message "$GREEN" "⟹ Run it by typing: uad-ng"
-        else
-                print_message "$RED" "Failed to install UAD."
-        fi
-            ;;
-    esac
+    if [[ $? -eq 0 ]]; then
+        print_message "$GREEN" "UAD has been installed to /usr/local/bin/uad-ng"
+        print_message "$GREEN" "Run it by typing: uad-ng"
+    else
+        print_message "$RED" "Failed to install UAD."
+    fi
 }
 
 install_apkstudio() {
