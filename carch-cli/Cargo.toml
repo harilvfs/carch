@@ -27,7 +27,7 @@ clap = { workspace = true, features = ["derive"] }
 clap_complete = "4.6.7"
 clap_mangen = "0.3"
 carch-core = { path = "../carch-core", version = "6.1.2" }
-dirs = "6"
+dirs = "7"
 log = { workspace = true }
 env_logger = { workspace = true }
 tempfile = { workspace = true }
