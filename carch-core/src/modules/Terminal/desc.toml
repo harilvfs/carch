@@ -22,5 +22,8 @@ description = "Termux is an Android terminal emulator and Linux environment. Thi
 [Tmux]
 description = "Tmux is a terminal multiplexer that lets you manage multiple terminal sessions within one window. The script applies my pre-configured tmux config."
 
+[Zellij]
+description = "Zellij is a terminal multiplexer and workspace with layouts, plugins, and a tmux-like workflow. The script installs zellij and applies my pre-configured zellij config."
+
 [Zsh]
 description = "Zsh (Z shell) is an advanced Unix shell with features like improved tab completion, better scripting, and powerful customization. The script installs all required dependencies and applies my custom theme."
