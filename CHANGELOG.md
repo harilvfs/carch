@@ -1,5 +1,15 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [6.1.4](https://github.com/harilvfs/carch/compare/v6.1.3...v6.1.4) - 2026-10-16
+
+
+### 🚀 Features
+
+
+- [75ac1d8](https://github.com/harilvfs/carch/commit/75ac1d849e1832aa0924b8a9a39906ff3d2253f4)  *(browser)* Add brave-origin and use official brave installer (#796) by @harilvfs in [#796](https://github.com/harilvfs/carch/pull/796)
+
+
+
 ## [6.1.3](https://github.com/harilvfs/carch/compare/v6.1.2...v6.1.3) - 2026-10-16
 
 
