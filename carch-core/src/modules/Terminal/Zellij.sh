@@ -38,7 +38,7 @@ check_essential_dependencies() {
         case "$DISTRO" in
             "Arch") sudo pacman -S --noconfirm "${missing[@]}" > /dev/null 2>&1 ;;
             "Fedora")
-                # zellij is not in the fedora repos, it lives in the varlad/zellij copr
+                # zellij is not in the fedora repos, it is in the varlad/zellij copr
                 if printf '%s\n' "${missing[@]}" | grep -qx "zellij"; then
                     print_message "$GREEN" "Enabling varlad/zellij copr..."
                     sudo dnf copr enable -y varlad/zellij > /dev/null 2>&1
