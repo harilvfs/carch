@@ -1,5 +1,22 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [6.1.3](https://github.com/harilvfs/carch/compare/v6.1.2...v6.1.3) - 2026-10-16
+
+
+### 🚀 Features
+
+
+- [d74bb6f](https://github.com/harilvfs/carch/commit/d74bb6f80ed1157fe6de4cf06e59e6f233915586)  *(terminal)* Add zellij script (#792) by @harilvfs in [#792](https://github.com/harilvfs/carch/pull/792)
+
+
+
+### 🐛 Bug Fixes
+
+
+- [a2f53e6](https://github.com/harilvfs/carch/commit/a2f53e62450af16669d6150c717f695458c9c569)  *(ci)* Drop pull_request trigger from sort-desc workflow (#793) by @harilvfs in [#793](https://github.com/harilvfs/carch/pull/793)
+
+
+
 ## [6.1.2](https://github.com/harilvfs/carch/compare/v6.1.1...v6.1.2) - 2026-09-19
 
 
