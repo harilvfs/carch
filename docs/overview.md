@@ -3,6 +3,7 @@
 ### Browser
 
 - **Brave**: *Privacy-focused Chromium-based browser with built-in ad blocking.*
+- **Brave-Origin**: *A leaner standalone variant of Brave: keeps Shields and Chromium security updates while dropping Rewards, ads, and other extras.*
 - **Chromium**: *The open-source web project that powers Google Chrome and Edge.*
 - **Extensions**: *Recommends useful extensions for Chromium and Firefox-based browsers.*
 - **Firefox**: *Fast, independent browser backed by the non-profit Mozilla Foundation.*
