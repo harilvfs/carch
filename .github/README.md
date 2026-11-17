@@ -10,7 +10,7 @@
 
 </div>
 
-_[Carch](https://carch.chalisehari.com.np)_ is **a collection** of modular Bash scripts with a beautiful TUI (_built with_ [`ratatui`](https://github.com/ratatui-org/ratatui)) to automate post-installation setup for Linux users.
+_[Carch](https://carch.chalisehari.com.np)_ is a **Rust-powered TUI** (_built with_ [`ratatui`](https://github.com/ratatui-org/ratatui)) that automates **post-installation setup and theming** on Linux, driving a collection of modular Bash scripts through an intuitive interface.
 It’s especially useful if you want to quickly set up and start using your _favorite apps_ on a clean, ready-to-use system. (_Currently supports Arch, Fedora, and openSUSE-based distros_)
 
 <div align="center">
