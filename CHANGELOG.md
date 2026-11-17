@@ -1,5 +1,43 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
+## [unreleased]
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [77a14eb](https://github.com/harilvfs/carch/commit/77a14eb1dee1c83c7ead57b337df5bb51bad5f5a) Remove discord notify workflow by @harilvfs
+
+
+
+## [6.1.5](https://github.com/harilvfs/carch/compare/v6.1.4...v6.1.5) - 2026-11-17
+
+
+### 🐛 Bug Fixes
+
+
+- [660d1bb](https://github.com/harilvfs/carch/commit/660d1bba9c0ea75aabb925602867344b5b523d64)  *(script)* Add chmod permission by @harilvfs
+
+- [b321ac9](https://github.com/harilvfs/carch/commit/b321ac982f4f925a3f4fee8984f9087dbe921f3e)  *(script)* Add chmod permission by @harilvfs
+
+- [7455078](https://github.com/harilvfs/carch/commit/74550782575c93beb05e6842009bba2268651f8c)  *(deps)* Patch rustls-webpki and webpki-roots security vulnerabilities by @harilvfs
+
+
+
+### 📚 Documentation
+
+
+- [5e6e4e3](https://github.com/harilvfs/carch/commit/5e6e4e3619faff342708e39d13625cbd345840e3) Update tagline to reflect Rust TUI and post-installation setup by @harilvfs
+
+
+
+### ⚙️ Miscellaneous Tasks
+
+
+- [f40e9c1](https://github.com/harilvfs/carch/commit/f40e9c1b85391e67ae3be40f6df9a981df65679f)  *(shellfmt)* Use stable go toolchain for shfmt@latest by @harilvfs
+
+
+
 ## [6.1.4](https://github.com/harilvfs/carch/compare/v6.1.3...v6.1.4) - 2026-10-16
 
 
