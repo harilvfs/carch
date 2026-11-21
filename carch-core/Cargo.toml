@@ -4,7 +4,6 @@ version.workspace = true
 description = "Core library for carch, providing script management and UI components."
 documentation.workspace = true
 repository.workspace = true
-homepage.workspace = true
 keywords.workspace = true
 categories.workspace = true
 license.workspace = true

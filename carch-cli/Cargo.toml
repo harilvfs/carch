@@ -4,7 +4,6 @@ version.workspace = true
 description = "A Rust-powered TUI that automates post-installation setup and theming on Arch, Fedora, and openSUSE"
 documentation.workspace = true
 repository.workspace = true
-homepage.workspace = true
 keywords.workspace = true
 categories.workspace = true
 license.workspace = true
