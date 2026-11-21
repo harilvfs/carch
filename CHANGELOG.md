@@ -1,12 +1,14 @@
 [![carch](https://raw.githubusercontent.com/harilvfs/assets/refs/heads/main/carch/carch.jpg)](https://carch.chalisehari.com.np)
 
-## [unreleased]
+## [6.1.6](https://github.com/harilvfs/carch/compare/v6.1.5...v6.1.6) - 2026-11-21
 
 
 ### ⚙️ Miscellaneous Tasks
 
 
 - [77a14eb](https://github.com/harilvfs/carch/commit/77a14eb1dee1c83c7ead57b337df5bb51bad5f5a) Remove discord notify workflow by @harilvfs
+
+- [015f2d9](https://github.com/harilvfs/carch/commit/015f2d9f2e6f45ea66c5e81b41f83f3a3507feb3) Remove redundant homepage metadata by @harilvfs
 
 
 
